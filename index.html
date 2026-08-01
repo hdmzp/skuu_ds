@@ -9,28 +9,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy-950:#060d1f;
-  --navy-900:#0a1530;
-  --navy-800:#101f45;
-  --navy-700:#16295a;
-  --surface:rgba(16,31,69,.62);
-  --surface-solid:#101f45;
-  --border:rgba(163,230,53,.16);
-  --border-soft:rgba(255,255,255,.09);
-  --ink:#f2f6ff;
-  --muted:#a8b3cf;
+  --navy-950:#0c1a3a;
+  --navy-900:#122250;
+  --navy-800:#1a2f66;
+  --navy-700:#24407f;
+  --ink:#16233f;
+  --muted:#5f6b83;
+  --bg:#f7f8fb;
+  --card:#ffffff;
+  --border:#e5e8ef;
   --lime:#c9f24b;
-  --lime-strong:#a3e635;
-  --lime-deep:#65a30d;
-  --radius:20px;
-  --radius-sm:14px;
-  --max:1080px;
+  --lime-soft:#f2fadc;
+  --lime-deep:#4d7c0f;
+  --radius:18px;
+  --radius-sm:12px;
+  --shadow:0 1px 2px rgba(18,34,80,.05),0 8px 24px rgba(18,34,80,.06);
+  --rail:72px;
+  --max:1060px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
   font-family:'Noto Sans KR',system-ui,-apple-system,sans-serif;
-  background:var(--navy-950);
+  background:var(--bg);
   color:var(--ink);
   font-size:16px;
   line-height:1.65;
@@ -38,70 +39,85 @@ body{
   -webkit-text-size-adjust:100%;
 }
 
-/* ---------- gradient mesh background ---------- */
+/* ---------- soft gradient mesh on white ---------- */
 .mesh{
-  position:fixed;inset:0;z-index:-1;overflow:hidden;
+  position:fixed;inset:0;z-index:-1;
   background:
-    radial-gradient(52rem 40rem at 12% -8%,  rgba(101,163,13,.32), transparent 60%),
-    radial-gradient(46rem 36rem at 108% 12%, rgba(30,64,175,.55), transparent 62%),
-    radial-gradient(40rem 34rem at 85% 95%,  rgba(163,230,53,.20), transparent 58%),
-    radial-gradient(56rem 44rem at -8% 88%,  rgba(37,99,235,.35), transparent 60%),
-    linear-gradient(160deg,#0a1530 0%,#060d1f 55%,#0a1a3d 100%);
+    radial-gradient(46rem 30rem at 88% -6%,  rgba(201,242,75,.20), transparent 60%),
+    radial-gradient(40rem 28rem at -6% 16%,  rgba(36,64,127,.10),  transparent 60%),
+    radial-gradient(44rem 32rem at 106% 78%, rgba(125,211,252,.16),transparent 62%),
+    radial-gradient(36rem 26rem at 18% 108%, rgba(201,242,75,.14), transparent 60%),
+    var(--bg);
 }
-.mesh::after{
-  content:"";position:absolute;inset:0;
-  background-image:radial-gradient(rgba(255,255,255,.045) 1px, transparent 1px);
-  background-size:26px 26px;
-  mask-image:radial-gradient(70rem 50rem at 50% 20%, #000 30%, transparent 80%);
+
+/* ---------- navy side rail (top bar on mobile) ---------- */
+.rail{
+  position:fixed;z-index:10;top:0;left:0;bottom:0;width:var(--rail);
+  background:linear-gradient(180deg,var(--navy-900),var(--navy-950));
+  display:flex;flex-direction:column;align-items:center;
+  padding:18px 0;gap:22px;
+}
+.rail .mark{
+  width:38px;height:38px;border-radius:12px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.08);
+  text-decoration:none;
+}
+.rail .mark svg{width:24px;height:24px}
+.rail nav{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.rail nav a{
+  width:40px;height:40px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  color:#8fa0c9;text-decoration:none;
+  transition:background .15s,color .15s;
+}
+.rail nav a:hover{background:rgba(255,255,255,.1);color:#fff}
+.rail nav a[aria-current="true"]{background:var(--lime);color:var(--navy-950)}
+.rail nav a svg{width:20px;height:20px}
+.rail .foot{
+  margin-top:auto;
+  font-size:.58rem;font-weight:500;letter-spacing:.18em;
+  color:#8fa0c9;writing-mode:vertical-rl;
 }
 
 /* ---------- layout ---------- */
-.wrap{max-width:var(--max);margin:0 auto;padding:clamp(20px,4vw,44px) clamp(16px,4vw,32px) 64px}
+.wrap{
+  max-width:var(--max);
+  margin:0 auto;
+  padding:clamp(22px,4vw,44px) clamp(16px,4vw,36px) 64px;
+  padding-left:calc(var(--rail) + clamp(16px,4vw,36px));
+}
 
 header.top{
-  display:flex;justify-content:space-between;align-items:flex-start;
-  gap:16px;margin-bottom:clamp(20px,4vw,36px);
+  display:flex;justify-content:space-between;align-items:flex-end;
+  gap:16px;margin-bottom:clamp(20px,3.5vw,32px);flex-wrap:wrap;
 }
-.brand{display:flex;flex-direction:column;gap:6px}
 .brand .eyebrow{
   display:inline-flex;align-items:center;gap:8px;
-  font-size:.8rem;font-weight:500;letter-spacing:.14em;color:var(--lime);
-  text-transform:uppercase;
+  font-size:.78rem;font-weight:700;letter-spacing:.14em;color:var(--lime-deep);
+  text-transform:uppercase;margin-bottom:6px;
 }
-.brand .eyebrow::before{content:"";width:22px;height:2px;background:var(--lime);border-radius:2px}
+.brand .eyebrow::before{content:"";width:22px;height:3px;background:var(--lime);border-radius:2px}
 .brand h1{
-  font-size:clamp(1.5rem,4.2vw,2.3rem);font-weight:900;line-height:1.25;
-  letter-spacing:-.01em;
+  font-size:clamp(1.45rem,4vw,2.15rem);font-weight:900;line-height:1.3;
+  letter-spacing:-.01em;color:var(--navy-950);
 }
-.brand h1 .grad{
-  background:linear-gradient(92deg,var(--lime) 0%,#7dd3fc 100%);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.brand p{color:var(--muted);font-size:.92rem}
-
-/* small SKKU logo in the corner */
+.brand p{color:var(--muted);font-size:.92rem;margin-top:4px}
 .skku{
-  display:flex;align-items:center;gap:7px;flex-shrink:0;
-  opacity:.75;transition:opacity .2s;
-  color:var(--muted);text-decoration:none;
+  display:flex;align-items:center;gap:8px;flex-shrink:0;
+  color:var(--muted);text-decoration:none;font-size:.75rem;font-weight:500;
+  opacity:.85;
 }
-.skku:hover,.skku:focus-visible{opacity:1}
-.skku svg{width:22px;height:22px;display:block}
-.skku span{font-size:.72rem;font-weight:500;letter-spacing:.02em;white-space:nowrap}
+.skku:hover{opacity:1;color:var(--navy-900)}
 
 /* ---------- bento grid ---------- */
-.bento{
-  display:grid;gap:14px;
-  grid-template-columns:repeat(6,1fr);
-  grid-auto-rows:auto;
-}
+.bento{display:grid;gap:16px;grid-template-columns:repeat(6,1fr)}
 .card{
-  background:var(--surface);
-  border:1px solid var(--border-soft);
+  background:var(--card);
+  border:1px solid var(--border);
   border-radius:var(--radius);
   padding:clamp(18px,3vw,26px);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
+  box-shadow:var(--shadow);
   position:relative;overflow:hidden;
 }
 .card.hero{grid-column:span 4}
@@ -109,80 +125,92 @@ header.top{
 .card.subject{grid-column:span 2}
 .card.meta{grid-column:span 6}
 
-/* hero */
-.hero h2{font-size:clamp(1.15rem,2.6vw,1.45rem);font-weight:700;margin-bottom:8px}
-.hero p{color:var(--muted);font-size:.95rem;max-width:46ch}
+/* hero — navy tile, like the dark chart card in the reference */
+.card.hero{
+  background:linear-gradient(135deg,var(--navy-900) 0%,var(--navy-950) 70%);
+  border-color:var(--navy-800);color:#eef2ff;
+}
+.hero h2{font-size:clamp(1.15rem,2.6vw,1.4rem);font-weight:700;margin-bottom:8px;color:#fff}
+.hero h2 b{color:var(--lime);font-weight:900}
+.hero p{color:#b9c4e2;font-size:.94rem;max-width:48ch}
 .hero .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .chip{
   font-size:.78rem;font-weight:500;color:var(--lime);
-  border:1px solid var(--border);border-radius:999px;
-  padding:4px 12px;background:rgba(163,230,53,.07);
+  border:1px solid rgba(201,242,75,.35);border-radius:999px;
+  padding:4px 12px;background:rgba(201,242,75,.08);
 }
-.hero::before{
-  content:"";position:absolute;top:-40%;right:-12%;width:22rem;height:22rem;
-  background:radial-gradient(closest-side, rgba(201,242,75,.14), transparent 70%);
+.hero::after{
+  content:"";position:absolute;top:-45%;right:-10%;width:20rem;height:20rem;
+  background:radial-gradient(closest-side,rgba(201,242,75,.16),transparent 70%);
   pointer-events:none;
 }
 
 /* semester selector */
-.semester h3,.subject-label{
-  font-size:.78rem;font-weight:700;letter-spacing:.12em;color:var(--muted);
+.panel-label{
+  font-size:.75rem;font-weight:700;letter-spacing:.12em;color:var(--muted);
   text-transform:uppercase;margin-bottom:12px;
 }
 .tabs{display:flex;flex-direction:column;gap:8px}
 .tab{
-  display:flex;justify-content:space-between;align-items:center;gap:10px;
-  width:100%;text-align:left;
-  font:inherit;font-size:.95rem;font-weight:500;color:var(--ink);
-  background:rgba(255,255,255,.04);
-  border:1px solid var(--border-soft);border-radius:var(--radius-sm);
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+  font:inherit;font-size:.94rem;font-weight:500;color:var(--ink);
+  background:#f3f5f9;border:1px solid transparent;border-radius:var(--radius-sm);
   padding:12px 16px;cursor:pointer;
-  transition:background .18s,border-color .18s;
+  transition:background .15s,border-color .15s;
 }
-.tab:hover:not(:disabled){background:rgba(255,255,255,.08)}
+.tab:hover:not(:disabled){background:#eceff5}
 .tab[aria-selected="true"]{
-  background:linear-gradient(95deg, rgba(163,230,53,.16), rgba(163,230,53,.06));
-  border-color:rgba(163,230,53,.45);
-  color:#fff;font-weight:700;
+  background:var(--navy-900);color:#fff;font-weight:700;
 }
-.tab[aria-selected="true"] .dot{background:var(--lime);box-shadow:0 0 10px rgba(201,242,75,.8)}
-.tab:disabled{opacity:.42;cursor:not-allowed}
-.tab .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);flex-shrink:0}
-.tab .badge{font-size:.72rem;color:var(--muted);font-weight:400}
+.tab[aria-selected="true"] .dot{background:var(--lime);box-shadow:0 0 8px rgba(201,242,75,.9)}
+.tab[aria-selected="true"] .badge{color:var(--lime)}
+.tab:disabled{opacity:.5;cursor:not-allowed}
+.tab .dot{width:8px;height:8px;border-radius:50%;background:#c3ccdd;flex-shrink:0}
+.tab .badge{margin-left:auto;font-size:.72rem;color:var(--muted);font-weight:400}
 
 /* subject cards */
-.subject{
-  display:flex;flex-direction:column;gap:0;
-  transition:transform .18s,border-color .18s,background .18s;
+.subject{display:flex;flex-direction:column;transition:transform .18s,border-color .18s,box-shadow .18s}
+.subject:hover{
+  transform:translateY(-3px);border-color:#c9d3e6;
+  box-shadow:0 2px 4px rgba(18,34,80,.06),0 14px 32px rgba(18,34,80,.10);
 }
-.subject:hover{transform:translateY(-3px);border-color:rgba(163,230,53,.4)}
-.subject .num{
-  font-size:.75rem;font-weight:700;color:var(--lime);letter-spacing:.1em;margin-bottom:10px;
+.subject .icon{
+  width:44px;height:44px;border-radius:12px;margin-bottom:14px;
+  background:var(--navy-900);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
-.subject h3{font-size:1.08rem;font-weight:700;line-height:1.4;margin-bottom:6px}
+.subject .icon svg{width:22px;height:22px}
+.subject h3{font-size:1.06rem;font-weight:700;line-height:1.4;margin-bottom:6px;color:var(--navy-950)}
 .subject p{font-size:.85rem;color:var(--muted);flex-grow:1}
 .subject .open-btn{
   margin-top:16px;align-self:flex-start;
   display:inline-flex;align-items:center;gap:6px;
-  font:inherit;font-size:.85rem;font-weight:700;color:var(--navy-950);
-  background:var(--lime);border:none;border-radius:999px;
-  padding:8px 18px;cursor:pointer;
-  transition:background .18s,transform .18s;
+  font:inherit;font-size:.85rem;font-weight:700;color:#fff;
+  background:var(--navy-900);border:none;border-radius:999px;
+  padding:9px 18px;cursor:pointer;
+  transition:background .15s;
 }
-.subject .open-btn:hover{background:#d9fa6e}
-.subject .open-btn::after{content:"→";font-weight:400}
+.subject .open-btn:hover{background:var(--navy-700)}
+.subject .open-btn::after{content:"→";font-weight:400;color:var(--lime)}
 .subject .tag{
-  position:absolute;top:18px;right:18px;
-  font-size:.7rem;color:var(--muted);
-  border:1px solid var(--border-soft);border-radius:999px;padding:2px 10px;
+  position:absolute;top:20px;right:20px;
+  font-size:.7rem;font-weight:500;color:var(--lime-deep);
+  background:var(--lime-soft);border:1px solid #dcedb4;
+  border-radius:999px;padding:2px 10px;
 }
 
 /* meta strip */
 .meta{display:flex;flex-wrap:wrap;gap:clamp(16px,4vw,48px);align-items:center}
 .meta .stat{display:flex;flex-direction:column;gap:2px}
-.meta .stat b{font-size:1.35rem;font-weight:900;color:var(--lime)}
+.meta .stat b{font-size:1.35rem;font-weight:900;color:var(--navy-900)}
+.meta .stat b .u{color:var(--lime-deep)}
 .meta .stat span{font-size:.8rem;color:var(--muted)}
-.meta .note{margin-left:auto;font-size:.8rem;color:var(--muted)}
+.meta .note{margin-left:auto;flex:0 1 40ch;font-size:.8rem;color:var(--muted)}
+.meta kbd{
+  font-family:inherit;font-size:.72rem;font-weight:700;color:var(--navy-900);
+  background:#eef1f7;border:1px solid var(--border);border-bottom-width:2px;
+  border-radius:6px;padding:1px 7px;
+}
 
 /* ---------- modal ---------- */
 .modal{
@@ -191,20 +219,16 @@ header.top{
   padding:clamp(0px,3vw,32px);
 }
 .modal.open{display:flex}
-.modal-backdrop{
-  position:absolute;inset:0;background:rgba(4,8,20,.72);
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-}
+.modal-backdrop{position:absolute;inset:0;background:rgba(12,26,58,.5)}
 .modal-panel{
   position:relative;width:min(960px,100%);height:min(88dvh,100%);
   background:#fff;border-radius:var(--radius);
-  border:1px solid rgba(163,230,53,.35);
-  box-shadow:0 32px 80px rgba(0,0,0,.55);
+  box-shadow:0 32px 80px rgba(12,26,58,.4);
   display:flex;flex-direction:column;overflow:hidden;
 }
 .modal-head{
   display:flex;align-items:center;gap:12px;
-  background:var(--navy-900);color:var(--ink);
+  background:var(--navy-900);color:#fff;
   padding:12px 16px;flex-shrink:0;
 }
 .modal-head .m-dot{width:9px;height:9px;border-radius:50%;background:var(--lime);flex-shrink:0}
@@ -212,40 +236,38 @@ header.top{
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .modal-head a.newtab{
   font-size:.78rem;color:var(--lime);text-decoration:none;white-space:nowrap;
-  border:1px solid var(--border);border-radius:999px;padding:4px 12px;
+  border:1px solid rgba(201,242,75,.4);border-radius:999px;padding:4px 12px;
 }
-.modal-head a.newtab:hover{background:rgba(163,230,53,.1)}
+.modal-head a.newtab:hover{background:rgba(201,242,75,.12)}
 .modal-close{
-  font:inherit;background:none;border:none;color:var(--ink);cursor:pointer;
+  font:inherit;background:none;border:none;color:#fff;cursor:pointer;
   width:34px;height:34px;border-radius:50%;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;font-size:1.15rem;
   transition:background .15s;
 }
-.modal-close:hover{background:rgba(255,255,255,.12)}
+.modal-close:hover{background:rgba(255,255,255,.15)}
 .modal-body{flex-grow:1;position:relative}
 .modal-body iframe{
   position:absolute;inset:0;width:100%;height:100%;border:none;background:#fff;
 }
 body.modal-locked{overflow:hidden}
 
-/* focus visibility & a11y helpers */
-:focus-visible{outline:3px solid var(--lime);outline-offset:2px;border-radius:6px}
+/* focus & a11y */
+:focus-visible{outline:3px solid var(--navy-700);outline-offset:2px;border-radius:6px}
+.card.hero :focus-visible,.modal-head :focus-visible,.rail :focus-visible{outline-color:var(--lime)}
 .visually-hidden{
   position:absolute;width:1px;height:1px;margin:-1px;
   clip:rect(0 0 0 0);clip-path:inset(50%);overflow:hidden;white-space:nowrap;
 }
 .skip-link{
-  position:absolute;left:16px;top:-48px;z-index:60;
-  background:var(--lime);color:var(--navy-950);font-weight:700;
+  position:absolute;left:calc(var(--rail) + 16px);top:-48px;z-index:60;
+  background:var(--navy-900);color:#fff;font-weight:700;
   padding:8px 16px;border-radius:0 0 10px 10px;text-decoration:none;
   transition:top .2s;
 }
 .skip-link:focus{top:0}
 
-footer{
-  margin-top:28px;text-align:center;
-  font-size:.78rem;color:var(--muted);
-}
+footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
@@ -257,13 +279,24 @@ footer{
   .card.semester{grid-column:span 6}
   .card.subject{grid-column:span 3}
 }
-@media (max-width:600px){
+@media (max-width:640px){
+  /* rail becomes a navy top bar */
+  .rail{
+    right:0;bottom:auto;width:auto;height:56px;
+    flex-direction:row;padding:0 14px;gap:10px;
+  }
+  .rail .mark{width:32px;height:32px;border-radius:10px}
+  .rail .mark svg{width:20px;height:20px}
+  .rail nav{flex-direction:row;margin-top:0;margin-left:auto}
+  .rail nav a{width:36px;height:36px}
+  .rail .foot{display:none}
+  .wrap{padding-left:clamp(16px,4vw,36px);padding-top:76px}
+  .skip-link{left:16px}
   .bento{grid-template-columns:1fr;gap:12px}
   .card.hero,.card.semester,.card.subject,.card.meta{grid-column:span 1}
   .meta .note{margin-left:0;width:100%}
   .modal{padding:0}
-  .modal-panel{width:100%;height:100dvh;border-radius:0;border:none}
-  .skku span{display:none}
+  .modal-panel{width:100%;height:100dvh;border-radius:0}
 }
 </style>
 </head>
@@ -271,28 +304,45 @@ footer{
 <a class="skip-link" href="#subjects">본문(과목 목록)으로 건너뛰기</a>
 <div class="mesh" aria-hidden="true"></div>
 
+<!-- navy rail: SKKU mark + decorative nav -->
+<aside class="rail">
+  <a class="mark" href="https://www.skku.edu" target="_blank" rel="noopener" aria-label="성균관대학교 홈페이지 (새 탭)">
+    <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+      <circle cx="12" cy="12" r="10.5" fill="none" stroke="#c9f24b" stroke-width="1.5"/>
+      <path d="M12 5c-2.5 2.1-4 4.4-4 6.7 0 2.8 1.8 4.7 4 7.3 2.2-2.6 4-4.5 4-7.3 0-2.3-1.5-4.6-4-6.7z"
+            fill="none" stroke="#c9f24b" stroke-width="1.3"/>
+      <line x1="12" y1="7" x2="12" y2="17.5" stroke="#c9f24b" stroke-width="1"/>
+    </svg>
+  </a>
+  <nav aria-label="사이트 메뉴">
+    <a href="#" aria-current="true" aria-label="홈">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/>
+      </svg>
+    </a>
+    <a href="#subjects" aria-label="과목 목록">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 19V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2z"/><path d="M4 17h15"/>
+      </svg>
+    </a>
+  </nav>
+  <span class="foot" aria-hidden="true">SKKU · DS</span>
+</aside>
+
 <div class="wrap">
   <header class="top">
     <div class="brand">
       <span class="eyebrow">Graduate Notes Archive</span>
-      <h1>데이터사이언스융합학과<br><span class="grad">석사과정 요점정리</span></h1>
+      <h1>데이터사이언스융합학과 석사과정 요점정리</h1>
       <p>매 학기 수강 과목의 핵심 개념을 한곳에 정리합니다.</p>
     </div>
-    <a class="skku" href="https://www.skku.edu" target="_blank" rel="noopener" aria-label="성균관대학교 홈페이지 (새 탭)">
-      <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
-        <circle cx="12" cy="12" r="11" fill="none" stroke="#c9f24b" stroke-width="1.4"/>
-        <path d="M12 4.5c-2.6 2.2-4.2 4.6-4.2 7 0 2.9 1.9 4.9 4.2 8 2.3-3.1 4.2-5.1 4.2-8 0-2.4-1.6-4.8-4.2-7z"
-              fill="none" stroke="#c9f24b" stroke-width="1.2"/>
-        <line x1="12" y1="6.5" x2="12" y2="18" stroke="#c9f24b" stroke-width="1"/>
-      </svg>
-      <span>성균관대학교 SKKU</span>
-    </a>
+    <a class="skku" href="https://www.skku.edu" target="_blank" rel="noopener">성균관대학교 SKKU</a>
   </header>
 
   <main class="bento">
     <!-- hero -->
     <section class="card hero" aria-labelledby="hero-title">
-      <h2 id="hero-title">2026학년도 1학기</h2>
+      <h2 id="hero-title"><b>2026학년도 1학기</b> 수강 과목</h2>
       <p>이번 학기에는 세 과목을 수강했습니다. 아래 과목 카드를 선택하면 요점정리 문서가 팝업으로 열립니다.</p>
       <div class="chips" aria-hidden="true">
         <span class="chip">수학 · 선형대수</span>
@@ -303,7 +353,7 @@ footer{
 
     <!-- semester selector -->
     <section class="card semester" aria-labelledby="sem-title">
-      <h3 id="sem-title">학기 선택</h3>
+      <h3 class="panel-label" id="sem-title">학기 선택</h3>
       <div class="tabs" role="tablist" aria-label="학기 선택">
         <button class="tab" role="tab" id="tab-2026-1" aria-selected="true" aria-controls="subjects">
           <span class="dot" aria-hidden="true"></span>
@@ -323,7 +373,11 @@ footer{
 
     <article class="card subject">
       <span class="tag">전공</span>
-      <p class="num">01</p>
+      <div class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#c9f24b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 4H7l6 8-6 8h11"/>
+        </svg>
+      </div>
       <h3>인공지능을 위한 수학</h3>
       <p>선형대수·미적분·최적화 등 AI의 수학적 기반 개념과 핵심 정리.</p>
       <button class="open-btn" type="button"
@@ -335,7 +389,11 @@ footer{
 
     <article class="card subject">
       <span class="tag">전공</span>
-      <p class="num">02</p>
+      <div class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#c9f24b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-8"/><path d="M22 20H2"/>
+        </svg>
+      </div>
       <h3>기초통계</h3>
       <p>확률·분포·추정·가설검정 등 통계학원론 개념과 수식 정리.</p>
       <button class="open-btn" type="button"
@@ -347,7 +405,12 @@ footer{
 
     <article class="card subject">
       <span class="tag">공통</span>
-      <p class="num">03</p>
+      <div class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#c9f24b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+          <path d="M14 3v6h6"/><path d="M9 14h6"/><path d="M9 17h6"/>
+        </svg>
+      </div>
       <h3>논문작성법과 윤리</h3>
       <p>학술 논문의 구조와 작성 전략, 연구윤리 핵심 쟁점 정리.</p>
       <button class="open-btn" type="button"
@@ -361,8 +424,8 @@ footer{
 
     <!-- meta strip -->
     <section class="card meta" aria-label="학기 요약">
-      <div class="stat"><b>3</b><span>수강 과목</span></div>
-      <div class="stat"><b>1</b><span>진행 학기</span></div>
+      <div class="stat"><b>3<span class="u">과목</span></b><span>수강 과목</span></div>
+      <div class="stat"><b>1<span class="u">학기</span></b><span>진행 학기</span></div>
       <div class="stat"><b>2026-1</b><span>현재 학기</span></div>
       <p class="note">과목 카드를 클릭하면 요점정리가 팝업으로 열립니다. 팝업은 <kbd>Esc</kbd> 키로 닫을 수 있습니다.</p>
     </section>
