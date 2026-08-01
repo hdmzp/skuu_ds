@@ -74,11 +74,65 @@ body{
 .rail nav a:hover{background:rgba(255,255,255,.1);color:#fff}
 .rail nav a[aria-current="true"]{background:var(--lime);color:var(--navy-950)}
 .rail nav a svg{width:20px;height:20px}
+.rail nav button{
+  width:40px;height:40px;border-radius:12px;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  background:none;color:#8fa0c9;font:inherit;
+  transition:background .15s,color .15s;
+}
+.rail nav button:hover{background:rgba(255,255,255,.1);color:#fff}
+.rail nav button[aria-expanded="true"]{background:var(--lime);color:var(--navy-950)}
+.rail nav button svg{width:20px;height:20px}
 .rail .foot{
   margin-top:auto;
   font-size:.58rem;font-weight:500;letter-spacing:.18em;
   color:#8fa0c9;writing-mode:vertical-rl;
 }
+
+/* ---------- expandable drawer menu ---------- */
+.drawer{
+  position:fixed;z-index:9;top:0;bottom:0;left:var(--rail);width:272px;
+  background:linear-gradient(180deg,var(--navy-800),var(--navy-900));
+  color:#eef2ff;padding:22px 18px;
+  display:flex;flex-direction:column;gap:4px;overflow-y:auto;
+  box-shadow:12px 0 40px rgba(12,26,58,.25);
+  transform:translateX(-16px);opacity:0;visibility:hidden;
+  transition:transform .2s ease,opacity .2s ease,visibility .2s;
+}
+.drawer.open{transform:none;opacity:1;visibility:visible}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.drawer-head h2{font-size:.95rem;font-weight:700}
+.drawer-close{
+  font:inherit;background:none;border:none;color:#b9c4e2;cursor:pointer;
+  width:30px;height:30px;border-radius:50%;font-size:1rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.drawer-close:hover{background:rgba(255,255,255,.12);color:#fff}
+.drawer .d-label{
+  font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:#8fa0c9;margin:14px 4px 6px;
+}
+.drawer .d-item{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+  font:inherit;font-size:.9rem;font-weight:500;color:#eef2ff;
+  background:none;border:none;border-radius:10px;
+  padding:10px 12px;cursor:pointer;text-decoration:none;
+  transition:background .15s;
+}
+.drawer .d-item:hover{background:rgba(255,255,255,.09)}
+.drawer .d-item:disabled{opacity:.45;cursor:not-allowed}
+.drawer .d-item .d-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);flex-shrink:0}
+.drawer .d-item.active .d-dot{background:var(--lime);box-shadow:0 0 8px rgba(201,242,75,.9)}
+.drawer .d-item .d-num{
+  font-size:.7rem;font-weight:700;color:var(--lime);width:20px;flex-shrink:0;
+}
+.drawer .d-item .d-side{margin-left:auto;font-size:.7rem;color:#8fa0c9}
+.drawer .d-foot{
+  margin-top:auto;padding-top:16px;border-top:1px solid rgba(255,255,255,.1);
+  font-size:.75rem;color:#8fa0c9;
+}
+.drawer .d-foot a{color:var(--lime);text-decoration:none}
+.drawer .d-foot a:hover{text-decoration:underline}
 
 /* ---------- layout ---------- */
 .wrap{
@@ -288,8 +342,15 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
   .rail .mark{width:32px;height:32px;border-radius:10px}
   .rail .mark svg{width:20px;height:20px}
   .rail nav{flex-direction:row;margin-top:0;margin-left:auto}
-  .rail nav a{width:36px;height:36px}
+  .rail nav a,.rail nav button{width:36px;height:36px}
   .rail .foot{display:none}
+  .drawer{
+    top:56px;left:0;right:0;bottom:auto;width:auto;
+    max-height:calc(100dvh - 56px);
+    border-radius:0 0 18px 18px;
+    transform:translateY(-10px);
+  }
+  .drawer.open{transform:none}
   .wrap{padding-left:clamp(16px,4vw,36px);padding-top:76px}
   .skip-link{left:16px}
   .bento{grid-template-columns:1fr;gap:12px}
@@ -304,9 +365,9 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
 <a class="skip-link" href="#subjects">본문(과목 목록)으로 건너뛰기</a>
 <div class="mesh" aria-hidden="true"></div>
 
-<!-- navy rail: SKKU mark + decorative nav -->
+<!-- navy rail: SKKU mark + menu -->
 <aside class="rail">
-  <a class="mark" href="https://www.skku.edu" target="_blank" rel="noopener" aria-label="성균관대학교 홈페이지 (새 탭)">
+  <a class="mark" href="https://ads.skku.edu/ads/index.do" target="_blank" rel="noopener" aria-label="성균관대학교 데이터사이언스융합학과 홈페이지 (새 탭)">
     <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
       <circle cx="12" cy="12" r="10.5" fill="none" stroke="#c9f24b" stroke-width="1.5"/>
       <path d="M12 5c-2.5 2.1-4 4.4-4 6.7 0 2.8 1.8 4.7 4 7.3 2.2-2.6 4-4.5 4-7.3 0-2.3-1.5-4.6-4-6.7z"
@@ -315,19 +376,63 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
     </svg>
   </a>
   <nav aria-label="사이트 메뉴">
-    <a href="#" aria-current="true" aria-label="홈">
+    <a href="#" aria-current="true" aria-label="홈 (맨 위로)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/>
       </svg>
     </a>
-    <a href="#subjects" aria-label="과목 목록">
+    <button type="button" id="menu-btn" aria-expanded="false" aria-controls="drawer" aria-label="과목 메뉴 열기">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M4 19V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2z"/><path d="M4 17h15"/>
       </svg>
-    </a>
+    </button>
   </nav>
   <span class="foot" aria-hidden="true">SKKU · DS</span>
 </aside>
+
+<!-- expandable drawer menu -->
+<nav class="drawer" id="drawer" aria-label="과목 메뉴" aria-hidden="true">
+  <div class="drawer-head">
+    <h2>메뉴</h2>
+    <button class="drawer-close" type="button" aria-label="메뉴 닫기">✕</button>
+  </div>
+
+  <p class="d-label" id="d-sem-label">학기</p>
+  <button class="d-item active" type="button" data-goto="#subjects">
+    <span class="d-dot" aria-hidden="true"></span>
+    2026-1학기
+    <span class="d-side">3과목</span>
+  </button>
+  <button class="d-item" type="button" disabled>
+    <span class="d-dot" aria-hidden="true"></span>
+    2026-2학기
+    <span class="d-side">준비중</span>
+  </button>
+
+  <p class="d-label">2026-1학기 과목</p>
+  <button class="d-item open-btn" type="button"
+    data-src="courses/math-for-ai.html"
+    data-title="인공지능을 위한 수학 — 요점정리">
+    <span class="d-num" aria-hidden="true">01</span>
+    인공지능을 위한 수학
+  </button>
+  <button class="d-item open-btn" type="button"
+    data-src="courses/statistics.html"
+    data-title="기초통계 — 개념·수식 정리">
+    <span class="d-num" aria-hidden="true">02</span>
+    기초통계
+  </button>
+  <button class="d-item open-btn" type="button"
+    data-src="courses/thesis-ethics.html"
+    data-title="논문작성법과 윤리 — 요점정리">
+    <span class="d-num" aria-hidden="true">03</span>
+    논문작성법과 윤리
+  </button>
+
+  <div class="d-foot">
+    <a href="https://ads.skku.edu/ads/index.do" target="_blank" rel="noopener">성균관대 데이터사이언스융합학과 ↗</a>
+  </div>
+</nav>
 
 <div class="wrap">
   <header class="top">
@@ -336,7 +441,7 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
       <h1>데이터사이언스융합학과 석사과정 요점정리</h1>
       <p>매 학기 수강 과목의 핵심 개념을 한곳에 정리합니다.</p>
     </div>
-    <a class="skku" href="https://www.skku.edu" target="_blank" rel="noopener">성균관대학교 SKKU</a>
+    <a class="skku" href="https://ads.skku.edu/ads/index.do" target="_blank" rel="noopener">성균관대학교 SKKU</a>
   </header>
 
   <main class="bento">
@@ -458,14 +563,58 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
   var frame = document.getElementById('modal-frame');
   var titleEl = document.getElementById('modal-title');
   var newtab = modal.querySelector('.newtab');
+  var drawer = document.getElementById('drawer');
+  var menuBtn = document.getElementById('menu-btn');
   var lastFocus = null;
 
+  /* ----- drawer menu ----- */
+  function setDrawer(open){
+    drawer.classList.toggle('open', open);
+    drawer.setAttribute('aria-hidden', String(!open));
+    menuBtn.setAttribute('aria-expanded', String(open));
+    if(open){
+      drawer.querySelector('.drawer-close').focus();
+    }
+  }
+
+  menuBtn.addEventListener('click', function(){
+    var open = !drawer.classList.contains('open');
+    setDrawer(open);
+    if(!open) menuBtn.focus();
+  });
+
+  drawer.querySelector('.drawer-close').addEventListener('click', function(){
+    setDrawer(false);
+    menuBtn.focus();
+  });
+
+  // click outside closes the drawer
+  document.addEventListener('click', function(e){
+    if(!drawer.classList.contains('open')) return;
+    if(drawer.contains(e.target) || menuBtn.contains(e.target)) return;
+    setDrawer(false);
+  });
+
+  // semester item: close drawer, jump to subject grid
+  drawer.querySelectorAll('[data-goto]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      setDrawer(false);
+      var target = document.querySelector(btn.dataset.goto);
+      if(target){
+        target.scrollIntoView({behavior:'smooth', block:'start'});
+        var card = target.querySelector('.card');
+        if(card) card.focus && card.focus();
+      }
+    });
+  });
+
+  /* ----- course modal ----- */
   function openModal(src, title){
     lastFocus = document.activeElement;
     titleEl.textContent = title;
     frame.title = title;
     frame.src = src;
-    newtab.href = src;
+    if(newtab) newtab.href = src;
     modal.hidden = false;
     modal.classList.add('open');
     document.body.classList.add('modal-locked');
@@ -477,11 +626,14 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
     modal.hidden = true;
     frame.src = 'about:blank';
     document.body.classList.remove('modal-locked');
-    if(lastFocus && lastFocus.focus) lastFocus.focus();
+    // if the modal was opened from the (now closed) drawer, return focus to the menu button
+    if(lastFocus && drawer.contains(lastFocus)) menuBtn.focus();
+    else if(lastFocus && lastFocus.focus) lastFocus.focus();
   }
 
   document.querySelectorAll('.open-btn').forEach(function(btn){
     btn.addEventListener('click', function(){
+      setDrawer(false);
       openModal(btn.dataset.src, btn.dataset.title);
     });
   });
@@ -491,8 +643,12 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
   });
 
   document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){
+      if(!modal.hidden){ closeModal(); }
+      else if(drawer.classList.contains('open')){ setDrawer(false); menuBtn.focus(); }
+      return;
+    }
     if(modal.hidden) return;
-    if(e.key === 'Escape'){ closeModal(); return; }
     if(e.key === 'Tab'){
       // simple focus trap within the modal
       var focusables = modal.querySelectorAll('a[href], button, iframe');
