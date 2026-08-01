@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main, "claude/masters-course-summary-site-4vp2sc"]
   workflow_dispatch:
 
 permissions:
