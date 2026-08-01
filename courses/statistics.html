@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>통계학원론 | 개념·수식 정리</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ── 변수 ── */
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --radius:10px; --max:800px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+
+/* ── 헤더 제거됨 ── */
+
+/* ── 탭 ── */
+.tab-bar{
+  background:var(--ink);
+  padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);
+  text-decoration:none;font-size:13px;font-weight:500;
+  padding:13px 12px;border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+
+/* ── 본문 ── */
+.wrap{max-width:var(--max);margin:0 auto;padding:24px 16px 80px}
+
+/* ── 장 ── */
+.ch{margin-bottom:52px}
+.ch-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}
+.ch-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.ch-title{font-size:clamp(16px,3.5vw,21px);font-weight:700;line-height:1.2}
+.ch-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+
+/* ── 소단원 ── */
+.sub-head{
+  font-size:12px;font-weight:700;color:var(--accent);
+  letter-spacing:.06em;text-transform:uppercase;
+  margin:20px 0 8px;display:flex;align-items:center;gap:8px;
+}
+.sub-head::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── 개념 테이블 ── */
+.concepts{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.concept-row{display:grid;grid-template-columns:130px 1fr;border-bottom:1px solid var(--border)}
+.concept-row:last-child{border-bottom:none}
+.concept-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;color:var(--ink);border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.concept-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.6}
+@media(max-width:440px){
+  .concept-row{grid-template-columns:1fr}
+  .concept-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+
+/* ── 수식 블록 ── */
+.formulas{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.f-block{background:var(--accent-light);border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:13px 16px}
+.f-name{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:7px}
+.f-eq{font-size:14.5px;line-height:1.9;color:var(--ink);overflow-x:auto}
+.f-note{font-size:12px;color:var(--muted);margin-top:6px;border-top:1px solid rgba(27,63,139,.12);padding-top:6px;line-height:1.55}
+
+/* ── 수식 표현용 CSS ── */
+/* 분수 */
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 2px;font-size:.9em}
+.frac .num{border-bottom:1.5px solid currentColor;padding-bottom:1px;text-align:center;white-space:nowrap}
+.frac .den{padding-top:1px;text-align:center;white-space:nowrap}
+/* 루트 */
+.sqrt-wrap{display:inline-flex;align-items:center;vertical-align:middle}
+.sqrt-sym{font-size:1.1em;margin-right:1px}
+.sqrt-body{border-top:1.5px solid currentColor;padding:0 2px;display:inline-block}
+/* 위첨자/아래첨자 */
+sup{font-size:.7em;vertical-align:super;line-height:0}
+sub{font-size:.7em;vertical-align:sub;line-height:0}
+/* 이탤릭 변수 */
+.v{font-style:italic}
+/* bold */
+.b{font-weight:700}
+/* 수식 줄 */
+.eq-line{display:block;margin:3px 0;white-space:normal;word-break:break-all}
+.eq-line.center{text-align:center}
+.eq-indent{display:block;margin:3px 0 3px 16px}
+/* 팁 */
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:11px 14px;font-size:12.5px;color:#78350f;line-height:1.6;margin-bottom:16px}
+.tip b{color:#92400e}
+/* 표 */
+.tbl-wrap{overflow-x:auto;margin-bottom:16px;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--surface);border-radius:var(--radius);overflow:hidden}
+th{background:var(--ink);color:#fff;padding:9px 12px;font-weight:500;font-size:11.5px;text-align:center;white-space:nowrap}
+td{padding:8px 12px;border:1px solid var(--border);text-align:center;color:var(--ink);line-height:1.5}
+tr:nth-child(even) td{background:#f8f7f4}
+/* 목차 */
+.toc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:28px}
+.toc-title{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.toc-list{display:flex;flex-direction:column;gap:2px}
+.toc-list a{font-size:13px;color:var(--ink);text-decoration:none;padding:4px 0;display:flex;align-items:center;gap:8px;transition:.12s}
+.toc-list a:hover{color:var(--accent)}
+.toc-num{font-weight:700;color:var(--red);min-width:32px;font-size:12px}
+/* 스텝 */
+.steps{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.step{display:flex;align-items:flex-start;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px}
+.step-n{background:var(--accent);color:#fff;font-size:11px;font-weight:700;min-width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+/* 맨 위로 */
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+/* ── 스토리텔링 블록 ── */
+.story{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:16px 18px;
+  margin-bottom:20px;
+  position:relative;
+  line-height:1.85;
+  font-size:13.5px;
+  color:#2d3748;
+}
+.story::before{
+  content:'흐름';
+  position:absolute;top:-1px;left:16px;
+  transform:translateY(-50%);
+  background:var(--gold,#92640a);
+  color:#fff;
+  font-size:9px;font-weight:700;letter-spacing:.12em;
+  padding:2px 8px;border-radius:20px;
+  white-space:nowrap;
+}
+.story p{margin-bottom:8px}
+.story p:last-child{margin-bottom:0}
+.story .kw{
+  color:var(--accent);font-weight:700;
+}
+.story .br{
+  display:block;
+  border-left:2px solid #d4cfc7;
+  margin:8px 0 8px 4px;
+  padding-left:10px;
+  font-size:13px;
+  color:var(--muted);
+}
+/* 가로 모드 */
+@media(orientation:landscape)and(max-height:500px){.tab-bar{top:0}}
+
+/* ── 출제 빈도 배지 ── */
+.freq-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10px;font-weight:700;letter-spacing:.06em;
+  padding:2px 8px;border-radius:20px;white-space:nowrap;
+  vertical-align:middle;margin-left:6px;
+}
+.freq-must{background:#FFF0F0;color:#B91C1C;border:1px solid #FCA5A5;}
+.freq-high{background:#FFF7ED;color:#C47B24;border:1px solid #FCD34D;}
+.freq-mid{background:#EFF6FF;color:#1D4ED8;border:1px solid #93C5FD;}
+
+/* 출제 tip 박스 */
+.exam-tip{
+  background:#F0FDF4;border:1px solid #86EFAC;
+  border-left:3px solid #16A34A;
+  border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;color:#166534;
+  line-height:1.6;margin-bottom:12px;
+}
+.exam-tip b{color:#15803D;}
+
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#ch3">3장 확률</a>
+  <a href="#ch4">4장 확률변수</a>
+  <a href="#ch5">5장 확률분포</a>
+  <a href="#ch6">6장 이변량</a>
+  <a href="#ch7">7장 표본분포</a>
+  <a href="#ch8">8장 점추정</a>
+  <a href="#ch9">9장 구간추정</a>
+  <a href="#ch10">10장 가설검정</a>
+  <a href="#ch11">11장 범주형</a>
+  <a href="#ch24">Ch.24 확률론</a>
+</nav>
+
+<div class="wrap">
+
+<nav class="toc">
+  <p class="toc-title">목차</p>
+  <div class="toc-list">
+    <a href="#ch3"><span class="toc-num">Ch.3</span>확률</a>
+    <a href="#ch4"><span class="toc-num">Ch.4</span>확률변수</a>
+    <a href="#ch5"><span class="toc-num">Ch.5</span>확률분포</a>
+    <a href="#ch6"><span class="toc-num">Ch.6</span>이변량 확률변수</a>
+    <a href="#ch7"><span class="toc-num">Ch.7</span>표본분포</a>
+    <a href="#ch8"><span class="toc-num">Ch.8</span>점추정</a>
+    <a href="#ch9"><span class="toc-num">Ch.9</span>구간추정</a>
+    <a href="#ch10"><span class="toc-num">Ch.10</span>가설검정</a>
+    <a href="#ch11"><span class="toc-num">Ch.11</span>범주형 자료분석</a>
+    <a href="#ch24"><span class="toc-num">Ch.24</span>Data Analysis · 확률론</a>
+  </div>
+</nav>
+
+
+<!-- ═══ 3장 확률 ═══ -->
+<section class="ch" id="ch3">
+  <div class="ch-head"><span class="ch-badge">Ch·3</span><h2 class="ch-title">확률<small>Probability · p.38–73</small></h2></div>
+
+  <div class="story">
+    <p>어떤 실험에서 나올 수 있는 모든 결과를 모은 것이 <span class="kw">표본공간 S</span>, 우리가 관심 있는 결과들의 묶음이 <span class="kw">사상(Event)</span>이다.</p>
+    <p>확률을 계산할 때 가장 먼저 확인할 것은 <span class="kw">"두 사상이 동시에 일어날 수 있는가?"</span>다. 동시에 일어날 수 없는 상호배반이라면 단순히 더하면 되고, 그렇지 않다면 <span class="kw">합법칙 P(A∪B) = P(A)+P(B)−P(A∩B)</span>으로 겹치는 부분을 뺀다.</p>
+    <p>다음은 <span class="kw">"이미 어떤 정보가 주어진 상황"</span>이다. B가 일어났음을 알고 있을 때 A의 확률은? 이것이 <span class="kw">조건부 확률 P(A|B) = P(A∩B)/P(B)</span>다.</p>
+    <p>조건부 확률에서 두 갈래가 생긴다.<span class="br">① 조건을 줘도 확률이 그대로면 → A와 B는 <span class="kw">독립</span>. P(A∩B) = P(A)·P(B)로 곱만 하면 된다.</span><span class="br">② 원인은 여럿인데 결과만 알고 역으로 원인의 확률을 구하고 싶다면 → <span class="kw">베이즈 정리</span>. 먼저 전확률 정리로 P(A) 전체를 구하고, 그것을 분모에 놓아 역방향 확률을 계산한다.</span></p>
+  </div>
+
+  <p class="sub-head">핵심 개념</p>
+  <div class="concepts">
+    <div class="concept-row"><div class="concept-key">표본공간 <span class="v">S</span></div><div class="concept-val">실험에서 나올 수 있는 모든 결과의 집합. 사상(Event)은 <span class="v">S</span>의 부분집합.</div></div>
+    <div class="concept-row"><div class="concept-key">확률의 공리</div><div class="concept-val">① P(A) ≥ 0 &nbsp;② P(S) = 1 &nbsp;③ 상호배반 A<sub>i</sub>: P(A<sub>1</sub>∪A<sub>2</sub>∪…) = P(A<sub>1</sub>)+P(A<sub>2</sub>)+…</div></div>
+    <div class="concept-row"><div class="concept-key">조건부 확률</div><div class="concept-val">B가 주어졌을 때 A의 확률. P(B) > 0 이어야 정의됨.</div></div>
+    <div class="concept-row"><div class="concept-key">사상의 독립</div><div class="concept-val">P(A∩B) = P(A)·P(B) ↔ P(A|B) = P(A). 독립이면 공분산=0 (역은 성립 안 함).</div></div>
+    <div class="concept-row"><div class="concept-key">전확률 정리</div><div class="concept-val">B<sub>1</sub>,…,B<sub>n</sub>이 S의 분할이면 P(A)를 조건부 확률의 합으로 표현.</div></div>
+    <div class="concept-row"><div class="concept-key">베이즈 정리</div><div class="concept-val">사전확률 → 사후확률 변환. 역방향 조건부 확률 계산에 사용.</div></div>
+  </div>
+
+  <p class="sub-head">주요 수식</p>
+  <div class="formulas">
+
+    <div class="f-block">
+      <div class="f-name">조건부 확률 <span class="freq-badge freq-high">★ 자주</span></div>
+      <div class="f-eq">
+        <span class="eq-line">P(A|B) &nbsp;=&nbsp;
+          <span class="frac"><span class="num">P(A∩B)</span><span class="den">P(B)</span></span>
+          &nbsp;,&nbsp; P(B) &gt; 0
+        </span>
+      </div>
+    </div>
+
+    <div class="f-block">
+      <div class="f-name">확률의 합법칙</div>
+      <div class="f-eq">
+        <span class="eq-line">P(A∪B) = P(A) + P(B) − P(A∩B)</span>
+        <span class="eq-line">A, B가 배반이면: P(A∪B) = P(A) + P(B)</span>
+      </div>
+    </div>
+
+    <div class="f-block">
+      <div class="f-name">전확률의 정리</div>
+      <div class="f-eq">
+        <span class="eq-line">P(A) = P(B<sub>1</sub>)·P(A|B<sub>1</sub>) + P(B<sub>2</sub>)·P(A|B<sub>2</sub>) + … + P(B<sub>n</sub>)·P(A|B<sub>n</sub>)</span>
+      </div>
+      <div class="f-note">단, B<sub>1</sub>,…,B<sub>n</sub> 은 S의 분할 — B<sub>i</sub>∩B<sub>j</sub> = ∅ (i≠j), B<sub>1</sub>∪…∪B<sub>n</sub> = S</div>
+    </div>
+
+    <div class="f-block">
+      <div class="f-name">베이즈 정리</div>
+      <div class="f-eq">
+        <span class="eq-line">P(B<sub>k</sub>|A) &nbsp;=&nbsp;
+          <span class="frac">
+            <span class="num">P(B<sub>k</sub>) · P(A|B<sub>k</sub>)</span>
+            <span class="den">P(B<sub>1</sub>)·P(A|B<sub>1</sub>) + … + P(B<sub>n</sub>)·P(A|B<sub>n</sub>)</span>
+          </span>
+        </span>
+      </div>
+      <div class="f-note">P(B<sub>k</sub>): 사전확률(prior) &nbsp;|&nbsp; P(B<sub>k</sub>|A): 사후확률(posterior)</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══ 4장 확률변수 ═══ -->
+<section class="ch" id="ch4">
+  <div class="ch-head"><span class="ch-badge">Ch·4</span><h2 class="ch-title">확률변수<small>Random Variable · p.74–119</small></h2></div>
+
+  <div class="story">
+    <p>3장에서 사상에 확률을 붙였다면, 4장은 그 결과를 <span class="kw">숫자로 매핑</span>하는 것에서 시작한다. 실험 결과를 실수로 변환하는 함수가 <span class="kw">확률변수 X</span>다.</p>
+    <p>확률변수는 두 종류로 나뉜다.<span class="br">값을 셀 수 있으면 <span class="kw">이산형</span> → 각 값에 확률을 직접 부여하는 <span class="kw">PMF p(x)</span>를 사용한다.</span><span class="br">값이 연속적이면 <span class="kw">연속형</span> → 구간의 면적으로 확률을 표현하는 <span class="kw">PDF f(x)</span>를 사용하고, P(a&lt;X&lt;b)는 f(x)의 적분으로 구한다.</span></p>
+    <p>분포를 요약하는 두 숫자가 <span class="kw">기대값(평균) μ</span>과 <span class="kw">분산 σ²</span>이다. 기대값은 분포의 중심, 분산은 얼마나 퍼져 있는지를 나타낸다. aX+b처럼 변수를 선형변환하면 기대값은 그대로 따라 변하고, 분산은 a²배가 된다.</p>
+    <p>분포를 몰라도 평균과 분산만 알면 확률의 범위를 보장할 수 있다. <span class="kw">체비쇼프 부등식</span>이 그것으로, 평균에서 kσ 이상 벗어날 확률은 반드시 1/k² 이하임을 보장한다. 분포 형태와 무관하게 항상 성립한다는 점이 핵심이다.</p>
+  </div>
+
+  <p class="sub-head">핵심 개념</p>
+  <div class="concepts">
+    <div class="concept-row"><div class="concept-key">확률변수</div><div class="concept-val">X: S → ℝ. 이산형(PMF) vs 연속형(PDF)으로 구분.</div></div>
+    <div class="concept-row"><div class="concept-key">PMF (이산)</div><div class="concept-val">p(x) = P(X=x) ≥ 0, 모든 x에 대해 Σp(x) = 1</div></div>
+    <div class="concept-row"><div class="concept-key">PDF (연속)</div><div class="concept-val">f(x) ≥ 0, ∫f(x)dx = 1, P(a &lt; X &lt; b) = ∫<sub>a</sub><sup>b</sup> f(x)dx</div></div>
+    <div class="concept-row"><div class="concept-key">CDF</div><div class="concept-val">F(x) = P(X ≤ x). 단조증가, F(−∞)=0, F(∞)=1. 연속형: f(x) = F′(x).</div></div>
+    <div class="concept-row"><div class="concept-key">기대값</div><div class="concept-val">분포의 중심. 선형성 E(aX+b) = aE(X)+b 성립.</div></div>
+    <div class="concept-row"><div class="concept-key">분산</div><div class="concept-val">Var(aX+b) = a²Var(X). 표준편차 σ = √Var(X).</div></div>
+    <div class="concept-row"><div class="concept-key">체비쇼프</div><div class="concept-val">분포 무관. 평균 주변 kσ 범위에 1−1/k² 이상의 확률.</div></div>
+    <div class="concept-row"><div class="concept-key">MGF</div><div class="concept-val">m(t) = E(e<sup>tX</sup>). m′(0)=E(X), m″(0)=E(X²). 분포를 유일 결정.</div></div>
+  </div>
+
+  <p class="sub-head">주요 수식</p>
+  <div class="formulas">
+
+    <div class="f-block">
+      <div class="f-name">기대값</div>
+      <div class="f-eq">
+        <span class="eq-line">이산형: E(X) = Σ x · p(x)</span>
+        <span class="eq-line">연속형: E(X) = ∫ x · f(x) dx</span>
+      </div>
+    </div>
+
+    <div class="f-block">
+      <div class="f-name">분산</div>
+      <div class="f-eq">
+        <span class="eq-line">Var(X) = E(X²) − [E(X)]² = E[(X−μ)²]</span>
+      </div>
+    </div>
+
+    <div class="f-block">
+      <div class="f-name">선형결합</div>
+      <div class="f-eq">
+        <span class="eq-line">E(aX+b) = a·E(X) + b</span>
+        <span class="eq-line">Var(aX+b) = a²·Var(X)</span>
+      </div>
+    </div>
+
+    <div class="f-block">
+      <div class="f-name">체비쇼프 부등식</div>
+      <div class="f-eq">
+        <span class="eq-line">P(|X−μ| ≥ kσ) ≤
+          <span class="frac"><span class="num">1</span><span class="den">k²</span></span>
+          &nbsp;, &nbsp; k &gt; 1
+        </span>
+      </div>
+      <div class="f-note">동치: P(|X−μ| &lt; kσ) ≥ 1 − 1/k²</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══ 5장 확률분포 ═══ -->
+<section class="ch" id="ch5">
+  <div class="ch-head"><span class="ch-badge">Ch·5</span><h2 class="ch-title">확률분포<small>Probability Distributions · p.120–178</small></h2></div>
+
+  <div class="story">
+    <p>4장에서 만든 확률변수에 구체적인 <span class="kw">분포 모형</span>을 씌운다. 현실의 패턴이 어떤 분포를 따르는지 파악하는 것이 5장의 핵심이다.</p>
+    <p><span class="kw">이산형부터:</span> 동전을 n번 던져 앞면이 몇 번 나오는가처럼, 독립 시행을 반복해서 성공 횟수를 셀 때는 <span class="kw">이항분포 B(n,p)</span>를 쓴다. 반면 단위 시간 동안 전화가 몇 번 오는가처럼 드문 사건을 시간/공간 단위로 셀 때는 <span class="kw">포아송분포 pois(λ)</span>가 맞는다. n이 매우 크고 p가 매우 작다면(n&gt;50, np&lt;5) 이항분포가 포아송으로 근사된다.</p>
+    <p><span class="kw">연속형으로 넘어오면:</span> 가장 중요한 것이 <span class="kw">정규분포 N(μ,σ²)</span>다. 실제 데이터 대부분이 정규분포를 따르거나 근사한다. 정규분포를 다룰 때는 반드시 <span class="kw">표준화 Z = (X−μ)/σ</span>를 거쳐 표준정규분포표를 이용한다.</p>
+    <p>이산형 분포를 정규로 근사할 때는 <span class="kw">연속성 수정</span>이 필요하다.<span class="br">이항분포 → 정규근사: min(np, nq) &gt; 5인 경우 사용, P(X≤k)를 구할 때 k를 k+0.5로 수정.</span><span class="br">포아송 → 정규근사: λ ≥ 10인 경우 사용.</span></p>
+  </div>
+
+  <div class="tip"><b>암기 세트:</b> 각 분포마다 ① PMF/PDF &nbsp;② 평균·분산 &nbsp;③ 적용 조건을 묶어서 외우세요.</div>
+
+  <p class="sub-head">이항분포 B(n, p) <span class="freq-badge freq-high">★ 자주</span></p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">PMF</div>
+      <div class="f-eq">
+        <span class="eq-line">p(x) = C(n,x) · p<sup>x</sup> · (1−p)<sup>n−x</sup> &nbsp;, &nbsp; x = 0, 1, …, n</span>
+      </div>
+      <div class="f-note">n번 독립 베르누이 시행, 성공확률 p, 성공 횟수 X</div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">평균 · 분산 · MGF</div>
+      <div class="f-eq">
+        <span class="eq-line">E(X) = np</span>
+        <span class="eq-line">Var(X) = npq &nbsp; (q = 1−p)</span>
+        <span class="eq-line">m(t) = (pe<sup>t</sup> + q)<sup>n</sup></span>
+      </div>
+    </div>
+  </div>
+
+  <p class="sub-head">포아송분포 pois(λ)</p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">PMF</div>
+      <div class="f-eq">
+        <span class="eq-line">p(x ; λ) =
+          <span class="frac"><span class="num">e<sup>−λ</sup> · λ<sup>x</sup></span><span class="den">x!</span></span>
+          &nbsp;, &nbsp; x = 0, 1, 2, …
+        </span>
+      </div>
+      <div class="f-note">단위 시간/공간의 사건 횟수 | n &gt; 50, np &lt; 5이면 이항분포 근사로 사용</div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">평균 · 분산</div>
+      <div class="f-eq">
+        <span class="eq-line">E(X) = Var(X) = λ</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="sub-head">초기하분포</p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">PMF</div>
+      <div class="f-eq">
+        <span class="eq-line">p(x) =
+          <span class="frac">
+            <span class="num">C(K,x) · C(N−K, n−x)</span>
+            <span class="den">C(N,n)</span>
+          </span>
+        </span>
+      </div>
+      <div class="f-note">비복원 추출 | N: 전체, K: 관심 범주, n: 표본크기</div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">평균 · 분산</div>
+      <div class="f-eq">
+        <span class="eq-line">E(X) =
+          <span class="frac"><span class="num">nK</span><span class="den">N</span></span>
+        </span>
+        <span class="eq-line">Var(X) =
+          <span class="frac"><span class="num">nK(N−K)(N−n)</span><span class="den">N²(N−1)</span></span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <p class="sub-head">기하분포</p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">PMF · 평균 · 분산</div>
+      <div class="f-eq">
+        <span class="eq-line">p(x) = (1−p)<sup>x−1</sup> · p &nbsp;, &nbsp; x = 1, 2, …</span>
+        <span class="eq-line">E(X) =
+          <span class="frac"><span class="num">1</span><span class="den">p</span></span>
+          &nbsp;, &nbsp; Var(X) =
+          <span class="frac"><span class="num">1−p</span><span class="den">p²</span></span>
+        </span>
+      </div>
+      <div class="f-note">첫 번째 성공까지의 시행 횟수. 무기억성(memoryless) 성질 보유.</div>
+    </div>
+  </div>
+
+  <p class="sub-head">정규분포 N(μ, σ²) <span class="freq-badge freq-must">★★ 반드시</span></p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">PDF</div>
+      <div class="f-eq">
+        <span class="eq-line">f(x) =
+          <span class="frac"><span class="num">1</span><span class="den">√(2π) · σ</span></span>
+          · exp&thinsp;(−
+          <span class="frac"><span class="num">(x−μ)²</span><span class="den">2σ²</span></span>
+          ) &nbsp;, &nbsp; −∞ &lt; x &lt; ∞
+        </span>
+      </div>
+      <div class="f-note">E(X) = μ &nbsp;, &nbsp; Var(X) = σ²</div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">표준화 · 표준정규</div>
+      <div class="f-eq">
+        <span class="eq-line">Z =
+          <span class="frac"><span class="num">X − μ</span><span class="den">σ</span></span>
+          ~ N(0, 1)
+        </span>
+        <span class="eq-line">P(a &lt; X &lt; b) = P(
+          <span class="frac"><span class="num">a−μ</span><span class="den">σ</span></span>
+          &lt; Z &lt;
+          <span class="frac"><span class="num">b−μ</span><span class="den">σ</span></span>
+          )
+        </span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">이항분포의 정규근사 (연속성 수정)</div>
+      <div class="f-eq">
+        <span class="eq-line">적용 조건: min(np, nq) &gt; 5</span>
+        <span class="eq-line">Z =
+          <span class="frac"><span class="num">X − np</span><span class="den">√(npq)</span></span>
+          ≈ N(0, 1)
+        </span>
+        <span class="eq-line">연속성 수정: P(X ≤ k) ≈ P(Z ≤
+          <span class="frac"><span class="num">k + 0.5 − np</span><span class="den">√(npq)</span></span>
+          )
+        </span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">포아송의 정규근사</div>
+      <div class="f-eq">
+        <span class="eq-line">적용 조건: λ ≥ 10</span>
+        <span class="eq-line">Z =
+          <span class="frac"><span class="num">X − λ</span><span class="den">√λ</span></span>
+          ≈ N(0, 1)
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <p class="sub-head">지수분포 Exp(λ)</p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">PDF · CDF · 평균 · 분산</div>
+      <div class="f-eq">
+        <span class="eq-line">f(x) = λe<sup>−λx</sup> &nbsp; (x ≥ 0)</span>
+        <span class="eq-line">F(x) = 1 − e<sup>−λx</sup></span>
+        <span class="eq-line">E(X) =
+          <span class="frac"><span class="num">1</span><span class="den">λ</span></span>
+          &nbsp;, &nbsp; Var(X) =
+          <span class="frac"><span class="num">1</span><span class="den">λ²</span></span>
+        </span>
+      </div>
+      <div class="f-note">무기억성: P(X &gt; s+t | X &gt; s) = P(X &gt; t)</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ 6장 이변량 ═══ -->
+<section class="ch" id="ch6">
+  <div class="ch-head"><span class="ch-badge">Ch·6</span><h2 class="ch-title">이변량 확률변수<small>Bivariate RV · p.180–227</small></h2></div>
+
+  <div class="story">
+    <p>5장까지는 변수 하나(X)만 봤다면, 6장은 <span class="kw">두 변수 X와 Y를 동시에</span> 다룬다. 두 변수의 관계가 있는지, 있다면 얼마나 강한지를 파악하는 것이 목표다.</p>
+    <p>두 변수의 동시 분포가 <span class="kw">결합분포 f(x,y)</span>다. 여기서 한 변수만 꺼내고 싶으면 나머지 변수에 대해 적분(합산)해서 <span class="kw">주변분포 f<sub>X</sub>(x)</span>를 구한다.</p>
+    <p>핵심 질문은 <span class="kw">"두 변수가 서로 영향을 주는가?"</span>이다.<span class="br">f(x,y) = f<sub>X</sub>(x)·f<sub>Y</sub>(y) 가 성립하면 → <span class="kw">독립</span>. 하나가 뭔지 알아도 다른 하나의 분포가 전혀 달라지지 않는다.</span><span class="br">독립이 아니라면 → 두 변수 사이에 관계가 있고, 그 크기와 방향을 <span class="kw">공분산 Cov(X,Y)</span>로 측정한다. 단위의 영향을 없애고 −1에서 1 사이로 정규화한 것이 <span class="kw">상관계수 ρ</span>다.</span></p>
+    <p>두 변수의 선형결합 aX+bY의 분산을 구할 때 독립이면 단순히 a²Var(X)+b²Var(Y)이지만, 독립이 아니면 공분산 항 2ab·Cov(X,Y)가 추가로 붙는다.</p>
+  </div>
+
+  <p class="sub-head">핵심 개념</p>
+  <div class="concepts">
+    <div class="concept-row"><div class="concept-key">결합분포</div><div class="concept-val">두 RV (X,Y)의 동시 분포. 이산: p(x,y), 연속: f(x,y). 전체 합/적분 = 1.</div></div>
+    <div class="concept-row"><div class="concept-key">주변분포</div><div class="concept-val">다른 변수에 대해 합산(적분)하여 한 변수의 분포만 추출.</div></div>
+    <div class="concept-row"><div class="concept-key">독립 조건</div><div class="concept-val">f(x,y) = f<sub>X</sub>(x)·f<sub>Y</sub>(y) 이면 독립. 공분산=0은 필요조건 (충분 아님).</div></div>
+    <div class="concept-row"><div class="concept-key">공분산</div><div class="concept-val">두 변수의 선형관계 크기·방향. Cov &gt; 0: 양의 관계.</div></div>
+    <div class="concept-row"><div class="concept-key">상관계수 ρ</div><div class="concept-val">−1 ≤ ρ ≤ 1. 단위 없는 선형관계 강도. |ρ|=1: 완전 선형.</div></div>
+    <div class="concept-row"><div class="concept-key">조건부분포</div><div class="concept-val">f<sub>X|Y</sub>(x|y) = f(x,y)/f<sub>Y</sub>(y). 독립이면 조건부=주변분포.</div></div>
+  </div>
+
+  <p class="sub-head">주요 수식</p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">주변확률밀도함수</div>
+      <div class="f-eq">
+        <span class="eq-line">f<sub>X</sub>(x) = ∫ f(x,y) dy</span>
+        <span class="eq-line">f<sub>Y</sub>(y) = ∫ f(x,y) dx</span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">공분산</div>
+      <div class="f-eq">
+        <span class="eq-line">Cov(X,Y) = E(XY) − E(X)·E(Y) = E[(X−μ<sub>X</sub>)(Y−μ<sub>Y</sub>)]</span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">상관계수</div>
+      <div class="f-eq">
+        <span class="eq-line">ρ<sub>XY</sub> =
+          <span class="frac"><span class="num">Cov(X,Y)</span><span class="den">σ<sub>X</sub> · σ<sub>Y</sub></span></span>
+          &nbsp;, &nbsp; −1 ≤ ρ ≤ 1
+        </span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">선형결합의 분산</div>
+      <div class="f-eq">
+        <span class="eq-line">Var(aX + bY) = a²Var(X) + b²Var(Y) + 2ab·Cov(X,Y)</span>
+      </div>
+      <div class="f-note">독립이면 Cov=0 이므로: Var(aX+bY) = a²Var(X) + b²Var(Y)</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ 7장 표본분포 ═══ -->
+<section class="ch" id="ch7">
+  <div class="ch-head"><span class="ch-badge">Ch·7</span><h2 class="ch-title">표본분포<small>Sampling Distributions · p.224–270</small></h2></div>
+
+  <div class="story">
+    <p>지금까지는 모집단의 분포가 알려진 상태에서 확률을 계산했다. 7장부터는 반대 방향, 즉 <span class="kw">표본을 뽑아서 모집단을 추론</span>하는 방향으로 전환된다. 8~10장의 추정·검정은 전부 7장의 표본분포 위에서 작동한다.</p>
+    <p>표본을 뽑으면 표본평균 X̄가 나오는데, 이 X̄ 자체도 확률변수라 매번 다른 값이 나온다. X̄의 분포가 <span class="kw">표본분포</span>다. 핵심은 두 가지다.<span class="br">E(X̄) = μ → 평균적으로 모평균을 정확히 맞힌다.</span><span class="br">Var(X̄) = σ²/n → 표본이 클수록 X̄는 μ 근처에 밀집된다.</span></p>
+    <p>모집단 분포가 정규면 X̄도 정확히 정규다. 정규가 아니어도 <span class="kw">n ≥ 30이면 중심극한정리(CLT)</span>에 의해 X̄는 근사적으로 정규분포를 따른다. 이것이 정규분포가 통계학 전반에 등장하는 이유다.</p>
+    <p>이후 검정에서 사용할 세 가지 분포가 정규분포로부터 파생된다.<span class="br"><span class="kw">χ² 분포</span>: 표준정규 Z를 제곱해서 합산. 모분산 추정/검정에 사용.</span><span class="br"><span class="kw">t 분포</span>: σ를 모를 때 S로 대체하면 Z가 아닌 t 통계량이 나온다. 꼬리가 두꺼워서 σ를 모를 때의 불확실성을 반영.</span><span class="br"><span class="kw">F 분포</span>: 두 χ²의 비. 두 집단의 분산을 비교할 때 등장.</span></p>
+  </div>
+
+  <p class="sub-head">핵심 개념</p>
+  <div class="concepts">
+    <div class="concept-row"><div class="concept-key">확률표본</div><div class="concept-val">X<sub>1</sub>,…,X<sub>n</sub> i.i.d. 통계량은 표본의 함수이자 확률변수.</div></div>
+    <div class="concept-row"><div class="concept-key">중심극한정리</div><div class="concept-val">모집단 무관, n ≥ 30이면 X̄는 근사 정규분포. 통계추론의 핵심 근거.</div></div>
+    <div class="concept-row"><div class="concept-key">대수의 법칙</div><div class="concept-val">n→∞이면 X̄ → μ (확률수렴). 표본 증가 → 추정 정확도 향상.</div></div>
+    <div class="concept-row"><div class="concept-key">χ² 분포</div><div class="concept-val">Z<sub>1</sub>²+…+Z<sub>k</sub>² ~ χ²(k). 비음수·오른쪽 치우침. 모분산 추정/검정에 사용.</div></div>
+    <div class="concept-row"><div class="concept-key">t 분포</div><div class="concept-val">T = Z/√(U/k) ~ t(k). 정규보다 두꺼운 꼬리. k→∞이면 N(0,1)로 수렴.</div></div>
+    <div class="concept-row"><div class="concept-key">F 분포</div><div class="concept-val">두 독립 χ²의 비. 두 분산의 비 검정에 사용.</div></div>
+  </div>
+
+  <p class="sub-head">주요 수식</p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">표본평균의 분포</div>
+      <div class="f-eq">
+        <span class="eq-line">E(X̄) = μ</span>
+        <span class="eq-line">Var(X̄) =
+          <span class="frac"><span class="num">σ²</span><span class="den">n</span></span>
+        </span>
+        <span class="eq-line">X̄ ~ N(μ, σ²/n) — 정규모집단이면 정확, 일반 모집단이면 CLT에 의해 근사</span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">중심극한정리 (CLT)</div>
+      <div class="f-eq">
+        <span class="eq-line">Z =
+          <span class="frac"><span class="num">X̄ − μ</span><span class="den">σ/√n</span></span>
+          → N(0,1) &nbsp; (n → ∞)
+        </span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">표본분산과 χ² 분포</div>
+      <div class="f-eq">
+        <span class="eq-line">
+          <span class="frac"><span class="num">(n−1)S²</span><span class="den">σ²</span></span>
+          ~ χ²(n−1)
+        </span>
+        <span class="eq-line">S² =
+          <span class="frac"><span class="num">1</span><span class="den">n−1</span></span>
+          · Σ(X<sub>i</sub> − X̄)²
+        </span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">t 통계량 (σ 미지)</div>
+      <div class="f-eq">
+        <span class="eq-line">T =
+          <span class="frac"><span class="num">X̄ − μ</span><span class="den">S/√n</span></span>
+          ~ t(n−1)
+        </span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">표본비율의 분포</div>
+      <div class="f-eq">
+        <span class="eq-line">E(p̂) = p &nbsp;, &nbsp; Var(p̂) =
+          <span class="frac"><span class="num">p(1−p)</span><span class="den">n</span></span>
+        </span>
+        <span class="eq-line">n이 충분히 크면: p̂ ≈ N(p, p(1−p)/n)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ 8장 점추정 ═══ -->
+<section class="ch" id="ch8">
+  <div class="ch-head"><span class="ch-badge">Ch·8</span><h2 class="ch-title">점추정<small>Point Estimation · p.272–299</small></h2></div>
+
+  <div class="story">
+    <p>모수(μ, σ², p 등)는 알 수 없다. 대신 표본을 뽑아 모수를 하나의 숫자로 <span class="kw">추측</span>하는 것이 점추정이다. 표본평균 X̄로 μ를 추정하고, 표본비율 p̂으로 p를 추정하는 식이다.</p>
+    <p>추정량이 좋은지 판단하는 기준이 세 가지다.<span class="br"><span class="kw">① 불편성</span>: 반복 추정하면 평균적으로 모수를 정확히 맞히는가? E(θ̂) = θ이면 불편추정량이다.</span><span class="br"><span class="kw">② 효율성</span>: 불편추정량이 여럿이면 분산이 가장 작은 것을 고른다. MSE = Var + bias²로 종합 평가한다. bias가 있어도 분산이 훨씬 작으면 더 실용적일 수 있다.</span><span class="br"><span class="kw">③ 일치성</span>: 표본이 커질수록 추정값이 모수에 가까워지는가? MSE → 0이면 일치추정량이다.</span></p>
+    <p>좋은 추정량을 찾는 방법이 두 가지다.<span class="br"><span class="kw">적률방법(MOM)</span>: 모적률 = 표본적률로 방정식을 세워 푼다. 계산이 간단하지만 최적이 아닐 수 있다.</span><span class="br"><span class="kw">최대우도법(MLE)</span>: 관측된 데이터가 나올 확률(우도)을 가장 크게 만드는 θ를 찾는다. 로그우도를 미분해서 0으로 놓으면 된다. 불변성·일치성·근사 정규성을 자동으로 만족하는 강력한 방법이다.</span></p>
+  </div>
+
+  <p class="sub-head">핵심 개념</p>
+  <div class="concepts">
+    <div class="concept-row"><div class="concept-key">불편성</div><div class="concept-val">E(θ̂) = θ. X̄→μ, S²→σ² 의 불편추정량.</div></div>
+    <div class="concept-row"><div class="concept-key">최소분산(MVUE)</div><div class="concept-val">불편추정량 중 분산이 가장 작은 것. 이론적 하한: 크래머-라오 하한.</div></div>
+    <div class="concept-row"><div class="concept-key">MSE</div><div class="concept-val">MSE = Var(θ̂) + bias². 불편이면 MSE = Var(θ̂).</div></div>
+    <div class="concept-row"><div class="concept-key">일치성</div><div class="concept-val">n→∞이면 θ̂ → θ (확률수렴). MSE→0이면 일치추정량.</div></div>
+    <div class="concept-row"><div class="concept-key">적률방법 MOM</div><div class="concept-val">모적률=표본적률 방정식 풀기. 계산 간단, MLE보다 효율 낮을 수 있음.</div></div>
+    <div class="concept-row"><div class="concept-key">최대우도법 MLE</div><div class="concept-val">우도함수 L(θ) 최대화. 불변성·일치성·근사 정규성 등 우수한 성질.</div></div>
+  </div>
+
+  <p class="sub-head">주요 수식</p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">평균제곱오차 (MSE)</div>
+      <div class="f-eq">
+        <span class="eq-line">MSE(θ̂) = Var(θ̂) + [E(θ̂) − θ]²</span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">상대효율</div>
+      <div class="f-eq">
+        <span class="eq-line">RE(θ̂<sub>1</sub>, θ̂<sub>2</sub>) =
+          <span class="frac"><span class="num">MSE(θ̂<sub>2</sub>)</span><span class="den">MSE(θ̂<sub>1</sub>)</span></span>
+          &gt; 1 이면 θ̂<sub>1</sub>이 더 효율적
+        </span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">r차 표본적률 (MOM)</div>
+      <div class="f-eq">
+        <span class="eq-line">M′<sub>r</sub> =
+          <span class="frac"><span class="num">1</span><span class="den">n</span></span>
+          · Σ X<sub>i</sub><sup>r</sup>
+        </span>
+        <span class="eq-line">μ′<sub>r</sub> = M′<sub>r</sub> 로 방정식 구성하여 θ 추정</span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">우도함수 · MLE</div>
+      <div class="f-eq">
+        <span class="eq-line">L(θ) = Π f(x<sub>i</sub> ; θ)</span>
+        <span class="eq-line">ln L(θ) = Σ ln f(x<sub>i</sub> ; θ)</span>
+        <span class="eq-line">∂lnL / ∂θ = 0 을 풀어 θ̂<sub>MLE</sub> 도출</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ 9장 구간추정 ═══ -->
+<section class="ch" id="ch9">
+  <div class="ch-head"><span class="ch-badge">Ch·9</span><h2 class="ch-title">구간추정<small>Interval Estimation · p.301–344</small></h2></div>
+
+  <div class="story">
+    <p>점추정은 단 하나의 숫자로 모수를 추측하는데, 그 숫자가 얼마나 믿을 만한지는 알 수 없다. 구간추정은 <span class="kw">"이 범위 안에 모수가 있을 확률이 95%"</span>처럼 신뢰도와 함께 구간을 제시한다.</p>
+    <p>구간 공식은 항상 같은 구조다: <span class="kw">추정량 ± (임계값) × (표준오차)</span>. 달라지는 것은 임계값의 종류다.<span class="br">모분산 σ²을 <span class="kw">아는 경우</span> → Z 통계량 사용. X̄를 표준화하면 N(0,1)을 따르므로 임계값은 <span class="kw">z<sub>α/2</sub></span>.</span><span class="br">모분산을 <span class="kw">모르는 경우</span> → σ 대신 S를 쓰면 t 통계량이 된다. 임계값은 자유도 n−1인 <span class="kw">t<sub>α/2</sub>(n−1)</span>. n이 작을수록 t값이 z값보다 커서 구간이 넓어진다 — σ를 모르는 불확실성을 반영한 것이다.</span></p>
+    <p>두 집단을 비교할 때는 상황에 따라 다시 갈린다.<span class="br">두 표본이 독립이고 등분산이라면 → 두 표본의 정보를 합친 <span class="kw">합동분산 S<sub>p</sub>²</span>을 써서 구간을 좁힌다.</span><span class="br">같은 대상을 두 번 측정한 <span class="kw">대응표본</span>이라면 → 차이 D<sub>i</sub> = X<sub>i</sub>−Y<sub>i</sub>를 만들어 단일표본 문제로 환원한다.</span></p>
+    <p>신뢰구간의 폭을 원하는 허용오차 E 이하로 하고 싶다면 역으로 <span class="kw">필요 표본크기 n</span>을 구할 수 있다. 오차가 작을수록, 신뢰수준이 높을수록 더 많은 표본이 필요하다.</p>
+  </div>
+
+  <div class="tip"><b>선택 기준:</b> ① σ² 알면 → Z &nbsp;② σ² 모르면 → t (자유도 n−1) &nbsp;③ 두 그룹 등분산이면 합동분산 S<sub>p</sub>², 아니면 Welch 자유도 사용.</div>
+
+  <p class="sub-head">모평균 구간추정</p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">① σ² 아는 경우 — Z 신뢰구간</div>
+      <div class="f-eq">
+        <span class="eq-line">X̄ ± z<sub>α/2</sub> ·
+          <span class="frac"><span class="num">σ</span><span class="den">√n</span></span>
+        </span>
+      </div>
+      <div class="f-note">95%: z<sub>0.025</sub> = 1.96 &nbsp;|&nbsp; 90%: z<sub>0.05</sub> = 1.645 &nbsp;|&nbsp; 99%: z<sub>0.005</sub> = 2.576</div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">② σ² 모르는 경우 — t 신뢰구간</div>
+      <div class="f-eq">
+        <span class="eq-line">X̄ ± t<sub>α/2</sub>(n−1) ·
+          <span class="frac"><span class="num">S</span><span class="den">√n</span></span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <p class="sub-head">두 모평균 차의 구간추정</p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">독립표본 — 등분산 (합동분산 S<sub>p</sub>²)</div>
+      <div class="f-eq">
+        <span class="eq-line">(X̄−Ȳ) ± t<sub>α/2</sub>(n<sub>1</sub>+n<sub>2</sub>−2) · S<sub>p</sub> ·
+          <span class="sqrt-wrap"><span class="sqrt-sym">√</span><span class="sqrt-body">1/n<sub>1</sub> + 1/n<sub>2</sub></span></span>
+        </span>
+        <span class="eq-line">S<sub>p</sub>² =
+          <span class="frac">
+            <span class="num">(n<sub>1</sub>−1)S<sub>1</sub>² + (n<sub>2</sub>−1)S<sub>2</sub>²</span>
+            <span class="den">n<sub>1</sub> + n<sub>2</sub> − 2</span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">대응표본 (Paired)</div>
+      <div class="f-eq">
+        <span class="eq-line">D<sub>i</sub> = X<sub>i</sub> − Y<sub>i</sub> 로 정의</span>
+        <span class="eq-line">D̄ ± t<sub>α/2</sub>(n−1) ·
+          <span class="frac"><span class="num">S<sub>D</sub></span><span class="den">√n</span></span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <p class="sub-head">기타 구간추정</p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">모비율</div>
+      <div class="f-eq">
+        <span class="eq-line">p̂ ± z<sub>α/2</sub> ·
+          <span class="sqrt-wrap"><span class="sqrt-sym">√</span><span class="sqrt-body">p̂(1−p̂) / n</span></span>
+        </span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">모분산 (χ² 분포)</div>
+      <div class="f-eq">
+        <span class="eq-line">하한:
+          <span class="frac"><span class="num">(n−1)S²</span><span class="den">χ²<sub>α/2</sub>(n−1)</span></span>
+          &nbsp;, &nbsp; 상한:
+          <span class="frac"><span class="num">(n−1)S²</span><span class="den">χ²<sub>1−α/2</sub>(n−1)</span></span>
+        </span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">표본크기 결정 (허용오차 E)</div>
+      <div class="f-eq">
+        <span class="eq-line">모평균: n ≥ (z<sub>α/2</sub> · σ / E)²</span>
+        <span class="eq-line">모비율: n ≥ z<sub>α/2</sub>² · p(1−p) / E²</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ 10장 가설검정 ═══ -->
+<section class="ch" id="ch10">
+  <div class="ch-head"><span class="ch-badge">Ch·10</span><h2 class="ch-title">가설검정<small>Hypothesis Testing · p.346–395</small></h2></div>
+
+  <div class="story">
+    <p>구간추정이 <span class="kw">"모수가 어디쯤 있을 것이다"</span>라면, 가설검정은 <span class="kw">"모수가 특정 값이다/아니다"를 증거로 판정</span>하는 것이다. 재판에서 무죄 추정 원칙처럼, 통계에서도 귀무가설 H<sub>0</sub>을 사실이라 가정하고 데이터가 그것을 뒤집을 만큼 충분히 강한 증거인지를 따진다.</p>
+    <p>검정 흐름은 항상 이 순서로 흘러간다.<span class="br">① H<sub>0</sub>와 H<sub>1</sub>을 설정한다 → ② 유의수준 α를 정한다(오경보를 얼마나 허용할지) → ③ 기각역을 설정한다 → ④ 검정통계량을 계산한다 → ⑤ 기각역에 해당하면 H<sub>0</sub>를 기각한다.</span></p>
+    <p>검정통계량 선택이 핵심이다.<span class="br">모분산 σ²을 <span class="kw">아는 경우</span> → Z<sub>0</sub> = (X̄−μ<sub>0</sub>)/(σ/√n). |Z<sub>0</sub>| &gt; z<sub>α/2</sub>이면 H<sub>0</sub> 기각.</span><span class="br">모분산을 <span class="kw">모르는 경우</span> → S로 대체해 T<sub>0</sub> = (X̄−μ<sub>0</sub>)/(S/√n) ~ t(n−1). 자유도를 반드시 확인.</span><span class="br">두 집단 비교, 등분산 가정 → 합동분산 S<sub>p</sub>²로 t 검정. 자유도 n<sub>1</sub>+n<sub>2</sub>−2.</span><span class="br">대응표본 → D<sub>i</sub>를 만들어 단일표본 t 검정으로 환원.</span></p>
+    <p>P값은 <span class="kw">"귀무가설이 참일 때 이 정도 극단적인 결과가 나올 확률"</span>이다. P &lt; α이면 그런 결과는 우연이라 보기 어려우므로 H<sub>0</sub>를 기각한다. 9장의 신뢰구간과 정확히 대응된다 — μ<sub>0</sub>이 신뢰구간 밖에 있으면 기각, 안에 있으면 채택.</p>
+  </div>
+
+  <p class="sub-head">핵심 개념</p>
+  <div class="concepts">
+    <div class="concept-row"><div class="concept-key">H<sub>0</sub> vs H<sub>1</sub></div><div class="concept-val">H<sub>0</sub>: 기각하려는 가설(등호 포함). H<sub>1</sub>: 입증하려는 가설. 양측(≠) / 단측(&lt; 또는 >).</div></div>
+    <div class="concept-row"><div class="concept-key">제1종 오류 α</div><div class="concept-val">H<sub>0</sub> 참인데 기각. = 유의수준. 연구자가 사전 설정.</div></div>
+    <div class="concept-row"><div class="concept-key">제2종 오류 β</div><div class="concept-val">H<sub>0</sub> 거짓인데 채택. 검정력 = 1−β. α↓이면 β↑ (tradeoff).</div></div>
+    <div class="concept-row"><div class="concept-key">P값</div><div class="concept-val">관측 통계량보다 더 극단적인 값이 나올 확률. P &lt; α이면 H<sub>0</sub> 기각.</div></div>
+    <div class="concept-row"><div class="concept-key">구간추정과의 관계</div><div class="concept-val">θ<sub>0</sub>이 1−α 신뢰구간 밖 ↔ 유의수준 α로 H<sub>0</sub> 기각.</div></div>
+  </div>
+
+  <p class="sub-head">검정 절차 6단계</p>
+  <div class="steps">
+    <div class="step"><span class="step-n">1</span>가설 설정: H<sub>0</sub>와 H<sub>1</sub> 명확히</div>
+    <div class="step"><span class="step-n">2</span>유의수준 α 설정 (0.05 또는 0.01)</div>
+    <div class="step"><span class="step-n">3</span>기각역: 임계값으로 기각역 설정</div>
+    <div class="step"><span class="step-n">4</span>검정통계량: 관측 자료로 산출</div>
+    <div class="step"><span class="step-n">5</span>결론: 기각역 해당 여부 판정</div>
+    <div class="step"><span class="step-n">6</span>P값: P &lt; α이면 H<sub>0</sub> 기각</div>
+  </div>
+
+  <p class="sub-head">주요 수식</p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">단일모평균 — σ 아는 경우 (Z 검정)</div>
+      <div class="f-eq">
+        <span class="eq-line">Z<sub>0</sub> =
+          <span class="frac"><span class="num">X̄ − μ<sub>0</sub></span><span class="den">σ/√n</span></span>
+          ~ N(0,1) under H<sub>0</sub>
+        </span>
+      </div>
+      <div class="f-note">양측: |Z<sub>0</sub>| &gt; z<sub>α/2</sub> 이면 기각 &nbsp;|&nbsp; 우측단측(H<sub>1</sub>: μ > μ<sub>0</sub>): Z<sub>0</sub> > z<sub>α</sub> 이면 기각</div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">단일모평균 — σ 모르는 경우 (t 검정)</div>
+      <div class="f-eq">
+        <span class="eq-line">T<sub>0</sub> =
+          <span class="frac"><span class="num">X̄ − μ<sub>0</sub></span><span class="den">S/√n</span></span>
+          ~ t(n−1)
+        </span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">두 모평균 차 (등분산, 독립표본)</div>
+      <div class="f-eq">
+        <span class="eq-line">T<sub>0</sub> =
+          <span class="frac">
+            <span class="num">(X̄−Ȳ) − δ<sub>0</sub></span>
+            <span class="den">S<sub>p</sub> · √(1/n<sub>1</sub> + 1/n<sub>2</sub>)</span>
+          </span>
+          ~ t(n<sub>1</sub>+n<sub>2</sub>−2)
+        </span>
+      </div>
+      <div class="f-note">δ<sub>0</sub> = μ<sub>1</sub>−μ<sub>2</sub> (귀무가설 값, 보통 0)</div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">대응표본 검정</div>
+      <div class="f-eq">
+        <span class="eq-line">T<sub>0</sub> =
+          <span class="frac"><span class="num">D̄ − δ<sub>0</sub></span><span class="den">S<sub>D</sub>/√n</span></span>
+          ~ t(n−1) &nbsp;, &nbsp; D<sub>i</sub> = X<sub>i</sub> − Y<sub>i</sub>
+        </span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">모비율 검정</div>
+      <div class="f-eq">
+        <span class="eq-line">Z<sub>0</sub> =
+          <span class="frac">
+            <span class="num">p̂ − p<sub>0</sub></span>
+            <span class="den">√(p<sub>0</sub>(1−p<sub>0</sub>)/n)</span>
+          </span>
+          ~ N(0,1)
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <p class="sub-head">검정 유형 요약표</p>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>검정 대상</th><th>조건</th><th>통계량</th><th>분포</th></tr></thead>
+      <tbody>
+        <tr><td>단일 모평균</td><td>σ² 알 때</td><td>(X̄−μ<sub>0</sub>)/(σ/√n)</td><td>N(0,1)</td></tr>
+        <tr><td>단일 모평균</td><td>σ² 모를 때</td><td>(X̄−μ<sub>0</sub>)/(S/√n)</td><td>t(n−1)</td></tr>
+        <tr><td>두 평균 차</td><td>독립, 등분산</td><td>합동분산 S<sub>p</sub> 사용</td><td>t(n<sub>1</sub>+n<sub>2</sub>−2)</td></tr>
+        <tr><td>두 평균 차</td><td>대응표본</td><td>D̄/(S<sub>D</sub>/√n)</td><td>t(n−1)</td></tr>
+        <tr><td>모비율</td><td>대표본</td><td>(p̂−p<sub>0</sub>)/√(p<sub>0</sub>q<sub>0</sub>/n)</td><td>N(0,1)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<!-- ═══ 11장 범주형 ═══ -->
+<section class="ch" id="ch11">
+  <div class="ch-head"><span class="ch-badge">Ch·11</span><h2 class="ch-title">범주형 자료분석<small>Categorical Data · p.397–430</small></h2></div>
+
+  <div class="story">
+    <p>지금까지는 키, 점수처럼 <span class="kw">수치 데이터</span>를 다뤘다. 11장은 성별·등급·찬반처럼 <span class="kw">범주로 나뉜 데이터</span>를 다룬다. 평균이나 분산 대신 <span class="kw">도수(빈도)와 비율</span>을 분석의 도구로 쓴다.</p>
+    <p>분석 유형이 목적에 따라 세 가지로 갈린다.<span class="br"><span class="kw">적합도 검정</span>: 데이터가 특정 이론 분포를 따르는가? 예) 주사위가 공정한가, 완두콩 비율이 멘델 법칙을 따르는가. 각 범주의 기대도수 E<sub>i</sub> = n·p<sub>i</sub>를 계산하고, 관측도수 O<sub>i</sub>와 얼마나 다른지를 χ² 통계량으로 측정한다. 자유도 = 범주수 − 1 − 추정 모수수.</span><span class="br"><span class="kw">독립성 검정</span>: 두 범주형 변수가 서로 관련 있는가? 예) 성별과 선호 정당은 관계가 있는가. r×c 분할표를 만들고 각 칸의 기대도수를 (행 합계 × 열 합계)/전체로 계산한다. 자유도 = (r−1)(c−1).</span><span class="br"><span class="kw">동질성 검정</span>: 여러 모집단에서 어떤 특성의 분포가 같은가? 형태는 독립성 검정과 동일하지만 질문의 방향이 다르다.</span></p>
+    <p>셋 모두 같은 검정통계량 χ² = Σ(O−E)²/E를 사용하고, 이 값이 χ²<sub>α</sub>(자유도)보다 크면 H<sub>0</sub>를 기각한다. 단, <span class="kw">모든 기대도수가 5 이상</span>이어야 이 근사가 타당하다는 점을 반드시 확인해야 한다.</p>
+  </div>
+
+  <p class="sub-head">핵심 개념</p>
+  <div class="concepts">
+    <div class="concept-row"><div class="concept-key">적합도 검정</div><div class="concept-val">관측 도수가 이론 분포에 적합한지 검정. 자유도 = 범주수 − 1 − 추정 모수수.</div></div>
+    <div class="concept-row"><div class="concept-key">독립성 검정</div><div class="concept-val">두 범주형 변수의 연관성 유무. r×c 분할표. 귀무: 두 변수는 독립.</div></div>
+    <div class="concept-row"><div class="concept-key">동질성 검정</div><div class="concept-val">여러 모집단에서 분포가 동일한지 검정. 통계량 형태는 독립성과 같음.</div></div>
+    <div class="concept-row"><div class="concept-key">기대도수 조건</div><div class="concept-val">모든 E<sub>ij</sub> ≥ 5이어야 χ² 근사 타당. 미충족 시 범주 합병 또는 Fisher 검정.</div></div>
+  </div>
+
+  <p class="sub-head">주요 수식</p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">카이제곱 검정통계량</div>
+      <div class="f-eq">
+        <span class="eq-line">χ² = Σ
+          <span class="frac"><span class="num">(O<sub>ij</sub> − E<sub>ij</sub>)²</span><span class="den">E<sub>ij</sub></span></span>
+        </span>
+      </div>
+      <div class="f-note">O<sub>ij</sub>: 관측도수 &nbsp;|&nbsp; E<sub>ij</sub>: 기대도수</div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">적합도 검정 — 기대도수 & 자유도</div>
+      <div class="f-eq">
+        <span class="eq-line">E<sub>i</sub> = n · p<sub>i</sub><sup>(0)</sup></span>
+        <span class="eq-line">자유도 = k − 1 − m &nbsp; (k: 범주수, m: 추정 모수수)</span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">독립성 검정 — 기대도수 & 자유도</div>
+      <div class="f-eq">
+        <span class="eq-line">Ê<sub>ij</sub> =
+          <span class="frac"><span class="num">행 합계 × 열 합계</span><span class="den">총 표본수</span></span>
+          =
+          <span class="frac"><span class="num">n<sub>i+</sub> · n<sub>+j</sub></span><span class="den">n</span></span>
+        </span>
+        <span class="eq-line">자유도 = (r−1)(c−1)</span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">기각 조건</div>
+      <div class="f-eq">
+        <span class="eq-line">χ² &gt; χ²<sub>α</sub>(자유도) 이면 H<sub>0</sub> 기각</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="sub-head">정규근사 조건 요약</p>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>분포</th><th>근사</th><th>조건</th></tr></thead>
+      <tbody>
+        <tr><td>이항 B(n,p)</td><td>N(np, npq)</td><td>min(np, nq) &gt; 5</td></tr>
+        <tr><td>포아송 pois(λ)</td><td>N(λ, λ)</td><td>λ ≥ 10</td></tr>
+        <tr><td>초기하분포</td><td>이항분포</td><td>N 매우 크고 n/N 작을 때</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</section>
+
+
+<!-- ═══ Ch.24 Data Analysis · 확률론 ═══ -->
+<section class="ch" id="ch24">
+  <div class="ch-head">
+    <span class="ch-badge" style="background:#7C3AED;">Ch·24</span>
+    <h2 class="ch-title">Data Analysis · 확률론
+      <small>Probability Theory · 교재 Ch.24 + 인공지능수학 기말 연계</small>
+    </h2>
+  </div>
+
+  <div class="story">
+    <p>이 챕터는 <span class="kw">통계학원론 7–11장의 확률 기초</span>와 <span class="kw">인공지능수학 기말 통계 파트</span>가 겹치는 핵심 구간이다. 기말에서 매번 고정 출제되는 3문제가 모두 여기서 나온다.</p>
+    <p>첫 번째는 <span class="kw">나사 불량 확률</span>: 복원/비복원 추출을 구분하고 조건부 확률 곱셈공식을 적용한다. 두 번째는 <span class="kw">균등분포 밀도함수</span>: ∫f(x)dx=1 조건으로 k를 구하고, 구간 겹침을 이용해 확률을 계산한다. 세 번째는 <span class="kw">정규분포 불량률</span>: 표준화 Z=(X−μ)/σ 후 표에서 Φ값을 읽는다. (a)는 범위→불량률%, (b)는 불량률%→범위 역산.</p>
+  </div>
+
+  <div class="exam-tip"><b>🎯 기말 100% 고정 출제 3문제</b> — 나사 불량(복원/비복원) · 균등분포 k구하기+확률 · 정규분포 불량률±역산. 숫자만 바뀌고 구조 동일.</div>
+
+  <!-- 복원/비복원 -->
+  <p class="sub-head">복원 / 비복원 추출 확률 <span class="freq-badge freq-must">★★ 반드시</span></p>
+  <div class="concepts">
+    <div class="concept-row">
+      <div class="concept-key">복원추출<br><small>with replacement</small></div>
+      <div class="concept-val">매번 되돌려 놓음 → 시행 독립 → 곱셈<br>P(둘 다 불량) = P(불량) × P(불량) = (M/N)²</div>
+    </div>
+    <div class="concept-row">
+      <div class="concept-key">비복원추출<br><small>without replacement</small></div>
+      <div class="concept-val">꺼낸 것 제외 → 조건부 확률 곱<br>P(A∩B) = P(A) × P(B|A) = (M/N) × (M−1)/(N−1)</div>
+    </div>
+  </div>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">복원 — 이항분포</div>
+      <div class="f-eq">
+        <span class="eq-line">P(둘 다 불량) =
+          <span class="frac"><span class="num">M</span><span class="den">N</span></span>
+          ×
+          <span class="frac"><span class="num">M</span><span class="den">N</span></span>
+          =
+          <span class="frac"><span class="num">M²</span><span class="den">N²</span></span>
+        </span>
+        <span class="eq-line">예: N=10, M=3 → (3/10)² = 9/100 = 0.09</span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">비복원 — 초기하분포 / 조건부확률</div>
+      <div class="f-eq">
+        <span class="eq-line">P(A∩B) = P(A) × P(B|A) =
+          <span class="frac"><span class="num">M</span><span class="den">N</span></span>
+          ×
+          <span class="frac"><span class="num">M−1</span><span class="den">N−1</span></span>
+        </span>
+        <span class="eq-line">예: N=10, M=3 → (3/10) × (2/9) = 6/90 = 1/15 ≈ 0.067</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 균등분포 -->
+  <p class="sub-head">균등분포 밀도함수 <span class="freq-badge freq-must">★★ 반드시</span></p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">밀도함수 & k 구하기</div>
+      <div class="f-eq">
+        <span class="eq-line">f(x) = k &nbsp; (a ≤ x ≤ b), &nbsp; 0 elsewhere</span>
+        <span class="eq-line">∫<sub>a</sub><sup>b</sup> k dx = 1 &nbsp;→&nbsp; k(b−a) = 1 &nbsp;→&nbsp; k =
+          <span class="frac"><span class="num">1</span><span class="den">b−a</span></span>
+        </span>
+      </div>
+      <div class="f-note">예: f(x)=k (−4≤x≤6) → k×10=1 → k=1/10</div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">확률 계산 — 구간 겹침</div>
+      <div class="f-eq">
+        <span class="eq-line">P(c ≤ X ≤ d) = k × (겹치는 구간 길이)</span>
+        <span class="eq-line">단, f(x)=0인 구간은 제외하고 겹치는 구간만 적분</span>
+      </div>
+      <div class="f-note">예: f(x)=1/10 (−4~6), P(−7≤X≤2) → 겹치는 구간 [−4, 2] → (1/10)×6 = 0.6</div>
+    </div>
+  </div>
+
+  <!-- 정규분포 불량률 -->
+  <p class="sub-head">정규분포 불량률 (tolerance limits) <span class="freq-badge freq-must">★★ 반드시</span></p>
+  <div class="story">
+    <p><span class="kw">(a) tolerance → 불량률%</span>: 범위 주어지면 표준화 후 Φ 계산 → 1 − 정상품률</p>
+    <p><span class="kw">(b) 불량률% → tolerance 역산</span>: 불량률 α% → 정상품 (1−α)% → Φ(c/σ) 구하고 표에서 역산</p>
+  </div>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">(a) 범위 → 불량률</div>
+      <div class="f-eq">
+        <span class="eq-line">X ~ N(μ, σ²), 허용범위 μ±c</span>
+        <span class="eq-line">정상품률 = P(μ−c ≤ X ≤ μ+c) = 2Φ(c/σ) − 1</span>
+        <span class="eq-line">불량률 = 1 − (2Φ(c/σ) − 1) = 2(1 − Φ(c/σ))</span>
+      </div>
+      <div class="f-note">예: μ=100, σ=1, c=0.44 → Φ(0.44)=0.6700 → 정상품 2(0.67)−1=0.34 → 불량 66%</div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">(b) 불량률 → 범위 역산</div>
+      <div class="f-eq">
+        <span class="eq-line">불량률 α → 정상품률 1−α</span>
+        <span class="eq-line">2Φ(c/σ) − 1 = 1−α &nbsp;→&nbsp; Φ(c/σ) =
+          <span class="frac"><span class="num">2−α</span><span class="den">2</span></span>
+        </span>
+        <span class="eq-line">표에서 z값 찾기 → c = z × σ</span>
+      </div>
+      <div class="f-note">예: 불량률 66% → 정상품 34% → 2Φ(c)−1=0.34 → Φ(c)=0.67 → c/1=0.44 → c=0.44</div>
+    </div>
+  </div>
+
+  <div class="tip"><b>정규분포 표 읽는 법:</b> Φ(z) = P(Z ≤ z). 표 행=소수점 첫째, 열=소수점 둘째. 음수: Φ(−z) = 1−Φ(z)</div>
+
+  <!-- 표본분포 (7장 연계) -->
+  <p class="sub-head">표본분포 핵심 (7장) <span class="freq-badge freq-mid">★ 배경지식</span></p>
+  <div class="concepts">
+    <div class="concept-row"><div class="concept-key">표본평균 X̄</div><div class="concept-val">E(X̄)=μ, Var(X̄)=σ²/n. 표준화: Z=(X̄−μ)/(σ/√n)~N(0,1)</div></div>
+    <div class="concept-row"><div class="concept-key">중심극한정리</div><div class="concept-val">n이 크면 원래 분포와 무관하게 X̄~N(μ, σ²/n). 보통 n≥30이면 적용.</div></div>
+    <div class="concept-row"><div class="concept-key">t분포</div><div class="concept-val">σ 모를 때: T=(X̄−μ)/(S/√n)~t(n−1). n→∞이면 N(0,1)에 수렴.</div></div>
+    <div class="concept-row"><div class="concept-key">χ² 분포</div><div class="concept-val">(n−1)S²/σ²~χ²(n−1). 항상 양수, 오른쪽 꼬리.</div></div>
+  </div>
+
+  <!-- 구간추정 (9장 연계) -->
+  <p class="sub-head">구간추정 핵심 공식 (9장) <span class="freq-badge freq-high">★ 자주</span></p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">모평균 신뢰구간 — σ 알 때</div>
+      <div class="f-eq">
+        <span class="eq-line">X̄ ± z<sub>α/2</sub> ·
+          <span class="frac"><span class="num">σ</span><span class="den">√n</span></span>
+        </span>
+      </div>
+      <div class="f-note">95% CI: z<sub>α/2</sub>=1.96 &nbsp;|&nbsp; 99% CI: z<sub>α/2</sub>=2.576</div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">모평균 신뢰구간 — σ 모를 때</div>
+      <div class="f-eq">
+        <span class="eq-line">X̄ ± t<sub>α/2</sub>(n−1) ·
+          <span class="frac"><span class="num">S</span><span class="den">√n</span></span>
+        </span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">모비율 신뢰구간</div>
+      <div class="f-eq">
+        <span class="eq-line">p̂ ± z<sub>α/2</sub> ·
+          <span class="sqrt-wrap"><span class="sqrt-sym">√</span><span class="sqrt-body">p̂(1−p̂)/n</span></span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 가설검정 (10장 연계) -->
+  <p class="sub-head">가설검정 핵심 (10장) <span class="freq-badge freq-high">★ 자주</span></p>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>검정 대상</th><th>조건</th><th>검정통계량</th><th>분포</th></tr></thead>
+      <tbody>
+        <tr><td>단일 모평균</td><td>σ 알 때</td><td>(X̄−μ₀)/(σ/√n)</td><td>N(0,1)</td></tr>
+        <tr><td>단일 모평균</td><td>σ 모를 때</td><td>(X̄−μ₀)/(S/√n)</td><td>t(n−1)</td></tr>
+        <tr><td>두 평균 차</td><td>독립, 등분산</td><td>(X̄−Ȳ)/(Sp·√(1/n₁+1/n₂))</td><td>t(n₁+n₂−2)</td></tr>
+        <tr><td>대응표본</td><td>—</td><td>D̄/(SD/√n)</td><td>t(n−1)</td></tr>
+        <tr><td>모비율</td><td>대표본</td><td>(p̂−p₀)/√(p₀q₀/n)</td><td>N(0,1)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 카이제곱 (11장 연계) -->
+  <p class="sub-head">카이제곱 검정 핵심 (11장) <span class="freq-badge freq-mid">★ 배경지식</span></p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">검정통계량 (공통)</div>
+      <div class="f-eq">
+        <span class="eq-line">χ² = Σ
+          <span class="frac"><span class="num">(O−E)²</span><span class="den">E</span></span>
+          , 단 모든 E ≥ 5
+        </span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">적합도 자유도</div>
+      <div class="f-eq"><span class="eq-line">df = 범주수 − 1 − 추정 모수수</span></div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">독립성/동질성 자유도 & 기대도수</div>
+      <div class="f-eq">
+        <span class="eq-line">df = (r−1)(c−1)</span>
+        <span class="eq-line">E<sub>ij</sub> = (행합 × 열합) / 전체 n</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+</div>
+
+<a class="top-btn" href="#top">↑</a>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  // ── 탭 활성화 ──
+  const tabs     = document.querySelectorAll('.tab-bar a');
+  const sections = document.querySelectorAll('.ch');
+
+  function setActive() {
+    let cur = '';
+    sections.forEach(function(s) {
+      if (window.scrollY >= s.offsetTop - 160) cur = s.id;
+    });
+    tabs.forEach(function(t) {
+      t.classList.toggle('active', t.getAttribute('href') === '#' + cur);
+    });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+
+  tabs.forEach(function(t) {
+    t.addEventListener('click', function() {
+      setTimeout(function() {
+        var bar    = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+
+}); // DOMContentLoaded
+</script>
+
+</body>
+</html>

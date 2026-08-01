@@ -1,0 +1,2377 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>논문작성법 및 연구윤리 — 요점정리</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@400;700&display=swap');
+
+  :root {
+    --green-dark: #2d6a4f;
+    --green-mid: #40916c;
+    --green-light: #d8f3dc;
+    --green-pale: #f0faf3;
+    --red: #c0392b;
+    --gold: #b5924c;
+    --text: #1a2e1a;
+    --text-light: #4a6741;
+    --border: #a8d5b5;
+    --white: #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--green-pale);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* ── 헤더 ── */
+  header {
+    background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+    color: white;
+    padding: 10px 24px 8px;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 3px 14px rgba(45,106,79,.35);
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .header-left { flex: 1; min-width: 0; }
+  header h1 { font-family: 'Noto Serif KR', serif; font-size: 15px; font-weight: 700; letter-spacing: .3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  header p  { font-size: 10.5px; opacity: .75; margin-top: 1px; }
+  .legend {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(255,255,255,.15); border-radius: 20px;
+    padding: 3px 10px; font-size: 11px; flex-shrink: 0;
+  }
+  .legend span { color: #ff9999; font-weight: 700; }
+
+  /* ── 목차 탭 ── */
+  nav {
+    display: flex; flex-wrap: wrap; gap: 5px;
+    padding: 8px 24px; background: var(--green-dark);
+    border-bottom: 3px solid var(--green-mid);
+  }
+  nav a {
+    color: #c8f0d8; text-decoration: none; font-size: 11px;
+    padding: 3px 9px; border-radius: 11px;
+    border: 1px solid rgba(200,240,216,.25);
+    transition: background .2s;
+  }
+  nav a:hover { background: rgba(255,255,255,.15); }
+
+  /* ── 본문 ── */
+  main { max-width: 960px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  /* ── 섹션 카드 ── */
+  .section {
+    background: white; border-radius: 14px;
+    border-left: 5px solid var(--green-mid);
+    margin-bottom: 28px;
+    box-shadow: 0 2px 12px rgba(45,106,79,.08);
+    overflow: hidden;
+  }
+  .section-header {
+    background: linear-gradient(90deg, var(--green-mid), var(--green-dark));
+    color: white; padding: 12px 20px;
+    font-size: 15px; font-weight: 700;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-header .num {
+    background: rgba(255,255,255,.25); border-radius: 50%;
+    width: 26px; height: 26px; display: flex;
+    align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 900; flex-shrink: 0;
+  }
+  .section-body { padding: 18px 22px; }
+
+  /* ── 서브섹션 ── */
+  .sub {
+    margin-bottom: 18px;
+    border-left: 3px solid var(--border);
+    padding-left: 14px;
+  }
+  .sub-title {
+    font-weight: 700; color: var(--green-dark);
+    font-size: 13.5px; margin-bottom: 6px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .sub-title::before {
+    content: '▸'; color: var(--green-mid); font-size: 11px;
+  }
+
+  /* ── 리스트 ── */
+  ul.items { list-style: none; }
+  ul.items li {
+    padding: 4px 0 4px 16px;
+    position: relative; font-size: 13.5px;
+  }
+  ul.items li::before {
+    content: '·'; position: absolute; left: 4px;
+    color: var(--green-mid); font-weight: 900;
+  }
+
+  /* ── 빨간 강조 ── */
+  .red { color: var(--red); font-weight: 700; }
+
+  /* ── 표 ── */
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px; margin: 10px 0;
+  }
+  th {
+    background: var(--green-dark); color: white;
+    padding: 7px 10px; text-align: left;
+  }
+  td {
+    padding: 7px 10px; border-bottom: 1px solid var(--green-light);
+  }
+  tr:nth-child(even) td { background: var(--green-pale); }
+
+  /* ── 정의 박스 ── */
+  .def-box {
+    background: var(--green-light); border-radius: 8px;
+    padding: 12px 16px; margin: 8px 0;
+    font-size: 13px; border-left: 4px solid var(--green-mid);
+  }
+  .def-box strong { color: var(--green-dark); }
+
+  /* ── 번호 단계 ── */
+  .steps { counter-reset: step; }
+  .step-item {
+    display: flex; gap: 10px; margin-bottom: 8px; align-items: flex-start;
+  }
+  .step-num {
+    background: var(--green-mid); color: white;
+    border-radius: 50%; width: 22px; height: 22px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; margin-top: 2px;
+  }
+  .step-text { font-size: 13.5px; }
+
+  /* ── 흐름도 행 ── */
+  .flow {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    align-items: center; margin: 10px 0;
+  }
+  .flow-item {
+    background: var(--green-mid); color: white;
+    padding: 5px 14px; border-radius: 20px; font-size: 12.5px; font-weight: 500;
+  }
+  .flow-arrow { color: var(--green-dark); font-size: 18px; }
+
+  /* ── 강조 배지 ── */
+  .badge {
+    display: inline-block; background: var(--green-light);
+    color: var(--green-dark); border-radius: 6px;
+    padding: 1px 8px; font-size: 12px; font-weight: 700;
+    border: 1px solid var(--border); margin: 1px;
+  }
+  .badge.red-badge {
+    background: #fff0f0; color: var(--red); border-color: #f5b8b8;
+  }
+
+  /* ── 비교표 헤더 ── */
+  .compare-head { background: var(--gold); color: white; }
+
+  /* ── 인용구 ── */
+  blockquote {
+    border-left: 4px solid var(--gold);
+    margin: 10px 0; padding: 8px 14px;
+    font-style: italic; color: #5a4a2a; font-size: 13px;
+    background: #fdfaf3; border-radius: 0 8px 8px 0;
+  }
+
+  /* ── 구분선 ── */
+  hr { border: none; border-top: 1px dashed var(--border); margin: 14px 0; }
+
+  /* ── 플로팅 버튼 ── */
+  #navbtn {
+    position: fixed; right: 20px; bottom: 24px;
+    background: var(--green-dark); color: white;
+    border: none; border-radius: 50%; width: 44px; height: 44px;
+    font-size: 15px; cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0,0,0,.35);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9999;
+    text-decoration: none;
+    font-weight: 700;
+  }
+  #navbtn:hover { background: var(--green-mid); }
+
+  /* ── 인쇄 ── */
+  @media print {
+    nav, #totop { display: none; }
+    .section { page-break-inside: avoid; }
+    header { position: static; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>📄 논문작성법 및 연구윤리 — 완전 요점정리</h1>
+    <p>성균관대학교 | Academic Writing and Research Ethics | 노상도 · 김기현 · 고관수 교수</p>
+  </div>
+  <div class="legend">⚠ <span>빨간 글자</span> = 출제 가능성 높음</div>
+</header>
+
+<nav id="toc">
+  <a href="#s1">1. 과목소개</a>
+  <a href="#s2">2. Science vs Engineering</a>
+  <a href="#s3">3. Researcher 정의</a>
+  <a href="#s4">4. 좋은 연구자 되기 6단계</a>
+  <a href="#s5">5. 논문 작성 과정 4단계</a>
+  <a href="#s6">6. Planning 전략</a>
+  <a href="#s7">7. Inventing 전략</a>
+  <a href="#s8">8. Drafting 전략</a>
+  <a href="#s9">9. Revising 전략</a>
+  <a href="#s10">10. 논문 구조 10섹션</a>
+  <a href="#s11">11. 저널 선택</a>
+  <a href="#s12">12. SCIE/IF</a>
+  <a href="#s13">13. Storytelling 방법</a>
+  <a href="#s14">14. 출판 프로세스</a>
+  <a href="#s15">15. 논문 유형</a>
+  <a href="#s16">16. Title 작성법</a>
+  <a href="#s17">17. Abstract 작성법</a>
+  <a href="#s18">18. Introduction 작성법</a>
+  <a href="#s19">19. Methods 작성법</a>
+  <a href="#s20">20. Results·Discussion·Conclusion</a>
+  <a href="#s21">21. Tables & Figures</a>
+  <a href="#s22">22. 투고·심사 프로세스 상세</a>
+  <a href="#s23">23. Grammar (문법)</a>
+  <a href="#s24">24. Word Choice (단어 선택)</a>
+  <a href="#s25">25. Punctuation (구두점)</a>
+  <a href="#s26">26. Writing Style·Paragraph</a>
+  <a href="#s27">27. 연구진실성·표절</a>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════════════════
+     1. 과목 소개
+══════════════════════════════════════════ -->
+<div class="section" id="s1">
+  <div class="section-header"><span class="num">1</span> 과목 소개 (Course Introduction)</div>
+  <div class="section-body">
+    <div class="sub">
+      <div class="sub-title">과목 목적 (Course Description)</div>
+      <ul class="items">
+        <li>대학원생이 더 효율적이고 자신 있는 <span class="red">학술 논문 작성자(academic paper writer)</span>가 되도록 돕는 과목</li>
+        <li>연구 및 논문 작성의 <span class="red">효과성(effectiveness)</span>과 <span class="red">윤리성(ethics)</span>을 높이기 위한 기본 개념·과정·전략·지식 포함</li>
+      </ul>
+    </div>
+    <div class="sub">
+      <div class="sub-title">학습 목표 (Course Objectives)</div>
+      <div class="steps">
+        <div class="step-item"><div class="step-num">①</div><div class="step-text">효율적이고 자신 있는 연구 및 논문 작성을 위한 <span class="red">기초 지식</span> 이해</div></div>
+        <div class="step-item"><div class="step-num">②</div><div class="step-text">자신의 학술 논문을 <span class="red">효과적으로 직접 작성</span>할 수 있어야 함</div></div>
+        <div class="step-item"><div class="step-num">③</div><div class="step-text">연구와 학술 작성에서 <span class="red">윤리의 중요성</span> 이해</div></div>
+      </div>
+    </div>
+    <div class="sub">
+      <div class="sub-title">수업 구성 (Course Contents 5대 주제)</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;">
+        <span class="badge red-badge">① Academic journals & database (학술지·데이터베이스)</span>
+        <span class="badge red-badge">② Structure of academic papers (논문 구조)</span>
+        <span class="badge red-badge">③ How to write academic papers (논문 작성법)</span>
+        <span class="badge red-badge">④ Grammar, Word Choice & Punctuation (문법·단어선택·구두점)</span>
+        <span class="badge red-badge">⑤ Research Ethics & Plagiarism (연구윤리·표절)</span>
+      </div>
+    </div>
+    <div class="sub">
+      <div class="sub-title">세션 일정 요약</div>
+      <table>
+        <tr><th>세션</th><th>주제</th></tr>
+        <tr><td>1</td><td>과목 소개 / 좋은 연구자 되는 법</td></tr>
+        <tr><td>2</td><td>좋은 논문 작성의 효과적 과정 / <span class="red">Planning·Inventing·Drafting·Revising</span> 전략</td></tr>
+        <tr><td>3</td><td>이공계 학술 논문 / <span class="red">목표 저널 선택</span></td></tr>
+        <tr><td>4</td><td>논문 구조 / <span class="red">스토리텔링 기법</span> / 논문 작성 준비</td></tr>
+        <tr><td>5</td><td><span class="red">Title, Abstract, Introduction</span></td></tr>
+        <tr><td>6</td><td><span class="red">Materials & Methods / Theoretical Basis</span></td></tr>
+        <tr><td>7</td><td><span class="red">Results & Discussion, Conclusion</span></td></tr>
+        <tr><td>8</td><td><span class="red">Tables and Figures</span></td></tr>
+        <tr><td>9</td><td><span class="red">Submission and Review Process (투고·심사 과정)</span></td></tr>
+        <tr><td>10</td><td>Grammar (문법)</td></tr>
+        <tr><td>11</td><td>Word Choice, Punctuation (단어 선택, 구두점)</td></tr>
+        <tr><td>12</td><td>Writing Style, Paragraph, Phrase</td></tr>
+        <tr><td>13</td><td><span class="red">Research Ethics & Plagiarism (연구윤리·표절)</span></td></tr>
+        <tr><td>14</td><td><span class="red">Types of Plagiarism and Practices (표절 유형·실습)</span></td></tr>
+        <tr><td>15</td><td><strong>Final Exam (기말고사)</strong></td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     2. Science vs Engineering
+══════════════════════════════════════════ -->
+<div class="section" id="s2">
+  <div class="section-header"><span class="num">2</span> Science vs Engineering 정의</div>
+  <div class="section-body">
+    <div class="def-box">
+      <strong>Science (과학)</strong> — Wikipedia, 2014<br>
+      "<span class="red">우주에 대한 검증 가능한 설명과 예측의 형태로 지식을 구축하고 조직화</span>하는 체계적인 기업 활동 (A systematic enterprise that builds and organizes knowledge in the form of <span class="red">testable explanations and predictions</span> about the universe.)"
+    </div>
+    <div class="def-box">
+      <strong>Engineering (공학)</strong> — ABET, 1986<br>
+      "학습·경험·실습을 통해 얻은 <span class="red">수학·자연과학 지식을 판단을 통해 적용</span>하여 인류의 이익을 위해 자연의 재료와 힘을 경제적으로 활용하는 방법을 개발하는 직업 (The profession in which a knowledge of the mathematical and natural sciences … is applied with judgment to develop ways to utilize, economically, the materials and forces of nature <span class="red">for the benefit of mankind.</span>)"
+    </div>
+    <blockquote>
+      "A scientist describes what is. An engineer creates what never was." — Theodore von Karman<br>
+      <small>→ 과학자는 현존하는 것을 설명하고, 공학자는 존재하지 않던 것을 창조한다.</small>
+    </blockquote>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     3. Researcher 정의
+══════════════════════════════════════════ -->
+<div class="section" id="s3">
+  <div class="section-header"><span class="num">3</span> Researcher (연구자) 정의</div>
+  <div class="section-body">
+    <div class="def-box">
+      OECD, 2002 정의: "지식의 <span class="red">stock(축적)</span>을 늘리기 위해 체계적인 기반 위에서 수행되는 창의적 작업을 하며, <span class="red">사실 확립·이전 연구 재확인·새로운/기존 문제 해결·이론 지지 또는 새 이론 개발</span>을 위해 연구를 사용하는 사람"
+    </div>
+    <ul class="items">
+      <li>연구자는 지식의 stock을 늘리는 <span class="red">창의적(creative) 작업</span>을 체계적으로 수행</li>
+      <li>목적: <span class="red">① 사실 확립·확인, ② 이전 연구 재확인, ③ 새/기존 문제 해결, ④ 정리 지지, ⑤ 새 이론 개발</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     4. 좋은 연구자 되기 6단계
+══════════════════════════════════════════ -->
+<div class="section" id="s4">
+  <div class="section-header"><span class="num">4</span> 좋은 연구자 되기 — 6가지 핵심 지침</div>
+  <div class="section-body">
+
+    <div class="sub">
+      <div class="sub-title">기본 마인드셋</div>
+      <ul class="items">
+        <li><span class="red">대학원 진학을 결정한 순간, 연구자로서의 삶은 이미 시작</span>되었다.</li>
+        <li>지도교수(academic adviser)는 교사·튜터·동료·선배로서 매우 중요한 존재 → <span class="red">자주 만나고 깊이 알아가라</span></li>
+        <li>교수들은 <span class="red">자기주도적(self-directed)</span>이고 동기 부여된 학생을 좋아한다 → "다음에 뭘 해야 하나"가 아닌 "<span class="red">내 아이디어·계획 중 어느 것이 더 나은가</span>"를 물어라</li>
+      </ul>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">① 지금 당장 연구와 논문 작성을 시작하라</span></div>
+      <ul class="items">
+        <li>Start your research work and writing papers <span class="red">as soon as possible, right now.</span></li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">② 좋은 연구 문제를 선택하라</span> (Choose good research problems)</div>
+      <ul class="items">
+        <li>중요한 문제에 집중하라</li>
+        <li>어디서든 새로운 문제를 찾으려고 노력하라</li>
+        <li>관심 분야를 폭넓게 읽어라</li>
+        <li><span class="red">현재 이슈와 hot topic을 지속적으로 조사하고 review papers에 주목</span>하라</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">③ 효율적 연구를 위한 가이드라인</span></div>
+      <ul class="items">
+        <li><span class="red">Solution보다 Problem에서 시작하라</span></li>
+        <li>방해받지 않는 큰 시간 블록을 확보하고 정기적으로 집중·창의적 사고를 하라</li>
+        <li>깊이 팔 곳, 넓게 볼 곳, 내려놓을 것을 구분하라</li>
+        <li>현재 "가정(Assumptions)"을 의심하여 새로운 해결책을 찾아라</li>
+        <li>문제를 관리 가능한 부분으로 쪼개라 (Break into manageable parts)</li>
+        <li>다른 연구자들에게 솔루션을 어떻게 보여줄지 탐구하라</li>
+        <li><span class="red">장기·단기 연구 목표</span>를 가져라</li>
+        <li>다른 연구자와 소통하여 서로의 연구를 촉진하라</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">④ 연구 결과를 매우 적극적으로 출판하라</span></div>
+      <ul class="items">
+        <li>항상 어디에, 무엇을 출판할지 깊이 생각하라</li>
+        <li><span class="red">기여가 있으면 공동저자를 관대하게 결정하고, 저자 순서를 신중히 정하라</span></li>
+        <li>논문을 읽기 쉽고, 흥미롭고, 잘 조직화하라</li>
+        <li>독자적 용어 발명이나 비표준 표기법 사용 금지</li>
+        <li>관련 선행 연구를 충분히 포함시켜라</li>
+        <li>다양한 방법으로 연구를 홍보하라</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">⑤ 일관성 있는 연구 계획 개발 (Coherent Research Plan)</div>
+      <ul class="items">
+        <li>연구 영역을 지속적으로 탐구·발전·확장하라</li>
+        <li>논쟁적 영역에서도 긍정적으로 작업하라</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">⑥ 다른 사람들과 협력하라 (Working with Others)</div>
+      <ul class="items">
+        <li>좋은 동료가 되고, 주변에 좋은 동료를 키워라</li>
+        <li><span class="red">논문 작성을 위한 버디 시스템(buddy system)</span> 만들기</li>
+        <li>성취를 동료와 함께 축하하고 자신에게도 관대하게 보상하라</li>
+        <li>연구와 글쓰기를 위한 지지적 환경을 찾고 만들어라</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     5. 논문 작성 과정 4단계
+══════════════════════════════════════════ -->
+<div class="section" id="s5">
+  <div class="section-header"><span class="num">5</span> 논문 작성 과정 4단계 — Planning → Inventing → Drafting → Revising</div>
+  <div class="section-body">
+    <div class="def-box" style="margin-bottom:12px;">
+      ⚠ 핵심: 글쓰기는 실제로 <span class="red">반복적(iterative)이고 순환적(recursive)인 과정</span>으로, Inventing·Drafting·Revising이 서로 맞물린다.
+    </div>
+
+    <table>
+      <tr><th>단계</th><th>핵심 활동</th><th>비고</th></tr>
+      <tr>
+        <td><span class="red">Planning (계획)</span></td>
+        <td>일정 수립 및 시간 관리 / Reader(독자)와 Purpose(목적) 정의·분석</td>
+        <td>가장 먼저 할 것</td>
+      </tr>
+      <tr>
+        <td><span class="red">Inventing (구상)</span></td>
+        <td>아이디어 생성 및 발명 / 작업 조직화</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="red">Drafting (초안 작성)</span></td>
+        <td>초안 효과적으로 작성 / Writer's block 극복</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="red">Revising & Editing (수정·편집)</span></td>
+        <td>초안 완전히 수정 / Boredom·Perfectionism 고려 / 맞춤법·문법 최종 점검</td>
+        <td></td>
+      </tr>
+    </table>
+
+    <div class="sub" style="margin-top:16px;">
+      <div class="sub-title"><span class="red">경험 수준별 시간 배분 비율 (중요 암기)</span></div>
+      <table>
+        <tr><th>작가 유형</th><th class="red">Inventing</th><th class="red">Drafting</th><th class="red">Revising</th></tr>
+        <tr><td>Inexperienced Writer (경험 부족)</td><td class="red">50%</td><td>45%</td><td>5%</td></tr>
+        <tr><td>Experienced Writer (숙련)</td><td>25%</td><td>35%</td><td class="red">40%</td></tr>
+      </table>
+      <p style="font-size:12px;margin-top:6px;color:#666;">→ 숙련된 작가일수록 <span class="red">Revising(수정)에 더 많은 시간 투자</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     6. Planning 전략
+══════════════════════════════════════════ -->
+<div class="section" id="s6">
+  <div class="section-header"><span class="num">6</span> Planning 전략 (계획 단계)</div>
+  <div class="section-body">
+    <div class="sub">
+      <div class="sub-title">성공적인 작가의 Planning 습관</div>
+      <ul class="items">
+        <li><span class="red">가능한 한 빨리 계획을 시작</span>한다 (Begin planning as soon as possible)</li>
+        <li>과제를 받자마자 시작하고, 가능하면 여러 부분으로 나누어 진행</li>
+        <li><span class="red">연구가 완료되기 전에 주요 논문 작성을 시작</span>한다</li>
+        <li>Reader(독자)에 대한 질문: <span class="red">누가 읽을 것인가</span></li>
+        <li>Purpose(목적) 명확화: <span class="red">이 글이 달성할 것이 무엇인가</span></li>
+      </ul>
+    </div>
+    <div class="sub">
+      <div class="sub-title"><span class="red">독자(Reader)에 대해 고려할 5가지 질문</span></div>
+      <div class="steps">
+        <div class="step-item"><div class="step-num">1</div><div class="step-text">누가 읽을 것인가? (Technical experts? Administrators? Business people?)</div></div>
+        <div class="step-item"><div class="step-num">2</div><div class="step-text">왜 읽는가? 어떤 행동을 취할 것인가?</div></div>
+        <div class="step-item"><div class="step-num">3</div><div class="step-text">어떤 정보를 요청했는가? 지침이 명확한가?</div></div>
+        <div class="step-item"><div class="step-num">4</div><div class="step-text">주제에 대해 얼마나 알고 있는가? 전문 용어에 익숙한가?</div></div>
+        <div class="step-item"><div class="step-num">5</div><div class="step-text">어떤 정보가 필요한가? 부족한 정보는 어떻게 얻을 것인가?</div></div>
+      </div>
+    </div>
+    <div class="sub">
+      <div class="sub-title">목적(Purpose)에 대해 고려할 질문</div>
+      <ul class="items">
+        <li>이 글로 무엇을 달성하고 싶은가? 명확하고 간결한 목적 진술 가능한가?</li>
+        <li>목표가 독자의 기대와 어떻게 관련되는가?</li>
+        <li>독자의 태도와 가치관을 어떻게 반영할 것인가?</li>
+      </ul>
+    </div>
+    <div class="sub">
+      <div class="sub-title">좋은 작성 환경 준비</div>
+      <ul class="items">
+        <li><span class="red">조용하고 방해 없는 환경</span> 제공</li>
+        <li>조명과 신체적 편안함 개선</li>
+        <li><span class="red">워드 프로세서 등 소프트웨어 도구 숙달</span></li>
+        <li>새로운 기기와 기술에 적응</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     7. Inventing 전략
+══════════════════════════════════════════ -->
+<div class="section" id="s7">
+  <div class="section-header"><span class="num">7</span> Inventing 전략 (구상·조직화 단계)</div>
+  <div class="section-body">
+    <div class="sub">
+      <div class="sub-title"><span class="red">① Outlining (개요 작성) — 가장 일반적인 조직화 전략</span></div>
+      <ul class="items">
+        <li>학술 논문 작성 중 주제를 조직화하는 <span class="red">가장 일반적인(most common) 전략</span></li>
+        <li>계층적 번호 체계로 아이디어를 구조화 (1. → 1.1. → 1.1.1. …)</li>
+      </ul>
+    </div>
+    <div class="sub">
+      <div class="sub-title"><span class="red">② Mind Mapping (마인드맵)</span></div>
+      <ul class="items">
+        <li>아이디어를 <span class="red">시각적으로 생성하고 조직화</span>하여 상호 관계를 보여주는 방법</li>
+        <li>중심 주제에서 가지를 뻗어 연관 개념을 연결</li>
+      </ul>
+    </div>
+    <div class="sub">
+      <div class="sub-title"><span class="red">③ Taxonomizing (분류화)</span></div>
+      <ul class="items">
+        <li>아이디어들을 <span class="red">공유된 특성에 기반하여 그룹화</span>하는 전략</li>
+        <li>표 형태로 항목들을 범주별로 분류</li>
+      </ul>
+    </div>
+    <div class="sub">
+      <div class="sub-title"><span class="red">④ 6가지 조직화 패턴 (Using Patterns for Organization)</span></div>
+      <table>
+        <tr><th>패턴</th><th>설명 (Description)</th></tr>
+        <tr><td><span class="red">Chronological (시간순)</span></td><td>시간을 통한 사건의 순서 — 과정 기술에 사용</td></tr>
+        <tr><td><span class="red">Spatial (공간적)</span></td><td>물리적 관계에 따라 — 물체 묘사에 사용</td></tr>
+        <tr><td><span class="red">Comparison/Contrast (비교·대조)</span></td><td>유사점과 차이점 설명 — 구 설계와 신 설계 비교에 사용</td></tr>
+        <tr><td><span class="red">Order of Importance (중요도 순)</span></td><td>가장 중요한 것부터 덜 중요한 순서 — 독자와 목적에 따라</td></tr>
+        <tr><td><span class="red">Problem Solving (문제해결)</span></td><td>문제·방법·해결책 설명 후 권고사항</td></tr>
+        <tr><td><span class="red">General to Specific (일반→구체)</span></td><td>일반적 주장 후 더 상세한 설명·구체적 예시</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     8. Drafting 전략
+══════════════════════════════════════════ -->
+<div class="section" id="s8">
+  <div class="section-header"><span class="num">8</span> Drafting 전략 (초안 작성 단계)</div>
+  <div class="section-body">
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">4가지 Drafting 접근법 (Four Approaches to Drafting)</span></div>
+      <table>
+        <tr><th>접근법</th><th>특징</th><th>적합 상황</th></tr>
+        <tr>
+          <td><span class="red">① Combining I+D+R (혼합)</span></td>
+          <td>구상·작성·수정을 동시에 진행 / 자유로운 글쓰기와 유사 / 창의적</td>
+          <td>아이디어 불명확할 때 / 시작이 어려울 때</td>
+        </tr>
+        <tr>
+          <td><span class="red">② Separating I·D·R (분리)</span></td>
+          <td>철저히 계획 → 빠른 초안 → 완전 수정 순서로 분리</td>
+          <td>사용자 매뉴얼·교과서 등 <span class="red">장문 문서</span></td>
+        </tr>
+        <tr>
+          <td><span class="red">③ Combining I+D (구상+작성)</span></td>
+          <td>구상과 초안 작성을 결합, 수정은 나중에 / 모멘텀 중요 / 5~15 페이지에 최적</td>
+          <td><span class="red">짧은 문서(5~15페이지)</span> 또는 긴 문서의 섹션</td>
+        </tr>
+        <tr>
+          <td><span class="red">④ Combining D+R (작성+수정)</span></td>
+          <td>글 쓰면서 수정 병행 / 조직화 매우 중요</td>
+          <td><span class="red">긴 문서(15~50페이지)</span> / 특허·법적 문서처럼 단어 선택이 중요할 때</td>
+        </tr>
+      </table>
+      <p style="font-size:12px;color:#666;margin-top:6px;">효율성: <span class="red">짧은 문서 → 혼합(I+D+R)</span>, <span class="red">긴 문서 → 분리(I+D+R)</span></p>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Writer's Block (글쓰기 막힘) 8가지 유형</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">
+        <span class="badge red-badge">① 계획 관련 (Planning)</span>
+        <span class="badge red-badge">② 환경 요인 (Environmental)</span>
+        <span class="badge red-badge">③ 주제 관련 (Topics)</span>
+        <span class="badge red-badge">④ 단어 관련 (Words)</span>
+        <span class="badge red-badge">⑤ 형식 관련 (Form)</span>
+        <span class="badge red-badge">⑥ 독자 관련 (Audience)</span>
+        <span class="badge red-badge">⑦ 기대 관련 (Expectations)</span>
+        <span class="badge red-badge">⑧ 위기 관련 (Crises)</span>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Combining I+D 방법의 특징</div>
+      <ul class="items">
+        <li>글쓰기 행위 자체가 <span class="red">새로운 아이디어·접근·해결책</span>을 만들어낼 수 있다</li>
+        <li>초안을 완성하는 것에서 <span class="red">만족감</span>을 얻는다</li>
+        <li>초기 초안에 시간·노력을 덜 투자하여 더 광범위하게 수정 가능</li>
+        <li><span class="red">방해 최소화 환경</span>이 필수</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Combining D+R 방법의 특징</div>
+      <ul class="items">
+        <li><span class="red">15~50페이지</span>의 긴 문서나 단어 선택이 매우 중요한 경우(제안서·특허·법적 문서)에 가장 효과적</li>
+        <li>조직화가 매우 중요 — 수정을 위해 멈추면 다음 내용을 놓칠 수 있음</li>
+        <li>막힐 경우, 이전 단락 검토가 다음 아이디어 제시에 도움</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     9. Revising 전략
+══════════════════════════════════════════ -->
+<div class="section" id="s9">
+  <div class="section-header"><span class="num">9</span> Revising 전략 (수정·편집 단계)</div>
+  <div class="section-body">
+    <div class="sub">
+      <div class="sub-title"><span class="red">Revising의 핵심 전략</span></div>
+      <ul class="items">
+        <li>수정을 위한 <span class="red">충분한 시간을 남겨둔다</span></li>
+        <li><span class="red">창의적 휴식</span>을 취한다 (Take creative time out)</li>
+        <li>문서를 <span class="red">비판적으로 읽는다</span></li>
+        <li><span class="red">모든 수준에서 수정</span>한다 (Revise on all levels)</li>
+      </ul>
+    </div>
+    <div class="sub">
+      <div class="sub-title"><span class="red">수정해야 할 6가지 수준</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">
+        <span class="badge red-badge">① Content quality (내용 품질)</span>
+        <span class="badge red-badge">② Persuasive emphasis (설득력 강조)</span>
+        <span class="badge red-badge">③ Format conventions (형식 관례)</span>
+        <span class="badge red-badge">④ Paragraph organization (단락 조직화)</span>
+        <span class="badge red-badge">⑤ Sentence structure (문장 구조)</span>
+        <span class="badge red-badge">⑥ Word choice (단어 선택)</span>
+      </div>
+    </div>
+    <div class="sub">
+      <div class="sub-title">추가 수정 전략들</div>
+      <ul class="items">
+        <li>여러 번에 나누어 수정하라 (Revise in several sweeps)</li>
+        <li>인쇄본 만들기 / 소리 내어 읽기</li>
+        <li>문서 개요 확인 / 반복 문제 목록 작성</li>
+        <li>독자 찾기 / <span class="red">동료와 버디 시스템 활용</span></li>
+        <li><span class="red">서론을 다시 쓴다 (Rewrite the introduction)</span></li>
+      </ul>
+    </div>
+    <div class="sub">
+      <div class="sub-title">완벽주의(Perfectionism) 대처법</div>
+      <ul class="items">
+        <li>수정·편집에 투자할 시간과 에너지의 한계를 명확히 설정</li>
+        <li><span class="red">저수준 편집(editing)보다 고수준 수정(revising)에 더 집중</span></li>
+        <li>독자에게 문서에 대한 반응을 명확히 해달라고 요청, 가정과 실제 반응의 차이를 파악</li>
+      </ul>
+    </div>
+    <div class="sub">
+      <div class="sub-title">지루함(Boredom) 대처법</div>
+      <ul class="items">
+        <li>더 복잡한 요소에 집중하여 과제의 난도를 높여라</li>
+        <li>덜 흥미로운 작업 먼저, 더 흥미로운 작업은 나중에</li>
+        <li>체크리스트 활용으로 집중력 유지</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     10. 논문 구조 10섹션
+══════════════════════════════════════════ -->
+<div class="section" id="s10">
+  <div class="section-header"><span class="num">10</span> 학술 논문의 구조 (Structure of Academic Paper)</div>
+  <div class="section-body">
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">1. Title (제목) — 4가지 원칙</span></div>
+      <div class="steps">
+        <div class="step-item"><div class="step-num">①</div><div class="step-text"><span class="red">지나치게 기술적이지 않게</span> — 전문가만 이해하는 제목은 NG</div></div>
+        <div class="step-item"><div class="step-num">②</div><div class="step-text">의도한 독자에게 적합하게 (Appropriate for the intended audience)</div></div>
+        <div class="step-item"><div class="step-num">③</div><div class="step-text"><span class="red">제한적이고 구체적으로</span> (Limited and specific)</div></div>
+        <div class="step-item"><div class="step-num">④</div><div class="step-text"><span class="red">논문 주요 초점의 간결한 요약</span> (Compendious summary of article's main focus)</div></div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">2. Authors (저자) — 4가지 규칙</span></div>
+      <div class="steps">
+        <div class="step-item"><div class="step-num">①</div><div class="step-text"><span class="red">제1저자(First author)</span>: 주로 연구하고 논문을 쓴 사람</div></div>
+        <div class="step-item"><div class="step-num">②</div><div class="step-text"><span class="red">등록 저자(Listed authors)</span>: 현저한 기여를 한 다른 사람들</div></div>
+        <div class="step-item"><div class="step-num">③</div><div class="step-text"><span class="red">공동저자(Co-author)</span>: 이름 포함 전 멘토의 동의 필요</div></div>
+        <div class="step-item"><div class="step-num">④</div><div class="step-text"><span class="red">교신저자(Corresponding author)</span>: 연락 담당 저자 (보통 지도교수)</div></div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">3. Abstract (초록) — 5가지 원칙</span></div>
+      <div class="steps">
+        <div class="step-item"><div class="step-num">①</div><div class="step-text">논문의 <span class="red">"Preview"</span> — 앞으로 나올 내용의 미리보기</div></div>
+        <div class="step-item"><div class="step-num">②</div><div class="step-text">본문보다 덜 기술적으로 작성</div></div>
+        <div class="step-item"><div class="step-num">③</div><div class="step-text"><span class="red">100~250 단어</span>, 1개 단락 — 목적·방법·결과·결론 요약</div></div>
+        <div class="step-item"><div class="step-num">④</div><div class="step-text">중요하고 필요한 개념 포함</div></div>
+        <div class="step-item"><div class="step-num">⑤</div><div class="step-text"><span class="red">초록에서 약어(abbreviation)나 인용(citation) 사용 금지</span></div></div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">4. Introduction (서론) — 6가지 요소</span></div>
+      <div class="steps">
+        <div class="step-item"><div class="step-num">①</div><div class="step-text">관련 연구 문헌 요약 (독자가 관심 이슈 이해하도록)</div></div>
+        <div class="step-item"><div class="step-num">②</div><div class="step-text"><span class="red">1~4 단락</span>으로 연구 질문 설명</div></div>
+        <div class="step-item"><div class="step-num">③</div><div class="step-text">연구 배경 스케치 (왜 이 질문을 연구했는지, 선행 연구와의 관계)</div></div>
+        <div class="step-item"><div class="step-num">④</div><div class="step-text">문제와 그 역사(선행 연구 포함) 기술</div></div>
+        <div class="step-item"><div class="step-num">⑤</div><div class="step-text">자신의 연구가 선행 연구의 <span class="red">차별점(distinction)</span>을 어떻게 설명하는지 기술</div></div>
+        <div class="step-item"><div class="step-num">⑥</div><div class="step-text">논문이 다룰 정보 언급</div></div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">5. Materials and Methods (재료 및 방법) — 6가지 원칙</span></div>
+      <div class="steps">
+        <div class="step-item"><div class="step-num">①</div><div class="step-text">독자가 <span class="red">실험을 재현(duplicate)</span>할 수 있을 만큼 충분한 정보</div></div>
+        <div class="step-item"><div class="step-num">②</div><div class="step-text"><span class="red">시간 순서대로(chronologically)</span> 구성</div></div>
+        <div class="step-item"><div class="step-num">③</div><div class="step-text">다이어그램·표·순서도 포함 가능</div></div>
+        <div class="step-item"><div class="step-num">④</div><div class="step-text"><span class="red">윤리적 고려사항 언급</span> — 인체 대상 시 동의 여부, 동물 실험 시 고통 최소화 조치</div></div>
+        <div class="step-item"><div class="step-num">⑤</div><div class="step-text"><span class="red">이 섹션에 결과(results)를 넣지 않는다</span></div></div>
+        <div class="step-item"><div class="step-num">⑥</div><div class="step-text">특수 장비(브랜드명 포함) 명기</div></div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">6. Results (결과) — 4가지 규칙</span></div>
+      <div class="steps">
+        <div class="step-item"><div class="step-num">①</div><div class="step-text">결과를 <span class="red">명확하고 논리적으로 제시</span>, 표·그림·그래프를 효과적으로 활용</div></div>
+        <div class="step-item"><div class="step-num">②</div><div class="step-text"><span class="red">비논리적 말·비이성적 사고·지나친 주관적 판단 피하기</span> — 데이터를 과장해 보이게 조작 금지</div></div>
+        <div class="step-item"><div class="step-num">③</div><div class="step-text">독자를 위해 각 단락마다 <span class="red">1문장 요약</span> 제공 고려</div></div>
+        <div class="step-item"><div class="step-num">④</div><div class="step-text">가지고 있는 모든 데이터를 반드시 포함시킬 필요는 없다</div></div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">7. Discussion (논의) — 4가지 요소</span></div>
+      <div class="steps">
+        <div class="step-item"><div class="step-num">①</div><div class="step-text"><span class="red">원래 질문과 결과의 가장 중요한 사항</span>을 강조</div></div>
+        <div class="step-item"><div class="step-num">②</div><div class="step-text">연구 질문과 결과 사이의 연관성 파악</div></div>
+        <div class="step-item"><div class="step-num">③</div><div class="step-text">가장 중요한 단어, 결과로 가장 명확히 나타나는 포인트, 핵심 개념에 종속된 아이디어 정리</div></div>
+        <div class="step-item"><div class="step-num">④</div><div class="step-text"><span class="red">결론의 1문장 요약</span>으로 마무리 — 왜 중요한지 강조</div></div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title">8. Tables and Graphs (표와 그래프)</div>
+      <ul class="items">
+        <li>표·그래프에는 <span class="red">객관적이고 구체적인 제목(caption)</span> 포함</li>
+        <li>그래프: <span class="red">x축과 y축을 정확히 라벨링</span></li>
+      </ul>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">9. Acknowledgements (감사의 글) — 6가지 범주</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">
+        <span class="badge red-badge">① Moral support (도덕적 지원)</span>
+        <span class="badge red-badge">② Financial support (재정 지원)</span>
+        <span class="badge red-badge">③ Editorial support (편집 지원)</span>
+        <span class="badge red-badge">④ Presentational support (발표 지원)</span>
+        <span class="badge red-badge">⑤ Instrumental/technical support (기술 지원)</span>
+        <span class="badge red-badge">⑥ Conceptual support / PIC (개념적 지원 / 동료 상호 소통)</span>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">10. References (참고문헌) — 형식</span></div>
+      <ul class="items">
+        <li>작성 순서대로 인용 목록 나열</li>
+        <li>참고문헌 내 포함 항목: <span class="red">저자·제목·학술지·권(volume)·페이지 번호·출판연도</span></li>
+        <li>예시: Zhang, Y., Tan, J. W., … Nature 438, 201–204 (2005)</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     11. 저널 선택
+══════════════════════════════════════════ -->
+<div class="section" id="s11">
+  <div class="section-header"><span class="num">11</span> 목표 저널 선택 (Selecting a Target Journal)</div>
+  <div class="section-body">
+    <div class="sub">
+      <div class="sub-title"><span class="red">목표 저널 선택의 중요성 — 4가지 중요 요소</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;">
+        <span class="badge red-badge">① Publishing goals (출판 목표)</span>
+        <span class="badge red-badge">② Impact factor (영향력 지수)</span>
+        <span class="badge red-badge">③ Fast publishing time (빠른 출판 시간)</span>
+        <span class="badge red-badge">④ Specific target audience (특정 목표 독자)</span>
+      </div>
+    </div>
+    <div class="sub">
+      <div class="sub-title"><span class="red">목표 저널 선택 시 장점 5가지</span></div>
+      <ul class="items">
+        <li>연구 가시성(visibility) 향상</li>
+        <li>다른 연구자들이 연구를 찾을 수 있음</li>
+        <li><span class="red">논문 거절 확률 감소</span></li>
+        <li>출판 시간과 노력 절약</li>
+        <li><span class="red">시간에 민감한 결과의 빠른 출판</span></li>
+      </ul>
+    </div>
+    <div class="sub">
+      <div class="sub-title"><span class="red">올바른 저널 선택 프로세스 4단계</span></div>
+      <div class="flow">
+        <div class="flow-item">① 후보 3~5개 저널 파악</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">② 저널 웹사이트 방문·적합성 확인</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">③ 후보 저널에 원고 제출</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">④ 저널 응답에 따라 출판 진행</div>
+      </div>
+      <ul class="items" style="margin-top:8px;">
+        <li>웹사이트 방문 시 확인: 연구 분야 적합성 / 분야에서 논문 출판 여부 / 논문 핵심 포인트와 저널 초점 일치 여부</li>
+      </ul>
+    </div>
+    <div class="sub">
+      <div class="sub-title"><span class="red">출판 시간 관련 고려사항</span></div>
+      <table>
+        <tr><th>항목</th><th>설명</th></tr>
+        <tr><td><span class="red">Pre-submission inquiries (사전 문의)</span></td><td>커버레터와 초록을 에디터에게 전송하여 귀중한 시간 절약</td></tr>
+        <tr><td><span class="red">Average time to complete peer review</span></td><td>동료 심사(peer review) 평균 완료 시간 광고</td></tr>
+        <tr><td><span class="red">Cascading peer review (계단식 동료 심사)</span></td><td>거절된 원고를 자매 저널로 이전하는 서비스 (Nature, Wiley, RSC, PLoS, BioMed Central 등)</td></tr>
+        <tr><td><span class="red">Typical speed of publication</span></td><td>투고·수락·출판 날짜 비교로 출판 속도 파악</td></tr>
+        <tr><td><span class="red">Online pre-publication</span></td><td>인쇄 지연과 무관하게 온라인 선출판 버전 먼저 공개</td></tr>
+      </table>
+    </div>
+    <div class="sub">
+      <div class="sub-title">Open Access (오픈 액세스) 저널</div>
+      <ul class="items">
+        <li><span class="red">동료 심사 학술 연구에 대한 비제한적 온라인 접근</span></li>
+        <li>모든 독자가 재정적 장벽 없이 접근 가능</li>
+        <li>연구자 사이에서 논문 가시성 향상</li>
+        <li>홍보 방법: 소셜 미디어, 보도자료(press releases), 연구 그룹 웹사이트·블로그, 수상(awards)</li>
+      </ul>
+    </div>
+    <div class="def-box">
+      <strong>핵심 요약:</strong> 적합한 목표 저널 선택 = <span class="red">단순히 가장 높은 IF의 저널을 선택하는 것이 아니다</span><br>
+      → 연구 분야·원고 목적에 맞는 저널을 찾고, 처리 시간과 출판 목표를 함께 고려해야 한다
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     12. SCIE / IF
+══════════════════════════════════════════ -->
+<div class="section" id="s12">
+  <div class="section-header"><span class="num">12</span> SCIE / Impact Factor (영향력 지수)</div>
+  <div class="section-body">
+    <div class="sub">
+      <div class="sub-title"><span class="red">Web of Science 내 인덱스 구조</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;">
+        <span class="badge red-badge">SCIE — Science Citation Index Expanded (이공계)</span>
+        <span class="badge red-badge">SSCI — Social Sciences Citation Index (사회과학)</span>
+        <span class="badge red-badge">AHCI — Arts &amp; Humanities Citation Index (인문)</span>
+        <span class="badge">SCI — SCIE에 포함</span>
+      </div>
+      <ul class="items" style="margin-top:10px;">
+        <li>인덱스 제공: <span class="red">Clarivate Analytics</span></li>
+        <li>플랫폼: <span class="red">Web of Science</span></li>
+        <li>어떤 후속 논문이 특정 논문을 인용했는지 파악 가능</li>
+        <li>저널뿐 아니라 <span class="red">책(books)과 학회 발표집(Conference proceedings)도 인덱싱</span></li>
+      </ul>
+    </div>
+    <div class="sub">
+      <div class="sub-title"><span class="red">Impact Factor (IF, 영향력 지수) — 계산법</span></div>
+      <div class="def-box">
+        학술지의 IF = 최근 2년간 게재 논문들이 받은 <span class="red">연평균 인용 수</span>를 반영하는 지수<br><br>
+        <span class="red">IF = (인용 수) / (출판 논문 수)</span><br><br>
+        예시) Nature 2011년 IF = (28,700+33,991) / (862+866) = 62,691/1,728 = <span class="red">36.280</span>
+      </div>
+      <ul class="items">
+        <li>분야 내 저널의 <span class="red">상대적 중요도의 대리 지표(proxy)</span>로 자주 사용</li>
+        <li>높은 IF 저널 = 분야에서 더 중요한 것으로 간주</li>
+      </ul>
+    </div>
+    <div class="sub">
+      <div class="sub-title">Google Scholar (구글 학술검색)</div>
+      <ul class="items">
+        <li>논문·특허 등 <span class="red">학술 문서 전문 검색</span></li>
+        <li>인용 수 및 기타 지표 서비스 제공</li>
+        <li>특정 논문을 클릭하면 <span class="red">그 논문을 인용한 모든 후속 논문</span> 확인 가능</li>
+        <li>주요 지표: 인용 수(사지정표), <span class="red">h-index</span>, i10-index</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     13. Storytelling
+══════════════════════════════════════════ -->
+<div class="section" id="s13">
+  <div class="section-header"><span class="num">13</span> 학술 논문의 스토리텔링 기법</div>
+  <div class="section-body">
+    <div class="sub">
+      <div class="sub-title"><span class="red">① Typical (Plain) Description — 전형적 기술</span></div>
+      <div class="flow">
+        <div class="flow-item">배경(잘 알려진)</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">배경(잘 알려진)</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">접근법 및 결과</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">연구 전망</div>
+      </div>
+    </div>
+    <div class="sub">
+      <div class="sub-title"><span class="red">② Dramatic Description — 극적 기술 (고IF 논문에 많이 사용)</span></div>
+      <div class="flow">
+        <div class="flow-item">배경(잘 알려진)</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">기존 기술의 최신 현황</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item" style="background:#c0392b;">기존 기술의 한계</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item" style="background:#27ae60;">결과 = 한계의 돌파</div>
+      </div>
+    </div>
+    <div class="sub">
+      <div class="sub-title"><span class="red">③ Magazine Style — 매거진 스타일 (대부분의 고IF 논문)</span></div>
+      <ul class="items">
+        <li>연구 동기: 과학적 <span class="red">"필요(needs)"</span>에서 시작</li>
+        <li>장점: 목표 독자의 탁월한 선택성 / 독자의 높은 수용도</li>
+        <li>적합 주제: <span class="red">트렌디(Trendy)하거나 방법론적(methodological) 이슈</span></li>
+      </ul>
+    </div>
+    <div class="sub">
+      <div class="sub-title"><span class="red">④ Thesis Style — 논문 스타일</span></div>
+      <ul class="items">
+        <li>연구 동기: 현상·문제·이슈를 <span class="red">명확히 하기 위해</span></li>
+        <li>장점: 구체적 정보 전달 / 결론 효과적으로 도출</li>
+        <li>적합 주제: <span class="red">근본적(Fundamental) 이슈</span></li>
+      </ul>
+    </div>
+    <div class="sub">
+      <div class="sub-title"><span class="red">논문 스타일별 그림(Figure) 수</span></div>
+      <table>
+        <tr><th>스타일</th><th>권장 Figure 수</th></tr>
+        <tr><td><span class="red">Letter Paper Style</span></td><td><span class="red">4~6 figures</span></td></tr>
+        <tr><td><span class="red">Full Paper (Article) Style</span></td><td><span class="red">8~10 figures</span></td></tr>
+      </table>
+      <p style="font-size:12px;color:#666;margin-top:6px;">최근에는 Supporting Figures(보조 그림)가 증가하는 추세 — 스토리 라인에 맞는 Supporting Figures 매칭이 중요</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     14. 출판 프로세스
+══════════════════════════════════════════ -->
+<div class="section" id="s14">
+  <div class="section-header"><span class="num">14</span> 출판 프로세스 (Publishing Process)</div>
+  <div class="section-body">
+    <div class="sub">
+      <div class="sub-title"><span class="red">전체 출판 흐름도</span></div>
+      <div class="flow" style="flex-direction:column;align-items:flex-start;">
+        <div style="display:flex;gap:8px;align-items:center;"><div class="flow-item">저자: 제출 (Submission)</div><div class="flow-arrow">→</div><div class="flow-item">에디터: 커버레터 확인</div></div>
+        <div class="flow-arrow" style="margin-left:20px;">↓</div>
+        <div style="display:flex;gap:8px;align-items:center;"><div class="flow-item">에디터: 초록·소속·저자 확인</div><div class="flow-arrow">→</div><div class="flow-item">에디터: 그림 세트 확인</div></div>
+        <div class="flow-arrow" style="margin-left:20px;">↓</div>
+        <div style="display:flex;gap:8px;align-items:center;"><div class="flow-item">에디터: 심사자 선정</div><div class="flow-arrow">→</div><div class="flow-item">심사자: 코멘트 제출</div></div>
+        <div class="flow-arrow" style="margin-left:20px;">↓</div>
+        <div style="display:flex;gap:8px;align-items:center;"><div class="flow-item">에디터: 에디터 결정</div><div class="flow-arrow">→</div><div class="flow-item">저자: 수정 및 응답레터</div></div>
+        <div class="flow-arrow" style="margin-left:20px;">↓</div>
+        <div class="flow-item">에디터: 최종 결정 (Final Decision)</div>
+      </div>
+    </div>
+    <div class="sub">
+      <div class="sub-title"><span class="red">커버레터(Cover Letter) 필수 요소</span></div>
+      <ul class="items">
+        <li><span class="red">주요 결론의 명확하고 간결한 진술</span> (Statement of the main conclusions clearly and concisely)</li>
+        <li><span class="red">제안 심사자(Suggested reviewers)</span> 목록: 이름 + 소속 + 이메일 (보통 3~5명)</li>
+      </ul>
+    </div>
+    <div class="sub">
+      <div class="sub-title">수정 응답 (Revision & Response Letter)</div>
+      <ul class="items">
+        <li>심사자 코멘트 → 에디터 결정 → 저자 수정 → 저자 응답 레터 제출</li>
+        <li>응답 레터 형식: <span class="red">Reviewer #1 코멘트 → Response (응답) 순서</span></li>
+        <li>심사자의 가치 있는 코멘트에 감사를 표하고, 각 코멘트에 대한 명확한 응답 제공</li>
+      </ul>
+    </div>
+    <div class="sub">
+      <div class="sub-title"><span class="red">효과적 학술 작성을 위한 일반 지침 (Guidelines — P.H. Wright, 1994)</span></div>
+      <ul class="items">
+        <li><span class="red">쓰기 전에 생각을 계획하고 조직화</span>하라</li>
+        <li><span class="red">개요(outline)를 준비</span>하라</li>
+        <li><span class="red">지루한 구조를 피하라</span></li>
+        <li><span class="red">간결함(brevity)과 명확함(clarity)을 추구</span>하라</li>
+        <li>의도한 독자에게 맞는 작성 스타일로 적응하라</li>
+        <li><span class="red">속어(slang)·유행어(fad words)·중복(redundancies)·완곡어법(euphemisms)·맞춤법 오류·문법 오류 사용 피하기</span></li>
+      </ul>
+    </div>
+    <div class="sub">
+      <div class="sub-title"><span class="red">좋은 논문 작성을 위한 8가지 팁 (C. Gravey, 2014)</span></div>
+      <div class="steps">
+        <div class="step-item"><div class="step-num">1</div><div class="step-text"><span class="red">많은 논문을 읽어라</span> — 분야 내외의 논문을 읽어 넓은 시야를 가져라</div></div>
+        <div class="step-item"><div class="step-num">2</div><div class="step-text">자신의 연구에 대해 <span class="red">객관적으로 되어라</span></div></div>
+        <div class="step-item"><div class="step-num">3</div><div class="step-text"><span class="red">좋은 영어로 써라</span></div></div>
+        <div class="step-item"><div class="step-num">4</div><div class="step-text"><span class="red">거절(rejection)과 함께 살아가는 법을 배워라</span> — 학술 커리어에는 항상 거절이 따른다. 심사자 조언을 받아들여 연구·원고를 개선하라</div></div>
+        <div class="step-item"><div class="step-num">5</div><div class="step-text">전체 연구 과정에서 <span class="red">논문 구조를 어떻게 잡을지 생각</span>하라</div></div>
+        <div class="step-item"><div class="step-num">6</div><div class="step-text"><span class="red">심사자(reviewer)가 되어라</span> — 비판적으로 과학을 평가하는 습관이 자신의 연구 평가에도 도움</div></div>
+        <div class="step-item"><div class="step-num">7</div><div class="step-text"><span class="red">어디에 출판할지 일찍 결정하라</span> — 저널의 Aims and Scopes 페이지를 확인</div></div>
+        <div class="step-item"><div class="step-num">8</div><div class="step-text"><span class="red">Quality is everything. (품질이 전부다.)</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     15. 논문 유형 4가지
+══════════════════════════════════════════ -->
+<div class="section" id="s15">
+  <div class="section-header"><span class="num">15</span> 논문 유형 4가지 (Types of Publication) — 고관수 교수</div>
+  <div class="section-body">
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">① Articles (Full Papers, 일반논문)</span></div>
+      <ul class="items">
+        <li>General paper style — <span class="red">주제를 철저하고 명확하게 다룬다</span> (Cover the subject matter thoroughly and clearly)</li>
+        <li>중요하고 독창적인 연구의 <span class="red">결정적(definitive) 설명</span> (Definitive accounts of significant, original studies)</li>
+        <li><span class="red">간결하게, 불필요한 역사적 참고문헌 피하기</span> (Concise, avoiding unnecessary historical references)</li>
+        <li>기존 주제에 <span class="red">새로운 접근법 제공</span> (Provide a fresh approach to an established subject)</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">② Letters / Communications (레터·커뮤니케이션)</span></div>
+      <ul class="items">
+        <li>요즘 트렌디하지만 역사적인 형식 (Trendy these days, but historical)</li>
+        <li><span class="red">특별한 중요성과 긴급성</span> — 신속 출판 (Special significance and urgency; expedited publication)</li>
+        <li><span class="red">엄격한 분량 제한</span> 적용 (Subject to strict length limitations)</li>
+        <li><span class="red">비필수적인 실험 상세 내용 포함 불가</span> (May not contain non-essential experimental details)</li>
+        <li>저자는 출판 후 완전한 세부내용을 별도 논문으로 출판해야 한다</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">③ Reviews (리뷰 논문)</span></div>
+      <ul class="items">
+        <li>특정 주제의 출판된 문헌을 <span class="red">통합·상관·평가</span>한다 (Integrate, correlate, and evaluate results from published literatures)</li>
+        <li><span class="red">명확하게 정의된 주제(well-defined theme)</span>를 가져야 함</li>
+        <li>새로운 이론적 해석 제시 가능 (May present novel theoretical interpretations)</li>
+        <li>특정 분야를 전체적으로 이해하는 <span class="red">창문 역할</span> (Window for a holistic understanding)</li>
+        <li>원본 문헌의 안내 역할 — <span class="red">참고문헌의 정확성·완전성이 필수</span></li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">④ Notes / News (노트·뉴스)</span></div>
+      <ul class="items">
+        <li><span class="red">제한된 범위의 독창적 연구에 대한 간결한 설명</span> (Concise accounts of original research of a limited scope)</li>
+        <li>특별한 중요성의 예비 보고서 가능 (Can be preliminary reports)</li>
+        <li>적합 주제: <span class="red">① 광범위한 응용성을 가진 개선된 절차, ② 특별한 관심의 새로운 관찰, ③ 새로운 기법 개발</span></li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">좋은 글쓰기의 중요성</span></div>
+      <div class="def-box">
+        많은 논문이 <span class="red">잘못 쓰여져 이해하기 어렵다</span> → 높은 거절(rejection) 확률 / 좋은 아이디어가 제대로 평가받지 못함<br><br>
+        간단한 지침만으로 논문 품질을 극적으로 향상시킬 수 있다 → <span class="red">높은 수락(acceptance) 확률</span>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">논문 필수 구성요소 9가지 (Essential parts)</span></div>
+      <table>
+        <tr><th>섹션</th><th>역할 (영문 원문)</th><th>한국어 설명</th></tr>
+        <tr><td><span class="red">Title</span></td><td>Describe concisely the core contents of the paper</td><td>논문 핵심 내용을 간결하게 기술</td></tr>
+        <tr><td><span class="red">Abstract</span></td><td>Summarize the major elements of the paper</td><td>논문의 주요 요소 요약</td></tr>
+        <tr><td><span class="red">Introduction</span></td><td>Provide context and rationale for the study</td><td>연구의 배경과 근거 제공</td></tr>
+        <tr><td><span class="red">Method/Materials/Theory</span></td><td>Describe the experimental procedures so it can be reproducible</td><td>재현 가능하도록 실험 절차 기술</td></tr>
+        <tr><td><span class="red">Results</span></td><td>Summarize the findings without interpretation</td><td>해석 없이 연구 결과 요약</td></tr>
+        <tr><td><span class="red">Discussion</span></td><td>Interpret the findings of the study</td><td>연구 결과 해석</td></tr>
+        <tr><td><span class="red">Summary/Conclusion</span></td><td>Summarize the findings</td><td>연구 결과 요약</td></tr>
+        <tr><td>Acknowledgement</td><td>Give credit to those who helped you</td><td>도움 받은 사람들에 대한 감사</td></tr>
+        <tr><td>References</td><td>All scientific papers, books and websites cited</td><td>인용된 모든 자료</td></tr>
+      </table>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">독자 수 추정 (Rough estimation of readers)</span></div>
+      <table>
+        <tr><th>섹션</th><th>대략적 독자 수</th></tr>
+        <tr><td><span class="red">Title</span></td><td><span class="red">1,000명</span></td></tr>
+        <tr><td><span class="red">Abstract (4 sentences)</span></td><td><span class="red">100명</span></td></tr>
+        <tr><td>Introduction (1 page)</td><td>10명</td></tr>
+        <tr><td>The problem / My idea</td><td>10명</td></tr>
+        <tr><td>The details (5 pages)</td><td>3명</td></tr>
+        <tr><td>Related work</td><td>10명</td></tr>
+      </table>
+      <p style="font-size:12px;color:#666;margin-top:6px;">→ Title과 Abstract가 얼마나 중요한지 보여주는 수치</p>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">섹션별 적절한 시제 (Appropriate tense — 절대 미래 시제 사용 금지)</span></div>
+      <table>
+        <tr><th>섹션</th><th>시제 (Tense)</th></tr>
+        <tr><td><span class="red">Abstract</span></td><td><span class="red">결과 기술·제시: 과거 시제 (Past tense) / 결론: 현재 시제 (Present tense)</span></td></tr>
+        <tr><td>Introduction</td><td>과거 또는 현재 시제 (Past or present tense)</td></tr>
+        <tr><td><span class="red">Methods & Results</span></td><td><span class="red">과거 시제 (Past tense) — 무엇을 했고, 무엇을 발견했는지</span></td></tr>
+        <tr><td>Discussion</td><td>과거 및/또는 현재 시제</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     16. Title 작성법
+══════════════════════════════════════════ -->
+<div class="section" id="s16">
+  <div class="section-header"><span class="num">16</span> Title 작성법 — 목적과 방법</div>
+  <div class="section-body">
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Title의 목적 (Purpose)</span></div>
+      <ul class="items">
+        <li><span class="red">가능한 적은 단어로 논문의 핵심 내용을 적절히 설명</span> (Adequately describe the contents using the fewest possible words)</li>
+        <li>논문의 인덱싱과 초록 작성은 <span class="red">제목의 정확성에 의존</span></li>
+        <li><span class="red">제목이 잘못 달린 논문은 묻혀서 영원히 읽히지 않는다</span> (An improperly titled paper will get lost and will never be read)</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Title 작성 5단계 방법</span></div>
+      <div class="steps">
+        <div class="step-item"><div class="step-num">1</div><div class="step-text">가장 중요한 <span class="red">키워드 목록</span>을 만들어라 (Make a list of the most important keywords)</div></div>
+        <div class="step-item"><div class="step-num">2</div><div class="step-text">이 단어들을 포함하는 제목을 생각하라 (Think of a title that contains these words)</div></div>
+        <div class="step-item"><div class="step-num">3</div><div class="step-text">제목이 <span class="red">논문의 결론을 언급</span>할 수 있다 (The title could state the conclusion)</div></div>
+        <div class="step-item"><div class="step-num">4</div><div class="step-text">제출 전 제목을 반복해서 재고하라 (Think, rethink of the title before submitting)</div></div>
+        <div class="step-item"><div class="step-num">5</div><div class="step-text"><span class="red">문법·구문 오류에 주의</span>하라 (Be careful of grammatical and syntax errors)</div></div>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">좋은 Title의 특징</span></div>
+      <ul class="items">
+        <li><span class="red">간결하고(concise), 의미 있고(meaningful), 구체적이며(specific), 정보성(informative)</span>이 있어야</li>
+        <li>실험의 근본적인 성격을 포착해야 함 (Should capture the fundamental nature of the experiments)</li>
+        <li>너무 짧지도, 너무 길어서 무의미하지도 않게 (Neither too short nor too long)</li>
+        <li>긴 제목이 필요하면 <span class="red">부제(subtitle) 사용</span> 고려</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Title에서 피해야 할 표현들</span></div>
+      <div class="def-box">
+        <span class="red">사용 금지:</span> "studies on", "investigations on", "using", "novel", "first", "a study of", "research on", "report on", "regarding", "new", "rapid", "use of"<br><br>
+        <span class="red">또한 피해야 할 것:</span> 전문 용어(jargon), 기호(symbols), 수식(formulas), 약어(abbreviations)<br><br>
+        <span class="red">대부분의 경우 제목 시작에 "the" 생략</span><br><br>
+        약어는 해당 분야 대다수 독자에게 널리 알려진 경우를 제외하고 <span class="red">원고 제목에 사용 금지</span><br><br>
+        구체적인 용어 선택: "a magnetic alloy" (X) → <span class="red">"a vanadium–iron alloy" (O)</span>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">제목 스타일 3가지 (Various styles of titles)</span></div>
+      <table>
+        <tr><th>유형</th><th>설명</th><th>예시</th></tr>
+        <tr>
+          <td><span class="red">Short descriptive type (가장 일반적)</span></td>
+          <td>짧고 서술적</td>
+          <td><em>Graphene analogue carries current</em> (Nature, 2014)</td>
+        </tr>
+        <tr>
+          <td><span class="red">Interrogative forms (의문형)</span></td>
+          <td>질문 형식으로 독자 흥미 유발</td>
+          <td><em>Can Water Store Charge?</em> (Langmuir, 2009)</td>
+        </tr>
+        <tr>
+          <td><span class="red">Long descriptive type (긴 서술형)</span></td>
+          <td>부제 포함 상세 기술</td>
+          <td><em>Electronic Quenching in N(2D) + N2: A State-Specific Analysis via Surface Hopping Dynamics</em></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     17. Abstract 작성법
+══════════════════════════════════════════ -->
+<div class="section" id="s17">
+  <div class="section-header"><span class="num">17</span> Abstract 작성법 (초록)</div>
+  <div class="section-body">
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Abstract의 목적</span></div>
+      <ul class="items">
+        <li>문서 내 정보의 <span class="red">요약(summary)</span> — 독자가 논문의 성격과 범위를 파악하도록 함</li>
+        <li><span class="red">명확하고 간단하게 작성</span> — 원고에서 처음이자 유일하게 읽히는 부분일 수 있음 (Write clearly and simply, as it is the first and sometimes the only part read)</li>
+        <li>기술 편집자들이 인덱싱·검색을 위한 핵심 특징 파악에 도움</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Abstract 내용 구성 — IMRAD 기반 4가지 요소</span></div>
+      <div class="def-box">
+        <strong>IMRAD</strong> = <span class="red">Introduction (서론), Methods (방법), Results (결과), and Discussion (논의)</span>
+      </div>
+      <div class="steps">
+        <div class="step-item"><div class="step-num">1</div><div class="step-text"><span class="red">주요 목적과 연구 범위</span>를 서술하라 (State the principal objective and scope)</div></div>
+        <div class="step-item"><div class="step-num">2</div><div class="step-text"><span class="red">사용한 방법</span>을 기술하라 (Describe the methods used)</div></div>
+        <div class="step-item"><div class="step-num">3</div><div class="step-text"><span class="red">결과를 요약</span>하라 (Summarize the results)</div></div>
+        <div class="step-item"><div class="step-num">4</div><div class="step-text"><span class="red">주요 결론</span>을 서술하라 (State the principal conclusions)</div></div>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Abstract 형식 규칙</span></div>
+      <ul class="items">
+        <li><span class="red">과거 시제</span>로 작성 — 이미 수행된 작업을 언급하므로 (Should be written in the past tense)</li>
+        <li><span class="red">간결하고(concise), 독립적이며(self-contained), 완전(complete)</span>해야 함</li>
+        <li><span class="red">최적 길이: 1 단락, 80~200 단어</span> (80~200 words is usually adequate)</li>
+        <li>본문의 수치에 대해 정확해야 함 (Must be accurate with respect to figures)</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Abstract에서 금지되는 것들</span></div>
+      <ul class="items">
+        <li><span class="red">참고문헌(references), 표(tables), 그림(figures), 섹션 인용 금지</span> (Do not cite references, tables, figures)</li>
+        <li><span class="red">방정식(equations), 구조식(schemes or structures) 포함 금지</span></li>
+        <li>본문에 없는 정보나 결론 제시 금지</li>
+        <li>약어·두문자어는 어색한 표현이나 불필요한 반복을 피하기 위해 꼭 필요한 경우에만 사용<br>
+          → <span class="red">초록 첫 사용 시 정의, 본문 첫 사용 시 다시 정의</span></li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Structured vs. Unstructured Abstract</div>
+      <table>
+        <tr><th>유형</th><th>특징</th><th>예시 저널</th></tr>
+        <tr><td><span class="red">Structured (구조적)</span></td><td>Background/Methods/Results/Conclusions 등 소제목 있음</td><td>Journal of Biomedical Science</td></tr>
+        <tr><td>Unstructured (비구조적)</td><td>소제목 없이 단락으로 작성</td><td>Science</td></tr>
+      </table>
+    </div>
+
+    <div class="def-box">
+      <strong>Summary:</strong> 잠재적 독자를 효과적으로 끌어당겨야 한다. 논문이 쉽게 인덱싱되고 인용되어야 한다.<br>
+      → <span class="red">명확하고(Clear), 간단하며(Simple), 논리적인(Logical) 기술이 필요하다</span><br>
+      → Your academic depth should be well implied (학문적 깊이가 잘 드러나야 한다)
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     18. Introduction 작성법
+══════════════════════════════════════════ -->
+<div class="section" id="s18">
+  <div class="section-header"><span class="num">18</span> Introduction 작성법 (서론)</div>
+  <div class="section-body">
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Introduction의 핵심 3요소</span></div>
+      <ul class="items">
+        <li><span class="red">논문 목적의 간결한 서술</span>과 관련 배경 (Concise statement of the purpose and the relevant background)</li>
+        <li><span class="red">잘 그리고 비판적으로 참고문헌 인용</span> (Must be well, and critically referenced)</li>
+        <li><span class="red">문제를 구체적으로 서술</span> (State the problems specifically)</li>
+      </ul>
+      <div class="def-box">
+        <strong>첫 문장(FIRST SENTENCE)이 가장 중요!</strong><br>
+        → <span class="red">잘 쓰여지고 정보성이 있어야 한다 / 제목처럼 독자의 관심을 끌어야 한다</span><br>
+        (Like the Title, capture the reader's interest!)
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Introduction 구조 (1~2 페이지)</span></div>
+      <div class="flow">
+        <div class="flow-item">흥미롭거나 미해결 문제 기술</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">자신의 기여 서술 (새 아이디어/데이터/결론)</div>
+      </div>
+      <ul class="items" style="margin-top:10px;">
+        <li>해결할 문제와 왜 중요한지 명확히 정의</li>
+        <li>관련 문헌 검토 (Review the pertinent literature)</li>
+        <li>과거 연구의 간략한 설명 + 자신의 연구가 과거 연구와 어떻게 연결되는지</li>
+        <li><span class="red">자신의 연구가 무엇이 다른지</span> 서술 (State what is different about your work)</li>
+        <li>연구 방법, 주요 결과, 주요 결론 언급</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">시제 및 문체 규칙</span></div>
+      <ul class="items">
+        <li>이미 출판된 연구를 언급할 때: <span class="red">과거 시제 (past tense)</span></li>
+        <li>사실이라고 생각하는 것을 서술할 때: <span class="red">현재 시제 (present tense)</span></li>
+        <li><span class="red">능동태(active voice) 최대한 활용</span> — e.g., "It was recently found that… → Harris and Harris (2006) found that…"</li>
+        <li>동료 심사 학술 문헌 인용 (교과서 같은 일반 참고서 피하기)</li>
+        <li>전문 용어나 약어 정의</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Introduction에서 피해야 할 것들</span></div>
+      <ul class="items">
+        <li><span class="red">길거나 초점 없는 선행 연구 검토</span></li>
+        <li>허세 언어, 반복, 의미 없는 표현 — e.g., "utilize → use", "commence → start", "due to the fact that → because", "In the event that → if"</li>
+        <li>관련 없는 자료</li>
+        <li><span class="red">단락에 하나 이상의 주제 넣기 금지</span> — 차라리 두 단락 이상으로 나눠라</li>
+        <li><span class="red">너무 많은 인용 — 가장 중요하고 최신이거나 리뷰 논문만 인용</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     19. Materials & Methods 작성법
+══════════════════════════════════════════ -->
+<div class="section" id="s19">
+  <div class="section-header"><span class="num">19</span> Materials & Methods 작성법 (재료 및 방법)</div>
+  <div class="section-body">
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Methods의 목적</span></div>
+      <div class="def-box">
+        모든 특수 재료와 일반 절차를 기록하여, 다른 연구자가 방법의 일부 또는 전부를 사용하거나 연구의 과학적 가치(validity)를 판단할 수 있게 한다.<br>
+        (To document all specialized materials and general procedures so that another individual may use some or all of the methods or judge the scientific merit of your work)
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Methods 충족 요건 2가지</span></div>
+      <div class="steps">
+        <div class="step-item"><div class="step-num">1</div><div class="step-text"><span class="red">다른 사람이 실험을 반복할 수 있어야</span> 한다 (The experiment could be repeated by others to evaluate whether the results are reproducible)</div></div>
+        <div class="step-item"><div class="step-num">2</div><div class="step-text">독자가 <span class="red">결과와 결론의 타당성을 판단</span>할 수 있어야 한다 (The audience can judge whether the results and conclusions are valid)</div></div>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Methods 구성 5단계</span></div>
+      <div class="steps">
+        <div class="step-item"><div class="step-num">1</div><div class="step-text">연구에 사용된 <span class="red">재료 기술</span> (Describing the materials used)</div></div>
+        <div class="step-item"><div class="step-num">2</div><div class="step-text">재료가 어떻게 <span class="red">준비되었는지</span> 설명 (Explaining how the materials were prepared)</div></div>
+        <div class="step-item"><div class="step-num">3</div><div class="step-text"><span class="red">연구 프로토콜(protocol) 기술</span> (Describing the research protocol)</div></div>
+        <div class="step-item"><div class="step-num">4</div><div class="step-text">측정 방법과 <span class="red">계산 설명</span> (Explaining how measurements were made and what calculations were performed)</div></div>
+        <div class="step-item"><div class="step-num">5</div><div class="step-text">데이터 분석 방법 서술 (Stating how the data were analyzed)</div></div>
+      </div>
+      <p style="font-size:12px;color:#666;margin-top:6px;"><span class="red">글쓰기는 직접적이고(direct), 정확하며(precise), 과거 시제(past tense)로</span></p>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Materials 기술 규칙</span></div>
+      <ul class="items">
+        <li>화학물질: <span class="red">정확한 기술 사양, 출처 또는 제조 방법, 상품명 금지 (NO trade names)</span></li>
+        <li>용액: 이름, 농도, 용매, pH 등</li>
+        <li>일반적인 공급품(시험관, 피펫 팁, 비커 등) 포함 금지</li>
+        <li>특정 장비가 실험 성공에 중요하면 명기</li>
+        <li><span class="red">순도(purity) 정보, 화학명(chemical names), 새롭거나 드문 화합물의 화학식</span> 제공</li>
+        <li><span class="red">위험(hazards) 주의사항 — "Caution:" 제목의 별도 단락으로 강조</span></li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Methods 작성 스타일</span></div>
+      <ul class="items">
+        <li>보통 <span class="red">수동태(passive voice)</span> 사용, 완전한 문장으로</li>
+        <li>비표준/비상업적 장치는 명확하고 간결하게 기술</li>
+        <li>표준 장비: 회사명과 모델번호 기재</li>
+        <li><span class="red">단계별 지시서처럼 쓰지 말 것</span> (It is not a set of instructions. Don't tell a story)</li>
+        <li>방법은 <span class="red">간결하게(concisely), 특정 사항(온도 등) 포함</span>하여 보고</li>
+        <li><span class="red">통계 분석 방법 반드시 언급</span> — 일반적 방법은 설명 없이, 고급·특이 방법은 문헌 인용 필요</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Methods에서 피해야 할 것</span></div>
+      <ul class="items">
+        <li>상표명(trademarks) 및 브랜드명</li>
+        <li>모든 설명 정보와 배경 생략</li>
+        <li>제3자와 무관한 정보 생략 (e.g., 어떤 색 아이스 버킷을 사용했는지)</li>
+        <li><span class="red">이 섹션에 Results 내용 혼합 금지</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     20. Results · Discussion · Conclusion
+══════════════════════════════════════════ -->
+<div class="section" id="s20">
+  <div class="section-header"><span class="num">20</span> Results · Discussion · Conclusion 작성법</div>
+  <div class="section-body">
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Results 작성 준비 단계</span></div>
+      <ul class="items">
+        <li>raw data(원시 데이터)를 기록하고, <span class="red">의미 있는 데이터를 추출</span></li>
+        <li>의미 있는 데이터가 떠오를 때마다 아이디어 기록</li>
+        <li><span class="red">결과로 표(Tables) 만들기 → 결과로 그래프(Graphs) 그리기</span></li>
+        <li>표/그림을 적절히 정렬하여 <span class="red">논리적인 스토리 구성</span></li>
+        <li>각 그림/표는 <span class="red">1~2가지 중요한 결과/발견</span>을 담아야 함</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Results의 목적 및 작성법</span></div>
+      <ul class="items">
+        <li>목적: <span class="red">연구 결과를 제시하고 설명</span>한다 (Present and illustrate your findings)</li>
+        <li>결과를 <span class="red">가장 효과적으로 표현할 그림·표 활용</span></li>
+        <li><span class="red">완전히 객관적인 보고</span> — 해석은 모두 Discussion에 남겨라 (Save all interpretation for the discussion)</li>
+        <li>결과와 토론을 함께 제시하는 것이 더 논리적이면 <span class="red">"Results and Discussion" 혼합 섹션</span> 사용 가능</li>
+        <li>결과를 가장 관련성 높은 관찰을 중심으로 서술</li>
+        <li><span class="red">통계 분석 요약, 중요한 음성 결과(negative results)</span> 포함</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Results에서 피해야 할 것</span></div>
+      <ul class="items">
+        <li><span class="red">결과를 논의하거나 해석하지 말 것 / 배경 정보 넣지 말 것</span></li>
+        <li>M&M 섹션에 이미 설명한 방법 반복 기술 금지</li>
+        <li>텍스트는 그림/표를 보완해야지 <span class="red">같은 정보를 반복하면 안 됨</span></li>
+        <li><span class="red">원시 데이터나 중간 계산 절대 포함 금지</span></li>
+        <li>같은 데이터를 두 번 이상 제시 금지</li>
+        <li>스타일: <span class="red">결과를 언급할 때 과거 시제 사용</span></li>
+        <li>그림/표는 번호를 매겨 적절한 위치에 배치 — 텍스트에서 "Figure 1" / "Table 1"로 언급</li>
+        <li><span class="red">각 그림/표는 연속 순서대로 인용</span>해야 함</li>
+      </ul>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Discussion의 목적</span></div>
+      <ul class="items">
+        <li>결과 <span class="red">해석(interpretation)</span> 제공 (Provide an interpretation of your results)</li>
+        <li>결론을 뒷받침 (Support for your conclusions based on your experiment and general knowledge)</li>
+        <li><span class="red">객관적으로 — 연구의 특징/한계점을 지적</span>하라 (Be objective; point out features/limitations)</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Discussion 내용 구성</span></div>
+      <ul class="items">
+        <li>문제가 해결되었는가? 무엇이 기여되었는가?</li>
+        <li>결과의 논리적 시사점 (Logical implications of the results)</li>
+        <li>추가 연구 또는 응용 제안</li>
+        <li><span class="red">Why? 와 How?에 대한 답변 (Science)</span></li>
+        <li>관찰을 설명하는 <span class="red">메커니즘(mechanisms)</span> 기술</li>
+        <li>각 가설이 지지·기각·미결정인지 판단</li>
+        <li>합리적인 대안 설명 제시 시도</li>
+        <li><span class="red">현재 지식과 연구의 원래 목적에 결과를 연결</span></li>
+        <li>특정 개인의 연구 언급 → <span class="red">과거 시제</span> / 일반적으로 인정된 사실·원리 → <span class="red">현재 시제</span></li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Discussion에서 피해야 할 것</span></div>
+      <ul class="items">
+        <li><span class="red">연구를 단순히 "inconclusive(불확정)"라고 무시하지 말 것</span> (미완성 논문은 수락되지 않음)</li>
+        <li>결과를 단순히 재서술하는 피상적 해석 금지</li>
+        <li>원고 다른 곳에 있는 정보 반복 금지</li>
+      </ul>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Summary (요약) 작성 규칙</span></div>
+      <ul class="items">
+        <li>대부분의 논문에서 요약은 불필요하다</li>
+        <li>긴 논문에서 주요 포인트 요약이 도움이 될 수 있으나, <span class="red">주요 포인트만 다루어야 함</span></li>
+        <li><span class="red">요약 자체가 너무 길면 목적이 사라진다</span></li>
+        <li>Communications에서는 "Conclusions" 대신 <span class="red">Summary가 자주 사용</span></li>
+      </ul>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Conclusion 작성법</span></div>
+      <ul class="items">
+        <li>목적: 해석을 원래 문제의 맥락에 넣기 (Put the interpretation into the context of the original problem)</li>
+        <li><span class="red">주요(NOT 전체) 발견과 시사점</span> 제시 (Give major findings and implications — not all)</li>
+        <li>Discussion 내용 반복이나 관련 없는 자료 금지</li>
+        <li><span class="red">결론은 제시된 증거에 기반</span>해야 한다 (Conclusions should be based on the evidence presented)</li>
+        <li><span class="red">또 다른 초록(another abstract)이 되어서는 안 된다</span></li>
+      </ul>
+      <div class="def-box">
+        <strong>Conclusion 구성 4단계:</strong><br>
+        <span class="red">① 연구한 것 (What you studied)</span><br>
+        <span class="red">② 어떻게 설명했는지, 그것이 의미하는 것 (How you explained / What they mean)</span><br>
+        <span class="red">③ 기여가 무엇인지 (What is the contribution)</span><br>
+        <span class="red">④ 향후 연구 및 응용 (Future study & applications)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     21. Tables & Figures
+══════════════════════════════════════════ -->
+<div class="section" id="s21">
+  <div class="section-header"><span class="num">21</span> Tables & Figures 상세 작성법</div>
+  <div class="section-body">
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Table 사용 조건</span></div>
+      <ul class="items">
+        <li><span class="red">데이터를 내러티브(서술)로 명확히 제시할 수 없을 때</span> (When data cannot be presented clearly as narrative)</li>
+        <li>많은 정확한 숫자를 제시해야 할 때</li>
+        <li>표 형식이 의미 있는 상호관계를 더 잘 전달할 때</li>
+        <li>아이디어를 전달하기 위해 <span class="red">대표 데이터가 담긴 표 1개</span> (여러 표 금지)</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Table 인용 방법 (How to Cite Tables)</span></div>
+      <ul class="items">
+        <li>모든 표는 텍스트에서 <span class="red">이름과 번호로 언급(called out)</span>되어야 함</li>
+        <li>표 번호가 뒤따를 때 <span class="red">"Table" 대문자 사용</span> (Capitalize "Table" when followed by the table number)</li>
+        <li>텍스트에서 <span class="red">순서대로 번호 부여</span>: Table 2 또는 Table II</li>
+        <li><span class="red">순서대로 토론</span>: Table 1 → Table 2 → Table 3</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">비공식 표 (Informal in-text Table)</span></div>
+      <ul class="items">
+        <li><span class="red">3~5줄, 최대 4열</span> (3~5 lines and ≤4 columns)</li>
+        <li>텍스트 열 너비를 초과할 수 없음</li>
+        <li>소개 문장 다음 텍스트 내 배치</li>
+        <li>각 열에 제목 있어야 함</li>
+        <li><span class="red">제목, 번호, 각주 없음</span></li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Table 형식 규칙</span></div>
+      <ul class="items">
+        <li><span class="red">최소 3개의 상호 연관된 열과 3개의 행</span>으로 구성 (2열만 있으면 내러티브로 작성)</li>
+        <li>간단하고 간결하게 — 공간 최적 활용, 동일/유사한 열 결합</li>
+        <li>유사하거나 관련된 표 전체에서 <span class="red">일관된 표현·기호·약어 사용</span></li>
+        <li>너비: 6열까지 단일 열, 13열까지 이중 열 / 이중 열보다 넓으면 <span class="red">90° 회전</span></li>
+        <li>매우 넓은 표 → <span class="red">2개 이상의 표로 분할 고려</span></li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Table 제목(Title) 작성법</span></div>
+      <ul class="items">
+        <li><span class="red">비문장(non-sentence) 형식으로 내용을 설명하는 간략하고 정보성 있는 제목</span></li>
+        <li><span class="red">텍스트를 참고하지 않고도 이해할 수 있게 자체적으로 완결</span> (Self-contained)</li>
+        <li>세부 사항은 제목이 아닌 <span class="red">각주(footnotes)</span>에 배치</li>
+        <li><span class="red">"Table"과 번호로 시작</span>: Table 1 또는 Table I</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Column Headings (열 제목) 규칙</span></div>
+      <ul class="items">
+        <li><span class="red">모든 열에는 해당 자료를 설명하는 제목이 있어야 함</span></li>
+        <li>열 제목이 전체 표에 적용되어서는 안 됨</li>
+        <li>하나의 열 제목이 여러 열에 적용되면 <span class="red">straddle rule(가로선)</span> 사용</li>
+        <li>간결하게, 약어와 기호 활용 / 측정 변수와 단위를 쉼표·슬래시·괄호로 표기</li>
+        <li>비표준 약어는 각주에 정의</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Table Footnotes (각주) 작성법</span></div>
+      <ul class="items">
+        <li><span class="red">전체 각주(general footnotes)</span>: 표 전체에 적용되는 단위, 약어·기호, 실험 조건, 데이터 출처</li>
+        <li><span class="red">특정 각주(specific footnotes)</span>: 열 제목에 맞지 않는 긴 단위, 특정 항목에 사용되는 약어</li>
+        <li><span class="red">표 왼쪽 위에서 시작해 알파벳 순 소문자 이탤릭 위첨자</span> 사용</li>
+        <li>각주는 표 끝에 그룹으로 작성</li>
+      </ul>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Figures의 목적 및 유형</span></div>
+      <ul class="items">
+        <li>목적: 데이터·결과 강조, 명확화, 요약 / 독자의 텍스트 이해력 향상 (시각적 소통)</li>
+        <li><span class="red">Line graphs (꺾은선 그래프): 추세(trends) 표시</span></li>
+        <li><span class="red">Bar graphs (막대 그래프): 크기 비교(magnitudes)</span></li>
+        <li><span class="red">Pie charts (파이 차트): 전체 대비 상대적 비율</span></li>
+        <li>Photographs: 발견의 절대적 증거 제공</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Figure vs. Table 선택 기준</span></div>
+      <table>
+        <tr><th>사용 목적</th><th>선택</th></tr>
+        <tr><td>한 눈에 핵심 포인트 전달 / 추세·관계 보여주기</td><td><span class="red">Figure</span></td></tr>
+        <tr><td>정확한 숫자 보여주기 / 많은 정보를 글로 전달</td><td><span class="red">Table</span></td></tr>
+      </table>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Color vs. Black & White</span></div>
+      <ul class="items">
+        <li>색상은 <span class="red">재료의 화학적 성질을 이해하는 데 필수적인 경우에만</span> 사용</li>
+        <li>그렇지 않으면 <span class="red">흑백으로 준비</span></li>
+        <li>꺾은선 그래프: 다양한 대시 스타일(dash styles) 활용 / 막대·파이 차트: 회색조 음영 활용</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">기존 출판된 그림·표 재사용 규칙 (Copyright)</span></div>
+      <ul class="items">
+        <li>이미 출판된 그림·사진·표를 재사용하려면 <span class="red">저작권자(보통 출판사)로부터 서면 허가</span>를 받아야 함</li>
+        <li>자신이 이전에 출판한 그림·표도 <span class="red">저작권자로부터 서면 허가 필요</span></li>
+        <li>미국 정부의 저작물만 예외</li>
+        <li>크레딧 형식: <span class="red">"Reprinted with permission from ref 10. Copyright 2003 American Pharmaceutical Association."</span></li>
+        <li>데이터에서 직접 그래프 구성 → 허가 불필요, <span class="red">데이터 출처 인용(cite)</span>만 하면 됨</li>
+        <li>이전 출판된 표/그림의 일부 사용 → <span class="red">크레딧 라인: "reprinted" → "adapted"로 변경</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     22. 투고·심사 프로세스 상세
+══════════════════════════════════════════ -->
+<div class="section" id="s22">
+  <div class="section-header"><span class="num">22</span> 투고·심사 프로세스 상세 (Submission & Review Process)</div>
+  <div class="section-body">
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">전체 출판 프로세스 흐름</span></div>
+      <div class="flow" style="flex-wrap:wrap;gap:4px;">
+        <div class="flow-item">Submission (투고)</div><div class="flow-arrow">→</div>
+        <div class="flow-item">Paper check (논문 점검)</div><div class="flow-arrow">→</div>
+        <div class="flow-item">Allocation to expert editor (전문 편집자 배정)</div><div class="flow-arrow">→</div>
+        <div class="flow-item">Selection of reviewers (심사자 선정)</div><div class="flow-arrow">→</div>
+        <div class="flow-item">Reviewer reports (심사 보고서)</div><div class="flow-arrow">→</div>
+        <div class="flow-item">Recommendation (권고)</div><div class="flow-arrow">→</div>
+        <div class="flow-item">First decision (1차 결정)</div><div class="flow-arrow">→</div>
+        <div class="flow-item">Responding to review reports (심사 보고서 대응)</div><div class="flow-arrow">→</div>
+        <div class="flow-item">Final decision (최종 결정)</div><div class="flow-arrow">→</div>
+        <div class="flow-item">Typesetting → Proof correction → Publication (교정 → 출판)</div>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">투고 전 준비사항</span></div>
+      <ul class="items">
+        <li>모든 저자는 <span class="red">투고에 동의하고 내용에 책임</span>을 져야 함 (All authors are responsible for the entire paper)</li>
+        <li>교신저자(corresponding author)는 모든 출판 관련 사항에서 저자들을 대표</li>
+        <li><span class="red">명확하고 논리적인 메시지</span>를 확보하라 — 논문은 명확하고 건전한 결론 없이는 출판되지 않음</li>
+        <li>분야에서 활동 중인 동료와 결과를 논의하라 / 학술 회의에서 결과를 발표하라</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">저널 선택 시 고려사항</span></div>
+      <ul class="items">
+        <li>유사한 논문을 출판하는 저널 파악 — 저자, 독자, 일반/전문 저널 여부</li>
+        <li><span class="red">수락률(acceptance rate), 페이지 비용(page charge), 전자/하드카피 투고 여부</span></li>
+        <li><span class="red">약탈적 저널(Predatory journals, 부실 저널)</span> 주의 → 유료로 논문을 쉽게 출판해 주는 저질 저널</li>
+        <li>저널의 편집 정책, 저자 지침 철저히 읽기</li>
+        <li>분량: 초록/텍스트 단어 수, 표/그림 수, 보충 자료 / 형식: 소섹션, 참고문헌 형식·수, 섹션 순서</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">커버레터(Cover Letter) 포함 내용</span></div>
+      <ul class="items">
+        <li>이름, 주소, 전화·팩스·이메일 / 부재 시 대체 연락처</li>
+        <li><span class="red">논문이 왜 중요하고 저널이 왜 출판해야 하는지 — 주요 결론을 1~2문장으로</span> (State the main conclusion clearly and concisely)</li>
+        <li>논문을 사전 검토한 분야 인사의 이름 (특히 편집위원회 멤버)</li>
+        <li><span class="red">추천 심사자(Suggested reviewers)</span>: 독립적이고 편향되지 않은 전문가</li>
+        <li><span class="red">기피 심사자(Reluctant reviewers)</span>: 객관적 평가를 하지 않을 것 같은 사람</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">동료 심사(Peer Review) 핵심</span></div>
+      <ul class="items">
+        <li>출판 전 학술 커뮤니티의 연구자·주제 전문가들이 논문을 평가하는 메커니즘</li>
+        <li>편집자는 <span class="red">보통 최소 2명의 독립적이고 객관적인 심사자("referees" or "reviewers")</span>를 구함</li>
+        <li>편집자의 수락 기준: <span class="red">독창성(originality), 관련성(relevance), 과학적 엄밀성(scientific rigor), 발표의 명확성(clarity of presentation)</span></li>
+        <li><span class="red">대부분의 저널은 "Novelty(참신성)"를 요구</span> — 이전에 수행되지 않은 '새로운 것'</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">1차 결정 유형 4가지 (First Decision)</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;">
+        <span class="badge">Direct accept (직접 수락) — 매우 드묾!</span>
+        <span class="badge red-badge">Minor revision (경미한 수정) — 기본 OK, 일부 개선·명확화</span>
+        <span class="badge red-badge">Major revision (대폭 수정) — "Reject and resubmission"이라고도 함</span>
+        <span class="badge red-badge">Reject (거절)</span>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">심사 결과 대응 (Responding to Review)</span></div>
+      <ul class="items">
+        <li><span class="red">포기하지 마라! (Do not give up!)</span> — 프로세스는 연구를 최상으로 만드는 것을 목표로 함</li>
+        <li>타당하다고 생각되는 <span class="red">모든 비판에 응답</span>하라</li>
+        <li>동의하지 않는 심사자 코멘트에 대해 <span class="red">논거(arguments)를 제시</span>하라</li>
+        <li>많은 저널에서 <span class="red">"point by point" 방식으로 각 코멘트에 구체적 응답</span> 요구</li>
+        <li>가능한 빨리 수정하라 / <span class="red">모든 코멘트에 반응</span>해야 함</li>
+        <li><span class="red">논증적(argumentative) 태도 자제</span> (심사자가 틀렸더라도)</li>
+        <li>동의하지 않으면 <span class="red">문헌을 인용하여 논거 제시</span></li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Major Revision 대응</span></div>
+      <ul class="items">
+        <li>방법의 추가 설명 / 무관한 부분 삭제 / 결과 재해석 / 추가 분석 수행</li>
+        <li>공동저자들과 수정 방법 논의</li>
+        <li>선임(또는 교신) 저자가 변경 사항 취합하고 일관성 확보</li>
+        <li>수정 후 공동저자들의 승인 받기</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">출판 관련 윤리적 고려사항</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">
+        <span class="badge red-badge">Ownership (소유권)</span>
+        <span class="badge red-badge">Plagiarism (표절)</span>
+        <span class="badge red-badge">Double publication (이중 출판)</span>
+        <span class="badge red-badge">Conflicts of interest — COI (이해충돌)</span>
+        <span class="badge red-badge">Funding (연구비 출처)</span>
+        <span class="badge red-badge">Ethical approvals: IRB (기관생명윤리위원회), IACUC (동물실험윤리위원회)</span>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">교정(Proof) 단계</div>
+      <ul class="items">
+        <li>종이 또는 전자 교정본</li>
+        <li><span class="red">2~3 영업일 이내 빠르게 응답</span></li>
+        <li>지정된 방식으로 교정본에 표시</li>
+        <li>마감일 내 반환 / 증쇄 주문 여부 결정 / 저작권 양도서 반환</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     23. Grammar 문법
+══════════════════════════════════════════ -->
+<div class="section" id="s23">
+  <div class="section-header"><span class="num">23</span> Grammar (문법) — 핵심 규칙 정리</div>
+  <div class="section-body">
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">① 형용사(Adjective) 순서</span></div>
+      <div class="def-box">
+        <span class="red">Article/Possessive(관사/소유격) → Number(수량) → Size(대소) → Shape(성질/정도) → Color(색깔) → Age(신구)</span><br>
+        e.g., "important two findings" (X) → <span class="red">"two important findings"</span> (O)<br><br>
+        Opinion adjective (주관적 형용사) → Fact adjective (객관적 형용사)<br>
+        e.g., "delicious hot water"
+      </div>
+      <ul class="items">
+        <li><strong>All:</strong> "All the rare gas was released…" vs "All of rare gases were released…"<br>
+          → "All of these methods did not converge." (X) → <span class="red">"None of these methods converged."</span> (O)</li>
+        <li><strong>Each:</strong> 형용사 / 대명사 / 부사 용법 구분</li>
+        <li><strong>Most:</strong> "Most of reactor types…" (X) → <span class="red">"Most reactor types…"</span> (O)<br>
+          "Most of the reactor types" (O — 특정 집합)</li>
+        <li><strong>only vs. alone vs. solely:</strong>
+          <span class="red">only = 주관적(subjective) 한정</span> / <span class="red">alone = 객관적(objective) 한정</span> / <span class="red">solely = 정량적이고 객관적</span></li>
+      </ul>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">② 부사(Adverb) 순서</span></div>
+      <div class="def-box">
+        <span class="red">Location(장소) → Method(방법) → Frequency(빈도) → Time(시간)</span><br>
+        단, 짧은 부사 먼저 (shorter ones first)<br>
+        e.g., "The samples were incubated briefly at room temperature."
+      </div>
+      <div class="sub-title" style="margin-top:10px;">빈도 부사 확률 척도</div>
+      <table>
+        <tr><th>부사</th><th>확률</th></tr>
+        <tr><td><span class="red">always (항상)</span></td><td><span class="red">100%</span></td></tr>
+        <tr><td>almost always</td><td>90%</td></tr>
+        <tr><td>usually</td><td>70%</td></tr>
+        <tr><td>often</td><td>50%</td></tr>
+        <tr><td>frequently</td><td>30%</td></tr>
+        <tr><td>sometimes / occasionally</td><td>20%</td></tr>
+        <tr><td><span class="red">never (절대)</span></td><td><span class="red">0%</span></td></tr>
+      </table>
+      <div class="sub-title" style="margin-top:10px;"><span class="red">확률 표현 부사</span></div>
+      <table>
+        <tr><th>표현</th><th>확률</th></tr>
+        <tr><td>inevitably, necessarily, definitely, certainly, undoubtedly</td><td>~90%</td></tr>
+        <tr><td><span class="red">probably</span></td><td><span class="red">80~90%</span></td></tr>
+        <tr><td>most likely</td><td>70%</td></tr>
+        <tr><td>likely</td><td>50%</td></tr>
+        <tr><td><span class="red">possibly, perhaps</span></td><td><span class="red">10~20%</span></td></tr>
+      </table>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">③ 명사(Noun) — 가산/불가산 구분</span></div>
+      <ul class="items">
+        <li><span class="red">Countable noun (가산명사)</span>: 단수·복수 가능 — "Many results are obtained." / "Two results are obtained."</li>
+        <li><span class="red">Uncountable noun (불가산명사)</span>: 단수만 — "Much data is obtained." / "Two pieces of data are obtained."</li>
+        <li>반복 피하기: "Table 1 and Table 2" (X) → <span class="red">"Table 1 and 2"</span> (O)</li>
+      </ul>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">④ 관사(Article) — 정관사 vs. 부정관사</span></div>
+      <ul class="items">
+        <li><span class="red">Definite article "the" (정관사)</span>: 독자가 이미 알고 있는 아이디어</li>
+        <li><span class="red">Indefinite article "a/an" (부정관사)</span>: 새로운 아이디어</li>
+      </ul>
+      <div class="def-box">
+        <strong>the 사용 상황:</strong><br>
+        · 독자가 이미 알고 있는 기법/방법/이론 — "The least square method is applied here."<br>
+        · 원고에 이미 소개된 대상 — "We present a method… The merits of the method are…"<br>
+        · [of + 명사]로 수식된 것 — "The velocity dispersion profiles of…"<br>
+        · 저널명/신문명 — "the Nature"<br>
+        · 고유한 대상 — 지구(the earth), 강 이름, 특정 기관명("The University of Wisconsin")<br>
+        · "most of the~, all the~, each of the~, many of the~"<br>
+        · next, entire, final, last, present, same, whole, only, chief, very, following 앞
+      </div>
+      <div class="def-box" style="margin-top:8px;">
+        <strong>관사 생략 상황 (무관사):</strong><br>
+        · 고유명사(인명, 국가명, 행성명) — proper noun<br>
+        · 현상/행위: "Application of the optical model…" (무관사)<br>
+        · 물질명사 앞 부정관사: "Radioassay of Yb is…" (무관사)<br>
+        · 형용사구: "Subject to modification without notice." / "Full width at half maximum."<br>
+        · 부사구: "for instance", "in reference to", "with elapse of time"
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">⑤ 동사(Verb) 규칙</span></div>
+      <ul class="items">
+        <li><span class="red">주동사를 앞으로</span>: "The value of y as function of x is shown in Fig. 5." → <span class="red">"The value of y is shown in Fig. 5 as function of x."</span></li>
+        <li><span class="red">부정 표현</span>: "was not found" (X) → <span class="red">"No … was found"</span> (O)</li>
+        <li>수동태(passive voice): "We obtained the equations." → "The equations are obtained."</li>
+        <li><span class="red">의인법(inanimate subject)</span>: "Figure 1 suggests…", "Knowledge of this value enables us to…"</li>
+        <li><span class="red">시제: 과거 시제</span>로 실험 행위/현상 서술 / <span class="red">현재 완료(present perfect)</span>로 이전 연구 서술</li>
+      </ul>
+      <div class="def-box">
+        <strong>동의어 선택 (Prove, Identify, Explain 등의 대안):</strong><br>
+        <span class="red">Prove</span>: substantiate, attest, document, evidence, demonstrate<br>
+        <span class="red">Identify</span>: verify, confirm, corroborate, ascertain<br>
+        <span class="red">Explain</span>: elucidate, clarify<br>
+        <span class="red">Show</span>: reveal, exhibit, display, give
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">⑥ 약어(Abbreviation) 규칙</span></div>
+      <ul class="items">
+        <li>이탤릭체(Italic font)로 작성: cf., vs., et al., e.g., etc., i.e.</li>
+        <li>마침표 사용에 주의: <span class="red">cf: 비교(compare)</span>, <span class="red">et al.: and others</span>, <span class="red">e.g.: for example</span>, <span class="red">i.e.: that is</span></li>
+        <li>하나의 약어가 여러 품사에 쓰이면 같은 약어 사용 가능</li>
+        <li><span class="red">복수형: 약어 끝에 "s" 추가</span> — e.g., GPCRs</li>
+        <li><span class="red">약어는 제목이 아닌 본문 첫 등장 시 정의</span>; 제목에서는 풀어서 쓰기</li>
+      </ul>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">⑦ 숫자(Number) 표시 규칙</span></div>
+      <ul class="items">
+        <li>과학 논문에서 숫자는 <span class="red">아라비아 숫자(Arabic numerals)</span>로 표기 — 예외 제외</li>
+        <li>예외: <span class="red">① 문장·제목·소제목 맨 처음</span> (영어 단어로), <span class="red">② 일반 분수(common fraction)</span>, ③ 숙어·관용구, <span class="red">④ 서수 first~ninth</span></li>
+        <li><span class="red">숫자와 단위 사이에 한 칸 공백</span> — "170 cm", 단 퍼센트 기호(%): 붙여 씀 "20%"</li>
+        <li>시간 전치사: <span class="red">at(하루보다 짧을 때)</span>, <span class="red">on(일(day))</span>, <span class="red">in(하루보다 길 때)</span></li>
+      </ul>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">⑧ 이탤릭체(Italic font) 사용 규칙</span></div>
+      <ul class="items">
+        <li><span class="red">동물·식물·미생물의 학명</span> — e.g., <em>Homo sapiens</em>, <em>Streptococcus pneumoniae</em></li>
+        <li><span class="red">저널명·신문명</span> — e.g., <em>the Nature</em>, <em>the New York Times</em></li>
+        <li><span class="red">통계 용어</span> — e.g., <em>p</em> value, student <em>t</em> distribution</li>
+        <li><span class="red">강조</span> — e.g., "The term <em>Magellanic Cloud</em> was first coined 40 years ago."</li>
+        <li>라틴어 약어 — cf., vs., et al., e.g., etc., i.e.</li>
+      </ul>
+    </div>
+
+    <div class="def-box">
+      <strong>Grammar의 핵심 원칙 (3가지):</strong><br>
+      <span class="red">① Logical! (논리적으로!)</span><br>
+      <span class="red">② Clear description (unambiguous)! (명확한, 모호하지 않은 기술!)</span><br>
+      <span class="red">③ Reading and writing a lot! (많이 읽고 쓰기!)</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     24. Word Choice (단어 선택)
+══════════════════════════════════════════ -->
+<div class="section" id="s24">
+  <div class="section-header"><span class="num">24</span> Word Choice (단어 선택) — 어휘 정밀도</div>
+  <div class="section-body">
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">간결한 단어 선택 원칙</span></div>
+      <ul class="items">
+        <li><span class="red">긴 단어보다 짧은 단어</span>를 선택하라 (Select the shorter word rather than the longer one)</li>
+        <li><span class="red">구(phrase)보다 단일 단어</span>를 선택하라 (Select the single word rather than the phrase)</li>
+      </ul>
+      <table>
+        <tr><th>피해야 할 표현 (X)</th><th>대체 표현 (O)</th></tr>
+        <tr><td>due to the fact that / for the reason that / on account of / owing to the fact that / on the basis that</td><td><span class="red">because</span></td></tr>
+        <tr><td>the majority of</td><td><span class="red">most</span></td></tr>
+        <tr><td>at the present moment / at this point</td><td><span class="red">now</span></td></tr>
+        <tr><td>Can't, won't, don't</td><td><span class="red">cannot, will not, do not</span></td></tr>
+        <tr><td>Get, happen, want</td><td><span class="red">obtain, occur, desire</span></td></tr>
+        <tr><td>Pretty</td><td><span class="red">fairly, quite</span></td></tr>
+        <tr><td>So much / not so much</td><td><span class="red">very much / not very much</span></td></tr>
+        <tr><td>Do</td><td><span class="red">undertake, conduct, perform, execute, carry out</span></td></tr>
+      </table>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">감정적 단어 피하기 (Avoid emotive words)</span></div>
+      <table>
+        <tr><th>X</th><th>O</th></tr>
+        <tr><td>suffer back pain</td><td><span class="red">have back pain</span></td></tr>
+        <tr><td>powerful risk factor</td><td><span class="red">strong risk factor</span></td></tr>
+      </table>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">부정문(Negative sentence) 규칙</span></div>
+      <ul class="items">
+        <li><strong>부분 부정 vs. 완전 부정:</strong><br>
+          "was not used in <span class="red">all</span> animals" (부분 부정: 일부는 사용) vs. "was not used in <span class="red">any</span> animals" (완전 부정: 아무것도 사용 안 함)</li>
+        <li><span class="red">이중 부정(double negative) 피하기</span>: "not abnormal" → <span class="red">normal</span> / "not uncommon" → <span class="red">common</span></li>
+        <li><span class="red">부정문에서 "and" 사용 불가</span>: "did not correlate with age <span class="red">and</span> sex" (X) → "did not correlate with age <span class="red">or</span> sex" (O)</li>
+        <li><span class="red">부정문에서 "also" 사용 불가</span>: "No expression … was <span class="red">also</span> detected" (X) → "No expression … was detected <span class="red">either</span>" (O)</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">수량 표현 (Quantity expressions)</span></div>
+      <table>
+        <tr><th>한국어 의미</th><th>영어 표현</th></tr>
+        <tr><td>다수의</td><td><span class="red">a (large) number of</span></td></tr>
+        <tr><td>소수의</td><td><span class="red">only a small number of</span></td></tr>
+        <tr><td>다량의</td><td><span class="red">a large/considerable/substantial/significant amount of</span></td></tr>
+        <tr><td>소량의</td><td><span class="red">a small/negligible/insignificant amount of</span></td></tr>
+        <tr><td>약 ~ / ~정도</td><td><span class="red">about / approximately / roughly / around / nearly / close to</span></td></tr>
+      </table>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">비교 표현 (Comparison expressions)</span></div>
+      <table>
+        <tr><th>한국어 의미</th><th>영어 표현 (예시)</th></tr>
+        <tr><td>~배 ~하다</td><td><span class="red">A is 5 times [or 5-fold] more soluble in hexane than in water.</span><br>The solubility of A in hexane is 10 times as high as that of B.</td></tr>
+        <tr><td>~만큼 ~하다</td><td><span class="red">The yield of the product was 30% larger than that previously reported.</span><br>The yield of the product increased by (up to) 30%.</td></tr>
+        <tr><td>~의 비율로 ~하다</td><td>X and Y were mixed in a mole ratio of 1:2.<br>The temperature was raised at a rate of 1°C per minute.</td></tr>
+        <tr><td>~까지 / ~이하·이상</td><td><span class="red">fluid at temperatures down to −20°C / solid at temperature up to 80°C</span><br>kept at −78°C or below [≤ −78°C] / maintained at −78°C or above [≥ −78°C]</td></tr>
+        <tr><td>최대(최소)로 되다</td><td>The yield reaches a maximum at a reaction temperature of 40°C.</td></tr>
+      </table>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">수단 표현의 강도 순서</span></div>
+      <div class="def-box">
+        <span class="red">by using > using > by the use of > by means of > by > with</span><br>
+        (강도 순서 — 왼쪽이 가장 강한 인과관계 표현)
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">인과 접속어 구분</span></div>
+      <table>
+        <tr><th>표현</th><th>용법</th></tr>
+        <tr><td><span class="red">therefore / hence</span></td><td>일반적인 결론·추론 (No evidence of direct reaction is seen, and therefore the statistical theory is applicable.)</td></tr>
+        <tr><td><span class="red">consequently / thereupon</span></td><td>시간 순서를 추가하는 결과 (add the time sequence)</td></tr>
+        <tr><td><span class="red">for this reason</span></td><td>so that / and보다 강한 인과관계 표현</td></tr>
+        <tr><td><span class="red">because</span></td><td>[Effect]…, because [Cause]… (결과 → 원인 순서)</td></tr>
+        <tr><td><span class="red">since</span></td><td>Since [Cause]…, [Effect]… (원인 강조, 원인 먼저)</td></tr>
+        <tr><td><span class="red">because of = owing to</span></td><td>부사적(adverbial) 용법 — "Because of its instability, the enzyme had to be kept…"</td></tr>
+        <tr><td><span class="red">due to</span></td><td>형용사적(adjectival) 용법 — "This is due to dissociation of the oxygen…"</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     25. Punctuation (구두점)
+══════════════════════════════════════════ -->
+<div class="section" id="s25">
+  <div class="section-header"><span class="num">25</span> Punctuation (구두점) — 마침표·쉼표·세미콜론·콜론·대시·하이픈</div>
+  <div class="section-body">
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">① Full Stop / Period (마침표) . ! ?</span></div>
+      <ul class="items">
+        <li>제목, 사람 이름, 약어·두문자어 뒤에는 <span class="red">마침표 불필요</span> (NOT needed after titles, names, abbreviations)</li>
+        <li><span class="red">인용 부호(quotation marks) 앞에 마침표 위치</span>: "perpetual motion<span class="red">.</span>"</li>
+        <li><span class="red">말줄임표(Ellipses, …)</span>: 인용된 텍스트의 생략을 나타내는 연속된 마침표<br>
+          e.g., "The patient had a stroke … but after many months of treatment … returned to work."</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">② Comma (쉼표) — 사용해야 할 때</span></div>
+      <table>
+        <tr><th>상황</th><th>예시</th></tr>
+        <tr><td><span class="red">접속사(conjunction)로 문장 시작 시</span></td><td>However<span class="red">,</span> we will need to order some new equipment.</td></tr>
+        <tr><td><span class="red">종속절(dependent clause)로 문장 시작 시</span></td><td>Before the study begins<span class="red">,</span> we will need to order some new equipment.</td></tr>
+        <tr><td><span class="red">비필수 형용사절이 독립절에 삽입될 때</span></td><td>The equipment<span class="red">,</span> which we can order from the supplier<span class="red">,</span> will be needed…</td></tr>
+        <tr><td><span class="red">같은 의미의 두 표현이 나란히 올 때 (동격)</span></td><td>Professor Brown<span class="red">,</span> the vice chancellor<span class="red">,</span> will attend the meeting.</td></tr>
+        <tr><td><span class="red">목록의 항목 구분</span></td><td>demography<span class="red">,</span> age<span class="red">,</span> gender<span class="red">,</span> and illness history</td></tr>
+      </table>
+      <div class="sub-title" style="margin-top:10px;"><span class="red">쉼표를 쓰면 안 되는 경우</span></div>
+      <ul class="items">
+        <li>독립절 + <span class="red">필수</span> 종속절: "We shall need to buy new equipment<s>,</s> that can be used…" (X)</li>
+        <li>독립절에 <span class="red">필수</span> 종속절이 삽입된 경우: "The new equipment that we shall need<s>,</s> can be ordered…" (X)</li>
+        <li><span class="red">두 독립절을 쉼표로만 연결 금지</span>: "…for poor validity<s>,</s> furthermore, most are based…" (X) → 마침표로 분리 (O)</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">③ Semicolon (세미콜론 ;)</span></div>
+      <ul class="items">
+        <li>긴 문장을 <span class="red">분리</span>한다 / 분리 강도: <span class="red">. > ; > ,</span></li>
+        <li>"Do not be shy of using the semicolon; it can serve you quite well."</li>
+        <li>목록 내 <span class="red">항목 자체에 쉼표가 있을 때</span> 항목 구분자로 사용<br>
+          e.g., signs of (1) epidermal vacuolation, degeneration, or necrosis<span class="red">;</span> (2) vascular congestion and thrombosis<span class="red">;</span> and (3) sweat gland necrosis.</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">④ Colon (콜론 :)</span></div>
+      <ul class="items">
+        <li>콜론 뒤에 <span class="red">단어나 문장을 강조</span>: "Two techniques are currently used: (a) fixed point and (b) transfer."</li>
+        <li>제목: 부제 구분 — "Weil sequences<span class="red">:</span> A family of binary sequences…"</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">⑤ Dash (대시 —)</span></div>
+      <ul class="items">
+        <li><span class="red">삽입어구 — 쉼표보다 강한 분리</span> (Insert, stronger separation than comma)</li>
+        <li>하이픈(-)보다 <span class="red">길다</span> (Longer than hyphen)</li>
+        <li><span class="red">대시 앞뒤에 공백 없음</span> (Do not have spaces before and after a dash)<br>
+          e.g., "The shear deformations─once the nominal strength is reached─do not increase."</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">⑥ Hyphen (하이픈 -) — 복합 수식어</span></div>
+      <ul class="items">
+        <li>명사를 수식하는 <span class="red">2개 이상의 단어를 연결</span>할 때 사용</li>
+      </ul>
+      <table>
+        <tr><th>유형</th><th>예시</th></tr>
+        <tr><td><span class="red">noun-adjective + noun</span></td><td>magnesium-rich silicates</td></tr>
+        <tr><td><span class="red">adjective-noun + noun</span></td><td>high-temperature chambers</td></tr>
+        <tr><td><span class="red">adjective-adjective + noun</span></td><td>three-dimensional structures</td></tr>
+        <tr><td><span class="red">noun-noun + noun</span></td><td>mass-velocity relationships</td></tr>
+        <tr><td><span class="red">분수</span></td><td>2/3: <span class="red">two-third</span> (O) vs. two third (X)</td></tr>
+      </table>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">⑦ Parentheses (괄호 ())</span></div>
+      <ul class="items">
+        <li><span class="red">약어·두문자어 정의</span> 또는 문장에 설명을 추가하지만 상대적으로 중요하지 않은 단어 그룹</li>
+        <li>e.g., "we measured the prevalence of airway hyperresponsiveness <span class="red">(AHR)</span>"</li>
+        <li>괄호 안 대괄호: e.g., "The following year [1947] was a turning point."</li>
+        <li>괄호 안 괄호: 대괄호 [] 사용 — "mechlorethamine hydrochloride [Mustragen]"</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     26. Writing Style · Paragraph
+══════════════════════════════════════════ -->
+<div class="section" id="s26">
+  <div class="section-header"><span class="num">26</span> Writing Style · Paragraph (문체·단락 구성)</div>
+  <div class="section-body">
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">문장 개선 — 핵심 원칙들</span></div>
+      <table>
+        <tr><th>Before (X)</th><th>After (O)</th><th>원칙</th></tr>
+        <tr>
+          <td>Not only in reactor physics, but also in pile radiation chemistry, resonance neutrons play an important role.</td>
+          <td><span class="red">Resonance neutrons play an important role not only in reactor physics but also in pile radiation chemistry.</span></td>
+          <td>주어·동사를 앞으로</td>
+        </tr>
+        <tr>
+          <td>a=A/b=B 형태의 병렬 비교</td>
+          <td><span class="red">sodium boiling takes place at 0.6 sec in the hottest channel and at 1.23 sec in the average channel.</span></td>
+          <td>짧은 구는 병렬 구조</td>
+        </tr>
+        <tr>
+          <td>긴 병렬 구조에서 혼용</td>
+          <td><span class="red">No activity … was detected … immediately after irradiation, but after ¹²⁸I had decayed, some long-lived impurities became discernible.</span></td>
+          <td>긴 구는 시제 분리</td>
+        </tr>
+        <tr>
+          <td>The value of y increases as increasing of x.</td>
+          <td><span class="red">The value of y increases with x.</span><br>The value of y increases in proportion of x.</td>
+          <td>불필요한 표현 제거</td>
+        </tr>
+        <tr>
+          <td>The ratio increases as the pressure decreases.</td>
+          <td><span class="red">The ratio increases with decreasing pressure.</span></td>
+          <td>간결한 분사구 활용</td>
+        </tr>
+        <tr>
+          <td>It may be expected that the prevalence of relatively mild asthma could be underestimated.</td>
+          <td><span class="red">The prevalence of mild asthma could have been underestimated.</span></td>
+          <td>짧고 간결한 문장</td>
+        </tr>
+        <tr>
+          <td>The severity of this disease has been demonstrated to be associated with age.</td>
+          <td><span class="red">The severity of this disease increases with age.</span></td>
+          <td>능동·직접 표현</td>
+        </tr>
+        <tr>
+          <td>To study mechanisms and investigate risk factors will provide useful information.</td>
+          <td><span class="red">Studying mechanisms and investigating risk factors will provide useful information.</span></td>
+          <td>병렬 동명사 구조</td>
+        </tr>
+        <tr>
+          <td>Dr. Smith's idea is brilliant, original, and will work.</td>
+          <td><span class="red">Dr. Smith's idea is brilliant, original, and practical.</span></td>
+          <td>병렬 구조 유지 (parallelism)</td>
+        </tr>
+      </table>
+    </div>
+
+    <hr>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">단락(Paragraph) 기본 원칙</span></div>
+      <div class="def-box">
+        단락은 <span class="red">하나의 주제를 다루는 관련 문장들의 모음</span> (A paragraph is a collection of related sentences dealing with a single topic)<br><br>
+        <span class="red">하나의 아이디어 = 하나의 단락! (Keep one idea to one paragraph!)</span>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">단락 구조 3요소</span></div>
+      <div class="steps">
+        <div class="step-item"><div class="step-num">1</div><div class="step-text"><span class="red">Introduction (도입): Topic sentence (주제문)</span> — 주된 아이디어</div></div>
+        <div class="step-item"><div class="step-num">2</div><div class="step-text"><span class="red">Body (본론): Supporting details (뒷받침 세부사항)</span></div></div>
+        <div class="step-item"><div class="step-num">3</div><div class="step-text"><span class="red">Conclusion / 전환 문장</span> — 다음 단락으로의 연결</div></div>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">Topic Sentence (주제문) 작성법</span></div>
+      <ul class="items">
+        <li>형식: <span class="red">Subject + controlling idea (의견)</span></li>
+        <li>e.g., "There are several <span class="red">advantages</span> to growing up in a small town."</li>
+        <li>e.g., "Effective leadership requires specific <span class="red">qualities</span> that anyone can develop."</li>
+      </ul>
+      <div class="sub-title" style="margin-top:8px;">좋은 주제문의 특성</div>
+      <ul class="items">
+        <li><span class="red">주요 아이디어를 명확하게 서술</span>하라 (State your main idea clearly)</li>
+        <li><span class="red">독자를 끌어당겨라</span> (Hook your reader)</li>
+        <li>생각을 자극하는 단어 사용</li>
+        <li><span class="red">짧게 유지</span>하라 (Keep it short)</li>
+        <li>합리적인 의견 제시</li>
+        <li>이전 단락에서 전환</li>
+      </ul>
+      <div class="sub-title" style="margin-top:8px;"><span class="red">주제문에서 피해야 할 것</span></div>
+      <ul class="items">
+        <li>너무 많은 세부사항 — 세부사항은 나중에</li>
+        <li><span class="red">두 개 이상의 주제 포함 금지</span> — 단락은 하나의 주제에 관한 것</li>
+        <li>너무 일반적 — e.g., "Clouds are white."</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">좋은 단락의 4가지 특성 (CUBE)</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;">
+        <span class="badge red-badge">① Unity (통일성) — 하나의 주제만</span>
+        <span class="badge red-badge">② Coherence (일관성) — 논리적 순서와 전환</span>
+        <span class="badge red-badge">③ Bridge (연결) — 논리적·언어적 연결</span>
+        <span class="badge red-badge">④ Adequate development (충분한 발전) — 주제를 완전히 다루기</span>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">전환어(Transition words) — 기능별 분류</span></div>
+      <table>
+        <tr><th>기능</th><th>전환어 (영문)</th></tr>
+        <tr><td><span class="red">유사·비교</span></td><td>Likewise, in the same way, similarly, in comparison</td></tr>
+        <tr><td><span class="red">대조·반대</span></td><td>On the other hand, in contrast, nevertheless, despite, in spite of, on the contrary</td></tr>
+        <tr><td><span class="red">순서·시간</span></td><td>First, second, to begin with, at the same time, later, finally</td></tr>
+        <tr><td><span class="red">인과관계</span></td><td>Thus, accordingly, therefore, because, in consequence, as a result, owing to, since</td></tr>
+        <tr><td><span class="red">이전 내용 참조</span></td><td>As has been said previously</td></tr>
+      </table>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">충분한 발전(Adequate development) 전략 7가지</span></div>
+      <table>
+        <tr><th>전략</th><th>설명</th></tr>
+        <tr><td><span class="red">① Compare/Contrast</span></td><td>두 개 이상의 현상·아이디어의 유사점과 차이점 제시</td></tr>
+        <tr><td><span class="red">② Relate</span></td><td>상관관계와 원인 제시</td></tr>
+        <tr><td><span class="red">③ Argue</span></td><td>주제문의 입장에 대한 이유·정당화·근거 제시</td></tr>
+        <tr><td><span class="red">④ Narrate</span></td><td>현상의 역사적 발전 서술</td></tr>
+        <tr><td><span class="red">⑤ Process</span></td><td>무언가가 어떻게 작동하는지 기술</td></tr>
+        <tr><td><span class="red">⑥ Analyze</span></td><td>현상·아이디어를 요소들로 분해</td></tr>
+        <tr><td><span class="red">⑦ Classify</span></td><td>공통 특성을 공유하는 더 큰 범주로 조직화</td></tr>
+      </table>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">마지막 단락(Concluding paragraph) 전략</div>
+      <ul class="items">
+        <li>논문 주요 포인트의 간략한 요약 포함</li>
+        <li>도발적인 질문 제기 / 생생한 이미지 환기</li>
+        <li>어떤 행동 촉구 / 경고로 마무리</li>
+        <li><span class="red">보편화 (다른 상황과 비교)</span></li>
+        <li><span class="red">결과나 결론 제안</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     27. 연구진실성 · 표절
+══════════════════════════════════════════ -->
+<div class="section" id="s27">
+  <div class="section-header"><span class="num">27</span> 연구진실성 · 표절 (Research Integrity & Plagiarism) — 노상도 교수</div>
+  <div class="section-body">
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">연구진실성의 핵심 가치 6가지</span> (The National Academies Press, 2017)</div>
+      <table>
+        <tr><th>가치 (한국어)</th><th>가치 (영문)</th><th>설명</th></tr>
+        <tr><td><span class="red">객관성 (客觀性)</span></td><td><span class="red">OBJECTIVITY</span></td><td>특정한 동기가 연구자의 연구 수행에 영향을 미치지 않도록 해야 함</td></tr>
+        <tr><td><span class="red">정직성 (正直性)</span></td><td><span class="red">HONESTY</span></td><td>연구의 전 과정에서 연구 자료와 데이터를 사실 그대로 활용하고 보고해야 함</td></tr>
+        <tr><td><span class="red">개방성 (開放性)</span></td><td><span class="red">OPENNESS</span></td><td>연구 수행을 통해 획득된 데이터와 결과를 투명하게 공개해야 함</td></tr>
+        <tr><td><span class="red">공정성 (公正性)</span></td><td><span class="red">FAIRNESS</span></td><td>연구 자원 배분, 연구업적 평가 등에서 친분이나 이해관계에 영향을 받지 않아야 함</td></tr>
+        <tr><td><span class="red">책무성 (責務性)</span></td><td><span class="red">ACCOUNTABILITY</span></td><td>연구 수행과정과 연구 결과의 타당성을 입증할 수 있어야 함</td></tr>
+        <tr><td><span class="red">관리 (管理)</span></td><td><span class="red">STEWARDSHIP</span></td><td>연구의 가치가 잘 확산되고 연구자들의 활동이 진작될 수 있도록 연구 공동체를 운영해야 함</td></tr>
+      </table>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">표절(Plagiarism) 정의</span></div>
+      <div class="def-box">
+        Merriam-Webster 정의: "<span class="red">다른 사람의 아이디어나 단어를 마치 자신의 것인 양 사용하는 행위</span>" (to use the words or ideas of another person as if they were your own words or ideas)
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">표절의 유형 (Types of Plagiarism)</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">
+        <span class="badge red-badge">① 완전 표절 — 타인의 저작물을 그대로 사용</span>
+        <span class="badge red-badge">② 모자이크 표절 — 일부 단어만 바꾸거나 짜깁기</span>
+        <span class="badge red-badge">③ 자기 표절(Self-plagiarism) — 자신의 이전 출판물을 인용 없이 재사용</span>
+        <span class="badge red-badge">④ 부적절한 인용 — 출처는 있지만 인용 방식이 잘못됨</span>
+        <span class="badge red-badge">⑤ 아이디어 표절 — 독특한 아이디어·이론 무단 사용</span>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">참고문헌 인용 방식 (How to use references with proper citations)</span></div>
+      <ul class="items">
+        <li><span class="red">본문 내 인용(In-text citation)</span>: 인용된 내용 뒤에 번호 또는 저자명·연도 표기<br>
+          e.g., "The education, experience and abilities of an employee have an economic value… <span class="red">(1)</span>"</li>
+        <li>참고문헌 목록에서 번호에 해당하는 출처 전체 정보 기재</li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">참고문헌 형식별 예시 (Reference formats)</span></div>
+      <table>
+        <tr><th>유형</th><th>형식 예시</th></tr>
+        <tr>
+          <td><span class="red">웹사이트 (Website)</span></td>
+          <td>IMO. International Maritime Organization [online]. London: IMO, 2018. [viewed date 12 April 2018]. Available from: &lt;http://www.imo.org&gt;</td>
+        </tr>
+        <tr>
+          <td><span class="red">학술지 논문 (Journal article)</span></td>
+          <td>Mahmood, K. The best library software for developing countries… Library software review. Wesport: Meckler, 1997, <span class="red">16(1)</span>, 12–16.<br>
+          <small>→ 권(volume), 호(issue), 페이지 순서</small></td>
+        </tr>
+        <tr>
+          <td><span class="red">온라인 학술지 논문</span></td>
+          <td>Nimbalkar, M. The fantastic four… Journal of magnetic resonance [online]. 2013, <span class="red">127(2)</span>, 199–205. [viewed date]. Available from: &lt;http://dx.doi.org/…&gt;</td>
+        </tr>
+        <tr>
+          <td><span class="red">단행본 (Book)</span></td>
+          <td>Bohigas Janoher, X. Electromagnetisme: tests resolts i comentats. Barcelona: Edicions UPC, 1999. <span class="red">ISBN 84-8301-279-0.</span></td>
+        </tr>
+        <tr>
+          <td><span class="red">기관 보고서</span></td>
+          <td>Association of College &amp; Research Libraries. Standards for libraries… [online]. Chicago: ACRL, 2011 [viewed date]. Available from: &lt;http://…&gt;</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title"><span class="red">출판 관련 연구윤리 위반 유형</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">
+        <span class="badge red-badge">표절 (Plagiarism)</span>
+        <span class="badge red-badge">이중 출판 (Double publication)</span>
+        <span class="badge red-badge">데이터 조작·위조</span>
+        <span class="badge red-badge">이해충돌 미신고 (COI)</span>
+        <span class="badge red-badge">IRB 미승인 연구</span>
+        <span class="badge red-badge">IACUC 미승인 동물실험</span>
+        <span class="badge red-badge">부당한 저자 표시 (Guest/Ghost authorship)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<a href="#toc" id="navbtn" title="목차로 이동">☰</a>
+
+
+</body>
+</html>

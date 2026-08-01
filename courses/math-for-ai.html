@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>인공지능을 위한 수학 | 개념·정리 정리</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --radius:10px; --max:800px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.7;-webkit-text-size-adjust:100%;}
+
+.tab-bar{background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;font-size:13px;font-weight:500;padding:13px 12px;border-bottom:2.5px solid transparent;transition:.15s;}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+
+.wrap{max-width:var(--max);margin:0 auto;padding:24px 16px 80px}
+
+.ch{margin-bottom:52px}
+.ch-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:20px}
+.ch-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.ch-title{font-size:clamp(16px,3.5vw,21px);font-weight:700;line-height:1.2}
+.ch-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+
+.sub-head{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;margin:20px 0 8px;display:flex;align-items:center;gap:8px;}
+.sub-head::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.concepts{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.concept-row{display:grid;grid-template-columns:140px 1fr;border-bottom:1px solid var(--border)}
+.concept-row:last-child{border-bottom:none}
+.concept-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;color:var(--ink);border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.concept-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.6}
+@media(max-width:440px){.concept-row{grid-template-columns:1fr}.concept-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}}
+
+.formulas{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.f-block{background:var(--accent-light);border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:13px 16px}
+.f-name{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:7px}
+.f-eq{font-size:14px;line-height:1.9;color:var(--ink);overflow-x:auto}
+.f-note{font-size:12px;color:var(--muted);margin-top:6px;border-top:1px solid rgba(27,63,139,.12);padding-top:6px;line-height:1.55}
+
+/* 정리 블록 */
+.theorem{background:#fafafa;border:1.5px solid #c7d2e8;border-left:4px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:13px 16px;margin-bottom:10px}
+.theorem-num{font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--accent);text-transform:uppercase;margin-bottom:5px}
+.theorem-body{font-size:13px;color:var(--ink);line-height:1.7}
+.theorem-proof{font-size:12px;color:var(--muted);margin-top:7px;border-top:1px dashed #c7d2e8;padding-top:7px;line-height:1.6}
+
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 2px;font-size:.9em}
+.frac .num{border-bottom:1.5px solid currentColor;padding-bottom:1px;text-align:center;white-space:nowrap}
+.frac .den{padding-top:1px;text-align:center;white-space:nowrap}
+.sqrt-wrap{display:inline-flex;align-items:center;vertical-align:middle}
+.sqrt-sym{font-size:1.1em;margin-right:1px}
+.sqrt-body{border-top:1.5px solid currentColor;padding:0 2px;display:inline-block}
+sup{font-size:.7em;vertical-align:super;line-height:0}
+sub{font-size:.7em;vertical-align:sub;line-height:0}
+.v{font-style:italic}
+.eq-line{display:block;margin:3px 0;white-space:normal;word-break:break-all}
+
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:11px 14px;font-size:12.5px;color:#78350f;line-height:1.6;margin-bottom:16px}
+.tip b{color:#92400e}
+
+.tbl-wrap{overflow-x:auto;margin-bottom:16px;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--surface);border-radius:var(--radius);overflow:hidden}
+th{background:var(--ink);color:#fff;padding:9px 12px;font-weight:500;font-size:11.5px;text-align:center;white-space:nowrap}
+td{padding:8px 12px;border:1px solid var(--border);text-align:center;color:var(--ink);line-height:1.5}
+tr:nth-child(even) td{background:#f8f7f4}
+
+.toc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:28px}
+.toc-title{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.toc-list{display:flex;flex-direction:column;gap:2px}
+.toc-list a{font-size:13px;color:var(--ink);text-decoration:none;padding:4px 0;display:flex;align-items:center;gap:8px;transition:.12s}
+.toc-list a:hover{color:var(--accent)}
+.toc-num{font-weight:700;color:var(--red);min-width:32px;font-size:12px}
+
+.steps{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.step{display:flex;align-items:flex-start;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px}
+.step-n{background:var(--accent);color:#fff;font-size:11px;font-weight:700;min-width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+
+.story{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:20px;position:relative;line-height:1.85;font-size:13.5px;color:#2d3748;}
+.story::before{content:'흐름';position:absolute;top:-1px;left:16px;transform:translateY(-50%);background:var(--gold,#92640a);color:#fff;font-size:9px;font-weight:700;letter-spacing:.12em;padding:2px 8px;border-radius:20px;white-space:nowrap;}
+.story p{margin-bottom:8px}
+.story p:last-child{margin-bottom:0}
+.story .kw{color:var(--accent);font-weight:700;}
+.story .br{display:block;border-left:2px solid #d4cfc7;margin:8px 0 8px 4px;padding-left:10px;font-size:13px;color:var(--muted);}
+
+/* 출제 빈도 배지 */
+.freq-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;letter-spacing:.06em;padding:2px 8px;border-radius:20px;white-space:nowrap;vertical-align:middle;margin-left:6px;}
+.freq-must{background:#FFF0F0;color:#B91C1C;border:1px solid #FCA5A5;}
+.freq-high{background:#FFF7ED;color:#C47B24;border:1px solid #FCD34D;}
+.freq-mid{background:#EFF6FF;color:#1D4ED8;border:1px solid #93C5FD;}
+
+@media(orientation:landscape)and(max-height:500px){.tab-bar{top:0}}
+
+/* ── 예상문제 블록 ── */
+.prob-section{margin-top:28px}
+.prob-head{font-size:12px;font-weight:700;color:#7c5c1e;letter-spacing:.07em;text-transform:uppercase;margin:22px 0 8px;display:flex;align-items:center;gap:8px;}
+.prob-head::after{content:'';flex:1;height:1px;background:#e2c98a}
+
+.prob-card{border:1px solid #e2c98a;border-radius:10px;overflow:hidden;margin-bottom:14px;background:#fff}
+.prob-q{background:#fffbf0;padding:13px 16px;border-bottom:1px solid #e2c98a;font-size:13.5px;font-weight:700;color:#1a1a2e;line-height:1.6}
+.prob-q .prob-num{display:inline-block;background:#7c5c1e;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;margin-right:8px;vertical-align:middle;letter-spacing:.05em}
+.prob-story{background:#f9f7ff;border-left:3px solid #7c5c1e;margin:0;padding:12px 16px;font-size:12.5px;color:#4a3f6b;line-height:1.75;position:relative}
+.prob-story::before{content:'풀이 흐름';font-size:9.5px;font-weight:700;letter-spacing:.1em;color:#7c5c1e;display:block;margin-bottom:6px;text-transform:uppercase}
+.prob-story .kw{color:#1b3f8b;font-weight:700}
+.prob-story .arrow{color:#7c5c1e;font-weight:700;margin:0 3px}
+
+.sol{background:#fff;padding:12px 16px}
+.sol-toggle{width:100%;background:none;border:1px solid #e2ddd6;border-radius:6px;padding:12px 14px;font-size:13px;font-weight:700;color:#6b7280;cursor:pointer;text-align:left;transition:.15s;display:flex;justify-content:space-between;align-items:center;min-height:44px;-webkit-tap-highlight-color:rgba(0,0,0,0.1);touch-action:manipulation;}
+.sol-toggle:hover{background:#f5f3ef;color:#1a1a2e}
+.sol-body{display:block;margin-top:10px;font-size:13px;color:#374151;line-height:1.8}
+.sol-body.open{display:block}
+.sol-body .step-row{display:flex;align-items:flex-start;gap:10px;margin:5px 0}
+.sol-body .sn{background:#1b3f8b;color:#fff;font-size:10px;font-weight:700;min-width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.sol-body .ans-box{background:#f0fdf4;border:1.5px solid #86efac;border-radius:6px;padding:9px 13px;margin-top:8px;font-size:13px;font-weight:700;color:#166534}
+.sol-body .ans-box::before{content:'정답 ';font-size:10px;letter-spacing:.06em;opacity:.7}
+.sol-body .mat{display:inline-flex;flex-direction:column;vertical-align:middle;margin:0 4px;font-size:13px;border-left:2px solid #374151;border-right:2px solid #374151;padding:2px 6px}
+.sol-body .mat-row{display:flex;gap:12px;justify-content:center}
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#ch7">7장 선형변환</a>
+  <a href="#ch8">8장 고윳값</a>
+  <a href="#ch9">9장 직교분해</a>
+  <a href="#ch10">10장 대각화</a>
+  <a href="#ch11">11장 SVD</a>
+  <a href="#ch24">Ch.24 확률론</a>
+</nav>
+
+<div class="wrap">
+
+<nav class="toc">
+  <p class="toc-title">목차 — 인공지능을 위한 수학 기말 범위</p>
+  <div class="toc-list">
+    <a href="#ch7"><span class="toc-num">Ch.7</span>선형변환 · 부분공간과 계수</a>
+    <a href="#ch8"><span class="toc-num">Ch.8</span>고윳값과 고유벡터 · PCA</a>
+    <a href="#ch9"><span class="toc-num">Ch.9</span>직교기저 · QR분해 · 최소제곱해</a>
+    <a href="#ch10"><span class="toc-num">Ch.10</span>대각화 · 대칭행렬 · 이차형식</a>
+    <a href="#ch11"><span class="toc-num">Ch.11</span>특잇값 분해 (SVD)</a>
+    <a href="#ch24"><span class="toc-num">Ch.24</span>Data Analysis · 확률론</a>
+  </div>
+</nav>
+
+
+<!-- ═══ 7장 ═══ -->
+<section class="ch" id="ch7">
+  <div class="ch-head"><span class="ch-badge">Ch·7</span><h2 class="ch-title">선형변환<small>Linear Transformation · 7.1 선형변환 / 7.2 부분공간과 계수</small></h2></div>
+
+  <div class="story">
+    <p>선형변환은 <span class="kw">벡터공간 사이의 구조를 보존하는 함수</span> L: V→W다. 핵심 조건은 두 가지 — 덧셈 보존, 스칼라배 보존. 이를 만족하면 행렬 A로 표현할 수 있고, 그 행렬을 <span class="kw">표준행렬</span>이라 한다.</p>
+    <p>변환을 거치면 공간이 어떻게 바뀌는지가 7.2의 주제다.<span class="br"><span class="kw">열공간 Col(A)</span>: Ax 꼴로 나타낼 수 있는 모든 벡터의 집합 → 치역(image)</span><span class="br"><span class="kw">영공간 Nul(A)</span>: Ax=0의 해 집합 → 핵(kernel)</span><span class="br"><span class="kw">계수(rank)</span> = dim Col(A), <span class="kw">퇴화차수(nullity)</span> = dim Nul(A). 이 둘의 합 = n (열 개수)</span></p>
+    <p>기말에서 증명으로 출제되는 핵심: <span class="kw">L(x)=Ax는 선형변환</span>임을 보이는 것. 덧셈·스칼라배 각각 보존됨을 보이면 끝.</p>
+  </div>
+
+  <p class="sub-head">핵심 개념</p>
+  <div class="concepts">
+    <div class="concept-row"><div class="concept-key">선형변환 조건</div><div class="concept-val">① L(u+v) = L(u)+L(v) &nbsp; ② L(cu) = cL(u). 동치: L(cu+dv) = cL(u)+dL(v)</div></div>
+    <div class="concept-row"><div class="concept-key">표준행렬</div><div class="concept-val">L(eᵢ)를 열벡터로 하는 행렬 A. L(x) = Ax로 표현됨.</div></div>
+    <div class="concept-row"><div class="concept-key">열공간 Col(A)</div><div class="concept-val">{ y | y = Ax, x∈ℝⁿ }. RREF에서 pivot열에 해당하는 원래 A의 열벡터들이 기저.</div></div>
+    <div class="concept-row"><div class="concept-key">영공간 Nul(A)</div><div class="concept-val">{ x | Ax=0 }. RREF → free variable에 1/0 대입해 기저 추출.</div></div>
+    <div class="concept-row"><div class="concept-key">계수 정리</div><div class="concept-val">rank(A) + nullity(A) = n (A의 열 개수)</div></div>
+    <div class="concept-row"><div class="concept-key">직교연산자</div><div class="concept-val">‖L(x)‖ = ‖x‖ ↔ AᵀA = I (열벡터가 정규직교). 내적 보존.</div></div>
+  </div>
+
+  <p class="sub-head">주요 정리 <span class="freq-badge freq-must">★★ 기말 증명 출제</span></p>
+  <div class="theorem">
+    <div class="theorem-num">정리 · L(x) = Ax는 선형변환이다</div>
+    <div class="theorem-body">m×n 실수행렬 A와 ℝⁿ의 벡터 x에 대하여, 사상 L(x) = Ax는 ℝⁿ에서 ℝᵐ으로의 선형변환이다.</div>
+    <div class="theorem-proof">증명: 임의의 u, v∈ℝⁿ, 스칼라 c에 대해<br>① L(u+v) = A(u+v) = Au + Av = L(u)+L(v) ✓<br>② L(cu) = A(cu) = c(Au) = cL(u) ✓<br>따라서 L은 선형변환이다. ∎</div>
+  </div>
+
+  <div class="theorem">
+    <div class="theorem-num">정리 7-5 · 가역 선형변환은 전단사</div>
+    <div class="theorem-body">선형변환 L: V→W이 가역 선형변환이면 L은 전단사(bijection)이다.</div>
+  </div>
+
+  <div class="theorem">
+    <div class="theorem-num">정리 7-15 · 퇴화차수 0 → 가역행렬</div>
+    <div class="theorem-body">n×n 행렬 A의 퇴화차수(nullity)가 0이면, A의 모든 열벡터가 선형독립이고 A는 가역행렬이다.</div>
+  </div>
+
+  <div class="theorem">
+    <div class="theorem-num">정리 7-22 · 행렬 곱의 계수</div>
+    <div class="theorem-body">rank(AB) ≤ min(rank(A), rank(B)). 가역행렬 B, C에 대해 rank(BAC) = rank(A).</div>
+  </div>
+
+  <p class="sub-head">열공간 · 영공간 기저 구하는 법 <span class="freq-badge freq-must">★★ 반드시</span></p>
+  <div class="steps">
+    <div class="step"><span class="step-n">1</span>A를 RREF(행 축소)로 변환</div>
+    <div class="step"><span class="step-n">2</span><b>열공간</b>: pivot열 위치 확인 → 원래 A에서 그 열벡터 가져옴 (RREF 열벡터 쓰면 틀림)</div>
+    <div class="step"><span class="step-n">3</span><b>영공간</b>: RREF를 Ax=0 연립방정식으로 읽기 → pivot variable을 free variable로 표현</div>
+    <div class="step"><span class="step-n">4</span>free variable 하나씩 1로, 나머지 0으로 놓아 기저 벡터 추출 (free 개수 = 기저 벡터 개수)</div>
+  </div>
+
+  <!-- ── 7장 과제 예상문제 ── -->
+  <div class="prob-section">
+    <p class="prob-head">📝 과제 예상문제 — 7장</p>
+
+    <!-- Q11 -->
+    <div class="prob-card">
+      <div class="prob-q"><span class="prob-num">Q11</span>ℝ³ 공간의 좌표 (a, b, c)를 x축 방향으로 2, y축 방향으로 −1, z축 방향으로 5만큼 평행이동하는 표준행렬의 동차 표현을 구하라.</div>
+      <div class="prob-story">
+        평행이동은 <span class="kw">선형변환이 아니다</span> — L(u+v) ≠ L(u)+L(v). 따라서 3×3 행렬로 표현 불가.<br>
+        해결책: <span class="kw">동차좌표(homogeneous coordinates)</span>. (x, y, z)를 (x, y, z, 1)로 확장하면 평행이동도 <span class="arrow">→</span> 4×4 행렬 곱으로 표현 가능.<br>
+        평행이동 벡터 (2, −1, 5)를 4×4 단위행렬의 마지막 열에 끼워 넣는다.
+      </div>
+      <div class="sol">
+        <div class="sol-body" >
+          <div class="step-row"><span class="sn">1</span><span>평행이동은 선형변환 아님 → 4×4 동차행렬 사용</span></div>
+          <div class="step-row"><span class="sn">2</span><span>원래 좌표 (x₁, y₁, z₁)에 1을 추가해 (x₁, y₁, z₁, 1)ᵀ로 확장</span></div>
+          <div class="step-row"><span class="sn">3</span><span>결과 좌표 (x₂, y₂, z₂, 1)ᵀ 에서 x₂=x₁+2, y₂=y₁−1, z₂=z₁+5</span></div>
+          <div class="ans-box">
+            <div style="margin-top:4px">
+              <div style="display:inline-block;border-left:2px solid #166534;border-right:2px solid #166534;padding:4px 10px;font-family:monospace;font-weight:400;font-size:13px;line-height:2">
+                1 0 0 &nbsp;2<br>
+                0 1 0 −1<br>
+                0 0 1 &nbsp;5<br>
+                0 0 0 &nbsp;1
+              </div>
+              <span style="margin-left:10px;font-weight:400">×</span>
+              <div style="display:inline-block;border-left:2px solid #166534;border-right:2px solid #166534;padding:4px 8px;font-family:monospace;font-weight:400;font-size:13px;line-height:2;margin-left:6px">
+                x₁<br>y₁<br>z₁<br>&nbsp;1
+              </div>
+              <span style="margin-left:8px;font-weight:400">=</span>
+              <div style="display:inline-block;border-left:2px solid #166534;border-right:2px solid #166534;padding:4px 8px;font-family:monospace;font-weight:400;font-size:13px;line-height:2;margin-left:6px">
+                x₂<br>y₂<br>z₂<br>&nbsp;1
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q30 -->
+    <div class="prob-card">
+      <div class="prob-q"><span class="prob-num">Q30</span>다음 행렬의 계수(rank)와 퇴화차수(nullity)를 구하라.<br>
+        <span style="font-size:12.5px;font-weight:400">A = [1 2 1 5 / 2 4 −3 0 / −3 1 2 −1 / 1 2 −1 1]</span></div>
+      <div class="prob-story">
+        계수·퇴화차수는 <span class="kw">기약행 사다리꼴(RREF)로 변환</span>해서 읽는다.<br>
+        <span class="kw">계수(rank)</span> = 선행성분(pivot)을 가진 행의 수 = 영이 아닌 행의 수.<br>
+        <span class="kw">퇴화차수(nullity)</span> = 전체 열 수 − rank. (계수 정리)<br>
+        행 연산 순서: R₂−2R₁, R₃+3R₁, R₄−R₁ → 다시 소거 반복.
+      </div>
+      <div class="sol">
+        <div class="sol-body" >
+          <div class="step-row"><span class="sn">1</span><span>R₂−2R₁, R₃+3R₁, R₄−R₁ 적용 → 1열 소거</span></div>
+          <div class="step-row"><span class="sn">2</span><span>2단계 소거 후: 선행성분 있는 행 3개, 영행 1개 확인</span></div>
+          <div class="step-row"><span class="sn">3</span><span>rank = 3 &nbsp;→&nbsp; nullity = 4 − 3 = 1</span></div>
+          <div class="ans-box">rank(A) = 3 &nbsp;&nbsp; nullity(A) = 1</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q40 -->
+    <div class="prob-card">
+      <div class="prob-q"><span class="prob-num">Q40</span>행렬 A의 열공간, 영공간, 행공간, 좌영공간의 차원과 기저를 구하라.<br>
+        <span style="font-size:12.5px;font-weight:400">A = [1 0 2 1 / 0 1 1 0 / 1 0 2 1]</span></div>
+      <div class="prob-story">
+        4개 부분공간을 한번에 구하는 문제. <span class="kw">RREF 하나로 전부 읽어낼 수 있다.</span><br>
+        <span class="kw">열공간 Col(A)</span>: pivot열 → 원래 A의 해당 열 / <span class="kw">행공간 Row(A)</span>: RREF의 영 아닌 행<br>
+        <span class="kw">영공간 Nul(A)</span>: Ax=0 → free variable 파라미터화 / <span class="kw">좌영공간 Nul(Aᵀ)</span>: Aᵀy=0 풀기<br>
+        rank=2이므로: dim(Col)=dim(Row)=2, dim(Nul)=4−2=2, dim(좌영)=3−2=1
+      </div>
+      <div class="sol">
+        <div class="sol-body" >
+          <div class="step-row"><span class="sn">1</span><span>RREF: R₃−R₁ → 영행. pivot열: 1열, 2열 → rank = 2</span></div>
+          <div class="step-row"><span class="sn">2</span><span><b>열공간</b>: 차원 2, 기저 = {(1,0,1)ᵀ, (0,1,0)ᵀ}</span></div>
+          <div class="step-row"><span class="sn">3</span><span><b>행공간</b>: 차원 2, 기저 = {(1,0,2,1), (0,1,1,0)}</span></div>
+          <div class="step-row"><span class="sn">4</span><span><b>영공간</b>: x₁+2x₃+x₄=0, x₂+x₃=0 → x₁=−2x₃−x₄, x₂=−x₃<br>
+            기저 = {(−2,−1,1,0)ᵀ, (−1,0,0,1)ᵀ}</span></div>
+          <div class="step-row"><span class="sn">5</span><span><b>좌영공간</b>: Aᵀy=0 → y₁+y₃=0, y₂=0 → 기저 = {(−1,0,1)ᵀ}</span></div>
+          <div class="ans-box">Col: 차원2 / Row: 차원2 / Nul: 차원2 / 좌영: 차원1</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /prob-section -->
+
+</section>
+
+<!-- ═══ 8장 ═══ -->
+<section class="ch" id="ch8">
+  <div class="ch-head"><span class="ch-badge">Ch·8</span><h2 class="ch-title">고윳값과 고유벡터<small>Eigenvalues & Eigenvectors · PCA</small></h2></div>
+
+  <div class="story">
+    <p>행렬 A를 곱해도 <span class="kw">방향이 변하지 않고 크기만 바뀌는 벡터</span>가 고유벡터, 그 배율이 고윳값이다: Av = λv.</p>
+    <p>계산 순서: <span class="kw">det(λI−A)=0</span>으로 특성방정식 → λ 구하기 → 각 λ에 대해 (λI−A)x=0 풀어 고유벡터 구하기.</p>
+    <p>기말 응용 파트인 <span class="kw">PCA</span>는 여기서 나온다. 공분산행렬 C의 최대 고윳값에 대응하는 고유벡터가 주성분 방향이다.</p>
+  </div>
+
+  <p class="sub-head">핵심 개념</p>
+  <div class="concepts">
+    <div class="concept-row"><div class="concept-key">고유벡터/고윳값</div><div class="concept-val">Av = λv (v ≠ 0). v: 고유벡터, λ: 고윳값. (λI−A)v=0의 비자명해.</div></div>
+    <div class="concept-row"><div class="concept-key">특성방정식</div><div class="concept-val">det(λI−A) = 0. n차 다항식 → 복소수 범위에서 n개의 근(고윳값) 존재.</div></div>
+    <div class="concept-row"><div class="concept-key">고유공간</div><div class="concept-val">고윳값 λ에 대한 고유벡터 전체 집합 + {0}. = Nul(λI−A).</div></div>
+    <div class="concept-row"><div class="concept-key">대각행렬 고윳값</div><div class="concept-val">삼각행렬·대각행렬의 고윳값 = 주대각 원소들.</div></div>
+  </div>
+
+  <p class="sub-head">고윳값/고유벡터 계산 순서 <span class="freq-badge freq-must">★★ 반드시</span></p>
+  <div class="steps">
+    <div class="step"><span class="step-n">1</span>det(λI−A) = 0 세우기 (특성방정식)</div>
+    <div class="step"><span class="step-n">2</span>λ에 대해 풀기 → 고윳값 λ₁, λ₂, … 구하기</div>
+    <div class="step"><span class="step-n">3</span>각 λᵢ에 대해 (λᵢI−A)x = 0 풀기 → 고유벡터(고유공간 기저)</div>
+  </div>
+
+  <p class="sub-head">주요 정리</p>
+  <div class="theorem">
+    <div class="theorem-num">정리 8-5 · 서로 다른 고윳값의 고유벡터는 선형독립</div>
+    <div class="theorem-body">정방행렬 A의 서로 다른 r개의 고윳값 λ₁, λ₂, …, λᵣ에 대한 고유벡터 v₁, v₂, …, vᵣ은 선형독립이다.</div>
+  </div>
+
+  <p class="sub-head">PCA — 주성분 분석 <span class="freq-badge freq-must">★★ 반드시</span></p>
+  <div class="steps">
+    <div class="step"><span class="step-n">1</span>데이터 평균 μ 계산</div>
+    <div class="step"><span class="step-n">2</span>중심화: 각 xᵢ − μ</div>
+    <div class="step"><span class="step-n">3</span>공분산행렬: C = (1/n) Σ(xᵢ−μ)(xᵢ−μ)ᵀ</div>
+    <div class="step"><span class="step-n">4</span>C의 고윳값 구하기: det(λI−C) = 0</div>
+    <div class="step"><span class="step-n">5</span>최대 고윳값 λ₁에 대응하는 고유벡터 → 정규화 → 주성분 벡터</div>
+  </div>
+  <div class="tip"><b>PCA 핵심:</b> 1차원 축소 시 λ₁(최대)에 대응하는 단위 고유벡터 하나만 쓴다. λ₂(=0)인 고유벡터는 버림.</div>
+
+  <!-- ── 8장 과제 예상문제 ── -->
+  <div class="prob-section">
+    <p class="prob-head">📝 과제 예상문제 — 8장</p>
+
+    <!-- Q9 -->
+    <div class="prob-card">
+      <div class="prob-q"><span class="prob-num">Q9</span>행렬 A의 각 고윳값에 대한 고유공간을 구하라.<br>
+        <span style="font-size:12.5px;font-weight:400">A = [1 0 2 / 0 3 0 / 2 0 1]</span></div>
+      <div class="prob-story">
+        <span class="kw">특성방정식 det(λI−A)=0</span> → λ 구하기.<br>
+        2행 2열 원소가 (3−λ)로 분리되므로 <span class="kw">2행 여인수 전개</span>가 편하다.<br>
+        각 λ에 대해 (λI−A)x=0 → RREF → free variable 파라미터화 → 고유공간(Span).
+      </div>
+      <div class="sol">
+        <div class="sol-body" >
+          <div class="step-row"><span class="sn">1</span><span>det(λI−A) = (3−λ)·det[(1−λ, 2),(2, 1−λ)] = (3−λ)[(1−λ)²−4]<br>
+            = (3−λ)(λ−3)(λ+1) = 0 &nbsp;→&nbsp; <b>λ₁=3, λ₂=−1</b></span></div>
+          <div class="step-row"><span class="sn">2</span><span>λ=3일 때: (A−3I)x=0 → [−2 0 2/0 0 0/2 0 −2] → x₁=x₃ (free: x₂, x₃)<br>
+            기저: s(1,0,1)ᵀ + t(0,1,0)ᵀ</span></div>
+          <div class="step-row"><span class="sn">3</span><span>λ=−1일 때: (A+I)x=0 → [2 0 2/0 4 0/2 0 2] → x₂=0, x₁=−x₃ (free: x₃)<br>
+            기저: u(−1,0,1)ᵀ</span></div>
+          <div class="ans-box">E(3) = Span{(1,0,1)ᵀ, (0,1,0)ᵀ} &nbsp;&nbsp; E(−1) = Span{(−1,0,1)ᵀ}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q31 -->
+    <div class="prob-card">
+      <div class="prob-q"><span class="prob-num">Q31</span>5개의 데이터에 대한 평균벡터와 공분산 행렬을 구하라.<br>
+        <span style="font-size:12.5px;font-weight:400">x₁=(1,3), x₂=(−2,2), x₃=(3,4), x₄=(0,6), x₅=(3,0)</span></div>
+      <div class="prob-story">
+        PCA의 준비단계: <span class="kw">평균벡터 x̄</span> 먼저 구하고, <span class="kw">편차벡터 dᵢ = xᵢ−x̄</span> 계산.<br>
+        공분산행렬 C = <span class="kw">(1/n) Σ dᵢdᵢᵀ</span>. 각 dᵢdᵢᵀ는 2×2 외적 행렬이므로 5개 합산 후 1/5.
+      </div>
+      <div class="sol">
+        <div class="sol-body" >
+          <div class="step-row"><span class="sn">1</span><span><b>평균벡터</b>: x̄ = (1/5)[(1+−2+3+0+3), (3+2+4+6+0)] = (1/5)(5,15) = (1,3)ᵀ</span></div>
+          <div class="step-row"><span class="sn">2</span><span>편차: d₁=(0,0), d₂=(−3,−1), d₃=(2,1), d₄=(−1,3), d₅=(2,−3)</span></div>
+          <div class="step-row"><span class="sn">3</span><span>Σ dᵢdᵢᵀ = [0]+[9,3/3,1]+[4,2/2,1]+[1,−3/−3,9]+[4,−6/−6,9]<br>
+            = [18,−4/−4,20]</span></div>
+          <div class="step-row"><span class="sn">4</span><span>C = (1/5)[18,−4/−4,20]</span></div>
+          <div class="ans-box">
+            x̄ = (1, 3)ᵀ &nbsp;&nbsp;&nbsp;
+            C = [[3.6, −0.8], [−0.8, 4]]
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /prob-section -->
+
+</section>
+
+<!-- ═══ 9장 ═══ -->
+<section class="ch" id="ch9">
+  <div class="ch-head"><span class="ch-badge">Ch·9</span><h2 class="ch-title">직교기저 · QR분해 · 최소제곱해<small>Orthogonality · QR Decomposition · Least Squares</small></h2></div>
+
+  <div class="story">
+    <p>직교(수직)는 내적이 0인 관계다. 기저가 직교이면 계산이 극도로 단순해진다. <span class="kw">Gram-Schmidt 과정</span>으로 임의 기저를 직교정규기저로 바꾸고, 이를 활용하면 <span class="kw">QR 분해</span>(A = QR)를 얻는다.</p>
+    <p>Ax = b의 해가 존재하지 않을 때 → <span class="kw">정규방정식 AᵀAx̂ = Aᵀb</span>로 최소제곱해를 구한다. 이것이 선형회귀의 수학적 토대다.</p>
+  </div>
+
+  <p class="sub-head">직교 관련 개념</p>
+  <div class="concepts">
+    <div class="concept-row"><div class="concept-key">직교</div><div class="concept-val">u·v = 0 ↔ 벡터 u, v 직교. 직교집합: 모든 쌍이 직교.</div></div>
+    <div class="concept-row"><div class="concept-key">정규직교</div><div class="concept-val">직교 + 각 벡터의 노름=1. UᵀU = I.</div></div>
+    <div class="concept-row"><div class="concept-key">정사영</div><div class="concept-val">projᵥu = (u·v / v·v) v. v 방향으로 u를 투영한 벡터.</div></div>
+    <div class="concept-row"><div class="concept-key">직교보공간</div><div class="concept-val">Col(A) ⊥ Nul(Aᵀ), Row(A) ⊥ Nul(A)</div></div>
+  </div>
+
+  <p class="sub-head">Gram-Schmidt & QR분해 <span class="freq-badge freq-must">★★ 반드시</span></p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">Gram-Schmidt — 직교화</div>
+      <div class="f-eq">
+        <span class="eq-line">u₁ = a₁</span>
+        <span class="eq-line">u₂ = a₂ −
+          <span class="frac"><span class="num">a₂·u₁</span><span class="den">u₁·u₁</span></span>
+          u₁
+        </span>
+        <span class="eq-line">u₃ = a₃ −
+          <span class="frac"><span class="num">a₃·u₁</span><span class="den">u₁·u₁</span></span>
+          u₁ −
+          <span class="frac"><span class="num">a₃·u₂</span><span class="den">u₂·u₂</span></span>
+          u₂
+        </span>
+      </div>
+      <div class="f-note">투영 = (내적/노름²) × 벡터. 암산 가능해도 과정 전부 기재 필수.</div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">정규화 → Q</div>
+      <div class="f-eq">
+        <span class="eq-line">qᵢ = uᵢ / ‖uᵢ‖ &nbsp;→&nbsp; Q = [q₁ | q₂ | q₃]</span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">R = QᵀA</div>
+      <div class="f-eq">
+        <span class="eq-line">R은 상삼각행렬. 대각원소 = ‖uᵢ‖</span>
+        <span class="eq-line">A = QR</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="sub-head">선형회귀 — 정규방정식 <span class="freq-badge freq-must">★★ 반드시</span></p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">행렬 세우기 (y = β₀ + β₁x)</div>
+      <div class="f-eq">
+        <span class="eq-line">데이터 (x₁,y₁), …, (xₙ,yₙ) →
+          A =
+          <span style="font-family:monospace;">[1 x₁; 1 x₂; …]</span>,
+          b = [y₁; y₂; …]
+        </span>
+        <span class="eq-line">1열은 전부 1 (β₀ 계수), 2열은 x값 (β₁ 계수)</span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">정규방정식 (외워야 함)</div>
+      <div class="f-eq">
+        <span class="eq-line">AᵀA β = Aᵀb</span>
+        <span class="eq-line">β = (AᵀA)⁻¹ Aᵀb</span>
+      </div>
+      <div class="f-note">두 점 지나는 직선으로 풀면 0점 — 반드시 정규방정식 과정 기재</div>
+    </div>
+  </div>
+
+  <!-- ── 9장 과제 예상문제 ── -->
+  <div class="prob-section">
+    <p class="prob-head">📝 과제 예상문제 — 9장</p>
+
+    <!-- #11 좌표벡터 -->
+    <div class="prob-card">
+      <div class="prob-q"><span class="prob-num">#11</span>기저 B = {v₁, v₂, v₃}를 사용하여 w의 좌표벡터를 구하라.<br>
+        <span style="font-size:12.5px;font-weight:400">v₁=(3,1,1)ᵀ, v₂=(−1,2,1)ᵀ, v₃=(−1,−4,7)ᵀ, w=(6,1,−8)ᵀ</span></div>
+      <div class="prob-story">
+        좌표벡터 [w]_B = (c₁, c₂, c₃)ᵀ는 <span class="kw">c₁v₁ + c₂v₂ + c₃v₃ = w</span> 를 만족하는 계수.<br>
+        B가 직교기저일 때: <span class="kw">cᵢ = w·vᵢ / vᵢ·vᵢ</span> (정사영 공식 직접 적용 가능).<br>
+        먼저 v₁·v₂, v₁·v₃, v₂·v₃ = 0인지 확인 → 직교기저 → 공식 바로 사용.
+      </div>
+      <div class="sol">
+        <div class="sol-body" >
+          <div class="step-row"><span class="sn">1</span><span>직교 확인: v₁·v₂ = −3+2+1=0 ✓, v₂·v₃ = 1−8+7=0 ✓, v₁·v₃ = −3−4+7=0 ✓ → 직교기저</span></div>
+          <div class="step-row"><span class="sn">2</span><span>c₁ = w·v₁/v₁·v₁ = (18+1−8)/(9+1+1) = 11/11 = <b>1</b></span></div>
+          <div class="step-row"><span class="sn">3</span><span>c₂ = w·v₂/v₂·v₂ = (−6+2−8)/(1+4+1) = −12/6 = <b>−2</b></span></div>
+          <div class="step-row"><span class="sn">4</span><span>c₃ = w·v₃/v₃·v₃ = (−6−4−56)/(1+16+49) = −66/66 = <b>−1</b></span></div>
+          <div class="ans-box">[w]_B = (1, −2, −1)ᵀ</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- #29 그람슈미트 -->
+    <div class="prob-card">
+      <div class="prob-q"><span class="prob-num">#29</span>그람-슈미트 과정을 이용하여 기저 {u₁, u₂}에 대한 정규직교기저를 구하라.<br>
+        <span style="font-size:12.5px;font-weight:400">(a) u₁=(2,1,−2)ᵀ, u₂=(2,7,−8)ᵀ &nbsp;&nbsp; (b) u₁=(1,1,0)ᵀ, u₂=(2,2,3)ᵀ</span></div>
+      <div class="prob-story">
+        <span class="kw">Gram-Schmidt 3단계</span>: ① v₁=u₁ 설정 ② v₂=u₂ − (u₂·v₁/v₁·v₁)v₁ 로 직교화 ③ 각각 노름으로 나눠 정규화.<br>
+        계산 실수 방지: 내적→투영→뺄셈→노름 계산을 단계적으로.
+      </div>
+      <div class="sol">
+        <div class="sol-body" >
+          <div class="step-row"><span class="sn">①</span><span><b>(a)</b> v₁=u₁=(2,1,−2)ᵀ, ‖v₁‖²=4+1+4=9</span></div>
+          <div class="step-row"><span class="sn">②</span><span>u₂·v₁ = 4+7+16=27 → 투영 = (27/9)v₁ = 3(2,1,−2)ᵀ = (6,3,−6)ᵀ<br>
+            v₂ = u₂ − 투영 = (2−6, 7−3, −8+6) = (−4, 4, −2)ᵀ</span></div>
+          <div class="step-row"><span class="sn">③</span><span>‖v₂‖ = √(16+16+4) = 6<br>
+            q₁ = (1/3)(2,1,−2)ᵀ &nbsp;&nbsp; q₂ = (1/6)(−4,4,−2)ᵀ = (−2/3, 2/3, −1/3)ᵀ</span></div>
+          <div class="step-row"><span class="sn">①</span><span><b>(b)</b> v₁=u₁=(1,1,0)ᵀ, ‖v₁‖²=2</span></div>
+          <div class="step-row"><span class="sn">②</span><span>u₂·v₁=2+2+0=4 → 투영=(4/2)v₁=2(1,1,0)ᵀ=(2,2,0)ᵀ<br>
+            v₂=(2−2, 2−2, 3−0)=(0,0,3)ᵀ</span></div>
+          <div class="step-row"><span class="sn">③</span><span>q₁=(1/√2)(1,1,0)ᵀ &nbsp;&nbsp; q₂=(0,0,1)ᵀ</span></div>
+          <div class="ans-box">(a) {(2/3,1/3,−2/3)ᵀ, (−2/3,2/3,−1/3)ᵀ} &nbsp;&nbsp; (b) {(1/√2,1/√2,0)ᵀ, (0,0,1)ᵀ}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- #39 QR 최소제곱해 -->
+    <div class="prob-card">
+      <div class="prob-q"><span class="prob-num">#39</span>행렬 A와 벡터 b에 대하여, Ax=b의 최적근사해를 QR 분해를 사용하여 구하라.<br>
+        <span style="font-size:12.5px;font-weight:400">A=[[2,1],[1,1],[2,1]], b=(12,6,18)ᵀ</span></div>
+      <div class="prob-story">
+        QR 분해로 최소제곱해: <span class="kw">A=QR → Rx̂=Qᵀb</span>. 정규방정식 없이 후방대입으로 풀린다.<br>
+        순서: A의 열벡터로 Gram-Schmidt → Q 구성 → R=QᵀA → Qᵀb 계산 → 후방대입.
+      </div>
+      <div class="sol">
+        <div class="sol-body" >
+          <div class="step-row"><span class="sn">1</span><span>u₁=(2,1,2)ᵀ → ‖u₁‖²=9, q₁=(1/3)(2,1,2)ᵀ</span></div>
+          <div class="step-row"><span class="sn">2</span><span>u₂=(1,1,1)ᵀ, u₂·u₁=2+1+2=5, 투영=(5/9)(2,1,2)ᵀ<br>
+            v₂ = (1−10/9, 1−5/9, 1−10/9) = (−1/9, 4/9, −1/9)ᵀ<br>
+            ‖v₂‖ = (√18)/9 = √2/3 &nbsp;→&nbsp; q₂ = (3√2)·(−1/9, 4/9, −1/9)ᵀ = (1/√2)(−1/3, 4/3, −1/3)·(√2) → (−1,4,−1)/(3√2)</span></div>
+          <div class="step-row"><span class="sn">3</span><span>R=QᵀA, Qᵀb 계산 후 후방대입</span></div>
+          <div class="step-row"><span class="sn">4</span><span>x̂₂ = −√2 × (3/√2) = −3, &nbsp; 3x̂₁ + (5/3)(−3) = 22 → x̂₁ = 9</span></div>
+          <div class="ans-box">x̂ = (9, −3)ᵀ</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /prob-section -->
+
+</section>
+
+<!-- ═══ 10장 ═══ -->
+<section class="ch" id="ch10">
+  <div class="ch-head"><span class="ch-badge">Ch·10</span><h2 class="ch-title">대각화 · 대칭행렬<small>Diagonalization · Symmetric Matrix · Quadratic Form</small></h2></div>
+
+  <div class="story">
+    <p>행렬 A를 <span class="kw">A = SΛS⁻¹</span>로 분해하는 것이 대각화다. Λ는 고윳값 대각행렬, S는 고유벡터 행렬.</p>
+    <p>대칭행렬(A = Aᵀ)은 특별하다. <span class="kw">반드시 직교대각화 가능</span>하고 — S를 직교행렬 P로 잡으면 A = PΛPᵀ. 기말 증명에서 자주 나오는 두 성질: <span class="kw">①서로 다른 고윳값의 고유벡터는 직교</span>, <span class="kw">②A와 Aᵀ의 고윳값은 동일</span>.</p>
+  </div>
+
+  <p class="sub-head">대각화</p>
+  <div class="concepts">
+    <div class="concept-row"><div class="concept-key">대각화 가능 조건</div><div class="concept-val">n개의 선형독립인 고유벡터 존재 ↔ 각 고윳값의 대수적 중복도 = 기하적 중복도</div></div>
+    <div class="concept-row"><div class="concept-key">A = SΛS⁻¹</div><div class="concept-val">S: 고유벡터를 열로 하는 행렬, Λ: 고윳값 대각행렬. Aᵏ = SΛᵏS⁻¹</div></div>
+    <div class="concept-row"><div class="concept-key">닮음행렬</div><div class="concept-val">B = S⁻¹AS. 닮음행렬은 같은 고윳값, 같은 행렬식, 같은 trace를 가짐.</div></div>
+  </div>
+
+  <p class="sub-head">주요 정리 <span class="freq-badge freq-must">★★ 기말 증명 출제</span></p>
+  <div class="theorem">
+    <div class="theorem-num">정리 10-10 · 대칭행렬 — 다른 고윳값 → 고유벡터 직교</div>
+    <div class="theorem-body">대칭행렬 A에서 서로 다른 고윳값에 대응하는 고유벡터는 서로 직교한다.</div>
+    <div class="theorem-proof">증명: λ₁≠λ₂, Av₁=λ₁v₁, Av₂=λ₂v₂라 하자.<br>
+    λ₁(v₁·v₂) = (Av₁)·v₂ = v₁ᵀAᵀv₂ = v₁ᵀAv₂ = v₁·(Av₂) = λ₂(v₁·v₂)<br>
+    (λ₁−λ₂)(v₁·v₂) = 0. λ₁≠λ₂이므로 v₁·v₂ = 0. ∎</div>
+  </div>
+
+  <div class="theorem">
+    <div class="theorem-num">정리 10-12/13 · 대칭행렬 ↔ 직교대각화 가능</div>
+    <div class="theorem-body">n×n 대칭행렬이다 ⟺ 직교대각화 가능 행렬이다 ⟺ n개의 직교하는 고유벡터를 갖는다.<br>따라서 A = PΛPᵀ (P: 직교행렬)</div>
+  </div>
+
+  <div class="theorem">
+    <div class="theorem-num">정리 · A와 Aᵀ의 고윳값은 동일 <span class="freq-badge freq-must">★★ 반드시</span></div>
+    <div class="theorem-body">행렬 A와 전치행렬 Aᵀ의 고윳값은 동일하다.</div>
+    <div class="theorem-proof">증명: det(λI−A) = det((λI−A)ᵀ) = det(λI−Aᵀ)<br>
+    따라서 A와 Aᵀ의 특성방정식이 동일 → 고윳값 동일. ∎</div>
+  </div>
+
+  <div class="theorem">
+    <div class="theorem-num">정리 10-16 · 대칭행렬의 스펙트럼 분해</div>
+    <div class="theorem-body">A = λ₁x₁x₁ᵀ + λ₂x₂x₂ᵀ + … + λₙxₙxₙᵀ (xᵢ: 단위 직교 고유벡터)</div>
+  </div>
+
+  <div class="theorem">
+    <div class="theorem-num">정리 10-17 · 대칭행렬의 계수</div>
+    <div class="theorem-body">대칭행렬 A의 rank = A의 0이 아닌 고윳값 개수</div>
+  </div>
+
+  <p class="sub-head">이차형식 & 정부호</p>
+  <div class="concepts">
+    <div class="concept-row"><div class="concept-key">이차형식</div><div class="concept-val">Q(x) = xᵀAx (A: 대칭행렬). 고윳값으로 정부호 판별.</div></div>
+    <div class="concept-row"><div class="concept-key">양의 정부호</div><div class="concept-val">모든 x≠0에 xᵀAx > 0 ↔ 모든 고윳값 > 0</div></div>
+    <div class="concept-row"><div class="concept-key">양의 준정부호</div><div class="concept-val">xᵀAx ≥ 0 ↔ 모든 고윳값 ≥ 0. AᵀA는 항상 양의 준정부호.</div></div>
+  </div>
+
+  <!-- ── 10장 과제 예상문제 ── -->
+  <div class="prob-section">
+    <p class="prob-head">📝 과제 예상문제 — 10장</p>
+
+    <!-- #5 A^100 -->
+    <div class="prob-card">
+      <div class="prob-q"><span class="prob-num">#5</span>다음 행렬 A에 대하여 A¹⁰⁰을 구하라.<br>
+        <span style="font-size:12.5px;font-weight:400">A = [[1,2],[4,3]]</span></div>
+      <div class="prob-story">
+        <span class="kw">A = PDP⁻¹</span>로 대각화하면 <span class="kw">Aⁿ = PDⁿP⁻¹</span>. Dⁿ은 대각원소의 n제곱이라 단순.<br>
+        순서: ① 특성방정식으로 고윳값 구하기 ② 각 λ에서 고유벡터 ③ P, P⁻¹ 계산 ④ D¹⁰⁰ 적용.
+      </div>
+      <div class="sol">
+        <div class="sol-body" >
+          <div class="step-row"><span class="sn">1</span><span>det(A−λI) = (1−λ)(3−λ)−8 = λ²−4λ−5 = (λ−5)(λ+1) = 0<br>
+            <b>λ₁=5, λ₂=−1</b></span></div>
+          <div class="step-row"><span class="sn">2</span><span>λ=5: (A−5I)x=0 → p₁=(1,2)ᵀ &nbsp;&nbsp; λ=−1: (A+I)x=0 → p₂=(1,−1)ᵀ</span></div>
+          <div class="step-row"><span class="sn">3</span><span>P = [[1,1],[2,−1]], det(P)=−3, P⁻¹ = (1/3)[[1,1],[2,−1]]</span></div>
+          <div class="step-row"><span class="sn">4</span><span>A¹⁰⁰ = PD¹⁰⁰P⁻¹ = [[1,1],[2,−1]]·[[5¹⁰⁰,0],[0,1]]·(1/3)[[1,1],[2,−1]]</span></div>
+          <div class="ans-box">A¹⁰⁰ = (1/3) [[5¹⁰⁰+2, 5¹⁰⁰−1], [2·5¹⁰⁰−2, 2·5¹⁰⁰+1]]</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- #13 직교대각화 -->
+    <div class="prob-card">
+      <div class="prob-q"><span class="prob-num">#13</span>행렬 A를 직교대각화하는 행렬 P와 직교대각화한 결과 D를 구하라.<br>
+        <span style="font-size:12.5px;font-weight:400">(a) A=[[4,2,2],[2,4,2],[2,2,4]] &nbsp;&nbsp; (b) A=[[0,0,−2],[0,−2,0],[−2,0,3]]</span></div>
+      <div class="prob-story">
+        대칭행렬 → <span class="kw">직교대각화 A=PᵀDP</span>. P의 열은 단위 직교 고유벡터.<br>
+        중복 고윳값이 있으면 해당 고유공간 내에서 <span class="kw">Gram-Schmidt</span>로 직교화 필요.<br>
+        순서: 고윳값 → 각 λ에서 고유벡터 → (중복이면) 직교화 → 정규화 → P, D 완성.
+      </div>
+      <div class="sol">
+        <div class="sol-body" >
+          <div class="step-row"><span class="sn">a1</span><span>특성방정식: λ=2(중복2), λ=8 구하기</span></div>
+          <div class="step-row"><span class="sn">a2</span><span>λ=2: x₁=−x₂−x₃ → v₁=(−1,1,0)ᵀ, v₂=(−1,0,1)ᵀ → Gram-Schmidt 직교화 → q₁,q₂</span></div>
+          <div class="step-row"><span class="sn">a3</span><span>λ=8: x₁=x₂=x₃ → v₃=(1,1,1)ᵀ → q₃=(1/√3)(1,1,1)ᵀ</span></div>
+          <div class="ans-box">(a) D = diag(2,2,8) &nbsp;&nbsp; P = [q₁|q₂|q₃] (각 열: 정규직교 고유벡터)</div>
+          <div class="step-row" style="margin-top:8px"><span class="sn">b1</span><span>특성방정식: λ=−2, λ=−1, λ=4</span></div>
+          <div class="step-row"><span class="sn">b2</span><span>각 λ에서 고유벡터 구하고 정규화 → P의 열 구성</span></div>
+          <div class="ans-box">(b) D = diag(−2,−1,4)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- #17 이차형식 -->
+    <div class="prob-card">
+      <div class="prob-q"><span class="prob-num">#17</span>다음 이차형식을 xᵀAx 형태로 표현할 때 대칭행렬 A를 구하라.<br>
+        <span style="font-size:12.5px;font-weight:400">(a) 3x₁²+9x₂² &nbsp;&nbsp; (b) −x₁²+x₂²−3x₁x₂</span></div>
+      <div class="prob-story">
+        xᵀAx = ax₁² + 2bx₁x₂ + cx₂². 대칭행렬이므로 <span class="kw">교차항 계수를 2로 나눠</span> 비대각 위치에 배치.<br>
+        공식: A = [[a, b], [b, c]] 에서 2b = 교차항 계수.
+      </div>
+      <div class="sol">
+        <div class="sol-body" >
+          <div class="step-row"><span class="sn">a</span><span>3x₁²+9x₂²: a=3, c=9, b=0 → A=[[3,0],[0,9]]</span></div>
+          <div class="step-row"><span class="sn">b</span><span>−x₁²+x₂²−3x₁x₂: a=−1, c=1, 2b=−3 → b=−3/2<br>
+            A = [[−1, −3/2], [−3/2, 1]]</span></div>
+          <div class="ans-box">(a) [[3,0],[0,9]] &nbsp;&nbsp; (b) [[−1,−1.5],[−1.5,1]]</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /prob-section -->
+
+</section>
+
+<!-- ═══ 11장 ═══ -->
+<section class="ch" id="ch11">
+  <div class="ch-head"><span class="ch-badge">Ch·11</span><h2 class="ch-title">특잇값 분해 (SVD)<small>Singular Value Decomposition</small></h2></div>
+
+  <div class="story">
+    <p>대각화는 정방행렬만 가능하다. <span class="kw">SVD는 임의의 m×n 행렬 A</span>를 A = UΣVᵀ로 분해한다. U는 AAᵀ의 고유벡터(좌특이벡터), V는 AᵀA의 고유벡터(우특이벡터), Σ는 특잇값(σᵢ=√λᵢ) 대각행렬.</p>
+    <p>기말 7번 증명과 직결: AᵀA의 고유벡터 {vᵢ}에 A를 곱하면 {Avᵢ}는 직교집합이고 ‖Avᵢ‖=√λᵢ — 이것이 SVD의 핵심 근거다.</p>
+  </div>
+
+  <p class="sub-head">SVD 구조</p>
+  <div class="concepts">
+    <div class="concept-row"><div class="concept-key">A = UΣVᵀ</div><div class="concept-val">U: m×m 직교행렬(좌특이벡터), Σ: m×n 직사각대각(특잇값), V: n×n 직교행렬(우특이벡터)</div></div>
+    <div class="concept-row"><div class="concept-key">특잇값 σᵢ</div><div class="concept-val">σᵢ = √λᵢ (AᵀA의 고윳값). σ₁ ≥ σ₂ ≥ … ≥ σᵣ > 0</div></div>
+    <div class="concept-row"><div class="concept-key">V</div><div class="concept-val">AᵀA의 고유벡터 (단위, 직교). AᵀA vᵢ = λᵢvᵢ</div></div>
+    <div class="concept-row"><div class="concept-key">U (r개)</div><div class="concept-val">uᵢ = Avᵢ/σᵢ. 나머지 u는 직교보공간에서 확장.</div></div>
+    <div class="concept-row"><div class="concept-key">rank(A)</div><div class="concept-val">A의 0이 아닌 특잇값 개수 = rank(AᵀA)</div></div>
+  </div>
+
+  <p class="sub-head">SVD 계산 순서 <span class="freq-badge freq-must">★★ 반드시</span></p>
+  <div class="steps">
+    <div class="step"><span class="step-n">1</span>AᵀA 계산</div>
+    <div class="step"><span class="step-n">2</span>AᵀA의 고윳값 λᵢ, 단위 고유벡터 vᵢ 구하기 → V 구성</div>
+    <div class="step"><span class="step-n">3</span>σᵢ = √λᵢ → Σ 구성</div>
+    <div class="step"><span class="step-n">4</span>uᵢ = Avᵢ/σᵢ (i=1,…,r) → 나머지 u는 직교 벡터로 확장 → U 구성</div>
+    <div class="step"><span class="step-n">5</span>A = UΣVᵀ 표현</div>
+  </div>
+
+  <p class="sub-head">핵심 정리 — 기말 7번 증명 <span class="freq-badge freq-must">★★ 반드시</span></p>
+  <div class="theorem">
+    <div class="theorem-num">정리 · {Avᵢ}는 직교집합이고 ‖Avᵢ‖ = √λᵢ</div>
+    <div class="theorem-body">AᵀA의 고윳값 λᵢ와 ‖vᵢ‖=1인 고유벡터 vᵢ에 대해, {Av₁, Av₂, …, Avₙ}은 직교집합이고 ‖Avᵢ‖ = √λᵢ이다.</div>
+    <div class="theorem-proof">
+      ① 직교: (Avᵢ)ᵀ(Avⱼ) = vᵢᵀAᵀAvⱼ = vᵢᵀ(λⱼvⱼ) = λⱼ(vᵢᵀvⱼ)<br>
+      AᵀA 대칭 → 서로 다른 고윳값의 고유벡터 직교 → vᵢᵀvⱼ=0 → (Avᵢ)ᵀ(Avⱼ)=0 ∎<br><br>
+      ② 노름: ‖Avᵢ‖² = (Avᵢ)ᵀ(Avᵢ) = vᵢᵀAᵀAvᵢ = vᵢᵀ(λᵢvᵢ) = λᵢ(vᵢᵀvᵢ) = λᵢ<br>
+      vᵢ는 단위벡터(‖vᵢ‖=1) → vᵢᵀvᵢ=1 → ‖Avᵢ‖ = √λᵢ ∎
+    </div>
+  </div>
+
+  <p class="sub-head">낮은 계수 근사 (데이터 압축)</p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">rank-k 근사</div>
+      <div class="f-eq">
+        <span class="eq-line">A ≈ Aₖ = σ₁u₁v₁ᵀ + σ₂u₂v₂ᵀ + … + σₖuₖvₖᵀ</span>
+      </div>
+      <div class="f-note">k가 작을수록 압축률 ↑, 정보손실 ↑. σᵢ가 클수록 중요한 성분.</div>
+    </div>
+  </div>
+
+  <!-- ── 11장 과제 예상문제 ── -->
+  <div class="prob-section">
+    <p class="prob-head">📝 과제 예상문제 — 11장</p>
+
+    <!-- #3 SVD -->
+    <div class="prob-card">
+      <div class="prob-q"><span class="prob-num">#3</span>다음 행렬 A를 특잇값 분해(SVD)하라.<br>
+        <span style="font-size:12.5px;font-weight:400">(a) A=[[3,2,2],[2,3,−2]] &nbsp;&nbsp; (b) A=[[2,2],[1,−1]]</span></div>
+      <div class="prob-story">
+        SVD의 계산 흐름: <span class="kw">AᵀA 계산 → 고윳값·고유벡터(V) → σᵢ=√λᵢ(Σ) → uᵢ=Avᵢ/σᵢ(U)</span>.<br>
+        A가 m×n이면 AᵀA는 n×n 정방행렬 → 더 계산하기 편한 쪽 선택 가능 (AAᵀ도 가능).<br>
+        U와 V는 직교행렬이어야 하므로 정규화 필수. 최종 A=UΣVᵀ 검증 권장.
+      </div>
+      <div class="sol">
+        <div class="sol-body" >
+          <div class="step-row"><span class="sn">a1</span><span>AᵀA = [[13,12,2],[12,13,2],[2,2,8]] → det(λI−AᵀA)=0<br>
+            고윳값: λ₁=25, λ₂=9, λ₃=0 → σ₁=5, σ₂=3</span></div>
+          <div class="step-row"><span class="sn">a2</span><span>V: λ=25→v₁=(1/√2,1/√2,0)ᵀ, λ=9→v₂=(−1/3√2,1/3√2,4/3√2)ᵀ, λ=0→v₃=(−2/3,2/3,1/3)ᵀ</span></div>
+          <div class="step-row"><span class="sn">a3</span><span>U: u₁=Av₁/5, u₂=Av₂/3 계산 → 2×2 직교행렬 U</span></div>
+          <div class="ans-box">(a) A = U·diag(5,0 / 0,3)·Vᵀ &nbsp; (Σ는 2×3)</div>
+          <div class="step-row" style="margin-top:8px"><span class="sn">b1</span><span>AᵀA = [[5,3],[3,5]] → λ₁=8, λ₂=2 → σ₁=2√2, σ₂=√2</span></div>
+          <div class="step-row"><span class="sn">b2</span><span>V: λ=8→v₁=(1/√2,1/√2)ᵀ, λ=2→v₂=(−1/√2,1/√2)ᵀ</span></div>
+          <div class="step-row"><span class="sn">b3</span><span>U: u₁=Av₁/2√2, u₂=Av₂/√2 → U=[[1,0],[0,−1]]</span></div>
+          <div class="ans-box">(b) A = [[1,0],[0,−1]]·[[2√2,0],[0,√2]]·Vᵀ</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- #11 의사역행렬 -->
+    <div class="prob-card">
+      <div class="prob-q"><span class="prob-num">#11</span>다음 행렬 A의 의사역행렬(pseudoinverse) A⁺를 구하라.<br>
+        <span style="font-size:12.5px;font-weight:400">A = [[−1,1,0],[0,2,1]]</span></div>
+      <div class="prob-story">
+        의사역행렬(Moore-Penrose): <span class="kw">A⁺ = VΣ⁺Uᵀ</span>.<br>
+        Σ⁺는 Σ의 전치에서 0이 아닌 특잇값을 역수로 교체한 행렬.<br>
+        SVD 먼저 구한 뒤 A⁺=VΣ⁺Uᵀ 조합. 차원 확인: A가 m×n이면 A⁺는 n×m.
+      </div>
+      <div class="sol">
+        <div class="sol-body" >
+          <div class="step-row"><span class="sn">1</span><span>AᵀA = [[1,−1,0],[−1,5,2],[0,2,1]] (대칭) → det=0<br>
+            고윳값: λ₁=6, λ₂=1, λ₃=0 → σ₁=√6, σ₂=1</span></div>
+          <div class="step-row"><span class="sn">2</span><span>Σ = [[√6,0],[0,1],[0,0]] (3×2) → Σ⁺ = [[1/√6,0,0],[0,1,0]] (2×3)</span></div>
+          <div class="step-row"><span class="sn">3</span><span>V(3×3): AᵀA 고유벡터, U(2×2): AAᵀ 고유벡터 구하기</span></div>
+          <div class="step-row"><span class="sn">4</span><span>A⁺ = VΣ⁺Uᵀ = (1/6)[[−5,2],[1,2],[−2,2]] (3×2)</span></div>
+          <div class="ans-box">A⁺ = (1/6)[[−5,2],[1,2],[−2,2]]</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /prob-section -->
+
+</section>
+
+<!-- ═══ Ch.24 ═══ -->
+<section class="ch" id="ch24">
+  <div class="ch-head">
+    <span class="ch-badge" style="background:#7C3AED;">Ch·24</span>
+    <h2 class="ch-title">Data Analysis · 확률론
+      <small>Probability Theory · 기말 고정 출제 3문제</small>
+    </h2>
+  </div>
+
+  <div class="story">
+    <p>기말 통계 파트는 <span class="kw">구조가 매번 동일</span>하다. 숫자만 바뀔 뿐 풀이 흐름은 6회 전부 같다.</p>
+    <p><span class="kw">8번</span>: 나사 불량 복원/비복원 확률 → 곱셈공식.</p>
+    <p><span class="kw">9번</span>: 균등분포 k 구하기 + 구간 확률 → 적분=1 조건, 겹치는 구간.</p>
+    <p><span class="kw">10번</span>: 정규분포 불량률 → 표준화 Z=(X−μ)/σ 후 Φ표 읽기. (a) 범위→%, (b) %→범위 역산.</p>
+  </div>
+
+  <!-- 8번 -->
+  <p class="sub-head">나사 불량 확률 (복원 / 비복원) <span class="freq-badge freq-must">★★ 100% 출제</span></p>
+  <div class="concepts">
+    <div class="concept-row">
+      <div class="concept-key">복원추출</div>
+      <div class="concept-val">꺼낸 후 되돌림 → 독립 → P(A∩B) = P(A)×P(B)<br>예: (3/10)×(3/10) = 9/100 = 0.09</div>
+    </div>
+    <div class="concept-row">
+      <div class="concept-key">비복원추출</div>
+      <div class="concept-val">꺼낸 후 제외 → 조건부확률 → P(A∩B) = P(A)×P(B|A)<br>예: (3/10)×(2/9) = 6/90 = 1/15 ≈ 0.067</div>
+    </div>
+  </div>
+
+  <!-- 9번 -->
+  <p class="sub-head">균등분포 밀도함수 <span class="freq-badge freq-must">★★ 100% 출제</span></p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">(a) k 구하기</div>
+      <div class="f-eq">
+        <span class="eq-line">f(x) = k &nbsp;(a≤x≤b), &nbsp; 0 elsewhere</span>
+        <span class="eq-line">∫ f(x)dx = 1 &nbsp;→&nbsp; k(b−a) = 1 &nbsp;→&nbsp; k =
+          <span class="frac"><span class="num">1</span><span class="den">b−a</span></span>
+        </span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">(b) 확률 — 겹치는 구간만</div>
+      <div class="f-eq">
+        <span class="eq-line">P(c≤X≤d) = k × (겹치는 구간 길이)</span>
+        <span class="eq-line">f(x)=0인 구간은 제외, 정의역과 겹치는 부분만</span>
+      </div>
+      <div class="f-note">예: f(x)=1/10 (−4~6), P(−7≤X≤2) → 겹침 [−4, 2] → (1/10)×6 = 0.6</div>
+    </div>
+  </div>
+
+  <!-- 10번 -->
+  <p class="sub-head">정규분포 불량률 (tolerance limits) <span class="freq-badge freq-must">★★ 100% 출제</span></p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">표준화 공식</div>
+      <div class="f-eq">
+        <span class="eq-line">X ~ N(μ, σ²) &nbsp;→&nbsp; Z =
+          <span class="frac"><span class="num">X − μ</span><span class="den">σ</span></span>
+          ~ N(0,1)
+        </span>
+        <span class="eq-line">P(a≤X≤b) = Φ(
+          <span class="frac"><span class="num">b−μ</span><span class="den">σ</span></span>
+          ) − Φ(
+          <span class="frac"><span class="num">a−μ</span><span class="den">σ</span></span>
+          )
+        </span>
+        <span class="eq-line">Φ(−z) = 1 − Φ(z)</span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">(a) 범위 → 불량률</div>
+      <div class="f-eq">
+        <span class="eq-line">허용 μ±c → 정상품률 = P(μ−c≤X≤μ+c) = 2Φ(c/σ) − 1</span>
+        <span class="eq-line">불량률 = 1 − (2Φ(c/σ) − 1) = 2(1 − Φ(c/σ))</span>
+      </div>
+      <div class="f-note">예: μ=100, σ=1, c=0.44 → Φ(0.44)=0.6700 → 정상품 34% → 불량 66%</div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">(b) 불량률 → 범위 역산</div>
+      <div class="f-eq">
+        <span class="eq-line">불량 α% → 정상 (1−α)% → 2Φ(c/σ)−1 = 1−α</span>
+        <span class="eq-line">Φ(c/σ) =
+          <span class="frac"><span class="num">2−α</span><span class="den">2</span></span>
+          → 표에서 z값 → c = z × σ
+        </span>
+      </div>
+      <div class="f-note">예: 불량 66% → Φ(c)=0.67 → 표에서 c=0.44 → 범위 100±0.44</div>
+    </div>
+  </div>
+
+  <div class="tip"><b>정규분포 표 읽는 법:</b> 행 = z의 소수점 첫째 자리, 열 = 소수점 둘째 자리. Φ(z) = P(Z≤z). 항상 표가 제공됨.</div>
+
+  <!-- 확률 기초 -->
+  <p class="sub-head">확률 기초 (24.2~24.4)</p>
+  <div class="concepts">
+    <div class="concept-row"><div class="concept-key">표본공간 S</div><div class="concept-val">실험의 모든 가능한 결과. 사상(Event)은 S의 부분집합.</div></div>
+    <div class="concept-row"><div class="concept-key">확률의 공리</div><div class="concept-val">① 0≤P(A)≤1 &nbsp; ② P(S)=1 &nbsp; ③ 배반사상: P(A∪B)=P(A)+P(B)</div></div>
+    <div class="concept-row"><div class="concept-key">조건부 확률</div><div class="concept-val">P(B|A) = P(A∩B)/P(A). 곱셈: P(A∩B) = P(A)P(B|A)</div></div>
+    <div class="concept-row"><div class="concept-key">독립사상</div><div class="concept-val">P(A∩B) = P(A)·P(B) ↔ P(B|A) = P(B)</div></div>
+    <div class="concept-row"><div class="concept-key">여사상</div><div class="concept-val">P(Aᶜ) = 1 − P(A)</div></div>
+    <div class="concept-row"><div class="concept-key">조합 C(n,k)</div><div class="concept-val">n!/(k!(n−k)!). 비복원 확률 계산에 사용.</div></div>
+  </div>
+
+  <!-- 분포 요약 -->
+  <p class="sub-head">분포 비교 요약 (24.5~24.7)</p>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>분포</th><th>PMF/PDF</th><th>평균</th><th>분산</th><th>조건</th></tr></thead>
+      <tbody>
+        <tr><td>이항 B(n,p)</td><td>C(n,x)pˣqⁿ⁻ˣ</td><td>np</td><td>npq</td><td>독립 베르누이 n회</td></tr>
+        <tr><td>포아송 pois(λ)</td><td>(λˣ/x!)e⁻λ</td><td>λ</td><td>λ</td><td>드문 사건. n>50, np&lt;5</td></tr>
+        <tr><td>초기하</td><td>C(M,x)C(N-M,n-x)/C(N,n)</td><td>nM/N</td><td>—</td><td>비복원 추출</td></tr>
+        <tr><td>균등 U(a,b)</td><td>1/(b−a)</td><td>(a+b)/2</td><td>(b−a)²/12</td><td>연속, 구간 균등</td></tr>
+        <tr><td>정규 N(μ,σ²)</td><td>(1/σ√2π)exp(…)</td><td>μ</td><td>σ²</td><td>표준화 후 Φ표 사용</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 기대값/분산 -->
+  <p class="sub-head">기대값 · 분산 성질 (24.6)</p>
+  <div class="formulas">
+    <div class="f-block">
+      <div class="f-name">기대값 & 분산</div>
+      <div class="f-eq">
+        <span class="eq-line">E(X) = Σ x·f(x) &nbsp;(이산), &nbsp; ∫x·f(x)dx &nbsp;(연속)</span>
+        <span class="eq-line">Var(X) = E(X²) − [E(X)]²</span>
+        <span class="eq-line">E(aX+b) = aE(X)+b &nbsp;,&nbsp; Var(aX+b) = a²Var(X)</span>
+      </div>
+    </div>
+    <div class="f-block">
+      <div class="f-name">독립 확률변수 합</div>
+      <div class="f-eq">
+        <span class="eq-line">E(X+Y) = E(X) + E(Y) &nbsp;(항상 성립)</span>
+        <span class="eq-line">Var(X+Y) = Var(X) + Var(Y) &nbsp;(독립일 때만)</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+</div>
+
+<a class="top-btn" href="#top">↑</a>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const tabs = document.querySelectorAll('.tab-bar a');
+  const sections = document.querySelectorAll('.ch');
+
+  function setActive() {
+    let cur = '';
+    sections.forEach(function(s) {
+      if (window.scrollY >= s.offsetTop - 160) cur = s.id;
+    });
+    tabs.forEach(function(t) {
+      t.classList.toggle('active', t.getAttribute('href') === '#' + cur);
+    });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+
+  tabs.forEach(function(t) {
+    t.addEventListener('click', function() {
+      setTimeout(function() {
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+});
+
+function toggleSol(btn) {
+  var sol = btn.parentNode.querySelector('.sol-body');
+  if (!sol) return;
+  var isHidden = sol.style.display === 'none' || sol.style.display === '';
+  sol.style.display = isHidden ? 'block' : 'none';
+  btn.querySelector('span').textContent = isHidden ? '▲ 접기' : '▼ 풀이 보기';
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="성균관대학교 데이터사이언스융합학과 석사과정 — 학기별 과목 요점정리 아카이브">
+<title>DS 석사과정 요점정리 | 성균관대학교 데이터사이언스융합학과</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-950:#060d1f;
+  --navy-900:#0a1530;
+  --navy-800:#101f45;
+  --navy-700:#16295a;
+  --surface:rgba(16,31,69,.62);
+  --surface-solid:#101f45;
+  --border:rgba(163,230,53,.16);
+  --border-soft:rgba(255,255,255,.09);
+  --ink:#f2f6ff;
+  --muted:#a8b3cf;
+  --lime:#c9f24b;
+  --lime-strong:#a3e635;
+  --lime-deep:#65a30d;
+  --radius:20px;
+  --radius-sm:14px;
+  --max:1080px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,-apple-system,sans-serif;
+  background:var(--navy-950);
+  color:var(--ink);
+  font-size:16px;
+  line-height:1.65;
+  min-height:100dvh;
+  -webkit-text-size-adjust:100%;
+}
+
+/* ---------- gradient mesh background ---------- */
+.mesh{
+  position:fixed;inset:0;z-index:-1;overflow:hidden;
+  background:
+    radial-gradient(52rem 40rem at 12% -8%,  rgba(101,163,13,.32), transparent 60%),
+    radial-gradient(46rem 36rem at 108% 12%, rgba(30,64,175,.55), transparent 62%),
+    radial-gradient(40rem 34rem at 85% 95%,  rgba(163,230,53,.20), transparent 58%),
+    radial-gradient(56rem 44rem at -8% 88%,  rgba(37,99,235,.35), transparent 60%),
+    linear-gradient(160deg,#0a1530 0%,#060d1f 55%,#0a1a3d 100%);
+}
+.mesh::after{
+  content:"";position:absolute;inset:0;
+  background-image:radial-gradient(rgba(255,255,255,.045) 1px, transparent 1px);
+  background-size:26px 26px;
+  mask-image:radial-gradient(70rem 50rem at 50% 20%, #000 30%, transparent 80%);
+}
+
+/* ---------- layout ---------- */
+.wrap{max-width:var(--max);margin:0 auto;padding:clamp(20px,4vw,44px) clamp(16px,4vw,32px) 64px}
+
+header.top{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  gap:16px;margin-bottom:clamp(20px,4vw,36px);
+}
+.brand{display:flex;flex-direction:column;gap:6px}
+.brand .eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:.8rem;font-weight:500;letter-spacing:.14em;color:var(--lime);
+  text-transform:uppercase;
+}
+.brand .eyebrow::before{content:"";width:22px;height:2px;background:var(--lime);border-radius:2px}
+.brand h1{
+  font-size:clamp(1.5rem,4.2vw,2.3rem);font-weight:900;line-height:1.25;
+  letter-spacing:-.01em;
+}
+.brand h1 .grad{
+  background:linear-gradient(92deg,var(--lime) 0%,#7dd3fc 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.brand p{color:var(--muted);font-size:.92rem}
+
+/* small SKKU logo in the corner */
+.skku{
+  display:flex;align-items:center;gap:7px;flex-shrink:0;
+  opacity:.75;transition:opacity .2s;
+  color:var(--muted);text-decoration:none;
+}
+.skku:hover,.skku:focus-visible{opacity:1}
+.skku svg{width:22px;height:22px;display:block}
+.skku span{font-size:.72rem;font-weight:500;letter-spacing:.02em;white-space:nowrap}
+
+/* ---------- bento grid ---------- */
+.bento{
+  display:grid;gap:14px;
+  grid-template-columns:repeat(6,1fr);
+  grid-auto-rows:auto;
+}
+.card{
+  background:var(--surface);
+  border:1px solid var(--border-soft);
+  border-radius:var(--radius);
+  padding:clamp(18px,3vw,26px);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  position:relative;overflow:hidden;
+}
+.card.hero{grid-column:span 4}
+.card.semester{grid-column:span 2}
+.card.subject{grid-column:span 2}
+.card.meta{grid-column:span 6}
+
+/* hero */
+.hero h2{font-size:clamp(1.15rem,2.6vw,1.45rem);font-weight:700;margin-bottom:8px}
+.hero p{color:var(--muted);font-size:.95rem;max-width:46ch}
+.hero .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chip{
+  font-size:.78rem;font-weight:500;color:var(--lime);
+  border:1px solid var(--border);border-radius:999px;
+  padding:4px 12px;background:rgba(163,230,53,.07);
+}
+.hero::before{
+  content:"";position:absolute;top:-40%;right:-12%;width:22rem;height:22rem;
+  background:radial-gradient(closest-side, rgba(201,242,75,.14), transparent 70%);
+  pointer-events:none;
+}
+
+/* semester selector */
+.semester h3,.subject-label{
+  font-size:.78rem;font-weight:700;letter-spacing:.12em;color:var(--muted);
+  text-transform:uppercase;margin-bottom:12px;
+}
+.tabs{display:flex;flex-direction:column;gap:8px}
+.tab{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  width:100%;text-align:left;
+  font:inherit;font-size:.95rem;font-weight:500;color:var(--ink);
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border-soft);border-radius:var(--radius-sm);
+  padding:12px 16px;cursor:pointer;
+  transition:background .18s,border-color .18s;
+}
+.tab:hover:not(:disabled){background:rgba(255,255,255,.08)}
+.tab[aria-selected="true"]{
+  background:linear-gradient(95deg, rgba(163,230,53,.16), rgba(163,230,53,.06));
+  border-color:rgba(163,230,53,.45);
+  color:#fff;font-weight:700;
+}
+.tab[aria-selected="true"] .dot{background:var(--lime);box-shadow:0 0 10px rgba(201,242,75,.8)}
+.tab:disabled{opacity:.42;cursor:not-allowed}
+.tab .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);flex-shrink:0}
+.tab .badge{font-size:.72rem;color:var(--muted);font-weight:400}
+
+/* subject cards */
+.subject{
+  display:flex;flex-direction:column;gap:0;
+  transition:transform .18s,border-color .18s,background .18s;
+}
+.subject:hover{transform:translateY(-3px);border-color:rgba(163,230,53,.4)}
+.subject .num{
+  font-size:.75rem;font-weight:700;color:var(--lime);letter-spacing:.1em;margin-bottom:10px;
+}
+.subject h3{font-size:1.08rem;font-weight:700;line-height:1.4;margin-bottom:6px}
+.subject p{font-size:.85rem;color:var(--muted);flex-grow:1}
+.subject .open-btn{
+  margin-top:16px;align-self:flex-start;
+  display:inline-flex;align-items:center;gap:6px;
+  font:inherit;font-size:.85rem;font-weight:700;color:var(--navy-950);
+  background:var(--lime);border:none;border-radius:999px;
+  padding:8px 18px;cursor:pointer;
+  transition:background .18s,transform .18s;
+}
+.subject .open-btn:hover{background:#d9fa6e}
+.subject .open-btn::after{content:"→";font-weight:400}
+.subject .tag{
+  position:absolute;top:18px;right:18px;
+  font-size:.7rem;color:var(--muted);
+  border:1px solid var(--border-soft);border-radius:999px;padding:2px 10px;
+}
+
+/* meta strip */
+.meta{display:flex;flex-wrap:wrap;gap:clamp(16px,4vw,48px);align-items:center}
+.meta .stat{display:flex;flex-direction:column;gap:2px}
+.meta .stat b{font-size:1.35rem;font-weight:900;color:var(--lime)}
+.meta .stat span{font-size:.8rem;color:var(--muted)}
+.meta .note{margin-left:auto;font-size:.8rem;color:var(--muted)}
+
+/* ---------- modal ---------- */
+.modal{
+  position:fixed;inset:0;z-index:50;
+  display:none;align-items:center;justify-content:center;
+  padding:clamp(0px,3vw,32px);
+}
+.modal.open{display:flex}
+.modal-backdrop{
+  position:absolute;inset:0;background:rgba(4,8,20,.72);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.modal-panel{
+  position:relative;width:min(960px,100%);height:min(88dvh,100%);
+  background:#fff;border-radius:var(--radius);
+  border:1px solid rgba(163,230,53,.35);
+  box-shadow:0 32px 80px rgba(0,0,0,.55);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.modal-head{
+  display:flex;align-items:center;gap:12px;
+  background:var(--navy-900);color:var(--ink);
+  padding:12px 16px;flex-shrink:0;
+}
+.modal-head .m-dot{width:9px;height:9px;border-radius:50%;background:var(--lime);flex-shrink:0}
+.modal-head h2{font-size:.95rem;font-weight:700;flex-grow:1;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.modal-head a.newtab{
+  font-size:.78rem;color:var(--lime);text-decoration:none;white-space:nowrap;
+  border:1px solid var(--border);border-radius:999px;padding:4px 12px;
+}
+.modal-head a.newtab:hover{background:rgba(163,230,53,.1)}
+.modal-close{
+  font:inherit;background:none;border:none;color:var(--ink);cursor:pointer;
+  width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:1.15rem;
+  transition:background .15s;
+}
+.modal-close:hover{background:rgba(255,255,255,.12)}
+.modal-body{flex-grow:1;position:relative}
+.modal-body iframe{
+  position:absolute;inset:0;width:100%;height:100%;border:none;background:#fff;
+}
+body.modal-locked{overflow:hidden}
+
+/* focus visibility & a11y helpers */
+:focus-visible{outline:3px solid var(--lime);outline-offset:2px;border-radius:6px}
+.visually-hidden{
+  position:absolute;width:1px;height:1px;margin:-1px;
+  clip:rect(0 0 0 0);clip-path:inset(50%);overflow:hidden;white-space:nowrap;
+}
+.skip-link{
+  position:absolute;left:16px;top:-48px;z-index:60;
+  background:var(--lime);color:var(--navy-950);font-weight:700;
+  padding:8px 16px;border-radius:0 0 10px 10px;text-decoration:none;
+  transition:top .2s;
+}
+.skip-link:focus{top:0}
+
+footer{
+  margin-top:28px;text-align:center;
+  font-size:.78rem;color:var(--muted);
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:860px){
+  .card.hero{grid-column:span 6}
+  .card.semester{grid-column:span 6}
+  .card.subject{grid-column:span 3}
+}
+@media (max-width:600px){
+  .bento{grid-template-columns:1fr;gap:12px}
+  .card.hero,.card.semester,.card.subject,.card.meta{grid-column:span 1}
+  .meta .note{margin-left:0;width:100%}
+  .modal{padding:0}
+  .modal-panel{width:100%;height:100dvh;border-radius:0;border:none}
+  .skku span{display:none}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#subjects">본문(과목 목록)으로 건너뛰기</a>
+<div class="mesh" aria-hidden="true"></div>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <span class="eyebrow">Graduate Notes Archive</span>
+      <h1>데이터사이언스융합학과<br><span class="grad">석사과정 요점정리</span></h1>
+      <p>매 학기 수강 과목의 핵심 개념을 한곳에 정리합니다.</p>
+    </div>
+    <a class="skku" href="https://www.skku.edu" target="_blank" rel="noopener" aria-label="성균관대학교 홈페이지 (새 탭)">
+      <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+        <circle cx="12" cy="12" r="11" fill="none" stroke="#c9f24b" stroke-width="1.4"/>
+        <path d="M12 4.5c-2.6 2.2-4.2 4.6-4.2 7 0 2.9 1.9 4.9 4.2 8 2.3-3.1 4.2-5.1 4.2-8 0-2.4-1.6-4.8-4.2-7z"
+              fill="none" stroke="#c9f24b" stroke-width="1.2"/>
+        <line x1="12" y1="6.5" x2="12" y2="18" stroke="#c9f24b" stroke-width="1"/>
+      </svg>
+      <span>성균관대학교 SKKU</span>
+    </a>
+  </header>
+
+  <main class="bento">
+    <!-- hero -->
+    <section class="card hero" aria-labelledby="hero-title">
+      <h2 id="hero-title">2026학년도 1학기</h2>
+      <p>이번 학기에는 세 과목을 수강했습니다. 아래 과목 카드를 선택하면 요점정리 문서가 팝업으로 열립니다.</p>
+      <div class="chips" aria-hidden="true">
+        <span class="chip">수학 · 선형대수</span>
+        <span class="chip">통계 · 추론</span>
+        <span class="chip">연구윤리 · 논문</span>
+      </div>
+    </section>
+
+    <!-- semester selector -->
+    <section class="card semester" aria-labelledby="sem-title">
+      <h3 id="sem-title">학기 선택</h3>
+      <div class="tabs" role="tablist" aria-label="학기 선택">
+        <button class="tab" role="tab" id="tab-2026-1" aria-selected="true" aria-controls="subjects">
+          <span class="dot" aria-hidden="true"></span>
+          2026-1학기
+          <span class="badge">3과목</span>
+        </button>
+        <button class="tab" role="tab" aria-selected="false" disabled>
+          <span class="dot" aria-hidden="true"></span>
+          2026-2학기
+          <span class="badge">준비중</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- subjects: display:contents so the articles participate in the bento grid -->
+    <section id="subjects" role="tabpanel" aria-labelledby="tab-2026-1" style="display:contents">
+
+    <article class="card subject">
+      <span class="tag">전공</span>
+      <p class="num">01</p>
+      <h3>인공지능을 위한 수학</h3>
+      <p>선형대수·미적분·최적화 등 AI의 수학적 기반 개념과 핵심 정리.</p>
+      <button class="open-btn" type="button"
+        data-src="courses/math-for-ai.html"
+        data-title="인공지능을 위한 수학 — 요점정리">
+        요점정리 열기<span class="visually-hidden"> (팝업)</span>
+      </button>
+    </article>
+
+    <article class="card subject">
+      <span class="tag">전공</span>
+      <p class="num">02</p>
+      <h3>기초통계</h3>
+      <p>확률·분포·추정·가설검정 등 통계학원론 개념과 수식 정리.</p>
+      <button class="open-btn" type="button"
+        data-src="courses/statistics.html"
+        data-title="기초통계 — 개념·수식 정리">
+        요점정리 열기<span class="visually-hidden"> (팝업)</span>
+      </button>
+    </article>
+
+    <article class="card subject">
+      <span class="tag">공통</span>
+      <p class="num">03</p>
+      <h3>논문작성법과 윤리</h3>
+      <p>학술 논문의 구조와 작성 전략, 연구윤리 핵심 쟁점 정리.</p>
+      <button class="open-btn" type="button"
+        data-src="courses/thesis-ethics.html"
+        data-title="논문작성법과 윤리 — 요점정리">
+        요점정리 열기<span class="visually-hidden"> (팝업)</span>
+      </button>
+    </article>
+
+    </section>
+
+    <!-- meta strip -->
+    <section class="card meta" aria-label="학기 요약">
+      <div class="stat"><b>3</b><span>수강 과목</span></div>
+      <div class="stat"><b>1</b><span>진행 학기</span></div>
+      <div class="stat"><b>2026-1</b><span>현재 학기</span></div>
+      <p class="note">과목 카드를 클릭하면 요점정리가 팝업으로 열립니다. 팝업은 <kbd>Esc</kbd> 키로 닫을 수 있습니다.</p>
+    </section>
+  </main>
+
+  <footer>
+    성균관대학교 데이터사이언스융합학과 석사과정 · 개인 학습 정리용 아카이브
+  </footer>
+</div>
+
+<!-- modal -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-panel">
+    <div class="modal-head">
+      <span class="m-dot" aria-hidden="true"></span>
+      <h2 id="modal-title">과목 요점정리</h2>
+      <a class="newtab" href="#" target="_blank" rel="noopener">새 탭에서 열기</a>
+      <button class="modal-close" type="button" data-close aria-label="팝업 닫기">✕</button>
+    </div>
+    <div class="modal-body">
+      <iframe id="modal-frame" src="about:blank" title="과목 요점정리 문서"></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var modal = document.getElementById('modal');
+  var frame = document.getElementById('modal-frame');
+  var titleEl = document.getElementById('modal-title');
+  var newtab = modal.querySelector('.newtab');
+  var lastFocus = null;
+
+  function openModal(src, title){
+    lastFocus = document.activeElement;
+    titleEl.textContent = title;
+    frame.title = title;
+    frame.src = src;
+    newtab.href = src;
+    modal.hidden = false;
+    modal.classList.add('open');
+    document.body.classList.add('modal-locked');
+    modal.querySelector('.modal-close').focus();
+  }
+
+  function closeModal(){
+    modal.classList.remove('open');
+    modal.hidden = true;
+    frame.src = 'about:blank';
+    document.body.classList.remove('modal-locked');
+    if(lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  document.querySelectorAll('.open-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      openModal(btn.dataset.src, btn.dataset.title);
+    });
+  });
+
+  modal.addEventListener('click', function(e){
+    if(e.target.hasAttribute('data-close')) closeModal();
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(modal.hidden) return;
+    if(e.key === 'Escape'){ closeModal(); return; }
+    if(e.key === 'Tab'){
+      // simple focus trap within the modal
+      var focusables = modal.querySelectorAll('a[href], button, iframe');
+      var first = focusables[0], last = focusables[focusables.length-1];
+      if(e.shiftKey && document.activeElement === first){
+        e.preventDefault(); last.focus();
+      } else if(!e.shiftKey && document.activeElement === last){
+        e.preventDefault(); first.focus();
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>
