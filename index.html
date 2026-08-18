@@ -399,12 +399,12 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
   </div>
 
   <p class="d-label" id="d-sem-label">학기</p>
-  <button class="d-item active" type="button" data-sem="2026-1" data-goto="#subjects">
+  <button class="d-item" type="button" data-sem="2026-1" data-goto="#subjects">
     <span class="d-dot" aria-hidden="true"></span>
     2026-1학기
     <span class="d-side">4과목</span>
   </button>
-  <button class="d-item" type="button" data-sem="2026-2" data-goto="#subjects-2">
+  <button class="d-item active" type="button" data-sem="2026-2" data-goto="#subjects-2">
     <span class="d-dot" aria-hidden="true"></span>
     2026-2학기
     <span class="d-side">3과목</span>
@@ -474,13 +474,12 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
   <main class="bento">
     <!-- hero -->
     <section class="card hero" aria-labelledby="hero-title">
-      <h2 id="hero-title"><b>2026학년도 1학기</b> 수강 과목</h2>
-      <p id="hero-desc">이번 학기에는 네 과목을 수강했습니다. 아래 과목 카드를 선택하면 요점정리 문서가 팝업으로 열립니다.</p>
+      <h2 id="hero-title"><b>2026학년도 2학기</b> 수강 예정 과목</h2>
+      <p id="hero-desc">개강 전 미리 등록한 과목입니다. 현재는 강의계획서·수업계획서를 정리해 두었고, 학기가 시작되면 요점정리를 추가합니다.</p>
       <div class="chips" id="hero-chips" aria-hidden="true">
-        <span class="chip">수학 · 선형대수</span>
-        <span class="chip">통계 · 추론</span>
-        <span class="chip">연구윤리 · 논문</span>
-        <span class="chip">데이터분석 · 프로그래밍</span>
+        <span class="chip">자료구조 · 알고리즘</span>
+        <span class="chip">컴퓨터비전</span>
+        <span class="chip">기계학습 · 딥러닝</span>
       </div>
     </section>
 
@@ -488,12 +487,12 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
     <section class="card semester" aria-labelledby="sem-title">
       <h3 class="panel-label" id="sem-title">학기 선택</h3>
       <div class="tabs" role="tablist" aria-label="학기 선택">
-        <button class="tab" role="tab" id="tab-2026-1" data-sem="2026-1" aria-selected="true" aria-controls="subjects">
+        <button class="tab" role="tab" id="tab-2026-1" data-sem="2026-1" aria-selected="false" aria-controls="subjects">
           <span class="dot" aria-hidden="true"></span>
           2026-1학기
           <span class="badge">4과목</span>
         </button>
-        <button class="tab" role="tab" id="tab-2026-2" data-sem="2026-2" aria-selected="false" aria-controls="subjects-2">
+        <button class="tab" role="tab" id="tab-2026-2" data-sem="2026-2" aria-selected="true" aria-controls="subjects-2">
           <span class="dot" aria-hidden="true"></span>
           2026-2학기
           <span class="badge">3과목</span>
@@ -502,7 +501,7 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
     </section>
 
     <!-- subjects: display:contents so the articles participate in the bento grid -->
-    <section id="subjects" role="tabpanel" aria-labelledby="tab-2026-1" style="display:contents">
+    <section id="subjects" role="tabpanel" aria-labelledby="tab-2026-1" style="display:none">
 
     <article class="card subject">
       <span class="tag">전공</span>
@@ -578,7 +577,7 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
     </section>
 
     <!-- subjects: 2026-2학기 (강의계획서 · 미리 등록) -->
-    <section id="subjects-2" role="tabpanel" aria-labelledby="tab-2026-2" style="display:none">
+    <section id="subjects-2" role="tabpanel" aria-labelledby="tab-2026-2" style="display:contents">
 
     <article class="card subject">
       <span class="tag">전공</span>
@@ -635,10 +634,10 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
 
     <!-- meta strip -->
     <section class="card meta" aria-label="학기 요약">
-      <div class="stat"><b id="stat-count">4<span class="u">과목</span></b><span>수강 과목</span></div>
+      <div class="stat"><b id="stat-count">3<span class="u">과목</span></b><span>수강 과목</span></div>
       <div class="stat"><b>2<span class="u">학기</span></b><span>진행 학기</span></div>
-      <div class="stat"><b id="stat-sem">2026-1</b><span>선택 학기</span></div>
-      <p class="note" id="stat-note">과목 카드를 클릭하면 요점정리가 팝업으로 열립니다. 팝업은 <kbd>Esc</kbd> 키로 닫을 수 있습니다.</p>
+      <div class="stat"><b id="stat-sem">2026-2</b><span>선택 학기</span></div>
+      <p class="note" id="stat-note">아직 개강 전이라 계획서(주차별 수업내용·평가)만 정리되어 있습니다. 팝업은 <kbd>Esc</kbd> 키로 닫을 수 있습니다.</p>
     </section>
   </main>
 
@@ -784,7 +783,7 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
     });
   });
 
-  setSemester('2026-1');
+  setSemester('2026-2');
 
   /* ----- course modal ----- */
   function openModal(src, title){
