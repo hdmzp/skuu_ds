@@ -212,10 +212,11 @@ header.top{
   padding:12px 16px;cursor:pointer;
   transition:background .15s,border-color .15s;
 }
-.tab:hover:not(:disabled){background:#eceff5}
+.tab:hover:not(:disabled):not([aria-selected="true"]){background:#eceff5}
 .tab[aria-selected="true"]{
   background:var(--navy-900);color:#fff;font-weight:700;
 }
+.tab[aria-selected="true"]:hover{background:var(--navy-800)}
 .tab[aria-selected="true"] .dot{background:var(--lime);box-shadow:0 0 8px rgba(201,242,75,.9)}
 .tab[aria-selected="true"] .badge{color:var(--lime)}
 .tab:disabled{opacity:.5;cursor:not-allowed}
@@ -398,15 +399,15 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
   </div>
 
   <p class="d-label" id="d-sem-label">학기</p>
-  <button class="d-item active" type="button" data-goto="#subjects">
+  <button class="d-item active" type="button" data-sem="2026-1" data-goto="#subjects">
     <span class="d-dot" aria-hidden="true"></span>
     2026-1학기
     <span class="d-side">4과목</span>
   </button>
-  <button class="d-item" type="button" disabled>
+  <button class="d-item" type="button" data-sem="2026-2" data-goto="#subjects-2">
     <span class="d-dot" aria-hidden="true"></span>
     2026-2학기
-    <span class="d-side">준비중</span>
+    <span class="d-side">3과목</span>
   </button>
 
   <p class="d-label">2026-1학기 과목</p>
@@ -435,6 +436,26 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
     데이터분석언어
   </button>
 
+  <p class="d-label">2026-2학기 과목 <span style="font-weight:500;letter-spacing:0;text-transform:none">(계획서)</span></p>
+  <button class="d-item open-btn" type="button"
+    data-src="courses/data-structures.html"
+    data-title="자료구조/알고리즘 — 수업계획서">
+    <span class="d-num" aria-hidden="true">01</span>
+    자료구조/알고리즘
+  </button>
+  <button class="d-item open-btn" type="button"
+    data-src="courses/computer-vision.html"
+    data-title="컴퓨터비전 — 강의계획서">
+    <span class="d-num" aria-hidden="true">02</span>
+    컴퓨터비전
+  </button>
+  <button class="d-item open-btn" type="button"
+    data-src="courses/machine-learning.html"
+    data-title="기계학습특론 — 강의계획서">
+    <span class="d-num" aria-hidden="true">03</span>
+    기계학습특론
+  </button>
+
   <div class="d-foot">
     <a href="https://ads.skku.edu/ads/index.do" target="_blank" rel="noopener">성균관대 데이터사이언스융합학과 ↗</a>
   </div>
@@ -454,8 +475,8 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
     <!-- hero -->
     <section class="card hero" aria-labelledby="hero-title">
       <h2 id="hero-title"><b>2026학년도 1학기</b> 수강 과목</h2>
-      <p>이번 학기에는 네 과목을 수강했습니다. 아래 과목 카드를 선택하면 요점정리 문서가 팝업으로 열립니다.</p>
-      <div class="chips" aria-hidden="true">
+      <p id="hero-desc">이번 학기에는 네 과목을 수강했습니다. 아래 과목 카드를 선택하면 요점정리 문서가 팝업으로 열립니다.</p>
+      <div class="chips" id="hero-chips" aria-hidden="true">
         <span class="chip">수학 · 선형대수</span>
         <span class="chip">통계 · 추론</span>
         <span class="chip">연구윤리 · 논문</span>
@@ -467,15 +488,15 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
     <section class="card semester" aria-labelledby="sem-title">
       <h3 class="panel-label" id="sem-title">학기 선택</h3>
       <div class="tabs" role="tablist" aria-label="학기 선택">
-        <button class="tab" role="tab" id="tab-2026-1" aria-selected="true" aria-controls="subjects">
+        <button class="tab" role="tab" id="tab-2026-1" data-sem="2026-1" aria-selected="true" aria-controls="subjects">
           <span class="dot" aria-hidden="true"></span>
           2026-1학기
           <span class="badge">4과목</span>
         </button>
-        <button class="tab" role="tab" aria-selected="false" disabled>
+        <button class="tab" role="tab" id="tab-2026-2" data-sem="2026-2" aria-selected="false" aria-controls="subjects-2">
           <span class="dot" aria-hidden="true"></span>
           2026-2학기
-          <span class="badge">준비중</span>
+          <span class="badge">3과목</span>
         </button>
       </div>
     </section>
@@ -556,12 +577,68 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
 
     </section>
 
+    <!-- subjects: 2026-2학기 (강의계획서 · 미리 등록) -->
+    <section id="subjects-2" role="tabpanel" aria-labelledby="tab-2026-2" style="display:none">
+
+    <article class="card subject">
+      <span class="tag">전공</span>
+      <div class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#c9f24b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v4"/><path d="M6 21v-4"/><path d="M18 21v-4"/><path d="M6 17h12"/><path d="M12 7v10"/>
+          <circle cx="12" cy="4" r="1.6"/><circle cx="6" cy="19" r="1.6"/><circle cx="18" cy="19" r="1.6"/>
+        </svg>
+      </div>
+      <h3>자료구조/알고리즘</h3>
+      <p>연결 리스트·스택·큐·트리·해시·그래프와 정렬/탐색 알고리즘을 Python으로 구현. (수업계획서)</p>
+      <button class="open-btn" type="button"
+        data-src="courses/data-structures.html"
+        data-title="자료구조/알고리즘 — 수업계획서">
+        수업계획서 열기<span class="visually-hidden"> (팝업)</span>
+      </button>
+    </article>
+
+    <article class="card subject">
+      <span class="tag">전공</span>
+      <div class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#c9f24b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z"/><circle cx="12" cy="12" r="2.6"/>
+        </svg>
+      </div>
+      <h3>컴퓨터비전</h3>
+      <p>카메라 기하·필터링·특징 정합부터 스테레오·검출/분할·생성 AI까지. (ADS5034 · 최재영)</p>
+      <button class="open-btn" type="button"
+        data-src="courses/computer-vision.html"
+        data-title="컴퓨터비전 — 강의계획서">
+        강의계획서 열기<span class="visually-hidden"> (팝업)</span>
+      </button>
+    </article>
+
+    <article class="card subject">
+      <span class="tag">전공</span>
+      <div class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#c9f24b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="5" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="12" cy="12" r="2"/>
+          <circle cx="19" cy="7" r="2"/><circle cx="19" cy="17" r="2"/>
+          <path d="M7 6.8 10.3 11"/><path d="M7 17.2 10.3 13"/><path d="M13.8 11.2 17.2 8"/><path d="M13.8 12.8 17.2 16"/>
+        </svg>
+      </div>
+      <h3>기계학습특론</h3>
+      <p>회귀·분류·퍼셉트론에서 CNN 기반 이미지 분류·분할·생성·검출까지. (최승호 · FL+PBL)</p>
+      <button class="open-btn" type="button"
+        data-src="courses/machine-learning.html"
+        data-title="기계학습특론 — 강의계획서">
+        강의계획서 열기<span class="visually-hidden"> (팝업)</span>
+      </button>
+    </article>
+
+    </section>
+
     <!-- meta strip -->
     <section class="card meta" aria-label="학기 요약">
-      <div class="stat"><b>4<span class="u">과목</span></b><span>수강 과목</span></div>
-      <div class="stat"><b>1<span class="u">학기</span></b><span>진행 학기</span></div>
-      <div class="stat"><b>2026-1</b><span>현재 학기</span></div>
-      <p class="note">과목 카드를 클릭하면 요점정리가 팝업으로 열립니다. 팝업은 <kbd>Esc</kbd> 키로 닫을 수 있습니다.</p>
+      <div class="stat"><b id="stat-count">4<span class="u">과목</span></b><span>수강 과목</span></div>
+      <div class="stat"><b>2<span class="u">학기</span></b><span>진행 학기</span></div>
+      <div class="stat"><b id="stat-sem">2026-1</b><span>선택 학기</span></div>
+      <p class="note" id="stat-note">과목 카드를 클릭하면 요점정리가 팝업으로 열립니다. 팝업은 <kbd>Esc</kbd> 키로 닫을 수 있습니다.</p>
     </section>
   </main>
 
@@ -636,6 +713,78 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
       }
     });
   });
+
+  /* ----- semester switching ----- */
+  var SEMESTERS = {
+    '2026-1': {
+      panel: 'subjects',
+      tab: 'tab-2026-1',
+      title: '<b>2026학년도 1학기</b> 수강 과목',
+      desc: '이번 학기에는 네 과목을 수강했습니다. 아래 과목 카드를 선택하면 요점정리 문서가 팝업으로 열립니다.',
+      chips: ['수학 · 선형대수','통계 · 추론','연구윤리 · 논문','데이터분석 · 프로그래밍'],
+      count: 4,
+      note: '과목 카드를 클릭하면 요점정리가 팝업으로 열립니다. 팝업은 <kbd>Esc</kbd> 키로 닫을 수 있습니다.'
+    },
+    '2026-2': {
+      panel: 'subjects-2',
+      tab: 'tab-2026-2',
+      title: '<b>2026학년도 2학기</b> 수강 예정 과목',
+      desc: '개강 전 미리 등록한 과목입니다. 현재는 강의계획서·수업계획서를 정리해 두었고, 학기가 시작되면 요점정리를 추가합니다.',
+      chips: ['자료구조 · 알고리즘','컴퓨터비전','기계학습 · 딥러닝'],
+      count: 3,
+      note: '아직 개강 전이라 계획서(주차별 수업내용·평가)만 정리되어 있습니다. 팝업은 <kbd>Esc</kbd> 키로 닫을 수 있습니다.'
+    }
+  };
+
+  var heroTitle = document.getElementById('hero-title');
+  var heroDesc  = document.getElementById('hero-desc');
+  var heroChips = document.getElementById('hero-chips');
+  var statCount = document.getElementById('stat-count');
+  var statSem   = document.getElementById('stat-sem');
+  var statNote  = document.getElementById('stat-note');
+
+  function setSemester(key){
+    var conf = SEMESTERS[key];
+    if(!conf) return;
+
+    Object.keys(SEMESTERS).forEach(function(k){
+      var c = SEMESTERS[k];
+      var panel = document.getElementById(c.panel);
+      var tab = document.getElementById(c.tab);
+      var on = (k === key);
+      if(panel) panel.style.display = on ? 'contents' : 'none';
+      if(tab) tab.setAttribute('aria-selected', String(on));
+    });
+
+    document.querySelectorAll('.drawer [data-sem]').forEach(function(btn){
+      btn.classList.toggle('active', btn.dataset.sem === key);
+    });
+
+    if(heroTitle) heroTitle.innerHTML = conf.title;
+    if(heroDesc)  heroDesc.textContent = conf.desc;
+    if(heroChips) heroChips.innerHTML = conf.chips.map(function(c){
+      return '<span class="chip">' + c + '</span>';
+    }).join('');
+    if(statCount) statCount.innerHTML = conf.count + '<span class="u">과목</span>';
+    if(statSem)   statSem.textContent = key;
+    if(statNote)  statNote.innerHTML = conf.note;
+  }
+
+  document.querySelectorAll('.tabs [data-sem]').forEach(function(tab){
+    tab.addEventListener('click', function(){ setSemester(tab.dataset.sem); });
+  });
+
+  document.querySelectorAll('.drawer [data-sem]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      setSemester(btn.dataset.sem);
+      // display:contents sections have no box of their own — scroll to the first card
+      var panel = document.getElementById(SEMESTERS[btn.dataset.sem].panel);
+      var first = panel && panel.querySelector('.card');
+      if(first) first.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+
+  setSemester('2026-1');
 
   /* ----- course modal ----- */
   function openModal(src, title){
