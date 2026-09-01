@@ -77,7 +77,7 @@ body{
 /* weeks */
 .weeks{display:flex;flex-direction:column;gap:8px}
 .wk{
-  display:grid;grid-template-columns:56px 1fr;gap:0;
+  display:grid;grid-template-columns:64px 1fr;gap:0;
   background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;
 }
 .wk-n{
@@ -87,6 +87,8 @@ body{
 }
 .wk-n b{font-size:17px;font-weight:700;color:var(--accent);line-height:1}
 .wk-n span{font-size:9.5px;color:var(--muted);letter-spacing:.04em}
+.wk-n em{font-style:normal;font-size:10px;font-weight:700;color:#4a72c9;margin-top:3px}
+.wk.exam .wk-n em{color:var(--red)}
 .wk-body{padding:11px 14px}
 .wk-key{font-size:13.5px;font-weight:700;line-height:1.4}
 .wk-list{list-style:none;margin-top:6px;display:flex;flex-direction:column;gap:3px}
@@ -108,6 +110,9 @@ body{
 /* misc */
 .note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
 .note-box + .note-box{margin-top:10px}
+.ref-list{list-style:none;font-size:12.5px;color:#4b5563;line-height:1.7}
+.ref-list li{padding-left:12px;position:relative}
+.ref-list li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.55}
 .src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
 .top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
 .top-btn:hover{transform:translateY(-3px)}
@@ -118,8 +123,10 @@ body{
 <nav class="tab-bar" id="tabbar">
   <a href="#overview">개요</a>
   <a href="#goal">교과목 목표</a>
+  <a href="#operation">수업 운영</a>
   <a href="#weeks">주차별 수업내용</a>
   <a href="#eval">과제·평가</a>
+  <a href="#material">참고자료</a>
 </nav>
 
 <div class="wrap">
@@ -128,144 +135,182 @@ body{
   <p class="kicker">2026-2학기 · 강의계획서</p>
   <h1>컴퓨터비전</h1>
   <p>카메라 기하와 필터링부터 특징 정합·스테레오·검출/분할·생성 AI까지, 컴퓨터 비전의 이론과 구현을 함께 다룹니다.</p>
-  <div class="chips"><span class="chip">ADS5034</span><span class="chip">전공</span><span class="chip">최재영 교수</span><span class="chip">Python 실습</span></div>
+  <div class="chips"><span class="chip">ADS5034-01</span><span class="chip">전공</span><span class="chip">플립러닝</span><span class="chip">실시간 수 19:00</span><span class="chip">Python · OpenCV · PyTorch</span></div>
 </section>
 
 <section class="sec" id="overview">
   <div class="sec-head"><span class="sec-badge">INFO</span><h2 class="sec-title">과목 개요<small>Course Overview</small></h2></div>
 <div class="info">
   <div class="info-row"><div class="info-key">학년도/학기</div><div class="info-val">2026학년도 2학기</div></div>
-  <div class="info-row"><div class="info-key">학수번호</div><div class="info-val">ADS5034</div></div>
+  <div class="info-row"><div class="info-key">학수번호</div><div class="info-val">ADS5034-01</div></div>
   <div class="info-row"><div class="info-key">이수구분</div><div class="info-val">전공</div></div>
-  <div class="info-row"><div class="info-key">교과목명</div><div class="info-val">컴퓨터비전</div></div>
-  <div class="info-row"><div class="info-key">담당교수</div><div class="info-val">최재영</div></div>
+  <div class="info-row"><div class="info-key">교과목명</div><div class="info-val">컴퓨터비전 (Computer Vision)</div></div>
   <div class="info-row"><div class="info-key">수강대상학과</div><div class="info-val">데이터사이언스융합학과</div></div>
-  <div class="info-row"><div class="info-key">선이수과목 (권장)</div><div class="info-val">확률및통계, 선형대수, Python</div></div>
-  <div class="info-row"><div class="info-key">교재 · 참고자료</div><div class="info-val">Various Computer Vision Materials (강좌관련자료)</div></div>
-  <div class="info-row"><div class="info-key">강좌진행방법</div><div class="info-val">혁신수업(학생참여형 플립러닝), 강의 중 발표/질의응답, 과제, 중간·기말고사</div></div>
+  <div class="info-row"><div class="info-key">수업방식</div><div class="info-val">혁신수업 — 학생참여형 플립러닝<br>온라인 사전제작 콘텐츠(목~수) + 실시간 온라인 수업(수)</div></div>
+  <div class="info-row"><div class="info-key">실시간 수업</div><div class="info-val">매주 수요일 19:00~20:30 (필요 시 연장) · Zoom (i-Campus 주차별 실시간 강의 링크)</div></div>
+  <div class="info-row"><div class="info-key">온라인 콘텐츠<br>출석 인정 기간</div><div class="info-val">매주 목요일 00:00 ~ 다음 주 수요일 수업 직전<br><span style="color:#6b7280">예) 2주차 콘텐츠: 9/3(목) 00:00 ~ 9/9(수) 19:00</span></div></div>
+  <div class="info-row"><div class="info-key">오프라인 강의실</div><div class="info-val">퇴계인문관 31705호 — 중간·기말고사 및 오프라인 수업 필요 시 사용</div></div>
+  <div class="info-row"><div class="info-key">공지 · 강의자료</div><div class="info-val"><a href="https://icampus.skku.edu/" target="_blank" rel="noopener" style="color:var(--accent);font-weight:600">i-Campus</a> — 강의노트, 과제, 시험일정 등 모든 공지 게시</div></div>
+  <div class="info-row"><div class="info-key">선이수과목 (필수)</div><div class="info-val">선형대수(행렬·벡터·변환), 확률및통계 기초, Python 프로그래밍</div></div>
+  <div class="info-row"><div class="info-key">선이수과목 (권장)</div><div class="info-val">영상처리(Image Processing), 기계학습, 인공지능</div></div>
+  <div class="info-row"><div class="info-key">사용 도구</div><div class="info-val">Python, OpenCV, PyTorch (Google Colaboratory)</div></div>
+  <div class="info-row"><div class="info-key">교재 · 참고자료</div><div class="info-val">Various Computer Vision Materials (강좌관련자료) — 별도 지정 교재 없음</div></div>
 </div>
 </section>
 
 <section class="sec" id="goal">
   <div class="sec-head"><span class="sec-badge">GOAL</span><h2 class="sec-title">교과목 목표<small>Objectives</small></h2></div>
 <div class="goals">
-  <p class="goal">컴퓨터 비전의 기본이론을 배우고, 관련된 프로그래밍(Python 등)을 활용하여 실제 프로젝트 실습(과제)에 적용한다.</p>
+  <p class="goal"><b>계산적 방법으로 실제 문제 해결</b> — 컴퓨터 비전의 계산 기법을 활용해 현실 세계의 문제를 해결한다.</p>
+  <p class="goal"><b>이론에서 프로젝트로</b> — 컴퓨터 비전의 이론과 기법을 배우고 실제 연구 프로젝트(과제)에 적용한다.</p>
+  <p class="goal"><b>SOTA 연구 이해의 기초</b> — 전통적인 비전 이론·방법론 학습을 통해 최신 연구(SOTA)를 이해할 수 있는 기본 개념과 역량을 갖춘다.</p>
 </div>
+<div class="tip"><b>Computer Vision이란?</b> 인간 시각 시스템의 복잡한 처리 과정을 컴퓨터에 적용하여, 사람의 뇌가 하는 것과 같은 방식으로 영상·비디오 속 객체를 인식하고 처리하게 하는 컴퓨터과학 분야. 대표 응용은 <b>Image classification · Localization · Instance segmentation · Object identification · Object generation</b> 입니다.</div>
+</section>
+
+<section class="sec" id="operation">
+  <div class="sec-head"><span class="sec-badge">RUN</span><h2 class="sec-title">수업 운영<small>Flipped Learning &amp; Class Operation</small></h2></div>
+
+<div class="note-box"><b>혁신수업 — 학생참여형 플립러닝</b><br>
+학생이 &lsquo;지식 습득&rsquo;을 스스로 미리 하도록 매주 온라인 교육 영상 콘텐츠를 사전 탑재하고,
+수업 시간에는 지식 전달보다 <b>학생 활동</b>이 중심이 되는 방식으로 운영합니다.
+(3시간 수업 기준: 사전제작 온라인 1~1.5시간 + 학생 활동 1.5~3시간)</div>
+
+<div class="note-box"><b>① 온라인 사전제작 콘텐츠</b><br>
+매주 목요일 00:00 ~ 다음 주 수요일 수업 직전까지가 <b>출석 인정 기간</b>입니다.
+기간 내 시청하지 않으면 결석 처리되니 주의하세요.<br>
+<span style="color:#6b7280">예) 2주차 콘텐츠 → 9/3(목) 00:00 ~ 9/9(수) 19:00</span></div>
+
+<div class="note-box"><b>② 실시간 온라인 수업 (Zoom)</b> — 매주 수요일 19:00~20:30<br>
+· <b>Python Review</b> — 총 3주간 (2~3주차, 11주차): 컴퓨터 비전 관련 Python, OpenCV Library, PyTorch (Colaboratory)<br>
+· <b>과제 설명</b> — 부여 시점(How to) / 종료 시점(Review)<br>
+· <b>논문 스터디 &amp; 발표</b> — 아래 참고</div>
+
+<div class="note-box"><b>③ 논문 스터디 &amp; 발표</b><br>
+· <b>시작</b> — 3주차(9/16)부터, 총 11주 내외 운영<br>
+· <b>편성</b> — 수강 인원에 따라 발표조 구성 · 주당 3~4명 발표<br>
+· <b>시간</b> — 발표 12분 + Q&amp;A 3~5분 (<b>발표 시간 절대 준수</b>)<br>
+· <b>주제</b> — 해당 주차 온라인 콘텐츠 관련 주제 또는 CV 관련 회사 업무/연구<br>
+· <b>조 편성</b> — 9/4(금)까지 구글 시트의 희망 발표 빈칸에 기입 (9/2 수업 시작 시 오픈)</div>
+
+<div class="tip"><b>과제(Homework)</b> — 총 3회 부여 예정 (3주차 · 7주차 · 11주차 부근).
+각 과제는 직전 주차 범위를 다루며, 부여 시 실시간 수업에서 설명하고 마감 후 Review를 진행합니다.</div>
 </section>
 
 <section class="sec" id="weeks">
-  <div class="sec-head"><span class="sec-badge">PLAN</span><h2 class="sec-title">주차별 수업내용<small>Weekly Schedule · 16주</small></h2></div>
+  <div class="sec-head"><span class="sec-badge">PLAN</span><h2 class="sec-title">주차별 수업내용<small>Weekly Schedule · 15주 (2026-2학기, 수요일)</small></h2></div>
 <div class="weeks">
   <div class="wk">
-    <div class="wk-n"><b>1</b><span>주차</span></div>
+    <div class="wk-n"><b>1</b><span>주차</span><em>9.2</em></div>
     <div class="wk-body">
       <p class="wk-key">Intro to the course</p>
-      <ul class="wk-list"><li>강좌 소개 및 컴퓨터 비전 개관</li></ul>
+      <ul class="wk-list"><li>What is Computer Vision</li><li>강좌 소개 및 오리엔테이션</li></ul>
+      <p class="wk-note">실시간: Orientation</p>
     </div>
   </div>
   <div class="wk">
-    <div class="wk-n"><b>2</b><span>주차</span></div>
+    <div class="wk-n"><b>2</b><span>주차</span><em>9.9</em></div>
     <div class="wk-body">
       <p class="wk-key">Geometric Camera Models</p>
-      <ul class="wk-list"><li>카메라 기하 모델 · 투영과 카메라 파라미터</li></ul>
+      <ul class="wk-list"><li>Image Transformation</li><li>Geometric Camera Model</li></ul>
+      <p class="wk-note">실시간: Python/OpenCV (1)</p>
     </div>
   </div>
   <div class="wk">
-    <div class="wk-n"><b>3</b><span>주차</span></div>
+    <div class="wk-n"><b>3</b><span>주차</span><em>9.16</em></div>
     <div class="wk-body">
       <p class="wk-key">Linear Filters</p>
-      <ul class="wk-list"><li>선형 필터링 · 합성곱과 잡음 제거</li></ul>
+      <ul class="wk-list"><li>What is an image</li><li>Linear filter · Convolution</li><li>Related Codes</li></ul>
+      <p class="wk-note">실시간: Python/OpenCV (2) · HW1 부여&amp;설명 (2~3주차 범위) · 논문 발표 시작</p>
     </div>
   </div>
   <div class="wk">
-    <div class="wk-n"><b>4</b><span>주차</span></div>
+    <div class="wk-n"><b>4</b><span>주차</span><em>9.23</em></div>
     <div class="wk-body">
       <p class="wk-key">Image Pyramids</p>
-      <ul class="wk-list"><li>다중 해상도 표현 · 가우시안/라플라시안 피라미드</li></ul>
+      <ul class="wk-list"><li>Aliasing</li><li>Image Pyramid</li><li>Interpolation · Related Codes</li></ul>
     </div>
   </div>
   <div class="wk">
-    <div class="wk-n"><b>5</b><span>주차</span></div>
+    <div class="wk-n"><b>5</b><span>주차</span><em>9.30</em></div>
     <div class="wk-body">
       <p class="wk-key">Local Feature Detection</p>
-      <ul class="wk-list"><li>코너·관심점 검출</li></ul>
+      <ul class="wk-list"><li>Local Features</li><li>Feature Detectors — Edge, Line, Corner, Blob</li></ul>
     </div>
   </div>
   <div class="wk">
-    <div class="wk-n"><b>6</b><span>주차</span></div>
+    <div class="wk-n"><b>6</b><span>주차</span><em>10.7</em></div>
     <div class="wk-body">
       <p class="wk-key">Feature Descriptors</p>
-      <ul class="wk-list"><li>특징 기술자 설계와 불변성</li></ul>
+      <ul class="wk-list"><li>Feature Description</li><li>Feature Descriptors — SIFT, SURF, HOG</li><li>BRIEF, ORB</li></ul>
+      <p class="wk-note">HW1 제출 마감 (10/7)</p>
     </div>
   </div>
   <div class="wk">
-    <div class="wk-n"><b>7</b><span>주차</span></div>
+    <div class="wk-n"><b>7</b><span>주차</span><em>10.14</em></div>
     <div class="wk-body">
       <p class="wk-key">Feature Matching &amp; Homography</p>
-      <ul class="wk-list"><li>특징 정합 · 호모그래피 추정</li></ul>
+      <ul class="wk-list"><li>Feature Matching — Fitting, RANSAC</li><li>Image Alignment — Homography, Rectification, Stitching</li></ul>
+      <p class="wk-note">HW1 Review · HW2 부여&amp;설명 (5~7주차 범위)</p>
     </div>
   </div>
   <div class="wk exam">
-    <div class="wk-n"><b>8</b><span>주차</span></div>
+    <div class="wk-n"><b>8</b><span>주차</span><em>10.21</em></div>
     <div class="wk-body">
       <p class="wk-key">Mid-term Examination</p>
-      <ul class="wk-list"><li>중간고사</li></ul>
+      <ul class="wk-list"><li>중간고사 — 오프라인 시험 (퇴계인문관 31705호)</li></ul>
     </div>
   </div>
   <div class="wk">
-    <div class="wk-n"><b>9</b><span>주차</span></div>
+    <div class="wk-n"><b>9</b><span>주차</span><em>10.28</em></div>
     <div class="wk-body">
       <p class="wk-key">Stereo Vision</p>
-      <ul class="wk-list"><li>스테레오 정합 · 깊이 추정</li></ul>
+      <ul class="wk-list"><li>Two-view Geometry — Epipolar Geometry, Essential matrix, Fundamental matrix</li><li>Stereo Vision — Rectification, Matching, Disparity &amp; Depth</li></ul>
     </div>
   </div>
   <div class="wk">
-    <div class="wk-n"><b>10</b><span>주차</span></div>
+    <div class="wk-n"><b>10</b><span>주차</span><em>11.4</em></div>
     <div class="wk-body">
       <p class="wk-key">Motion Tracking</p>
-      <ul class="wk-list"><li>움직임 추정과 추적</li></ul>
+      <ul class="wk-list"><li>Motion · Optical Flow — Lucas-Kanade, Horn-Schunck</li><li>Visual Tracking — KLT, Mean shift, Cam shift</li></ul>
+      <p class="wk-note">HW2 제출 마감 (11/4)</p>
     </div>
   </div>
   <div class="wk">
-    <div class="wk-n"><b>11</b><span>주차</span></div>
+    <div class="wk-n"><b>11</b><span>주차</span><em>11.11</em></div>
     <div class="wk-body">
       <p class="wk-key">Classification (1)</p>
-      <ul class="wk-list"><li>영상 분류 기초</li></ul>
+      <ul class="wk-list"><li>Bag of Words</li><li>Classifier — K-Nearest Neighbor, Support Vector Machine</li></ul>
+      <p class="wk-note">실시간: Python Review (3주차) · HW2 Review · HW3 부여&amp;설명 (11~13주차 범위: BoW-SVM, CNN)</p>
     </div>
   </div>
   <div class="wk">
-    <div class="wk-n"><b>12</b><span>주차</span></div>
+    <div class="wk-n"><b>12</b><span>주차</span><em>11.18</em></div>
     <div class="wk-body">
       <p class="wk-key">Classification (2)</p>
-      <ul class="wk-list"><li>영상 분류 심화</li></ul>
+      <ul class="wk-list"><li>Image Classification · Neural Networks</li><li>Convolutional Networks — AlexNet, ResNet</li><li>Vision Transformer</li></ul>
     </div>
   </div>
   <div class="wk">
-    <div class="wk-n"><b>13</b><span>주차</span></div>
+    <div class="wk-n"><b>13</b><span>주차</span><em>11.25</em></div>
     <div class="wk-body">
       <p class="wk-key">Detection &amp; Segmentation</p>
-      <ul class="wk-list"><li>객체 검출과 영상 분할</li></ul>
+      <ul class="wk-list"><li>Detection — R-CNN, SSD, YOLO</li><li>Segmentation — FCN, Mask R-CNN</li><li>Data Set / Evaluation</li></ul>
     </div>
   </div>
   <div class="wk">
-    <div class="wk-n"><b>14</b><span>주차</span></div>
+    <div class="wk-n"><b>14</b><span>주차</span><em>12.2</em></div>
     <div class="wk-body">
-      <p class="wk-key">Image Generative AI</p>
-      <ul class="wk-list"><li>영상 생성 AI</li></ul>
-    </div>
-  </div>
-  <div class="wk">
-    <div class="wk-n"><b>15</b><span>주차</span></div>
-    <div class="wk-body">
-      <p class="wk-key">Wrap up</p>
-      <ul class="wk-list"><li>정리 및 마무리</li></ul>
+      <p class="wk-key">Image Generative AI &amp; Wrap up</p>
+      <ul class="wk-list"><li>Image Generative Model · AutoEncoder</li><li>GAN (DCGAN) · Diffusion Model</li><li>정리 및 마무리</li></ul>
+      <p class="wk-note">HW3 제출 마감 (12/2)</p>
     </div>
   </div>
   <div class="wk exam">
-    <div class="wk-n"><b>16</b><span>주차</span></div>
+    <div class="wk-n"><b>15</b><span>주차</span><em>12.9</em></div>
     <div class="wk-body">
       <p class="wk-key">Final Examination</p>
-      <ul class="wk-list"><li>기말고사</li></ul>
+      <ul class="wk-list"><li>기말고사 — 오프라인 시험 (퇴계인문관 31705호)</li></ul>
     </div>
   </div>
 </div>
@@ -273,32 +318,67 @@ body{
 
 <section class="sec" id="eval">
   <div class="sec-head"><span class="sec-badge">EVAL</span><h2 class="sec-title">과제 및 평가<small>Assignments &amp; Grading</small></h2></div>
-<div class="note-box"><b>과제물</b> — 과제 진도에 맞추어 총 3회 과제(프로그래밍)를 진행합니다.</div><div style="height:14px"></div><div class="evals">
+
+<div class="note-box"><b>과제물</b> — 진도에 맞추어 총 <b>3회</b> 프로그래밍 과제를 진행합니다.<br>
+· <b>HW1</b> — 3주차 부여 (2~3주차 범위) / 마감 10월 7일 · 배점 5%<br>
+· <b>HW2</b> — 7주차 부여 (5~7주차 범위) / 마감 11월 4일 · 배점 8%<br>
+· <b>HW3</b> — 11주차 부여 (11~13주차 범위: BoW-SVM, CNN) / 마감 12월 2일 · 배점 12%</div>
+
+<div style="height:14px"></div>
+<div class="evals">
   <div class="ev">
-    <div class="ev-top"><span class="ev-name">출석</span><span class="ev-pct">10%</span></div>
+    <div class="ev-top"><span class="ev-name">출석 및 참여 (Attendance &amp; Participation)</span><span class="ev-pct">10%</span></div>
     <div class="ev-bar"><i style="width:10%"></i></div>
   </div>
   <div class="ev">
-    <div class="ev-top"><span class="ev-name">과제/토론</span><span class="ev-pct">25%</span></div>
-    <div class="ev-bar"><i style="width:25%"></i></div>
-  </div>
-  <div class="ev">
-    <div class="ev-top"><span class="ev-name">중간시험</span><span class="ev-pct">25%</span></div>
-    <div class="ev-bar"><i style="width:25%"></i></div>
-  </div>
-  <div class="ev">
-    <div class="ev-top"><span class="ev-name">기말시험</span><span class="ev-pct">25%</span></div>
-    <div class="ev-bar"><i style="width:25%"></i></div>
-  </div>
-  <div class="ev">
-    <div class="ev-top"><span class="ev-name">평소학습</span><span class="ev-pct">15%</span></div>
+    <div class="ev-top"><span class="ev-name">논문 발표 (Paper Presentation)</span><span class="ev-pct">15%</span></div>
     <div class="ev-bar"><i style="width:15%"></i></div>
   </div>
+  <div class="ev">
+    <div class="ev-top"><span class="ev-name">과제 (Homework · 5+8+12)</span><span class="ev-pct">25%</span></div>
+    <div class="ev-bar"><i style="width:25%"></i></div>
+  </div>
+  <div class="ev">
+    <div class="ev-top"><span class="ev-name">중간고사 (Mid-term)</span><span class="ev-pct">25%</span></div>
+    <div class="ev-bar"><i style="width:25%"></i></div>
+  </div>
+  <div class="ev">
+    <div class="ev-top"><span class="ev-name">기말고사 (Final)</span><span class="ev-pct">25%</span></div>
+    <div class="ev-bar"><i style="width:25%"></i></div>
+  </div>
   <div class="ev-total"><span>합계</span><span>100%</span></div>
-</div><div class="note-box"><b>평가방법</b> — 출석여부, 과제물 평가, 발표 평가, 중간·기말고사 점수를 합산하여 평가합니다.</div>
+</div>
+
+<div class="tip"><b>성적 산출</b> — 학교 정책에 따른 <b>절대평가(Absolute Evaluation)</b>로 진행합니다.<br>
+· <b>결석 4회</b> 이상이면 <b>F</b><br>
+· <b>기말고사 미응시</b> 시 <b>F</b><br>
+· 최소 <b>12주 이상</b> 출석 필수</div>
+
+<div class="note-box"><b>출결 유의사항</b><br>
+· 온라인/실시간/오프라인 수업의 결석 및 지각은 <b>감점</b> 대상입니다.<br>
+· 실시간·오프라인 수업을 부득이한 사유(질병, 가족 문제 등)로 결석한 경우, <b>다음 수업일까지</b> 관련 증빙 서류를 제출해야 합니다.<br>
+· 강의노트 및 공지(과제, 시험일정 등)는 모두 <a href="https://icampus.skku.edu/" target="_blank" rel="noopener" style="color:var(--accent);font-weight:600">i-Campus</a>에 게시됩니다.</div>
 </section>
 
-<p class="src">출처 — 컴퓨터비전 강의계획서 (2026학년도)</p>
+<section class="sec" id="material">
+  <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">참고자료<small>References</small></h2></div>
+
+<div class="note-box"><b>강의 자료 출처</b> — 본 강좌 자료는 다음 강의들을 기반으로 구성되었습니다.
+<ul class="ref-list" style="margin-top:8px">
+  <li>Hyunjin Park, Jae-Pil Heo — SKKU, Computer Vision</li>
+  <li>Ioannis Gkioulekas — CMU, Computer Vision 16-385</li>
+  <li>Noah Snavely, Abe Davis — Cornell, Computer Vision CS5670</li>
+  <li>Fei-Fei Li, Juan Carlos Niebles, Ranjay Krishna — Stanford, CS131</li>
+  <li>Jianbo Shi — UPenn, Computer Vision and Computational Photography CIS581</li>
+  <li>Jana Kosecka — George Mason, Computer Vision CS682</li>
+  <li>Ahmed Elgammal — Rutgers, Computer Vision CS534</li>
+  <li>Nitin J. Sanket — Univ. of Maryland, Computer Vision CMSC426</li>
+  <li>Per-Erik Forss&eacute;n — Link&ouml;ping Univ., Visual Object Recognition</li>
+  <li>그 외 Kris Kitani, Bob Collins, Martial Hebert, Alyosha Efros, Deva Ramanan, Steve Seitz, Richard Szeliski, Lana Lazebnik, Kristen Grauman, Antonio Torralba, Rob Fergus 외 다수</li>
+</ul></div>
+</section>
+
+<p class="src">출처 — 컴퓨터비전(ADS5034-01) 강의계획서 및 1주차 오리엔테이션 교안 (2026학년도 2학기)<br>주차별 일정·평가 비율은 1주차 오리엔테이션 자료 기준입니다.</p>
 
 </div>
 
