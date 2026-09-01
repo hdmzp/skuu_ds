@@ -110,15 +110,6 @@ body{
 /* misc */
 .note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
 .note-box + .note-box{margin-top:10px}
-.mat{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-.mat a{
-  display:flex;align-items:center;gap:10px;background:var(--surface);
-  border:1px solid var(--border);border-left:3px solid var(--red);
-  border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;
-  font-size:13px;font-weight:700;color:var(--red);text-decoration:none;line-height:1.5;
-}
-.mat a:hover{background:#fff8f8}
-.mat a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
 .ref-list{list-style:none;font-size:12.5px;color:#4b5563;line-height:1.7}
 .ref-list li{padding-left:12px;position:relative}
 .ref-list li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.55}
@@ -135,7 +126,7 @@ body{
   <a href="#operation">수업 운영</a>
   <a href="#weeks">주차별 수업내용</a>
   <a href="#eval">과제·평가</a>
-  <a href="#material">교안·참고자료</a>
+  <a href="#material">참고자료</a>
 </nav>
 
 <div class="wrap">
@@ -144,7 +135,7 @@ body{
   <p class="kicker">2026-2학기 · 강의계획서</p>
   <h1>컴퓨터비전</h1>
   <p>카메라 기하와 필터링부터 특징 정합·스테레오·검출/분할·생성 AI까지, 컴퓨터 비전의 이론과 구현을 함께 다룹니다.</p>
-  <div class="chips"><span class="chip">ADS5034-01</span><span class="chip">전공</span><span class="chip">최재영 교수</span><span class="chip">플립러닝</span><span class="chip">실시간 수 19:00</span><span class="chip">Python · OpenCV · PyTorch</span></div>
+  <div class="chips"><span class="chip">ADS5034-01</span><span class="chip">전공</span><span class="chip">플립러닝</span><span class="chip">실시간 수 19:00</span><span class="chip">Python · OpenCV · PyTorch</span></div>
 </section>
 
 <section class="sec" id="overview">
@@ -154,9 +145,6 @@ body{
   <div class="info-row"><div class="info-key">학수번호</div><div class="info-val">ADS5034-01</div></div>
   <div class="info-row"><div class="info-key">이수구분</div><div class="info-val">전공</div></div>
   <div class="info-row"><div class="info-key">교과목명</div><div class="info-val">컴퓨터비전 (Computer Vision)</div></div>
-  <div class="info-row"><div class="info-key">담당교수</div><div class="info-val">최재영 (Jae-Young Choi)</div></div>
-  <div class="info-row"><div class="info-key">연락처</div><div class="info-val">jaeychoi@skku.edu · 031-299-4607</div></div>
-  <div class="info-row"><div class="info-key">연구실</div><div class="info-val">제1공학관 21539호 (수원 자연과학캠퍼스)</div></div>
   <div class="info-row"><div class="info-key">수강대상학과</div><div class="info-val">데이터사이언스융합학과</div></div>
   <div class="info-row"><div class="info-key">수업방식</div><div class="info-val">혁신수업 — 학생참여형 플립러닝<br>온라인 사전제작 콘텐츠(목~수) + 실시간 온라인 수업(수)</div></div>
   <div class="info-row"><div class="info-key">실시간 수업</div><div class="info-val">매주 수요일 19:00~20:30 (필요 시 연장) · Zoom (i-Campus 주차별 실시간 강의 링크)</div></div>
@@ -373,13 +361,7 @@ body{
 </section>
 
 <section class="sec" id="material">
-  <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">교안 &amp; 참고자료<small>Lecture Notes &amp; References</small></h2></div>
-
-<div class="mat">
-  <a href="../materials/computer-vision/01_Course_Introduction_Orientation.pdf" target="_blank" rel="noopener">
-    📄 <span>1주차 · Course Introduction (Orientation) PDF 열기 ↗<small>2026-2 오리엔테이션 · 18p · 강의 운영, 일정, 평가 안내</small></span>
-  </a>
-</div>
+  <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">참고자료<small>References</small></h2></div>
 
 <div class="note-box"><b>강의 자료 출처</b> — 본 강좌 자료는 다음 강의들을 기반으로 구성되었습니다.
 <ul class="ref-list" style="margin-top:8px">
