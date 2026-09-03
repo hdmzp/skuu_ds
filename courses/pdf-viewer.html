@@ -9,20 +9,21 @@
 :root{
   --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
   --ink:#1a1a2e; --muted:#6b7280;
-  --accent:#1b3f8b; --accent-light:#eef2fb;
-  --red:#b91c1c; --lime:#c9f24b;
+  --accent:#1b3f8b; --red:#b91c1c; --lime:#c9f24b;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
 html,body{height:100%}
 body{
   font-family:'Noto Sans KR',system-ui,sans-serif;
   background:var(--bg); color:var(--ink); font-size:15px; line-height:1.7;
   display:flex; flex-direction:column; -webkit-text-size-adjust:100%;
 }
+/* ---------- top bar ---------- */
 .bar{
-  background:var(--ink); color:#fff; padding:10px 14px;
-  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
-  box-shadow:0 2px 8px rgba(0,0,0,.25); position:sticky; top:0; z-index:10;
+  background:var(--ink); color:#fff; padding:9px 13px;
+  display:flex; align-items:center; gap:9px; flex-wrap:wrap;
+  box-shadow:0 2px 8px rgba(0,0,0,.25); position:sticky; top:0; z-index:20; flex-shrink:0;
 }
 .bar .back{
   color:rgba(255,255,255,.75); text-decoration:none; font-size:12.5px; font-weight:500;
@@ -30,36 +31,69 @@ body{
 }
 .bar .back:hover{color:#fff;background:rgba(255,255,255,.12)}
 .bar h1{
-  font-size:14px; font-weight:700; flex:1 1 160px; min-width:0;
+  font-size:13.5px; font-weight:700; flex:1 1 150px; min-width:0;
   overflow:hidden; text-overflow:ellipsis; white-space:nowrap; line-height:1.4;
 }
 .bar h1 small{display:block;font-size:10.5px;font-weight:400;color:rgba(255,255,255,.6);margin-top:1px}
-.acts{display:flex;gap:7px;flex-shrink:0}
+.acts{display:flex;gap:6px;flex-shrink:0;align-items:center}
 .btn{
-  display:inline-flex;align-items:center;gap:5px;
+  display:inline-flex;align-items:center;justify-content:center;gap:5px;
   font-size:12.5px;font-weight:700;text-decoration:none;white-space:nowrap;
-  padding:7px 13px;border-radius:8px;border:1px solid transparent;transition:.15s;
+  padding:7px 12px;border-radius:8px;border:1px solid transparent;transition:.15s;
+  font-family:inherit;cursor:pointer;
 }
 .btn-dl{background:var(--lime);color:#16233f}
 .btn-dl:hover{background:#d8ff69}
-.btn-tab{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.22)}
-.btn-tab:hover{background:rgba(255,255,255,.2)}
-.stage{flex:1 1 auto;position:relative;background:#3a3a44;min-height:0}
-.stage iframe,.stage object{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
-.fallback{
-  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:14px;padding:32px 22px;text-align:center;color:#e5e7eb;
+.btn-gh{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.22)}
+.btn-gh:hover{background:rgba(255,255,255,.2)}
+.btn-ic{padding:7px 10px;font-size:14px;line-height:1}
+.btn:disabled{opacity:.4;cursor:default}
+.zoom{display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);border-radius:8px;overflow:hidden}
+.zoom button{
+  background:none;border:0;color:#fff;font-size:15px;font-weight:700;line-height:1;
+  padding:7px 11px;cursor:pointer;font-family:inherit;
 }
-.fallback p{font-size:13.5px;line-height:1.8;max-width:420px}
-.fallback .fb-btns{display:flex;gap:9px;flex-wrap:wrap;justify-content:center}
-.err{
+.zoom button:hover{background:rgba(255,255,255,.18)}
+.zoom span{font-size:11.5px;font-weight:700;color:rgba(255,255,255,.85);min-width:42px;text-align:center;padding:0 2px}
+/* ---------- stage ---------- */
+.stage{
+  flex:1 1 auto; overflow:auto; -webkit-overflow-scrolling:touch;
+  background:#3f3f4a; padding:14px 10px 40px; min-height:0;
+}
+.pages{display:flex;flex-direction:column;align-items:center;gap:14px;margin:0 auto}
+.pg{
+  position:relative;background:#fff;box-shadow:0 3px 14px rgba(0,0,0,.35);
+  border-radius:2px;overflow:hidden;max-width:100%;
+}
+.pg canvas{display:block;width:100%;height:auto}
+.pg .pno{
+  position:absolute;right:8px;bottom:7px;background:rgba(26,26,46,.72);color:#fff;
+  font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;letter-spacing:.03em;
+}
+.pg.skel{width:100%;aspect-ratio:4/3;background:#ececf1}
+/* ---------- states ---------- */
+.state{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  padding:46px 22px;text-align:center;color:#e5e7eb;
+}
+.state p{font-size:13.5px;line-height:1.85;max-width:430px}
+.state .st-btns{display:flex;gap:9px;flex-wrap:wrap;justify-content:center}
+.spin{
+  width:30px;height:30px;border-radius:50%;
+  border:3px solid rgba(255,255,255,.22);border-top-color:var(--lime);
+  animation:sp .8s linear infinite;
+}
+@keyframes sp{to{transform:rotate(360deg)}}
+.err-card{
   margin:auto;background:var(--surface);border:1px solid var(--border);border-radius:10px;
-  padding:22px 24px;font-size:13.5px;color:#374151;text-align:center;line-height:1.8;max-width:420px;
+  padding:22px 24px;font-size:13.5px;color:#374151;text-align:center;line-height:1.8;max-width:430px;
 }
-.err a{color:var(--accent);font-weight:700}
-@media(max-width:520px){
-  .bar h1{flex-basis:100%;order:3}
-  .btn{padding:7px 11px;font-size:12px}
+.err-card a{color:var(--accent);font-weight:700}
+@media(max-width:560px){
+  .bar h1{flex-basis:100%;order:5}
+  .btn{padding:7px 10px;font-size:12px}
+  .stage{padding:10px 6px 34px}
+  .pages{gap:10px}
 }
 </style>
 </head>
@@ -68,14 +102,31 @@ body{
 <div class="bar">
   <a class="back" id="back" href="machine-learning-week01.html">← 뒤로</a>
   <h1 id="doc-title">강의자료<small id="doc-sub"></small></h1>
-  <div class="acts" id="acts"></div>
+  <div class="acts">
+    <div class="zoom" id="zoom" hidden>
+      <button type="button" id="zoom-out" aria-label="축소">−</button>
+      <span id="zoom-val">100%</span>
+      <button type="button" id="zoom-in" aria-label="확대">+</button>
+    </div>
+    <a class="btn btn-dl" id="dl" href="#">⬇ 다운로드</a>
+    <a class="btn btn-gh btn-ic" id="newtab" href="#" target="_blank" rel="noopener" aria-label="새 탭에서 열기" title="새 탭에서 열기">↗</a>
+  </div>
 </div>
 
-<div class="stage" id="stage"></div>
+<div class="stage" id="stage">
+  <div class="state" id="loading">
+    <div class="spin"></div>
+    <p id="loading-msg">자료를 불러오는 중입니다…</p>
+  </div>
+  <div class="pages" id="pages"></div>
+</div>
 
+<script src="../vendor/pdfjs/build/pdf.min.js"></script>
 <script>
 (function () {
-  // 허용된 자료만 열 수 있도록 화이트리스트로 관리합니다.
+  'use strict';
+
+  // 열람 가능한 자료는 화이트리스트로만 관리합니다.
   var DOCS = {
     'ml-w01-intro': {
       file: '../materials/machine-learning/ml-week01-course-intro.pdf',
@@ -91,60 +142,153 @@ body{
     }
   };
 
+  var stage = document.getElementById('stage');
+  var pagesEl = document.getElementById('pages');
+  var loadingEl = document.getElementById('loading');
+  var loadingMsg = document.getElementById('loading-msg');
+
   function param(name) {
     var m = new RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
     return m ? decodeURIComponent(m[1].replace(/\+/g, ' ')) : '';
   }
 
-  var stage = document.getElementById('stage');
   var doc = DOCS[param('doc')];
 
   if (!doc) {
     stage.style.background = 'var(--bg)';
-    stage.innerHTML = '<div class="err">요청하신 자료를 찾을 수 없습니다.<br>' +
+    stage.innerHTML = '<div class="err-card">요청하신 자료를 찾을 수 없습니다.<br>' +
       '<a href="machine-learning-week01.html">← 1주차 수업내용으로 돌아가기</a></div>';
     return;
   }
 
+  var fileName = doc.file.split('/').pop();
   document.title = doc.title + ' | 강의자료 뷰어';
   document.getElementById('doc-title').childNodes[0].nodeValue = doc.title;
   document.getElementById('doc-sub').textContent = doc.sub;
   document.getElementById('back').setAttribute('href', doc.back);
 
-  var name = doc.file.split('/').pop();
+  var dlBtn = document.getElementById('dl');
+  dlBtn.href = doc.file;
+  dlBtn.setAttribute('download', fileName);
+  var tabBtn = document.getElementById('newtab');
+  tabBtn.href = doc.file;
 
-  var dl = document.createElement('a');
-  dl.className = 'btn btn-dl';
-  dl.href = doc.file;
-  dl.setAttribute('download', name);
-  dl.textContent = '⬇ 다운로드';
+  function showError(msg) {
+    loadingEl.innerHTML = '<p>' + msg + '</p>' +
+      '<div class="st-btns">' +
+      '<a class="btn btn-dl" href="' + doc.file + '" download="' + fileName + '">⬇ 다운로드</a>' +
+      '<a class="btn btn-gh" href="' + doc.file + '" target="_blank" rel="noopener">새 탭에서 열기 ↗</a>' +
+      '</div>';
+    loadingEl.hidden = false;
+  }
 
-  var tab = document.createElement('a');
-  tab.className = 'btn btn-tab';
-  tab.href = doc.file;
-  tab.target = '_blank';
-  tab.rel = 'noopener';
-  tab.textContent = '새 탭 ↗';
+  if (typeof window.pdfjsLib === 'undefined') {
+    showError('뷰어를 불러오지 못했습니다.<br>새 탭에서 열거나 파일을 내려받아 확인해 주세요.');
+    return;
+  }
 
-  var acts = document.getElementById('acts');
-  acts.appendChild(dl);
-  acts.appendChild(tab);
+  pdfjsLib.GlobalWorkerOptions.workerSrc = '../vendor/pdfjs/build/pdf.worker.min.js';
 
-  // 내장 PDF 뷰어를 지원하지 않는 환경(주로 모바일)을 위한 대체 화면
-  var fb = document.createElement('div');
-  fb.className = 'fallback';
-  fb.innerHTML = '<p>이 브라우저에서는 PDF를 바로 표시할 수 없습니다.<br>' +
-    '새 탭에서 열거나 파일을 내려받아 확인해 주세요.</p>' +
-    '<div class="fb-btns">' +
-    '<a class="btn btn-dl" href="' + doc.file + '" download="' + name + '">⬇ 다운로드</a>' +
-    '<a class="btn btn-tab" href="' + doc.file + '" target="_blank" rel="noopener">새 탭에서 열기 ↗</a>' +
-    '</div>';
-  stage.appendChild(fb);
+  // ---- 확대/축소 ----
+  var ZOOMS = [0.5, 0.75, 1, 1.25, 1.5, 2, 2.5, 3];
+  var zoomIdx = 2;
+  var zoomBox = document.getElementById('zoom');
+  var zoomVal = document.getElementById('zoom-val');
+  var zoomIn = document.getElementById('zoom-in');
+  var zoomOut = document.getElementById('zoom-out');
 
-  var frame = document.createElement('iframe');
-  frame.setAttribute('title', doc.title);
-  frame.setAttribute('src', doc.file + '#view=FitH');
-  stage.appendChild(frame);
+  function applyZoom() {
+    var z = ZOOMS[zoomIdx];
+    zoomVal.textContent = Math.round(z * 100) + '%';
+    zoomOut.disabled = zoomIdx === 0;
+    zoomIn.disabled = zoomIdx === ZOOMS.length - 1;
+    // 기준 폭(=stage 폭)에 배율을 곱해 페이지 컨테이너 폭을 조절합니다.
+    pagesEl.style.width = (baseWidth() * z) + 'px';
+  }
+  function baseWidth() {
+    var pad = window.innerWidth <= 560 ? 12 : 20;
+    return Math.min(stage.clientWidth - pad, 980);
+  }
+  zoomIn.addEventListener('click', function () {
+    if (zoomIdx < ZOOMS.length - 1) { zoomIdx++; applyZoom(); }
+  });
+  zoomOut.addEventListener('click', function () {
+    if (zoomIdx > 0) { zoomIdx--; applyZoom(); }
+  });
+
+  var resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(applyZoom, 150);
+  });
+
+  // ---- 렌더링 ----
+  // 화면 폭에 맞춰 캔버스를 그리되, 선명하도록 devicePixelRatio를 반영합니다.
+  function renderPage(pdf, num, holder) {
+    return pdf.getPage(num).then(function (page) {
+      var base = page.getViewport({ scale: 1 });
+      var targetW = Math.min(baseWidth(), 980);
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var scale = (targetW / base.width) * dpr;
+      var vp = page.getViewport({ scale: scale });
+
+      var canvas = document.createElement('canvas');
+      canvas.width = Math.floor(vp.width);
+      canvas.height = Math.floor(vp.height);
+      holder.style.aspectRatio = '';
+      holder.classList.remove('skel');
+      holder.appendChild(canvas);
+
+      var tag = document.createElement('span');
+      tag.className = 'pno';
+      tag.textContent = num + ' / ' + pdf.numPages;
+      holder.appendChild(tag);
+
+      return page.render({
+        canvasContext: canvas.getContext('2d', { alpha: false }),
+        viewport: vp
+      }).promise;
+    });
+  }
+
+  var task = pdfjsLib.getDocument({
+    url: doc.file,
+    cMapUrl: '../vendor/pdfjs/cmaps/',
+    cMapPacked: true,
+    standardFontDataUrl: '../vendor/pdfjs/standard_fonts/'
+  });
+
+  task.onProgress = function (p) {
+    if (p && p.total) {
+      loadingMsg.textContent = '자료를 불러오는 중입니다… ' +
+        Math.min(100, Math.round((p.loaded / p.total) * 100)) + '%';
+    }
+  };
+
+  task.promise.then(function (pdf) {
+    loadingEl.hidden = true;
+    zoomBox.hidden = false;
+    applyZoom();
+
+    // 페이지 자리를 먼저 만들어 두고 순서대로 채웁니다.
+    var holders = [];
+    for (var i = 1; i <= pdf.numPages; i++) {
+      var h = document.createElement('div');
+      h.className = 'pg skel';
+      pagesEl.appendChild(h);
+      holders.push(h);
+    }
+
+    var chain = Promise.resolve();
+    holders.forEach(function (h, idx) {
+      chain = chain.then(function () { return renderPage(pdf, idx + 1, h); });
+    });
+    return chain;
+  }).catch(function (e) {
+    pagesEl.innerHTML = '';
+    showError('이 브라우저에서 자료를 표시하지 못했습니다.<br>새 탭에서 열거나 파일을 내려받아 확인해 주세요.');
+    if (window.console) { console.error(e); }
+  });
 })();
 </script>
 
