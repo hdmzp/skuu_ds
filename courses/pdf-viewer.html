@@ -127,15 +127,19 @@ body{
   'use strict';
 
   // 열람 가능한 자료는 화이트리스트로만 관리합니다.
+  // file     : 저장소 경로 (폴더=과목명 한글, 파일명=영문)
+  // download : 실제로 내려받을 때 저장될 이름 (한글 그대로)
   var DOCS = {
     'ml-w01-intro': {
-      file: '../materials/machine-learning/ml-week01-course-intro.pdf',
+      file: '../materials/기계학습특론/week01-course-intro.pdf',
+      download: '기계학습특론_1주차_강의소개.pdf',
       title: '기계학습특론 CHAPTER 1 — 강의소개',
       sub: '1주차 · 7페이지',
       back: 'machine-learning-week01.html'
     },
     'ml-w01-genai': {
-      file: '../materials/machine-learning/ml-week01-generative-ai-image.pdf',
+      file: '../materials/기계학습특론/week01-generative-ai-image.pdf',
+      download: '기계학습특론_1주차_생성형AI(이미지)란.pdf',
       title: '생성형 AI(이미지)란?',
       sub: '1주차 참고자료 · 17페이지',
       back: 'machine-learning-week01.html'
@@ -161,23 +165,25 @@ body{
     return;
   }
 
-  var fileName = doc.file.split('/').pop();
+  // 경로에 한글이 포함되므로 요청용 URL은 인코딩해 둔다.
+  var fileUrl = doc.file.split('/').map(encodeURIComponent).join('/');
+  var fileName = doc.download || doc.file.split('/').pop();
   document.title = doc.title + ' | 강의자료 뷰어';
   document.getElementById('doc-title').childNodes[0].nodeValue = doc.title;
   document.getElementById('doc-sub').textContent = doc.sub;
   document.getElementById('back').setAttribute('href', doc.back);
 
   var dlBtn = document.getElementById('dl');
-  dlBtn.href = doc.file;
+  dlBtn.href = fileUrl;
   dlBtn.setAttribute('download', fileName);
   var tabBtn = document.getElementById('newtab');
-  tabBtn.href = doc.file;
+  tabBtn.href = fileUrl;
 
   function showError(msg) {
     loadingEl.innerHTML = '<p>' + msg + '</p>' +
       '<div class="st-btns">' +
-      '<a class="btn btn-dl" href="' + doc.file + '" download="' + fileName + '">⬇ 다운로드</a>' +
-      '<a class="btn btn-gh" href="' + doc.file + '" target="_blank" rel="noopener">새 탭에서 열기 ↗</a>' +
+      '<a class="btn btn-dl" href="' + fileUrl + '" download="' + fileName + '">⬇ 다운로드</a>' +
+      '<a class="btn btn-gh" href="' + fileUrl + '" target="_blank" rel="noopener">새 탭에서 열기 ↗</a>' +
       '</div>';
     loadingEl.hidden = false;
   }
@@ -252,7 +258,7 @@ body{
   }
 
   var task = pdfjsLib.getDocument({
-    url: doc.file,
+    url: fileUrl,
     cMapUrl: '../vendor/pdfjs/cmaps/',
     cMapPacked: true,
     standardFontDataUrl: '../vendor/pdfjs/standard_fonts/'
