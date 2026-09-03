@@ -150,6 +150,33 @@ a.ext:hover{border-bottom-color:var(--accent)}
 }
 .link-list a:hover{background:var(--accent-light)}
 .link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
 .src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
 .top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
 .top-btn:hover{transform:translateY(-3px)}
@@ -166,6 +193,7 @@ a.ext:hover{border-bottom-color:var(--accent)}
   <a href="#history">AI 역사</a>
   <a href="#learn">학습 방법 3가지</a>
   <a href="#pipeline">학습 파이프라인</a>
+  <a href="#docs">강의자료</a>
   <a href="#next">다음 주 예고</a>
   <a href="#ref">참고자료</a>
 </nav>
@@ -532,6 +560,55 @@ AI가 이 세 단계를 거치는 과정에서 <b>단계별로 필요한 기술�
   </tbody>
 </table>
 </div>
+</section>
+
+<!-- ===================== 강의자료 ===================== -->
+<section class="sec" id="docs">
+  <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">1주차 강의자료<small>제목을 누르면 뷰어로 열리고, 오른쪽 버튼으로 내려받을 수 있습니다</small></h2></div>
+
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📕</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=ml-w01-intro">기계학습특론 CHAPTER 1 — 강의소개</a>
+      <p>교과목 개요 · 수업 방식(블렌디드 러닝, FL+실습) · 성적 배분 · 15주차 강의 계획 · 7페이지</p>
+    </div>
+    <a class="doc-dl" href="../materials/machine-learning/ml-week01-course-intro.pdf" download="ml-week01-course-intro.pdf">⬇ 다운로드</a>
+  </div>
+
+  <div class="doc">
+    <div class="doc-ico"><span>📗</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=ml-w01-genai">생성형 AI(이미지)란?</a>
+      <p>판별 모델 vs 생성 모델 · 생성형 AI 정의 · 응용 사례(image-to-image, text-to-image, AI 휴먼, 영상 생성) · 17페이지</p>
+    </div>
+    <a class="doc-dl" href="../materials/machine-learning/ml-week01-generative-ai-image.pdf" download="ml-week01-generative-ai-image.pdf">⬇ 다운로드</a>
+  </div>
+</div>
+
+<div class="note-box"><b>강의소개 자료 요약</b>
+<ul class="ul">
+  <li><b>수업 방식</b> — 블렌디드 러닝(온라인 + 오프라인), FL(플립러닝, 이론) + 실습, 온라인 반 / 오프라인 반 구성</li>
+  <li><b>성적</b> — 출석 10 · 중간시험 30 · 기말시험 30 · 기타 30(프로젝트 수행)
+    <span style="color:#6b7280">※ 1주차 OT에서 안내된 변경 사항(주차별 100문제, 과제 50% 반영 등)과 함께 확인하세요.</span></li>
+  <li><b>주차별 계획</b> — 1 인공지능 기본 개념 / 2 기초 수학 / 3 단순 선형 회귀·손실함수 / 4 로지스틱 / 5 퍼셉트론·논리 게이트 / 6 다층 퍼셉트론 / 7 K-NN / 8 중간고사 / 9 군집화·딥러닝 소개·의사결정트리 / 10 CNN·딥러닝 응용 / 11 이미지 분류 / 12 객체 검출 / 13 시멘틱 분할 / 14 생성 모델 / 15 기말고사</li>
+</ul></div>
+
+<div class="note-box"><b>생성형 AI(이미지) 자료 요약</b>
+<ul class="ul">
+  <li><b>판별 모델(Discriminative)</b> — 주어진 관측 <b>x</b>를 통해 정답 <b>y</b>가 나올 확률을 예측</li>
+  <li><b>생성 모델(Generative)</b> — 관측된 데이터 <b>x</b>를 토대로 확률 분포를 만들고, 그 분포에서 <b>샘플링</b>하여 새로운 것을 만듦</li>
+  <li><b>생성형 AI 정의</b> — 독창적인 콘텐츠를 생성할 수 있는 컴퓨터 모델을 중심으로 하는 인공지능의 한 분야. 대규모 언어 모델·신경망·머신러닝을 활용해 인간의 창의성을 모방한 새로운 콘텐츠를 생산</li>
+  <li><b>응용 사례</b> — image-to-image 변환(캐릭터) · text-to-image 변환(애니메이션 뮤직비디오, 광고/디자인, 개인화, 생성 제어) · AI 휴먼 모델 · Video 생성 제어(댄스/패션) · 영화 영상 생성</li>
+</ul></div>
+
+<div class="tip"><b>자료 속 참고 링크</b> —
+<a class="ext" href="https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/ch01.html" target="_blank" rel="noopener">Generative Deep Learning (O'Reilly) Ch.1</a> ·
+<a class="ext" href="https://arxiv.org/pdf/2302.05543" target="_blank" rel="noopener">ControlNet (arXiv 2302.05543)</a> ·
+<a class="ext" href="https://arxiv.org/pdf/2305.16223" target="_blank" rel="noopener">개인화 T2I (arXiv 2305.16223)</a> ·
+<a class="ext" href="https://showlab.github.io/magicanimate/" target="_blank" rel="noopener">MagicAnimate</a> ·
+<a class="ext" href="https://grail.cs.washington.edu/projects/dreampose/" target="_blank" rel="noopener">DreamPose</a> ·
+<a class="ext" href="https://github.com/justinpinkney/toonify" target="_blank" rel="noopener">Toonify</a></div>
 </section>
 
 <!-- ===================== 다음 주 ===================== -->
