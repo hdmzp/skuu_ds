@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기계학습특론 1주차 | 인공지능 기본 개념 &amp; 오리엔테이션</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#run">수업 운영</a>
+  <a href="#submit">과제·제출</a>
+  <a href="#attend">출석</a>
+  <a href="#exam">시험·평가</a>
+  <a href="#concept">AI 개념</a>
+  <a href="#history">AI 역사</a>
+  <a href="#learn">학습 방법 3가지</a>
+  <a href="#pipeline">학습 파이프라인</a>
+  <a href="#next">다음 주 예고</a>
+  <a href="#ref">참고자료</a>
+</nav>
+
+<div class="wrap">
+
+<a class="backlink" href="machine-learning.html">← 기계학습특론 강의계획서로</a>
+
+<section class="hero">
+  <p class="kicker">1주차 · 9월 3일 · 2026-2학기</p>
+  <h1>인공지능 기본 개념 &amp; 오리엔테이션</h1>
+  <p>AI · 머신러닝 · 딥러닝 · 생성형 AI의 관계를 정리하고, 지도/비지도/강화학습이라는 세 가지 학습 방법과 훈련–검증–테스트 파이프라인의 큰 그림을 잡습니다. 더불어 이번 학기 운영 방식(FL+PBL)과 바뀐 평가 방식을 안내합니다.</p>
+  <div class="chips"><span class="chip">오리엔테이션</span><span class="chip">FL + PBL</span><span class="chip">주차별 100문제</span><span class="chip">매주 캡쳐 2건 제출</span></div>
+</section>
+
+<!-- ===================== 수업 운영 ===================== -->
+<section class="sec" id="run">
+  <div class="sec-head"><span class="sec-badge">OT</span><h2 class="sec-title">수업 운영 방식<small>Flipped Learning + PBL</small></h2></div>
+
+<div class="cards">
+  <div class="card2">
+    <h4>플립러닝 (FL)<em>Flipped Learning</em></h4>
+    <p>온라인 영상을 <b>미리 듣고 오는</b> 방식. 강의실에서는 지식 전달보다 활동 중심으로 진행합니다.</p>
+  </div>
+  <div class="card2">
+    <h4>문제중심학습 (PBL)<em>Problem-Based Learning</em></h4>
+    <p><b>실습 베이스.</b> 교수님이 실습 예시를 올려주시면, 직접 실행한 <b>실행 화면을 캡쳐해서 제출</b>합니다.</p>
+  </div>
+</div>
+
+<h3 class="sub-title">직전 학기와 달라진 점</h3>
+<div class="info">
+  <div class="info-row"><div class="info-key">주차별 100문제<br>과제 신설</div><div class="info-val">온라인 영상 수강과 함께 <b>주차별 100문제 과제</b>가 추가되었습니다. (HTML 형식으로 제공)</div></div>
+  <div class="info-row"><div class="info-key">시험 방식 변경</div><div class="info-val">기존: 중간고사 서술형 / 기말고사 대체과제<br>변경: <b>주차별 100문제를 오프라인 수업 시간에 풀고 가는 방식</b><br><span style="color:#6b7280">시간 내 다 못 풀면 집에서 마저 풀어 제출 가능 · <b>정답률 최소 50% 이상</b> 필요</span></div></div>
+  <div class="info-row"><div class="info-key">제출물 증가</div><div class="info-val">매주 <b>캡쳐 2건</b> 제출 — ① 실습 캡쳐, ② 100문제 푼 증명 캡쳐</div></div>
+</div>
+</section>
+
+<!-- ===================== 과제·제출 ===================== -->
+<section class="sec" id="submit">
+  <div class="sec-head"><span class="sec-badge">HW</span><h2 class="sec-title">과제 &amp; 제출 규칙<small>Weekly Submission</small></h2></div>
+
+<div class="flow">
+  <div class="fl">
+    <div class="fl-n">1</div>
+    <div><h4>매주 실습 캡쳐</h4><p>교수님이 올려주신 실습 예시를 직접 실행하고, 그 <b>실행 화면</b>을 캡쳐합니다.</p></div>
+  </div>
+  <div class="fl">
+    <div class="fl-n">2</div>
+    <div><h4>100문제 푼 증명 캡쳐</h4><p>해당 주차 100문제를 푼 결과 화면을 캡쳐합니다. <b>정답률 50% 이상</b>이어야 인정됩니다.</p></div>
+  </div>
+</div>
+
+<div class="warn"><b>제출 형식 — 꼭 지켜주세요</b><br>
+①과 ②를 <b>각각 캡쳐</b>한 뒤, <b>PDF 등 하나의 파일로 합쳐(압축해서)</b> 제출해 주세요.
+파일이 흩어져 오면 채점이 어려워집니다.</div>
+
+<div class="tip"><b>100문제, 언제 푸는가?</b><br>
+· 원칙은 <b>오프라인 수업 시간에 풀고 가는 것</b>입니다.<br>
+· 시간 내 다 못 풀었다면 집에 가서 마저 풀어 제출해도 됩니다.<br>
+· 미리 풀어와도 무방합니다. (다음 주 예고 참고)<br>
+· <b>노트북을 가져오는 것이 편합니다.</b></div>
+</section>
+
+<!-- ===================== 출석 ===================== -->
+<section class="sec" id="attend">
+  <div class="sec-head"><span class="sec-badge">ATT</span><h2 class="sec-title">출석 기준<small>Attendance</small></h2></div>
+
+<ul class="ul">
+  <li>수업은 <b>대부분 20시(8시) 언저리</b>에 종료 예정 — <b>그 전에만 오면 출석 인정</b>됩니다.</li>
+  <li><b>회사 일로 못 오는 경우</b> → <b>18시(6시) 수업 시작 전에 반드시 메일</b>을 보내야 합니다. <b>증빙 필수.</b></li>
+  <li><b>온라인 영상</b>은 늦게 듣더라도 최대한 인정되도록 도와주실 예정입니다.</li>
+</ul>
+
+<div class="warn"><b>정규 수업 4회 이상 결석 시 F 처리</b></div>
+</section>
+
+<!-- ===================== 시험·평가 ===================== -->
+<section class="sec" id="exam">
+  <div class="sec-head"><span class="sec-badge">EVAL</span><h2 class="sec-title">시험 &amp; 성적<small>Exams &amp; Grading</small></h2></div>
+
+<div class="note-box"><b>문제은행식 출제</b><br>
+주차별로 쌓인 100문제들 중에서 <b>100문제를 뽑아 시험으로 출제</b>합니다.
+즉 시험 하나당 <b>약 800문제 규모의 문제은행</b>에서 출제되는 구조입니다.
+→ <b>주차별 100문제를 성실히 풀어두는 것이 곧 시험 대비</b>입니다.</div>
+
+<ul class="ul">
+  <li>시험은 <b>중간·기말 총 2회</b> 진행하며, <b>기말과제도 그대로 유지</b>됩니다. (과제 점수 <b>50%</b> 반영)</li>
+  <li>시험은 <b>학교 시스템을 통해 온라인</b>으로 응시합니다. (기존 오프라인 대면 → 온라인 전환)</li>
+  <li>사정상 응시하지 못하는 경우 <b>사전에 메일로 연락</b>해야 합니다.</li>
+  <li>성적은 <b>원점수 기반 절대평가</b>로 산출합니다.</li>
+</ul>
+
+<div class="tip"><b>정리하면</b> — 매주 100문제 → 그대로 시험 문제은행 → 중간·기말 각 100문제 출제.
+주차별 과제가 밀리면 시험 대비가 통째로 밀립니다.</div>
+</section>
+
+<!-- ===================== AI 개념 ===================== -->
+<section class="sec" id="concept">
+  <div class="sec-head"><span class="sec-badge">01</span><h2 class="sec-title">AI · ML · DL · 생성형 AI<small>포함 관계로 이해하기</small></h2></div>
+
+<div class="nest">
+  <div class="nest-l">
+    <b>AI — 인공지능 (Artificial Intelligence)</b>
+    <p style="font-size:12.5px;color:#4b5563;margin-bottom:10px">사람처럼 생각하고 판단하도록 만드는 것. 가장 넓은 개념.</p>
+    <div class="nest-l l2">
+      <b>ML — 머신러닝 / 기계학습 (Machine Learning)</b>
+      <p style="font-size:12.5px;color:#4b5563;margin-bottom:10px">규칙을 사람이 짜 넣는 대신, <b>데이터를 기반으로 의사결정</b>하도록 돕는 방식.</p>
+      <div class="nest-l l3">
+        <b>DL — 딥러닝 (Deep Learning)</b>
+        <p style="font-size:12.5px;color:#4b5563;margin-bottom:10px">머릿속 뇌세포 구조를 본뜬 <b>신경망(Neural Network)</b>을 깊게 쌓아 학습하는 방식.</p>
+        <div class="nest-l l4">
+          <b>생성형 AI (Generative AI)</b>
+          <p>글·그림·코드처럼 <b>새로운 것을 만들어내는</b> AI.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tip"><b>수업 중 화두</b> — 생성형 AI보다 더 미세한 범위에서 <b>무엇이 탄생할지 정의하고 고민하는 것</b>,
+그것이 대학원생의 과제가 아닐까?</div>
+
+<h3 class="sub-title">AI를 떠받치는 세 가지 요소</h3>
+<div class="cards">
+  <div class="card2"><h4>계산<em>Computation</em></h4><p>GPU 등 연산 자원. 알고리즘을 실제로 돌릴 수 있게 하는 힘.</p></div>
+  <div class="card2"><h4>AI<em>Algorithm / Model</em></h4><p>퍼셉트론 → 신경망 → 트랜스포머로 이어지는 알고리즘·모델.</p></div>
+  <div class="card2"><h4>데이터<em>Data</em></h4><p>학습의 재료. ImageNet 같은 대규모 데이터셋이 판을 바꿨습니다.</p></div>
+</div>
+
+<h3 class="sub-title">이번 학기 실습 목표 예시</h3>
+<div class="good"><b>“AI로 남자 / 여자 사진을 분류하는 것을 만들어보자”</b><br>
+지도학습 · 이진 분류 문제로, 이번 수업 전체를 관통하는 예시로 계속 등장합니다.</div>
+</section>
+
+<!-- ===================== AI 역사 ===================== -->
+<section class="sec" id="history">
+  <div class="sec-head"><span class="sec-badge">02</span><h2 class="sec-title">연도별 대표 흐름<small>1950s → 2020s · 두 번의 AI 겨울과 두 번의 부활</small></h2></div>
+
+<div class="tl">
+
+  <div class="tlx">
+    <div class="tl-era"><b>1950s</b></div>
+    <div class="tl-body">
+      <h4>퍼셉트론(Perceptron)의 등장</h4>
+      <p class="tl-who">프랭크 로젠블랫 (Frank Rosenblatt), 1957</p>
+      <ul class="ul">
+        <li>초기 신경망인 <b>단층 퍼셉트론</b>이 발표되며 큰 기대를 모음. 신경망 연구의 출발점.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tlx cold">
+    <div class="tl-era"><b>1960s</b></div>
+    <div class="tl-body">
+      <h4>제1차 AI 겨울의 시작</h4>
+      <p class="tl-who">마빈 민스키 (Marvin Minsky), 시모어 페퍼트 (Seymour Papert)</p>
+      <ul class="ul">
+        <li>1969년 저서 《<a class="ext" href="https://en.wikipedia.org/wiki/Perceptrons_(book)" target="_blank" rel="noopener">Perceptrons</a>》에서 <b>단층 퍼셉트론으로는 XOR 문제조차 풀 수 없음</b>을 수학적으로 증명.</li>
+        <li>XOR = 두 입력이 <b>다르면 1, 같으면 0</b>. 직선 하나로 나눌 수 없는 문제.</li>
+        <li>AI 붐이 꺼지고 연구비가 끊기는 <b>제1차 AI 겨울</b> 돌입.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tlx">
+    <div class="tl-era"><b>1970s</b></div>
+    <div class="tl-body">
+      <h4>전문가 시스템과 지식 기반 AI</h4>
+      <p class="tl-who">에드워드 파이겐바움 (Edward Feigenbaum)</p>
+      <ul class="ul">
+        <li>신경망은 얼어붙었지만, 인간 전문가의 지식을 <b>IF-THEN 규칙</b>으로 코딩하는 <b>전문가 시스템</b>이 등장.</li>
+        <li>의료 진단 프로그램 <a class="ext" href="https://en.wikipedia.org/wiki/Mycin" target="_blank" rel="noopener">MYCIN</a> 등이 주목받음.</li>
+        <li>한계: 사람이 규칙을 <b>일일이 수작업으로 입력</b>해야 해 복잡한 현실 문제에는 적용이 어려움.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tlx cold">
+    <div class="tl-era"><b>1980s</b></div>
+    <div class="tl-body">
+      <h4>역전파의 부활, 그리고 제2차 AI 겨울</h4>
+      <p class="tl-who">제프리 힌턴 (Geoffrey Hinton), 얀 르쿤 (Yann LeCun)</p>
+      <ul class="ul">
+        <li>1986년 힌턴 등이 <b><a class="ext" href="https://www.nature.com/articles/323533a0" target="_blank" rel="noopener">역전파(Backpropagation)</a></b> 알고리즘을 대중화. 층을 여러 개 쌓은 <b>다층 퍼셉트론(MLP)</b>으로 1960년대의 XOR 문제를 완벽히 해결.</li>
+        <li>1989년 얀 르쿤이 CNN의 시초인 <b><a class="ext" href="http://yann.lecun.com/exdb/lenet/" target="_blank" rel="noopener">LeNet</a></b>을 발표해 우편번호 손글씨 인식에 성공.</li>
+        <li>그러나 연산 속도가 너무 느렸고, 층이 깊어지면 학습이 되지 않는 <b>기울기 소실(Vanishing Gradient)</b> 문제로 <b>제2차 AI 겨울</b>을 맞이함.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tlx">
+    <div class="tl-era"><b>1990s</b></div>
+    <div class="tl-body">
+      <h4>통계 기반 머신러닝의 전성기</h4>
+      <p class="tl-who">블라디미르 바프닉 (Vladimir Vapnik)</p>
+      <ul class="ul">
+        <li>신경망이 겨울을 겪는 동안, 수학적 기반이 탄탄한 <b>통계 기반 ML</b>이 판을 지배.</li>
+        <li><b><a class="ext" href="https://scikit-learn.org/stable/modules/svm.html" target="_blank" rel="noopener">SVM(서포트 벡터 머신)</a></b>, 결정 트리, <b>랜덤 포레스트</b> 등이 등장.</li>
+        <li>1997년 IBM <b><a class="ext" href="https://en.wikipedia.org/wiki/Deep_Blue_(chess_computer)" target="_blank" rel="noopener">딥블루</a></b>가 체스 챔피언 가리 카스파로프를 꺾음. <span style="color:#6b7280">(단, 딥러닝이 아니라 <b>탐색 알고리즘</b> 기반)</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tlx">
+    <div class="tl-era"><b>2000s</b></div>
+    <div class="tl-body">
+      <h4>‘딥러닝’ 용어 정립과 암흑기 탈출</h4>
+      <p class="tl-who">제프리 힌턴 (Geoffrey Hinton), 페이페이 리 (Fei-Fei Li)</p>
+      <ul class="ul">
+        <li>2006년 힌턴 교수가 깊은 신경망도 효율적으로 사전 학습시킬 수 있음을 입증하며 <b>‘딥러닝(Deep Learning)’</b> 용어를 사실상 부활·정립. <span style="color:#6b7280">— 딥러닝의 대부</span></li>
+        <li>2009년 페이페이 리 교수가 1,400만 장 이상의 대규모 이미지 데이터셋 <b><a class="ext" href="https://www.image-net.org/" target="_blank" rel="noopener">ImageNet</a></b>을 구축. 딥러닝 폭발을 위한 <b>‘Data’ 판</b>을 깔아둠.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tlx">
+    <div class="tl-era"><b>2010s</b></div>
+    <div class="tl-body">
+      <h4>빅데이터 · GPU와 함께 폭발한 딥러닝</h4>
+      <p class="tl-who">알렉스 크리제프스키, 데미스 허사비스, 바스바니 외(Google)</p>
+      <ul class="ul">
+        <li><b>2012 · <a class="ext" href="https://papers.nips.cc/paper_files/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html" target="_blank" rel="noopener">AlexNet</a></b> — 힌턴 랩의 알렉스가 GPU로 학습한 CNN으로 ImageNet 대회 압도적 우승. 전 세계가 딥러닝으로 일제히 전환.</li>
+        <li><b>2016 · <a class="ext" href="https://deepmind.google/research/breakthroughs/alphago/" target="_blank" rel="noopener">알파고(AlphaGo)</a></b> — 딥마인드의 허사비스가 <b>딥러닝 + 강화학습</b>을 결합해 이세돌 9단을 꺾음.</li>
+        <li><b>2017 · <a class="ext" href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">트랜스포머(Transformer)</a></b> — 구글의 &lsquo;Attention Is All You Need&rsquo; 논문. <b>현재 모든 LLM과 생성형 AI의 뼈대</b>가 됨.</li>
+        <li><b>2018 · <a class="ext" href="https://amturing.acm.org/" target="_blank" rel="noopener">튜링상</a></b> — 제프리 힌턴, 얀 르쿤, 요슈아 벤지오 3인이 컴퓨터 과학의 노벨상을 수상.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tlx">
+    <div class="tl-era"><b>2020s</b></div>
+    <div class="tl-body">
+      <h4>생성형 AI 시대와 피지컬 AI</h4>
+      <p class="tl-who">샘 올트먼 (OpenAI), 젠슨 황 (NVIDIA)</p>
+      <ul class="ul">
+        <li><b>2022년 말 ChatGPT(GPT-3.5/4) 등장</b> — 분류·예측만 하던 AI에서 <b>글·그림·코드를 직접 만드는</b> 초거대 생성형 AI 시대로 패러다임 전환.</li>
+        <li><b>파운데이션 모델</b> 경쟁 가속화.</li>
+        <li><b>피지컬 AI (Physical AI)</b> — 뇌(LLM/VLA)를 로봇·자율주행 등 <b>현실 물리 세계의 몸체</b>에 탑재하는 흐름이 핵심 트렌드로 급부상.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ===================== 학습 방법 ===================== -->
+<section class="sec" id="learn">
+  <div class="sec-head"><span class="sec-badge">03</span><h2 class="sec-title">학습 방법 3가지<small>지도 · 비지도 · 강화학습</small></h2></div>
+
+<div class="good"><b>가장 큰 차이는 &lsquo;정답(Label)의 유무&rsquo;</b> — 정답지가 있으면 지도학습, 없으면 비지도학습,
+정답 대신 <b>보상(Reward)</b>이 있으면 강화학습입니다.</div>
+
+<h3 class="sub-title">1. 지도학습 (Supervised Learning)</h3>
+<div class="note-box">
+<b>핵심 개념</b> — 문제집을 풀 때 뒤에 <b>정답지(Label / Target)</b>가 같이 붙어 있는 방식.<br>
+<b>입력과 출력</b> — 데이터(X, Feature)와 정답(Y, Label)이 <b>짝을 이룸</b>. 분류할 대상인 데이터와, 정답이라 표현할 수 있는 것이 <b>둘 다</b> 있어야 합니다.
+<ul class="ul">
+  <li><b>분류 (Classification)</b> — 범주를 나누는 것<br>
+    · <b>이진 분류</b>: 사진을 보고 남(0) vs 여(1) 구분, 스팸 메일 여부 판별<br>
+    · <b>다중 분류</b>: 손글씨 숫자(0~9) 맞히기, 개/고양이/호랑이 사진 분류</li>
+  <li><b>회귀 (Regression)</b> — 연속적인 실수 값을 맞히는 것<br>
+    · 평수·역세권 기반 아파트 가격 예측, 내일 기온 예측, 다음 달 매출 예측</li>
+  <li><b>주요 알고리즘</b> — 로지스틱 회귀, SVM, 랜덤 포레스트, XGBoost, 신경망(MLP/CNN 등)</li>
+</ul>
+</div>
+
+<h3 class="sub-title">2. 비지도학습 (Unsupervised Learning)</h3>
+<div class="note-box">
+<b>핵심 개념</b> — 정답지(Label)가 전혀 없는 문제집. AI가 데이터 자체의 <b>숨겨진 패턴·구조·유사도</b>를 스스로 파악.<br>
+<b>입력과 출력</b> — 데이터(X)만 주어지고 <b>Y는 없음</b>.
+<ul class="ul">
+  <li><b>군집화 (Clustering)</b> — 정답 없이 비슷한 데이터끼리 묶기<br>
+    · 구매 패턴 기반 고객 세분화(VIP군, 알뜰형군 등)<br>
+    · 알고리즘: <a class="ext" href="https://scikit-learn.org/stable/modules/clustering.html#k-means" target="_blank" rel="noopener">K-Means</a>, <a class="ext" href="https://scikit-learn.org/stable/modules/clustering.html#dbscan" target="_blank" rel="noopener">DBSCAN</a></li>
+  <li><b>차원 축소 (Dimensionality Reduction)</b> — 핵심 특징만 남기고 변수 개수를 줄여 시각화하거나 계산량 절감<br>
+    · 알고리즘: <a class="ext" href="https://scikit-learn.org/stable/modules/decomposition.html#pca" target="_blank" rel="noopener">PCA</a>, <a class="ext" href="https://scikit-learn.org/stable/modules/manifold.html#t-sne" target="_blank" rel="noopener">t-SNE</a>, <a class="ext" href="https://umap-learn.readthedocs.io/" target="_blank" rel="noopener">UMAP</a></li>
+  <li><b>이상 탐지 (Anomaly Detection)</b> — 평소 패턴과 현저히 다른 값 찾기<br>
+    · 신용카드 부정 결제(FDS) 감지, 공장 설비 이상 진단</li>
+</ul>
+</div>
+
+<h3 class="sub-title">3. 강화학습 (Reinforcement Learning)</h3>
+<div class="note-box">
+<b>핵심 개념</b> — 문제집도 정답지도 없음. <b>에이전트</b>가 환경에 부딪혀 보며 <b>시행착오(Trial &amp; Error)</b>를 통해
+<b>보상(Reward)</b>을 가장 많이 얻는 최적의 행동 방식을 터득.<br>
+<span style="color:#6b7280">수업 예시 — 슈퍼마리오라는 <b>에이전트</b>가 게임이라는 <b>환경</b> 안에서 움직임에 따라 점수를 얻는 것.</span>
+<ul class="ul">
+  <li><b>상태 (State)</b> — 현재 상황 (예: 마리오의 위치, 눈앞의 쿠파와 장애물)</li>
+  <li><b>행동 (Action)</b> — 에이전트가 취할 움직임 (예: 오른쪽 점프, 대시)</li>
+  <li><b>보상 (Reward)</b> — 행동의 결과 피드백 (예: 코인 +10점, 낙사/피격 −100점)</li>
+  <li><b>정책 (Policy)</b> — 어떤 상태에서 어떤 행동을 할지 결정하는 룰북 <span style="color:#6b7280">(목표: 누적 보상 극대화)</span></li>
+</ul>
+<b style="display:block;margin-top:10px">적용 분야</b>
+<ul class="ul">
+  <li>알파고(바둑 승패 피드백), 자율주행 경로 제어, 게임 AI(스타크래프트 등)</li>
+  <li><b>최근 트렌드</b> — <b>피지컬 AI 및 로보틱스</b>(로봇 팔 집기 훈련, 4족 보행 로봇 균형 잡기), LLM의 인간 피드백 기반 강화학습(<b>RLHF</b>)</li>
+</ul>
+</div>
+
+<h3 class="sub-title">한눈에 보는 비교</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>구분</th><th>지도학습</th><th>비지도학습</th><th>강화학습</th></tr></thead>
+  <tbody>
+    <tr><td>학습 데이터</td><td>데이터(X) + 정답(Y)</td><td>데이터(X)만 존재<br>(정답 없음)</td><td>정답 대신<br>환경과 보상(Reward)</td></tr>
+    <tr><td>핵심 목표</td><td>입력값에 대한<br>정답(값/클래스) 맞히기</td><td>데이터 안의<br>숨은 규칙·구조 발견</td><td>보상을 최대로 얻는<br>최적 행동 학습</td></tr>
+    <tr><td>대표 예시</td><td>성별 분류, 집값 예측</td><td>고객 군집화, 차원 축소</td><td>슈퍼마리오 클리어,<br>알파고, 로봇 보행</td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
+<!-- ===================== 파이프라인 ===================== -->
+<section class="sec" id="pipeline">
+  <div class="sec-head"><span class="sec-badge">04</span><h2 class="sec-title">학습 파이프라인과 성능 평가<small>Train · Validation · Test</small></h2></div>
+
+<p style="font-size:13.5px;color:#2d3748;line-height:1.8;margin-bottom:6px">
+&ldquo;지도학습 방법을 통해 AI를 공부시키고 싶다&rdquo; — 그러면 데이터를 <b>훈련 / 검증 / 테스트</b> 세 가지로 쪼개는 것부터 시작합니다.</p>
+
+<div class="flow">
+  <div class="fl">
+    <div class="fl-n">1</div>
+    <div><h4>훈련 데이터 (Training Data)</h4>
+      <p>모델의 <b>가중치(파라미터)를 직접 업데이트</b>하며 공부하는 <b>문제집</b>. AI·알고리즘을 학습시킬 때 필요한 데이터입니다.</p></div>
+  </div>
+  <div class="fl">
+    <div class="fl-n">2</div>
+    <div><h4>검증 데이터 (Validation Data)</h4>
+      <p>모델을 직접 학습시키는 게 아니라, <b>공부가 잘되고 있는지 중간 점검(모의고사)</b>하고 <b>하이퍼파라미터를 튜닝</b>할 때 쓰는 데이터입니다.</p></div>
+  </div>
+  <div class="fl">
+    <div class="fl-n">3</div>
+    <div><h4>테스트 데이터 (Test Data)</h4>
+      <p>훈련·검증에 <b>전혀 쓰지 않은 완전히 새로운</b> 실전 수능 시험지. 최종 성능은 여기서 측정합니다.</p></div>
+  </div>
+</div>
+
+<div class="tip"><b>흐름</b> — 훈련 데이터로 학습 → 산출물(모델·파라미터)이 나옴 → 검증 데이터로 중간 점검·튜닝 →
+훈련·검증에 쓰이지 않은 <b>새로운 테스트 데이터</b>로 최종 평가.<br>
+AI가 이 세 단계를 거치는 과정에서 <b>단계별로 필요한 기술들</b>을 이번 학기에 하나씩 배우게 됩니다.</div>
+
+<h3 class="sub-title">성능 평가 (Evaluation)</h3>
+<ul class="ul">
+  <li>알고리즘은 <b>무조건 성능평가가 필요</b>합니다.</li>
+  <li>수행하는 <b>task에 따라 입력 → 산출</b>이 정해집니다. <span style="color:#6b7280">예) 남자·여자 사진 → 성별 분류</span></li>
+  <li><b>분류냐 예측(회귀)이냐</b>에 따라 사용하는 <b>평가지표가 달라집니다.</b> 여러 지표로 태스크를 수행하면 <b>데이터별로 성능</b>이 나옵니다.</li>
+</ul>
+
+<h3 class="sub-title">과적합(Overfitting) 팩트체크</h3>
+<div class="warn"><b>주의 — 수업 중 짚은 부분을 바로잡습니다</b><br>
+정상적인 경우, 모델이 달달 외운 <b>훈련 데이터 성능이 테스트 데이터 성능보다 높은 것이 일반적</b>입니다.
+(테스트 성능이 가장 좋게 나오는 것이 정상이 아닙니다.)<br><br>
+문제가 되는 것은 <b>격차</b>입니다. 훈련 데이터 성능은 비정상적으로 <b>99%</b>인데
+테스트 성능이 <b>50%</b>로 곤두박질친다면 → 훈련 데이터에만 갇혀버린 <b>과적합(Overfitting)</b>입니다.</div>
+
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>구분</th><th>훈련 성능</th><th>테스트 성능</th><th>진단</th></tr></thead>
+  <tbody>
+    <tr><td>정상</td><td>92%</td><td>88%</td><td>훈련이 조금 더 높음 — 자연스러운 상태</td></tr>
+    <tr><td>과적합</td><td>99%</td><td>50%</td><td>훈련 데이터만 외움 — 일반화 실패</td></tr>
+    <tr><td>과소적합</td><td>55%</td><td>53%</td><td>둘 다 낮음 — 모델이 문제를 못 배움</td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
+<!-- ===================== 다음 주 ===================== -->
+<section class="sec" id="next">
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>2주차 준비</small></h2></div>
+<div class="good">
+· <b>2주차 100문제를 미리 풀어와도 됩니다.</b> 풀어오고 체크하면 바로 보내주십니다.<br>
+· 안 풀어왔다면 <b>대면 수업에서 남아 풀어도</b> 됩니다.<br>
+· <b>노트북을 가져오는 것이 편합니다.</b> 집에서 풀어와도 상관 없습니다.
+</div>
+<div class="note-box"><b>2주차 예정 내용</b> — 인공지능 기초 수학, 파이썬 라이브러리 활용 방법
+<span style="color:#6b7280">(기초 수학 개념 · Python 라이브러리 활용)</span></div>
+</section>
+
+<!-- ===================== 참고자료 ===================== -->
+<section class="sec" id="ref">
+  <div class="sec-head"><span class="sec-badge">REF</span><h2 class="sec-title">참고자료<small>References &amp; Links</small></h2></div>
+
+<h3 class="sub-title">실습 환경</h3>
+<div class="link-list">
+  <a href="https://colab.research.google.com/" target="_blank" rel="noopener">Google Colaboratory ↗<small>설치 없이 브라우저에서 Python·딥러닝 실습 (무료 GPU)</small></a>
+  <a href="https://scikit-learn.org/stable/user_guide.html" target="_blank" rel="noopener">scikit-learn User Guide ↗<small>지도/비지도학습 알고리즘 공식 문서 — SVM, K-Means, PCA 등</small></a>
+  <a href="https://pytorch.org/tutorials/" target="_blank" rel="noopener">PyTorch Tutorials ↗<small>딥러닝 프레임워크 공식 튜토리얼</small></a>
+  <a href="https://gymnasium.farama.org/" target="_blank" rel="noopener">Gymnasium ↗<small>강화학습 표준 환경 라이브러리 (구 OpenAI Gym)</small></a>
+</div>
+
+<h3 class="sub-title">역사 속 주요 논문 · 자료</h3>
+<div class="link-list">
+  <a href="https://www.nature.com/articles/323533a0" target="_blank" rel="noopener">Learning representations by back-propagating errors (1986) ↗<small>Rumelhart, Hinton, Williams — 역전파 알고리즘</small></a>
+  <a href="http://yann.lecun.com/exdb/lenet/" target="_blank" rel="noopener">LeNet (1989~) ↗<small>Yann LeCun — CNN의 시초, 손글씨 인식</small></a>
+  <a href="https://www.image-net.org/" target="_blank" rel="noopener">ImageNet ↗<small>Fei-Fei Li — 1,400만 장 규모 이미지 데이터셋</small></a>
+  <a href="https://papers.nips.cc/paper_files/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html" target="_blank" rel="noopener">ImageNet Classification with Deep CNNs (2012) ↗<small>AlexNet — 딥러닝 대전환의 기점</small></a>
+  <a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Attention Is All You Need (2017) ↗<small>Transformer — 현재 모든 LLM·생성형 AI의 뼈대</small></a>
+  <a href="https://deepmind.google/research/breakthroughs/alphago/" target="_blank" rel="noopener">AlphaGo ↗<small>DeepMind — 딥러닝 + 강화학습</small></a>
+  <a href="https://amturing.acm.org/" target="_blank" rel="noopener">ACM A.M. Turing Award ↗<small>2018년 힌턴·르쿤·벤지오 공동 수상</small></a>
+</div>
+</section>
+
+<p class="src">기계학습특론 1주차 (9/3) 오리엔테이션 및 강의 내용 정리 · 2026학년도 2학기<br>
+수업 필기를 기반으로 재구성했으며, 개념 보강 내용이 함께 포함되어 있습니다.</p>
+
+</div>
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive(){
+    var cur = '';
+    sections.forEach(function(s){ if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function(t){ t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      setTimeout(function(){
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+});
+</script>
+
+</body>
+</html>
