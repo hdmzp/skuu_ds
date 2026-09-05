@@ -192,6 +192,16 @@ header.top{
   font-size:.78rem;font-weight:500;color:var(--lime);
   border:1px solid rgba(201,242,75,.35);border-radius:999px;
   padding:4px 12px;background:rgba(201,242,75,.08);
+  font-family:inherit;line-height:1.65;cursor:pointer;
+  transition:background .15s,border-color .15s,transform .15s;
+}
+button.chip:hover{background:rgba(201,242,75,.2);border-color:rgba(201,242,75,.7);transform:translateY(-1px)}
+button.chip:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+.card.subject.flash{animation:cardflash 1.4s ease}
+@keyframes cardflash{
+  0%{box-shadow:0 0 0 0 rgba(201,242,75,.85)}
+  30%{box-shadow:0 0 0 6px rgba(201,242,75,.35)}
+  100%{box-shadow:var(--shadow)}
 }
 .hero::after{
   content:"";position:absolute;top:-45%;right:-10%;width:20rem;height:20rem;
@@ -436,29 +446,23 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
     데이터분석언어
   </button>
 
-  <p class="d-label">2026-2학기 과목 <span style="font-weight:500;letter-spacing:0;text-transform:none">(계획서)</span></p>
-  <button class="d-item open-btn" type="button"
-    data-src="courses/data-structures.html"
-    data-title="자료구조/알고리즘 — 수업계획서">
-    <span class="d-num" aria-hidden="true">01</span>
-    자료구조/알고리즘
-  </button>
+  <p class="d-label">2026-2학기 과목 <span style="font-weight:500;letter-spacing:0;text-transform:none">(강의계획서)</span></p>
   <button class="d-item open-btn" type="button"
     data-src="courses/computer-vision.html"
     data-title="컴퓨터비전 — 강의계획서">
-    <span class="d-num" aria-hidden="true">02</span>
+    <span class="d-num" aria-hidden="true">01</span>
     컴퓨터비전
   </button>
   <button class="d-item open-btn" type="button"
     data-src="courses/machine-learning.html"
     data-title="기계학습특론 — 강의계획서">
-    <span class="d-num" aria-hidden="true">03</span>
+    <span class="d-num" aria-hidden="true">02</span>
     기계학습특론
   </button>
   <button class="d-item open-btn" type="button"
     data-src="courses/nlp.html"
-    data-title="자연어처리 — 1주차 수업내용">
-    <span class="d-num" aria-hidden="true">04</span>
+    data-title="자연어처리 — 강의계획서">
+    <span class="d-num" aria-hidden="true">03</span>
     자연어처리
   </button>
 
@@ -480,12 +484,12 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
   <main class="bento">
     <!-- hero -->
     <section class="card hero" aria-labelledby="hero-title">
-      <h2 id="hero-title"><b>2026학년도 2학기</b> 수강 예정 과목</h2>
-      <p id="hero-desc">개강 전 미리 등록한 과목입니다. 현재는 강의계획서·수업계획서를 정리해 두었고, 학기가 시작되면 요점정리를 추가합니다.</p>
-      <div class="chips" id="hero-chips" aria-hidden="true">
-        <span class="chip">자료구조 · 알고리즘</span>
-        <span class="chip">컴퓨터비전</span>
-        <span class="chip">기계학습 · 딥러닝</span>
+      <h2 id="hero-title"><b>2026학년도 2학기</b> 수강 과목</h2>
+      <p id="hero-desc">2학기가 개강했습니다. 강의계획서와 함께 주차별 수업내용·교안을 이어서 정리하고 있습니다.</p>
+      <div class="chips" id="hero-chips">
+        <button class="chip" type="button" data-goto="#subj-cv">컴퓨터비전</button>
+        <button class="chip" type="button" data-goto="#subj-ml">기계학습 · 딥러닝</button>
+        <button class="chip" type="button" data-goto="#subj-nlp">자연어처리</button>
       </div>
     </section>
 
@@ -509,7 +513,7 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
     <!-- subjects: display:contents so the articles participate in the bento grid -->
     <section id="subjects" role="tabpanel" aria-labelledby="tab-2026-1" style="display:none">
 
-    <article class="card subject">
+    <article class="card subject" id="subj-math">
       <span class="tag">전공</span>
       <div class="icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="#c9f24b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -531,7 +535,7 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
       </div>
     </article>
 
-    <article class="card subject">
+    <article class="card subject" id="subj-stat">
       <span class="tag">전공</span>
       <div class="icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="#c9f24b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -547,7 +551,7 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
       </button>
     </article>
 
-    <article class="card subject">
+    <article class="card subject" id="subj-thesis">
       <span class="tag">공통</span>
       <div class="icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="#c9f24b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -564,7 +568,7 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
       </button>
     </article>
 
-    <article class="card subject">
+    <article class="card subject" id="subj-dal">
       <span class="tag">전공</span>
       <div class="icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="#c9f24b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -582,27 +586,10 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
 
     </section>
 
-    <!-- subjects: 2026-2학기 (강의계획서 · 미리 등록) -->
+    <!-- subjects: 2026-2학기 (개강 · 강의계획서 + 주차별 수업내용) -->
     <section id="subjects-2" role="tabpanel" aria-labelledby="tab-2026-2" style="display:contents">
 
-    <article class="card subject">
-      <span class="tag">전공</span>
-      <div class="icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#c9f24b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 3v4"/><path d="M6 21v-4"/><path d="M18 21v-4"/><path d="M6 17h12"/><path d="M12 7v10"/>
-          <circle cx="12" cy="4" r="1.6"/><circle cx="6" cy="19" r="1.6"/><circle cx="18" cy="19" r="1.6"/>
-        </svg>
-      </div>
-      <h3>자료구조/알고리즘</h3>
-      <p>연결 리스트·스택·큐·트리·해시·그래프와 정렬/탐색 알고리즘을 Python으로 구현. (수업계획서)</p>
-      <button class="open-btn" type="button"
-        data-src="courses/data-structures.html"
-        data-title="자료구조/알고리즘 — 수업계획서">
-        수업계획서 열기<span class="visually-hidden"> (팝업)</span>
-      </button>
-    </article>
-
-    <article class="card subject">
+    <article class="card subject" id="subj-cv">
       <span class="tag">전공</span>
       <div class="icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="#c9f24b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -618,7 +605,7 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
       </button>
     </article>
 
-    <article class="card subject">
+    <article class="card subject" id="subj-ml">
       <span class="tag">전공</span>
       <div class="icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="#c9f24b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -636,7 +623,7 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
       </button>
     </article>
 
-    <article class="card subject">
+    <article class="card subject" id="subj-nlp">
       <span class="tag">전공</span>
       <div class="icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="#c9f24b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -645,11 +632,11 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
         </svg>
       </div>
       <h3>자연어처리</h3>
-      <p>자연어처리의 정의와 역사(규칙→통계→신경망→LLM), 어려운 이유와 주요 응용 분야. (월요일) <b style="color:#b91c1c">1주차 교안 반영</b></p>
+      <p>텍스트 처리 단계·단어 표현·분류/요약/생성부터 딥러닝 기반 번역·질의응답·챗봇까지. (최승호 · FL+PBL) <b style="color:#b91c1c">1주차 교안 반영</b></p>
       <button class="open-btn" type="button"
         data-src="courses/nlp.html"
-        data-title="자연어처리 — 1주차 수업내용">
-        1주차 수업내용 열기<span class="visually-hidden"> (팝업)</span>
+        data-title="자연어처리 — 강의계획서">
+        강의계획서 열기<span class="visually-hidden"> (팝업)</span>
       </button>
     </article>
 
@@ -660,7 +647,7 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
       <div class="stat"><b id="stat-count">3<span class="u">과목</span></b><span>수강 과목</span></div>
       <div class="stat"><b>2<span class="u">학기</span></b><span>진행 학기</span></div>
       <div class="stat"><b id="stat-sem">2026-2</b><span>선택 학기</span></div>
-      <p class="note" id="stat-note">아직 개강 전이라 계획서(주차별 수업내용·평가)만 정리되어 있습니다. 팝업은 <kbd>Esc</kbd> 키로 닫을 수 있습니다.</p>
+      <p class="note" id="stat-note">개강 이후 주차별 수업내용과 교안(PDF 뷰어·다운로드, 100문제)을 주차마다 추가하고 있습니다. 팝업은 <kbd>Esc</kbd> 키로 닫을 수 있습니다.</p>
     </section>
   </main>
 
@@ -743,18 +730,27 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
       tab: 'tab-2026-1',
       title: '<b>2026학년도 1학기</b> 수강 과목',
       desc: '이번 학기에는 네 과목을 수강했습니다. 아래 과목 카드를 선택하면 요점정리 문서가 팝업으로 열립니다.',
-      chips: ['수학 · 선형대수','통계 · 추론','연구윤리 · 논문','데이터분석 · 프로그래밍'],
+      chips: [
+        { label: '수학 · 선형대수', goto: '#subj-math' },
+        { label: '통계 · 추론', goto: '#subj-stat' },
+        { label: '연구윤리 · 논문', goto: '#subj-thesis' },
+        { label: '데이터분석 · 프로그래밍', goto: '#subj-dal' }
+      ],
       count: 4,
       note: '과목 카드를 클릭하면 요점정리가 팝업으로 열립니다. 팝업은 <kbd>Esc</kbd> 키로 닫을 수 있습니다.'
     },
     '2026-2': {
       panel: 'subjects-2',
       tab: 'tab-2026-2',
-      title: '<b>2026학년도 2학기</b> 수강 예정 과목',
-      desc: '개강 전 미리 등록한 과목입니다. 현재는 강의계획서·수업계획서를 정리해 두었고, 학기가 시작되면 요점정리를 추가합니다.',
-      chips: ['자료구조 · 알고리즘','컴퓨터비전','기계학습 · 딥러닝','자연어처리'],
-      count: 4,
-      note: '아직 개강 전이라 계획서(주차별 수업내용·평가)만 정리되어 있습니다. 팝업은 <kbd>Esc</kbd> 키로 닫을 수 있습니다.'
+      title: '<b>2026학년도 2학기</b> 수강 과목',
+      desc: '2학기가 개강했습니다. 강의계획서와 함께 주차별 수업내용·교안을 이어서 정리하고 있습니다.',
+      chips: [
+        { label: '컴퓨터비전', goto: '#subj-cv' },
+        { label: '기계학습 · 딥러닝', goto: '#subj-ml' },
+        { label: '자연어처리', goto: '#subj-nlp' }
+      ],
+      count: 3,
+      note: '개강 이후 주차별 수업내용과 교안(PDF 뷰어·다운로드, 100문제)을 주차마다 추가하고 있습니다. 팝업은 <kbd>Esc</kbd> 키로 닫을 수 있습니다.'
     }
   };
 
@@ -785,7 +781,7 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
     if(heroTitle) heroTitle.innerHTML = conf.title;
     if(heroDesc)  heroDesc.textContent = conf.desc;
     if(heroChips) heroChips.innerHTML = conf.chips.map(function(c){
-      return '<span class="chip">' + c + '</span>';
+      return '<button class="chip" type="button" data-goto="' + c.goto + '">' + c.label + '</button>';
     }).join('');
     if(statCount) statCount.innerHTML = conf.count + '<span class="u">과목</span>';
     if(statSem)   statSem.textContent = key;
@@ -807,6 +803,21 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
   });
 
   setSemester('2026-2');
+
+  /* ----- hero chips: jump to that course card ----- */
+  if(heroChips){
+    heroChips.addEventListener('click', function(e){
+      var chip = e.target.closest('[data-goto]');
+      if(!chip) return;
+      var card = document.querySelector(chip.dataset.goto);
+      if(!card) return;
+      card.scrollIntoView({behavior:'smooth', block:'center'});
+      card.classList.remove('flash');
+      void card.offsetWidth;   // restart the animation
+      card.classList.add('flash');
+      setTimeout(function(){ card.classList.remove('flash'); }, 1600);
+    });
+  }
 
   /* ----- course modal ----- */
   function openModal(src, title){
