@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1주차 · 생성형 AI(이미지) 100문제</title>
+<style>
+  :root{
+    --bg:#f4f6fa; --card:#ffffff; --ink:#16202e; --muted:#657189;
+    --line:#e2e8f2; --brand:#1560d8; --brand-deep:#0b3b8c; --brand-soft:#eaf1fe;
+    --ok:#0f8a5f; --ok-soft:#e6f6ef; --no:#d43c4a; --no-soft:#fdecee;
+    --warn:#b7791f; --shadow:0 1px 2px rgba(16,32,64,.05),0 8px 24px rgba(16,32,64,.07);
+    --r:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0e1420; --card:#161e2c; --ink:#e8edf6; --muted:#98a4bb;
+      --line:#273246; --brand:#5b96ff; --brand-deep:#a8c6ff; --brand-soft:#1a2740;
+      --ok:#48c99a; --ok-soft:#122c23; --no:#ff7b88; --no-soft:#33191e;
+      --warn:#e0b25c; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Malgun Gothic","맑은 고딕",system-ui,sans-serif;
+    line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:22px 16px 80px}
+
+  header.top{margin-bottom:18px}
+  .eyebrow{color:var(--brand);font-weight:700;font-size:13px;letter-spacing:.04em}
+  h1{font-size:25px;line-height:1.3;margin:4px 0 6px;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:14px;margin:0}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+
+  /* controls */
+  .controls{padding:14px 16px;margin-bottom:14px}
+  .ctl-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .ctl-row + .ctl-row{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+  .ctl-label{font-size:12px;font-weight:700;color:var(--muted);min-width:52px}
+  .chip{
+    border:1px solid var(--line);background:transparent;color:var(--ink);
+    padding:5px 11px;border-radius:999px;font-size:13px;cursor:pointer;
+    font-family:inherit;transition:.13s; white-space:nowrap;
+  }
+  .chip:hover{border-color:var(--brand);color:var(--brand)}
+  .chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+  .chip.ghost[aria-pressed="true"]{background:var(--brand-soft);color:var(--brand-deep);border-color:var(--brand)}
+  .spacer{flex:1}
+
+  /* progress */
+  .prog{padding:14px 16px;margin-bottom:14px}
+  .prog-head{display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;margin-bottom:9px}
+  .stat{font-size:13px;color:var(--muted)}
+  .stat b{color:var(--ink);font-size:15px;font-variant-numeric:tabular-nums}
+  .stat.ok b{color:var(--ok)} .stat.no b{color:var(--no)}
+  .bar{height:7px;background:var(--line);border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--ok));border-radius:99px;transition:width .3s}
+
+  /* question */
+  .qcard{padding:20px 20px 18px;margin-bottom:14px}
+  .qmeta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
+  .tag{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:.02em}
+  .tag.num{background:var(--brand-deep);color:#fff}
+  @media (prefers-color-scheme: dark){ .tag.num{background:var(--brand-soft);color:var(--brand-deep)} }
+  .tag.sec{background:var(--brand-soft);color:var(--brand-deep)}
+  .tag.d1{background:var(--ok-soft);color:var(--ok)}
+  .tag.d2{background:#fff4e0;color:var(--warn)}
+  .tag.d3{background:var(--no-soft);color:var(--no)}
+  @media (prefers-color-scheme: dark){ .tag.d2{background:#3a2e14} }
+  .qtext{font-size:17.5px;font-weight:600;letter-spacing:-.01em;margin:0 0 16px;line-height:1.55}
+
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{
+    display:flex;gap:11px;align-items:flex-start;text-align:left;width:100%;
+    padding:12px 14px;border:1.5px solid var(--line);background:var(--card);
+    border-radius:11px;cursor:pointer;font:inherit;font-size:15px;color:var(--ink);
+    transition:.13s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--brand);background:var(--brand-soft)}
+  .opt:disabled{cursor:default}
+  .opt .n{
+    flex:none;width:23px;height:23px;border-radius:50%;background:var(--line);color:var(--muted);
+    display:grid;place-items:center;font-size:12.5px;font-weight:700;margin-top:1px;
+  }
+  .opt.correct{border-color:var(--ok);background:var(--ok-soft)}
+  .opt.correct .n{background:var(--ok);color:#fff}
+  .opt.wrong{border-color:var(--no);background:var(--no-soft)}
+  .opt.wrong .n{background:var(--no);color:#fff}
+  .opt .mark{margin-left:auto;font-size:13px;font-weight:700;flex:none;padding-left:8px}
+  .opt.correct .mark{color:var(--ok)} .opt.wrong .mark{color:var(--no)}
+
+  .exp{margin-top:14px;padding:13px 15px;border-radius:11px;background:var(--brand-soft);border-left:3px solid var(--brand);font-size:14.5px}
+  .exp h4{margin:0 0 5px;font-size:12.5px;letter-spacing:.03em;color:var(--brand-deep)}
+  .exp p{margin:0}
+  .exp .ref{display:block;margin-top:7px;font-size:12.5px;color:var(--muted)}
+
+  .nav{display:flex;gap:8px;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+  .btn{
+    border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 16px;border-radius:10px;
+    font:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:.13s;
+  }
+  .btn:hover:not(:disabled){border-color:var(--brand);color:var(--brand)}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+  .btn.primary:hover:not(:disabled){filter:brightness(1.08);color:#fff}
+  .btn.danger{color:var(--no);border-color:var(--no)}
+  .btn.danger:hover{background:var(--no-soft)}
+
+  /* palette */
+  details.pal{padding:0;margin-bottom:14px;overflow:hidden}
+  details.pal summary{padding:13px 16px;cursor:pointer;font-size:14px;font-weight:600;list-style:none;display:flex;align-items:center;gap:8px}
+  details.pal summary::-webkit-details-marker{display:none}
+  details.pal summary::before{content:"▸";color:var(--muted);transition:.15s}
+  details.pal[open] summary::before{transform:rotate(90deg)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:6px;padding:0 16px 16px}
+  .cell{
+    aspect-ratio:1;border:1px solid var(--line);background:transparent;border-radius:8px;
+    font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;
+    font-variant-numeric:tabular-nums;transition:.1s;
+  }
+  .cell:hover{border-color:var(--brand);color:var(--brand)}
+  .cell.o{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+  .cell.x{background:var(--no-soft);border-color:var(--no);color:var(--no)}
+  .cell.cur{outline:2px solid var(--brand);outline-offset:1px}
+
+  /* result */
+  .result{padding:26px 22px;text-align:center}
+  .score{font-size:46px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:6px 0}
+  .score small{font-size:20px;color:var(--muted);font-weight:600}
+  .breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:20px 0 6px;text-align:left}
+  .bd{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .bd .k{font-size:12px;color:var(--muted)}
+  .bd .v{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+  .empty{padding:40px 20px;text-align:center;color:var(--muted);font-size:15px}
+  footer{margin-top:26px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.8}
+  @media (max-width:520px){
+    h1{font-size:21px} .qtext{font-size:16.5px} .opt{font-size:14.5px;padding:11px 12px}
+    .ctl-label{min-width:100%;margin-bottom:-3px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">CHAPTER 1 · 생성형 이미지 AI</div>
+    <h1>1주차 &middot; 생성형 AI(이미지) — 100문제</h1>
+    <p class="sub">강의자료 1.1~1.6절 전 범위 · 4지선다 · 난이도 3단계</p>
+  </header>
+
+  <section class="panel controls">
+    <div class="ctl-row">
+      <span class="ctl-label">단원</span>
+      <div id="secChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    </div>
+    <div class="ctl-row">
+      <span class="ctl-label">난이도</span>
+      <div id="diffChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    </div>
+    <div class="ctl-row">
+      <span class="ctl-label">설정</span>
+      <button class="chip ghost" id="shuffleQ" aria-pressed="false">문제 순서 섞기</button>
+      <button class="chip ghost" id="shuffleO" aria-pressed="false">보기 순서 섞기</button>
+      <span class="spacer"></span>
+      <button class="chip" id="reviewBtn">오답 다시 풀기 <b id="wrongCount">0</b></button>
+      <button class="chip" id="resetBtn">처음부터</button>
+    </div>
+  </section>
+
+  <section class="panel prog">
+    <div class="prog-head">
+      <span class="stat">진도 <b><span id="doneN">0</span> / <span id="totalN">0</span></b></span>
+      <span class="stat ok">정답 <b id="okN">0</b></span>
+      <span class="stat no">오답 <b id="noN">0</b></span>
+      <span class="spacer"></span>
+      <span class="stat">정답률 <b id="rate">—</b></span>
+    </div>
+    <div class="bar"><i id="barFill"></i></div>
+  </section>
+
+  <details class="panel pal">
+    <summary>문제 번호로 이동 <span style="color:var(--muted);font-weight:400">(초록 = 정답, 빨강 = 오답)</span></summary>
+    <div class="grid" id="palette"></div>
+  </details>
+
+  <main id="stage"></main>
+
+  <footer>
+    1주차 강의자료(생성형 AI(이미지)) 기반 자율 학습용 문제 세트<br>
+    풀이 기록은 이 브라우저에만 저장되며, '처음부터'를 누르면 초기화됩니다.
+  </footer>
+</div>
+
+<script>
+const QUESTIONS = [{"id": 1, "sec": "1.1", "diff": "기초", "q": "강의자료가 생성형 AI(이미지)를 설명하기 위해 가장 먼저 대비시킨 두 종류의 모델은 무엇인가?", "opts": ["판별 모델(Discriminative Model)과 생성 모델(Generative Model)", "지도 모델과 비지도 모델", "선형 모델과 비선형 모델", "얕은 신경망과 깊은 신경망"], "a": 0, "exp": "첫 슬라이드는 '판별 vs 생성'이라는 제목으로 Discriminative Model과 Generative Model을 나란히 놓고 비교한다."}, {"id": 2, "sec": "1.1", "diff": "기초", "q": "'판별 vs 생성' 그림에서 판별 모델에 고양이·개 사진을 입력했을 때 나오는 출력은 무엇인가?", "opts": ["새로운 고양이 이미지", "cat 또는 dog라는 범주(클래스) 판정", "랜덤 노이즈 패턴", "해상도를 높인 원본 사진"], "a": 1, "exp": "그림에서 Discriminative Model의 화살표는 'cat | dog'로 이어지며, 입력 이미지가 어느 범주인지 가려내는 역할을 한다."}, {"id": 3, "sec": "1.1", "diff": "기초", "q": "'판별 vs 생성' 그림에서 생성 모델의 입력으로 그려진 것은 무엇인가?", "opts": ["고양이 사진과 개 사진", "cat/dog 레이블", "랜덤 노이즈(random noise)에 해당하는 잡음 패턴", "학습 데이터의 평균 이미지"], "a": 2, "exp": "생성 모델 쪽에는 회색 잡음 이미지가 입력으로 그려져 있고, 이는 무작위 노이즈를 뜻한다."}, {"id": 4, "sec": "1.1", "diff": "기초", "q": "'판별 vs 생성' 그림에서 생성 모델의 출력으로 그려진 것은 무엇인가?", "opts": ["cat 또는 dog 레이블", "0.83이라는 확률 값", "입력 이미지의 경계선(edge) 지도", "새로운 고양이 이미지"], "a": 3, "exp": "Generative Model의 화살표 끝에는 학습 데이터에 있던 것이 아닌 새 고양이 이미지가 놓여 있다."}, {"id": 5, "sec": "1.1", "diff": "중급", "q": "판별 모델과 생성 모델의 입출력 방향 차이를 가장 잘 요약한 것은?", "opts": ["판별은 이미지→레이블, 생성은 노이즈→이미지", "판별은 노이즈→이미지, 생성은 이미지→레이블", "둘 다 이미지→이미지 변환이다", "둘 다 레이블→이미지 변환이다"], "a": 0, "exp": "판별 모델은 관측(이미지)을 받아 범주·확률을 내놓고, 생성 모델은 무작위 노이즈를 받아 이미지를 만들어 낸다."}, {"id": 6, "sec": "1.1", "diff": "중급", "q": "학습정리 슬라이드에서 '생성형 AI(이미지)란?'을 한 문장으로 표현한 말은 무엇인가?", "opts": ["정답을 정확히 맞히는 모델", "가상의 세계를 흉내내는 모델", "데이터를 압축하는 모델", "레이블을 자동으로 붙이는 모델"], "a": 1, "exp": "학습정리 1번 항목에 '가상의 세계를 흉내내는 모델'이라고 정리되어 있다."}, {"id": 7, "sec": "1.1", "diff": "중급", "q": "'가상의 세계를 흉내내는 모델'이라는 표현이 강조하는 능력은 무엇인가?", "opts": ["관측을 정확한 범주로 나누는 능력", "학습 속도를 높이는 최적화 능력", "실제 데이터가 있을 법한 세계를 모사해 새 데이터를 만들어내는 능력", "학습 데이터를 그대로 저장해 재생하는 능력"], "a": 2, "exp": "흉내낸다는 것은 실제 데이터가 따르는 분포를 모사한다는 뜻이며, 그 결과로 그럴듯한 새 이미지를 만들어 낸다."}, {"id": 8, "sec": "1.1", "diff": "중급", "q": "판별 모델에 대한 설명으로 옳지 않은 것은?", "opts": ["입력 관측으로부터 정답이 나올 확률을 예측한다", "학습에 정답 레이블이 필요하다", "고양이와 개를 구분하는 문제가 대표적인 예다", "랜덤 노이즈에서 새 이미지를 샘플링한다"], "a": 3, "exp": "노이즈에서 이미지를 샘플링하는 것은 생성 모델의 동작이며, 판별 모델은 관측을 받아 확률을 예측한다."}, {"id": 9, "sec": "1.1", "diff": "중급", "q": "생성 모델에 대한 설명으로 옳지 않은 것은?", "opts": ["출력이 항상 하나의 클래스 레이블이다", "랜덤 노이즈를 이용해 샘플을 만든다", "관측 데이터로부터 확률 분포를 학습한다", "학습 데이터에 없던 새로운 이미지를 만들 수 있다"], "a": 0, "exp": "클래스 레이블을 출력하는 것은 판별 모델이고, 생성 모델의 출력은 새로 만들어진 샘플(이미지)이다."}, {"id": 10, "sec": "1.1", "diff": "기초", "q": "그림에서 판별 모델의 출력으로 표시된 'cat | dog'가 의미하는 것은?", "opts": ["고양이와 개를 합성한 새 이미지", "입력이 고양이인지 개인지 가려낸 판정 결과", "학습에 쓸 두 장의 데이터", "고양이와 개의 평균 특징 벡터"], "a": 1, "exp": "cat과 dog는 판별 모델이 선택해야 하는 후보 범주이며, 출력은 그중 어느 쪽인지에 대한 판정이다."}, {"id": 11, "sec": "1.1", "diff": "심화", "q": "같은 고양이 사진 데이터셋으로 학습해도 판별 모델과 생성 모델이 서로 다른 산출물을 내는 근본적인 이유는?", "opts": ["판별 모델이 항상 더 많은 파라미터를 쓰기 때문", "생성 모델이 반드시 레이블을 필요로 하기 때문", "판별 모델은 정답 확률(경계)을, 생성 모델은 데이터의 분포 자체를 학습하기 때문", "생성 모델은 학습 과정을 거치지 않기 때문"], "a": 2, "exp": "학습 목표가 다르다. 판별 모델은 x가 주어졌을 때 y의 확률을, 생성 모델은 관측 x가 이루는 분포를 배워 그 분포에서 샘플링한다."}, {"id": 12, "sec": "1.1", "diff": "중급", "q": "자율주행차가 카메라 영상 속 물체가 보행자인지 아닌지를 판단하는 과제는 어느 쪽에 가까운가?", "opts": ["노이즈에서 이미지를 만드는 생성 모델", "확률 분포에서의 샘플링", "image-to-image 변환", "관측으로부터 정답 확률을 예측하는 판별 모델"], "a": 3, "exp": "주어진 관측을 보고 정답 범주의 확률을 예측하는 문제이므로 판별 모델의 전형적인 사례다."}, {"id": 13, "sec": "1.1", "diff": "중급", "q": "텍스트 설명만 주고 실제로 존재하지 않는 풍경 사진을 만들어 내는 과제는 어느 쪽에 해당하는가?", "opts": ["생성 모델", "판별 모델", "분류기(classifier)", "레이블링 도구"], "a": 0, "exp": "학습 데이터에 없던 새 이미지를 만들어 내는 일이므로 생성 모델의 역할이다."}, {"id": 14, "sec": "1.1", "diff": "심화", "q": "판별 모델 그림과 생성 모델 그림을 학습 데이터 표기 관점에서 비교한 설명으로 가장 적절한 것은?", "opts": ["두 그림 모두 반드시 (관측, 레이블) 쌍으로 표시되어 있다", "판별 모델 그림에는 관측에 레이블이 붙어 있지만, 생성 모델 그림에는 관측만 표시되어 있다", "생성 모델 그림에서만 레이블이 붙어 있다", "두 그림 모두 레이블 표기가 없다"], "a": 1, "exp": "판별 모델 그림에는 각 그림 옆에 1과 0 레이블이 붙어 있으나, 생성 모델 그림에는 'An observation' 표시만 있고 레이블 숫자가 없다."}, {"id": 15, "sec": "1.1", "diff": "기초", "q": "'판별 vs 생성' 개념도의 참조 출처로 표시된 사이트는 어디인가?", "opts": ["arXiv", "O'Reilly", "Semantic Scholar", "GitHub"], "a": 2, "exp": "해당 슬라이드 하단에는 semanticscholar.org의 논문 그림 페이지가 참조 출처로 표기되어 있다."}, {"id": 16, "sec": "1.1", "diff": "심화", "q": "생성형 AI(이미지)를 다루면서 판별/생성 구분을 가장 먼저 설명하는 이유로 가장 타당한 것은?", "opts": ["판별 모델의 성능이 생성 모델보다 항상 우수하기 때문", "두 모델의 학습 알고리즘이 동일하기 때문", "생성 모델이 판별 모델의 한 종류이기 때문", "'무엇을 맞히는가'와 '무엇을 만들어내는가'라는 목표 차이가 이후의 응용 전체를 가르기 때문"], "a": 3, "exp": "이 목표 차이가 이후 다루는 image-to-image, text-to-image, 영상 생성 등 모든 응용의 출발점이 된다."}, {"id": 17, "sec": "1.2", "diff": "기초", "q": "강의자료가 정의한 판별 모델의 역할은 무엇인가?", "opts": ["주어진 몇몇 관측 x를 통해 정답 y가 나올 확률을 예측한다", "관측 x로부터 확률 분포를 만들고 거기서 샘플링한다", "노이즈를 이미지로 바꾼다", "이미지의 화질을 자동으로 개선한다"], "a": 0, "exp": "판별 모델 슬라이드의 본문은 '주어진 몇몇 관측 x를 통해 정답 y가 나올 확률을 예측'이라고 적고 있다."}, {"id": 18, "sec": "1.2", "diff": "기초", "q": "판별 모델 그림의 학습 데이터에서 각 그림 옆에 붙은 1과 0은 무엇을 뜻하는가?", "opts": ["픽셀 값", "레이블(a label)", "확률 분포", "학습률"], "a": 1, "exp": "그림에는 'A lable(레이블)'이라는 화살표가 숫자 쪽을 가리키고 있어, 1과 0이 정답 레이블임을 보여 준다."}, {"id": 19, "sec": "1.2", "diff": "기초", "q": "판별 모델 그림에서 'An observation'이 가리키는 대상은 무엇인가?", "opts": ["모델이 내놓은 예측 확률 값", "레이블로 붙은 숫자", "학습에 쓰이는 한 장의 그림(관측)", "모델 내부의 파라미터"], "a": 2, "exp": "An observation 화살표는 레이블 옆의 그림 자체를 가리키며, 이는 하나의 관측 데이터를 뜻한다."}, {"id": 20, "sec": "1.2", "diff": "기초", "q": "판별 모델 예시가 새로운 그림에 대해 최종적으로 출력한 예측 값은 얼마인가?", "opts": ["0.38", "0.53", "0.63", "0.83"], "a": 3, "exp": "그림 오른쪽에 'Prediction 0.83 likely to be Van Gogh'라고 표시되어 있다."}, {"id": 21, "sec": "1.2", "diff": "중급", "q": "예측 값 0.83이 의미하는 바로 가장 적절한 것은?", "opts": ["입력한 그림이 반 고흐의 작품일 가능성이 83% 정도라는 뜻", "학습에 83장의 그림을 사용했다는 뜻", "모델의 전체 정확도가 83%라는 뜻", "학습이 83번째 에폭에 도달했다는 뜻"], "a": 0, "exp": "0.83은 'likely to be Van Gogh'라는 설명과 함께 표시된 확률 값으로, 해당 입력이 반 고흐 작품일 확률을 뜻한다."}, {"id": 22, "sec": "1.2", "diff": "중급", "q": "판별 모델 그림에서 레이블 1이 붙은 그림들의 공통점은 무엇인가?", "opts": ["모나리자 계열의 초상화다", "반 고흐 화풍의 작품이다", "사진으로 촬영한 실물이다", "AI가 생성한 이미지다"], "a": 1, "exp": "별이 빛나는 밤, 해바라기 등 반 고흐의 작품에 1이 붙고, 다른 화가의 그림에는 0이 붙어 있다."}, {"id": 23, "sec": "1.2", "diff": "중급", "q": "판별 모델 학습에서 레이블 0이 붙은 데이터가 하는 역할은 무엇인가?", "opts": ["모델이 예측을 하지 못하도록 막는다", "모든 예측 확률을 1로 만든다", "반 고흐가 아닌 사례를 알려 주어 구분 기준을 잡게 한다", "학습 속도를 직접적으로 높인다"], "a": 2, "exp": "부정 사례(0)가 있어야 모델이 '무엇이 반 고흐가 아닌지'를 배워 경계를 세울 수 있다."}, {"id": 24, "sec": "1.2", "diff": "중급", "q": "판별 모델 그림이 보여 주는 파이프라인의 순서로 옳은 것은?", "opts": ["예측 → 학습 → 데이터 수집", "랜덤 노이즈 → 샘플링 → 이미지", "레이블링 → 샘플링 → 확률 분포", "레이블이 붙은 학습 데이터 → 학습(Training) → 새 관측에 대한 예측(Prediction)"], "a": 3, "exp": "그림은 Training data에서 Training 화살표로 모델로, 다시 Prediction 화살표로 0.83이라는 결과로 이어진다."}, {"id": 25, "sec": "1.2", "diff": "심화", "q": "학습이 끝난 판별 모델에 처음 보는 그림 한 장을 넣었을 때 모델이 수행하는 일은 무엇인가?", "opts": ["학습된 기준에 따라 그 그림이 반 고흐 작품일 확률을 계산한다", "그 그림과 비슷한 새 그림을 그려 준다", "그 그림을 학습 데이터에 자동으로 추가한다", "그 그림에 섞인 노이즈를 제거한다"], "a": 0, "exp": "그림의 Prediction 단계가 바로 이 과정으로, 새 관측에 대해 정답일 확률을 출력한다."}, {"id": 26, "sec": "1.2", "diff": "중급", "q": "판별 모델을 학습시킬 때 레이블이 전혀 없다면 어떤 문제가 생기는가?", "opts": ["관측 자체를 모델에 입력할 수 없다", "정답과 비교할 기준이 없어 확률 예측을 학습할 수 없다", "예측 확률이 항상 1로 고정된다", "랜덤 노이즈를 만들 수 없다"], "a": 1, "exp": "판별 모델은 관측 x에 대한 정답 y가 있어야 예측과 정답의 차이를 줄이는 방향으로 학습할 수 있다."}, {"id": 27, "sec": "1.2", "diff": "심화", "q": "예측 값이 0.83으로 나왔다는 사실에서 내릴 수 있는 결론으로 가장 적절한 것은?", "opts": ["모델이 정답을 반드시 맞혔다는 뜻이다", "모델이 새 그림을 그려 냈다는 뜻이다", "모델은 확정된 답이 아니라 정도(확률)로 답한다는 뜻이다", "레이블 0인 데이터가 필요 없었다는 뜻이다"], "a": 2, "exp": "판별 모델의 출력은 확신의 정도를 나타내는 확률이므로, 1이 아닌 0.83은 불확실성이 남아 있음을 뜻한다."}, {"id": 28, "sec": "1.2", "diff": "중급", "q": "판별 모델 그림에서 'Training'이라고 표시된 화살표가 연결하는 두 요소는 무엇인가?", "opts": ["Prediction과 Generated Samples", "Random noise와 Generative Model", "Prediction과 An observation", "Training data와 Discriminative Model"], "a": 3, "exp": "레이블이 붙은 Training data가 Training 화살표를 따라 Discriminative Model로 들어가는 구조다."}, {"id": 29, "sec": "1.2", "diff": "기초", "q": "판별 모델과 생성 모델 개념도 두 장이 공통으로 인용한 참조 문헌은 무엇인가?", "opts": ["O'Reilly의 Generative Deep Learning", "MIT Press의 Deep Learning", "Pattern Recognition and Machine Learning", "Hands-On Machine Learning"], "a": 0, "exp": "두 슬라이드 모두 oreilly.com의 generative-deep-learning 1장 페이지를 참조 출처로 표기하고 있다."}, {"id": 30, "sec": "1.2", "diff": "중급", "q": "판별 모델 설명에 쓰인 기호 x와 y는 각각 무엇을 가리키는가?", "opts": ["x는 정답, y는 관측", "x는 관측, y는 정답", "x는 노이즈, y는 생성 이미지", "x는 확률, y는 레이블 개수"], "a": 1, "exp": "'주어진 몇몇 관측 x를 통해 정답 y가 나올 확률을 예측'이라는 문장에서 x는 관측, y는 정답이다."}, {"id": 31, "sec": "1.2", "diff": "심화", "q": "어떤 그림에 대해 반 고흐일 확률이 0.83으로 나왔다면, 반 고흐가 아닐 확률은 얼마로 보는 것이 자연스러운가? (두 범주만 있는 경우로 가정)", "opts": ["0.83", "0.50", "0.17", "0.00"], "a": 2, "exp": "두 범주만 존재한다면 확률의 합이 1이므로 1에서 0.83을 뺀 0.17이 된다."}, {"id": 32, "sec": "1.2", "diff": "심화", "q": "판별 모델을 그림의 진위 감정에 활용할 때 예상되는 한계로 가장 타당한 것은?", "opts": ["레이블이 없는 데이터도 아무 문제 없이 그대로 학습에 쓸 수 있다", "확률 대신 새 그림을 만들어 버린다", "입력 이미지를 아예 처리하지 못한다", "학습 데이터에 없던 화풍에 대해서는 신뢰하기 어려운 확률을 낸다"], "a": 3, "exp": "판별 모델은 학습에서 본 사례를 기준으로 경계를 세우므로, 학습 분포를 벗어난 입력에 대한 확률은 신뢰도가 떨어진다."}, {"id": 33, "sec": "1.3", "diff": "기초", "q": "강의자료가 정의한 생성 모델의 동작 방식은 무엇인가?", "opts": ["관측된 데이터 x를 토대로 확률 분포를 만들고 그 분포에서 샘플링한다", "관측 x로부터 정답 y의 확률을 예측한다", "이미지를 클래스별로 정렬해 저장한다", "사람이 직접 레이블을 붙여 데이터를 정리한다"], "a": 0, "exp": "생성 모델 슬라이드의 본문은 '관측된 데이터 x를 토대로 확률 분포 만들고 확률 분포에서 샘플링'이라고 적고 있다."}, {"id": 34, "sec": "1.3", "diff": "기초", "q": "생성 모델 그림에서 학습 데이터로 사용된 이미지의 소재는 무엇인가?", "opts": ["고양이 사진", "말 사진", "명화 작품", "사람 얼굴 사진"], "a": 1, "exp": "Training data 상자 안에는 여러 장의 말 사진이 들어 있고, 생성 결과도 말 이미지다."}, {"id": 35, "sec": "1.3", "diff": "기초", "q": "생성 모델 그림에서 샘플링(Sampling) 단계에 함께 들어가는 요소는 무엇인가?", "opts": ["레이블 1과 0", "예측 확률 0.83", "랜덤 노이즈(Random noise)", "Canny edge 지도"], "a": 2, "exp": "Sampling 화살표 아래에 Random noise 상자가 연결되어 있어, 노이즈가 샘플링의 재료로 쓰임을 보여 준다."}, {"id": 36, "sec": "1.3", "diff": "기초", "q": "생성 모델 그림의 오른쪽에 표시된 결과물의 이름은 무엇인가?", "opts": ["Training data", "Prediction", "An observation", "Generated Samples"], "a": 3, "exp": "오른쪽 상자에는 Generated Samples라는 제목과 함께 새로 만들어진 말 이미지들이 놓여 있다."}, {"id": 37, "sec": "1.3", "diff": "중급", "q": "생성 모델이 샘플을 만들 때 랜덤 노이즈를 사용하는 이유로 가장 적절한 것은?", "opts": ["같은 모델에서도 매번 서로 다른 샘플이 나오게 하기 위해", "학습 데이터를 지우기 위해", "레이블을 자동으로 만들기 위해", "예측 확률을 1로 고정하기 위해"], "a": 0, "exp": "무작위 노이즈가 출발점이 되므로 같은 모델이라도 다양한 결과를 뽑아낼 수 있고, 이것이 분포에서의 샘플링을 구현한다."}, {"id": 38, "sec": "1.3", "diff": "중급", "q": "생성 모델 그림이 보여 주는 파이프라인의 순서로 옳은 것은?", "opts": ["랜덤 노이즈 → 학습 → 레이블링", "학습 데이터 → 학습(Training) → 샘플링(Sampling) → 생성 샘플", "예측 → 샘플링 → 학습", "레이블 → 확률 → 관측"], "a": 1, "exp": "Training data가 Training을 거쳐 Generative Model이 되고, 랜덤 노이즈와 함께 Sampling을 거쳐 Generated Samples가 나온다."}, {"id": 39, "sec": "1.3", "diff": "중급", "q": "생성 모델 그림의 학습 데이터에 레이블 숫자가 표시되지 않은 이유로 가장 적절한 설명은?", "opts": ["레이블을 그림에서 생략했을 뿐 실제로는 반드시 필요하다", "말 사진에는 레이블을 붙일 수 없기 때문", "목표가 정답 맞히기가 아니라 데이터 분포 자체를 익히는 것이기 때문", "레이블이 있으면 노이즈를 만들 수 없기 때문"], "a": 2, "exp": "생성 모델은 관측 x가 이루는 분포를 배우는 것이 목적이므로, 판별 모델처럼 정답 레이블이 필수적이지 않다."}, {"id": 40, "sec": "1.3", "diff": "중급", "q": "생성된 말 이미지들이 학습 데이터의 말 사진과 완전히 같지 않은 이유는 무엇인가?", "opts": ["해상도가 낮게 저장되기 때문", "학습 데이터를 절반만 사용했기 때문", "레이블이 잘못 붙었기 때문", "학습한 확률 분포에서 새로 샘플링한 결과이기 때문"], "a": 3, "exp": "생성 모델은 원본을 복사하는 것이 아니라 분포에서 새 점을 뽑아내므로, 그럴듯하지만 원본과는 다른 이미지가 나온다."}, {"id": 41, "sec": "1.3", "diff": "심화", "q": "'확률 분포에서 샘플링한다'는 표현이 생성 결과에 대해 함의하는 바는 무엇인가?", "opts": ["출력이 하나로 정해지지 않고 매번 달라질 수 있다", "출력이 언제나 동일하게 고정된다", "출력이 학습 데이터 중 하나로 반드시 복사된다", "출력이 0과 1 사이의 레이블 값이다"], "a": 0, "exp": "샘플링은 확률적 선택이므로 동일한 모델에서도 여러 가지 결과가 나올 수 있다."}, {"id": 42, "sec": "1.3", "diff": "중급", "q": "판별 모델과 생성 모델의 대표적인 '출력'을 옳게 짝지은 것은?", "opts": ["판별-생성 샘플, 생성-정답 확률", "판별-정답 확률, 생성-생성 샘플", "판별-랜덤 노이즈, 생성-레이블", "판별-레이블, 생성-출력 없음"], "a": 1, "exp": "판별 모델은 0.83 같은 정답 확률을, 생성 모델은 Generated Samples를 출력한다."}, {"id": 43, "sec": "1.3", "diff": "심화", "q": "생성 모델이 학습 데이터를 사실상 그대로 외워 버린다면 어떤 점이 문제가 되는가?", "opts": ["샘플링 속도가 크게 느려진다", "정답 레이블이 새로 필요해진다", "독창적인 새 콘텐츠를 만든다는 목적에 어긋난다", "확률 분포를 아예 만들 수 없게 된다"], "a": 2, "exp": "강의자료는 생성형 AI를 '독창적인 콘텐츠를 생성'하는 분야로 정의하므로, 원본 복제는 그 목적에 반한다."}, {"id": 44, "sec": "1.3", "diff": "중급", "q": "생성 모델 그림에서 'An observation' 화살표가 가리키는 대상은 무엇인가?", "opts": ["생성된 말 이미지 한 장", "랜덤 노이즈 한 덩어리", "모델의 파라미터", "학습 데이터 안의 말 사진 한 장"], "a": 3, "exp": "화살표는 Training data 상자 안의 개별 사진을 가리키며, 이것이 하나의 관측이다."}, {"id": 45, "sec": "1.3", "diff": "기초", "q": "다음 중 생성 모델의 산출물에 해당하는 것은?", "opts": ["학습 데이터에 없던 새로운 말 이미지", "입력 이미지가 말일 확률", "말과 개를 구분하는 결정 경계", "학습에 쓰인 말 사진의 개수"], "a": 0, "exp": "생성 모델의 출력은 Generated Samples, 즉 새로 만들어진 이미지다."}, {"id": 46, "sec": "1.3", "diff": "심화", "q": "동일한 랜덤 노이즈를 같은 생성 모델에 두 번 넣었을 때 기대할 수 있는 결과는?", "opts": ["언제나 학습 데이터와 똑같은 사진이 나온다", "조건이 같다면 같은 샘플이 나오는 것이 자연스럽다", "반드시 서로 다른 샘플이 나온다", "레이블 값이 출력된다"], "a": 1, "exp": "샘플의 다양성은 노이즈의 무작위성에서 나오므로, 노이즈가 같으면 같은 결과가 나오는 것이 자연스럽다."}, {"id": 47, "sec": "1.3", "diff": "중급", "q": "생성 모델을 데이터 증강(data augmentation)에 활용할 수 있는 이유는 무엇인가?", "opts": ["관측을 레이블로 바꾸어 주기 때문", "기존 이미지를 자동으로 삭제하기 때문", "학습한 분포에서 새로운 샘플을 계속 만들어 낼 수 있기 때문", "예측 확률을 0으로 만들어 주기 때문"], "a": 2, "exp": "분포에서 반복 샘플링하면 원본과 비슷하지만 서로 다른 데이터를 얼마든지 얻을 수 있다."}, {"id": 48, "sec": "1.3", "diff": "심화", "q": "생성 모델의 학습 데이터가 특정 품종의 말 사진에만 편중되어 있다면 예상되는 결과는?", "opts": ["여러 품종이 오히려 고르게 생성된다", "레이블 오류가 발생한다", "예측 확률이 0.83으로 고정된다", "생성되는 샘플도 그 품종 쪽으로 치우친다"], "a": 3, "exp": "생성 모델은 관측된 데이터의 분포를 흉내내므로, 학습 데이터의 편향이 그대로 생성 결과에 반영된다."}, {"id": 49, "sec": "1.3", "diff": "중급", "q": "판별 모델 그림과 생성 모델 그림에서 공통으로 등장하는 단계는 무엇인가?", "opts": ["학습 데이터로부터 모델로 이어지는 Training 단계", "Random noise 단계", "Prediction 0.83 단계", "Sampling 단계"], "a": 0, "exp": "두 그림 모두 Training data에서 Training 화살표로 모델에 이어지지만, 그 이후 단계는 서로 다르다."}, {"id": 50, "sec": "1.4", "diff": "기초", "q": "강의자료가 제시한 생성형 AI의 정의로 옳은 것은?", "opts": ["데이터를 분류하는 알고리즘의 총칭", "독창적인 콘텐츠를 생성할 수 있는 컴퓨터 모델을 중심으로 하는 인공지능의 한 분야", "사람이 만든 이미지를 빠르게 검색하는 기술", "3차원 그래픽을 실시간으로 렌더링하는 기법"], "a": 1, "exp": "'생성형 AI 정의' 슬라이드의 첫 문장이 그대로 이 정의를 담고 있다."}, {"id": 51, "sec": "1.4", "diff": "기초", "q": "생성형 AI가 활용한다고 서술된 세 가지 힘은 무엇인가?", "opts": ["강화학습, 유전 알고리즘, 탐색", "데이터베이스, 클라우드, 네트워크", "대규모 언어 모델, 신경망, 머신러닝", "CPU, GPU, TPU"], "a": 2, "exp": "정의 슬라이드는 '대규모 언어 모델, 신경망 및 머신러닝의 힘을 활용하여'라고 밝히고 있다."}, {"id": 52, "sec": "1.4", "diff": "기초", "q": "강의자료에 따르면 생성형 AI가 모방한다고 서술된 것은 무엇인가?", "opts": ["인간의 기억력", "인간의 계산 속도", "인간의 시각 인지 능력", "인간의 창의성"], "a": 3, "exp": "'인간의 창의성을 모방한 새로운 콘텐츠를 생산'한다고 정의되어 있다."}, {"id": 53, "sec": "1.4", "diff": "중급", "q": "정의에 등장하는 '독창적인 콘텐츠'라는 표현이 강조하는 바는 무엇인가?", "opts": ["기존 데이터의 단순한 검색·복제가 아니라 새로운 결과물을 만든다는 점", "콘텐츠의 해상도가 매우 높다는 점", "콘텐츠를 사람 손으로 직접 제작한다는 점", "콘텐츠가 반드시 텍스트 형태라는 점"], "a": 0, "exp": "독창성은 학습 데이터를 그대로 되돌려 주는 것이 아니라 새로운 결과를 만들어 낸다는 의미다."}, {"id": 54, "sec": "1.4", "diff": "중급", "q": "생성형 AI 정의 슬라이드에 예시 장면으로 함께 제시된 것은 무엇인가?", "opts": ["자율주행차가 보행자를 인식하는 장면", "장난감 오리를 보여 주며 여러 언어의 표현과 발음을 물어보는 장면", "공장 로봇이 부품을 조립하는 장면", "의료 영상에서 종양을 찾아내는 장면"], "a": 1, "exp": "슬라이드 아래에는 손으로 오리 그림과 장난감 오리를 보여 주며 발음을 묻는 영상 장면이 삽입되어 있다."}, {"id": 55, "sec": "1.4", "diff": "중급", "q": "오리 예시 장면의 화면에 함께 나열되어 있는 정보는 무엇인가?", "opts": ["오리의 품종 목록", "오리 그림의 픽셀 값 표", "Spanish: pato, French: canard, Korean: 오리 같은 언어별 표현", "오리 사진의 촬영 장비 정보"], "a": 2, "exp": "화면 오른쪽에 스페인어, 프랑스어, 한국어, 일본어, 중국어로 '오리'를 표기한 목록이 나타난다."}, {"id": 56, "sec": "1.4", "diff": "심화", "q": "오리 예시가 보여 주는 생성형 AI의 특징으로 가장 적절한 것은?", "opts": ["이미지를 분류하는 일만 수행한다", "텍스트만 처리할 수 있다", "반드시 정답 레이블이 있어야 동작한다", "이미지와 언어를 함께 다루며 사람의 질문에 새로운 답을 만들어 낸다"], "a": 3, "exp": "보여 준 물체를 이해하고 여러 언어 표현과 발음을 생성해 답하는 장면이므로, 이미지와 언어를 아우르는 생성 능력을 보여 준다."}, {"id": 57, "sec": "1.4", "diff": "중급", "q": "'생성형 AI는 인공지능의 한 분야'라는 서술이 뜻하는 바는 무엇인가?", "opts": ["생성형 AI가 인공지능 전체를 대체하는 것이 아니라 그 하위 영역이라는 뜻", "생성형 AI가 머신러닝과는 무관하다는 뜻", "인공지능이 생성형 AI의 하위 분야라는 뜻", "생성형 AI가 신경망을 사용하지 않는다는 뜻"], "a": 0, "exp": "'인공지능의 한 분야'라는 표현은 생성형 AI가 AI 안에 포함되는 영역임을 나타낸다."}, {"id": 58, "sec": "1.4", "diff": "심화", "q": "강의자료의 정의를 기준으로 볼 때 생성형 AI의 결과물이라고 보기 가장 어려운 것은?", "opts": ["텍스트 설명으로 만들어 낸 광고 이미지", "입력 사진이 고양이인지 개인지 알려 주는 판정 결과", "프롬프트로 제작한 애니메이션 영상", "참조 이미지를 바탕으로 만든 캐릭터 그림"], "a": 1, "exp": "판정 결과는 콘텐츠 생성이 아니라 판별 모델의 예측 출력이다."}, {"id": 59, "sec": "1.4", "diff": "중급", "q": "강의자료 1장(생성형 AI(이미지)란?)의 논리 전개 순서로 옳은 것은?", "opts": ["생성형 AI 정의 → 응용 사례 → 판별/생성 구분", "응용 사례 → 정의 → 판별 모델", "판별 vs 생성 구분 → 판별 모델 → 생성 모델 → 생성형 AI 정의", "랜덤 노이즈 → 레이블 → 정의"], "a": 2, "exp": "1장은 판별과 생성을 대비한 뒤 각각을 자세히 설명하고, 마지막에 생성형 AI의 정의를 제시한다."}, {"id": 60, "sec": "1.4", "diff": "기초", "q": "생성형 AI 정의 슬라이드가 참조 출처로 밝힌 자료의 형태는 무엇인가?", "opts": ["학술 논문(arXiv)", "GitHub 저장소", "신문 기사", "YouTube 영상"], "a": 3, "exp": "해당 슬라이드 하단에는 youtube.com 링크가 참조 출처로 적혀 있다."}, {"id": 61, "sec": "1.4", "diff": "심화", "q": "정의문에 '컴퓨터 모델을 중심으로 하는'이라는 표현이 들어간 이유로 가장 적절한 것은?", "opts": ["콘텐츠 생성의 주체가 학습된 모델이라는 점을 분명히 하기 위해", "모델보다 하드웨어가 더 중요함을 강조하기 위해", "사람이 직접 콘텐츠를 만든다는 뜻을 담기 위해", "데이터가 필요 없다는 점을 밝히기 위해"], "a": 0, "exp": "생성형 AI에서는 학습된 모델 자체가 콘텐츠를 만들어 내는 주체라는 점이 핵심이다."}, {"id": 62, "sec": "1.4", "diff": "중급", "q": "이미지 중심의 생성형 AI에서도 대규모 언어 모델이 의미를 갖는 이유로 가장 자연스러운 설명은?", "opts": ["언어 모델이 이미지의 픽셀을 직접 저장하기 때문", "텍스트 프롬프트를 이해해 이미지 생성의 조건으로 연결할 수 있기 때문", "언어 모델이 랜덤 노이즈를 생성하기 때문", "언어 모델이 레이블을 0과 1로 변환하기 때문"], "a": 1, "exp": "이 주차의 응용 사례 다수가 text-to-image이며, 텍스트 이해가 생성 조건을 만드는 출발점이 된다."}, {"id": 63, "sec": "1.4", "diff": "심화", "q": "학습정리의 '가상의 세계를 흉내내는 모델'과 정의문의 '독창적인 콘텐츠를 생성'은 어떤 관계인가?", "opts": ["서로 모순되는 서술이다", "전자는 판별 모델, 후자는 생성 모델을 가리킨다", "같은 성질을 각각 비유와 정의의 방식으로 표현한 것이다", "전자는 응용 분야, 후자는 하드웨어를 가리킨다"], "a": 2, "exp": "데이터가 있을 법한 세계를 모사한다는 비유와, 새로운 콘텐츠를 만든다는 정의는 같은 능력을 서로 다른 방식으로 표현한 것이다."}, {"id": 64, "sec": "1.5", "diff": "기초", "q": "실제 인물 사진을 만화풍 캐릭터 그림으로 바꾸는 사례는 어떤 변환으로 소개되었는가?", "opts": ["text-to-video 변환", "noise-to-text 변환", "text-to-image 변환", "image-to-image 변환"], "a": 3, "exp": "해당 슬라이드의 제목은 'image-to-image 변환 : 캐릭터'이다."}, {"id": 65, "sec": "1.5", "diff": "기초", "q": "캐릭터 변환 사례의 참조 출처로 제시된 프로젝트는 무엇인가?", "opts": ["malnyun_faces와 toonify", "MagicAnimate와 DreamPose", "ControlNet과 LoRA", "freepik과 aitimes"], "a": 0, "exp": "슬라이드 하단에 github.com/bryandlee/malnyun_faces와 github.com/justinpinkney/toonify가 적혀 있다."}, {"id": 66, "sec": "1.5", "diff": "중급", "q": "image-to-image 변환에서 입력과 출력의 관계를 가장 잘 설명한 것은?", "opts": ["텍스트를 입력해 이미지를 얻는다", "원본 이미지의 구조를 유지한 채 화풍·스타일이 바뀐 이미지를 얻는다", "이미지를 넣어 클래스 레이블을 얻는다", "노이즈를 넣어 텍스트를 얻는다"], "a": 1, "exp": "캐릭터 변환 예시에서 인물의 정체성과 구도는 유지되면서 그림체만 만화풍으로 바뀌었다."}, {"id": 67, "sec": "1.5", "diff": "기초", "q": "'생성형 인공지능으로 만든 애니메이션 뮤직비디오'는 어떤 변환의 사례로 제시되었는가?", "opts": ["image-to-image 변환", "video-to-video 변환", "text-to-image 변환", "image-to-text 변환"], "a": 2, "exp": "슬라이드 제목이 'text-to-image 변환 : 생성형 인공지능으로 만든 애니메이션 뮤직비디오'이다."}, {"id": 68, "sec": "1.5", "diff": "중급", "q": "애니메이션 뮤직비디오 사례 화면에 표시된 문구로 언급된 것은 무엇인가?", "opts": ["위 이미지는 AI로 생성되었습니다", "Input human pose", "Animating Human Image", "그 AI 작사 그 AI 작곡"], "a": 3, "exp": "영상 화면 상단에 '그 AI 작사 그 AI 작곡'이라는 문구와 'TRACK 01 새로운 시작'이라는 곡 정보가 보인다."}, {"id": 69, "sec": "1.5", "diff": "기초", "q": "광고/디자인 분야의 응용 사례로 공개되었다고 소개된 결과물은 무엇인가?", "opts": ["생성형 AI 기술을 적용한 온라인 배너광고", "AI가 심사하는 광고 공모전", "광고 문구 자동 번역 서비스", "광고 클릭률 예측 모델"], "a": 0, "exp": "슬라이드 본문에 '생성형 ai 기술 적용 \"온라인 배너광고\" 공개'라고 적혀 있다."}, {"id": 70, "sec": "1.5", "diff": "중급", "q": "배너광고 이미지 하단에 붙은 '위 이미지는 AI로 생성되었습니다'라는 고지 문구의 취지는 무엇인가?", "opts": ["이미지의 저작권자를 밝히기 위해", "해당 이미지가 AI로 만들어졌음을 알리기 위해", "이미지의 촬영 장소를 밝히기 위해", "모델의 초상권 계약 사실을 알리기 위해"], "a": 1, "exp": "광고 이미지가 실제 촬영물이 아니라 생성물임을 소비자에게 명시하는 표기다."}, {"id": 71, "sec": "1.5", "diff": "심화", "q": "AI로 생성한 이미지임을 광고에 명시하는 관행이 필요한 이유로 가장 적절한 것은?", "opts": ["생성 속도를 높이기 위해", "이미지 해상도를 보장하기 위해", "소비자가 실제 촬영된 인물·장면으로 오인하지 않게 하기 위해", "학습 데이터의 양을 늘리기 위해"], "a": 2, "exp": "생성 이미지는 실제 인물이나 실제 상황이 아니므로, 오인을 막기 위한 고지가 필요하다."}, {"id": 72, "sec": "1.5", "diff": "기초", "q": "개인화(personalization) 사례 그림에서 사전학습된 확산 모델을 나타내는 상자의 이름은 무엇인가?", "opts": ["Discriminative Model", "MagicAnimate", "Canny Encoder", "Pretrained T2I Diffuser"], "a": 3, "exp": "그림 가운데의 초록색 상자에 Pretrained T2I Diffuser라고 표기되어 있다."}, {"id": 73, "sec": "1.5", "diff": "중급", "q": "개인화 사례 그림에서 확산 모델로 들어가는 입력으로 표시된 것들은 무엇인가?", "opts": ["참조 이미지(Ref Image), 선택적 구조 조건, 초기 노이즈", "레이블 1과 0", "예측 확률 0.83", "말 사진과 고양이 사진"], "a": 0, "exp": "그림에는 Ref Image, Optional Structural Cond, Initial Noise가 점선으로 확산 모델에 연결되어 있다."}, {"id": 74, "sec": "1.5", "diff": "심화", "q": "개인화 사례 그림에서 'Text Prompt' 위에 금지 표시가 그려져 있는 것의 의미로 가장 적절한 것은?", "opts": ["텍스트 프롬프트만으로 생성한다는 뜻", "텍스트 프롬프트 없이도 참조 이미지를 바탕으로 생성할 수 있음을 강조한 것", "텍스트 프롬프트가 항상 오류를 낸다는 뜻", "텍스트 프롬프트가 학습 데이터라는 뜻"], "a": 1, "exp": "프롬프트에 금지 표시를 둔 것은 텍스트 조건을 쓰지 않고 참조 이미지와 구조 조건만으로 결과를 얻는 방식임을 나타낸다."}, {"id": 75, "sec": "1.5", "diff": "중급", "q": "개인화 사례에서 참조 이미지로 사용된 소재는 무엇인가?", "opts": ["뿔이 큰 사슴", "주방의 요리사", "우주복을 입고 백마를 탄 인물", "지하철 안의 승객"], "a": 2, "exp": "Ref Image에는 우주복 차림으로 백마를 탄 인물 이미지가 놓여 있고, 생성 결과도 같은 대상을 변주한다."}, {"id": 76, "sec": "1.5", "diff": "기초", "q": "'AI 휴먼 모델' 사례로 소개된 가상 인간의 이름은 무엇인가?", "opts": ["미켈란젤로", "반 고흐", "모나리자", "로지"], "a": 3, "exp": "슬라이드에 삽입된 뉴스 장면에 '광고서 얼굴 알린 가상인간 로지, 가수로 데뷔'라는 자막이 나온다."}, {"id": 77, "sec": "1.5", "diff": "중급", "q": "AI 휴먼 모델 사례에서 소개된 가상 인간의 활동 경로는 무엇인가?", "opts": ["광고에서 얼굴을 알린 뒤 가수로 데뷔", "드라마 주연으로 데뷔한 뒤 광고에 출연", "연구 논문 발표 후 곧바로 상용화", "게임 캐릭터에서 시작해 영화 배우로 전환"], "a": 0, "exp": "뉴스 자막이 광고로 알려진 뒤 가수로 데뷔한다는 내용을 전하고 있다."}, {"id": 78, "sec": "1.5", "diff": "중급", "q": "AI 휴먼 모델이 광고 산업에서 갖는 이점으로 자료의 맥락에 가장 부합하는 것은?", "opts": ["학습 데이터가 전혀 필요하지 않다", "실제 인물의 촬영 없이 원하는 콘셉트의 인물 이미지·영상을 제작할 수 있다", "광고 효과를 항상 100% 보장한다", "판별 모델을 완전히 대체할 수 있다"], "a": 1, "exp": "가상 인간은 생성 모델로 만들어지므로 실제 촬영 없이도 다양한 콘셉트의 인물 콘텐츠를 만들 수 있다."}, {"id": 79, "sec": "1.5", "diff": "심화", "q": "강의자료에서 image-to-image 응용과 text-to-image 응용을 나누는 기준은 무엇인가?", "opts": ["출력이 이미지인지 영상인지", "모델이 확산 모델인지 아닌지", "생성의 조건(입력)이 이미지인지 텍스트인지", "학습에 사용한 데이터의 양"], "a": 2, "exp": "슬라이드 제목이 입력 종류를 기준으로 image-to-image와 text-to-image로 구분되어 있다."}, {"id": 80, "sec": "1.5", "diff": "중급", "q": "강의자료의 응용 사례 중 생성 조건이 '텍스트'인 것끼리만 묶은 것은?", "opts": ["캐릭터 변환, AI 휴먼 모델", "캐릭터 변환, 댄스 영상 제어", "패션 영상, 캐릭터 변환", "애니메이션 뮤직비디오, 온라인 배너광고"], "a": 3, "exp": "뮤직비디오와 배너광고는 모두 text-to-image 변환 항목 아래에 소개되어 있고, 캐릭터 변환은 image-to-image다."}, {"id": 81, "sec": "1.5", "diff": "심화", "q": "캐릭터 변환 사례가 image-to-image로 분류되는 근거로 가장 적절한 것은?", "opts": ["원본 인물 사진이 입력으로 주어지고 그 인물의 특징을 유지한 그림이 출력되기 때문", "텍스트 설명이 유일한 입력이기 때문", "노이즈만 입력으로 사용하기 때문", "출력이 클래스 레이블이기 때문"], "a": 0, "exp": "슬라이드의 예시는 왼쪽에 실사 얼굴, 오른쪽에 같은 얼굴을 만화풍으로 바꾼 결과를 짝지어 보여 준다."}, {"id": 82, "sec": "1.5", "diff": "중급", "q": "응용 사례 슬라이드들이 전체적으로 보여 주는 흐름은 무엇인가?", "opts": ["정적인 이미지에서 판별 성능 향상으로 나아간다", "정지 이미지 생성에서 영상 생성으로 범위가 확장된다", "영상에서 이미지로 범위가 축소된다", "텍스트 처리에서 음성 인식으로 이동한다"], "a": 1, "exp": "캐릭터·광고·개인화 등 이미지 사례를 먼저 다룬 뒤 댄스/패션 영상, 영화 영상 생성으로 이어진다."}, {"id": 83, "sec": "1.5", "diff": "심화", "q": "개인화 기술이 일반적인 text-to-image 생성과 구별되는 점으로 가장 적절한 것은?", "opts": ["결과 이미지가 항상 흑백으로 나온다", "텍스트를 전혀 사용할 수 없다", "특정 대상(참조 이미지)의 정체성을 유지하면서 다양한 장면을 만들어 낸다", "학습 과정 없이 동작한다"], "a": 2, "exp": "참조 이미지를 조건으로 주어 같은 대상을 여러 구도·장면으로 재생성하는 것이 개인화의 목적이다."}, {"id": 84, "sec": "1.6", "diff": "기초", "q": "text-to-image 생성 제어 슬라이드에서 사슴 이미지를 만들 때 구조 조건으로 사용한 입력은 무엇인가?", "opts": ["사람의 자세(pose) 정보", "랜덤 노이즈만", "레이블 1과 0", "Canny edge(윤곽선) 이미지"], "a": 3, "exp": "슬라이드 왼쪽 위에 'Input Canny edge'라는 설명과 함께 사슴의 윤곽선 그림이 놓여 있다."}, {"id": 85, "sec": "1.6", "diff": "기초", "q": "생성 제어 슬라이드에서 사람 이미지를 만들 때 사용한 입력 조건은 무엇인가?", "opts": ["human pose(사람 자세) 정보", "Canny edge 지도", "말 사진", "배너광고 이미지"], "a": 0, "exp": "아래쪽 예시에는 'Input human pose'라는 설명과 함께 색색의 뼈대 형태 자세 정보가 입력으로 제시된다."}, {"id": 86, "sec": "1.6", "diff": "중급", "q": "생성 제어 예시에서 'Default' 결과와 텍스트 프롬프트를 준 결과의 차이는 무엇인가?", "opts": ["Default 결과는 조건 이미지를 아예 무시한다", "조건에서 온 구조는 유지되고 프롬프트에 따라 화풍·설정만 달라진다", "프롬프트를 주면 구조가 완전히 바뀐다", "Default 결과는 텍스트만 출력한다"], "a": 1, "exp": "사슴은 윤곽선을, 사람은 자세를 그대로 유지한 채 '동화 속 걸작', '주방의 요리사' 등 프롬프트에 따라 표현만 달라진다."}, {"id": 87, "sec": "1.6", "diff": "중급", "q": "사람 자세 조건에 \"chef in kitchen\"과 \"Lincoln statue\" 프롬프트를 각각 주었을 때 공통으로 유지되는 것은 무엇인가?", "opts": ["옷의 색", "배경의 조명", "입력으로 준 자세(포즈)", "이미지의 파일 크기"], "a": 2, "exp": "생성 제어의 핵심은 조건으로 준 구조가 유지된다는 점이며, 여기서는 사람의 포즈가 그대로 반영된다."}, {"id": 88, "sec": "1.6", "diff": "심화", "q": "생성 제어(controllable generation)가 가지는 핵심 효용으로 가장 적절한 것은?", "opts": ["학습 데이터의 양을 줄여 준다", "레이블링 작업을 자동화해 준다", "판별 모델의 정확도를 높여 준다", "원하는 구조나 구도를 지정해 생성 결과를 통제할 수 있다"], "a": 3, "exp": "윤곽선이나 자세 같은 조건을 주면 결과의 구도를 의도대로 고정한 채 세부 표현만 바꿀 수 있다."}, {"id": 89, "sec": "1.6", "diff": "중급", "q": "사슴 생성 제어 예시에 사용된 텍스트 프롬프트로 슬라이드에 표기된 것은 무엇인가?", "opts": ["masterpiece of fairy tale, giant deer, golden antlers", "chef in kitchen", "Animating Human Image", "New Beginning"], "a": 0, "exp": "사슴 예시에는 이 프롬프트와 '..., quaint city Galic'이라는 프롬프트가 표기되어 있고, chef in kitchen은 사람 자세 예시의 프롬프트다."}, {"id": 90, "sec": "1.6", "diff": "기초", "q": "Video 생성 제어 사례에서 다룬 두 가지 주제는 무엇인가?", "opts": ["광고와 영화", "댄스와 패션", "캐릭터와 개인화", "분류와 회귀"], "a": 1, "exp": "슬라이드 제목이 'Video 생성 제어 : 댄스 / 패션'이다."}, {"id": 91, "sec": "1.6", "diff": "중급", "q": "MagicAnimate의 목표로 슬라이드에 적힌 설명은 무엇인가?", "opts": ["텍스트를 음악으로 바꾸는 것", "사진의 해상도를 높이는 것", "참조 이미지를 모션 시퀀스에 맞춰 시간적 일관성을 지키며 애니메이션하는 것", "이미지를 범주별로 분류하는 것"], "a": 2, "exp": "슬라이드에는 참조 이미지를 모션 시퀀스에 맞추어 temporal consistency를 유지하며 애니메이션하는 것을 목표로 한다고 적혀 있다."}, {"id": 92, "sec": "1.6", "diff": "중급", "q": "MagicAnimate 예시 그림에서 각 묶음이 보여 주는 세 열의 구성은 무엇인가?", "opts": ["Input / Output / Loss", "Train / Valid / Test", "Edge / Pose / Depth", "Reference / Motion / Animation"], "a": 3, "exp": "각 묶음은 참조 이미지, 모션 정보, 그리고 그 둘을 합쳐 만든 애니메이션 결과 순으로 배열되어 있다."}, {"id": 93, "sec": "1.6", "diff": "중급", "q": "DreamPose 예시 그림에서 모델에 주어지는 두 가지 입력은 무엇인가?", "opts": ["Input Image와 Input Pose Sequence", "Canny edge와 텍스트 프롬프트", "랜덤 노이즈와 레이블", "참조 이미지와 예측 확률"], "a": 0, "exp": "그림 왼쪽에 Input Image(옷을 입은 인물 사진)와 Input Pose Sequence(자세 시퀀스)가 표시되어 있다."}, {"id": 94, "sec": "1.6", "diff": "심화", "q": "영상 생성에서 시간적 일관성(temporal consistency)이 중요한 이유는 무엇인가?", "opts": ["파일 용량을 줄이기 위해", "프레임마다 인물이나 의상이 달라져 영상이 어색해지는 것을 막기 위해", "자세 정보를 제거하기 위해", "학습 속도를 높이기 위해"], "a": 1, "exp": "영상은 여러 프레임의 연속이므로, 프레임 사이에 대상의 정체성과 외형이 유지되어야 자연스러운 결과가 된다."}, {"id": 95, "sec": "1.6", "diff": "중급", "q": "패션 분야에서 DreamPose와 같은 기술의 활용으로 가장 자연스러운 것은?", "opts": ["옷의 가격을 예측하는 일", "매장 방문객 수를 세는 일", "옷 사진 한 장으로 모델이 움직이는 착용 영상을 만드는 일", "옷의 재질을 자동으로 분류하는 일"], "a": 2, "exp": "입력 이미지와 자세 시퀀스로 영상을 만드는 기술이므로, 정지 사진을 착용 영상으로 바꾸는 데 쓰일 수 있다."}, {"id": 96, "sec": "1.6", "diff": "기초", "q": "응용 사례의 마지막 항목으로 제시된 Video 생성 분야는 무엇인가?", "opts": ["게임", "교육", "의료", "영화"], "a": 3, "exp": "마지막 응용 슬라이드의 제목은 'Video 생성 : 영화'이며, AI로 제작한 사극풍 영상 장면이 예시로 실려 있다."}, {"id": 97, "sec": "1.6", "diff": "중급", "q": "학습정리 슬라이드가 제시한 두 개의 대단원은 무엇인가?", "opts": ["생성형 AI(이미지)란? / 생성형 AI(이미지) 응용 사례", "판별 모델 / 생성 모델", "이미지 생성 / 영상 편집", "데이터 수집 / 모델 배포"], "a": 0, "exp": "학습정리는 1번 '생성형 AI(이미지)란?'과 2번 '생성형 AI(이미지) 응용 사례'로 정리되어 있다."}, {"id": 98, "sec": "1.6", "diff": "심화", "q": "학습정리에 나열된 응용 사례 항목의 순서로 옳은 것은?", "opts": ["AI 휴먼 모델 → 캐릭터 변환 → 영화", "캐릭터 변환 → 애니메이션 뮤직비디오 → 광고/디자인·개인화·생성 제어 → AI 휴먼 모델 → 댄스/패션 영상 → 영화", "영화 → 댄스/패션 → 광고 → 캐릭터", "광고 → 캐릭터 → 영화 → 개인화"], "a": 1, "exp": "학습정리 2번 항목은 image-to-image 캐릭터부터 시작해 Video 생성 영화로 끝나는 순서로 나열되어 있다."}, {"id": 99, "sec": "1.6", "diff": "심화", "q": "이 주차 강의자료 전체를 관통하는 메시지로 가장 적절한 것은?", "opts": ["판별 모델의 정확도를 높이는 기법을 익혀야 한다", "레이블링 비용을 줄이는 방법이 핵심이다", "데이터 분포를 흉내내는 생성 모델이 이미지에서 영상까지 새로운 콘텐츠 제작 전반으로 확장되고 있다", "이미지 압축 표준을 이해하는 것이 중요하다"], "a": 2, "exp": "자료는 판별과 생성의 차이에서 출발해 생성형 AI의 정의를 세우고, 이미지와 영상 전반의 응용 사례로 확장해 간다."}, {"id": 100, "sec": "1.6", "diff": "기초", "q": "강의자료가 제작 이미지의 출처로 마지막에 밝힌 사이트는 어디인가?", "opts": ["arxiv.org", "github.com", "aitimes.com", "kr.freepik.com"], "a": 3, "exp": "출처 슬라이드에 '제작 이미지 출처 https://kr.freepik.com/'이 표기되어 있다."}];
+
+const SECTIONS = {
+  "1.1": "판별 모델과 생성 모델의 구분",
+  "1.2": "판별 모델의 동작 원리",
+  "1.3": "생성 모델의 동작 원리",
+  "1.4": "생성형 AI의 정의",
+  "1.5": "응용 사례 — image-to-image와 text-to-image",
+  "1.6": "생성 제어와 Video 생성, 학습 정리"
+};
+const DIFFS = ["기초","중급","심화"];
+const DIFFCLS = {"기초":"d1","중급":"d2","심화":"d3"};
+const KEY = "mlx_week1_img_quiz_v1";
+
+/* ---------- state ---------- */
+let state = {
+  answers:{},           // id -> chosen original option index
+  secFilter:"ALL",
+  diffFilter:"ALL",
+  shuffleQ:false,
+  shuffleO:false,
+  reviewMode:false,
+  order:[],             // array of question ids in display order
+  optOrder:{},          // id -> array of original indices
+  cursor:0
+};
+
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify({
+    answers:state.answers, shuffleQ:state.shuffleQ, shuffleO:state.shuffleO,
+    secFilter:state.secFilter, diffFilter:state.diffFilter, optOrder:state.optOrder
+  })); }catch(e){}
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY); if(!raw) return;
+    const d = JSON.parse(raw);
+    if(d && typeof d==="object"){
+      state.answers = d.answers||{};
+      state.shuffleQ = !!d.shuffleQ; state.shuffleO = !!d.shuffleO;
+      state.secFilter = d.secFilter||"ALL"; state.diffFilter = d.diffFilter||"ALL";
+      state.optOrder = d.optOrder||{};
+    }
+  }catch(e){}
+}
+
+/* ---------- helpers ---------- */
+function shuffled(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function optOrderFor(q){
+  if(!state.shuffleO) return [0,1,2,3];
+  if(!state.optOrder[q.id]) { state.optOrder[q.id] = shuffled([0,1,2,3]); save(); }
+  return state.optOrder[q.id];
+}
+function isWrong(q){ return q.id in state.answers && state.answers[q.id] !== q.a; }
+function isRight(q){ return state.answers[q.id] === q.a; }
+
+function buildOrder(keepCursor){
+  let pool = QUESTIONS.filter(q =>
+    (state.secFilter==="ALL" || q.sec===state.secFilter) &&
+    (state.diffFilter==="ALL" || q.diff===state.diffFilter)
+  );
+  if(state.reviewMode && state.reviewIds && state.reviewIds.length)
+    pool = state.reviewIds.map(id=>byId[id]);
+  let ids = pool.map(q=>q.id);
+  if(state.shuffleQ) ids = shuffled(ids);
+  state.order = ids;
+  if(!keepCursor) state.cursor = 0;
+  if(state.cursor >= ids.length) state.cursor = Math.max(0, ids.length-1);
+}
+
+const byId = {}; QUESTIONS.forEach(q => byId[q.id]=q);
+
+/* ---------- rendering ---------- */
+const $ = s => document.querySelector(s);
+const stage = $("#stage");
+
+function renderChips(){
+  const sc = $("#secChips"); sc.innerHTML="";
+  const mk = (label,val,cur,handler)=>{
+    const b=document.createElement("button");
+    b.className="chip"; b.textContent=label;
+    b.setAttribute("aria-pressed", String(cur===val));
+    b.onclick=()=>handler(val); return b;
+  };
+  sc.appendChild(mk("전체 "+QUESTIONS.length+"문항","ALL",state.secFilter,setSec));
+  Object.keys(SECTIONS).forEach(k=>{
+    const n = QUESTIONS.filter(q=>q.sec===k).length;
+    sc.appendChild(mk(k+" "+SECTIONS[k]+" ("+n+")",k,state.secFilter,setSec));
+  });
+  const dc = $("#diffChips"); dc.innerHTML="";
+  dc.appendChild(mk("전체","ALL",state.diffFilter,setDiff));
+  DIFFS.forEach(d=>{
+    const n = QUESTIONS.filter(q=>q.diff===d).length;
+    dc.appendChild(mk(d+" ("+n+")",d,state.diffFilter,setDiff));
+  });
+  $("#shuffleQ").setAttribute("aria-pressed", String(state.shuffleQ));
+  $("#shuffleO").setAttribute("aria-pressed", String(state.shuffleO));
+  $("#reviewBtn").setAttribute("aria-pressed", String(state.reviewMode));
+}
+
+function setSec(v){ state.secFilter=v; state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+function setDiff(v){ state.diffFilter=v; state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+
+function renderProgress(){
+  const ids = state.order;
+  const done = ids.filter(id=> id in state.answers).length;
+  const ok = ids.filter(id=> isRight(byId[id])).length;
+  const no = done - ok;
+  $("#doneN").textContent = done;
+  $("#totalN").textContent = ids.length;
+  $("#okN").textContent = ok;
+  $("#noN").textContent = no;
+  $("#rate").textContent = done ? Math.round(ok/done*100)+"%" : "—";
+  $("#barFill").style.width = ids.length ? (done/ids.length*100)+"%" : "0%";
+  $("#wrongCount").textContent = QUESTIONS.filter(isWrong).length;
+}
+
+function renderPalette(){
+  const p = $("#palette"); p.innerHTML="";
+  state.order.forEach((id,i)=>{
+    const q = byId[id];
+    const b=document.createElement("button");
+    b.className="cell" + (id in state.answers ? (isRight(q)?" o":" x") : "") + (i===state.cursor?" cur":"");
+    b.textContent = q.id;
+    b.title = q.sec+" · "+q.diff;
+    b.onclick=()=>{ state.cursor=i; renderAll(); window.scrollTo({top:0,behavior:"smooth"}); };
+    p.appendChild(b);
+  });
+}
+
+function renderQuestion(){
+  stage.innerHTML="";
+  if(!state.order.length){
+    const d=document.createElement("div"); d.className="panel empty";
+    d.textContent = state.reviewMode ? "틀린 문제가 없습니다. 잘하셨어요!" : "조건에 맞는 문제가 없습니다. 필터를 바꿔 보세요.";
+    stage.appendChild(d); return;
+  }
+  const idx = state.cursor;
+  const q = byId[state.order[idx]];
+  const answered = q.id in state.answers;
+  const order = optOrderFor(q);
+
+  const card=document.createElement("section"); card.className="panel qcard";
+
+  const meta=document.createElement("div"); meta.className="qmeta";
+  meta.innerHTML =
+    '<span class="tag num">'+ (idx+1) +' / '+ state.order.length +'</span>' +
+    '<span class="tag sec">'+ q.sec +' '+ SECTIONS[q.sec] +'</span>' +
+    '<span class="tag '+ DIFFCLS[q.diff] +'">'+ q.diff +'</span>' +
+    '<span style="margin-left:auto;font-size:12px;color:var(--muted)">문제 '+ q.id +'번</span>';
+  card.appendChild(meta);
+
+  const h=document.createElement("h2"); h.className="qtext"; h.textContent=q.q; card.appendChild(h);
+
+  const wrap=document.createElement("div"); wrap.className="opts";
+  order.forEach((orig,pos)=>{
+    const b=document.createElement("button"); b.className="opt"; b.type="button";
+    b.innerHTML = '<span class="n">'+(pos+1)+'</span><span class="t"></span>';
+    b.querySelector(".t").textContent = q.opts[orig];
+    if(answered){
+      b.disabled = true;
+      if(orig===q.a){ b.classList.add("correct"); b.insertAdjacentHTML("beforeend",'<span class="mark">정답</span>'); }
+      else if(orig===state.answers[q.id]){ b.classList.add("wrong"); b.insertAdjacentHTML("beforeend",'<span class="mark">내 선택</span>'); }
+    } else {
+      b.onclick=()=>{ state.answers[q.id]=orig; save(); renderAll(); };
+    }
+    wrap.appendChild(b);
+  });
+  card.appendChild(wrap);
+
+  if(answered){
+    const e=document.createElement("div"); e.className="exp";
+    const good = isRight(q);
+    e.innerHTML = '<h4>'+(good?'✓ 정답입니다':'✕ 다시 확인해 보세요')+'</h4><p></p>'+
+                  '<span class="ref">관련 단원 · '+q.sec+' '+SECTIONS[q.sec]+'</span>';
+    e.querySelector("p").textContent = q.exp;
+    if(!good){ e.style.background="var(--no-soft)"; e.style.borderLeftColor="var(--no)"; e.querySelector("h4").style.color="var(--no)"; }
+    card.appendChild(e);
+  }
+
+  const nav=document.createElement("div"); nav.className="nav";
+  const prev=document.createElement("button"); prev.className="btn"; prev.textContent="← 이전";
+  prev.disabled = idx===0; prev.onclick=()=>{ state.cursor--; renderAll(); };
+  const next=document.createElement("button"); next.className="btn primary";
+  next.textContent = idx===state.order.length-1 ? "결과 보기 →" : "다음 →";
+  next.onclick=()=>{
+    if(idx===state.order.length-1){ showResult(); }
+    else { state.cursor++; renderAll(); }
+  };
+  const redo=document.createElement("button"); redo.className="btn"; redo.textContent="이 문제 다시";
+  redo.disabled = !answered;
+  redo.onclick=()=>{ delete state.answers[q.id]; save(); renderAll(); };
+  nav.appendChild(prev); nav.appendChild(redo);
+  const sp=document.createElement("span"); sp.className="spacer"; nav.appendChild(sp);
+  nav.appendChild(next);
+  card.appendChild(nav);
+
+  stage.appendChild(card);
+}
+
+function showResult(){
+  const ids = state.order;
+  const done = ids.filter(id=> id in state.answers).length;
+  const ok = ids.filter(id=> isRight(byId[id])).length;
+  const card=document.createElement("section"); card.className="panel result";
+  const pct = done ? Math.round(ok/done*100) : 0;
+  let msg = pct>=90?"완벽합니다. 1주차 내용을 확실히 이해했어요."
+          : pct>=75?"좋습니다. 틀린 문제만 복습하면 충분해요."
+          : pct>=50?"절반 이상 맞혔습니다. 오답 노트를 한 번 더 돌려 보세요."
+          : "해설을 읽으며 오답부터 차근히 정리해 봅시다.";
+
+  const per = {};
+  Object.keys(SECTIONS).forEach(k=>{
+    const sub = ids.map(i=>byId[i]).filter(q=>q.sec===k && (q.id in state.answers));
+    if(sub.length) per[k] = [sub.filter(isRight).length, sub.length];
+  });
+
+  card.innerHTML =
+    '<div class="eyebrow">결과</div>'+
+    '<div class="score">'+ok+' <small>/ '+done+' 정답</small></div>'+
+    '<div class="stat" style="font-size:15px">정답률 <b>'+pct+'%</b> · '+msg+'</div>'+
+    '<div class="breakdown">'+ Object.keys(per).map(k=>
+       '<div class="bd"><div class="k">'+k+' '+SECTIONS[k]+'</div><div class="v">'+per[k][0]+' / '+per[k][1]+'</div></div>'
+     ).join('') +'</div>';
+
+  const nav=document.createElement("div"); nav.className="nav";
+  const back=document.createElement("button"); back.className="btn"; back.textContent="← 문제로 돌아가기";
+  back.onclick=()=>renderAll();
+  const rev=document.createElement("button"); rev.className="btn primary";
+  const wn = QUESTIONS.filter(isWrong).length;
+  rev.textContent="틀린 문제 "+wn+"개 다시 풀기"; rev.disabled = wn===0;
+  rev.onclick=()=>enterReview();
+  nav.appendChild(back);
+  const sp=document.createElement("span"); sp.className="spacer"; nav.appendChild(sp);
+  nav.appendChild(rev);
+  card.appendChild(nav);
+
+  stage.innerHTML=""; stage.appendChild(card);
+  renderProgress(); renderPalette();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function enterReview(){
+  const wrongIds = QUESTIONS.filter(isWrong).map(q=>q.id);
+  if(!wrongIds.length){
+    state.reviewMode=false; buildOrder(false); renderAll();
+    alert("틀린 문제가 없습니다.");
+    return;
+  }
+  wrongIds.forEach(id=> delete state.answers[id]);
+  state.reviewMode = true;
+  state.reviewIds = wrongIds;
+  state.order = state.shuffleQ ? shuffled(wrongIds) : wrongIds.slice();
+  state.cursor = 0;
+  save(); renderAll(); window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function renderAll(){ renderChips(); renderProgress(); renderPalette(); renderQuestion(); }
+
+/* ---------- events ---------- */
+$("#shuffleQ").onclick=()=>{ state.shuffleQ=!state.shuffleQ; buildOrder(false); save(); renderAll(); };
+$("#shuffleO").onclick=()=>{
+  state.shuffleO=!state.shuffleO;
+  if(!state.shuffleO) state.optOrder={};
+  save(); renderAll();
+};
+$("#reviewBtn").onclick=()=>{
+  if(state.reviewMode){ state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+  else enterReview();
+};
+$("#resetBtn").onclick=()=>{
+  state.answers={}; state.optOrder={}; state.reviewMode=false;
+  buildOrder(false); save(); renderAll(); window.scrollTo({top:0,behavior:"smooth"});
+};
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT") return;
+  if(e.key==="ArrowRight" && state.cursor < state.order.length-1){ state.cursor++; renderAll(); }
+  if(e.key==="ArrowLeft" && state.cursor>0){ state.cursor--; renderAll(); }
+  if(["1","2","3","4"].includes(e.key)){
+    const btns = document.querySelectorAll(".opt:not(:disabled)");
+    const b = btns[Number(e.key)-1]; if(b) b.click();
+  }
+});
+
+/* ---------- init ---------- */
+load();
+buildOrder(false);
+// resume at first unanswered
+const firstUn = state.order.findIndex(id=> !(id in state.answers));
+state.cursor = firstUn === -1 ? 0 : firstUn;
+renderAll();
+</script>
+</body>
+</html>

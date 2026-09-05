@@ -39,3 +39,15 @@ materials/
 
 3. 해당 주차 페이지의 "강의자료" 섹션에 카드를 추가한다.
    제목은 `pdf-viewer.html?doc=<키>` 로, 다운로드 버튼은 PDF 경로로 연결한다.
+
+## 100문제(HTML) 자료
+
+주차별 100문제는 단일 HTML 파일이므로 PDF와 같은 폴더에 둔다.
+
+```
+materials/자연어처리/week01-quiz100.html
+materials/기계학습특론/week01-quiz100.html
+```
+
+주차 페이지에서는 `target="_blank"`로 바로 열고, 다운로드 버튼에는
+`download="자연어처리_1주차_자연어처리개요_100문제.html"`처럼 한글 파일명을 지정한다.
