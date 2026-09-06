@@ -139,6 +139,22 @@ th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);ve
 th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
 tr:last-child td{border-bottom:none}
 td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+.exam{background:#fef2f2;border:2px solid var(--red);border-radius:var(--radius);padding:11px 15px;font-size:12.5px;color:#7f1d1d;line-height:1.7;margin:0 0 12px;display:flex;gap:9px;align-items:flex-start}
+.exam .tag{flex-shrink:0;background:var(--red);color:#fff;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;margin-top:1px}
+table.exam-table th{background:#fdecec}
+table.exam-table td:first-child{background:#fef7f7}
+.pipe{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:14px 0}
+.pipe .st{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:12px;font-weight:700;text-align:center;line-height:1.5;flex:1 1 100px;min-width:88px}
+.pipe .st small{display:block;font-size:10px;font-weight:400;color:var(--muted);margin-top:2px}
+.pipe .st.raw{background:#f1f0ec;color:var(--muted)}
+.pipe .st.app{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pipe .arrow{color:var(--muted);font-size:14px;flex:0 0 auto}
+.cycle{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.cyc{background:var(--accent);color:#fff;border-radius:8px;padding:12px 12px 11px;font-size:12.5px;font-weight:700;text-align:center}
+.cyc em{display:block;font-style:normal;font-size:10.5px;font-weight:400;color:#dbe4f7;margin-top:4px;line-height:1.5}
+.cyc.dim{background:#7d9ad6}
+@media(max-width:480px){.cycle{grid-template-columns:1fr 1fr}}
+.cyc-note{grid-column:1/-1;background:#fff7ed;border:1px solid #f59e0b;border-radius:8px;padding:9px 12px;font-size:11.5px;color:#78350f;text-align:center}
 /* links */
 a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
 a.ext:hover{border-bottom-color:var(--accent)}
@@ -193,6 +209,7 @@ a.ext:hover{border-bottom-color:var(--accent)}
   <a href="#apps">응용 분야</a>
   <a href="#system">시스템 구성</a>
   <a href="#limit">한계 · 윤리</a>
+  <a href="#summary">핵심 정리</a>
   <a href="#next">다음 주 예고</a>
   <a href="#ref">참고문헌</a>
 </nav>
@@ -277,6 +294,29 @@ a.ext:hover{border-bottom-color:var(--accent)}
   <li><b>⑤ 사전학습 · 대규모 언어모델 (2017 ~ 현재)</b> — Transformer 「Attention Is All You Need」 이후 순환구조 없이 어텐션만으로 구성, 병렬화로 대규모 사전학습이 가능해짐</li>
   <li>한국어 자연어처리의 흐름도 같은 축을 따라 정리된다</li>
 </ul></div>
+
+<div class="exam"><span class="tag">시험 출제 예고</span>
+<div>아래 <b>네 가지 패러다임 비교표</b>는 시험에 나온다고 예고된 핵심 내용입니다.
+시기 · 핵심 아이디어 · 대표 기법 · 장점 · 한계를 <b>패러다임별로 짝지어</b> 정확히 암기해 두세요.
+※ 태동기(1950년대)는 <b>규칙 기반</b> 열에 포함됩니다.</div></div>
+
+<div class="tbl-wrap">
+<table class="exam-table">
+  <thead><tr><th>구분</th><th>규칙 기반</th><th>통계 기반</th><th>딥러닝 기반</th><th>사전학습 · LLM</th></tr></thead>
+  <tbody>
+    <tr><td>시기</td><td>1950~1980s</td><td>1990~2000s</td><td>2013~2017</td><td>2018~현재</td></tr>
+    <tr><td>핵심 아이디어</td><td>사람이 문법 규칙을 직접 작성</td><td>코퍼스에서 확률을 추정</td><td>표현을 데이터로부터 자동 학습</td><td>대규모 사전학습 후 전이 · 지시 학습</td></tr>
+    <tr><td>대표 기법</td><td>정규표현식, CFG, 전문가 시스템</td><td>n-gram, HMM, IBM 번역모델</td><td>word2vec, RNN, LSTM, CNN</td><td>Transformer, BERT, GPT</td></tr>
+    <tr><td>장점</td><td>해석 가능, 소량 데이터로도 동작</td><td>통계적 일반화, 견고함</td><td>특징공학 불필요, 높은 성능</td><td>범용성, 소수 예시 학습(few-shot)</td></tr>
+    <tr><td>한계</td><td>예외 처리 폭증, 확장 곤란</td><td>희소성 문제, 장거리 의존 관계에 약함</td><td>대량의 라벨 데이터 필요</td><td>막대한 비용, 환각 · 편향</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="tip"><b>한 줄로 외우기</b><br>
+규칙 기반(사람이 직접 규칙 작성) → 통계 기반(코퍼스에서 확률 추정) → 딥러닝 기반(표현을 자동 학습) → 사전학습 · LLM(대규모 사전학습 + 전이/지시 학습)
+— 각 단계는 <b>이전 단계의 한계를 해결</b>하며 등장했다는 흐름으로 이해하면 암기가 쉽습니다.
+(예: 규칙 기반의 &ldquo;예외 처리 폭증&rdquo; → 통계적 접근으로 완화 → 통계 기반의 &ldquo;희소성 문제&rdquo; → 딥러닝의 자동 표현 학습으로 완화)</div>
 </section>
 
 <!-- ===================== 1.3 ===================== -->
@@ -305,11 +345,64 @@ a.ext:hover{border-bottom-color:var(--accent)}
 <!-- ===================== 1.5 ===================== -->
 <section class="sec" id="system">
   <div class="sec-head"><span class="sec-badge">1.5</span><h2 class="sec-title">시스템은 어떻게 만들어지는가<small>코퍼스 · 임베딩 · 파이프라인</small></h2></div>
+
+<div class="note-box">자연어처리 시스템은 여러 처리 단계가 연결된 <b>&lsquo;파이프라인&rsquo;</b> 구조를 가진다.</div>
+
+<div class="pipe">
+  <span class="st raw">원문 텍스트</span><span class="arrow">→</span>
+  <span class="st">전처리<small>정제 · 정규화</small></span><span class="arrow">→</span>
+  <span class="st">토큰화<small>형태소 분석</small></span><span class="arrow">→</span>
+  <span class="st">벡터화<small>특징 표현</small></span><span class="arrow">→</span>
+  <span class="st">모델<small>학습 · 추론</small></span><span class="arrow">→</span>
+  <span class="st">후처리<small>결과 생성</small></span><span class="arrow">→</span>
+  <span class="st app">응용 서비스</span>
+</div>
+
+<div class="tip"><b>이번 학기 진도와의 연결</b><br>
+· <b>3주차</b> — 토큰화 · 태깅 &nbsp;·&nbsp; <b>4주차</b> — 구문 · 의미 분석 &nbsp;·&nbsp;
+<b>5주차</b> — 단어 표현 · 분류 &nbsp;·&nbsp; <b>11~14주차</b> — 딥러닝 모델</div>
+
 <div class="note-box"><ul class="ul">
-  <li>자연어처리 시스템은 여러 처리 단계가 연결된 <b>파이프라인</b> 구조를 가진다 (딥러닝 기반 연구·개발의 여섯 단계)</li>
-  <li><b>코퍼스(Corpus, 말뭉치)</b> — 대규모 문장 모음. 목적에 따라 품사·개체명·감성 등 분석 결과가 함께 담기기도 한다</li>
-  <li><b>단어 임베딩(Word Embedding)</b> — 각 단어(형태소)를 실수 벡터로 바꾸는 전처리. 비슷한 의미의 단어는 가까이 놓인다</li>
-  <li><b>챗봇 파이프라인 4단계</b> — ① 파싱(특징·구조적 수치 추출) → ② 분석(정서·문법성·의미 평점) → ③ 생성 → ④ 실행</li>
+  <li><b>코퍼스(Corpus, 말뭉치)</b> — 통계 · 딥러닝 기반 자연어처리에서 사용되는 대규모 문장 모음. 문장만 담기도 하지만, 목적에 따라 분석 결과(품사 · 개체명 · 감성 등)를 함께 붙인다</li>
+  <li><b>단어 임베딩(Word Embedding)</b> — 각 단어(형태소)를 실수 벡터로 바꾸는 전처리. 비슷한 의미의 단어는 가까이, 비슷한 관계의 단어쌍은 같은 방향에 놓인다</li>
+</ul></div>
+
+<h3 class="sub-title">딥러닝 기반 자연어처리 연구 · 개발의 여섯 단계</h3>
+<div class="cycle">
+  <div class="cyc">① 목적 정의<em>무엇을 풀 것인가</em></div>
+  <div class="cyc">② 데이터 확보<em>코퍼스 구축 · 수집</em></div>
+  <div class="cyc">③ 모델 설계<em>구조와 손실 정의</em></div>
+  <div class="cyc dim">④ 학습<em>코퍼스로 파라미터 최적화</em></div>
+  <div class="cyc dim">⑤ 검증<em>성능 평가 · 오류 분석</em></div>
+  <div class="cyc">⑥ 배포<em>실제 서비스 투입</em></div>
+  <div class="cyc-note">⑤ 검증에서 문제 발견 시 → <b>② ~ ④ 를 반복</b>한다 (목적 정의는 유지한 채 데이터 · 모델 · 학습만 다시)</div>
+</div>
+
+<h3 class="sub-title">사례 연구 — 챗봇(대화 엔진)의 파이프라인</h3>
+<div class="flow">
+  <div class="fl">
+    <div class="fl-n">1</div>
+    <div><h4>파싱 (Parse)</h4><p>자연어 텍스트에서 <b>특징(feature)과 구조적 수치 자료</b>를 추출한다.</p></div>
+  </div>
+  <div class="fl">
+    <div class="fl-n">2</div>
+    <div><h4>분석 (Analyze)</h4><p><b>정서 · 문법성 · 의미</b>에 대한 평점을 매겨 특징들을 생성하고 결합한다.</p></div>
+  </div>
+  <div class="fl">
+    <div class="fl-n">3</div>
+    <div><h4>생성 (Generate)</h4><p><b>템플릿 · 검색 · 언어모델</b>을 이용해 적절한 응답문을 작성한다.</p></div>
+  </div>
+  <div class="fl">
+    <div class="fl-n">4</div>
+    <div><h4>실행 (Execute)</h4><p>대화 내역과 목표에 기초해 제시문을 계획하고 <b>다음 응답문을 선택</b>한다.</p></div>
+  </div>
+</div>
+
+<div class="note-box"><b>덧붙여</b>
+<ul class="ul">
+  <li>이전 제시문과 응답문을 <b>기억하기 위한 데이터베이스</b>가 함께 필요하다 — 실행 결과가 대화 이력으로 저장되고, 다음 파싱 단계에서 그 문맥을 다시 조회하는 <b>순환 구조</b>다</li>
+  <li>각 단계는 하나 이상의 알고리즘이 <b>병렬 또는 직렬</b>로 실행되는 구조다</li>
+  <li>최근에는 이 네 단계를 <b>하나의 대규모 언어모델이 통합 수행</b>하는 방식이 확산되고 있다</li>
 </ul></div>
 </section>
 
@@ -322,12 +415,31 @@ a.ext:hover{border-bottom-color:var(--accent)}
   <li>학습 데이터의 <b>수집 경위와 라이선스</b>를 확인하고 문서화한다</li>
   <li>성별·지역 등에 대한 <b>편향</b>을 점검한다</li>
 </ul></div>
-<div class="note-box"><b>1주차 정리</b>
-<ul class="ul">
-  <li>자연어처리는 컴퓨터가 사람의 언어를 <b>이해(NLU)</b>하고 <b>생성(NLG)</b>하게 하는 분야다</li>
-  <li>규칙 기반 → 통계 기반 → 신경망 → 사전학습·LLM 으로 패러다임이 이동해 왔다</li>
-  <li>자연어가 어려운 이유는 중의성 · 규칙의 예외 · 확장성, 그리고 한국어의 교착어 특성이다</li>
-</ul></div>
+</section>
+
+<!-- ===================== 핵심 정리 ===================== -->
+<section class="sec" id="summary">
+  <div class="sec-head"><span class="sec-badge">정리</span><h2 class="sec-title">핵심 정리<small>1주차 Summary — 교안 &ldquo;정리&rdquo; 슬라이드 전체 7개 항목</small></h2></div>
+
+<div class="good">
+① 자연어처리는 컴퓨터가 사람의 언어를 <b>이해(NLU)</b>하고 <b>생성(NLG)</b>하게 하는 분야다.<br><br>
+② <b>규칙 기반 → 통계 기반 → 신경망 → 사전학습 · LLM</b>으로 패러다임이 이동해 왔다.
+<span style="color:#166534">(<a href="#history" style="color:inherit;text-decoration:underline">시험 출제 예고된 비교표</a> 참고)</span><br><br>
+③ 자연어가 어려운 이유는 <b>중의성, 규칙의 예외, 유연성과 확장성</b> 때문이다.<br><br>
+④ <b>한국어</b>는 교착어 · 어순 자유 · 생략 등으로 <b>추가적인 어려움</b>을 갖는다.<br><br>
+⑤ <b>번역 · 검색 · 질의응답 · 분류 · 요약 · 대화</b> 등 폭넓은 응용 분야가 존재한다.<br><br>
+⑥ 자연어처리 시스템은 <b>전처리 – 벡터화 – 모델 – 후처리</b>의 파이프라인으로 구성된다.<br><br>
+⑦ <b>데이터(코퍼스)의 양과 품질</b>이 성능을 좌우하며, <b>윤리적 검토</b>가 함께 필요하다.
+</div>
+
+<div class="tip"><b>이 페이지에서 각 항목이 다뤄진 곳</b><br>
+①→ <a href="#what" style="color:inherit;font-weight:700">자연어처리란</a> ·
+②→ <a href="#history" style="color:inherit;font-weight:700">역사</a> ·
+③→ <a href="#hard" style="color:inherit;font-weight:700">어려운 이유</a> ·
+④→ <a href="#hard" style="color:inherit;font-weight:700">어려운 이유(한국어)</a> ·
+⑤→ <a href="#apps" style="color:inherit;font-weight:700">응용 분야</a> ·
+⑥→ <a href="#system" style="color:inherit;font-weight:700">시스템 구성</a> ·
+⑦→ <a href="#limit" style="color:inherit;font-weight:700">한계 · 윤리</a></div>
 </section>
 
 <!-- ===================== 다음 주 ===================== -->
