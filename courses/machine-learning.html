@@ -115,6 +115,16 @@ a.wk .wk-n{background:#dfe8fa}
 .ev-bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#24407f,#4a72c9)}
 .ev-total{display:flex;align-items:baseline;justify-content:space-between;padding:10px 14px;border:1px dashed var(--border);border-radius:var(--radius);font-size:13px;font-weight:700;background:#f8f7f4}
 /* misc */
+.mat-links{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.mat-links a{
+  display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:11px 14px;text-decoration:none;
+}
+.mat-links a:hover{background:#fff8f8}
+.mat-links b{font-size:13px;font-weight:700;color:var(--ink);line-height:1.45}
+.mat-links small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.mat-links i{font-style:normal;font-size:11.5px;font-weight:700;color:var(--red);white-space:nowrap}
 .note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
 .note-box + .note-box{margin-top:10px}
 .src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
@@ -128,6 +138,7 @@ a.wk .wk-n{background:#dfe8fa}
   <a href="#overview">개요</a>
   <a href="#goal">교과목 목표</a>
   <a href="#weeks">주차별 수업내용</a>
+  <a href="#materials">강의자료</a>
   <a href="#eval">과제·평가</a>
 </nav>
 
@@ -272,6 +283,16 @@ a.wk .wk-n{background:#dfe8fa}
     </div>
   </div>
 </div>
+</section>
+
+<section class="sec" id="materials">
+  <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">강의자료<small>제목을 누르면 앱 실행 없이 화면에서 바로 열립니다</small></h2></div>
+<div class="mat-links">
+  <a href="pdf-viewer.html?doc=ml-w01-intro"><span><b>1주차 · CHAPTER 1 강의소개</b><small>교과목 개요 · 수업 방식 · 성적 배분 · 15주차 계획 · 7페이지</small></span><i>열기 →</i></a>
+  <a href="pdf-viewer.html?doc=ml-w01-genai"><span><b>1주차 · 생성형 AI(이미지)란?</b><small>판별 vs 생성 모델 · 생성형 AI 응용 사례 · 17페이지</small></span><i>열기 →</i></a>
+</div>
+<div class="note-box">각 자료의 <b>다운로드</b> 및 <b>내용 요약</b>은
+<a href="machine-learning-week01.html" style="color:var(--accent);font-weight:700;text-decoration:none">1주차 수업내용 페이지 →</a> 에서 확인할 수 있습니다.</div>
 </section>
 
 <section class="sec" id="eval">
