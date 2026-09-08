@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>컴퓨터비전 | 1주차 실습 자료</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#docs">실습 자료</a>
+  <a href="#env">실습 환경</a>
+  <a href="#py">Python 기초</a>
+  <a href="#np">NumPy</a>
+  <a href="#cv">OpenCV</a>
+  <a href="#next">다음 주 예고</a>
+</nav>
+
+<div class="wrap">
+
+<a class="backlink" href="computer-vision.html">← 컴퓨터비전 강의계획서로</a>
+
+<section class="hero">
+  <p class="kicker">1주차 · 8.31 ~ 9.6 · 2026-2학기</p>
+  <h1>기초 코드 실습 1 — Python &amp; OpenCV Library</h1>
+  <p>과제 구현에 필요한 Python 환경을 갖추고, NumPy로 이미지를 배열(텐서)로 다루는 법과 OpenCV의 변환·필터링·에지 검출을 실습합니다.</p>
+  <div class="chips"><span class="chip">담당교수 최재영</span><span class="chip">조교 한상훈</span><span class="chip">Python 3.10.x</span><span class="chip">OpenCV 4.10.x</span><span class="chip">42페이지</span></div>
+</section>
+
+<section class="sec" id="docs">
+  <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">1주차 실습 자료<small>제목을 누르면 앱 실행 없이 화면에서 바로 열리고, 오른쪽 버튼으로 내려받을 수 있습니다</small></h2></div>
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>🐍</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-w01-python">기초 코드 실습 1 — Python &amp; OpenCV Library</a>
+      <p>Python 환경 구축 · 자료형(list · tuple · dict) · NumPy 배열과 이미지 텐서 · 이미지 마스킹 · OpenCV 변환/필터링/에지 검출 · 42페이지</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week01-python-opencv.pdf" download="컴퓨터비전_1주차_Python&amp;OpenCV.pdf">⬇ 다운로드</a>
+  </div>
+</div>
+</section>
+
+<section class="sec" id="env">
+  <div class="sec-head"><span class="sec-badge">ENV</span><h2 class="sec-title">실습 환경 구축<small>버전이 다르면 과제 코드가 동작하지 않을 수 있습니다</small></h2></div>
+<div class="info">
+  <div class="info-row"><div class="info-key">Python</div><div class="info-val">3.10.x 권장 — <a href="https://www.python.org/" target="_blank" rel="noopener">python.org</a></div></div>
+  <div class="info-row"><div class="info-key">OpenCV</div><div class="info-val">4.10.x 권장 — <code>pip install opencv-python==4.10.0.84</code></div></div>
+  <div class="info-row"><div class="info-key">NumPy</div><div class="info-val">벡터·행렬 연산 라이브러리 (Pandas · OpenCV · PyTorch의 기반)</div></div>
+</div>
+<div class="note-box"><b>이 실습에서 다루는 것</b>
+<ul class="ul">
+  <li>Python 기초 — list 변환</li>
+  <li>NumPy 기초 — list 변환, 이미지 변환</li>
+  <li>OpenCV 기초 — 이미지 변환, Image masking, OpenCV 라이브러리 활용</li>
+</ul></div>
+</section>
+
+<section class="sec" id="py">
+  <div class="sec-head"><span class="sec-badge">01</span><h2 class="sec-title">Python 자료형<small>List · Tuple · Dictionary</small></h2></div>
+<div class="note-box"><ul class="ul">
+  <li><b>List</b> <code>[ … ]</code> — 순서대로 저장하고 요소를 수정할 수 있다 (mutable). <code>append(x)</code> · <code>remove(x)</code> · <code>pop()</code> · <code>pop(i)</code></li>
+  <li><b>Tuple</b> <code>( … )</code> — 읽을 수는 있지만 요소 수정은 불가능(immutable). 변수에 새 튜플을 다시 할당하는 것은 가능하다</li>
+  <li><b>Dictionary</b> <code>{'key': value}</code> — key로 접근하는 mutable 자료형 (list·tuple은 index로 접근)</li>
+  <li><b>인덱싱 &amp; 슬라이싱</b> — index는 0부터. <code>list[i]</code>는 i번째 값, <code>list[start:end]</code>는 start ~ (end−1)번째 값</li>
+</ul></div>
+</section>
+
+<section class="sec" id="np">
+  <div class="sec-head"><span class="sec-badge">02</span><h2 class="sec-title">NumPy와 이미지<small>스칼라 · 벡터 · 행렬 · 텐서</small></h2></div>
+<div class="note-box"><ul class="ul">
+  <li><b>실제 이미지는 3차원 텐서</b> — (Height, Width, Channel[RGB]) 형태로 표현된다</li>
+  <li><b>배열 만들기</b> — <code>np.zeros</code>, <code>np.ones</code>, <code>np.arange</code>, <code>np.full</code>, <code>np.random.rand / randint / randn</code></li>
+  <li><b>좌표 주의</b> — 이미지를 열면 <b>0번째 차원이 Y축, 1번째 차원이 X축</b>이다</li>
+  <li><b>영역 지정(마스킹)</b> — <code>Region = Image[y1:y2, x1:x2]</code>. 예) <code>Image[0:50, 100:200] = 0</code> 은 해당 영역을 검은색으로 만든다</li>
+  <li><b>연산</b> — array 간 연산은 같은 위치의 원소끼리 수행되며 <b>shape이 일치</b>해야 한다 (아니면 에러)</li>
+  <li><b>축 기준 함수</b> — <code>np.sum</code>, <code>np.mean</code> 등은 <code>axis</code> 로 방향을 지정한다</li>
+  <li><b>형태 변환</b> — <code>reshape</code>(요소 개수 유지, <code>-1</code>은 자동 계산), <code>transpose(axes)</code>로 축 재배열</li>
+</ul></div>
+</section>
+
+<section class="sec" id="cv">
+  <div class="sec-head"><span class="sec-badge">03</span><h2 class="sec-title">OpenCV 기초<small>입출력 · 변환 · 필터링 · 에지 검출</small></h2></div>
+<div class="note-box"><b>이미지 입출력</b>
+<ul class="ul">
+  <li><code>cv2.imread()</code> 로 읽고 <code>cv2.imwrite('filename', image)</code> 로 저장한다 (경로를 정확히 써야 동작)</li>
+  <li><b>채널 순서</b> — matplotlib은 R-G-B, OpenCV는 <b>B-G-R</b>. <code>cv2.cvtColor(img, cv2.COLOR_BGR2RGB)</code> 로 변환</li>
+  <li><code>cv2.imshow</code> 에는 채널 변환을 하지 <b>않는다</b> (BGR을 그대로 쓰므로). <code>plt.imshow</code> 를 쓸 때만 변환한다</li>
+</ul></div>
+<div class="warn"><b>과제 감점 주의</b> — matplotlib으로 결과를 표시할 때 <b>BGR → RGB 변환을 하지 않으면 감점</b>이라고 자료에 명시되어 있습니다.</div>
+<div class="note-box"><b>이미지 변환 (Transformations)</b>
+<ul class="ul">
+  <li><b>이진화</b> — grayscale로 읽은 뒤(<code>cv2.IMREAD_GRAYSCALE</code>) threshold 기준으로 흑/백 분리</li>
+  <li><b>크기 변경</b> — <code>cv2.resize(img, dsize, fx, fy, interpolation)</code>. 축소는 <code>INTER_AREA</code>, 확대는 <code>INTER_CUBIC</code> 권장</li>
+  <li><b>이동 · 회전</b> — Affine 변환 행렬 생성 후 <code>cv2.warpAffine</code>, 회전 행렬은 <code>cv2.getRotationMatrix2D(center, angle, scale)</code></li>
+  <li><b>Affine / Perspective</b> — 대응점 3개면 <code>cv2.getAffineTransform</code>, 4개면 Perspective 변환</li>
+</ul></div>
+<div class="note-box"><b>필터링과 에지 검출</b>
+<ul class="ul">
+  <li><b>블러</b> — <code>cv2.blur</code> · <code>cv2.GaussianBlur</code> · <code>cv2.medianBlur</code>(윈도우 안의 중간값)</li>
+  <li><b>커스텀 커널</b> — <code>cv2.filter2D(img, ddepth, kernel)</code> 로 직접 만든 커널 적용 (ddepth −1이면 입력과 동일)</li>
+  <li><b>Sobel</b> — <code>cv2.Sobel()</code> 로 방향별 그래디언트 기반 에지 검출</li>
+  <li><b>Canny</b> — ① Gaussian으로 노이즈 제거 → ② gradient 계산(크기·방향) → ③ Non-maximum Suppression → ④ 이중 임계값 판정의 multi-stage 알고리즘</li>
+</ul></div>
+</section>
+
+<section class="sec" id="next">
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>자료 마지막 장 "Next Week.."</small></h2></div>
+<div class="note-box"><ul class="ul">
+  <li>OpenCV feature, transform</li>
+  <li>Image data preparation, scikit-learn</li>
+</ul></div>
+</section>
+
+<p class="src">출처 — 컴퓨터비전 기초 코드 실습 1 (CV2026-2-python-01. Python &amp; OpenCV Library)</p>
+
+</div>
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive(){
+    var cur = '';
+    sections.forEach(function(s){ if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function(t){ t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      setTimeout(function(){
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+});
+</script>
+
+</body>
+</html>

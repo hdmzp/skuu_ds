@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기계학습특론 | 2주차 수업내용</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#docs">강의자료</a>
+  <a href="#goal">학습 목표</a>
+  <a href="#vec">벡터</a>
+  <a href="#data">훈련 데이터</a>
+  <a href="#dot">노름·내적</a>
+  <a href="#mat">행렬·텐서</a>
+  <a href="#diff">미분</a>
+  <a href="#prob">확률</a>
+  <a href="#numpy">NumPy 실습</a>
+  <a href="#next">다음 주 예고</a>
+</nav>
+
+<div class="wrap">
+
+<a class="backlink" href="machine-learning.html">← 기계학습특론 강의계획서로</a>
+
+<section class="hero">
+  <p class="kicker">2주차 · 9.7 ~ 9.13 · 2026-2학기</p>
+  <h1>인공지능 기초 수학 &amp; 파이썬 라이브러리(NumPy)</h1>
+  <p>기계학습에 필요한 선형대수(벡터·행렬·텐서), 미분학(편미분·기울기), 확률(확률변수·분포)을 한 번에 훑고, NumPy로 이 개념들을 코드로 다뤄 봅니다.</p>
+  <div class="chips"><span class="chip">선형대수</span><span class="chip">미분학</span><span class="chip">확률</span><span class="chip">NumPy 실습</span><span class="chip">교안 50페이지</span></div>
+</section>
+
+<!-- ===================== 강의자료 ===================== -->
+<section class="sec" id="docs">
+  <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">2주차 강의자료<small>제목을 누르면 앱 실행 없이 화면에서 바로 열리고, 오른쪽 버튼으로 내려받을 수 있습니다</small></h2></div>
+
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📐</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=ml-w02-math">기계학습특론 — 인공지능 기초 수학</a>
+      <p>벡터 · 훈련 데이터와 특징벡터 · 노름과 내적 · 초평면 · 행렬과 텐서 · 미분과 기울기 · 확률과 확률분포 · 50페이지</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week02-slides.pdf" download="기계학습특론_2주차_인공지능기초수학.pdf">⬇ 다운로드</a>
+  </div>
+
+  <div class="doc">
+    <div class="doc-ico"><span>📝</span>HTML</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week02-quiz100.html" target="_blank" rel="noopener">2주차 인공지능 기초 수학 100문제 ↗</a>
+      <p>브라우저에서 바로 풀 수 있는 HTML 문제지 · 절별 문제는 아래 각 절 제목 옆 버튼으로도 열립니다</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week02-quiz100.html" download="기계학습특론_2주차_인공지능기초수학_100문제.html">⬇ 다운로드</a>
+  </div>
+</div>
+</section>
+
+<!-- ===================== 학습 목표 ===================== -->
+<section class="sec" id="goal">
+  <div class="sec-head"><span class="sec-badge">GOAL</span><h2 class="sec-title">학습 목표<small>2주차를 마치면 할 수 있어야 하는 것들</small></h2></div>
+<div class="note-box"><ul class="ul">
+  <li><b>AI를 위한 주요 수학 개념</b> — 선형대수 · 미분학 · 확률</li>
+  <li><b>머신러닝 라이브러리(NumPy)</b> — 배열·텐서를 만들고 인덱싱·연산·형태 변환을 수행</li>
+</ul></div>
+<div class="tip"><b>이번 주차를 관통하는 한 문장</b><br>
+데이터는 <b>벡터</b>로 표현하고, 모델은 <b>행렬 연산</b>으로 계산하며, 학습은 <b>미분(기울기)</b>으로 방향을 찾고,
+결과는 <b>확률</b>로 해석한다 — 그리고 이 전부를 <b>NumPy</b>로 구현한다.</div>
+</section>
+
+<!-- ===================== 2.1 ===================== -->
+<section class="sec" id="vec">
+  <div class="sec-head"><span class="sec-badge">2.1</span><h2 class="sec-title">벡터<small>Vectors — 정의와 기하학적 해석</small></h2></div>
+<div class="note-box"><ul class="ul">
+  <li><b>컴퓨터 과학의 정의</b> — 벡터는 <b>실수 값을 갖는 성분으로 구성된 1차원 배열</b></li>
+  <li><b>물리의 정의</b> — 크기와 방향을 가진 값 (방향은 화살표, 크기는 수치)</li>
+  <li>벡터는 값의 모임이지만 <b>순서가 존재</b>한다는 점에서 일반 집합과 다르다</li>
+  <li><b>n벡터</b> — 성분이 n개인 벡터는 n차원 공간 <b>x ∈ ℝⁿ</b> 에 존재한다 (ℝ은 실수)</li>
+  <li><b>두 가지 해석</b> — ① 공간의 <b>점</b>, ② 공간에서의 <b>방향</b> (예: 오른쪽 3, 위로 2)</li>
+  <li><b>연산</b> — 벡터 덧셈은 방향과 크기를 함께 고려해 정해지고, 스칼라 곱은 각 성분에 실수를 곱한다</li>
+</ul></div>
+</section>
+
+<!-- ===================== 2.2 ===================== -->
+<section class="sec" id="data">
+  <div class="sec-head"><span class="sec-badge">2.2</span><h2 class="sec-title">기계학습과 훈련 데이터<small>특징벡터 · 레이블</small></h2></div>
+<div class="note-box"><ul class="ul">
+  <li>기계학습에는 <b>대규모 데이터</b>가 매우 중요하다 — 임무를 잘 푸는 모델을 찾으려면 그 임무에 대한 데이터가 먼저 확보되어야 한다</li>
+  <li><b>훈련 데이터</b> D = {(xᵢ, yᵢ)}<sub>i=1..N</sub> — xᵢ는 관측 값을 설명하는 <b>특징벡터</b>, yᵢ는 정답인 <b>레이블</b></li>
+  <li>예) "대학생·고등학생·중학생·초등학생·학생 아님"의 5개 카테고리로 구분할 때, 하나의 관측 값을 <b>나이 · 성별 · 이름 · 학교코드</b>로 설명하면 그것이 특징벡터가 된다</li>
+  <li><b>벡터와 데이터</b> — 벡터를 공간의 점으로 보면, 훈련 데이터는 <b>공간에 흩어진 점들의 모음</b>이 된다 (고양이 집단 vs 강아지 집단)</li>
+</ul></div>
+</section>
+
+<!-- ===================== 2.3 ===================== -->
+<section class="sec" id="dot">
+  <div class="sec-head"><span class="sec-badge">2.3</span><h2 class="sec-title">노름과 내적, 그리고 초평면<small>Norm · Dot product · Hyperplane</small></h2></div>
+<div class="note-box"><ul class="ul">
+  <li><b>노름(Norm)</b> — 벡터를 스칼라 값으로 매핑하는 함수로, <b>벡터 크기의 척도</b></li>
+  <li><b>내적(Dot product)</b> — u · v = Σ uᵢvᵢ 이고, 동시에 u · v = ‖u‖‖v‖ cos θ 로도 표현된다 → 여기서 <b>사잇각</b>이 나온다</li>
+  <li>내적은 <b>대칭</b> 연산이다 (u · v = v · u)</li>
+  <li><b>초평면(Hyperplane)</b> — n차원 공간을 둘로 가르는 n−1차원 경계. 분류 모델의 <b>결정 경계</b>가 바로 이것이다</li>
+</ul></div>
+</section>
+
+<!-- ===================== 2.4 ===================== -->
+<section class="sec" id="mat">
+  <div class="sec-head"><span class="sec-badge">2.4</span><h2 class="sec-title">행렬과 텐서<small>Matrices · Tensors · 선형 독립</small></h2></div>
+<div class="note-box"><ul class="ul">
+  <li><b>행렬</b> — 수나 식을 행과 열의 형태로 배열한 것. 덧셈·뺄셈은 같은 위치의 성분끼리 수행한다</li>
+  <li><b>행렬 곱 AB</b> — 앞 행렬의 <b>열 수</b>와 뒤 행렬의 <b>행 수</b>가 같아야 정의되며, <b>교환 법칙이 성립하지 않는다</b> (AB ≠ BA)</li>
+  <li><b>행렬–벡터 곱</b> — 벡터를 다른 공간으로 옮기는 <b>선형 변환</b>으로 해석한다</li>
+  <li><b>역행렬</b> — AA⁻¹ = I 를 만족하는 행렬. 항상 존재하지는 않는다</li>
+  <li><b>텐서</b> — 스칼라(0차원) · 벡터(1차원) · 행렬(2차원)을 일반화한 N차원 배열</li>
+  <li><b>선형 결합 · 선형 종속 / 독립</b> — 어떤 벡터가 다른 벡터들의 조합으로 표현되면 종속, 아니면 독립</li>
+</ul></div>
+</section>
+
+<!-- ===================== 2.5 ===================== -->
+<section class="sec" id="diff">
+  <div class="sec-head"><span class="sec-badge">2.5</span><h2 class="sec-title">미분학<small>도함수 · 편미분 · 기울기 · 임계점</small></h2></div>
+<div class="note-box"><ul class="ul">
+  <li><b>도함수</b> f′(x) — 함수의 순간 변화율. 극한으로 정의되며 거듭제곱 규칙 등 계산 규칙을 사용한다</li>
+  <li><b>편미분</b> — 변수가 여러 개일 때, 나머지를 상수로 두고 한 변수에 대해서만 미분한다</li>
+  <li><b>기울기(Gradient)</b> — 편미분을 모아 놓은 벡터. <b>함수 값이 가장 빠르게 증가하는 방향</b>을 가리킨다</li>
+  <li><b>기계학습에서의 학습</b> — 손실함수를 최소화하도록 기울기의 <b>반대 방향</b>으로 파라미터를 갱신하는 과정</li>
+  <li><b>임계점 · 극소점</b> — 기울기가 0이 되는 점이 임계점이고, 그중 주변보다 값이 작은 곳이 극소점(local minimum)이다</li>
+</ul></div>
+</section>
+
+<!-- ===================== 2.6 ===================== -->
+<section class="sec" id="prob">
+  <div class="sec-head"><span class="sec-badge">2.6</span><h2 class="sec-title">확률과 확률 변수<small>확률의 공리 · 분포 · 기대값 · 베이즈 정리</small></h2></div>
+<div class="note-box"><ul class="ul">
+  <li><b>확률 변수</b> — 표본공간의 각 결과를 실수에 대응시키는 함수. 표기 X ~ P(·)</li>
+  <li><b>이산형 / 연속형</b> — 이산형은 <b>확률 질량 함수(PMF)</b>, 연속형은 <b>확률 밀도 함수(PDF)</b>로 분포를 표현한다</li>
+  <li><b>기대값과 분산</b> — 기대값은 값과 확률의 가중평균, 분산은 기대값에서 벗어난 정도의 평균</li>
+  <li><b>다변량 확률 변수</b> — 결합 확률 분포 · 주변 확률 분포 · 조건부 확률 분포</li>
+  <li><b>베이즈 정리</b> — 관측(증거)을 이용해 사전확률을 사후확률로 갱신하는 규칙</li>
+  <li><b>가우시안(정규) 분포</b> — 평균 μ 와 분산 σ² 로 정의되며, 신경망 가중치 초기화 등에서 널리 쓰인다</li>
+</ul></div>
+</section>
+
+<!-- ===================== 2.7 실습 ===================== -->
+<section class="sec" id="numpy">
+  <div class="sec-head"><span class="sec-badge">2.7</span><h2 class="sec-title">NumPy 실습<small>파이썬 라이브러리 활용 방법 — 실습 노트북 (Colab)</small></h2></div>
+<div class="note-box"><b>실습 노트북</b> — <code>2주차_파이썬라이브러리활용방법_numpy.ipynb</code> (Google Colab에서 실행)
+<ul class="ul">
+  <li><b>배열 만들기</b> — <code>np.array</code>, <code>np.zeros</code>, <code>np.ones</code>, <code>np.full</code>, <code>np.arange</code>, <code>np.random.random</code></li>
+  <li><b>배열의 정보</b> — <code>ndim</code>(차원 수)과 <code>shape</code>(각 차원의 요소 수). 대괄호 개수 = 차원 수</li>
+  <li><b>인덱싱 · 슬라이싱</b> — 인덱스는 0부터. <code>a[2:5]</code> 는 인덱스 2~4까지 (뒤 값 −1까지)</li>
+  <li><b>형태 변환</b> — <code>reshape</code>(요소 개수가 같아야 함, <code>-1</code>은 자동 계산), <code>transpose</code>, <code>None</code>으로 축 추가</li>
+  <li><b>연산</b> — 원소별 사칙연산(shape이 맞아야 함), <code>sum</code>/<code>mean</code>의 <code>axis</code> 지정, <code>dot</code>·<code>matmul</code>, 브로드캐스팅</li>
+  <li><b>결합</b> — <code>stack</code>, <code>concatenate</code> (지정한 axis 외의 shape이 같아야 함)</li>
+</ul></div>
+<div class="tip"><b>노트북에 들어 있는 퀴즈 (총 17개)</b> — 답을 코드로 확인하며 따라가는 형식입니다.
+<ul class="ul">
+  <li><b>퀴즈 1~2</b> — <code>[[[1],[2],[3]],[[4],[5],[6]]]</code> 의 shape 구하기 / (4,3,2) 텐서를 0~23으로 채우기</li>
+  <li><b>퀴즈 3~5</b> — <code>a[-4:]</code>, <code>a[:-8]</code> 의 결과 예측하기 / 슬라이싱으로 <code>[9, 6, 3]</code> 만들기</li>
+  <li><b>퀴즈 6~8</b> — 행렬에서 마지막 행 · 두 번째 열 접근하기 / <code>[8, 5]</code> 만들기</li>
+  <li><b>퀴즈 9~12</b> — 3차원 텐서의 <code>a[0]</code>, <code>a[0,1]</code> / <code>[[0,2,4],[6,8,10]]</code> 만들기 / 불리언 인덱싱으로 2보다 큰 값 고르기</li>
+  <li><b>퀴즈 13</b> — <code>np.arange(24).reshape((2,3,4))</code> 에서 마지막 차원 합의 평균 구하기</li>
+  <li><b>퀴즈 14~17</b> — (4,3,2)와 (2,3)의 곱셈 규칙 / <code>reshape((6,4,-1))</code> 결과 / <code>None</code>으로 (3,1,1,4) 만들기 / axis=2 기준 concatenate</li>
+</ul></div>
+<div class="warn"><b>제출</b> — 매주 <b>실습 실행 화면 캡쳐</b>와 <b>100문제 풀이 증명 캡쳐</b> 2건을 제출합니다. (1주차 OT 안내 기준, 100문제 정답률 50% 이상)</div>
+</section>
+
+<!-- ===================== 다음 주 ===================== -->
+<section class="sec" id="next">
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>3주차 — 단순 선형 회귀</small></h2></div>
+<div class="note-box"><ul class="ul">
+  <li>단순 선형 회귀의 개념</li>
+  <li>회귀 모델의 손실 함수</li>
+  <li>학습 방법 (경사하강법) — 이번 주차의 <b>기울기</b>가 여기서 바로 쓰입니다</li>
+</ul></div>
+</section>
+
+<p class="src">출처 — 기계학습특론 2주차 강의자료(인공지능 기초 수학) · 2주차 파이썬 라이브러리 활용 방법(NumPy) 실습 노트북</p>
+
+</div>
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive(){
+    var cur = '';
+    sections.forEach(function(s){ if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function(t){ t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      setTimeout(function(){
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+});
+</script>
+
+<script src="quiz/ml-w02.js"></script>
+<script src="quiz/inline-quiz.js"></script>
+
+</body>
+</html>

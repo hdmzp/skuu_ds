@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>컴퓨터비전 | 2주차 수업내용</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#docs">강의자료</a>
+  <a href="#ot">오리엔테이션</a>
+  <a href="#grade">평가 · 출석</a>
+  <a href="#warp">Image Transformation</a>
+  <a href="#camera">Camera Model</a>
+  <a href="#lens">렌즈 · 심도 · FOV</a>
+  <a href="#next">다음 주 예고</a>
+</nav>
+
+<div class="wrap">
+
+<a class="backlink" href="computer-vision.html">← 컴퓨터비전 강의계획서로</a>
+
+<section class="hero">
+  <p class="kicker">2주차 · 9.7 ~ 9.13 · 2026-2학기</p>
+  <h1>Geometric Camera Models</h1>
+  <p>2D 이미지 변환(강체 · 유사 · 아핀 · 투영)을 정리하고, 3D 세계가 2D 이미지로 투영되는 핀홀 카메라 모델과 카메라 파라미터를 다룹니다. 오리엔테이션 자료도 이 주차에 함께 배포되었습니다.</p>
+  <div class="chips"><span class="chip">ADS5034-01</span><span class="chip">최재영 교수</span><span class="chip">Flipped Learning</span><span class="chip">교안 63페이지</span></div>
+</section>
+
+<section class="sec" id="docs">
+  <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">2주차 강의자료<small>제목을 누르면 앱 실행 없이 화면에서 바로 열리고, 오른쪽 버튼으로 내려받을 수 있습니다</small></h2></div>
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📐</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-w02-camera">02. Geometric Camera Models</a>
+      <p>Image Transformation(선형 변환 · 동차좌표 · 아핀/투영 변환) · Geometric Camera Model(핀홀 · 렌즈 · 심도 · FOV · 카메라 행렬) · 63페이지</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week02-geometric-camera-models.pdf" download="컴퓨터비전_2주차_Geometric_Camera_Models.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📋</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-w02-intro">01. Course Introduction (Orientation)</a>
+      <p>수업 방식(플립러닝) · 온라인 콘텐츠 출석 인정 기간 · 논문 발표 운영 · 과제 3회 · 평가 비율 · 18페이지</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week02-course-intro.pdf" download="컴퓨터비전_Course_Introduction(오리엔테이션).pdf">⬇ 다운로드</a>
+  </div>
+</div>
+</section>
+
+<section class="sec" id="ot">
+  <div class="sec-head"><span class="sec-badge">OT</span><h2 class="sec-title">오리엔테이션 요약<small>Course Introduction</small></h2></div>
+<div class="info">
+  <div class="info-row"><div class="info-key">수업 방식</div><div class="info-val">Flipped Learning — 온라인 콘텐츠(목~수) + 실시간 온라인 수업(수)</div></div>
+  <div class="info-row"><div class="info-key">실시간 수업</div><div class="info-val">매주 수요일 19:00~20:30 (필요 시 연장) · Zoom (i-Campus 링크)</div></div>
+  <div class="info-row"><div class="info-key">온라인 콘텐츠<br>출석 인정</div><div class="info-val">매주 목요일 00:00 ~ 다음 주 수요일 수업 직전<br><span style="color:#6b7280">예) 2주차 콘텐츠: 9/3(목) 00:00 ~ 9/9(수) 19:00</span></div></div>
+  <div class="info-row"><div class="info-key">선수 지식</div><div class="info-val">선형대수(행렬·벡터·변환) · 기초 확률과 통계 · 구현을 위한 프로그래밍(Python)</div></div>
+  <div class="info-row"><div class="info-key">오프라인 강의실</div><div class="info-val">퇴계인문관 31705호 (중간/기말고사 및 필요 시)</div></div>
+</div>
+<div class="note-box"><b>Python Review</b> — 총 3주간(2~3주차, 11주차) 진행. Computer Vision 관련 Python · OpenCV Library · PyTorch(Colaboratory)를 다룹니다.</div>
+<div class="tip"><b>논문 스터디 &amp; 발표</b> — 3주차(9/16)부터 총 11주 내외 운영. 발표 12분 + Q&amp;A 3~5분, 주당 3~4명.
+주제는 해당 주차 온라인 콘텐츠 관련이거나 CV 관련 회사 업무/연구.</div>
+</section>
+
+<section class="sec" id="grade">
+  <div class="sec-head"><span class="sec-badge">EVAL</span><h2 class="sec-title">평가 비율<small>Grading</small></h2></div>
+<div class="evals">
+  <div class="ev">
+    <div class="ev-top"><span class="ev-name">출석 및 참여 (Attendance and participation)</span><span class="ev-pct">10%</span></div>
+    <div class="ev-bar"><i style="width:10%"></i></div>
+  </div>
+  <div class="ev">
+    <div class="ev-top"><span class="ev-name">논문 발표 (Paper Presentation)</span><span class="ev-pct">15%</span></div>
+    <div class="ev-bar"><i style="width:15%"></i></div>
+  </div>
+  <div class="ev">
+    <div class="ev-top"><span class="ev-name">과제 (Homework 3회 · 5+8+12)</span><span class="ev-pct">25%</span></div>
+    <div class="ev-bar"><i style="width:25%"></i></div>
+  </div>
+  <div class="ev">
+    <div class="ev-top"><span class="ev-name">중간고사</span><span class="ev-pct">25%</span></div>
+    <div class="ev-bar"><i style="width:25%"></i></div>
+  </div>
+  <div class="ev">
+    <div class="ev-top"><span class="ev-name">기말고사</span><span class="ev-pct">25%</span></div>
+    <div class="ev-bar"><i style="width:25%"></i></div>
+  </div>
+  <div class="ev-total"><span>합계</span><span>100%</span></div>
+</div>
+</section>
+
+<section class="sec" id="warp">
+  <div class="sec-head"><span class="sec-badge">01</span><h2 class="sec-title">Image Transformation<small>필터링은 값(range), 워핑은 좌표(domain)를 바꾼다</small></h2></div>
+<div class="note-box"><ul class="ul">
+  <li><b>filtering vs warping</b> — 필터링은 <code>g(x) = h(f(x))</code> 로 <b>값</b>을 바꾸고, 워핑은 <code>g(x) = f(h(x))</code> 로 <b>좌표</b>를 바꾼다</li>
+  <li><b>선형 변환</b> — 2×2 행렬로 표현되는 Scale · Rotation · Shear · Mirror의 조합. 원점이 유지되고 직선은 직선으로 남는다</li>
+  <li><b>Translation은 선형 연산이 아니다</b> — 2D 좌표만으로는 행렬 곱으로 표현할 수 없다</li>
+  <li><b>동차 좌표(Homogeneous coordinates)</b> — 좌표를 하나 더 붙여 (x, y, w)로 두면 이동까지 하나의 행렬 곱으로 처리할 수 있다. 되돌릴 때는 (x/w, y/w)</li>
+</ul></div>
+<div class="note-box"><b>변환의 계층</b>
+<ul class="ul">
+  <li><b>Rigid (Euclidean)</b> — 회전 + 이동. 길이와 각도가 보존된다</li>
+  <li><b>Similarity</b> — Rigid + 균일 스케일. 각도(모양)가 보존된다</li>
+  <li><b>Affine</b> — 선형 변환 + 이동. <b>평행선이 평행으로 유지</b>된다</li>
+  <li><b>Perspective (Homography)</b> — 아핀 + 투영 왜곡. 평행선이 한 점(소실점)으로 모이고, <b>직선만 보존</b>된다</li>
+</ul></div>
+</section>
+
+<section class="sec" id="camera">
+  <div class="sec-head"><span class="sec-badge">02</span><h2 class="sec-title">Geometric Camera Model<small>3D 세계 → 2D 이미지</small></h2></div>
+<div class="note-box"><ul class="ul">
+  <li><b>이미지 형성의 두 요소</b> — Geometry(3D 점과 이미지 점의 관계)와 Radiometry(빛의 양과 밝기의 관계)</li>
+  <li><b>두 좌표계</b> — World coordinate system과 Camera coordinate system. 여기에 Image / Pixel 좌표계가 이어진다</li>
+  <li><b>카메라 파라미터</b> — <b>Intrinsic</b>(초점거리, 주점 등 카메라 내부)과 <b>Extrinsic</b>(회전·이동 등 카메라의 위치·자세). 이를 구하는 과정이 <b>카메라 캘리브레이션</b></li>
+  <li><b>투영은 차원 축소(3D→2D)</b> — 각도와 거리(길이)는 잃고, 직선과 결합관계(incidence)는 보존된다</li>
+  <li><b>Many-to-one</b> — 같은 광선 위의 점들은 모두 같은 이미지 점으로 투영된다. 평행선은 <b>소실점</b>에서 만나지만, 이미지 평면과 평행한 선들은 평행을 유지한다</li>
+  <li><b>핀홀 카메라 모델</b> — (x, y, z) → (f·x/z, f·y/z). 카메라 행렬 P는 초점거리 f와 주점 (oₓ, o_y)을 담은 내부 행렬과 [R | t] 형태의 외부 행렬로 분해된다</li>
+</ul></div>
+</section>
+
+<section class="sec" id="lens">
+  <div class="sec-head"><span class="sec-badge">03</span><h2 class="sec-title">렌즈 · 심도 · 화각<small>Aperture · Depth of Field · FOV</small></h2></div>
+<div class="note-box"><ul class="ul">
+  <li><b>핀홀 크기의 딜레마</b> — 구멍이 크면 여러 방향의 빛이 섞여 흐려지고, 너무 작으면 회절(diffraction)로 다시 흐려진다. 빛의 양도 줄어든다</li>
+  <li><b>렌즈</b> — 평행한 빛을 초점(focal point)에 모은다. 중심을 지나는 광선은 꺾이지 않으므로 핀홀 모델이 그대로 성립한다</li>
+  <li><b>얇은 렌즈 공식</b> — 이 식을 만족하는 물체 점만 초점이 맞는다. 초점면이 움직이면 맞는 거리도 달라진다</li>
+  <li><b>피사계 심도(Depth of Field)</b> — 초점이 맞는 것처럼 보이는 거리 범위. <b>조리개를 좁힐수록 심도가 깊어진다</b></li>
+  <li><b>화각(FOV)</b> — 초점거리와 센서 크기로 결정된다. <b>f가 작을수록 광각(넓은 화각), f가 클수록 망원(좁은 화각)</b></li>
+  <li>사람의 눈도 렌즈다 — 홍채(빛의 양) · 망막(센서) · 중심와(가장 조밀한 센서)</li>
+</ul></div>
+</section>
+
+<section class="sec" id="next">
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>3주차 (9/16)</small></h2></div>
+<div class="note-box"><ul class="ul">
+  <li><b>Image Processing (Linear Filter)</b> — 온라인 콘텐츠</li>
+  <li><b>실시간</b> — Python/OpenCV (2)</li>
+  <li><b>논문 스터디 발표 시작</b> · 과제 1회차 부여 시점</li>
+</ul></div>
+</section>
+
+<p class="src">출처 — 컴퓨터비전 02. Geometric Camera Models · 01. Course Introduction (Orientation) (2026-2학기)</p>
+
+</div>
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive(){
+    var cur = '';
+    sections.forEach(function(s){ if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function(t){ t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      setTimeout(function(){
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+});
+</script>
+
+</body>
+</html>

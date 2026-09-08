@@ -210,6 +210,7 @@ a.ext:hover{border-bottom-color:var(--accent)}
   <a href="#system">시스템 구성</a>
   <a href="#limit">한계 · 윤리</a>
   <a href="#summary">핵심 정리</a>
+  <a href="#lab">실습 · 과제</a>
   <a href="#next">다음 주 예고</a>
   <a href="#ref">참고문헌</a>
 </nav>
@@ -440,6 +441,28 @@ a.ext:hover{border-bottom-color:var(--accent)}
 ⑤→ <a href="#apps" style="color:inherit;font-weight:700">응용 분야</a> ·
 ⑥→ <a href="#system" style="color:inherit;font-weight:700">시스템 구성</a> ·
 ⑦→ <a href="#limit" style="color:inherit;font-weight:700">한계 · 윤리</a></div>
+</section>
+
+<!-- ===================== 실습 ===================== -->
+<section class="sec" id="lab">
+  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">1주차 실습<small>자연어처리 첫걸음 — 텍스트에서 예측까지 (Google Colab)</small></h2></div>
+<div class="note-box"><b>실습 개요</b> — 강의에서 본 파이프라인(원문 → 전처리 → 토큰화 → 벡터화 → 모델 → 평가)을 가장 작은 형태로 처음부터 끝까지 한 번 통과합니다.
+<ul class="ul">
+  <li><b>데이터</b> — 한국어 영화 리뷰 120개 (<code>review</code> 문장, <code>label</code> 1=긍정 / 0=부정)</li>
+  <li><b>첫 번째 실습</b> — scikit-learn 이용: <code>CountVectorizer</code>/<code>TfidfVectorizer</code> + <code>LogisticRegression</code>, Accuracy·Precision·Recall·F1과 혼동 행렬</li>
+  <li><b>두 번째 실습</b> — 직접 구현: <code>tokenize()</code> · <code>build_vocab()</code> · <code>bow_vectorize()</code> · <code>cosine_similarity_manual()</code> · <code>MyNaiveBayes</code>(라플라스 스무딩 + 로그 변환)</li>
+  <li><b>한국어의 벽</b> — 어절 토큰화로는 "훌륭합니다/훌륭해서/훌륭한"이 서로 다른 단어가 된다 → 대안으로 <b>문자 n-gram</b>(<code>analyzer='char_wb'</code>) 사용, 근본 해법은 3주차 형태소 분석</li>
+  <li><b>사용 라이브러리</b> — numpy · pandas · matplotlib · scikit-learn (Colab 기본 설치)</li>
+</ul></div>
+<div class="tip"><b>과제 (4문항)</b>
+<ul class="ul">
+  <li><b>과제 1. 불용어 목록 바꿔보기</b> — <code>STOPWORDS</code>에 단어를 3개 이상 추가/제거하고 직접 구현한 나이브 베이즈(어절)의 정확도 변화를 표로 정리. 어휘 수·정확도 변화와 "불용어 제거가 항상 성능을 높이는가"를 분석</li>
+  <li><b>과제 2. 문자 n-gram의 n 바꿔보기</b> — n = 2, 3, 4 비교 후 <code>tokenize_char_range(text, nmin, nmax)</code> 직접 구현 (sklearn의 <code>ngram_range</code>와 같은 동작). n이 커질 때 어휘 수·정확도 변화 분석</li>
+  <li><b>과제 3. 내가 쓴 리뷰로 예측해 보기</b> — 직접 만든 리뷰 5개(긍정 3 · 부정 2 이상)를 모델에 넣고 오답의 원인을 해석 (미학습 표현 / 중의성 / 부정 표현 등)</li>
+  <li><b>과제 4. 자연어처리 서비스 조사 (보고서, A4 1장)</b> — 서비스 소개 · 해당 하위 과제 분류 · 성공/실패 예시 캡처 · 실패 원인을 1주차 "자연어처리가 어려운 이유"와 연결</li>
+</ul></div>
+<div class="warn"><b>제출</b> — <code>1주차_실습_학번_이름.ipynb</code>(모든 셀 실행 상태) + 조사 보고서 <code>1주차_조사_학번_이름.pdf</code> · 기한은 다음 주 강의 전까지.
+과제 1~3의 표와 분석은 <b>본인의 실행 결과</b>를 근거로 작성합니다.</div>
 </section>
 
 <!-- ===================== 다음 주 ===================== -->

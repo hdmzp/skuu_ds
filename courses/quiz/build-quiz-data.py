@@ -9,6 +9,22 @@ def extract(path):
 
 # 주차별 핵심 개념 후보 — 실제 문항에서 다뤄진 것만 살아남는다.
 TERMS = {
+ 'ml-w01': [
+   '판별 모델','생성 모델','생성형 AI','확률 분포','샘플링','GAN','확산','Diffusion','오토인코더',
+   'text-to-image','image-to-image','AI 휴먼','블렌디드','플립러닝','PBL','출석','중간시험','기말시험','프로젝트',
+   '지도학습','비지도학습','강화학습','딥러닝','머신러닝','인공지능','신경망','CNN','객체 검출','시멘틱 분할',
+   '훈련','검증','테스트','과적합','일반화',
+ ],
+ 'ml-w02': [
+   '벡터','스칼라','n벡터','전치','스칼라 곱','벡터 덧셈','방향','크기',
+   '훈련 데이터','특징벡터','레이블','관측','이진분류',
+   '노름','내적','사잇각','코사인','초평면','결정 경계',
+   '행렬','행렬 곱','교환 법칙','역행렬','단위 행렬','텐서','선형 결합','선형 종속','선형 독립','선형 변환',
+   '도함수','미분','편미분','기울기','Gradient','임계점','극소점','경사','연쇄 법칙',
+   '확률 변수','확률 분포','확률 질량 함수','확률 밀도 함수','기대값','분산','결합 확률','주변 확률','조건부 확률',
+   '베이즈','가우시안','정규 분포','이산','연속',
+   'Numpy','배열','ndim','shape','reshape','arange','인덱싱','슬라이싱','축','axis','브로드캐스팅','concatenate','stack','transpose',
+ ],
  'nlp-w01': [
    'NLU','NLG','인공어','텍스트 분석','학제간','규칙 기반','통계 기반','신경망','사전학습',
    'ELIZA','튜링','Transformer','n-gram','word2vec','BERT','GPT','어텐션',
@@ -63,3 +79,7 @@ build('nlp-w01', 'materials/자연어처리/week01-quiz100.html', 'courses/quiz/
       {'title': '1주차 · 자연어처리 개요', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week01-quiz100.html'})
 build('nlp-w02', 'materials/자연어처리/week02-quiz100.html', 'courses/quiz/nlp-w02.js',
       {'title': '2주차 · 수학과 언어학의 기본 원리', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week02-quiz100.html'})
+build('ml-w01', 'materials/기계학습특론/week01-quiz100.html', 'courses/quiz/ml-w01.js',
+      {'title': '1주차 · 강의소개와 생성형 AI(이미지)', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week01-quiz100.html'})
+build('ml-w02', 'materials/기계학습특론/week02-quiz100.html', 'courses/quiz/ml-w02.js',
+      {'title': '2주차 · 인공지능 기초 수학', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week02-quiz100.html'})

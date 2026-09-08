@@ -213,6 +213,7 @@ a.ext:hover{border-bottom-color:var(--accent)}
   <a href="#syntax">2.7 구구조 · 의존구조</a>
   <a href="#semantic">2.8 의미론 · 화용론</a>
   <a href="#summary">핵심 정리</a>
+  <a href="#lab">실습 · 과제</a>
   <a href="#ref">참고문헌</a>
 </nav>
 
@@ -725,6 +726,30 @@ a.ext:hover{border-bottom-color:var(--accent)}
 </section>
 
 <!-- ===================== 참고문헌 ===================== -->
+<!-- ===================== 실습 ===================== -->
+<section class="sec" id="lab">
+  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">2주차 실습<small>수학·언어학 기초를 코드로 확인하기 (Google Colab)</small></h2></div>
+<div class="note-box"><b>실습 구성</b> — 각 Part는 <b>(1) 라이브러리를 이용한 방법</b>을 먼저 보고 <b>(2) 직접 함수를 구현하는 방법</b>으로 진행합니다.
+<ul class="ul">
+  <li><b>Part 1 (2.1~2.2) 확률·통계</b> — 미니 코퍼스에서 유니그램/바이그램 MLE 확률, Add-k 스무딩, 연쇄법칙으로 문장 확률 계산</li>
+  <li><b>Part 2 (2.3) 정보이론</b> — 엔트로피 직접 구현, 이진 엔트로피 곡선, 교차 엔트로피와 KL divergence, Perplexity</li>
+  <li><b>Part 3 (2.4) 선형대수</b> — <code>CountVectorizer</code>/<code>TfidfVectorizer</code>로 단어-문서 행렬, 코사인 유사도, SVD(LSA) 2차원 시각화</li>
+  <li><b>Part 4 (2.5~2.6) 형태론</b> — 유니코드로 음절을 초성·중성·종성 분해, KoNLPy(Okt) 품사 태깅, 어절 vs 형태소 어휘 크기 비교</li>
+  <li><b>Part 5 (2.7~2.8) 통사·의미</b> — 의존구조 시각화, 공기(co-occurrence) 행렬과 분포 가설</li>
+</ul></div>
+<div class="tip"><b>과제 (5문항 · 각 20점, 채점 셀 통과 기준)</b>
+<ul class="ul">
+  <li><b>과제 1. trigram Add-k 확률</b> — <code>p_trigram_addk(w1, w2, w3, k)</code> 완성. P = (C(w1,w2,w3) + k) / (C(w1,w2) + k·|V|)</li>
+  <li><b>과제 2. Perplexity</b> — <code>perplexity(sentences, k=1.0)</code> 완성. PPL = 2^H, H는 토큰당 평균 로그확률(Add-1 바이그램 사용)</li>
+  <li><b>과제 3. 코사인 유사도 직접 구현</b> — <code>np.dot</code>과 <code>np.linalg.norm</code>만 사용 (<code>sklearn</code>의 <code>cosine_similarity</code> 사용 금지), 노름이 0이면 0 반환</li>
+  <li><b>과제 4. 명사 상위 5개 추출</b> — <code>pos_tag()</code> 결과에서 품사가 <code>Noun</code>인 형태소만 세어 <code>Counter.most_common(5)</code> 로 반환</li>
+  <li><b>과제 5. PPMI 행렬</b> — 공기 행렬 C에서 PMI = log2( P(x,y) / (P(x)P(y)) ), PPMI = max(0, PMI) 계산 (18×18, 모든 원소 0 이상)</li>
+</ul></div>
+<div class="note-box"><b>환경 설정 메모</b> — KoNLPy(Okt)는 자바 분석기의 래퍼라 <code>openjdk-17-jdk-headless</code> 를 먼저 설치해야 <code>okt.pos()</code> 가 동작합니다
+(설치하지 않으면 <code>JVMNotFoundException</code>). 그래프의 한글 폰트는 설치만으로는 반영되지 않아 <code>fontManager.addfont()</code> 로 직접 등록합니다.</div>
+<div class="warn"><b>제출</b> — <code>런타임 → 모두 실행</code> 후 <b>모든 셀의 출력이 남아 있는 상태</b>로 <code>2주차_실습_학번_이름.ipynb</code> 저장하여 제출.</div>
+</section>
+
 <section class="sec" id="ref">
   <div class="sec-head"><span class="sec-badge">REF</span><h2 class="sec-title">참고서적<small>교안에 수록된 도서</small></h2></div>
 <div class="note-box"><b>국내 도서</b>
