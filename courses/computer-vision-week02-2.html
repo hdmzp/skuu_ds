@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>컴퓨터비전 | 2주차 수업내용</title>
+<title>컴퓨터비전 | 2주차-2 Geometric Camera Models</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -301,22 +301,22 @@ a.ext:hover{border-bottom-color:var(--accent)}
   <a href="#fov">② 화각</a>
   <a href="#pmat">② 카메라 행렬 P</a>
   <a href="#apps">② 왜곡 보정</a>
-  <a href="#ot">OT 자료</a>
 </nav>
 
 <div class="wrap">
 
 <div class="weeknav">
   <a href="computer-vision.html" class="plan">← 강의계획서</a>
-  <a href="computer-vision-week01.html">1주차 · Python &amp; OpenCV</a>
-  <span class="cur">2주차 · Geometric Camera Models</span>
+  <a href="computer-vision-week01.html">1주차 · 오리엔테이션</a>
+  <a href="computer-vision-week02-1.html">2주차-1 · Python &amp; OpenCV</a>
+  <span class="cur">2주차-2 · Geometric Camera Models</span>
 </div>
 
 <section class="hero">
-  <p class="kicker">2주차 · 9.7 ~ 9.13 · 2026-2학기 · ADS5034-01</p>
+  <p class="kicker">2주차-2 · 9.9 (수) 온라인 콘텐츠 · 2026-2학기 · ADS5034-01</p>
   <h1>Geometric Camera Models</h1>
   <p>2D 이미지 변환을 자유도와 행렬식으로 정리하고(part 1), 3D 세계가 2D 이미지로 투영되는 과정을 핀홀 모델에서 카메라 행렬 P까지 쌓아 올린 뒤 왜곡 보정까지 다룹니다(part 2).</p>
-  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 63p + OT 18p</span><span class="chip">필기 통합본</span></div>
+  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 63p</span><span class="chip">필기 통합본</span></div>
 </section>
 
 <div class="legend">
@@ -326,7 +326,7 @@ a.ext:hover{border-bottom-color:var(--accent)}
 
 <section class="sec" id="map">
   <div class="sec-head"><span class="sec-badge">MAP</span><h2 class="sec-title">한눈에 보기<small>이번 주차 흐름 — 누르면 해당 절로 이동합니다</small></h2></div>
-<div class="partbar"><b>자료 ①</b> 02. Geometric Camera Models — part 1 · 이미지 변환</div>
+<div class="partbar"><b>PART 1</b> 이미지 변환</div>
 <div class="mapgrid">
   <a href="#factors"><b>00 이미지 형성의 네 요소</b><span>Geometry · Radiometry · Photometry · Digitization</span></a>
   <a href="#warp"><b>01 이미지 변환</b><span>필터링(값) vs 워핑(좌표) · 선형변환 2×2</span></a>
@@ -334,7 +334,7 @@ a.ext:hover{border-bottom-color:var(--accent)}
   <a href="#types"><b>03 변환 4가지</b><span>강체 → 유사 → 아핀 → 투영, 자유도 2·3·4·6·8</span></a>
   <a href="#table"><b>04 정리표</b><span>행렬 · 자유도 · 보존되는 성질</span></a>
 </div>
-<div class="partbar"><b>자료 ①</b> part 2 · 카메라 모델</div>
+<div class="partbar"><b>PART 2</b> 카메라 모델</div>
 <div class="mapgrid">
   <a href="#camera"><b>05 카메라 파라미터</b><span>intrinsic vs extrinsic, 캘리브레이션</span></a>
   <a href="#proj"><b>06 투영의 성질</b><span>many-to-one · 소실점 · 무엇을 잃고 지키나</span></a>
@@ -344,22 +344,18 @@ a.ext:hover{border-bottom-color:var(--accent)}
   <a href="#pmat"><b>11 카메라 행렬 P</b><span>x = P·X, P = K [R | t]</span></a>
   <a href="#apps"><b>12 왜곡 보정</b><span>원근 왜곡 · 방사 왜곡</span></a>
 </div>
-<div class="partbar"><b>자료 ②</b> 01. Course Introduction (오리엔테이션)</div>
-<div class="mapgrid">
-  <a href="#ot"><b>수업 운영과 평가</b><span>플립러닝 · 출석 인정 기간 · 발표 · 과제 3회 · 평가 비율</span></a>
-</div>
 </section>
 
 <!-- ==================================================================== -->
 <!-- 자료 ①                                                                -->
 <!-- ==================================================================== -->
 <div class="matbar">
-  <p class="tagline">자료 ① · 2주차 본 교안</p>
+  <p class="tagline">2주차-2 교안 · 온라인 콘텐츠</p>
   <h2>02. Geometric Camera Models</h2>
   <p>63페이지 · Image Transformation(part 1)과 Geometric Camera Model(part 2)로 이루어져 있습니다.</p>
   <div class="acts">
-    <a class="primary" href="pdf-viewer.html?doc=cv-w02-camera">뷰어로 보기</a>
-    <a href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week02-geometric-camera-models.pdf" download="컴퓨터비전_2주차_Geometric_Camera_Models.pdf">⬇ 다운로드</a>
+    <a class="primary" href="pdf-viewer.html?doc=cv-w02-2-camera">뷰어로 보기</a>
+    <a href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week02-2-geometric-camera-models.pdf" download="컴퓨터비전_2주차-2_Geometric_Camera_Models.pdf">⬇ 다운로드</a>
   </div>
 </div>
 
@@ -664,41 +660,6 @@ z로 나누는 연산 때문에 <span class="hw">선형 변환이라고 말할 �
 </div>
 </section>
 
-<!-- ==================================================================== -->
-<!-- 자료 ②                                                                -->
-<!-- ==================================================================== -->
-<div class="matbar">
-  <p class="tagline">자료 ② · 오리엔테이션 (2주차에 함께 배포)</p>
-  <h2>01. Course Introduction (Orientation)</h2>
-  <p>18페이지 · 수업 운영 방식과 평가 기준. 1주차 수업(9/2) 내용이지만 자료는 이 주차에 함께 공유되었습니다.</p>
-  <div class="acts">
-    <a class="primary" href="pdf-viewer.html?doc=cv-w02-intro">뷰어로 보기</a>
-    <a href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week02-course-intro.pdf" download="컴퓨터비전_Course_Introduction(오리엔테이션).pdf">⬇ 다운로드</a>
-  </div>
-</div>
-
-<section class="sec" id="ot">
-  <div class="sec-head"><span class="sec-badge">OT</span><h2 class="sec-title">수업 운영과 평가<small>Course Introduction 요약</small></h2></div>
-<div class="info">
-  <div class="info-row"><div class="info-key">수업 방식</div><div class="info-val"><span class="term" tabindex="0" data-tip="온라인 콘텐츠를 미리 보고 오고, 실시간 수업에서는 질의응답·실습 등 학생 활동 중심으로 진행하는 수업 방식.">Flipped Learning</span> — 온라인 콘텐츠(목~수) + 실시간 온라인 수업(수)</div></div>
-  <div class="info-row"><div class="info-key">실시간 수업</div><div class="info-val">매주 수요일 19:00~20:30 (필요 시 연장) · Zoom (i-Campus 링크)</div></div>
-  <div class="info-row"><div class="info-key">온라인 콘텐츠<br>출석 인정</div><div class="info-val">매주 목요일 00:00 ~ 다음 주 수요일 수업 직전<br><span style="color:#6b7280">예) 2주차 콘텐츠: 9/3(목) 00:00 ~ 9/9(수) 19:00</span></div></div>
-  <div class="info-row"><div class="info-key">선수 지식</div><div class="info-val">선형대수(행렬·벡터·변환) · 기초 확률과 통계 · 구현을 위한 프로그래밍(Python)</div></div>
-  <div class="info-row"><div class="info-key">Python Review</div><div class="info-val">총 3주간 (2~3주차, 11주차) — Python · OpenCV · PyTorch (Colab)</div></div>
-  <div class="info-row"><div class="info-key">논문 발표</div><div class="info-val">3주차(9/16)부터 11주 내외 · 발표 12분 + Q&amp;A 3~5분 · 주당 3~4명</div></div>
-  <div class="info-row"><div class="info-key">과제</div><div class="info-val">총 3회 (배점 5 + 8 + 12) · 부여 시 실시간 수업에서 설명, 마감 후 Review</div></div>
-  <div class="info-row"><div class="info-key">오프라인 강의실</div><div class="info-val">퇴계인문관 31705호 (중간/기말고사 및 필요 시)</div></div>
-</div>
-<div class="evals">
-  <div class="ev"><div class="ev-top"><span class="ev-name">출석 및 참여</span><span class="ev-pct">10%</span></div><div class="ev-bar"><i style="width:10%"></i></div></div>
-  <div class="ev"><div class="ev-top"><span class="ev-name">논문 발표</span><span class="ev-pct">15%</span></div><div class="ev-bar"><i style="width:15%"></i></div></div>
-  <div class="ev"><div class="ev-top"><span class="ev-name">과제 (3회)</span><span class="ev-pct">25%</span></div><div class="ev-bar"><i style="width:25%"></i></div></div>
-  <div class="ev"><div class="ev-top"><span class="ev-name">중간고사</span><span class="ev-pct">25%</span></div><div class="ev-bar"><i style="width:25%"></i></div></div>
-  <div class="ev"><div class="ev-top"><span class="ev-name">기말고사</span><span class="ev-pct">25%</span></div><div class="ev-bar"><i style="width:25%"></i></div></div>
-  <div class="ev-total"><span>합계</span><span>100%</span></div>
-</div>
-</section>
-
 <section class="sec" id="next">
   <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>3주차 (9/16)</small></h2></div>
 <div class="note-box"><ul class="ul">
@@ -707,12 +668,12 @@ z로 나누는 연산 때문에 <span class="hw">선형 변환이라고 말할 �
   <li><b>논문 스터디 발표 시작</b> · 과제 1회차 부여 시점</li>
 </ul></div>
 <div class="weeknav" style="margin-top:16px">
-  <a href="computer-vision-week01.html">← 1주차 · Python &amp; OpenCV</a>
+  <a href="computer-vision-week02-1.html">← 2주차-1 · Python &amp; OpenCV</a>
   <a href="computer-vision.html" class="plan">강의계획서 전체 주차 보기</a>
 </div>
 </section>
 
-<p class="src">출처 — 컴퓨터비전 02. Geometric Camera Models (part 1 · part 2) · 01. Course Introduction (Orientation) · 2주차 수업 필기 (2026-2학기)</p>
+<p class="src">출처 — 컴퓨터비전 02. Geometric Camera Models (part 1 · part 2) · 2주차 수업 필기 (2026-2학기)</p>
 
 </div>
 
