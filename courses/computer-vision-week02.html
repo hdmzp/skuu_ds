@@ -268,8 +268,14 @@ a.ext:hover{border-bottom-color:var(--accent)}
   <a href="#homog">동차 좌표</a>
   <a href="#types">변환 4가지</a>
   <a href="#table">정리표</a>
-  <a href="#camera">Camera Model</a>
-  <a href="#lens">렌즈 · 심도 · FOV</a>
+  <a href="#camera">카메라 파라미터</a>
+  <a href="#proj">투영의 성질</a>
+  <a href="#pinhole">핀홀 카메라</a>
+  <a href="#lens">렌즈 · 초점</a>
+  <a href="#dof">심도</a>
+  <a href="#fov">화각</a>
+  <a href="#pmat">카메라 행렬 P</a>
+  <a href="#apps">왜곡 보정</a>
   <a href="#next">다음 주 예고</a>
 </nav>
 
@@ -280,7 +286,7 @@ a.ext:hover{border-bottom-color:var(--accent)}
 <section class="hero">
   <p class="kicker">2주차 · 9.7 ~ 9.13 · 2026-2학기</p>
   <h1>Geometric Camera Models</h1>
-  <p>2D 이미지 변환(강체 · 유사 · 아핀 · 투영)을 자유도와 행렬식으로 정리하고, 3D 세계가 2D 이미지로 투영되는 핀홀 카메라 모델과 카메라 파라미터를 다룹니다. 오리엔테이션 자료도 이 주차에 함께 배포되었습니다.</p>
+  <p>2D 이미지 변환(강체 · 유사 · 아핀 · 투영)을 자유도와 행렬식으로 정리하고, 3D 세계가 2D 이미지로 투영되는 핀홀 카메라 모델부터 카메라 행렬 P의 완성과 왜곡 보정까지 다룹니다. part 1 · part 2 필기를 모두 반영했습니다.</p>
   <div class="chips"><span class="chip">ADS5034-01</span><span class="chip">최재영 교수</span><span class="chip">Flipped Learning</span><span class="chip">교안 63페이지</span><span class="chip">필기 반영</span></div>
 </section>
 
@@ -529,31 +535,238 @@ translation ⊂ rigid ⊂ similarity ⊂ affine ⊂ projective 순서로 포함 
 <code>getPerspectiveTransform</code>이 점 4개를 받는 이유가 여기에 있다.</div>
 </section>
 
-<!-- ===================== Camera Model ===================== -->
+<!-- ===================== 카메라 파라미터 ===================== -->
 <section class="sec" id="camera">
-  <div class="sec-head"><span class="sec-badge">04</span><h2 class="sec-title">Geometric Camera Model<small>3D 세계 → 2D 이미지</small></h2></div>
-<div class="note-box"><ul class="ul">
-  <li><b>두 좌표계</b> — World coordinate system과 Camera coordinate system. 여기에 Image / Pixel 좌표계가 이어진다</li>
-  <li><b>카메라 파라미터</b> — <b>Intrinsic</b>(초점거리, 주점 등 카메라 내부)과 <b>Extrinsic</b>(회전·이동 등 카메라의 위치·자세). 이를 구하는 과정이 <b>카메라 캘리브레이션</b></li>
-  <li><b>투영은 차원 축소(3D→2D)</b> — 각도와 거리(길이)는 잃고, 직선과 결합관계(incidence)는 보존된다</li>
-  <li><b>Many-to-one</b> — 같은 광선 위의 점들은 모두 같은 이미지 점으로 투영된다. 평행선은 <span class="term" data-tip="실제로는 평행한 직선들이 투영된 이미지에서 만나는 점. 방향마다 자신의 소실점을 갖는다.">소실점</span>에서 만나지만, 이미지 평면과 평행한 선들은 평행을 유지한다</li>
-  <li><b>핀홀 카메라 모델</b> — (x, y, z) → (f·x/z, f·y/z). 투영 후 좌표에 z로 나누는 연산이 들어가므로 <b>동차 좌표</b>가 여기서 다시 쓰인다</li>
-  <li><b>핀홀 크기의 딜레마</b> — 구멍이 크면 여러 방향의 빛이 섞여 흐려지고, 너무 작으면 회절(diffraction)로 다시 흐려진다</li>
+  <div class="sec-head"><span class="sec-badge">04</span><h2 class="sec-title">카메라 파라미터란 무엇인가<small>How can we model the geometry of a camera?</small></h2></div>
+<div class="note-box">카메라 모델을 안다는 것은 <b>그 사진이 찍힐 당시의 상황을 복원할 수 있다</b>는 뜻이다.
+카메라가 어디에 어떤 자세로 있었고(외부), 어떤 렌즈와 센서로 빛을 받았는지(내부)를 알면
+이미지의 한 점이 3D 공간의 어느 광선에서 왔는지 되짚을 수 있다.</div>
+<div class="cards">
+  <div class="card2"><h4><span class="term" data-tip="카메라 내부가 결정하는 값들 — 초점거리 f, 주점 (oₓ, o_y), 픽셀의 가로/세로 크기, 비대칭(skew). 카메라를 어디에 두든 변하지 않는다.">Intrinsic</span><em>내부 파라미터</em></h4>
+    <p>초점거리 f · <span class="term" data-tip="광학축이 이미지 평면과 만나는 점 (oₓ, o_y). 픽셀 좌표의 원점은 보통 이미지 왼쪽 위 모서리라서, 센서 좌표를 픽셀 좌표로 옮길 때 이 값을 더해 준다.">주점(principal point)</span> (o<sub>x</sub>, o<sub>y</sub>) · 픽셀 크기 · <span class="term" data-tip="픽셀의 가로축과 세로축이 정확히 직교하지 않을 때 생기는 비틀림. 보정 항 f·s_θ 로 모델에 넣는다.">skew(비대칭)</span>. <b>카메라를 어디에 두든 변하지 않는다.</b> 이번 주차의 대부분이 여기에 해당한다.</p></div>
+  <div class="card2"><h4><span class="term" data-tip="카메라가 세계 어디에, 어떤 자세로 놓여 있는지 — 회전 R(3)과 이동 t(3). 카메라를 옮기면 바뀐다.">Extrinsic</span><em>외부 파라미터</em></h4>
+    <p>세계 좌표계에 대한 카메라의 <b>회전 R</b>과 <b>이동 t</b>. 카메라를 옮기거나 돌리면 바뀐다.</p></div>
+</div>
+<div class="tip"><b>"이걸 다 모아서 카메라 행렬로 만든다"가 무슨 뜻인가</b><br>
+3D 점을 2D로 옮기는 과정은 실제로는 <b>세 단계</b>다 — ① 세계 좌표 → 카메라 좌표(위치·자세 보정) ②
+카메라 좌표 → 센서 평면(초점거리로 나누는 투영) ③ 센서 평면 → 픽셀 좌표(원점 이동·픽셀 크기).
+그런데 <b>동차 좌표를 쓰면 세 단계가 모두 행렬 곱</b>이므로, 미리 곱해서 <b>단 하나의 3×4 행렬 <span class="term" data-tip="3D 세계 좌표(동차 4×1)를 이미지 좌표(동차 3×1)로 한 번에 보내는 3×4 행렬. P = K [R | t] 로 분해되며, K가 내부, [R|t]가 외부다.">카메라 행렬 P</span></b>로 합쳐 둘 수 있다.
+그러면 어떤 3D 점이든 <b>x = P·X</b> 한 번의 곱셈으로 이미지 위치가 나온다. "카메라 매트릭스로 만들어 둔다"는 말은 이 뜻이다.</div>
+<div class="hand">
+  <ul class="ul">
+    <li>카메라의 모델을 알고, <span class="hw">이 카메라가 이미지를 획득했을 당시의 상황을 이해</span>해야 한다 — 카메라가 상황을 어떻게 받아들였고 어떻게 처리했는지.</li>
+    <li>실제 카메라 자체도 3차원에 있다. <span class="hw">카메라가 실제 위치에서 가져온 3차원 정보가 2차원으로 투영되는</span> 그 복잡한 과정을 다룬다.</li>
+    <li>실세계 좌표를 2차원으로 가져오기 위한 내용들 — <span class="hw">이를 모두 모아 camera matrix로 만들어 놓는다.</span></li>
+    <li>외부적인 요소 <span class="hw">extrinsic</span>, 내부적인 요소 <span class="hw">intrinsic</span> 을 모두 다룬 것이 카메라 파라미터. 이 시간에 설명할 내용은 <span class="hw">카메라의 내부 요소가 대부분</span>.</li>
+  </ul>
+</div>
+<div class="note-box"><b><span class="term" data-tip="체스보드처럼 좌표를 아는 물체를 여러 장 찍어, 내부 파라미터 K와 외부 파라미터 [R|t]를 역으로 추정하는 과정.">카메라 캘리브레이션(Camera calibration)</span></b> — 반대로, 사진들로부터 이 파라미터들을 <b>역으로 구하는</b> 작업. 좌표를 아는 물체(체스보드 등)를 여러 각도에서 찍어 K와 [R|t]를 추정한다.</div>
+</section>
+
+<!-- ===================== 투영의 성질 ===================== -->
+<section class="sec" id="proj">
+  <div class="sec-head"><span class="sec-badge">05</span><h2 class="sec-title">투영(Projection)의 성질<small>3D → 2D 로 갈 때 무엇을 잃고 무엇을 지키는가</small></h2></div>
+<div class="warn"><b>차원 축소 기계 (3D → 2D)</b><br>
+<b>잃는 것</b> — 각도(angles) · 거리(길이) · 깊이 정보<br>
+<b>지키는 것</b> — 직선(straight lines) · 결합 관계(incidence, 점이 선 위에 있다는 사실)</div>
+<div class="note-box"><b>투영의 속성</b>
+<ul class="ul">
+  <li><b><span class="term" data-tip="한 광선 위에 놓인 3D 점들은 깊이가 달라도 모두 같은 이미지 점에 맺힌다. 그래서 이미지 한 점만으로는 원래 거리(깊이)를 알 수 없다.">Many-to-one</span></b> — 같은 광선 위의 점들은 모두 같은 이미지 점으로 간다</li>
+  <li>점 → 점, 직선 → 직선 <span style="color:#6b7280">(단, 광학 중심을 지나는 직선은 한 점으로 투영된다)</span></li>
+  <li>평면 → 평면, 또는 소실선을 경계로 한 <span class="term" data-tip="무한히 뻗은 평면이 투영되면 이미지 전체를 덮거나, 소실선을 경계로 한 쪽 절반만 덮는 경우가 생긴다. 이때 반평면이라 부른다.">반평면(half-plane)</span></li>
+  <li><span class="term" data-tip="실제로는 평행한 직선들이 투영된 이미지에서 만나는 점. 방향마다 자신의 소실점을 갖는다.">소실점(vanishing point)</span> — 평행선은 더 이상 평행하지 않고 한 점에서 만난다. 방향마다 자기 소실점이 있다</li>
+  <li><span class="term" data-tip="지면처럼 같은 평면에 놓인 모든 방향의 소실점들이 모여 이루는 직선. 사진 속 수평선이 바로 이것이다.">소실선(horizon line)</span> — 같은 평면 위 여러 방향의 소실점들이 모여 만드는 직선</li>
+  <li>단, <b>이미지 평면과 평행한 직선들은</b> 투영 후에도 평행을 유지한다</li>
 </ul></div>
-<div class="note-box"><b>카메라 행렬 P</b> — 초점거리 f와 주점 (o<sub>x</sub>, o<sub>y</sub>)을 담은 <b>내부 행렬 K</b>와, 세계 좌표를 카메라 좌표로 옮기는 <b>[R | t] 외부 행렬</b>의 곱으로 분해된다.
-<div class="eq"><span class="op">K =</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>f</span><span>0</span><span>o<sub>x</sub></span><span>0</span><span>f</span><span>o<sub>y</sub></span><span>0</span><span>0</span><span>1</span></span><span class="br r"></span></span> <span class="op">,&nbsp; P = K · [ R | t ]</span></div>
+<div class="hand">
+  <ul class="ul">
+    <li>카메라의 센서에 담는 것(3차원 → 2차원)이 곧 <span class="hw">projection</span>, 앞서 배운 개념이다.</li>
+    <li><span class="hw">(x, y, 1) = (2x, 2y, 2)</span> — 스케일에 대한 의미는 없다. x, y에서의 투영이라는 공통점만 남는다.</li>
+    <li><span class="hw">소실점(vanishing point)을 중심으로 펼쳐 나가는</span> 모습 — 평행했던 것들이 더 이상 평행하지 않다. 하지만 <span class="hw">straight lines는 유지</span>된다.</li>
+    <li>속성 정리 — <span class="hw">many-to-one</span>, 점은 점으로, 라인은 라인으로, 면은 면으로 혹은 half-planes로.</li>
+    <li>또 하나의 가장 중요한 특징 — 카메라의 시선들이 모이는 <span class="hw">vanishing point</span>, 그리고 <span class="hw">horizon line</span>.</li>
+  </ul>
+</div>
+<div class="tip"><b>"(x, y, 1) = (2x, 2y, 2), 스케일은 의미가 없다"의 뜻</b> — <span class="term" data-tip="동차 좌표에서는 0이 아닌 수를 전체에 곱해도 같은 점이다. (x, y, 1) = (2x, 2y, 2) — w로 나누면 둘 다 (x, y)가 되기 때문. 그래서 카메라 행렬도 스케일 배수만큼의 자유가 없다.">동차 좌표의 스케일 불변성</span><br>
+투영식 (x, y, z) → (f·x/z, f·y/z) 에는 <b>z로 나누는 연산</b>이 들어 있는데, 동차 좌표로 쓰면
+(f·x, f·y, z) 라고만 적어 두고 <b>마지막에 w로 나누기</b>만 하면 된다. 그래서 투영이 행렬 곱 하나로 표현된다.</div>
+</section>
+
+<!-- ===================== 핀홀 카메라 ===================== -->
+<section class="sec" id="pinhole">
+  <div class="sec-head"><span class="sec-badge">06</span><h2 class="sec-title">핀홀 카메라 모델<small>Pinhole camera model — 가장 단순한 카메라</small></h2></div>
+<div class="flow">
+  <div class="fl"><div class="fl-n">1</div><div><h4>문제 — 그냥 필름만 두면 흐려진다</h4>
+    <p>물체의 한 점에서 나온 빛은 <b>사방으로 방사</b>되므로 필름 여러 곳에 동시에 닿는다. 모든 점의 빛이 겹쳐 아무 상도 맺히지 않는다.</p></div></div>
+  <div class="fl"><div class="fl-n">2</div><div><h4>해결 — barrier(장벽)를 세운다</h4>
+    <p>대부분의 빛은 장벽에서 차단되고, <b>구멍을 지나는 하나의 광선만</b> 필름에 도달한다. 물체의 한 점 ↔ 필름의 한 점이 대응되어 상이 맺힌다.</p></div></div>
+  <div class="fl"><div class="fl-n">3</div><div><h4>결과 — 역상(倒立)</h4>
+    <p>구멍을 지나며 광선이 교차하므로 <b>위는 아래로, 좌우도 뒤집혀</b> 맺힌다. 이 구멍이 곧 <span class="term" data-tip="빛이 통과하는 구멍의 크기. 핀홀에서는 구멍 자체이고, 렌즈 카메라에서는 조리개다. 크면 밝지만 흐려지고, 작으면 선명하지만 어둡다.">조리개(aperture)</span> 역할을 한다.</p></div></div>
+  <div class="fl"><div class="fl-n">4</div><div><h4>정리 — <span class="term" data-tip="핀홀 모델에서 상은 뒤집혀 맺힌다. 계산 편의를 위해 이미지 평면을 핀홀 앞쪽(초점거리 f 위치)으로 옮겨 놓은 것이 가상 이미지이며, 이때는 상이 바로 선다.">Virtual image(가상 이미지)</span></h4>
+    <p>계산할 때는 이미지 평면을 핀홀 <b>앞쪽 f 위치</b>로 옮겨 상이 바로 서게 둔다. 기하 관계는 같고 부호만 정리된다.</p></div></div>
+</div>
+<div class="note-box"><b>구멍 크기의 딜레마</b>
+<ul class="ul">
+  <li><b>구멍이 크면</b> — 여러 방향의 빛이 한 점에 섞여 들어와 <b>평균되어 흐려진다</b></li>
+  <li><b>구멍이 너무 작으면</b> — <span class="term" data-tip="구멍이 파장에 가까울 만큼 작아지면 빛이 가장자리에서 휘어 퍼지는 현상. 핀홀을 무작정 작게 만들 수 없는 이유다.">회절(diffraction)</span> 때문에 다시 흐려지고, 들어오는 <b>빛의 양이 부족</b>해진다</li>
+  <li>그래서 빛이 모자라면 <b>노출 시간을 길게</b> 가져간다 — 야경 촬영에서 셔터를 오래 열어 두는 것과 같은 이치</li>
+</ul></div>
+<div class="hand">
+  <ul class="ul">
+    <li>하나의 객체에서 나오는 여러 빛은 <span class="hw">방사</span>하기 때문에 film의 여러 곳에 닿는다 → 그래서 <span class="hw">barrier를 설치</span>한다. 대부분의 빛은 차단되고 <span class="hw">어떤 하나의 빛 정도만 통과</span>해 film에 맺힌다.</li>
+    <li><span class="hw">위는 아래로</span> 역상으로 맺히며, 핀홀이 곧 <span class="hw">조리개(aperture)</span> 역할을 하게 된다.</li>
+    <li>중국의 철학자 <span class="hw">Mozi(묵자)</span>가 원리를 이야기했고, <span class="hw">아리스토텔레스</span>도 언급했으며, <span class="hw">레오나르도 다 빈치</span>가 이를 그림에 활용했다.</li>
+    <li>핀홀 카메라는 결국 <span class="hw">박스 안에 조그만 구멍을 뚫은 것</span>. 맺히는 상은 역상이고, <span class="hw">virtual image</span>는 상이 바뀌지 않도록 앞쪽에 세워 둔 것이다.</li>
+    <li>구멍이 크면 많은 빛이 들어와 흐려지니 가능하면 작게, <span class="hw">근데 너무 작으면 빛의 양이 적어 또 흐려진다</span>. 그래서 <span class="hw">장시간 조리개를 열어 두는</span> 작업이 필요할 수도 있다 — 야경 촬영처럼.</li>
+  </ul>
 </div>
 </section>
 
+<!-- ===================== 렌즈 ===================== -->
 <section class="sec" id="lens">
-  <div class="sec-head"><span class="sec-badge">05</span><h2 class="sec-title">렌즈 · 심도 · 화각<small>Aperture · Depth of Field · FOV</small></h2></div>
+  <div class="sec-head"><span class="sec-badge">07</span><h2 class="sec-title">렌즈와 초점<small>Cameras with lenses — 빛을 더 많이, 그러나 선명하게</small></h2></div>
 <div class="note-box"><ul class="ul">
-  <li><b>렌즈</b> — 평행한 빛을 초점(focal point)에 모은다. 중심을 지나는 광선은 꺾이지 않으므로 핀홀 모델이 그대로 성립한다</li>
-  <li><b>얇은 렌즈 공식</b> — 이 식을 만족하는 물체 점만 초점이 맞는다. 초점면이 움직이면 맞는 거리도 달라진다</li>
-  <li><b>피사계 심도(Depth of Field)</b> — 초점이 맞는 것처럼 보이는 거리 범위. <b>조리개를 좁힐수록 심도가 깊어진다</b></li>
-  <li><b>화각(FOV)</b> — 초점거리와 센서 크기로 결정된다. <b>f가 작을수록 광각(넓은 화각), f가 클수록 망원(좁은 화각)</b></li>
-  <li>사람의 눈도 렌즈다 — 홍채(빛의 양) · 망막(센서) · 중심와(가장 조밀한 센서)</li>
+  <li><b>렌즈를 넣는 이유</b> — 구멍을 키워 <b>빛을 많이 받으면서도</b> 상을 선명하게 유지하기 위해서. 렌즈가 퍼지는 빛을 <b>한 점으로 모아 주기</b> 때문이다</li>
+  <li><b><span class="term" data-tip="평행하게 들어온 빛이 렌즈를 지나 모이는 한 점. 렌즈에서 이 점까지의 거리가 초점거리다.">초점(focal point)</span></b> — 평행하게 들어온 광선들이 렌즈를 지나 모이는 점. 렌즈에서 그 점까지의 거리가 <span class="term" data-tip="렌즈가 평행한 빛을 한 점(초점)에 모으는 거리 f. 이미지의 확대율과 화각을 동시에 결정한다.">초점거리 f</span></li>
+  <li><b>핀홀 모델은 그대로 성립</b> — 렌즈 <b>중심</b>을 지나는 광선은 꺾이지 않기 때문에, 앞에서 세운 투영식을 그대로 쓸 수 있다</li>
+  <li><b><span class="term" data-tip="초점이 정확히 맞지 않은 점은 한 점이 아니라 작은 원으로 번져 맺힌다. 이 원이 사람 눈이나 센서가 "점"으로 인정할 만큼 작으면 초점이 맞은 것으로 보인다.">착란원(circle of confusion)</span></b> — 초점이 어긋난 점은 원으로 번져 맺힌다. 이 원이 충분히 작으면 "초점이 맞았다"고 본다</li>
 </ul></div>
+<div class="note-box"><b><span class="term" data-tip="1/D′ + 1/D = 1/f. 물체 거리 D와 상 거리 D′, 초점거리 f의 관계식. 이 식을 만족하는 점만 정확히 초점이 맞는다.">Thin Lens Formula</span> — 얇은 렌즈 공식</b>
+<div class="eq"><span class="op">1 / D&prime;</span><span class="op">+</span><span class="op">1 / D</span><span class="op">=</span><span class="op">1 / f</span></div>
+<ul class="ul">
+  <li><b>D</b> — 물체까지의 거리 (object distance) · <b>D′</b> — 상이 맺히는 거리 (focus distance) · <b>f</b> — 초점거리</li>
+  <li>이 식을 만족하는 점만 <b>정확히</b> 초점이 맞는다. 초점면 D′를 앞뒤로 움직이면 초점이 맞는 물체 거리 D도 함께 달라진다 — 카메라의 <b>포커싱</b>이 바로 이 조작이다</li>
+</ul></div>
+<div class="hand">
+  <ul class="ul">
+    <li>빛이 들어올 때 <span class="hw">굴절(꺾임)의 문제</span>가 있다. 렌즈의 어떤 구간에서는 빛이 꺾인다.</li>
+    <li>렌즈를 통해 <span class="hw">더 많은 빛으로 표현</span>할 수 있게 한다 — a lens focuses light onto the film.</li>
+    <li>굴절 문제를 처리하려고 <span class="hw">렌즈의 모양·두께를 바꿔 가며 거리를 맞춘다</span>. 우리 눈이 하는 일과 같다.</li>
+    <li><span class="hw">사람의 눈도 결국 렌즈</span> — iris(홍채, 빛의 양 조절) · retina(망막, 센서) · fovea(중심와, 가장 조밀한 센서).</li>
+    <li>결국 <span class="hw">object distance D · focal length f · focus distance D′</span> 라는 모델이 나오고, 도형화하면 <span class="hw">1/D′ + 1/D = 1/f</span> 공식이 된다.</li>
+  </ul>
+</div>
+</section>
+
+<!-- ===================== 심도 ===================== -->
+<section class="sec" id="dof">
+  <div class="sec-head"><span class="sec-badge">08</span><h2 class="sec-title">피사계 심도<small>Depth of Field — "초점이 잘 맞는 구간"의 정체</small></h2></div>
+<div class="tip"><b>필기의 "같은 거리에 있는 부분… 일치하는 부분" 이 무슨 뜻인가</b><br>
+얇은 렌즈 공식을 정확히 만족하는 거리는 <b>딱 하나</b>다. 하지만 그 거리에서 조금 벗어난 점도
+<span class="term" data-tip="초점이 정확히 맞지 않은 점은 한 점이 아니라 작은 원으로 번져 맺힌다. 이 원이 사람 눈이나 센서가 "점"으로 인정할 만큼 작으면 초점이 맞은 것으로 보인다.">착란원(circle of confusion)</span>이 <b>센서 화소(또는 눈의 분해능)보다 작으면</b> 사람 눈에는 여전히 점으로 보인다.
+그래서 실제 렌즈에서는 초점이 맞는 <b>거리의 범위</b>가 생기고, 이 범위를 <span class="term" data-tip="초점이 맞은 것처럼 보이는 거리의 범위. 착란원이 허용 크기 이하로 유지되는 구간이며, 조리개를 조일수록 넓어진다.">피사계 심도(Depth of Field)</span>라고 부른다.</div>
+<div class="note-box"><b>어떻게 조절하는가 — 조리개</b>
+<ul class="ul">
+  <li><b>조리개를 조이면(작게)</b> — 렌즈 가장자리를 지나는 광선이 잘려 착란원이 작아진다 → <b>심도가 깊어져</b> 앞뒤로 넓은 범위가 선명해진다. 대신 <b>어두워진다</b></li>
+  <li><b>조리개를 열면(크게)</b> — 빛은 많이 들어오지만 착란원이 커져 <b>심도가 얕아진다</b> → 배경이 흐려지는 아웃포커스</li>
+  <li>물체 거리 D가 멀어질수록 심도는 대체로 깊어진다</li>
+</ul></div>
+<div class="hand">
+  가장 잘 나오는 부분을 컨트롤하려면 결국 <span class="hw">조리개 사이즈를 조절</span>해서 얻을 수 있다.
+  조리개를 크게 열었을 때와 작게 열었을 때 — <span class="hw">작게 조일수록 선명하게 커버하는 거리 범위가 길어진다.</span>
+</div>
+</section>
+
+<!-- ===================== 화각 ===================== -->
+<section class="sec" id="fov">
+  <div class="sec-head"><span class="sec-badge">09</span><h2 class="sec-title">화각<small>Field of View — 초점거리가 결정하는 시야</small></h2></div>
+<div class="note-box"><ul class="ul">
+  <li><b><span class="term" data-tip="카메라가 담아내는 3D 공간의 각도 범위. 초점거리 f와 센서(필름) 크기로 결정된다.">화각(FOV)</span></b>는 <b>초점거리 f</b>와 <b>센서(필름) 크기</b>로 결정된다. 카메라가 보는 3D 공간의 각도 범위</li>
+  <li><b>f가 작아지면</b> → 더 넓은 각도가 유한한 이미지 평면 안에 들어온다 = <b>광각(wide angle)</b>, 더 많은 세계 점이 담긴다</li>
+  <li><b>f가 커지면</b> → 화각이 좁아진다 = <b>망원(telephoto)</b>, 좁은 영역이 크게 확대된다</li>
+  <li>수식으로는 대략 FOV = 2·arctan( (센서 크기 / 2) / f ) 의 형태 — f가 분모에 있으므로 반비례</li>
+</ul></div>
+<div class="hand">
+  <ul class="ul">
+    <li>시야각은 <span class="hw">focal length(렌즈의 초점거리)</span>로 정해지고, 교안에 식도 제시되어 있다.</li>
+    <li><span class="hw">초점거리 vs viewpoint</span> — 멀리서 망원으로 당겨 찍을수록 화각이 좁아지고, <span class="hw">배경을 크롭시키는 효과</span>가 생긴다. 그래서 망원은 배경을 고르기가 쉽다 (시점을 조금만 옮겨도 배경이 크게 바뀐다).</li>
+  </ul>
+</div>
+</section>
+
+<!-- ===================== 카메라 행렬 P ===================== -->
+<section class="sec" id="pmat">
+  <div class="sec-head"><span class="sec-badge">10</span><h2 class="sec-title">카메라 행렬 P 만들기<small>What is the camera matrix P? — 단계별로 쌓아 올리기</small></h2></div>
+<div class="note-box"><b>출발점 — Rearranged Pinhole Camera Model</b><br>
+역상으로 맺힌 이미지 평면을 <b><span class="term" data-tip="렌즈(또는 핀홀)의 중심을 지나 이미지 평면에 수직으로 뻗는 기준 축. 이 축이 이미지 평면과 만나는 점이 주점이다.">광학축(optical axis)</span> 위 초점거리 f 위치로 당겨 놓으면</b>(가상 이미지) 닮은꼴 삼각형에서 곧바로
+<div class="eq"><span class="op">(x, y, z)</span><span class="op">→</span><span class="op">( f·x / z ,&nbsp; f·y / z )</span></div>
+z로 나누는 이 연산 때문에 <b>엄밀히 말하면 선형 변환이 아니다</b>. 그래서 <span class="term" data-tip="동차 좌표에서는 0이 아닌 수를 전체에 곱해도 같은 점이다. (x, y, 1) = (2x, 2y, 2) — w로 나누면 둘 다 (x, y)가 되기 때문. 그래서 카메라 행렬도 스케일 배수만큼의 자유가 없다.">동차 좌표의 스케일 불변성</span> 덕분에 동차 좌표로 적어 두고, 나눗셈은 맨 마지막 w로 미룬다 — 그러면 전체가 <b>x = P·X</b> 라는 행렬 곱 하나가 된다.</div>
+
+<h3 class="sub-title">① 카메라 좌표 → 센서 평면</h3>
+<div class="note-box">투영과 카메라 파라미터를 분리해서 쓴다. 앞의 3×3이 카메라(초점거리), 뒤의 3×4가 순수한 투영이다.
+<div class="eq"><span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x&prime;</span><span>y&prime;</span><span>1</span></span><span class="br r"></span></span> <span class="op">=</span> <span class="op">(1/z)</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>f</span><span>0</span><span>0</span><span>0</span><span>f</span><span>0</span><span>0</span><span>0</span><span>1</span></span><span class="br r"></span></span> <span class="op">·</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(4,auto)"><span>1</span><span>0</span><span>0</span><span>0</span><span>0</span><span>1</span><span>0</span><span>0</span><span>0</span><span>0</span><span>1</span><span>0</span></span><span class="br r"></span></span> <span class="op">·</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x</span><span>y</span><span>z</span><span>1</span></span><span class="br r"></span></span></div></div>
+
+<h3 class="sub-title">② 센서 평면 → 이미지(픽셀) 좌표</h3>
+<div class="note-box">센서 좌표의 원점은 광학축이 지나는 가운데지만, 이미지 픽셀의 원점은 보통 <b>왼쪽 위 모서리</b>다.
+그래서 <span class="term" data-tip="광학축이 이미지 평면과 만나는 점 (oₓ, o_y). 픽셀 좌표의 원점은 보통 이미지 왼쪽 위 모서리라서, 센서 좌표를 픽셀 좌표로 옮길 때 이 값을 더해 준다.">주점(principal point)</span> (o<sub>x</sub>, o<sub>y</sub>) 만큼 <b>평행이동</b>을 더한다.
+<div class="eq"><span class="op">K =</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>f</span><span>0</span><span>o<sub>x</sub></span><span>0</span><span>f</span><span>o<sub>y</sub></span><span>0</span><span>0</span><span>1</span></span><span class="br r"></span></span></div></div>
+
+<h3 class="sub-title">③ 세계 좌표 → 카메라 좌표 (외부 파라미터)</h3>
+<div class="note-box">카메라가 세계 어디에 어떤 자세로 있는지를 회전 R(3×3)과 이동 t(3×1)로 붙인다.
+<div class="eq"><span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(2,auto)"><span>R</span><span>t</span><span>0<sub>1×3</sub></span><span>1</span></span><span class="br r"></span></span></div></div>
+
+<h3 class="sub-title">④ Complete Camera Model</h3>
+<div class="note-box">세 단계를 모두 곱하면 완성이다. 앞쪽이 <span class="term" data-tip="카메라 내부가 결정하는 값들 — 초점거리 f, 주점 (oₓ, o_y), 픽셀의 가로/세로 크기, 비대칭(skew). 카메라를 어디에 두든 변하지 않는다.">Intrinsic parameters</span>, 뒤쪽이 <span class="term" data-tip="카메라가 세계 어디에, 어떤 자세로 놓여 있는지 — 회전 R(3)과 이동 t(3). 카메라를 옮기면 바뀐다.">Extrinsic parameters</span>.
+<div class="eq"><span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x&prime;</span><span>y&prime;</span><span>1</span></span><span class="br r"></span></span> <span class="op">=</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>f</span><span>0</span><span>o<sub>x</sub></span><span>0</span><span>f</span><span>o<sub>y</sub></span><span>0</span><span>0</span><span>1</span></span><span class="br r"></span></span> <span class="op">·</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(4,auto)"><span>1</span><span>0</span><span>0</span><span>0</span><span>0</span><span>1</span><span>0</span><span>0</span><span>0</span><span>0</span><span>1</span><span>0</span></span><span class="br r"></span></span> <span class="op">·</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(2,auto)"><span>R</span><span>t</span><span>0<sub>1×3</sub></span><span>1</span></span><span class="br r"></span></span> <span class="op">·</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x</span><span>y</span><span>z</span><span>1</span></span><span class="br r"></span></span></div>
+<div class="eq"><span class="op">즉,&nbsp; x = P · X ,&nbsp; P = K [ R | t ]&nbsp; (3×4)</span></div></div>
+
+<h3 class="sub-title">⑤ More General Camera Model</h3>
+<div class="note-box">실제 센서는 픽셀이 정사각형이 아닐 수도 있고(<span class="term" data-tip="픽셀이 정사각형이 아닐 때 가로·세로 방향의 배율이 달라지는 것. K에서 f·sₓ 와 f·s_y 로 나뉘어 표현된다.">픽셀 종횡비</span>), 축이 살짝 비틀려 있을 수도 있다(<span class="term" data-tip="픽셀의 가로축과 세로축이 정확히 직교하지 않을 때 생기는 비틀림. 보정 항 f·s_θ 로 모델에 넣는다.">skew(비대칭)</span>).
+이를 보정하는 항을 넣으면 내부 행렬의 자유도가 늘어난다.
+<div class="eq"><span class="op">K =</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>f&thinsp;s<sub>x</sub></span><span>f&thinsp;s<sub>θ</sub></span><span>o<sub>x</sub></span><span>0</span><span>f&thinsp;s<sub>y</sub></span><span>o<sub>y</sub></span><span>0</span><span>0</span><span>1</span></span><span class="br r"></span></span></div>
+<ul class="ul">
+  <li><b>f·s<sub>x</sub>, f·s<sub>y</sub></b> — 가로/세로 방향의 배율 (픽셀 크기 차이 반영)</li>
+  <li><b>f·s<sub>θ</sub></b> — skew 보정 항. 픽셀 축이 직교하면 0이다</li>
+  <li>내부 파라미터 자유도 5(f<sub>x</sub>, f<sub>y</sub>, s<sub>θ</sub>, o<sub>x</sub>, o<sub>y</sub>) + 외부 6(R 3 + t 3) = <b>총 11</b>, 이는 3×4 행렬 12개 원소에서 전체 스케일 1을 뺀 값과 정확히 일치한다</li>
+</ul></div>
+<div class="hand">
+  <ul class="ul">
+    <li>rearrange할 때, 역상으로 맺힌 걸 당겨서 <span class="hw">optical axis</span> 위 가상의 평면에 맺히게 한다 — rearranged pinhole camera model.</li>
+    <li><span class="hw">선형 변환이라고 말할 수는 없고</span>, homogeneous하게 표현한다. 그래서 <span class="hw">x = PX</span>. 앞으로 이 <span class="hw">P</span>에 대해 알아보게 된다.</li>
+    <li><span class="hw">camera frame과 sensor plane의 관계</span> → 초점거리만큼의 배율을 도입. 이어서 <span class="hw">sensor plane과 image의 관계</span>(주점 이동). 여기까지가 카메라 <span class="hw">내부</span>.</li>
+    <li>카메라 <span class="hw">외부</span>에서는 world frame과 image의 관계 — 실세계 좌표와 카메라의 이동성(R, t)까지.</li>
+    <li>결국 intrinsic·extrinsic parameters를 다 합쳐 <span class="hw">complete camera model</span>을 만든다. 다르게 scaling해야 할 수도 있어 <span class="hw">자유도가 증가</span>할 수 있고, 뒤틀려 있을 수도 있어 <span class="hw">skew 보정값</span>을 포함해 more general camera model을 구축한다.</li>
+  </ul>
+</div>
+</section>
+
+<!-- ===================== 응용 ===================== -->
+<section class="sec" id="apps">
+  <div class="sec-head"><span class="sec-badge">11</span><h2 class="sec-title">응용 — 왜곡과 보정<small>Applications · 교안 60~62p</small></h2></div>
+
+<div class="xf">
+  <div class="xf-head"><h4>1) <span class="term" data-tip="카메라를 위로 기울여 찍으면 건물의 수직선들이 위로 갈수록 모이는 왜곡. 원근 투영 자체의 성질이라 렌즈 결함이 아니다.">Perspective distortion</span></h4><span class="en">원근 왜곡 · converging verticals</span></div>
+  <p style="font-size:13px;color:#4b5563;line-height:1.75"><b>건축 사진의 고질적인 문제</b> — 높은 건물을 담으려고 카메라를 위로 기울이면
+  이미지 평면이 건물 벽과 평행하지 않게 되어, <b>수직선들이 위로 갈수록 모인다</b>(아래는 넓고 위는 좁게).
+  카메라를 수평으로 유지하면 왜곡은 없지만 <b>건물 아랫부분만</b> 담긴다.</p>
+  <div class="xf-keep" style="color:#1b3f8b;background:#eef6ff;border-color:#c4d2ee"><b>해결 ①  하드웨어</b> — 렌즈를 위로 <b>평행 이동</b>시킨다(lens shift / 시프트 렌즈). 카메라는 수평인 채로 건물 전체가 담긴다<br>
+  <b>해결 ②  소프트웨어</b> — <span class="term" data-tip="왜곡된 이미지에 호모그래피를 적용해, 모여 버린 평행선을 다시 평행하게 되돌리는 보정.">Perspective rectification</span>. 우리가 배운 <span class="term" data-tip="두 평면 사이의 투영 대응을 나타내는 3×3 행렬. 자유도 8이며 대응점 4쌍으로 구할 수 있다.">호모그래피</span>로 모여 버린 평행선을 다시 평행하게 되돌린다</div>
+</div>
+
+<div class="xf">
+  <div class="xf-head"><h4>2) <span class="term" data-tip="렌즈의 불완전함 때문에 가장자리를 지나는 광선이 더 크게 휘어 생기는 왜곡. 직선이 곡선으로 휘며, 배럴형과 핀쿠션형이 있다.">Radial distortion</span></h4><span class="en">방사 왜곡 · barrel / pin cushion</span></div>
+  <p style="font-size:13px;color:#4b5563;line-height:1.75"><b>렌즈의 불완전함</b>에서 오는 왜곡으로, <b>렌즈 가장자리를 지나는 광선일수록</b> 편차가 크게 나타난다.
+  중심에서 멀어질수록 직선이 휘어 보인다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>유형</th><th>모습</th><th>흔한 경우</th></tr></thead>
+    <tbody>
+      <tr><td><b>No distortion</b></td><td>직선이 직선으로</td><td>이상적인 렌즈</td></tr>
+      <tr><td><b>Pin cushion</b> (핀쿠션)</td><td>가장자리가 <b>안으로 오목하게</b> 당겨짐 — 바늘꽂이 모양</td><td>망원 쪽</td></tr>
+      <tr><td><b>Barrel</b> (배럴)</td><td>가장자리가 <b>밖으로 볼록하게</b> 부풀음 — 술통 모양</td><td>광각 · 어안렌즈</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="xf-keep" style="color:#1b3f8b;background:#eef6ff;border-color:#c4d2ee"><b>보정</b> — 반지름 방향으로 늘이고 줄이는 왜곡 계수를 추정해 되돌린다.
+  <b>직선이 다시 직선이 되는지</b>가 판단 기준이며, 호모그래피와 함께 카메라 캘리브레이션의 일부로 다룬다</div>
+</div>
+<div class="hand">
+  <ul class="ul">
+    <li><b>perspective distortion</b> — 카메라로 찍을 때 <span class="hw">위는 좁게, 아래는 넓게</span> 왜곡되는 것. 하드웨어적 solution은 <span class="hw">camera lens가 shifting</span>, 우리가 배운 방법은 <span class="hw">perspective rectification (modeling distortion)</span> — 왜곡된 평행선을 평행하게 바꿔 주는 것.</li>
+    <li><b>radial distortion</b> — 어안렌즈처럼 <span class="hw">가장자리가 왜곡</span>된 것. pin cushion처럼, 또는 barrel처럼.</li>
+    <li>이것도 <span class="hw">평행선을 유지하게끔 당기고 늘리고 줄여서</span> 맞춰 주는 것이며, <span class="hw">homography와도 같이 고려</span>한다. 결국 이미지에 대한 transformation을 진행하는 것이고, <span class="hw">왜곡 효과는 카메라의 파라미터를 활용해 보정</span>한다.</li>
+  </ul>
+</div>
 </section>
 
 <section class="sec" id="next">
@@ -565,7 +778,7 @@ translation ⊂ rigid ⊂ similarity ⊂ affine ⊂ projective 순서로 포함 
 </ul></div>
 </section>
 
-<p class="src">출처 — 컴퓨터비전 02. Geometric Camera Models (part 1) · 01. Course Introduction (Orientation) · 2주차 수업 필기 (2026-2학기)</p>
+<p class="src">출처 — 컴퓨터비전 02. Geometric Camera Models (part 1 · part 2) · 01. Course Introduction (Orientation) · 2주차 수업 필기 (2026-2학기)</p>
 
 </div>
 
