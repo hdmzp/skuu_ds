@@ -180,6 +180,16 @@ a.ext:hover{border-bottom-color:var(--accent)}
 .src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
 .top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
 .top-btn:hover{transform:translateY(-3px)}
+
+/* 주차 내비 */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
 </style>
 </head>
 <body id="top">
@@ -199,7 +209,11 @@ a.ext:hover{border-bottom-color:var(--accent)}
 
 <div class="wrap">
 
-<a class="backlink" href="machine-learning.html">← 기계학습특론 강의계획서로</a>
+<div class="weeknav">
+  <a href="machine-learning.html" class="plan">← 강의계획서</a>
+  <a href="machine-learning-week01.html">1주차 · 인공지능 기본 개념</a>
+  <span class="cur">2주차 · 인공지능 기초 수학</span>
+</div>
 
 <section class="hero">
   <p class="kicker">2주차 · 9.7 ~ 9.13 · 2026-2학기</p>
