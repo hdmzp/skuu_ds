@@ -180,6 +180,81 @@ a.ext:hover{border-bottom-color:var(--accent)}
 .src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
 .top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
 .top-btn:hover{transform:translateY(-3px)}
+
+/* ===== 필기(수업 중 메모) ===== */
+:root{ --hand:#b45309; --hand-deep:#7c2d12; --hand-bg:#fffaf3; --hand-line:#f0c48a; }
+.hand{
+  background:var(--hand-bg);border:1px solid var(--hand-line);border-left:4px solid var(--hand);
+  border-radius:var(--radius);padding:12px 15px 13px;margin:12px 0;
+  font-size:13px;line-height:1.8;color:var(--hand-deep);
+}
+.hand::before{
+  content:'✍ 필기';display:inline-block;background:var(--hand);color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.06em;padding:2px 8px;border-radius:999px;margin-bottom:7px;
+}
+.hand b{color:var(--hand-deep)}
+.hand .ul li{color:var(--hand-deep)}
+.hand .ul li::before{background:var(--hand);opacity:.75}
+.hw{color:var(--hand);font-weight:700}
+.legend{
+  display:flex;flex-wrap:wrap;gap:14px;align-items:center;
+  background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius);
+  padding:10px 14px;margin:14px 0 0;font-size:12px;color:var(--muted);
+}
+.legend i{font-style:normal;display:inline-flex;align-items:center;gap:6px}
+.legend .sw{width:13px;height:13px;border-radius:4px;display:inline-block}
+.legend .sw.hand{background:var(--hand-bg);border:1px solid var(--hand);margin:0;padding:0}
+.legend .sw-term{background:#eef6ff;border-bottom:2px dotted var(--accent)}
+
+/* ===== 개념 툴팁 ===== */
+.term{
+  position:relative;color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);
+  border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+.term::after{
+  content:attr(data-tip);
+  position:absolute;left:50%;bottom:calc(100% + 9px);transform:translateX(-50%) translateY(4px);
+  width:max-content;max-width:min(320px,78vw);
+  background:#16233f;color:#f2f5fb;font-size:12px;font-weight:400;line-height:1.65;
+  letter-spacing:0;text-align:left;white-space:normal;
+  padding:9px 12px;border-radius:9px;box-shadow:0 8px 22px rgba(12,26,58,.3);
+  opacity:0;visibility:hidden;transition:opacity .14s,transform .14s;z-index:60;pointer-events:none;
+}
+.term::before{
+  content:'';position:absolute;left:50%;bottom:calc(100% + 3px);transform:translateX(-50%) translateY(4px);
+  border:6px solid transparent;border-top-color:#16233f;
+  opacity:0;visibility:hidden;transition:opacity .14s,transform .14s;z-index:61;pointer-events:none;
+}
+.term:hover::after,.term:hover::before,.term.on::after,.term.on::before{
+  opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);
+}
+.term.flip::after{bottom:auto;top:calc(100% + 9px)}
+.term.flip::before{bottom:auto;top:calc(100% + 3px);border-top-color:transparent;border-bottom-color:#16233f}
+
+/* ===== 행렬 ===== */
+.mtx{display:inline-flex;align-items:center;gap:4px;vertical-align:middle;margin:0 2px}
+.mtx .br{
+  display:inline-block;width:7px;align-self:stretch;
+  border:2px solid var(--ink);border-right:none;border-radius:3px 0 0 3px;
+}
+.mtx .br.r{border:2px solid var(--ink);border-left:none;border-radius:0 3px 3px 0}
+.mtx .cells{display:grid;gap:2px 12px;padding:5px 2px;font-size:12.5px;text-align:center;font-variant-numeric:tabular-nums}
+.mtx .cells span{min-width:26px;line-height:1.5}
+.eq{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;justify-content:center;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 14px;margin:10px 0;overflow-x:auto;
+}
+.eq .op{font-size:14px;font-weight:700;color:var(--muted)}
+/* ===== 변환 카드 ===== */
+.xf{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px}
+.xf-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:4px}
+.xf-head h4{font-size:14.5px;font-weight:700}
+.xf-head .en{font-size:11.5px;color:var(--muted)}
+.xf-dof{margin-left:auto;background:var(--accent);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.xf-keep{font-size:12.5px;color:#166534;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.65}
 </style>
 </head>
 <body id="top">
@@ -187,8 +262,12 @@ a.ext:hover{border-bottom-color:var(--accent)}
 <nav class="tab-bar" id="tabbar">
   <a href="#docs">강의자료</a>
   <a href="#ot">오리엔테이션</a>
-  <a href="#grade">평가 · 출석</a>
+  <a href="#grade">평가</a>
+  <a href="#factors">이미지 형성의 요소</a>
   <a href="#warp">Image Transformation</a>
+  <a href="#homog">동차 좌표</a>
+  <a href="#types">변환 4가지</a>
+  <a href="#table">정리표</a>
   <a href="#camera">Camera Model</a>
   <a href="#lens">렌즈 · 심도 · FOV</a>
   <a href="#next">다음 주 예고</a>
@@ -201,9 +280,14 @@ a.ext:hover{border-bottom-color:var(--accent)}
 <section class="hero">
   <p class="kicker">2주차 · 9.7 ~ 9.13 · 2026-2학기</p>
   <h1>Geometric Camera Models</h1>
-  <p>2D 이미지 변환(강체 · 유사 · 아핀 · 투영)을 정리하고, 3D 세계가 2D 이미지로 투영되는 핀홀 카메라 모델과 카메라 파라미터를 다룹니다. 오리엔테이션 자료도 이 주차에 함께 배포되었습니다.</p>
-  <div class="chips"><span class="chip">ADS5034-01</span><span class="chip">최재영 교수</span><span class="chip">Flipped Learning</span><span class="chip">교안 63페이지</span></div>
+  <p>2D 이미지 변환(강체 · 유사 · 아핀 · 투영)을 자유도와 행렬식으로 정리하고, 3D 세계가 2D 이미지로 투영되는 핀홀 카메라 모델과 카메라 파라미터를 다룹니다. 오리엔테이션 자료도 이 주차에 함께 배포되었습니다.</p>
+  <div class="chips"><span class="chip">ADS5034-01</span><span class="chip">최재영 교수</span><span class="chip">Flipped Learning</span><span class="chip">교안 63페이지</span><span class="chip">필기 반영</span></div>
 </section>
+
+<div class="legend">
+  <i><span class="sw hand"></span> 주황색 박스 = 수업 중 필기 내용</i>
+  <i><span class="sw sw-term"></span> 파란 점선 = 어려운 개념 (커서를 올리면 설명이 뜹니다 · 모바일은 탭)</i>
+</div>
 
 <section class="sec" id="docs">
   <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">2주차 강의자료<small>제목을 누르면 앱 실행 없이 화면에서 바로 열리고, 오른쪽 버튼으로 내려받을 수 있습니다</small></h2></div>
@@ -244,63 +328,226 @@ a.ext:hover{border-bottom-color:var(--accent)}
 <section class="sec" id="grade">
   <div class="sec-head"><span class="sec-badge">EVAL</span><h2 class="sec-title">평가 비율<small>Grading</small></h2></div>
 <div class="evals">
-  <div class="ev">
-    <div class="ev-top"><span class="ev-name">출석 및 참여 (Attendance and participation)</span><span class="ev-pct">10%</span></div>
-    <div class="ev-bar"><i style="width:10%"></i></div>
-  </div>
-  <div class="ev">
-    <div class="ev-top"><span class="ev-name">논문 발표 (Paper Presentation)</span><span class="ev-pct">15%</span></div>
-    <div class="ev-bar"><i style="width:15%"></i></div>
-  </div>
-  <div class="ev">
-    <div class="ev-top"><span class="ev-name">과제 (Homework 3회 · 5+8+12)</span><span class="ev-pct">25%</span></div>
-    <div class="ev-bar"><i style="width:25%"></i></div>
-  </div>
-  <div class="ev">
-    <div class="ev-top"><span class="ev-name">중간고사</span><span class="ev-pct">25%</span></div>
-    <div class="ev-bar"><i style="width:25%"></i></div>
-  </div>
-  <div class="ev">
-    <div class="ev-top"><span class="ev-name">기말고사</span><span class="ev-pct">25%</span></div>
-    <div class="ev-bar"><i style="width:25%"></i></div>
-  </div>
+  <div class="ev"><div class="ev-top"><span class="ev-name">출석 및 참여</span><span class="ev-pct">10%</span></div><div class="ev-bar"><i style="width:10%"></i></div></div>
+  <div class="ev"><div class="ev-top"><span class="ev-name">논문 발표</span><span class="ev-pct">15%</span></div><div class="ev-bar"><i style="width:15%"></i></div></div>
+  <div class="ev"><div class="ev-top"><span class="ev-name">과제 (3회 · 5+8+12)</span><span class="ev-pct">25%</span></div><div class="ev-bar"><i style="width:25%"></i></div></div>
+  <div class="ev"><div class="ev-top"><span class="ev-name">중간고사</span><span class="ev-pct">25%</span></div><div class="ev-bar"><i style="width:25%"></i></div></div>
+  <div class="ev"><div class="ev-top"><span class="ev-name">기말고사</span><span class="ev-pct">25%</span></div><div class="ev-bar"><i style="width:25%"></i></div></div>
   <div class="ev-total"><span>합계</span><span>100%</span></div>
 </div>
 </section>
 
+<!-- ===================== 이미지 형성의 요소 ===================== -->
+<section class="sec" id="factors">
+  <div class="sec-head"><span class="sec-badge">00</span><h2 class="sec-title">이미지 형성의 네 가지 요소<small>Factors in image formation — 교안 3p</small></h2></div>
+<div class="cards">
+  <div class="card2">
+    <h4><span class="term" data-tip="3차원 세계의 점과 그 점이 이미지에 맺히는 점 사이의 위치 관계를 다루는 분야. 카메라 모델·투영이 여기에 속한다.">Geometry</span><em>기하학</em></h4>
+    <p>3D 세계의 점과 이미지에 맺힌 점 사이의 <b>관계</b>. 이번 주차의 주제인 카메라 모델이 바로 이 관계를 수식으로 쓴 것이다.</p>
+  </div>
+  <div class="card2">
+    <h4><span class="term" data-tip="표면에서 방출·반사되는 빛의 양과, 그 빛이 이미지에 도달하는 양의 관계를 다룬다. 자외선·가시광선·적외선을 포함한 광학 복사의 측정.">Radiometry</span><em>복사량</em></h4>
+    <p>표면에서 나오는 빛의 양과 이미지에 도달하는 빛의 양의 관계. 자외선·가시광선·적외선을 포함한 광학 복사의 측정.</p>
+  </div>
+  <div class="card2">
+    <h4><span class="term" data-tip="빛의 세기를 측정하는 방법. 라디오메트리 중에서도 사람 눈이 감지할 수 있는 범위의 빛을 다룬다.">Photometry</span><em>측광</em></h4>
+    <p>빛의 <b>세기(intensity)</b>를 재는 방법. 그중에서도 <b>사람 눈이 감지할 수 있는</b> 빛을 다룬다.</p>
+  </div>
+  <div class="card2">
+    <h4><span class="term" data-tip="연속적인 아날로그 신호를 컴퓨터가 계산할 수 있는 이산적인 디지털 값으로 근사하는 과정. 표본화(sampling)와 양자화(quantization)로 이루어진다.">Digitization</span><em>디지털화</em></h4>
+    <p>연속 신호를 디지털 근사값으로 바꾸는 과정.</p>
+  </div>
+</div>
+<div class="hand">
+  <ul class="ul">
+    <li><b>Geometry(기하학)</b> — 3차원 세계에서 점과 점 간의 관계는 결국 <span class="hw">기하학적인 위치 관계</span>로 나타난다.</li>
+    <li><b>Radiometry(복사량)</b> — 물체에 반사된 빛의 <span class="hw">방향이나 양</span>을 측정. 광학적으로 적외선·자외선까지 포함.</li>
+    <li><b>Photometry</b> — 한마디로 빛의 <span class="hw">강도</span>를 재는 것.</li>
+    <li><b>Digitization</b> — 실세계에서 접하는 것은 아날로그 신호(연속적인 변화)다. 컴퓨터가 연산할 수 있게 <span class="hw">이산적인 디지털 값(digit)</span>으로 바꿔 주는 과정.</li>
+  </ul>
+</div>
+</section>
+
+<!-- ===================== Image Transformation ===================== -->
 <section class="sec" id="warp">
-  <div class="sec-head"><span class="sec-badge">01</span><h2 class="sec-title">Image Transformation<small>필터링은 값(range), 워핑은 좌표(domain)를 바꾼다</small></h2></div>
-<div class="note-box"><ul class="ul">
-  <li><b>filtering vs warping</b> — 필터링은 <code>g(x) = h(f(x))</code> 로 <b>값</b>을 바꾸고, 워핑은 <code>g(x) = f(h(x))</code> 로 <b>좌표</b>를 바꾼다</li>
-  <li><b>선형 변환</b> — 2×2 행렬로 표현되는 Scale · Rotation · Shear · Mirror의 조합. 원점이 유지되고 직선은 직선으로 남는다</li>
-  <li><b>Translation은 선형 연산이 아니다</b> — 2D 좌표만으로는 행렬 곱으로 표현할 수 없다</li>
-  <li><b>동차 좌표(Homogeneous coordinates)</b> — 좌표를 하나 더 붙여 (x, y, w)로 두면 이동까지 하나의 행렬 곱으로 처리할 수 있다. 되돌릴 때는 (x/w, y/w)</li>
-</ul></div>
-<div class="note-box"><b>변환의 계층</b>
+  <div class="sec-head"><span class="sec-badge">01</span><h2 class="sec-title">Image Transformation<small>필터링은 값(range)을, 워핑은 좌표(domain)를 바꾼다</small></h2></div>
+
+<div class="cards">
+  <div class="card2">
+    <h4>Image <span class="term" data-tip="이미지의 값(range)을 바꾸는 연산. g(x) = h(f(x)). 한 화소의 값을 정하기 위해 주변 화소를 함께 본다 (블러·샤프닝 등).">Filtering</span><em>g(x) = h( f(x) )</em></h4>
+    <p>화소의 <b>값</b>을 바꾼다. 한 화소를 정하기 위해 <b>주변 화소를 함께</b> 본다. 블러·샤프닝·에지 검출이 여기에 속한다.</p>
+  </div>
+  <div class="card2">
+    <h4>Image <span class="term" data-tip="이미지의 좌표(domain)를 바꾸는 연산. g(x) = f(h(x)). 화소 값은 그대로 두고 위치를 옮긴다 (이동·회전·원근 변환 등).">Warping</span><em>g(x) = f( h(x) )</em></h4>
+    <p>화소의 <b>위치</b>를 바꾼다. 변환 함수 h로 좌표를 옮겨 다른 위치·다른 형태의 이미지를 만든다.</p>
+  </div>
+</div>
+<div class="hand">
+  <ul class="ul">
+    <li><b>이미지 필터링</b> — 이미지의 <span class="hw">range</span>를 변화시킨다. 실제로 이미지가 받아들이는 <span class="hw">빛의 양을 조절</span>하는 셈이며, 화소 하나를 파악하기 위해 <span class="hw">주변을 다 파악</span>한다.</li>
+    <li><b>Image warping</b> — <span class="hw">변환 함수를 활용해</span> 다른 형태로 바꾼다. 다른 위치, 다른 형태로의 변환.</li>
+    <li>각 화소들의 기하학적인 관계를 잘 파악해서 알맞게 바꿔 주는 것 = <span class="hw">기하학적 변환</span>.</li>
+  </ul>
+</div>
+
+<h3 class="sub-title">기하학적 요소 — 무엇을 변환하는가</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>차원</th><th>대상</th><th>표기</th></tr></thead>
+  <tbody>
+    <tr><td rowspan="2">2D</td><td>점 (point)</td><td>x = (x, y) ∈ ℝ²</td></tr>
+    <tr><td>직선 (line)</td><td>l = (a, b, c), 점이 직선 위에 있으면 ax + by + c = 0</td></tr>
+    <tr><td rowspan="2">3D</td><td>점 (point)</td><td>x = (x, y, z), 동차 표현은 (x̄, ȳ, z̄, w̄)</td></tr>
+    <tr><td>평면 (plane)</td><td>m = (a, b, c, d), ax + by + cz + d = 0</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="hand">
+  3D에서는 <span class="hw">점이 모여 선이 되고, 선이 모여 평면이 된다</span>. 그래서 (x, y)가 (x′, y′)로 변환될 때
+  <span class="hw">p′ = T(p)</span> — 즉 <b>하나의 변환 매트릭스를 만드는 과정</b>이 이번 절의 목표다.
+</div>
+
+<h3 class="sub-title">선형 변환 — 2×2 행렬로 표현되는 것들</h3>
+<div class="note-box"><span class="term" data-tip="행렬 곱 하나로 표현되는 변환. 원점이 원점으로 가고, 직선은 직선으로, 평행선은 평행선으로 유지되며 여러 변환을 곱으로 합칠 수 있다. 2D에서는 2×2 행렬.">선형 변환(Linear transformation)</span>은 좌표를 바꾸는 기계 <b>p′ = T(p)</b> 중에서 <b>2×2 행렬 하나</b>로 쓸 수 있는 것들이다.</div>
+<div class="note-box"><b>① 균일 <span class="term" data-tip="모든 방향으로 같은 배율 s를 곱하는 변환. 각도(모양)는 그대로이고 크기만 달라진다.">스케일링</span> (Uniform scaling by s)</b><div class="eq"><span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x&prime;</span><span>y&prime;</span></span><span class="br r"></span></span> <span class="op">=</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(2,auto)"><span>s</span><span>0</span><span>0</span><span>s</span></span><span class="br r"></span></span> <span class="op">·</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x</span><span>y</span></span><span class="br r"></span></span></div></div>
+<div class="note-box"><b>② <span class="term" data-tip="원점을 중심으로 θ만큼 회전시키는 2×2 행렬. 역행렬은 −θ 회전, 즉 전치행렬과 같다.">회전 행렬</span> (Rotation by θ, 원점 기준)</b><div class="eq"><span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x&prime;</span><span>y&prime;</span></span><span class="br r"></span></span> <span class="op">=</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(2,auto)"><span>cos&thinsp;θ</span><span>−sin&thinsp;θ</span><span>sin&thinsp;θ</span><span>cos&thinsp;θ</span></span><span class="br r"></span></span> <span class="op">·</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x</span><span>y</span></span><span class="br r"></span></span></div>
+<ul class="ul"><li>역변환은 −θ 회전이며, 회전 행렬의 역행렬 = 전치행렬 (Rᵀ = R⁻¹)</li></ul></div>
+<div class="note-box"><b>③ 그 밖의 2×2 변환</b>
 <ul class="ul">
-  <li><b>Rigid (Euclidean)</b> — 회전 + 이동. 길이와 각도가 보존된다</li>
-  <li><b>Similarity</b> — Rigid + 균일 스케일. 각도(모양)가 보존된다</li>
-  <li><b>Affine</b> — 선형 변환 + 이동. <b>평행선이 평행으로 유지</b>된다</li>
-  <li><b>Perspective (Homography)</b> — 아핀 + 투영 왜곡. 평행선이 한 점(소실점)으로 모이고, <b>직선만 보존</b>된다</li>
+  <li><b>Mirror (Y축 대칭)</b> — [[−1, 0], [0, 1]] · <b>y = x 대칭</b> — [[0, 1], [1, 0]]</li>
+  <li><b><span class="term" data-tip="한 축을 고정한 채 다른 축 방향으로 밀어 기울이는 변환. 직사각형이 평행사변형이 된다.">Shear(전단)</span></b> — [[1, k], [0, 1]] 형태로 한쪽 축을 밀어 기울인다</li>
+</ul></div>
+<div class="warn"><b>평행이동(Translation)은 선형 연산이 아니다</b> — 2D 좌표만으로는
+(x′, y′) = (x + t<sub>x</sub>, y + t<sub>y</sub>) 를 <b>2×2 행렬 곱</b>으로 쓸 수 없다. 덧셈이 따로 남기 때문이다.</div>
+<div class="hand">
+  <ul class="ul">
+    <li>좌표의 평행이동은 구할 수 있지만, <span class="hw">엄격하게 보면 선형 연산이 아니다</span>.</li>
+    <li><span class="term" data-tip="여러 변환을 차례로 적용하는 것. 행렬 곱으로 표현되므로 미리 한 개의 행렬로 합쳐 두면 화소마다 한 번의 곱셈으로 끝난다 — 영상 처리에서 곱의 형태가 강력한 이유.">Composition(변환의 합성)</span>은 <span class="hw">곱의 형태로 표현되어야 한다</span> — 영상에서 아주 강력한 요소이며, 대부분의 연산은 곱의 형태가 효율적이다.</li>
+  </ul>
+</div>
+<div class="note-box"><b>선형 변환의 성질</b>
+<ul class="ul">
+  <li>원점은 원점으로 간다 (origin maps to origin)</li>
+  <li>직선은 직선으로, <span class="term" data-tip="평행한 두 직선이 변환 후에도 평행하게 남는 성질. 아핀 변환까지는 보존되지만 투영 변환에서는 깨진다.">평행성</span>은 유지된다</li>
+  <li>길이의 비가 보존되고, <b>변환을 곱으로 합칠 수 있다</b> (closed under composition)</li>
 </ul></div>
 </section>
 
+<!-- ===================== 동차 좌표 ===================== -->
+<section class="sec" id="homog">
+  <div class="sec-head"><span class="sec-badge">02</span><h2 class="sec-title">동차 좌표<small>Homogeneous Coordinates — 평행이동까지 곱으로 묶는 트릭</small></h2></div>
+<div class="note-box"><b>아이디어</b> — 좌표를 하나 더 붙인다. <span class="term" data-tip="우리가 평소 쓰는 보통의 좌표 (x, y). 동차 좌표와 구분하기 위해 부르는 이름이며, w로 나누어 되돌린 형태다.">Heterogeneous</span> (x, y) → <span class="term" data-tip="2D 좌표 (x, y)에 1을 하나 더 붙여 (x, y, 1)로 쓰는 좌표계. 덧셈으로만 표현되던 평행이동까지 행렬 곱 하나로 묶을 수 있어, 모든 변환을 같은 방식으로 합성할 수 있다. 되돌릴 때는 (x/w, y/w).">동차 좌표</span> (x, y, 1).
+되돌릴 때는 w로 나눈다: (x, y, w) → (x/w, y/w).
+<div class="eq"><span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x</span><span>y</span></span><span class="br r"></span></span> <span class="op">→</span> 3×3 행렬 곱 <span class="op">→</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x&prime;</span><span>y&prime;</span><span>1</span></span><span class="br r"></span></span></div>
+이렇게 하면 <b>평행이동도 행렬 곱</b>이 되어, 회전·스케일과 <b>같은 방식으로 합성</b>할 수 있다.</div>
+<div class="eq"><span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x&prime;</span><span>y&prime;</span><span>1</span></span><span class="br r"></span></span> <span class="op">=</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>1</span><span>0</span><span>t<sub>x</sub></span><span>0</span><span>1</span><span>t<sub>y</sub></span><span>0</span><span>0</span><span>1</span></span><span class="br r"></span></span> <span class="op">·</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x</span><span>y</span><span>1</span></span><span class="br r"></span></span></div>
+<div class="hand">
+  <ul class="ul">
+    <li>동차 행렬·동차 벡터 — 컴퓨터비전에서 동차는 주로 <span class="hw">perspective(원근)</span>에서 강력하게 쓰이고, 컴퓨터 그래픽스에서는 아주 기본적으로 활용한다.</li>
+    <li>핵심 질문: <span class="hw">평행이동을 덧셈이 아닌 곱의 표현으로 바꾸려면?</span> → heterogeneous coordinates를 homogeneous coordinates로 표현하면 된다.</li>
+    <li>앞으로 좌표계를 쓸 때는 <span class="hw">동차 좌표로 바꿔서, 1을 붙여</span> 곱의 형식으로 표현하자. 그래야 다른 변환과 함께 연산할 수 있다.</li>
+  </ul>
+</div>
+</section>
+
+<!-- ===================== 변환 4가지 ===================== -->
+<section class="sec" id="types">
+  <div class="sec-head"><span class="sec-badge">03</span><h2 class="sec-title">본격적인 이미지 변환 4가지<small>Rigid → Similarity → Affine → Perspective · 자유도가 커지는 순서</small></h2></div>
+
+<div class="xf">
+  <div class="xf-head"><h4>1-① <span class="term" data-tip="물체의 모양과 크기를 전혀 바꾸지 않는 변환. 회전 + 평행이동으로만 이루어지며 길이와 각도가 그대로 보존된다.">Rigid(강체) 변환</span> — Translation</h4><span class="en">평행이동</span><span class="xf-dof"><span class="term" data-tip="Degrees of Freedom. 그 변환을 완전히 결정하는 데 필요한 독립적인 매개변수의 개수. 값이 클수록 자유롭게 변형할 수 있고, 그만큼 추정에 필요한 대응점도 많아진다.">DoF</span> 2</span></div>
+  <p style="font-size:13px;color:#4b5563;line-height:1.75">원래 영상을 이동시켜 <b>새로운 위치에 놓는다</b>. 모양·크기·방향은 전혀 바뀌지 않는다.</p>
+  <div class="eq"><span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x&prime;</span><span>y&prime;</span><span>1</span></span><span class="br r"></span></span> <span class="op">=</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>1</span><span>0</span><span>t<sub>x</sub></span><span>0</span><span>1</span><span>t<sub>y</sub></span><span>0</span><span>0</span><span>1</span></span><span class="br r"></span></span> <span class="op">·</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x</span><span>y</span><span>1</span></span><span class="br r"></span></span></div>
+  <div class="xf-keep"><b>보존</b> — 방향(orientation) · 길이 · 각도 · 평행성 · 직선</div>
+</div>
+
+<div class="xf">
+  <div class="xf-head"><h4>1-② 강체 변환 — <span class="term" data-tip="회전 R과 평행이동 t로 이루어진 강체 변환의 정식 이름. 자유도는 회전각 1 + 이동 2 = 3.">Euclidean</span></h4><span class="en">이동 + 회전</span><span class="xf-dof"><span class="term" data-tip="Degrees of Freedom. 그 변환을 완전히 결정하는 데 필요한 독립적인 매개변수의 개수. 값이 클수록 자유롭게 변형할 수 있고, 그만큼 추정에 필요한 대응점도 많아진다.">DoF</span> 3</span></div>
+  <p style="font-size:13px;color:#4b5563;line-height:1.75">이동도 하고, θ만큼 <b>각도 이동(회전)</b>도 한 변환. 회전 1 + 이동 2 = 자유도 3.</p>
+  <div class="eq"><span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x&prime;</span><span>y&prime;</span><span>1</span></span><span class="br r"></span></span> <span class="op">=</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>cos&thinsp;θ</span><span>−sin&thinsp;θ</span><span>t<sub>x</sub></span><span>sin&thinsp;θ</span><span>cos&thinsp;θ</span><span>t<sub>y</sub></span><span>0</span><span>0</span><span>1</span></span><span class="br r"></span></span> <span class="op">·</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x</span><span>y</span><span>1</span></span><span class="br r"></span></span></div>
+  <div class="xf-keep"><b>보존</b> — 길이(lengths) · 각도 · 평행성 · 직선 <span style="color:#6b7280">(방향은 회전한 만큼 달라진다)</span></div>
+</div>
+
+<div class="xf">
+  <div class="xf-head"><h4>2) 동질 변환 — <span class="term" data-tip="강체 변환에 균일한 크기 변화 s를 더한 변환. 모양(각도)은 유지되고 크기만 달라진다. 자유도 4.">Similarity(유사 변환)</span></h4><span class="en">이동 + 회전 + 크기</span><span class="xf-dof"><span class="term" data-tip="Degrees of Freedom. 그 변환을 완전히 결정하는 데 필요한 독립적인 매개변수의 개수. 값이 클수록 자유롭게 변형할 수 있고, 그만큼 추정에 필요한 대응점도 많아진다.">DoF</span> 4</span></div>
+  <p style="font-size:13px;color:#4b5563;line-height:1.75">앞선 강체 변환에 <b>크기 변화</b>까지 추가한다. (T, R) + S — 성질은 그대로 유지하면서 이동·회전·크기만 달라진다.
+  아래에서 a = s·cos θ, b = s·sin θ 이므로 매개변수는 a, b, e, f 네 개다.</p>
+  <div class="eq"><span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x&prime;</span><span>y&prime;</span><span>1</span></span><span class="br r"></span></span> <span class="op">=</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>a</span><span>−b</span><span>e</span><span>b</span><span>a</span><span>f</span><span>0</span><span>0</span><span>1</span></span><span class="br r"></span></span> <span class="op">·</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x</span><span>y</span><span>1</span></span><span class="br r"></span></span></div>
+  <div class="xf-keep"><b>보존</b> — 각도(angles) · 모양 · 평행성 · 직선 · 길이의 비</div>
+</div>
+
+<div class="xf">
+  <div class="xf-head"><h4>3) <span class="term" data-tip="선형 변환 + 평행이동. 평행선은 평행하게 유지되고 선분 위 길이의 비도 보존되지만, 각도와 길이 자체는 변한다. 원점이 원점으로 갈 필요가 없다. 자유도 6.">Affine 변환</span></h4><span class="en">Affine Transformation</span><span class="xf-dof"><span class="term" data-tip="Degrees of Freedom. 그 변환을 완전히 결정하는 데 필요한 독립적인 매개변수의 개수. 값이 클수록 자유롭게 변형할 수 있고, 그만큼 추정에 필요한 대응점도 많아진다.">DoF</span> 6</span></div>
+  <p style="font-size:13px;color:#4b5563;line-height:1.75"><b>직선의 평행 관계를 유지</b>하면서, 거리와 거리의 <b>비</b>는 보존되도록 변환한다.
+  유사 변환 + 직선/길이의 비 — 가로·세로가 서로 다르게 늘어나거나 기울어질 수 있어 매개변수가 여섯 개(a, b, c, d, e, f)다.</p>
+  <div class="eq"><span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x&prime;</span><span>y&prime;</span><span>1</span></span><span class="br r"></span></span> <span class="op">=</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>a</span><span>b</span><span>e</span><span>c</span><span>d</span><span>f</span><span>0</span><span>0</span><span>1</span></span><span class="br r"></span></span> <span class="op">·</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x</span><span>y</span><span>1</span></span><span class="br r"></span></span></div>
+  <div class="xf-keep"><b>보존</b> — <span class="term" data-tip="평행한 두 직선이 변환 후에도 평행하게 남는 성질. 아핀 변환까지는 보존되지만 투영 변환에서는 깨진다.">평행성(parallelism)</span> · 직선 · 같은 직선 위 <span class="term" data-tip="한 직선 위에 놓인 세 점 사이의 거리 비. 아핀 변환에서는 길이 자체는 변해도 이 비는 유지된다.">길이의 비</span> <span style="color:#6b7280">(각도와 길이 자체는 변한다)</span></div>
+</div>
+<div class="hand">
+  <b>affine의 특징</b> — 선형 변환의 특성을 가지면서 변화하고, 여기에 덧붙이자면
+  앞선 선형 변환에 비해 <span class="hw">원점과 매핑시킬 필요가 없다</span>는 특징이 하나 더 있다.
+  (선형 변환 + 평행이동 = 아핀 변환)
+</div>
+
+<div class="xf">
+  <div class="xf-head"><h4>4) <span class="term" data-tip="투영 변환 · 호모그래피라고도 한다. 3D 공간을 2D 평면에 투영할 때 생기는 원근 효과를 표현하며, 직선은 직선으로 유지되지만 평행선은 소실점에서 만난다. 자유도 8.">Perspective(투영) 변환</span> — 원근</h4><span class="en">= Projective = <span class="term" data-tip="두 평면 사이의 투영 대응을 나타내는 3×3 행렬. 스케일 배수만큼의 자유가 있어 실제 자유도는 9−1 = 8이고, 대응점 4쌍으로 추정할 수 있다. 파노라마 합성에 쓰인다.">Homography</span></span><span class="xf-dof"><span class="term" data-tip="Degrees of Freedom. 그 변환을 완전히 결정하는 데 필요한 독립적인 매개변수의 개수. 값이 클수록 자유롭게 변형할 수 있고, 그만큼 추정에 필요한 대응점도 많아진다.">DoF</span> 8</span></div>
+  <p style="font-size:13px;color:#4b5563;line-height:1.75"><b>3D 공간을 2D 공간으로 투영</b>할 때 주로 쓰는 변환 — 원근법을 생각하면 된다.
+  서로 다른 두 이미지를 합성(파노라마)할 때도 사용한다. 3×3 행렬 9개 원소 중 <b>전체 스케일은 의미가 없어</b> 자유도는 8이고, 대응점 4쌍이면 구할 수 있다.</p>
+  <div class="eq"><span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x&prime;</span><span>y&prime;</span><span>1</span></span><span class="br r"></span></span> <span class="op">=</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>a</span><span>b</span><span>e</span><span>c</span><span>d</span><span>f</span><span>g</span><span>h</span><span>i</span></span><span class="br r"></span></span> <span class="op">·</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x</span><span>y</span><span>1</span></span><span class="br r"></span></span></div>
+  <div class="xf-keep"><b>보존</b> — 직선(straight lines)만 <span style="color:#6b7280">— 평행선은 <span class="term" data-tip="실제로는 평행한 직선들이 투영된 이미지에서 만나는 점. 방향마다 자신의 소실점을 갖는다.">소실점(vanishing point)</span>에서 만난다</span></div>
+</div>
+<div class="hand">
+  <ul class="ul">
+    <li>perspective = <span class="hw">projective = homography</span> 라고도 부른다.</li>
+    <li>2개의 서로 다른 이미지를 합성할 때도 사용 — <span class="hw">모아지거나, 벌어지거나</span>.</li>
+    <li>affine에 projective warps가 더해진 것. <span class="hw">라인은 라인으로 된다(lines map to lines)</span>. 평행도는 바뀐다(일부는 유지되겠지만). 자유도 <span class="hw">8</span>.</li>
+  </ul>
+</div>
+</section>
+
+<!-- ===================== 정리표 ===================== -->
+<section class="sec" id="table">
+  <div class="sec-head"><span class="sec-badge">TBL</span><h2 class="sec-title">2D 변환 정리표<small>교안 마지막 표 — 각 변환이 보존하는 것 (아래로 갈수록 자유도가 커지고 보존되는 성질은 줄어든다)</small></h2></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>변환 (Transformation)</th><th>행렬</th><th><span class="term" data-tip="Degrees of Freedom. 그 변환을 완전히 결정하는 데 필요한 독립적인 매개변수의 개수. 값이 클수록 자유롭게 변형할 수 있고, 그만큼 추정에 필요한 대응점도 많아진다.">자유도(DoF)</span></th><th>보존되는 성질 (Preserves)</th></tr></thead>
+  <tbody>
+    <tr><td><b>translation</b><br><span style="color:#6b7280">평행이동</span></td><td>[ <b>I</b> | <b>t</b> ]<sub>2×3</sub></td><td><b>2</b></td><td>방향(orientation) + 아래 모든 것</td></tr>
+    <tr><td><b>rigid (Euclidean)</b><br><span style="color:#6b7280">강체 · 등거리</span></td><td>[ <b>R</b> | <b>t</b> ]<sub>2×3</sub></td><td><b>3</b></td><td>길이(lengths) + 아래 모든 것</td></tr>
+    <tr><td><b>similarity</b><br><span style="color:#6b7280">유사 · 동질</span></td><td>[ s<b>R</b> | <b>t</b> ]<sub>2×3</sub></td><td><b>4</b></td><td>각도(angles) + 아래 모든 것</td></tr>
+    <tr><td><b>affine</b><br><span style="color:#6b7280">아핀</span></td><td>[ <b>A</b> ]<sub>2×3</sub></td><td><b>6</b></td><td>평행성(parallelism) + 아래 모든 것</td></tr>
+    <tr><td><b>projective</b><br><span style="color:#6b7280">투영 · 원근 · 호모그래피</span></td><td>[ <b>H̃</b> ]<sub>3×3</sub></td><td><b>8</b></td><td>직선(straight lines)</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="tip"><b>표를 읽는 법</b> — 위쪽 변환은 아래쪽 변환의 <b>특수한 경우</b>다.
+translation ⊂ rigid ⊂ similarity ⊂ affine ⊂ projective 순서로 포함 관계가 성립하며,
+자유도는 2 → 3 → 4 → 6 → 8 로 늘고 보존되는 성질은 하나씩 사라진다.
+그래서 "보존" 칸은 <b>자기 것 + 아래의 모든 것</b>으로 읽는다.</div>
+<div class="note-box"><b>실무 감각</b> — 자유도는 곧 <b>필요한 대응점 수</b>다. 한 쌍의 대응점이 식 2개를 주므로
+아핀(6)은 대응점 3쌍, 투영(8)은 4쌍이 필요하다. OpenCV의 <code>getAffineTransform</code>이 점 3개,
+<code>getPerspectiveTransform</code>이 점 4개를 받는 이유가 여기에 있다.</div>
+</section>
+
+<!-- ===================== Camera Model ===================== -->
 <section class="sec" id="camera">
-  <div class="sec-head"><span class="sec-badge">02</span><h2 class="sec-title">Geometric Camera Model<small>3D 세계 → 2D 이미지</small></h2></div>
+  <div class="sec-head"><span class="sec-badge">04</span><h2 class="sec-title">Geometric Camera Model<small>3D 세계 → 2D 이미지</small></h2></div>
 <div class="note-box"><ul class="ul">
-  <li><b>이미지 형성의 두 요소</b> — Geometry(3D 점과 이미지 점의 관계)와 Radiometry(빛의 양과 밝기의 관계)</li>
   <li><b>두 좌표계</b> — World coordinate system과 Camera coordinate system. 여기에 Image / Pixel 좌표계가 이어진다</li>
   <li><b>카메라 파라미터</b> — <b>Intrinsic</b>(초점거리, 주점 등 카메라 내부)과 <b>Extrinsic</b>(회전·이동 등 카메라의 위치·자세). 이를 구하는 과정이 <b>카메라 캘리브레이션</b></li>
   <li><b>투영은 차원 축소(3D→2D)</b> — 각도와 거리(길이)는 잃고, 직선과 결합관계(incidence)는 보존된다</li>
-  <li><b>Many-to-one</b> — 같은 광선 위의 점들은 모두 같은 이미지 점으로 투영된다. 평행선은 <b>소실점</b>에서 만나지만, 이미지 평면과 평행한 선들은 평행을 유지한다</li>
-  <li><b>핀홀 카메라 모델</b> — (x, y, z) → (f·x/z, f·y/z). 카메라 행렬 P는 초점거리 f와 주점 (oₓ, o_y)을 담은 내부 행렬과 [R | t] 형태의 외부 행렬로 분해된다</li>
+  <li><b>Many-to-one</b> — 같은 광선 위의 점들은 모두 같은 이미지 점으로 투영된다. 평행선은 <span class="term" data-tip="실제로는 평행한 직선들이 투영된 이미지에서 만나는 점. 방향마다 자신의 소실점을 갖는다.">소실점</span>에서 만나지만, 이미지 평면과 평행한 선들은 평행을 유지한다</li>
+  <li><b>핀홀 카메라 모델</b> — (x, y, z) → (f·x/z, f·y/z). 투영 후 좌표에 z로 나누는 연산이 들어가므로 <b>동차 좌표</b>가 여기서 다시 쓰인다</li>
+  <li><b>핀홀 크기의 딜레마</b> — 구멍이 크면 여러 방향의 빛이 섞여 흐려지고, 너무 작으면 회절(diffraction)로 다시 흐려진다</li>
 </ul></div>
+<div class="note-box"><b>카메라 행렬 P</b> — 초점거리 f와 주점 (o<sub>x</sub>, o<sub>y</sub>)을 담은 <b>내부 행렬 K</b>와, 세계 좌표를 카메라 좌표로 옮기는 <b>[R | t] 외부 행렬</b>의 곱으로 분해된다.
+<div class="eq"><span class="op">K =</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>f</span><span>0</span><span>o<sub>x</sub></span><span>0</span><span>f</span><span>o<sub>y</sub></span><span>0</span><span>0</span><span>1</span></span><span class="br r"></span></span> <span class="op">,&nbsp; P = K · [ R | t ]</span></div>
+</div>
 </section>
 
 <section class="sec" id="lens">
-  <div class="sec-head"><span class="sec-badge">03</span><h2 class="sec-title">렌즈 · 심도 · 화각<small>Aperture · Depth of Field · FOV</small></h2></div>
+  <div class="sec-head"><span class="sec-badge">05</span><h2 class="sec-title">렌즈 · 심도 · 화각<small>Aperture · Depth of Field · FOV</small></h2></div>
 <div class="note-box"><ul class="ul">
-  <li><b>핀홀 크기의 딜레마</b> — 구멍이 크면 여러 방향의 빛이 섞여 흐려지고, 너무 작으면 회절(diffraction)로 다시 흐려진다. 빛의 양도 줄어든다</li>
   <li><b>렌즈</b> — 평행한 빛을 초점(focal point)에 모은다. 중심을 지나는 광선은 꺾이지 않으므로 핀홀 모델이 그대로 성립한다</li>
   <li><b>얇은 렌즈 공식</b> — 이 식을 만족하는 물체 점만 초점이 맞는다. 초점면이 움직이면 맞는 거리도 달라진다</li>
   <li><b>피사계 심도(Depth of Field)</b> — 초점이 맞는 것처럼 보이는 거리 범위. <b>조리개를 좁힐수록 심도가 깊어진다</b></li>
@@ -318,11 +565,35 @@ a.ext:hover{border-bottom-color:var(--accent)}
 </ul></div>
 </section>
 
-<p class="src">출처 — 컴퓨터비전 02. Geometric Camera Models · 01. Course Introduction (Orientation) (2026-2학기)</p>
+<p class="src">출처 — 컴퓨터비전 02. Geometric Camera Models (part 1) · 01. Course Introduction (Orientation) · 2주차 수업 필기 (2026-2학기)</p>
 
 </div>
 
 <a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+<script>
+/* 모바일: 개념어를 탭하면 설명이 뜨고, 화면의 다른 곳을 누르면 닫힌다.
+   화면 위쪽에 있어 말풍선이 잘리는 경우에는 아래쪽으로 뒤집는다. */
+document.addEventListener('DOMContentLoaded', function () {
+  var terms = document.querySelectorAll('.term');
+  function place(el) {
+    el.classList.toggle('flip', el.getBoundingClientRect().top < 130);
+  }
+  terms.forEach(function (t) {
+    t.addEventListener('mouseenter', function () { place(t); });
+    t.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var on = t.classList.contains('on');
+      terms.forEach(function (o) { o.classList.remove('on'); });
+      if (!on) { place(t); t.classList.add('on'); }
+    });
+  });
+  document.addEventListener('click', function () {
+    terms.forEach(function (o) { o.classList.remove('on'); });
+  });
+});
+</script>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -346,6 +617,9 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 </script>
+
+<script src="quiz/ml-w01.js"></script>
+<script src="quiz/inline-quiz.js"></script>
 
 </body>
 </html>
