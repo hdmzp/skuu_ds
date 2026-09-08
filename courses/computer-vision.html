@@ -87,6 +87,7 @@ body{
 }
 .wk-n b{font-size:17px;font-weight:700;color:var(--accent);line-height:1}
 .wk-n span{font-size:9.5px;color:var(--muted);letter-spacing:.04em}
+.wk-n .wk-part{font-style:normal;font-size:11px;font-weight:700;color:#fff;background:var(--accent);border-radius:999px;padding:1px 6px;margin-top:4px;line-height:1.4}
 .wk-n em{font-style:normal;font-size:10px;font-weight:700;color:#4a72c9;margin-top:3px}
 .wk.exam .wk-n em{color:var(--red)}
 a.wk{text-decoration:none;color:inherit;transition:.15s;border-color:#c4d2ee}
@@ -206,23 +207,32 @@ a.wk .wk-n{background:#dfe8fa}
 </section>
 
 <section class="sec" id="weeks">
-  <div class="sec-head"><span class="sec-badge">PLAN</span><h2 class="sec-title">주차별 수업내용<small>Weekly Schedule · 15주 (2026-2학기, 수요일)</small></h2></div>
+  <div class="sec-head"><span class="sec-badge">PLAN</span><h2 class="sec-title">주차별 수업내용<small>Weekly Schedule · 15주 (2026-2학기, 수요일) · 2주차는 실습(-1)과 교안(-2)으로 나뉩니다</small></h2></div>
 <div class="weeks">
   <a class="wk" href="computer-vision-week01.html">
     <div class="wk-n"><b>1</b><span>주차</span><em>9.2</em></div>
     <div class="wk-body">
-      <p class="wk-key">Intro to the course</p>
-      <ul class="wk-list"><li>What is Computer Vision</li><li>강좌 소개 및 오리엔테이션</li><li>기초 코드 실습 1 — Python &amp; OpenCV</li></ul>
+      <p class="wk-key">Intro to the course — 오리엔테이션</p>
+      <ul class="wk-list"><li>What is Computer Vision</li><li>강좌 소개 및 수업 운영 방식</li><li>출석 · 발표 · 과제 · 평가 기준</li></ul>
       <p class="wk-note">실시간: Orientation</p>
+      <span class="wk-go">수업내용 보기 →</span>
+    </div>
+  </a>
+  <a class="wk" href="computer-vision-week02-1.html">
+    <div class="wk-n"><b>2</b><span>주차</span><em>9.9</em><i class="wk-part">-1</i></div>
+    <div class="wk-body">
+      <p class="wk-key">기초 코드 실습 1 — Python &amp; OpenCV</p>
+      <ul class="wk-list"><li>Python 환경 구축 · list / tuple / dict</li><li>NumPy로 이미지를 배열(텐서)로 다루기</li><li>OpenCV 변환 · 필터링 · 에지 검출</li></ul>
+      <p class="wk-note">실시간 수업 (수 19:00) · Python/OpenCV (1)</p>
       <span class="wk-go">실습 자료 보기 →</span>
     </div>
   </a>
-  <a class="wk" href="computer-vision-week02.html">
-    <div class="wk-n"><b>2</b><span>주차</span><em>9.9</em></div>
+  <a class="wk" href="computer-vision-week02-2.html">
+    <div class="wk-n"><b>2</b><span>주차</span><em>9.9</em><i class="wk-part">-2</i></div>
     <div class="wk-body">
       <p class="wk-key">Geometric Camera Models</p>
-      <ul class="wk-list"><li>Image Transformation</li><li>Geometric Camera Model</li><li>오리엔테이션 자료 포함</li></ul>
-      <p class="wk-note">실시간: Python/OpenCV (1)</p>
+      <ul class="wk-list"><li>Image Transformation — 동차 좌표 · 변환 4가지 · 자유도</li><li>Geometric Camera Model — 핀홀 · 렌즈 · 카메라 행렬 P</li><li>왜곡 보정</li></ul>
+      <p class="wk-note">온라인 콘텐츠 (사전제작) · 필기 통합본</p>
       <span class="wk-go">수업내용 보기 →</span>
     </div>
   </a>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>컴퓨터비전 | 1주차 실습 자료</title>
+<title>컴퓨터비전 | 1주차 오리엔테이션</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -190,16 +190,105 @@ a.ext:hover{border-bottom-color:var(--accent)}
 .weeknav a:hover{background:var(--accent-light)}
 .weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
 .weeknav .plan{color:var(--muted)}
+
+/* ===== 필기 표기 ===== */
+.hw{color:#b45309;font-weight:700;background:#fff7ed;border-radius:3px;padding:0 3px}
+.legend{
+  display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;
+  background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius);
+  padding:11px 14px;margin:0 0 24px;font-size:12px;color:var(--muted);line-height:1.6;
+}
+.legend i{font-style:normal;display:flex;align-items:flex-start;gap:7px}
+.legend i > span:last-child{flex:1;min-width:0}
+.legend .sw{width:14px;height:14px;border-radius:4px;display:inline-block;flex-shrink:0}
+.legend .sw-hand{background:#fff7ed;border:1px solid #b45309}
+.legend .sw-term{background:#eef6ff;border-bottom:2px dotted var(--accent)}
+
+/* ===== 주차 내비 ===== */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* ===== 자료별 구분 ===== */
+.matbar{
+  background:linear-gradient(135deg,#122250,#24407f);color:#fff;border-radius:14px;
+  padding:16px 18px;margin:34px 0 18px;box-shadow:0 6px 18px rgba(18,34,80,.15);
+}
+.matbar .tagline{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--lime)}
+.matbar h2{font-size:clamp(16px,3.6vw,20px);font-weight:700;line-height:1.3;margin:5px 0 4px}
+.matbar p{font-size:12.5px;color:#c9d3ee;line-height:1.65}
+.matbar .acts{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.matbar .acts a{
+  font-size:12px;font-weight:700;text-decoration:none;border-radius:8px;padding:6px 12px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;
+}
+.matbar .acts a.primary{background:var(--lime);border-color:var(--lime);color:#16233f}
+.partbar{
+  display:flex;align-items:center;gap:10px;margin:26px 0 14px;
+  font-size:13px;font-weight:700;color:var(--accent);
+}
+.partbar::after{content:'';flex:1;height:1px;background:var(--border)}
+.partbar b{background:var(--accent-light);border:1px solid #c4d2ee;border-radius:999px;padding:4px 11px;font-size:11.5px}
+
+/* ===== 한눈에 보기 ===== */
+.mapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px;margin-top:10px}
+.mapgrid a{
+  display:block;text-decoration:none;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:9px;padding:10px 13px;transition:.15s;
+}
+.mapgrid a:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(18,34,80,.1)}
+.mapgrid b{display:block;font-size:12.5px;color:var(--ink)}
+.mapgrid span{font-size:11.5px;color:var(--muted);line-height:1.55}
+
+/* ===== 개념 하이라이트 + 툴팁 ===== */
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);
+  border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;
+  left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+
+/* ===== 행렬 ===== */
+.mtx{display:inline-flex;align-items:center;gap:4px;vertical-align:middle;margin:0 2px}
+.mtx .br{display:inline-block;width:7px;align-self:stretch;border:2px solid var(--ink);border-right:none;border-radius:3px 0 0 3px}
+.mtx .br.r{border:2px solid var(--ink);border-left:none;border-radius:0 3px 3px 0}
+.mtx .cells{display:grid;gap:2px 12px;padding:5px 2px;font-size:12.5px;text-align:center}
+.mtx .cells span{min-width:26px;line-height:1.5}
+.eq{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;justify-content:center;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 14px;margin:10px 0;
+}
+.eq .op{font-size:14px;font-weight:700;color:var(--muted)}
+/* ===== 변환 카드 ===== */
+.xf{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px}
+.xf-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:4px}
+.xf-head h4{font-size:14.5px;font-weight:700}
+.xf-head .en{font-size:11.5px;color:var(--muted)}
+.xf-dof{margin-left:auto;background:var(--accent);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.xf p{font-size:13px;color:#4b5563;line-height:1.78}
+.xf-keep{font-size:12.5px;color:#166534;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.65}
+.xf-sol{font-size:12.5px;color:#1b3f8b;background:#eef6ff;border:1px solid #c4d2ee;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.7}
 </style>
 </head>
 <body id="top">
 
 <nav class="tab-bar" id="tabbar">
-  <a href="#docs">실습 자료</a>
-  <a href="#env">실습 환경</a>
-  <a href="#py">Python 기초</a>
-  <a href="#np">NumPy</a>
-  <a href="#cv">OpenCV</a>
+  <a href="#ot">수업 운영과 평가</a>
+  <a href="#goal">교과목 목표</a>
   <a href="#next">다음 주 예고</a>
 </nav>
 
@@ -207,103 +296,80 @@ a.ext:hover{border-bottom-color:var(--accent)}
 
 <div class="weeknav">
   <a href="computer-vision.html" class="plan">← 강의계획서</a>
-  <span class="cur">1주차 · Python &amp; OpenCV</span>
-  <a href="computer-vision-week02.html">2주차 · Geometric Camera Models</a>
+  <span class="cur">1주차 · 오리엔테이션</span>
+  <a href="computer-vision-week02-1.html">2주차-1 · Python &amp; OpenCV</a>
+  <a href="computer-vision-week02-2.html">2주차-2 · Geometric Camera Models</a>
 </div>
 
 <section class="hero">
-  <p class="kicker">1주차 · 8.31 ~ 9.6 · 2026-2학기</p>
-  <h1>기초 코드 실습 1 — Python &amp; OpenCV Library</h1>
-  <p>과제 구현에 필요한 Python 환경을 갖추고, NumPy로 이미지를 배열(텐서)로 다루는 법과 OpenCV의 변환·필터링·에지 검출을 실습합니다.</p>
-  <div class="chips"><span class="chip">담당교수 최재영</span><span class="chip">조교 한상훈</span><span class="chip">Python 3.10.x</span><span class="chip">OpenCV 4.10.x</span><span class="chip">42페이지</span></div>
+  <p class="kicker">1주차 · 9.2 (수) · 2026-2학기 · ADS5034-01</p>
+  <h1>Intro to the course — 오리엔테이션</h1>
+  <p>컴퓨터 비전이란 무엇인가에 대한 개관과 함께, 이 강좌가 한 학기 동안 어떻게 굴러가는지(플립러닝 · 출석 · 발표 · 과제 · 평가)를 정리합니다.</p>
+  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">OT 교안 18p</span><span class="chip">실시간: Orientation</span></div>
 </section>
 
-<section class="sec" id="docs">
-  <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">1주차 실습 자료<small>제목을 누르면 앱 실행 없이 화면에서 바로 열리고, 오른쪽 버튼으로 내려받을 수 있습니다</small></h2></div>
-<div class="docs">
-  <div class="doc">
-    <div class="doc-ico"><span>🐍</span>PDF</div>
-    <div class="doc-main">
-      <a class="doc-open" href="pdf-viewer.html?doc=cv-w01-python">기초 코드 실습 1 — Python &amp; OpenCV Library</a>
-      <p>Python 환경 구축 · 자료형(list · tuple · dict) · NumPy 배열과 이미지 텐서 · 이미지 마스킹 · OpenCV 변환/필터링/에지 검출 · 42페이지</p>
-    </div>
-    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week01-python-opencv.pdf" download="컴퓨터비전_1주차_Python&amp;OpenCV.pdf">⬇ 다운로드</a>
+<!-- ==================================================================== -->
+<!-- 1주차 교안                                                             -->
+<!-- ==================================================================== -->
+<div class="matbar">
+  <p class="tagline">1주차 교안 · 오리엔테이션</p>
+  <h2>01. Course Introduction (Orientation)</h2>
+  <p>18페이지 · 강좌 소개와 수업 운영 방식, 평가 기준을 안내한 1주차(9/2) 오리엔테이션 자료입니다.</p>
+  <div class="acts">
+    <a class="primary" href="pdf-viewer.html?doc=cv-w01-intro">뷰어로 보기</a>
+    <a href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week01-course-intro.pdf" download="컴퓨터비전_1주차_Course_Introduction(오리엔테이션).pdf">⬇ 다운로드</a>
   </div>
 </div>
-</section>
 
-<section class="sec" id="env">
-  <div class="sec-head"><span class="sec-badge">ENV</span><h2 class="sec-title">실습 환경 구축<small>버전이 다르면 과제 코드가 동작하지 않을 수 있습니다</small></h2></div>
+<section class="sec" id="ot">
+  <div class="sec-head"><span class="sec-badge">OT</span><h2 class="sec-title">수업 운영과 평가<small>Course Introduction 요약</small></h2></div>
 <div class="info">
-  <div class="info-row"><div class="info-key">Python</div><div class="info-val">3.10.x 권장 — <a href="https://www.python.org/" target="_blank" rel="noopener">python.org</a></div></div>
-  <div class="info-row"><div class="info-key">OpenCV</div><div class="info-val">4.10.x 권장 — <code>pip install opencv-python==4.10.0.84</code></div></div>
-  <div class="info-row"><div class="info-key">NumPy</div><div class="info-val">벡터·행렬 연산 라이브러리 (Pandas · OpenCV · PyTorch의 기반)</div></div>
+  <div class="info-row"><div class="info-key">수업 방식</div><div class="info-val"><span class="term" tabindex="0" data-tip="온라인 콘텐츠를 미리 보고 오고, 실시간 수업에서는 질의응답·실습 등 학생 활동 중심으로 진행하는 수업 방식.">Flipped Learning</span> — 온라인 콘텐츠(목~수) + 실시간 온라인 수업(수)</div></div>
+  <div class="info-row"><div class="info-key">실시간 수업</div><div class="info-val">매주 수요일 19:00~20:30 (필요 시 연장) · Zoom (i-Campus 링크)</div></div>
+  <div class="info-row"><div class="info-key">온라인 콘텐츠<br>출석 인정</div><div class="info-val">매주 목요일 00:00 ~ 다음 주 수요일 수업 직전<br><span style="color:#6b7280">예) 2주차 콘텐츠: 9/3(목) 00:00 ~ 9/9(수) 19:00</span></div></div>
+  <div class="info-row"><div class="info-key">선수 지식</div><div class="info-val">선형대수(행렬·벡터·변환) · 기초 확률과 통계 · 구현을 위한 프로그래밍(Python)</div></div>
+  <div class="info-row"><div class="info-key">Python Review</div><div class="info-val">총 3주간 (2~3주차, 11주차) — Python · OpenCV · PyTorch (Colab)</div></div>
+  <div class="info-row"><div class="info-key">논문 발표</div><div class="info-val">3주차(9/16)부터 11주 내외 · 발표 12분 + Q&amp;A 3~5분 · 주당 3~4명</div></div>
+  <div class="info-row"><div class="info-key">과제</div><div class="info-val">총 3회 (배점 5 + 8 + 12) · 부여 시 실시간 수업에서 설명, 마감 후 Review</div></div>
+  <div class="info-row"><div class="info-key">오프라인 강의실</div><div class="info-val">퇴계인문관 31705호 (중간/기말고사 및 필요 시)</div></div>
 </div>
-<div class="note-box"><b>이 실습에서 다루는 것</b>
-<ul class="ul">
-  <li>Python 기초 — list 변환</li>
-  <li>NumPy 기초 — list 변환, 이미지 변환</li>
-  <li>OpenCV 기초 — 이미지 변환, Image masking, OpenCV 라이브러리 활용</li>
-</ul></div>
+<div class="evals">
+  <div class="ev"><div class="ev-top"><span class="ev-name">출석 및 참여</span><span class="ev-pct">10%</span></div><div class="ev-bar"><i style="width:10%"></i></div></div>
+  <div class="ev"><div class="ev-top"><span class="ev-name">논문 발표</span><span class="ev-pct">15%</span></div><div class="ev-bar"><i style="width:15%"></i></div></div>
+  <div class="ev"><div class="ev-top"><span class="ev-name">과제 (3회)</span><span class="ev-pct">25%</span></div><div class="ev-bar"><i style="width:25%"></i></div></div>
+  <div class="ev"><div class="ev-top"><span class="ev-name">중간고사</span><span class="ev-pct">25%</span></div><div class="ev-bar"><i style="width:25%"></i></div></div>
+  <div class="ev"><div class="ev-top"><span class="ev-name">기말고사</span><span class="ev-pct">25%</span></div><div class="ev-bar"><i style="width:25%"></i></div></div>
+  <div class="ev-total"><span>합계</span><span>100%</span></div>
+</div>
 </section>
 
-<section class="sec" id="py">
-  <div class="sec-head"><span class="sec-badge">01</span><h2 class="sec-title">Python 자료형<small>List · Tuple · Dictionary</small></h2></div>
+
+<section class="sec" id="goal">
+  <div class="sec-head"><span class="sec-badge">GOAL</span><h2 class="sec-title">교과목 목표<small>The goal of the course</small></h2></div>
 <div class="note-box"><ul class="ul">
-  <li><b>List</b> <code>[ … ]</code> — 순서대로 저장하고 요소를 수정할 수 있다 (mutable). <code>append(x)</code> · <code>remove(x)</code> · <code>pop()</code> · <code>pop(i)</code></li>
-  <li><b>Tuple</b> <code>( … )</code> — 읽을 수는 있지만 요소 수정은 불가능(immutable). 변수에 새 튜플을 다시 할당하는 것은 가능하다</li>
-  <li><b>Dictionary</b> <code>{'key': value}</code> — key로 접근하는 mutable 자료형 (list·tuple은 index로 접근)</li>
-  <li><b>인덱싱 &amp; 슬라이싱</b> — index는 0부터. <code>list[i]</code>는 i번째 값, <code>list[start:end]</code>는 start ~ (end−1)번째 값</li>
+  <li><b>계산적 방법으로 실제 문제 해결</b> — 컴퓨터 비전의 계산 기법으로 현실 세계의 문제를 푼다</li>
+  <li><b>이론에서 프로젝트로</b> — 컴퓨터 비전의 이론과 기법을 배우고 실제 연구 프로젝트(과제)에 적용한다</li>
+  <li><b>SOTA 연구 이해의 기초</b> — 전통적인 비전 이론·방법론 학습을 통해 최신 연구를 이해할 기본기를 갖춘다</li>
 </ul></div>
-</section>
-
-<section class="sec" id="np">
-  <div class="sec-head"><span class="sec-badge">02</span><h2 class="sec-title">NumPy와 이미지<small>스칼라 · 벡터 · 행렬 · 텐서</small></h2></div>
-<div class="note-box"><ul class="ul">
-  <li><b>실제 이미지는 3차원 텐서</b> — (Height, Width, Channel[RGB]) 형태로 표현된다</li>
-  <li><b>배열 만들기</b> — <code>np.zeros</code>, <code>np.ones</code>, <code>np.arange</code>, <code>np.full</code>, <code>np.random.rand / randint / randn</code></li>
-  <li><b>좌표 주의</b> — 이미지를 열면 <b>0번째 차원이 Y축, 1번째 차원이 X축</b>이다</li>
-  <li><b>영역 지정(마스킹)</b> — <code>Region = Image[y1:y2, x1:x2]</code>. 예) <code>Image[0:50, 100:200] = 0</code> 은 해당 영역을 검은색으로 만든다</li>
-  <li><b>연산</b> — array 간 연산은 같은 위치의 원소끼리 수행되며 <b>shape이 일치</b>해야 한다 (아니면 에러)</li>
-  <li><b>축 기준 함수</b> — <code>np.sum</code>, <code>np.mean</code> 등은 <code>axis</code> 로 방향을 지정한다</li>
-  <li><b>형태 변환</b> — <code>reshape</code>(요소 개수 유지, <code>-1</code>은 자동 계산), <code>transpose(axes)</code>로 축 재배열</li>
-</ul></div>
-</section>
-
-<section class="sec" id="cv">
-  <div class="sec-head"><span class="sec-badge">03</span><h2 class="sec-title">OpenCV 기초<small>입출력 · 변환 · 필터링 · 에지 검출</small></h2></div>
-<div class="note-box"><b>이미지 입출력</b>
-<ul class="ul">
-  <li><code>cv2.imread()</code> 로 읽고 <code>cv2.imwrite('filename', image)</code> 로 저장한다 (경로를 정확히 써야 동작)</li>
-  <li><b>채널 순서</b> — matplotlib은 R-G-B, OpenCV는 <b>B-G-R</b>. <code>cv2.cvtColor(img, cv2.COLOR_BGR2RGB)</code> 로 변환</li>
-  <li><code>cv2.imshow</code> 에는 채널 변환을 하지 <b>않는다</b> (BGR을 그대로 쓰므로). <code>plt.imshow</code> 를 쓸 때만 변환한다</li>
-</ul></div>
-<div class="warn"><b>과제 감점 주의</b> — matplotlib으로 결과를 표시할 때 <b>BGR → RGB 변환을 하지 않으면 감점</b>이라고 자료에 명시되어 있습니다.</div>
-<div class="note-box"><b>이미지 변환 (Transformations)</b>
-<ul class="ul">
-  <li><b>이진화</b> — grayscale로 읽은 뒤(<code>cv2.IMREAD_GRAYSCALE</code>) threshold 기준으로 흑/백 분리</li>
-  <li><b>크기 변경</b> — <code>cv2.resize(img, dsize, fx, fy, interpolation)</code>. 축소는 <code>INTER_AREA</code>, 확대는 <code>INTER_CUBIC</code> 권장</li>
-  <li><b>이동 · 회전</b> — Affine 변환 행렬 생성 후 <code>cv2.warpAffine</code>, 회전 행렬은 <code>cv2.getRotationMatrix2D(center, angle, scale)</code></li>
-  <li><b>Affine / Perspective</b> — 대응점 3개면 <code>cv2.getAffineTransform</code>, 4개면 Perspective 변환</li>
-</ul></div>
-<div class="note-box"><b>필터링과 에지 검출</b>
-<ul class="ul">
-  <li><b>블러</b> — <code>cv2.blur</code> · <code>cv2.GaussianBlur</code> · <code>cv2.medianBlur</code>(윈도우 안의 중간값)</li>
-  <li><b>커스텀 커널</b> — <code>cv2.filter2D(img, ddepth, kernel)</code> 로 직접 만든 커널 적용 (ddepth −1이면 입력과 동일)</li>
-  <li><b>Sobel</b> — <code>cv2.Sobel()</code> 로 방향별 그래디언트 기반 에지 검출</li>
-  <li><b>Canny</b> — ① Gaussian으로 노이즈 제거 → ② gradient 계산(크기·방향) → ③ Non-maximum Suppression → ④ 이중 임계값 판정의 multi-stage 알고리즘</li>
-</ul></div>
+<div class="note-box"><b>Computer Vision이란?</b> 인간 시각 시스템의 복잡한 처리 과정을 컴퓨터에 적용하여,
+사람의 뇌가 하는 것과 같은 방식으로 영상·비디오 속 객체를 인식하고 처리하게 하는 컴퓨터과학 분야.<br>
+<span style="color:#6b7280">대표 응용 — Image classification · Localization · Instance segmentation · Object identification · Object generation</span></div>
 </section>
 
 <section class="sec" id="next">
-  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>자료 마지막 장 "Next Week.."</small></h2></div>
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>2주차 (9/9)</small></h2></div>
 <div class="note-box"><ul class="ul">
-  <li>OpenCV feature, transform</li>
-  <li>Image data preparation, scikit-learn</li>
+  <li><b>온라인 콘텐츠</b> — 02. Geometric Camera Models (Image Transformation · Geometric Camera Model)</li>
+  <li><b>실시간</b> — Python/OpenCV (1) · 기초 코드 실습 1</li>
 </ul></div>
+<div class="weeknav" style="margin-top:16px">
+  <a href="computer-vision-week02-1.html">2주차-1 · Python &amp; OpenCV →</a>
+  <a href="computer-vision-week02-2.html">2주차-2 · Geometric Camera Models →</a>
+  <a href="computer-vision.html" class="plan">강의계획서 전체 주차 보기</a>
+</div>
 </section>
 
-<p class="src">출처 — 컴퓨터비전 기초 코드 실습 1 (CV2026-2-python-01. Python &amp; OpenCV Library)</p>
+<p class="src">출처 — 컴퓨터비전 01. Course Introduction (Orientation) · 1주차 (2026-2학기)</p>
 
 </div>
 
@@ -311,26 +377,81 @@ a.ext:hover{border-bottom-color:var(--accent)}
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+  /* ---- 상단 탭바 활성 표시 ---- */
   var tabs = document.querySelectorAll('.tab-bar a');
   var sections = document.querySelectorAll('.sec');
-  function setActive(){
+  function setActive() {
     var cur = '';
-    sections.forEach(function(s){ if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
-    tabs.forEach(function(t){ t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+    sections.forEach(function (s) { if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function (t) { t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
   }
   window.addEventListener('scroll', setActive, { passive: true });
   setActive();
-  tabs.forEach(function(t){
-    t.addEventListener('click', function(){
-      setTimeout(function(){
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      setTimeout(function () {
         var bar = document.getElementById('tabbar');
         var active = bar.querySelector('.active');
         if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
       }, 300);
     });
   });
+
+  /* ---- 개념 설명 말풍선 ----
+     화면에 고정된 상자 하나를 옮겨 쓰기 때문에 표·수식처럼 스크롤되는 영역 안에서도 잘리지 않고,
+     좌우로 화면을 벗어나지도 않는다. 데스크톱은 마우스를 올리면, 모바일은 탭하면 뜬다. */
+  var terms = document.querySelectorAll('.term');
+  if (!terms.length) return;
+  var tip = document.createElement('div');
+  tip.id = 'tipbox';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  var current = null;
+
+  function hide() {
+    tip.classList.remove('on');
+    if (current) { current.classList.remove('on'); current = null; }
+  }
+
+  function show(el) {
+    tip.textContent = el.getAttribute('data-tip') || '';
+    tip.classList.add('on');
+    if (current && current !== el) current.classList.remove('on');
+    current = el;
+    el.classList.add('on');
+
+    var pad = 8;
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+    var top = r.top - t.height - 10;
+    if (top < pad) top = r.bottom + 10;                       // 위가 좁으면 아래로
+    top = Math.min(top, window.innerHeight - t.height - pad);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+
+  terms.forEach(function (el) {
+    el.addEventListener('mouseenter', function () { show(el); });
+    el.addEventListener('mouseleave', function () { if (current === el) hide(); });
+    el.addEventListener('focus', function () { show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (current === el && tip.classList.contains('on')) hide(); else show(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el); }
+      if (e.key === 'Escape') hide();
+    });
+  });
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide);
 });
 </script>
+
 
 </body>
 </html>
