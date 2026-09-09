@@ -367,22 +367,28 @@ a.ext:hover{border-bottom-color:var(--accent)}
   <div class="card2"><h4><span class="term" tabindex="0" data-tip="3차원 세계의 점과 그 점이 이미지에 맺히는 점 사이의 위치 관계를 다루는 분야. 카메라 모델·투영이 여기에 속한다.">Geometry</span><em>기하학</em></h4>
     <p>3D 세계의 점과 이미지에 맺힌 점 사이의 <b>관계</b>. 3차원 세계에서 점과 점 간의 관계는 결국 <span class="hw">기하학적인 위치 관계</span>로 드러난다. 이번 주차의 주제인 카메라 모델이 바로 이 관계를 수식으로 쓴 것이다.</p></div>
   <div class="card2"><h4><span class="term" tabindex="0" data-tip="표면에서 방출·반사되는 빛의 양과, 그 빛이 이미지에 도달하는 양의 관계. 자외선·가시광선·적외선을 포함한 광학 복사의 측정.">Radiometry</span><em>복사량</em></h4>
-    <p>물체에 반사된 빛의 <span class="hw">방향이나 양</span>을 측정한다. 표면에서 나온 빛과 이미지에 도달한 빛의 관계이며, 광학적으로 <span class="hw">적외선·자외선</span>까지 포함한다.</p></div>
+    <p><span class="hw">물리적인</span> 빛 — 물체에 반사된 빛의 <span class="hw">방향이나 양</span>을 측정한다. 표면에서 나온 빛과 이미지에 도달한 빛의 관계이며, 광학적으로 <span class="hw">적외선·자외선</span>까지 포함한다.</p></div>
   <div class="card2"><h4><span class="term" tabindex="0" data-tip="빛의 세기를 측정하는 방법. 라디오메트리 중에서도 사람 눈이 감지할 수 있는 범위의 빛을 다룬다.">Photometry</span><em>측광</em></h4>
-    <p>한마디로 빛의 <span class="hw">강도(intensity)</span>를 재는 것. 그중에서도 <b>사람 눈이 감지할 수 있는</b> 범위를 다룬다.</p></div>
+    <p><span class="hw">사람이 눈으로 느끼는</span> 빛의 양 — 한마디로 빛의 <span class="hw">강도(intensity)</span>를 재는 것이다. 라디오메트리 중에서도 <b>사람 눈이 감지할 수 있는</b> 범위만 다룬다.</p></div>
   <div class="card2"><h4><span class="term" tabindex="0" data-tip="연속적인 아날로그 신호를 컴퓨터가 계산할 수 있는 이산적인 디지털 값으로 근사하는 과정. 표본화(sampling)와 양자화(quantization)로 이루어진다.">Digitization</span><em>디지털화</em></h4>
-    <p>실세계에서 접하는 것은 <span class="hw">아날로그 신호(연속적인 변화)</span>다. 컴퓨터가 연산할 수 있도록 <span class="hw">이산적인 디지털 값(digit)</span>으로 바꿔 주는 과정.</p></div>
+    <p>실세계에서 접하는 것은 <span class="hw">아날로그 신호(연속적인 변화)</span>다. 컴퓨터가 연산할 수 있도록 <span class="hw">이산적인 디지털 값(digit)</span>으로 바꿔 주는 과정 — <span class="hw">디지털화가 우리가 해야 할 일</span>이다.</p></div>
 </div>
+<div class="tip"><b>헷갈리기 쉬운 두 가지 — 실시간 수업에서 짚어 준 대비</b><br>
+<b>Radiometry</b>는 <span class="hw">물리적인</span> 빛의 방향·양(기계가 재는 값, 적외선·자외선 포함),
+<b>Photometry</b>는 <span class="hw">사람이 눈으로 느끼는</span> 빛의 양이다. 같은 밝기여도 사람 눈은 파장에 따라 다르게 느끼기 때문에 둘을 나눈다.</div>
 </section>
 
 <section class="sec" id="warp">
   <div class="sec-head"><span class="sec-badge">01</span><h2 class="sec-title">이미지 변환의 두 갈래<small>필터링은 값(range)을, 워핑은 좌표(domain)를 바꾼다</small></h2></div>
 <div class="cards">
   <div class="card2"><h4>Image <span class="term" tabindex="0" data-tip="이미지의 값(range)을 바꾸는 연산. g(x) = h(f(x)). 한 화소의 값을 정하기 위해 주변 화소를 함께 본다 (블러·샤프닝 등).">Filtering</span><em>g(x) = h( f(x) )</em></h4>
-    <p>이미지의 <span class="hw">range를 변화</span>시킨다 — 실제로 이미지가 받아들이는 <span class="hw">빛의 양을 조절</span>하는 셈이다. 화소 하나의 값을 정하기 위해 <span class="hw">주변을 다 파악</span>한다. 블러·샤프닝·에지 검출이 여기에 속한다.</p></div>
+    <p><span class="hw">화소값을 건든다 — 픽셀 화소에 대한 처리.</span> 이미지의 <span class="hw">range를 변화</span>시키며, 실제로 이미지가 받아들이는 <span class="hw">빛의 양을 조절</span>하는 셈이다. 화소 하나의 값을 정하기 위해 <span class="hw">주변을 다 파악</span>한다. 블러·샤프닝·에지 검출이 여기에 속한다.</p></div>
   <div class="card2"><h4>Image <span class="term" tabindex="0" data-tip="이미지의 좌표(domain)를 바꾸는 연산. g(x) = f(h(x)). 화소 값은 그대로 두고 위치를 옮긴다 (이동·회전·원근 변환 등).">Warping</span><em>g(x) = f( h(x) )</em></h4>
-    <p><span class="hw">변환 함수를 활용해</span> 다른 위치, 다른 형태로 바꾼다. 각 화소의 기하학적 관계를 파악해 알맞게 옮기는 <span class="hw">기하학적 변환</span>이다.</p></div>
+    <p><span class="hw">형태를 건든다.</span> <span class="hw">변환 함수를 활용해</span> 다른 위치, 다른 형태로 바꾼다. 각 화소의 기하학적 관계를 파악해 알맞게 옮기는 <span class="hw">기하학적 변환</span>이며, <b>이번 주차에서 다루는 쪽</b>이 바로 이것이다.</p></div>
 </div>
+
+<div class="tip"><b>한 줄로 구분</b> — <b>필터링 = 화소값</b>을 건드리고, <b>워핑 = 형태</b>를 건드린다.
+필터링은 <span class="hw">다음 주(3주차 Linear Filter)에</span> 본격적으로 다룬다.</div>
 
 <h3 class="sub-title">무엇을 변환하는가 — 기하학적 요소</h3>
 <div class="tbl-wrap">
@@ -417,6 +423,11 @@ a.ext:hover{border-bottom-color:var(--accent)}
   <li>원점은 원점으로 간다 · 직선은 직선으로 · <span class="term" tabindex="0" data-tip="평행한 두 직선이 변환 후에도 평행하게 남는 성질. 아핀 변환까지는 보존되지만 투영 변환에서는 깨진다.">평행성</span>은 유지된다 · 길이의 비가 보존된다</li>
   <li><b><span class="term" tabindex="0" data-tip="여러 변환을 차례로 적용하는 것. 행렬 곱으로 표현되므로 미리 한 개의 행렬로 합쳐 두면 화소마다 한 번의 곱셈으로 끝난다.">Composition(변환의 합성)</span>은 <span class="hw">곱의 형태로 표현되어야 한다</span></b> — 영상에서 아주 강력한 요소이며, <span class="hw">대부분의 연산은 곱의 형태가 효율적</span>이다. 여러 변환을 미리 한 행렬로 합쳐 두면 화소마다 곱셈 한 번으로 끝난다</li>
 </ul></div>
+<div class="tip"><b>왜 하필 곱셈인가 — 실시간 수업에서 강조된 이유</b><br>
+사칙연산 중 <span class="hw">대부분 곱셈을 쓴다. 곱셈을 씀으로써 연산이 빨라지기 때문</span>이다.<br>
+<b>덧셈이 섞이면</b> 변환을 이어 붙일 때마다 항이 늘어난다 — <span class="hw">루프를 돌리면 어마어마한 다항식</span>이 되어 버린다.
+반면 <b>곱셈만으로 쓰면</b> <span class="hw">변환을 몇 번 시켜도 결국엔 곱셈으로 끝나</span>므로, N개의 변환을 미리 한 행렬로 합쳐 두고 화소마다 <b>곱셈 한 번</b>만 하면 된다.<br>
+그리고 <b><span class="hw">곱셈화시키는 데 가장 큰 역할</span>을 하는 것이 바로 다음 절의 동차 좌표</b>다 — 유일하게 덧셈으로 남아 있던 평행이동까지 곱으로 끌어들이기 때문이다.</div>
 </section>
 
 <section class="sec" id="homog">
@@ -426,10 +437,15 @@ a.ext:hover{border-bottom-color:var(--accent)}
 <div class="eq"><span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x&prime;</span><span>y&prime;</span><span>1</span></span><span class="br r"></span></span> <span class="op">=</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>1</span><span>0</span><span>t<sub>x</sub></span><span>0</span><span>1</span><span>t<sub>y</sub></span><span>0</span><span>0</span><span>1</span></span><span class="br r"></span></span> <span class="op">·</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x</span><span>y</span><span>1</span></span><span class="br r"></span></span></div>
 앞으로 좌표계를 쓸 때는 <span class="hw">동차 좌표로 바꿔 1을 붙이고</span>, 곱의 형식으로 표현해 <span class="hw">다른 변환과 함께 연산이 가능하게</span> 한다.</div>
 <div class="tip">동차 좌표는 컴퓨터비전에서 주로 <span class="hw">perspective(원근)</span>에서 강력하게 쓰이고, 컴퓨터 그래픽스에서는 <span class="hw">아주 기본적으로</span> 활용된다.</div>
+<div class="good"><b>이 절의 존재 이유</b> — 앞 절에서 본 "모든 걸 곱셈으로" 라는 목표에서, <b>혼자 덧셈으로 남아 있던 평행이동</b>을 곱셈 진영으로 데려오는 장치가 동차 좌표다.
+그래서 <span class="hw">곱셈화시키는 데 가장 큰 역할</span>이라고 짚어 주신 것이다. 이 덕분에 이동·회전·크기·원근을 <b>순서대로 곱해 하나의 행렬</b>로 만들 수 있고, 뒤에 나올 <b>카메라 행렬 P</b>도 같은 원리로 만들어진다.</div>
 </section>
 
 <section class="sec" id="types">
   <div class="sec-head"><span class="sec-badge">03</span><h2 class="sec-title">본격적인 이미지 변환 4가지<small>자유도가 커지는 순서 — 강체 → 유사 → 아핀 → 투영</small></h2></div>
+<div class="note-box"><b>DoF(자유도)를 읽는 법</b> — <span class="hw">몇 개가 바뀌느냐에 따라 자유도가 결정된다.</span>
+이동만 하면 바뀌는 값이 (t<sub>x</sub>, t<sub>y</sub>) 둘이라 2, 회전이 더해지면 3, 크기까지 더해지면 4 … 이런 식으로
+<b>내가 조절할 수 있는 손잡이의 개수</b>가 곧 자유도다. 아래 네 가지를 이 관점으로 보면 순서가 자연스럽게 외워진다.</div>
 
 <div class="xf">
   <div class="xf-head"><h4>1-① <span class="term" tabindex="0" data-tip="물체의 모양과 크기를 전혀 바꾸지 않는 변환. 회전 + 평행이동으로만 이루어지며 길이와 각도가 그대로 보존된다.">Rigid(강체) 변환</span> — Translation</h4><span class="en">평행이동</span><span class="xf-dof"><span class="term" tabindex="0" data-tip="Degrees of Freedom. 그 변환을 완전히 결정하는 데 필요한 독립적인 매개변수의 개수. 클수록 자유롭게 변형할 수 있고, 추정에 필요한 대응점도 많아진다.">DoF</span> 2</span></div>
@@ -471,6 +487,13 @@ a.ext:hover{border-bottom-color:var(--accent)}
   <div class="eq"><span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x&prime;</span><span>y&prime;</span><span>1</span></span><span class="br r"></span></span> <span class="op">=</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>a</span><span>b</span><span>e</span><span>c</span><span>d</span><span>f</span><span>g</span><span>h</span><span>i</span></span><span class="br r"></span></span> <span class="op">·</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x</span><span>y</span><span>1</span></span><span class="br r"></span></span></div>
   <div class="xf-keep"><b>보존</b> — 직선(straight lines)만 <span style="color:#6b7280">— 평행선은 <span class="term" tabindex="0" data-tip="실제로는 평행한 직선들이 투영된 이미지에서 만나는 점. 방향마다 자신의 소실점을 갖는다.">소실점(vanishing point)</span>에서 만난다</span></div>
 </div>
+
+<div class="warn"><b>📌 과제 2 예고 — 실시간 수업 공지</b><br>
+<span class="hw">affine이나 perspective 알고리즘을 집어넣어서 그림을 합치는 것을 두 번째 과제에서 실습</span>합니다 —
+<b>펼쳐진 파노라마 사진처럼 만들기</b>.<br>
+<span style="color:#7f1d1d">두 사진에서 같은 지점(대응점)을 찾아 → 아핀이면 3쌍, 원근(호모그래피)이면 4쌍으로 변환 행렬을 구하고 →
+한쪽 이미지를 다른 쪽 좌표계로 워핑해 이어 붙이는 흐름입니다.
+<a href="computer-vision-week02-1.html#geom" style="color:#7f1d1d;font-weight:700;text-decoration:underline">2주차-1의 getAffineTransform / getPerspectiveTransform 실습</a>이 그대로 재료가 됩니다.</span></div>
 </section>
 
 <section class="sec" id="table">
@@ -513,6 +536,8 @@ translation ⊂ rigid ⊂ similarity ⊂ affine ⊂ projective 순서로 포함 
 ③ 센서 평면 → 픽셀 좌표(원점 이동·픽셀 크기). 그런데 <b>동차 좌표를 쓰면 세 단계가 모두 행렬 곱</b>이므로 미리 곱해
 <b>단 하나의 3×4 행렬 <span class="term" tabindex="0" data-tip="3D 세계 좌표(동차 4×1)를 이미지 좌표(동차 3×1)로 한 번에 보내는 3×4 행렬. P = K [R | t] 로 분해된다.">카메라 행렬 P</span></b>로 합쳐 둘 수 있다. 그러면 어떤 3D 점이든 <b>x = P·X</b> 한 번의 곱셈으로 이미지 위치가 나온다.</div>
 <div class="note-box"><b><span class="term" tabindex="0" data-tip="좌표를 아는 물체(체스보드 등)를 여러 각도에서 찍어, 내부 파라미터 K와 외부 파라미터 [R|t]를 역으로 추정하는 과정.">카메라 캘리브레이션(Camera calibration)</span></b> — 반대로 사진들로부터 이 파라미터들을 <b>역으로 추정</b>하는 작업이다.</div>
+<div class="tip"><b>현장에서는</b> — <span class="hw">CCTV를 다루는 사람들은 파라미터까지 조정</span>한다.
+초점거리·주점·왜곡 계수를 맞춰 두어야 화면 속 위치를 실제 거리로 환산하거나, 여러 대의 카메라 영상을 하나의 좌표계에서 이어 볼 수 있기 때문이다.</div>
 </section>
 
 <section class="sec" id="proj">
@@ -527,6 +552,8 @@ translation ⊂ rigid ⊂ similarity ⊂ affine ⊂ projective 순서로 포함 
   <li><b>또 하나의 가장 중요한 특징</b> — 카메라의 시선들이 모이는 <span class="term" tabindex="0" data-tip="실제로는 평행한 직선들이 투영된 이미지에서 만나는 점. 방향마다 자신의 소실점을 갖는다.">vanishing point(소실점)</span>. <span class="hw">소실점을 중심으로 펼쳐 나가면서 평행했던 것들이 더 이상 평행하지 않게</span> 된다. 방향마다 자기 소실점이 있고, 이들이 모이면 <span class="term" tabindex="0" data-tip="지면처럼 같은 평면에 놓인 여러 방향의 소실점들이 모여 이루는 직선. 사진 속 수평선이 바로 이것이다.">horizon line(소실선)</span>이 된다</li>
   <li>단, <b>이미지 평면과 평행한 직선들은</b> 투영 후에도 평행을 유지한다</li>
 </ul></div>
+<div class="good"><b>용어 체크</b> — <span class="hw">소실점(vanishing point)은 용어를 잘 기억해 두라</span>고 짚어 주신 부분입니다.
+평행선이 투영 후 만나는 점이며, 같은 평면 위 여러 방향의 소실점을 이으면 <b>소실선(horizon line)</b>이 됩니다.</div>
 <div class="tip"><b>"(x, y, 1) = (2x, 2y, 2), 스케일에 대한 의미는 없다"의 뜻</b> — <span class="term" tabindex="0" data-tip="동차 좌표에서는 0이 아닌 수를 전체에 곱해도 같은 점이다. (x, y, 1) = (2x, 2y, 2) — w로 나누면 둘 다 (x, y)가 되기 때문.">동차 좌표의 스케일 불변성</span>
 투영식 (x, y, z) → (f·x/z, f·y/z) 에는 <b>z로 나누는 연산</b>이 들어 있는데, 동차 좌표로는 (f·x, f·y, z) 라고만 적어 두고
 <b>마지막에 w로 나누기</b>만 하면 된다. 그래서 투영이 행렬 곱 하나로 표현된다.</div>
@@ -577,6 +604,7 @@ translation ⊂ rigid ⊂ similarity ⊂ affine ⊂ projective 순서로 포함 
 얇은 렌즈 공식을 정확히 만족하는 거리는 <b>딱 하나</b>다. 하지만 그 거리에서 조금 벗어난 점도
 <span class="term" tabindex="0" data-tip="초점이 정확히 맞지 않은 점은 한 점이 아니라 작은 원으로 번져 맺힌다. 이 원이 화소나 눈의 분해능보다 작으면 점으로 보인다.">착란원(circle of confusion)</span>이 <b>센서 화소(또는 눈의 분해능)보다 작으면</b> 여전히 점으로 보인다.
 그래서 실제 렌즈에는 초점이 맞아 보이는 <b>거리의 범위</b>가 생기고, 이것이 <span class="term" tabindex="0" data-tip="초점이 맞은 것처럼 보이는 거리의 범위. 착란원이 허용 크기 이하로 유지되는 구간이며, 조리개를 조일수록 넓어진다.">피사계 심도(Depth of Field)</span>다.</div>
+<div class="note-box"><b>한 줄 정의</b> — <span class="hw">잘 보이는 거리 구간을 depth of field라고 하고, 그 역할을 조리개가 해 준다.</span></div>
 <div class="note-box"><b>어떻게 컨트롤하는가</b> — <span class="hw">결국 조리개 사이즈를 조절해서 얻을 수 있다</span>
 <ul class="ul">
   <li><b>조리개를 작게(조이면)</b> — 렌즈 가장자리를 지나는 광선이 잘려 착란원이 작아진다 → <span class="hw">선명하게 커버하는 거리 범위가 길어진다</span>. 대신 어두워진다</li>
@@ -663,9 +691,14 @@ z로 나누는 연산 때문에 <span class="hw">선형 변환이라고 말할 �
 <section class="sec" id="next">
   <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>3주차 (9/16)</small></h2></div>
 <div class="note-box"><ul class="ul">
-  <li><b>온라인 콘텐츠</b> — Image Processing (Linear Filter)</li>
+  <li><b>온라인 콘텐츠</b> — Image Processing (Linear Filter) · <b>필터링(화소값 처리)</b>을 본격적으로 다룬다</li>
   <li><b>실시간</b> — Python/OpenCV (2)</li>
   <li><b>논문 스터디 발표 시작</b> · 과제 1회차 부여 시점</li>
+</ul></div>
+<div class="good"><b>미리 짚어 주신 용어</b>
+<ul class="ul">
+  <li><b>pixel</b> = <b>pic</b>ture <b>el</b>ement — 2차원 이미지를 이루는 최소 단위 한 칸</li>
+  <li><b>voxel</b> = <b>vo</b>lume <b>el</b>ement — <span class="hw">3차원에서의 요거 하나</span>. CT·MRI나 3D 스캔처럼 부피를 다루는 데이터의 최소 단위다</li>
 </ul></div>
 <div class="weeknav" style="margin-top:16px">
   <a href="computer-vision-week02-1.html">← 2주차-1 · Python &amp; OpenCV</a>
