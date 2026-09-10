@@ -190,6 +190,58 @@ a.ext:hover{border-bottom-color:var(--accent)}
 .weeknav a:hover{background:var(--accent-light)}
 .weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
 .weeknav .plan{color:var(--muted)}
+
+/* 노트북 주석 */
+.nbc{color:#b45309;font-weight:700;background:#fff7ed;border-radius:3px;padding:0 3px}
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .out{color:#c9f24b}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 함수 카드 */
+.fnc{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:var(--radius);padding:13px 15px;margin:11px 0}
+.fnc h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fnc .sig{
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;color:#1b3f8b;
+  background:#eef2fb;border:1px solid #dbe3f5;border-radius:6px;padding:7px 10px;margin:7px 0 9px;
+  overflow-x:auto;white-space:pre;
+}
+.fnc dl{display:grid;grid-template-columns:minmax(84px,auto) 1fr;gap:5px 12px;font-size:12.5px;line-height:1.65}
+.fnc dt{font-weight:700;color:var(--ink)}
+.fnc dd{color:#4b5563}
+@media(max-width:440px){.fnc dl{grid-template-columns:1fr;gap:2px}.fnc dd{margin-bottom:6px}}
+/* 개념 하이라이트 + 툴팁 */
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+/* 퀴즈 목록 */
+.qz{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 15px;margin-bottom:9px}
+.qz h4{font-size:13px;font-weight:700;margin-bottom:5px}
+.qz .ans{
+  display:block;margin-top:7px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;
+  padding:8px 11px;font-size:12.5px;color:#14532d;line-height:1.7;
+}
+.qz .ans summary{cursor:pointer;font-weight:700;color:#166534;list-style:none}
+.qz .ans summary::-webkit-details-marker{display:none}
+.qz .ans summary::before{content:'▸ ';font-weight:700}
+.qz .ans[open] summary::before{content:'▾ '}
+.qz .ans pre.code{margin:8px 0 0}
 </style>
 </head>
 <body id="top">
@@ -204,6 +256,13 @@ a.ext:hover{border-bottom-color:var(--accent)}
   <a href="#diff">미분</a>
   <a href="#prob">확률</a>
   <a href="#numpy">NumPy 실습</a>
+  <a href="#nb-basic">스칼라·벡터·텐서</a>
+  <a href="#nb-create">배열 만들기</a>
+  <a href="#nb-index">인덱싱·슬라이싱</a>
+  <a href="#nb-math">연산·행렬곱</a>
+  <a href="#nb-shape">형태 변형</a>
+  <a href="#nb-broadcast">브로드캐스팅</a>
+  <a href="#nb-quiz">퀴즈 17문제</a>
   <a href="#next">다음 주 예고</a>
 </nav>
 
@@ -334,25 +393,304 @@ a.ext:hover{border-bottom-color:var(--accent)}
 
 <!-- ===================== 2.7 실습 ===================== -->
 <section class="sec" id="numpy">
-  <div class="sec-head"><span class="sec-badge">2.7</span><h2 class="sec-title">NumPy 실습<small>파이썬 라이브러리 활용 방법 — 실습 노트북 (Colab)</small></h2></div>
-<div class="note-box"><b>실습 노트북</b> — <code>2주차_파이썬라이브러리활용방법_numpy.ipynb</code> (Google Colab에서 실행)
+  <div class="sec-head"><span class="sec-badge">2.7</span><h2 class="sec-title">NumPy 실습 개요<small>2주차_파이썬라이브러리활용방법_numpy.ipynb — 노트북을 절별로 풀어 정리</small></h2></div>
+<div class="note-box"><b>왜 NumPy부터인가</b> — 기계학습 코드에서 <b>거의 항상 쓰이는 수학 함수 라이브러리</b>다.
+앞 절에서 본 벡터 · 행렬 · 텐서 · 미분 · 확률이 전부 NumPy 배열 위에서 계산되므로, 기계학습 코딩을 할 때는 <b>제일 먼저 NumPy를 불러온다</b>.
+<pre class="code">import numpy as np   <span class="cm"># numpy.~~~ 를 np.~~~ 로 줄여 쓰자는 약속</span></pre>
 <ul class="ul">
-  <li><b>배열 만들기</b> — <code>np.array</code>, <code>np.zeros</code>, <code>np.ones</code>, <code>np.full</code>, <code>np.arange</code>, <code>np.random.random</code></li>
-  <li><b>배열의 정보</b> — <code>ndim</code>(차원 수)과 <code>shape</code>(각 차원의 요소 수). 대괄호 개수 = 차원 수</li>
-  <li><b>인덱싱 · 슬라이싱</b> — 인덱스는 0부터. <code>a[2:5]</code> 는 인덱스 2~4까지 (뒤 값 −1까지)</li>
-  <li><b>형태 변환</b> — <code>reshape</code>(요소 개수가 같아야 함, <code>-1</code>은 자동 계산), <code>transpose</code>, <code>None</code>으로 축 추가</li>
-  <li><b>연산</b> — 원소별 사칙연산(shape이 맞아야 함), <code>sum</code>/<code>mean</code>의 <code>axis</code> 지정, <code>dot</code>·<code>matmul</code>, 브로드캐스팅</li>
-  <li><b>결합</b> — <code>stack</code>, <code>concatenate</code> (지정한 axis 외의 shape이 같아야 함)</li>
+  <li><b>라이브러리</b> = 여러 <b>패키지</b>를 모아 놓은 것 · <b>패키지</b> = 관련 <b>모듈</b>이 모인 폴더 · <b>모듈</b> = 함수·변수를 모아 놓은 파일</li>
+  <li>실행 환경은 <span class="term" tabindex="0" data-tip="구글이 제공하는 브라우저용 파이썬 실행 환경. 설치 없이 NumPy·matplotlib 등을 바로 쓸 수 있다.">Google Colab</span> — <code>from google.colab import drive</code> 로 드라이브를 마운트하면 업로드한 파일을 불러올 수 있다</li>
+  <li>노트북이 계속 쓰는 도우미 함수 <code>print_obj(obj, name)</code> 는 <b>이름과 값을 함께</b> 찍어 주는 함수다</li>
 </ul></div>
-<div class="tip"><b>노트북에 들어 있는 퀴즈 (총 17개)</b> — 답을 코드로 확인하며 따라가는 형식입니다.
+<pre class="code">def print_obj(obj, name):
+    print("%s:\n%s\n" % (name, obj))     <span class="cm"># 이름 : 값 형태로 출력</span>
+
+def check_each(a, b):
+    return (a == b).astype('bool')       <span class="cm"># 원소별로 같은지 True/False</span>
+
+def check_mean(a, b):
+    return np.mean(a == b).astype('bool')</pre>
+<div class="note-box"><b>알아 두면 좋은 표기</b>
 <ul class="ul">
-  <li><b>퀴즈 1~2</b> — <code>[[[1],[2],[3]],[[4],[5],[6]]]</code> 의 shape 구하기 / (4,3,2) 텐서를 0~23으로 채우기</li>
-  <li><b>퀴즈 3~5</b> — <code>a[-4:]</code>, <code>a[:-8]</code> 의 결과 예측하기 / 슬라이싱으로 <code>[9, 6, 3]</code> 만들기</li>
-  <li><b>퀴즈 6~8</b> — 행렬에서 마지막 행 · 두 번째 열 접근하기 / <code>[8, 5]</code> 만들기</li>
-  <li><b>퀴즈 9~12</b> — 3차원 텐서의 <code>a[0]</code>, <code>a[0,1]</code> / <code>[[0,2,4],[6,8,10]]</code> 만들기 / 불리언 인덱싱으로 2보다 큰 값 고르기</li>
-  <li><b>퀴즈 13</b> — <code>np.arange(24).reshape((2,3,4))</code> 에서 마지막 차원 합의 평균 구하기</li>
-  <li><b>퀴즈 14~17</b> — (4,3,2)와 (2,3)의 곱셈 규칙 / <code>reshape((6,4,-1))</code> 결과 / <code>None</code>으로 (3,1,1,4) 만들기 / axis=2 기준 concatenate</li>
+  <li><code>\n</code> — 문자열 안에서 줄을 바꾸는 이스케이프 코드</li>
+  <li><b>포매팅</b> — 문자열 안에 변수 자리를 만들어 두는 기능. <code>%</code> 포매팅 · <code>format</code> · f-string 세 가지가 있고, <code>%s</code>는 문자열 자리를 뜻한다</li>
+  <li><code>.astype('bool')</code> — 배열에 담긴 값의 <span class="term" tabindex="0" data-tip="배열에 담긴 값의 자료형. 1은 정수(int), 1.은 실수(float)이며 astype으로 바꾼다.">자료형(dtype)</span>을 바꾼다. 여기서는 <span class="term" tabindex="0" data-tip="참(True)/거짓(False) 두 값만 갖는 자료형. 조건식의 결과가 이 형태로 나온다.">불리언(bool)</span> 형으로 변환</li>
 </ul></div>
+</section>
+
+<section class="sec" id="nb-basic">
+  <div class="sec-head"><span class="sec-badge">실습 ①</span><h2 class="sec-title">스칼라 · 벡터 · 행렬 · 텐서<small>차원을 세는 법: ndim과 shape</small></h2></div>
+<pre class="code">a = np.array(1.)                        <span class="cm"># 0차원 — 스칼라</span>
+b = np.array([1., 2., 3.])              <span class="cm"># 1차원 — 벡터</span>
+c = np.array([[1., 2., 3.],
+              [4., 5., 6.]])            <span class="cm"># 2차원 — 행렬</span>
+
+a.ndim, b.ndim, c.ndim                  <span class="out"># 0, 1, 2</span>
+a.shape, b.shape, c.shape               <span class="out"># (), (3,), (2, 3)</span></pre>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>이름</th><th>차원</th><th>예시</th><th>shape</th><th>기계학습에서</th></tr></thead>
+  <tbody>
+    <tr><td>스칼라 (Scalar)</td><td>0차원 텐서</td><td><code>1.</code></td><td><code>()</code></td><td>손실값, 학습률</td></tr>
+    <tr><td>벡터 (Vector)</td><td>1차원 텐서</td><td><code>[1., 2., 3.]</code></td><td><code>(3,)</code></td><td>하나의 관측값 = 특징벡터</td></tr>
+    <tr><td>행렬 (Matrix)</td><td>2차원 텐서</td><td><code>[[1,2,3],[4,5,6]]</code></td><td><code>(2, 3)</code></td><td>데이터셋 전체(샘플 × 특징), 가중치</td></tr>
+    <tr><td><span class="term" tabindex="0" data-tip="스칼라(0차원) · 벡터(1차원) · 행렬(2차원)을 일반화한 N차원 배열. 대괄호가 N겹이면 N차원 텐서다.">텐서 (Tensor)</span></td><td>N차원</td><td>대괄호 N겹</td><td><code>(4, 3, 2)</code></td><td>이미지 묶음, 시퀀스 배치</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="tip"><b>차원 세는 요령</b> — <span class="nbc">대괄호 개수 3개 이상이면 텐서, N개의 대괄호면 N차원 텐서</span>다.
+<span class="term" tabindex="0" data-tip="배열의 차원 수. 대괄호가 몇 겹으로 감싸여 있는지와 같다.">ndim</span>은 <b>몇 겹인지</b>, <span class="term" tabindex="0" data-tip="각 차원에 요소가 몇 개씩 있는지를 나타내는 튜플. (2, 3)이면 행 2 · 열 3.">shape</span>은 <b>각 겹에 몇 개인지</b>를 알려 준다.</div>
+<div class="warn"><b>헷갈리기 쉬운 한 쌍</b> — 대괄호 하나 차이로 shape이 달라진다.
+<pre class="code">np.array([1, 2, 3]).shape       <span class="out"># (3,)    — 벡터</span>
+np.array([[1, 2, 3]]).shape     <span class="out"># (1, 3)  — 1행 3열 행렬</span></pre>
+<code>1</code>과 <code>1.</code>도 다르다 — <b>점이 붙으면 실수(float)</b>다.</div>
+</section>
+
+<section class="sec" id="nb-create">
+  <div class="sec-head"><span class="sec-badge">실습 ②</span><h2 class="sec-title">배열 만들기<small>Defining NumPy arrays</small></h2></div>
+<pre class="code">np.ones(10)                 <span class="out"># 1. 로 채운 길이 10 벡터 (실수)</span>
+np.zeros((2, 5))            <span class="out"># 0. 으로 채운 2×5 행렬</span>
+np.full((2, 5), 5)          <span class="out"># 5 로 채운 2×5 행렬</span>
+np.full((1, 1, 1), -1)      <span class="out"># ndim 3, shape (1,1,1)</span>
+np.random.random((2, 3, 4)) <span class="out"># 0~1 난수로 채운 3차원 텐서</span>
+np.arange(10)               <span class="out"># [0 1 2 ... 9]  — 0부터 시작!</span>
+np.arange(10).astype(float) <span class="out"># [0. 1. 2. ... 9.]</span>
+np.arange(10).reshape((5, 2))   <span class="cm"># 1차원 10개를 5×2로</span></pre>
+<div class="note-box"><b>모양을 지정할 때</b> — <code>np.ones(10)</code> 처럼 <b>정수 하나</b>면 1차원,
+<code>np.zeros((2, 5))</code> 처럼 <b>튜플</b>이면 그 모양의 다차원 배열이 된다. 괄호를 한 번 더 감싸는 이유가 이것이다.</div>
+<div class="tip"><span class="nbc">컴퓨터는 항상 0부터!!</span> — <code>np.arange(10)</code>은 0부터 9까지 <b>10개</b>다.
+그리고 <code>reshape</code>는 <b>원소 개수가 맞아야</b> 한다 — <code>np.arange(10).reshape((5,1))</code>은 10 ≠ 5이므로 에러.</div>
+</section>
+
+<section class="sec" id="nb-index">
+  <div class="sec-head"><span class="sec-badge">실습 ③</span><h2 class="sec-title">인덱싱과 슬라이싱<small>노트북에서 "중요!!" 로 표시된 핵심 절</small></h2></div>
+<h3 class="sub-title">벡터에서</h3>
+<pre class="code">a = np.arange(10)          <span class="cm"># [0 1 2 3 4 5 6 7 8 9]</span>
+
+a[0], a[1]                 <span class="out"># 0, 1        인덱스는 0부터</span>
+a[-1], a[-3]               <span class="out"># 9, 7        음수는 뒤에서부터</span>
+
+a[0:10], a[0:], a[:], a[:10]   <span class="cm"># 네 가지 모두 전체와 같다</span>
+a[7:]                      <span class="out"># [7 8 9]     7번 이상</span>
+a[:5]                      <span class="out"># [0 1 2 3 4] 5번 미만</span>
+a[2:5]                     <span class="out"># [2 3 4]     2 이상 5 미만</span>
+
+a[0:10:2]                  <span class="out"># [0 2 4 6 8]  세 번째 값 = 간격(step)</span>
+a[::-1]                    <span class="out"># [9 8 ... 0]  거꾸로</span>
+a[8:5:-1]                  <span class="out"># [8 7 6]      음의 간격</span>
+a[8:5]                     <span class="out"># []           시작 > 끝 이면 빈 배열</span></pre>
+<div class="note-box"><b>규칙 정리</b>
+<ul class="ul">
+  <li><b>i번째 저장 요소의 인덱스는 i−1</b> — 첫 번째 값의 인덱스가 0이다</li>
+  <li><b><code>[시작:끝]</code> 은 "시작 이상, 끝 미만"</b> — 끝 인덱스의 값은 포함되지 않는다</li>
+  <li>시작을 생략하면 0부터, 끝을 생략하면 마지막까지, 둘 다 생략하면 전체</li>
+  <li><b><code>[시작:끝:간격]</code></b> — 콜론이 두 개면 세 번째가 간격이고, <b>음수 간격</b>이면 뒤에서부터 거꾸로 읽는다</li>
+  <li><b><code>-k</code></b> 는 "원소 개수 − k" 위치. 콜론 뒤에 쓰일 때는 그 위치의 <b>앞까지</b>만 가져온다</li>
+</ul></div>
+
+<h3 class="sub-title">행렬과 3차원 텐서에서</h3>
+<pre class="code">a = np.arange(9).reshape((3, 3))
+a[0][0]      <span class="out"># 0    대괄호를 두 번</span>
+a[0, 0]      <span class="out"># 0    콤마로 한 번에 — 이 방식을 권장</span>
+a[1, 1]      <span class="out"># 4</span>
+
+t = np.arange(4*3*2).reshape((4, 3, 2))
+t[2, 1, 0]   <span class="out"># 16   (3번째 블록, 2번째 행, 1번째 열)</span></pre>
+<div class="tip"><span class="nbc">대괄호 개수로 인덱스를 잘 파악하자!</span> — 콤마로 구분된 인덱스의 개수는 곧 <b>차원의 개수</b>다.
+<code>t[2, 1, 0]</code> 은 "바깥에서 3번째 → 그 안에서 2번째 → 또 그 안에서 1번째" 로 읽는다.</div>
+
+<h3 class="sub-title">조건 인덱싱 · 특정 요소 뽑기</h3>
+<pre class="code"><span class="cm"># 불리언 인덱싱 — 조건식으로 고르기</span>
+a = np.arange(3*2).reshape((3, 2))
+idx = a % 2 == 0        <span class="out"># True/False 배열 (짝수인 자리)</span>
+a[idx]                  <span class="out"># [0 2 4]</span>
+
+<span class="cm"># 팬시 인덱싱 — 원하는 위치를 리스트로 지정</span>
+v = np.arange(10)
+v[[0, 2, 3]]            <span class="out"># [0 2 3]</span>
+
+m = np.arange(24).reshape((6, 4))
+m[:, [0, 2, 3]]         <span class="cm"># 모든 행에서 0·2·3번째 열만</span>
+m[[0, 2, 3], :]         <span class="cm"># 0·2·3번째 행 전체</span></pre>
+<div class="note-box"><b><span class="term" tabindex="0" data-tip="조건식으로 만든 True/False 배열을 인덱스로 넣어, True인 위치의 값만 골라내는 방법.">불리언 인덱싱</span></b> — <code>a % 2 == 0</code> 은 값이 아니라 <b>True/False 배열</b>을 만든다.
+그것을 다시 인덱스로 넣으면 True인 자리의 값만 남는다. <b><span class="term" tabindex="0" data-tip="정수 리스트를 인덱스로 넣어 원하는 위치의 값만 한 번에 뽑아내는 방법.">팬시 인덱싱</span></b>은 정수 리스트로 원하는 위치를 골라내는 방식이다.</div>
+</section>
+
+<section class="sec" id="nb-math">
+  <div class="sec-head"><span class="sec-badge">실습 ④</span><h2 class="sec-title">수학적 연산<small>원소별 연산 · 축 연산 · 세 가지 곱셈</small></h2></div>
+<pre class="code">a = np.arange(6).reshape((3, 2))
+b = np.ones((3, 2))
+
+a + b, a - b, a * b, a / b     <span class="cm"># 모두 같은 위치의 원소끼리</span></pre>
+<div class="warn"><b>여기서 <code>*</code> 는 행렬곱이 아니다</b> — 3×2와 3×2를 곱했는데 결과가 3×2로 나오는 이유다.
+같은 위치끼리 곱하는 이 연산을 <b><span class="term" tabindex="0" data-tip="같은 크기의 두 배열에서 같은 위치의 원소끼리 곱하는 연산. 수학의 행렬곱과는 다르며 NumPy의 * 연산이 이것이다.">Hadamard product(아다마르 곱)</span></b>라고 한다. 수학에서 배운 행렬곱은 <code>@</code> 또는 <code>np.matmul</code>이다.</div>
+
+<h3 class="sub-title">축(axis)을 기준으로 한 연산</h3>
+<pre class="code">a = np.arange(6).reshape((3, 2))   <span class="cm"># [[0 1] [2 3] [4 5]]</span>
+a.sum()            <span class="out"># 15     전체 합</span>
+a.sum(axis=0)      <span class="out"># [6 9]  세로로(행끼리) 합 → 열이 남는다</span>
+a.sum(axis=1)      <span class="out"># [1 5 9] 가로로(열끼리) 합 → 행이 남는다</span>
+a.mean(), a.max(), a.min()</pre>
+<div class="note-box"><b><span class="term" tabindex="0" data-tip="배열의 차원 방향. axis=0은 가장 바깥(행 방향), 마지막 축은 가장 안쪽이다. sum·mean 등에 지정하면 그 방향으로만 계산한다.">axis</span> 읽는 법</b> — <code>axis=k</code> 는 "<b>k번째 축을 없애면서</b> 합친다"는 뜻이다.
+(3, 2) 배열에서 <code>axis=0</code>이면 3이 사라져 <code>(2,)</code>가 되고, <code>axis=1</code>이면 2가 사라져 <code>(3,)</code>가 된다.</div>
+
+<h3 class="sub-title">세 가지 곱셈 — *, dot, @(matmul)</h3>
+<pre class="code"><span class="cm"># ① 벡터 내적</span>
+a = np.arange(3).astype('float'); b = np.ones(3)
+np.dot(a, b)              <span class="out"># 3.0  (0+1+2)</span>
+
+<span class="cm"># ② 행렬 곱 — 세 가지가 모두 같은 결과</span>
+a = np.arange(6).reshape((3, 2)); b = np.ones((2, 3))
+np.dot(a, b)              <span class="out"># (3, 3)</span>
+a @ b                     <span class="out"># (3, 3)</span>
+np.matmul(a, b)           <span class="out"># (3, 3)</span>
+
+<span class="cm"># ③ 3차원부터는 dot 과 matmul 이 달라진다!</span>
+a = np.arange(24).reshape((4, 3, 2)); b = np.ones((4, 2, 3))
+np.dot(a, b).shape        <span class="out"># (4, 3, 4, 3)  ← 축이 늘어난다</span>
+(a @ b).shape             <span class="out"># (4, 3, 3)     ← 앞 축을 배치로 보고 행렬곱</span></pre>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>연산</th><th>이름</th><th>규칙</th><th>언제 쓰나</th></tr></thead>
+  <tbody>
+    <tr><td><code>*</code></td><td><span class="term" tabindex="0" data-tip="같은 크기의 두 배열에서 같은 위치의 원소끼리 곱하는 연산. 수학의 행렬곱과는 다르며 NumPy의 * 연산이 이것이다.">아다마르 곱</span></td><td>같은 위치끼리 곱 — shape이 같아야 함</td><td>마스킹, 가중치별 스케일</td></tr>
+    <tr><td><code>np.dot</code></td><td><span class="term" tabindex="0" data-tip="1차원끼리면 내적(스칼라), 2차원끼리면 행렬곱과 같다. 다만 3차원 이상에서는 matmul과 결과가 달라진다.">dot product</span></td><td>1D는 내적, 2D는 행렬곱, 3D 이상은 축이 늘어남</td><td>내적·2차원 행렬곱</td></tr>
+    <tr><td><code>@</code> · <code>np.matmul</code></td><td><span class="term" tabindex="0" data-tip="수학에서 배운 행렬 곱. (N×M)·(M×K) = (N×K). NumPy에서는 @ 또는 np.matmul을 쓴다.">행렬 곱(matmul)</span></td><td>마지막 두 축만 행렬곱, 앞쪽 축은 <b>배치</b>로 취급</td><td>신경망의 배치 연산 — 실무 기본</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="tip">노트북의 말 그대로 <span class="nbc">*(=하다마르), dot, @(=matmul)은 서로 다른 연산</span>이다.
+3차원 이상을 다루기 시작하면 <b>@를 기본</b>으로 쓰면 헷갈릴 일이 줄어든다.</div>
+</section>
+
+<section class="sec" id="nb-shape">
+  <div class="sec-head"><span class="sec-badge">실습 ⑤</span><h2 class="sec-title">형태 변형<small>reshape · 차원 추가 · stack/concatenate · transpose</small></h2></div>
+<div class="fnc">
+  <h4>reshape — 모양 바꾸기</h4>
+  <div class="sig">b = a.reshape((6, 4))
+c = a.reshape((6, -1))</div>
+  <dl>
+    <dt>규칙</dt><dd>바꾸기 전과 후의 <b>원소 개수가 같아야</b> 한다 (2×3×4 = 24 = 6×4)</dd>
+    <dt>-1</dt><dd>나머지 값으로부터 <b>자동 계산</b>해 달라는 뜻. 24개를 (6, −1)로 주면 4가 채워진다</dd>
+    <dt>주의</dt><dd>값의 <b>나열 순서는 그대로</b>다. 축을 바꾸려면 reshape가 아니라 transpose를 써야 한다</dd>
+  </dl>
+</div>
+<div class="fnc">
+  <h4>None(np.newaxis) — 차원 하나 더 붙이기</h4>
+  <div class="sig">a[:, None]</div>
+  <dl>
+    <dt>뜻</dt><dd><code>:</code> 는 그 축 전체, <code>None</code> 은 그 자리에 <b>크기 1인 축을 새로 삽입</b></dd>
+    <dt>예</dt><dd><code>np.arange(3)</code> (3,) → <code>a[:, None]</code> (3, 1) — 열벡터가 된다</dd>
+    <dt>쓰임</dt><dd>브로드캐스팅으로 행/열 방향 연산을 맞출 때 자주 쓴다</dd>
+  </dl>
+</div>
+<div class="fnc">
+  <h4>stack / concatenate — 이어 붙이기</h4>
+  <div class="sig">np.vstack([a, b])              <span class="cm"># 수직(위아래)</span>
+np.hstack([a, b])              <span class="cm"># 수평(좌우)</span>
+np.concatenate([a, b], axis=0) <span class="cm"># 축을 지정해서</span></div>
+  <dl>
+    <dt>vstack</dt><dd>v = vertical. (3,2)+(3,2) → <b>(6, 2)</b></dd>
+    <dt>hstack</dt><dd>h = horizontal. (3,2)+(3,2) → <b>(3, 4)</b></dd>
+    <dt>concatenate</dt><dd>axis로 방향을 직접 지정. axis=0이면 vstack, axis=1이면 hstack과 같다</dd>
+    <dt>조건</dt><dd><b>이어 붙이는 축을 뺀 나머지 shape이 모두 같아야</b> 한다</dd>
+  </dl>
+</div>
+<div class="fnc">
+  <h4><span class="term" tabindex="0" data-tip="축의 순서를 바꾸는 연산. 2차원에서는 행과 열을 맞바꾸는 전치(.T)와 같다.">transpose</span> — 축 바꾸기</h4>
+  <div class="sig">a.T                        <span class="cm"># 2차원: 행↔열</span>
+np.transpose(a, [0, 2, 1]) <span class="cm"># 축 1과 2를 교환</span></div>
+  <dl>
+    <dt>2차원</dt><dd><span class="nbc">손바닥 뒤집기!</span> — (3, 2) → (2, 3), 6×4 행렬은 4×6이 된다</dd>
+    <dt>3차원 이상</dt><dd>새 축 순서를 리스트로 준다. (4,3,2)에 <code>[0,2,1]</code> → <b>(4,2,3)</b>, <code>[1,0,2]</code> → <b>(3,4,2)</b></dd>
+    <dt>reshape와 차이</dt><dd>reshape는 값의 순서를 그대로 두고 틀만 바꾸지만, transpose는 <b>값의 위치 관계 자체</b>가 바뀐다</dd>
+  </dl>
+</div>
+<div class="note-box"><b>모양이 헷갈릴 때</b> — 노트북의 조언대로 <span class="nbc">항상 텐서(행렬)의 크기와 모양을 잘 파악해서 데이터를 조작</span>해야 한다.
+<code>.shape</code> · <code>.ndim</code> 을 찍어 보거나 <b>대괄호 개수</b>로 세어 보면 된다.
+또 reshape·transpose 결과는 대개 <span class="term" tabindex="0" data-tip="데이터를 복사하지 않고 같은 메모리를 다른 모양으로 바라보는 것. reshape·transpose 결과를 수정하면 원본도 바뀔 수 있다.">view(뷰)</span>라서, 결과를 고치면 원본도 바뀔 수 있다 — 안전하게 떼려면 <code>.copy()</code>.</div>
+</section>
+
+<section class="sec" id="nb-broadcast">
+  <div class="sec-head"><span class="sec-badge">실습 ⑥</span><h2 class="sec-title">브로드캐스팅<small>Broadcasting — 모양이 달라도 알아서 맞춰 주는 규칙</small></h2></div>
+<div class="note-box"><b><span class="term" tabindex="0" data-tip="shape이 다른 배열끼리 연산할 때, 크기가 1이거나 없는 축을 자동으로 늘려 맞춰 주는 규칙. 실제로 값을 복사하지는 않아 메모리도 아낀다.">브로드캐스팅</span></b> — <span class="nbc">자동으로 공란을 채워서 연산을 수행하는 기능</span>이다.
+크기가 다른 배열끼리도, <b>뒤쪽 축부터 맞춰 보아 크기가 같거나 한쪽이 1이면</b> 연산이 성립한다.</div>
+<pre class="code"><span class="cm"># ① 벡터 + 스칼라</span>
+a = np.arange(3); b = 2.
+a + b            <span class="out"># [2. 3. 4.]   스칼라가 모든 원소에 적용</span>
+
+<span class="cm"># ② 행렬 + 벡터</span>
+a = np.arange(6).reshape((3, 2))     <span class="cm"># (3, 2)</span>
+b = np.arange(2) + 1                 <span class="cm"># (2,)  → (1, 2) 로 보고 3번 반복</span>
+a + b            <span class="out"># [[1 3] [3 5] [5 7]]</span>
+
+<span class="cm"># ③ 텐서 + 행렬</span>
+a = np.arange(12).reshape((2, 3, 2)) <span class="cm"># (2, 3, 2)</span>
+b = np.arange(6).reshape((3, 2))     <span class="cm"># (3, 2) → 앞에 축을 붙여 (1, 3, 2)</span>
+a + b            <span class="out"># (2, 3, 2)</span></pre>
+<div class="tip"><b>규칙을 한 줄로</b> — shape을 <b>오른쪽 끝에서부터</b> 비교해서, 같거나 한쪽이 1이면 통과.
+비어 있는 앞쪽 축은 1로 채워서 본다. 그래서 <code>(2,3,2) + (3,2)</code>는 되지만 <code>(3,2) + (3,)</code>은 안 된다.</div>
+</section>
+
+<section class="sec" id="nb-quiz">
+  <div class="sec-head"><span class="sec-badge">퀴즈</span><h2 class="sec-title">노트북 퀴즈 17문제<small>먼저 직접 풀어 보고, 막히면 펼쳐서 확인하세요</small></h2></div>
+
+<div class="qz"><h4>퀴즈 1 — <code>[[[1], [2], [3]], [[4], [5], [6]]]</code> 의 shape은?</h4>
+<details class="ans"><summary>정답 보기</summary><b>(2, 3, 1)</b> — 대괄호가 3겹이므로 3차원. 바깥 2개 · 그 안 3개 · 가장 안쪽 1개.
+<pre class="code">np.array([[[1],[2],[3]],[[4],[5],[6]]]).shape</pre></details></div>
+
+<div class="qz"><h4>퀴즈 2 — (4, 3, 2) 텐서를 0.0 ~ 23.0 으로 채우기</h4>
+<details class="ans"><summary>정답 보기</summary>4×3×2 = 24 이므로 24개를 만들어 모양을 바꾼다.
+<pre class="code">np.arange(24).reshape((4, 3, 2)).astype(float)</pre></details></div>
+
+<div class="qz"><h4>퀴즈 3~4 — <code>a = np.arange(10)</code> 일 때 <code>a[-4:]</code> 와 <code>a[:-8]</code> 은?</h4>
+<details class="ans"><summary>정답 보기</summary><b>a[-4:] → [6 7 8 9]</b> (뒤에서 4개) · <b>a[:-8] → [0 1]</b> (뒤에서 8번째 <b>앞까지</b>)</details></div>
+
+<div class="qz"><h4>퀴즈 5 — <code>a</code>로 <code>[9, 6, 3]</code> 만들기</h4>
+<details class="ans"><summary>정답 보기</summary>9에서 시작해 3칸씩 거꾸로 — 간격에 음수를 준다.
+<pre class="code">a[:0:-3]      <span class="out"># [9 6 3]</span>
+a[9:0:-3]     <span class="cm"># 같은 결과</span></pre></details></div>
+
+<div class="qz"><h4>퀴즈 6~8 — <code>a = np.arange(9).reshape((3,3))</code> 에서</h4>
+<p style="font-size:12.5px;color:#4b5563;line-height:1.7">마지막 행 / 두 번째 열 / <code>[8, 5]</code> 만들기</p>
+<details class="ans"><summary>정답 보기</summary>
+<pre class="code">a[-1]            <span class="out"># [6 7 8]   마지막 행 (a[2] 와 같음)</span>
+a[:, 1]          <span class="out"># [1 4 7]   모든 행의 2번째 열</span>
+a[[2, 1], [2, 2]]<span class="out"># [8 5]     (2,2)=8 과 (1,2)=5 를 한 번에</span></pre></details></div>
+
+<div class="qz"><h4>퀴즈 9~11 — <code>a = np.arange(24).reshape((4,3,2))</code> 에서</h4>
+<p style="font-size:12.5px;color:#4b5563;line-height:1.7"><code>a[0]</code> / <code>a[0, 1]</code> / <code>[[0, 2, 4], [6, 8, 10]]</code> 만들기</p>
+<details class="ans"><summary>정답 보기</summary>
+<pre class="code">a[0]        <span class="out"># [[0 1] [2 3] [4 5]]   첫 블록 전체 (3, 2)</span>
+a[0, 1]     <span class="out"># [2 3]                 첫 블록의 2번째 행</span>
+a[:2, :, 0] <span class="out"># [[0 2 4] [6 8 10]]    앞 2블록의 0번째 열만</span></pre></details></div>
+
+<div class="qz"><h4>퀴즈 12 — <code>a = np.arange(6).reshape((3,2))</code> 로 <code>[3, 4, 5]</code> 만들기</h4>
+<details class="ans"><summary>정답 보기</summary>예제의 조건을 "2보다 큰 값"으로 바꾸면 된다 — 불리언 인덱싱.
+<pre class="code">idx = a &gt; 2
+a[idx]        <span class="out"># [3 4 5]</span></pre></details></div>
+
+<div class="qz"><h4>퀴즈 13 — <code>a = np.arange(24).reshape((2,3,4))</code> 의 마지막 차원 합의 평균은?</h4>
+<details class="ans"><summary>정답 보기</summary>마지막 축으로 합치면 6개의 값(6, 22, 38, 54, 70, 86)이 남고, 그 평균은 <b>46.0</b>.
+<pre class="code">a.sum(axis=-1).mean()    <span class="out"># 46.0   (axis=2 와 같음)</span></pre></details></div>
+
+<div class="qz"><h4>퀴즈 14 — <code>a.shape == (4,3,2)</code>, <code>b.shape == (2,3)</code> 일 때 곱셈은?</h4>
+<details class="ans"><summary>정답 보기</summary>matmul은 <b>마지막 두 축</b>만 행렬곱하고 앞 축은 배치로 본다. (3,2)·(2,3) = (3,3) 이므로 결과는 <b>(4, 3, 3)</b>.
+<pre class="code">(a @ b).shape    <span class="out"># (4, 3, 3)</span></pre></details></div>
+
+<div class="qz"><h4>퀴즈 15 — <code>a = np.arange(24).reshape((2,3,4))</code> 에서 <code>a.reshape((6, 4, -1))</code> 은?</h4>
+<details class="ans"><summary>정답 보기</summary>24 ÷ (6×4) = 1 이므로 −1 자리에 1이 채워져 <b>(6, 4, 1)</b>.</details></div>
+
+<div class="qz"><h4>퀴즈 16 — <code>np.ones((3,4))</code> 를 (3, 1, 1, 4) 로 만들기</h4>
+<details class="ans"><summary>정답 보기</summary>중간에 크기 1인 축을 두 번 끼워 넣는다.
+<pre class="code">a = np.ones((3, 4))
+a[:, None, None, :].shape    <span class="out"># (3, 1, 1, 4)</span>
+a.reshape(3, 1, 1, 4).shape  <span class="cm"># reshape로도 가능</span></pre></details></div>
+
+<div class="qz"><h4>퀴즈 17 — (4,3,2)와 (4,3,3)을 axis=2 로 concatenate 하면?</h4>
+<details class="ans"><summary>정답 보기</summary>이어 붙이는 축(2번 축)만 2+3 = 5가 되고 나머지는 그대로 → <b>(4, 3, 5)</b>.
+<pre class="code">np.concatenate([x, y], axis=2).shape   <span class="out"># (4, 3, 5)</span></pre></details></div>
+
 <div class="warn"><b>제출</b> — 매주 <b>실습 실행 화면 캡쳐</b>와 <b>100문제 풀이 증명 캡쳐</b> 2건을 제출합니다. (1주차 OT 안내 기준, 100문제 정답률 50% 이상)</div>
 </section>
 
@@ -395,6 +733,56 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var terms = document.querySelectorAll('.term');
+  if (!terms.length) return;
+  var tip = document.createElement('div');
+  tip.id = 'tipbox';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  var current = null;
+
+  function hide() {
+    tip.classList.remove('on');
+    if (current) { current.classList.remove('on'); current = null; }
+  }
+  function show(el) {
+    tip.textContent = el.getAttribute('data-tip') || '';
+    tip.classList.add('on');
+    if (current && current !== el) current.classList.remove('on');
+    current = el;
+    el.classList.add('on');
+    var pad = 8;
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+    var top = r.top - t.height - 10;
+    if (top < pad) top = r.bottom + 10;
+    top = Math.min(top, window.innerHeight - t.height - pad);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+  terms.forEach(function (el) {
+    el.addEventListener('mouseenter', function () { show(el); });
+    el.addEventListener('mouseleave', function () { if (current === el) hide(); });
+    el.addEventListener('focus', function () { show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (current === el && tip.classList.contains('on')) hide(); else show(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el); }
+      if (e.key === 'Escape') hide();
+    });
+  });
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide);
+});
+</script>
 <script src="quiz/ml-w02.js"></script>
 <script src="quiz/inline-quiz.js"></script>
 
