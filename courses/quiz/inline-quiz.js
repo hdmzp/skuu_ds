@@ -25,11 +25,16 @@
     'font-family:inherit;font-size:11px;font-weight:700;padding:5px 11px;cursor:pointer;line-height:1;transition:.15s}',
     '.q-secbtn:hover{background:#b91c1c;color:#fff;border-color:#b91c1c}',
     '.q-secbtn b{font-size:11.5px}',
-    /* 본문 하이라이트 */
-    '.q-hl{background:linear-gradient(transparent 58%,#ffe9a8 58%);border:0;padding:0 1px;',
-    'font-weight:700;color:inherit;cursor:pointer;border-radius:2px;font-family:inherit;font-size:inherit;line-height:inherit}',
-    '.q-hl:hover{background:#ffdf7e}',
-    '.q-hl sup{font-size:9px;font-weight:700;color:#b91c1c;margin-left:1px;vertical-align:super}',
+    /* 본문 하이라이트 — 문장 읽기를 방해하지 않도록 아주 연한 연노랑 */
+    '.q-hl{background:#fdf8e3;border-bottom:1px solid #f2e3ab;padding:0 1px;',
+    'color:inherit;font-weight:inherit;font-family:inherit;font-size:inherit;line-height:inherit;border-radius:2px}',
+    /* 줄 끝 문제 버튼 */
+    '.q-lnbtn{display:inline-flex;align-items:center;gap:3px;vertical-align:baseline;',
+    'margin-left:6px;padding:1px 8px;border-radius:999px;cursor:pointer;',
+    'background:#fdf8e3;border:1px solid #e8d38f;color:#8a6100;',
+    'font-family:inherit;font-size:10.5px;font-weight:700;line-height:1.6;white-space:nowrap;transition:.15s}',
+    '.q-lnbtn:hover{background:#b45309;border-color:#b45309;color:#fff}',
+    '.q-lnbtn b{font-size:10.5px}',
     /* 안내 배너 */
     '.q-banner{display:flex;gap:9px;align-items:flex-start;background:#fffbeb;border:1px solid #f59e0b;',
     'border-radius:10px;padding:11px 14px;font-size:12.5px;color:#78350f;line-height:1.7;margin:0 0 18px}',
@@ -224,22 +229,25 @@
 
     var used = {};
 
-    // 개념 하나를 하이라이트 버튼으로 만든다.
-    // (while 루프 안에서 직접 만들면 var 스코프 탓에 모든 버튼이 마지막 개념을 가리키게 된다)
+    // 개념어는 표시만 한다. 문제를 여는 버튼은 줄 끝에 한 번만 붙인다.
     function makeMark(word, info) {
-      var mark = document.createElement('button');
-      mark.type = 'button';
+      var mark = document.createElement('span');
       mark.className = 'q-hl';
       mark.textContent = word;
-      mark.title = '"' + info.t + '" 관련 문제 ' + info.ids.length + '개 보기';
-      var sup = document.createElement('sup');
-      sup.textContent = info.ids.length;
-      mark.appendChild(sup);
-      mark.addEventListener('click', function () {
-        var list = info.ids.map(function (id) { return byId[id]; }).filter(Boolean);
-        open(info.t, '이 개념을 다루는 ' + list.length + '문항', list);
-      });
+      mark.setAttribute('data-term', info.t);
+      mark.title = info.t + ' — 출제 ' + info.ids.length + '문항';
       return mark;
+    }
+
+    // 하이라이트가 들어 있는 "한 줄"(목록 항목·문단·표 칸 등)을 찾는다.
+    var LINE_TAGS = { LI: 1, P: 1, TD: 1, TH: 1, H4: 1, FIGCAPTION: 1, DT: 1, DD: 1 };
+    function lineOf(el, scope) {
+      var p = el.parentNode;
+      while (p && p !== scope) {
+        if (LINE_TAGS[p.nodeName]) { return p; }
+        p = p.parentNode;
+      }
+      return scope;
     }
 
     scopes.forEach(function (scope) {
@@ -286,6 +294,46 @@
         if (last < text.length) { frag.appendChild(document.createTextNode(text.slice(last))); }
         node.parentNode.replaceChild(frag, node);
       });
+
+      // 줄 단위로 묶어서, 그 줄에 등장한 개념들의 문항을 여는 버튼을 끝에 하나만 붙인다.
+      var lines = [];
+      scope.querySelectorAll('.q-hl').forEach(function (mark) {
+        var line = lineOf(mark, scope);
+        var slot = null;
+        for (var i = 0; i < lines.length; i++) {
+          if (lines[i].el === line) { slot = lines[i]; break; }
+        }
+        if (!slot) { slot = { el: line, names: [], ids: [] }; lines.push(slot); }
+        var name = mark.getAttribute('data-term');
+        var info = termById[name.toLowerCase()];
+        if (!info || slot.names.indexOf(info.t) >= 0) { return; }
+        slot.names.push(info.t);
+        info.ids.forEach(function (id) {
+          if (slot.ids.indexOf(id) < 0) { slot.ids.push(id); }
+        });
+      });
+
+      var LINE_MAX = 24;   // 한 줄에 개념이 여러 개면 문항이 너무 많아지므로 상한을 둔다.
+      lines.forEach(function (slot) {
+        if (!slot.ids.length || slot.el.querySelector('.q-lnbtn')) { return; }
+        var all = slot.ids.map(function (id) { return byId[id]; }).filter(Boolean);
+        if (!all.length) { return; }
+        var list = all.slice(0, LINE_MAX);
+        var label = slot.names.length === 1 ? slot.names[0]
+                  : slot.names[0] + ' 외 ' + (slot.names.length - 1) + '개';
+        var sub = '이 줄의 개념을 다루는 ' + all.length + '문항'
+                + (all.length > list.length ? ' 중 ' + list.length + '문항' : '');
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'q-lnbtn';
+        btn.innerHTML = '문제 <b>' + list.length + (all.length > list.length ? '+' : '') + '</b>';
+        btn.title = label + ' 관련 문제 ' + all.length + '개';
+        btn.addEventListener('click', function () {
+          open(label, sub, list);
+        });
+        slot.el.appendChild(document.createTextNode(' '));
+        slot.el.appendChild(btn);
+      });
     });
   }
 
@@ -295,10 +343,10 @@
     var banner = document.createElement('div');
     banner.className = 'q-banner';
     banner.innerHTML = '<span class="q-tag">문제 연동</span>' +
-      '<div><b>노란 형광펜으로 표시된 개념</b>은 100문제 세트에서 실제로 출제된 개념입니다. ' +
-      '개념을 누르면 <b>그 개념을 다루는 문항</b>이, 절 제목 옆 <b>문제 N</b> 버튼을 누르면 ' +
+      '<div><b>연노랑으로 표시된 말</b>은 100문제 세트에서 실제로 출제된 개념입니다. ' +
+      '<b>줄 끝의 문제 N</b> 버튼을 누르면 그 줄에 나온 개념의 문항이, 절 제목 옆 <b>문제 N</b> 버튼을 누르면 ' +
       '<b>그 절의 문항 전체</b>가 팝업으로 열리고 정답과 해설을 바로 확인할 수 있습니다. ' +
-      '<span style="color:#92400e">숫자는 그 개념이 출제된 문항 수</span>입니다.</div>';
+      '<span style="color:#92400e">숫자는 열리는 문항 수</span>입니다.</div>';
     firstSec.parentNode.insertBefore(banner, firstSec);
   }
 })();
