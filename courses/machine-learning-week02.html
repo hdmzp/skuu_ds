@@ -66,6 +66,28 @@ body{
 .note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
 .note-box + .note-box{margin-top:10px}
 .note-box b{color:var(--ink)}
+/* 수식 카드 */
+.fx{background:#f8faff;border:1px solid #cfdcf5;border-left:3px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:10px 0}
+.fx + .fx{margin-top:8px}
+.fx-lab{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.fx-note{font-size:12px;color:#4b5563;line-height:1.7;margin-top:7px}
+.fx-note b{color:var(--ink)}
+.tex-d{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:9px 2px 5px;text-align:center}
+.tex-d .katex{font-size:1.12em}
+.tex{white-space:nowrap}
+/* 풀이 예제 */
+.ex{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin:10px 0}
+.ex-q{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.65;
+  background:#f1f0ec;border-radius:7px;padding:9px 12px;margin-bottom:4px}
+.ex-q em{font-style:normal;color:var(--red);font-size:11px;font-weight:700;display:block;margin-bottom:3px}
+.step{display:grid;grid-template-columns:20px 1fr;gap:9px;align-items:baseline;
+  font-size:12.5px;color:#4b5563;line-height:1.75;padding:5px 0}
+.step i{font-style:normal;font-weight:700;color:var(--accent);font-size:11.5px}
+.step .katex{font-size:1em}
+.ex-ans{margin-top:8px;background:#f0fdf4;border:1px solid #22c55e;border-radius:8px;
+  padding:9px 12px;font-size:12.5px;color:#14532d;line-height:1.7}
+.ex-ans b{color:var(--green)}
 .tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
 .tip b{color:#92400e}
 .warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
@@ -329,6 +351,26 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li><b>두 가지 해석</b> — ① 공간의 <b>점</b>, ② 공간에서의 <b>방향</b> (예: 오른쪽 3, 위로 2)</li>
   <li><b>연산</b> — 벡터 덧셈은 방향과 크기를 함께 고려해 정해지고, 스칼라 곱은 각 성분에 실수를 곱한다</li>
 </ul></div>
+
+<h3 class="sub-title">수식으로 정리</h3>
+
+<div class="fx">
+  <p class="fx-lab">벡터의 표기</p>
+  <div class="tex-d">\begin{gathered} \mathbf{x}=(x_1,\;x_2,\;\dots,\;x_n)\;\in\;\mathbb{R}^n
+  \\\text{또는}\\
+  \mathbf{x}=\begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_n \end{bmatrix}
+  =\begin{bmatrix} x_1 & x_2 & \cdots & x_n \end{bmatrix}^{\mathsf T} \end{gathered}</div>
+  <p class="fx-note">교안이 <span class="tex">[1\;\;2\;\;3]^{\mathsf T}</span> 처럼 <b>가로로 쓰고 오른쪽 위에 T</b>를 붙이는 이유가 이것이다.
+  벡터는 원래 <b>세로(열벡터)</b>인데, 지면에 세로로 쓰면 자리를 많이 차지하니 가로로 눕혀 쓰고 전치(<span class="tex">\mathsf T</span>) 기호로 &ldquo;사실은 세로&rdquo;임을 표시한다.</p>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">벡터 덧셈 · 스칼라 곱 — 둘 다 성분별로</p>
+  <div class="tex-d">\begin{gathered} \mathbf{u}+\mathbf{v}=\begin{bmatrix} u_1+v_1 \\ \vdots \\ u_n+v_n \end{bmatrix}
+  \\
+  a\mathbf{v}=\begin{bmatrix} a\,v_1 \\ \vdots \\ a\,v_n \end{bmatrix}\quad (a\in\mathbb{R}) \end{gathered}</div>
+  <p class="fx-note">같은 자리끼리만 더하므로 <b>두 벡터의 차원이 같아야</b> 덧셈이 정의된다.</p>
+</div>
 </section>
 
 <!-- ===================== 2.2 ===================== -->
@@ -347,10 +389,119 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <div class="sec-head"><span class="sec-badge">2.3</span><h2 class="sec-title">노름과 내적, 그리고 초평면<small>Norm · Dot product · Hyperplane</small></h2></div>
 <div class="note-box"><ul class="ul">
   <li><b>노름(Norm)</b> — 벡터를 스칼라 값으로 매핑하는 함수로, <b>벡터 크기의 척도</b></li>
-  <li><b>내적(Dot product)</b> — u · v = Σ uᵢvᵢ 이고, 동시에 u · v = ‖u‖‖v‖ cos θ 로도 표현된다 → 여기서 <b>사잇각</b>이 나온다</li>
-  <li>내적은 <b>대칭</b> 연산이다 (u · v = v · u)</li>
+  <li><b>내적(Dot product)</b> — 성분끼리 곱해서 전부 더한 값. 동시에 <b>두 벡터의 사잇각</b> 정보를 담고 있다</li>
+  <li>내적은 <b>대칭</b> 연산이다</li>
   <li><b>초평면(Hyperplane)</b> — n차원 공간을 둘로 가르는 n−1차원 경계. 분류 모델의 <b>결정 경계</b>가 바로 이것이다</li>
 </ul></div>
+
+<div class="warn"><b>가장 많이 헷갈리는 지점 — 절대값은 &lsquo;노름&rsquo;에만 붙는다</b><br>
+· <b>노름</b>은 크기라서 부호를 없애야 한다 → <span class="tex">|x_i|</span> 처럼 <b>절대값</b>을 씌운다.<br>
+· <b>내적</b>은 절대값을 씌우지 <b>않는다</b>. 성분끼리 <b>그냥 곱해서 더한다</b> → <span class="tex">\sum_i u_i v_i</span>.
+부호가 살아 있어야 방향(사잇각)을 표현할 수 있기 때문이며, 그래서 내적은 <b>음수가 될 수 있다</b>.</div>
+
+<h3 class="sub-title">노름 (Norm)</h3>
+
+<div class="fx">
+  <p class="fx-lab">일반 ℓp 노름 — 교안 정의</p>
+  <div class="tex-d">\begin{gathered} \lVert \mathbf{x}\rVert_p=\left(\sum_{i=1}^{n}\lvert x_i\rvert^{\,p}\right)^{\frac{1}{p}}
+  \\ \mathbf{x}=\begin{bmatrix} x_1 \\ \vdots \\ x_n \end{bmatrix} \end{gathered}</div>
+  <p class="fx-note">보통 <span class="tex">p=1,\;2,\;\infty</span> 세 가지를 쓴다.</p>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">자주 쓰는 세 가지</p>
+  <div class="tex-d">\begin{gathered} \lVert \mathbf{x}\rVert_1=\sum_{i=1}^{n}\lvert x_i\rvert
+  \\
+  \lVert \mathbf{x}\rVert_2=\sqrt{\sum_{i=1}^{n} x_i^{\,2}}
+  \\
+  \lVert \mathbf{x}\rVert_\infty=\max\{\lvert x_1\rvert,\dots,\lvert x_n\rvert\} \end{gathered}</div>
+  <p class="fx-note">· <b>L1</b> = 절대값의 합 &nbsp;·&nbsp; <b>L2</b> = 제곱합의 제곱근(= 우리가 아는 &lsquo;길이&rsquo;) &nbsp;·&nbsp; <b>L∞</b> = 절대값 중 가장 큰 값<br>
+  L2에서 <span class="tex">\lvert x_i\rvert^2</span>은 제곱하면 어차피 부호가 사라지므로 <span class="tex">x_i^2</span>으로 써도 같다.<br>
+  그냥 <span class="tex">\lVert \mathbf{x}\rVert</span> 라고 아래첨자 없이 쓰면 <b>L2 노름</b>을 뜻한다.</p>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">노름이 만족해야 하는 세 가지 성질</p>
+  <div class="tex-d">\begin{gathered} \text{(스케일링)}\;\; f(a\mathbf{x})=\lvert a\rvert f(\mathbf{x})
+  \\ \text{(삼각 부등식)}\;\; f(\mathbf{x}+\mathbf{y}) \le f(\mathbf{x})+f(\mathbf{y})
+  \\ \text{(양의 함수)}\;\; f(\mathbf{x}) \ge 0 \end{gathered}</div>
+</div>
+
+<div class="ex">
+  <p class="ex-q"><em>교안 연습문제</em>
+  <span class="tex">\mathbb{R}^3</span>의 벡터 <span class="tex">\mathbf{x}=[1\;\;2\;\;3]^{\mathsf T},\;\mathbf{y}=[-2\;\;3\;\;6]^{\mathsf T}</span> 에 대하여
+  <span class="tex">\lVert \mathbf{x}\rVert_1,\;\lVert \mathbf{y}\rVert_2,\;\lVert \mathbf{x}\rVert_\infty</span> 를 구하여라.</p>
+  <div class="step"><i>①</i><div><span class="tex">\lVert \mathbf{x}\rVert_1=\lvert 1\rvert+\lvert 2\rvert+\lvert 3\rvert=6</span></div></div>
+  <div class="step"><i>②</i><div><span class="tex">\lVert \mathbf{y}\rVert_2=\sqrt{(-2)^2+3^2+6^2}=\sqrt{4+9+36}=\sqrt{49}=7</span>
+  &nbsp;— 제곱하면서 <span class="tex">-2</span>의 부호가 사라진다</div></div>
+  <div class="step"><i>③</i><div><span class="tex">\lVert \mathbf{x}\rVert_\infty=\max\{1,2,3\}=3</span></div></div>
+  <div class="ex-ans"><b>답</b> &nbsp;<span class="tex">\lVert \mathbf{x}\rVert_1=6,\quad \lVert \mathbf{y}\rVert_2=7,\quad \lVert \mathbf{x}\rVert_\infty=3</span></div>
+</div>
+
+<h3 class="sub-title">내적 (Dot product)과 사잇각</h3>
+
+<div class="fx">
+  <p class="fx-lab">내적의 정의 — 교안 표기 그대로</p>
+  <div class="tex-d">\mathbf{u}\cdot\mathbf{v}=\mathbf{u}^{\mathsf T}\mathbf{v}=\sum_i u_i\,v_i=\lVert\mathbf{u}\rVert\,\lVert\mathbf{v}\rVert\cos(\theta)</div>
+  <p class="fx-note">· <span class="tex">\langle \mathbf{u},\mathbf{v}\rangle</span> 로도 표기한다.<br>
+  · <span class="tex">u_i \cdot v_i</span> 는 <b>실수 <span class="tex">u_i</span>와 실수 <span class="tex">v_i</span>의 곱셈</b>이고,
+    <span class="tex">\mathbf{u}\cdot\mathbf{v}</span> 의 가운데 점은 <b>내적 연산</b>이다 — 같은 점이지만 뜻이 다르다.<br>
+  · <span class="tex">\theta</span> 는 두 벡터의 <b>사잇각</b>이고, 여기 쓰이는 노름은 <b>L2 노름</b>이다
+    (원래 표현은 <span class="tex">\lVert\mathbf{u}\rVert_2\lVert\mathbf{v}\rVert_2\cos(\theta)</span> 인데 편의상 아래첨자를 생략).</p>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">대칭 연산</p>
+  <div class="tex-d">\mathbf{u}\cdot\mathbf{v}=\mathbf{u}^{\mathsf T}\mathbf{v}=\mathbf{v}^{\mathsf T}\mathbf{u}=\mathbf{v}\cdot\mathbf{u}</div>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">사잇각 유도 · 코사인 유사도 (Cosine similarity)</p>
+  <div class="tex-d">\cos(\theta)=\frac{\mathbf{u}\cdot\mathbf{v}}{\lVert\mathbf{u}\rVert\,\lVert\mathbf{v}\rVert}
+  =\frac{\sum_i u_i v_i}{\lVert\mathbf{u}\rVert\,\lVert\mathbf{v}\rVert}</div>
+  <p class="fx-note" style="margin:2px 0 0">노름까지 전부 풀어 쓰면 —</p>
+  <div class="tex-d">\cos(\theta)=\frac{\sum_{i=1}^{n} u_i v_i}
+  {\sqrt{\sum_{i=1}^{n} u_i^{\,2}}\;\sqrt{\sum_{i=1}^{n} v_i^{\,2}}}</div>
+  <p class="fx-note">내적 정의 <span class="tex">\mathbf{u}\cdot\mathbf{v}=\lVert\mathbf{u}\rVert\lVert\mathbf{v}\rVert\cos\theta</span> 의 양변을
+  <span class="tex">\lVert\mathbf{u}\rVert\lVert\mathbf{v}\rVert</span> 로 나눈 것이 전부다.<br>
+  <b>분자는 절대값 없이 그냥 곱해서 더하고</b>, <b>분모에서만</b> 노름(제곱합의 제곱근)을 쓴다.
+  기계학습에서는 관측값을 벡터로 표현한 뒤, 이 <span class="tex">\cos(\theta)</span> 값으로 <b>두 관측값의 유사한 정도를 수치화</b>한다.
+  값의 범위는 <span class="tex">-1 \le \cos\theta \le 1</span> 이고 <b>1에 가까울수록 비슷</b>하다.</p>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">직교 (Orthogonal)</p>
+  <div class="tex-d">\theta = 90^\circ \;\Longleftrightarrow\; \cos\theta = 0 \;\Longleftrightarrow\; \mathbf{u}\cdot\mathbf{v}=0</div>
+  <p class="fx-note">사잇각이 90도인 두 벡터를 서로 <b>직교</b>한다고 한다.</p>
+</div>
+
+<div class="ex">
+  <p class="ex-q"><em>교안 연습문제</em>
+  세 개의 벡터 <span class="tex">\mathbf{x}=[1\;\;2\;\;3]^{\mathsf T},\;\mathbf{y}=[-2\;\;3\;\;6]^{\mathsf T},\;\mathbf{z}=[1\;\;2\;\;4]^{\mathsf T}</span> 에 대하여
+  <span class="tex">\mathbf{x}</span>는 <span class="tex">\mathbf{y}</span>와 <span class="tex">\mathbf{z}</span> 중 어느 벡터와 코사인 유사도에서 더 가까운지 수식적으로 판단하시오.</p>
+  <div class="step"><i>①</i><div>분자 — 내적을 구한다. <b>절대값 없이 그냥 곱해서 더한다</b><br>
+    <span class="tex">\mathbf{x}\cdot\mathbf{y}=(1)(-2)+(2)(3)+(3)(6)=-2+6+18=22</span><br>
+    <span class="tex">\mathbf{x}\cdot\mathbf{z}=(1)(1)+(2)(2)+(3)(4)=1+4+12=17</span></div></div>
+  <div class="step"><i>②</i><div>분모 — 각 벡터의 L2 노름<br>
+    <span class="tex">\lVert\mathbf{x}\rVert=\sqrt{1+4+9}=\sqrt{14}\approx 3.742</span>,&nbsp;
+    <span class="tex">\lVert\mathbf{y}\rVert=\sqrt{4+9+36}=7</span>,&nbsp;
+    <span class="tex">\lVert\mathbf{z}\rVert=\sqrt{1+4+16}=\sqrt{21}\approx 4.583</span></div></div>
+  <div class="step"><i>③</i><div><span class="tex">\cos(\mathbf{x},\mathbf{y})=\dfrac{22}{\sqrt{14}\cdot 7}=\dfrac{22}{7\sqrt{14}}\approx\dfrac{22}{26.19}\approx 0.840</span></div></div>
+  <div class="step"><i>④</i><div><span class="tex">\cos(\mathbf{x},\mathbf{z})=\dfrac{17}{\sqrt{14}\cdot\sqrt{21}}=\dfrac{17}{\sqrt{294}}\approx\dfrac{17}{17.15}\approx 0.991</span></div></div>
+  <div class="ex-ans"><b>답</b> &nbsp;<span class="tex">0.991 > 0.840</span> 이므로 <span class="tex">\mathbf{x}</span>는 <b><span class="tex">\mathbf{z}</span>와 더 가깝다</b>.
+  <br><span style="color:#166534">참고 — <span class="tex">\mathbf{y}</span>는 노름(길이 7)이 훨씬 큰데도 더 멀다. 코사인 유사도는 <b>길이가 아니라 방향</b>만 보기 때문이다.</span></div>
+</div>
+
+<h3 class="sub-title">초평면 (Hyperplane)</h3>
+
+<div class="fx">
+  <p class="fx-lab">초평면의 식과 이진 분류</p>
+  <div class="tex-d">\mathbf{w}\cdot\mathbf{x}+b=0</div>
+  <p class="fx-note">· <span class="tex">n</span>차원 공간에서 초평면은 <span class="tex">n-1</span>차원을 가지며 공간을 <b>두 개의 절반 공간</b>으로 나눈다
+  (2차원 → 직선, 3차원 → 평면).<br>
+  · 이진 분류에서는 <span class="tex">\mathbf{w}\cdot\mathbf{x}+b>0</span> 인지 여부를 검사해 클래스를 결정한다.<br>
+  · <span class="tex">\mathbf{x}</span>는 관측값의 <b>특징벡터</b>, <span class="tex">\mathbf{w}</span>와 <span class="tex">b</span>는 <b>학습 데이터로 정해지는 값</b>이다.</p>
+</div>
 </section>
 
 <!-- ===================== 2.4 ===================== -->
@@ -364,6 +515,53 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li><b>텐서</b> — 스칼라(0차원) · 벡터(1차원) · 행렬(2차원)을 일반화한 N차원 배열</li>
   <li><b>선형 결합 · 선형 종속 / 독립</b> — 어떤 벡터가 다른 벡터들의 조합으로 표현되면 종속, 아니면 독립</li>
 </ul></div>
+
+<h3 class="sub-title">수식으로 정리</h3>
+
+<div class="fx">
+  <p class="fx-lab">행렬–벡터 곱 — 결국 &lsquo;내적을 여러 번&rsquo;</p>
+  <div class="tex-d">\begin{gathered} \mathbf{A}=\begin{bmatrix} \mathbf{a}_1^{\mathsf T} \\ \mathbf{a}_2^{\mathsf T} \\ \vdots \\ \mathbf{a}_m^{\mathsf T}\end{bmatrix}
+  \\
+  \mathbf{A}\mathbf{x}=\begin{bmatrix} \mathbf{a}_1^{\mathsf T}\mathbf{x} \\ \mathbf{a}_2^{\mathsf T}\mathbf{x} \\ \vdots \\ \mathbf{a}_m^{\mathsf T}\mathbf{x}\end{bmatrix} \end{gathered}</div>
+  <p class="fx-note">행렬을 <b>행 벡터의 모음</b>으로 보면, 결과의 <span class="tex">i</span>번째 성분은
+  <b><span class="tex">i</span>번째 행과 <span class="tex">\mathbf{x}</span>의 내적</b> <span class="tex">\mathbf{a}_i^{\mathsf T}\mathbf{x}</span> 다.
+  즉 행렬–벡터 곱은 내적을 <span class="tex">m</span>번 반복한 것이다.</p>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">크기(shape) 규칙 — 곱셈이 되는지부터 확인</p>
+  <div class="tex-d">\begin{gathered} \underbrace{\mathbf{A}}_{(m\times n)}\;\cdot\;\underbrace{\mathbf{x}}_{(n\times 1)}\;=\;\underbrace{\mathbf{A}\mathbf{x}}_{(m\times 1)}
+  \\
+  \underbrace{\mathbf{A}}_{(m\times n)}\;\cdot\;\underbrace{\mathbf{B}}_{(n\times k)}\;=\;\underbrace{\mathbf{A}\mathbf{B}}_{(m\times k)} \end{gathered}</div>
+  <p class="fx-note"><b>안쪽 두 숫자가 같아야</b> 곱이 정의되고(앞의 열 수 = 뒤의 행 수), <b>바깥 두 숫자</b>가 결과의 크기가 된다.
+  그리고 <span class="tex">\mathbf{A}\mathbf{B} \ne \mathbf{B}\mathbf{A}</span> — 교환 법칙은 성립하지 않는다.</p>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">행렬 곱의 성분</p>
+  <div class="tex-d">(\mathbf{A}\mathbf{B})_{ij}=\sum_{k=1}^{n} A_{ik}\,B_{kj}</div>
+  <p class="fx-note"><span class="tex">i</span>행 <span class="tex">j</span>열 성분은 <b><span class="tex">\mathbf{A}</span>의 <span class="tex">i</span>행</b>과
+  <b><span class="tex">\mathbf{B}</span>의 <span class="tex">j</span>열</b>의 내적이다. 여기서도 절대값은 쓰지 않는다.</p>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">역행렬과 직교 행렬</p>
+  <div class="tex-d">\begin{gathered} \mathbf{A}^{-1}\mathbf{A}=\mathbf{A}\mathbf{A}^{-1}=\mathbf{I}
+  \\ (\mathbf{A}^{-1})^{-1}=\mathbf{A}
+  \\ (\mathbf{A}\mathbf{B})^{-1}=\mathbf{B}^{-1}\mathbf{A}^{-1} \end{gathered}</div>
+  <p class="fx-note">정방 행렬에만 정의되며 <b>항상 존재하지는 않는다</b>. 큰 행렬의 역행렬은 계산 비용이 크고 수치적으로 불안정할 수 있다.<br>
+  역행렬이 전치행렬과 같은 행렬 <span class="tex">\mathbf{A}^{-1}=\mathbf{A}^{\mathsf T}</span> 를 <b>직교 행렬</b>이라 한다
+  (<span class="tex">\mathbf{A}^{\mathsf T}\mathbf{A}=\mathbf{A}\mathbf{A}^{\mathsf T}=\mathbf{I}</span>).<br>
+  <span style="color:#b91c1c">주의 — <span class="tex">(\mathbf{A}\mathbf{B})^{-1}</span> 은 순서가 <b>뒤집힌다</b>.</span></p>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">선형 결합 · 선형 독립 / 종속</p>
+  <div class="tex-d">a_1\mathbf{v}_1+\cdots+a_k\mathbf{v}_k=\mathbf{0}</div>
+  <p class="fx-note">· 위 식이 <b><span class="tex">a_1=\cdots=a_k=0</span> 일 때만</b> 성립하면 → <b>선형 독립</b><br>
+  · 0이 아닌 <span class="tex">a_1,\dots,a_k</span> 가 <b>존재</b>하면 → <b>선형 종속</b><br>
+  · <span class="tex">a_1\mathbf{b}_1+a_2\mathbf{b}_2</span> 형태를 <span class="tex">\mathbf{b}_1,\mathbf{b}_2</span>의 <b>선형 결합</b>이라 한다.</p>
+</div>
 </section>
 
 <!-- ===================== 2.5 ===================== -->
@@ -376,6 +574,47 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li><b>기계학습에서의 학습</b> — 손실함수를 최소화하도록 기울기의 <b>반대 방향</b>으로 파라미터를 갱신하는 과정</li>
   <li><b>임계점 · 극소점</b> — 기울기가 0이 되는 점이 임계점이고, 그중 주변보다 값이 작은 곳이 극소점(local minimum)이다</li>
 </ul></div>
+
+<h3 class="sub-title">수식으로 정리</h3>
+
+<div class="fx">
+  <p class="fx-lab">도함수의 정의</p>
+  <div class="tex-d">f'(x)=\lim_{h \to 0}\frac{f(x+h)-f(x)}{h}</div>
+  <p class="fx-note"><span class="tex">x</span>를 아주 조금(<span class="tex">h</span>) 움직였을 때 <b>함숫값이 얼마나 변하는가</b>의 비율 — 즉 <b>순간 변화율</b>.<br>
+  같은 뜻의 표기가 여러 개다:
+  <span class="tex">f'(x)=f'=\dfrac{dy}{dx}=\dfrac{df}{dx}=\dfrac{d}{dx}f(x)=Df(x)=D_x f(x)</span></p>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">편미분 — 나머지는 상수 취급</p>
+  <div class="tex-d">\frac{\partial y}{\partial x_i}=\lim_{h \to 0}\frac{f(x_1,\dots,x_i+h,\dots,x_n)-f(x_1,\dots,x_i,\dots,x_n)}{h}</div>
+  <p class="fx-note">다변량 함수 <span class="tex">y=f(\mathbf{x})=f(x_1,\dots,x_n)</span> 에서
+  <span class="tex">x_i</span> <b>하나만 움직이고</b> 나머지는 <b>상수로 두고</b> 미분한다.
+  <span class="tex">\partial</span> 는 &ldquo;round&rdquo;라고 읽는다.<br>
+  같은 뜻의 표기: <span class="tex">\dfrac{\partial y}{\partial x_i}=\dfrac{\partial f}{\partial x_i}=\dfrac{\partial}{\partial x_i}f(\mathbf{x})=f_{x_i}=f_i=D_i f=D_{x_i}f</span></p>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">기울기 (Gradient) — 편미분을 모아 만든 벡터</p>
+  <div class="tex-d">\nabla_{\mathbf{x}} f(\mathbf{x})=\left[\frac{\partial f(\mathbf{x})}{\partial x_1},\;\frac{\partial f(\mathbf{x})}{\partial x_2},\;\dots,\;\frac{\partial f(\mathbf{x})}{\partial x_n}\right]^{\mathsf T}</div>
+  <p class="fx-note"><span class="tex">\nabla</span> 는 그리스 문자로 <b>nabla(나블라) / del</b> 이라 읽는다.
+  <span class="tex">\nabla f(\mathbf{x})</span> 또는 <span class="tex">\nabla f</span> 로 줄여 쓰기도 한다.
+  이 벡터는 함숫값이 <b>가장 빠르게 증가하는 방향</b>을 가리킨다.</p>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">기계학습에서의 학습 — 기울기의 반대 방향으로</p>
+  <div class="tex-d">\boldsymbol{\theta}_{t+1}=\boldsymbol{\theta}_{t}-\eta\,\nabla_{\boldsymbol{\theta}} L(\boldsymbol{\theta}_t)</div>
+  <p class="fx-note">기울기가 <b>증가</b> 방향이므로, 손실 <span class="tex">L</span> 을 <b>줄이려면 빼야</b> 한다 — 그래서 부호가 마이너스다.
+  <span class="tex">\eta</span> 는 한 번에 얼마나 움직일지 정하는 <b>학습률</b>.</p>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">임계점 · 극소점</p>
+  <div class="tex-d">\nabla f(\mathbf{x}^{*})=\mathbf{0}</div>
+  <p class="fx-note">기울기가 0이 되는 점이 <b>임계점(stationary point)</b>이고, 그중 주변보다 값이 작은 곳이 <b>극소점(local minimum)</b>이다.
+  임계점에는 극소점 말고도 극대점 · 안장점이 있으므로, 기울기가 0이라고 곧바로 최솟값인 것은 아니다.</p>
+</div>
 </section>
 
 <!-- ===================== 2.6 ===================== -->
@@ -389,6 +628,76 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li><b>베이즈 정리</b> — 관측(증거)을 이용해 사전확률을 사후확률로 갱신하는 규칙</li>
   <li><b>가우시안(정규) 분포</b> — 평균 μ 와 분산 σ² 로 정의되며, 신경망 가중치 초기화 등에서 널리 쓰인다</li>
 </ul></div>
+
+<h3 class="sub-title">수식으로 정리</h3>
+
+<div class="fx">
+  <p class="fx-lab">확률의 공리 — 표본공간 <span class="tex">\mathcal{S}</span>, 사건 <span class="tex">\mathcal{A}</span></p>
+  <div class="tex-d">\begin{gathered} \text{①}\;\; P(\mathcal{S})=1
+  \\ \text{②}\;\; P(\mathcal{A}) \ge 0 \;\;(\forall \mathcal{A}\subseteq\mathcal{S})
+  \\ \text{③}\;\; \mathcal{A}_1\cap\mathcal{A}_2=\varnothing \;\Rightarrow\; P(\mathcal{A}_1\cup\mathcal{A}_2)=P(\mathcal{A}_1)+P(\mathcal{A}_2) \end{gathered}</div>
+  <p class="fx-note">&lsquo;공리&rsquo;란 증명 없이 옳다고 간주되는 명제다. ③은 두 사건이 <b>서로 겹치지 않을 때만</b> 성립한다.</p>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">PMF와 PDF — 이산이면 더하고, 연속이면 적분한다</p>
+  <div class="tex-d">\begin{gathered} P(X=x) \quad\text{(PMF, 이산)}
+  \\
+  P\big(X\in[a,b]\big)=\int_{a}^{b} P(X)\,dX \quad\text{(PDF, 연속)} \end{gathered}</div>
+  <p class="fx-note">· <b>PMF</b> — 이산형(예: 두 주사위의 합 <span class="tex">x\in\{2,3,\dots,12\}</span>)에서는 특정 값의 확률을 그대로 읽는다.<br>
+  · <b>PDF</b> — 연속형(예: 20대 남성의 키가 168~175cm일 확률)에서는 <b>구간의 넓이(적분)</b>로 확률을 구한다.</p>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">기대값 (Expected Value) — <span class="tex">X \sim P(X)</span> 일 때</p>
+  <div class="tex-d">\begin{gathered} \mathbb{E}_{X\sim P}[f(X)]=\sum_{X} P(X)\,f(X)
+  \\
+  \mathbb{E}_{X\sim P}[f(X)]=\int P(X)\,f(X)\,dX \end{gathered}</div>
+  <p class="fx-note">왼쪽이 이산형, 오른쪽이 연속형이다. <b>값과 그 값이 나올 확률을 곱해서 전부 더한 것</b> — 가중평균.
+  문맥이 분명하면 <span class="tex">\mathbb{E}_X[f(X)]</span> 또는 <span class="tex">\mathbb{E}[f(X)]</span> 로 줄여 쓴다.</p>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">분산 (Variance)과 표준편차</p>
+  <div class="tex-d">\begin{gathered} \mathrm{Var}\big(f(X)\big)=\mathbb{E}\Big[\big(f(X)-\mathbb{E}[f(X)]\big)^2\Big]
+  \\
+  \sigma^2=\sum_{i} P(X_i)\,(X_i-\mu)^2
+  \\
+  \sigma=\sqrt{\mathrm{Var}(X)} \end{gathered}</div>
+  <p class="fx-note"><b>기대값에서 벗어난 정도를 제곱해서 평균</b>낸 값. 제곱하는 이유는 <span class="tex">+</span>쪽과 <span class="tex">-</span>쪽 편차가 상쇄되지 않게 하려는 것이다.
+  분산이 작으면 반복 측정했을 때 값이 기대값 주변에 모인다. 분산의 제곱근이 <b>표준편차</b>.</p>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">조건부 확률 · 곱셈 규칙 · 베이즈 정리</p>
+  <div class="tex-d">\begin{gathered} P(X=x\mid Y=y)=\frac{P(X=x,\;Y=y)}{P(Y=y)}
+  \\
+  P(X,Y)=P(Y\mid X)\,P(X) \end{gathered}</div>
+  <div class="tex-d">P(X\mid Y)=\frac{P(Y\mid X)\,P(X)}{P(Y)}</div>
+  <p class="fx-note">조건부 확률은 <b>&ldquo;<span class="tex">Y=y</span>인 세계로 범위를 좁힌 뒤</b> 그 안에서 <span class="tex">X=x</span>일 확률&rdquo;이라
+  <span class="tex">P(Y=y)</span> 로 나눠 준다.<br>
+  베이즈 정리는 곱셈 규칙 <span class="tex">P(X,Y)=P(Y\mid X)P(X)=P(X\mid Y)P(Y)</span> 를 정리한 것이다.</p>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">베르누이 분포 · 균등 분포</p>
+  <div class="tex-d">\begin{gathered} P(X=x)=\begin{cases} p & x=1 \\ 1-p & x=0 \end{cases}=p^{x}(1-p)^{1-x}
+  \\
+  P(X=i)=\frac{1}{n},\;\; i\in\{1,2,\dots,n\} \end{gathered}</div>
+  <p class="fx-note">· <b>베르누이</b> <span class="tex">X \sim \mathrm{Bernoulli}(p)</span> — 한 개의 <b>이진</b> 확률변수.
+  <span class="tex">p^{x}(1-p)^{1-x}</span> 에 <span class="tex">x=1</span>을 넣으면 <span class="tex">p</span>, <span class="tex">x=0</span>을 넣으면 <span class="tex">1-p</span> 가 되어 두 경우를 한 줄로 쓴 것이다.<br>
+  · <b>균등</b> <span class="tex">X \sim U(n)</span> — 모든 값이 <b>동일한 확률</b>.</p>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">가우시안(정규) 분포</p>
+  <div class="tex-d">\begin{gathered} X \sim \mathcal{N}(\mu,\;\sigma^{2})
+  \\
+  P_X(x)=\frac{1}{\sqrt{2\pi\sigma^{2}}}\;e^{-\frac{(x-\mu)^{2}}{2\sigma^{2}}} \end{gathered}</div>
+  <p class="fx-note"><b>평균 <span class="tex">\mu</span></b> 가 봉우리의 위치, <b>분산 <span class="tex">\sigma^2</span></b> 이 퍼진 정도를 정한다.
+  지수부의 <span class="tex">-(x-\mu)^2</span> 때문에 <span class="tex">\mu</span> 에서 멀어질수록 확률밀도가 빠르게 줄어들고,
+  앞의 <span class="tex">\frac{1}{\sqrt{2\pi\sigma^2}}</span> 는 전체 넓이를 1로 맞추는 <b>정규화 상수</b>다.</p>
+</div>
 </section>
 
 <!-- ===================== 2.7 실습 ===================== -->
@@ -783,6 +1092,25 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('resize', hide);
 });
 </script>
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script src="../vendor/katex/katex.min.js"></script>
+<script>
+// .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.
+// KaTeX를 못 불러온 경우에는 원문이 그대로 남아 최소한 읽을 수는 있게 둔다.
+(function () {
+  if (typeof katex === 'undefined') { return; }
+  document.querySelectorAll('.tex, .tex-d').forEach(function (el) {
+    try {
+      katex.render(el.textContent.trim(), el, {
+        displayMode: el.classList.contains('tex-d'),
+        throwOnError: false,
+        strict: false
+      });
+    } catch (e) { if (window.console) { console.error('KaTeX', e, el.textContent); } }
+  });
+})();
+</script>
+
 <script src="quiz/ml-w02.js"></script>
 <script src="quiz/inline-quiz.js"></script>
 
