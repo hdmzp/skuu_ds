@@ -242,6 +242,43 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .qz .ans summary::before{content:'▸ ';font-weight:700}
 .qz .ans[open] summary::before{content:'▾ '}
 .qz .ans pre.code{margin:8px 0 0}
+
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 실시간 강의 강조 */
+.live{
+  background:#fffaf3;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#7c2d12;
+}
+.live::before{
+  content:'🎙 실시간 강의 강조';display:inline-block;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.live b{color:#7c2d12}
+.live .ul li{color:#7c2d12}
+.live .ul li::before{background:#b45309;opacity:.75}
+/* 100문제 해설 포인트 */
+.qexp{
+  background:#f0fdf4;border:1px solid #bbf7d0;border-left:4px solid #16a34a;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;font-size:13px;line-height:1.8;color:#14532d;
+}
+.qexp::before{
+  content:'✅ 100문제 해설에서 짚어 준 것';display:inline-block;background:#16a34a;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.qexp b{color:#14532d}
+.qexp .ul li{color:#166534}
+.qexp .ul li::before{background:#16a34a;opacity:.8}
+.fml{
+  display:block;background:#eef2fb;border:1px solid #dbe3f5;border-radius:8px;
+  padding:9px 12px;margin:8px 0;font-size:13px;color:#1b3f8b;text-align:center;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;overflow-x:auto;white-space:nowrap;
+}
 </style>
 </head>
 <body id="top">
@@ -329,6 +366,22 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li><b>두 가지 해석</b> — ① 공간의 <b>점</b>, ② 공간에서의 <b>방향</b> (예: 오른쪽 3, 위로 2)</li>
   <li><b>연산</b> — 벡터 덧셈은 방향과 크기를 함께 고려해 정해지고, 스칼라 곱은 각 성분에 실수를 곱한다</li>
 </ul></div>
+<div class="live"><b>이 개념이 어디에 쓰이나 — 교수님 질문</b>
+<ul class="ul">
+  <li><b>Q. 벡터의 스칼라 곱, 어디에 쓰일까? 기계학습? 영상? 딥러닝 모델?</b><br>
+      → <b>딥러닝 모델의 특징벡터</b>들이다. 이미지 한 장, 문장 하나, 사용자 한 명이 모두 <b>벡터 하나</b>로 표현되고,
+      학습은 그 벡터에 <b>가중치를 곱하고 더하는 일</b>의 반복이다</li>
+  <li><b>벡터로 데이터를 표현할 수 있다</b> → <b>벡터로 기계학습·딥러닝·AI를 표현할 수 있다</b> → 그래서 <b>벡터의 의미와 관계를 알아야 한다</b></li>
+  <li><b>표현 학습(Representation Learning)</b> — 원본 데이터(이미지·텍스트·오디오)를 그대로 쓰지 않고,
+      <b>태스크에 유용한 형태의 특징(feature)을 자동으로 학습</b>하는 방법론. 딥러닝이 강력한 이유가 여기에 있다</li>
+</ul></div>
+<div class="qexp"><ul class="ul">
+  <li>강의자료는 <b>벡터는 굵은 소문자, 행렬은 굵은 대문자</b>로 표기한다</li>
+  <li>벡터는 값의 모임이지만 <b>순서가 존재</b>한다 — 집합과 다른 점</li>
+  <li><b>전치</b>는 열벡터 ↔ 행벡터를 바꾸는 연산이다</li>
+  <li>성분끼리 곱해 <b>스칼라를 만드는 것은 내적</b>이고, 스칼라 곱은 모든 성분에 실수를 곱하는 것 — 헷갈리지 말 것</li>
+  <li>예: x = [1,2,3]ᵀ, y = [−2,3,6]ᵀ 일 때 x − y = [3, −1, −3]ᵀ (x + y = [−1, 5, 9]ᵀ)</li>
+</ul></div>
 </section>
 
 <!-- ===================== 2.2 ===================== -->
@@ -340,6 +393,34 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li>예) "대학생·고등학생·중학생·초등학생·학생 아님"의 5개 카테고리로 구분할 때, 하나의 관측 값을 <b>나이 · 성별 · 이름 · 학교코드</b>로 설명하면 그것이 특징벡터가 된다</li>
   <li><b>벡터와 데이터</b> — 벡터를 공간의 점으로 보면, 훈련 데이터는 <b>공간에 흩어진 점들의 모음</b>이 된다 (고양이 집단 vs 강아지 집단)</li>
 </ul></div>
+<div class="live"><b>꼭 기억할 수식과 개념</b>
+<ul class="ul">
+  <li><b>훈련 데이터 D의 표기는 반드시 외울 것</b> (교안 8p)</li>
+</ul>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml-01-training-data.png" alt="교안 8p — 훈련 데이터 D = {(xᵢ, yᵢ)}ᵢ₌₁..ᴺ · N개의 관측값, 각각 특징벡터 xᵢ와 레이블 yᵢ의 쌍"><figcaption>교안 8p — 훈련 데이터 D = {(xᵢ, yᵢ)}ᵢ₌₁..ᴺ · N개의 관측값, 각각 특징벡터 xᵢ와 레이블 yᵢ의 쌍</figcaption></figure>
+<ul class="ul">
+  <li><b>학습의 세 가지 방식</b> — ① <b>지도학습</b>(정답 y가 있다) ② <b>비지도학습</b>(정답이 없고 <b>데이터의 패턴</b>으로 학습) ③ <b>강화학습</b>(보상으로 학습)</li>
+  <li><b>예시 1 — 성별·나이·키로 몸무게를 예측</b> : 몸무게는 정수가 아니라 <b>실수</b>가 들어가야 한다 → <b>회귀(Regression)</b></li>
+  <li><b>예시 2 — 생존 여부를 예측</b> : 살았다/죽었다 두 가지 → <b>1과 0으로 두는 이진 분류(Binary classification)</b></li>
+  <li>즉 <b>y가 실수면 회귀, 정해진 범주면 분류</b> — 문제의 성격은 레이블이 결정한다</li>
+</ul></div>
+<div class="live"><b>전처리에서 정규화를 꼭 넣어야 하는 이유 (교안 10p)</b>
+<ul class="ul">
+  <li>딥러닝 모델을 학습시키려면 전처리 과정에 <b>정규화(normalization)를 꼭 넣어 줘야 한다</b> —
+      보통 <b>최댓값·최솟값을 이용해 0~1 범위</b>로 맞춘다 (min-max 정규화)</li>
+  <li><b>이유</b> — 특징마다 값의 범위가 다르면(키 170 vs 나이 25) <b>큰 값을 가진 축이 기울기를 지배</b>해
+      대규모로 학습시켜도 잘 인식하지 못한다. 범위를 맞춰 주면 학습이 안정되고 빨라진다</li>
+</ul>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml-02-normalization.jpg" alt="교안 10p — 왼쪽: 두 클래스를 가르는 결정 경계 / 오른쪽: 원본 → 평균 0으로 이동 → 정규화된 데이터"><figcaption>교안 10p — 왼쪽: 두 클래스를 가르는 결정 경계 / 오른쪽: 원본 → 평균 0으로 이동 → 정규화된 데이터</figcaption></figure></div>
+<div class="qexp"><ul class="ul">
+  <li>xᵢ는 <b>특징벡터</b>, yᵢ는 <b>참값 · 레이블 · 목표값</b>이라 부른다</li>
+  <li>특징이 4개면 특징벡터는 4개 성분을 갖고, 이진분류면 레이블은 두 값 중 하나가 부여된다</li>
+  <li><b>노름은 벡터를 스칼라로 매핑하는 함수</b>이며 크기의 척도다. 교안이 제시한 속성은
+      <b>스케일링 · 삼각 부등식 · 양의 함수</b> 세 가지 (덧셈에 대한 선형성은 성립하지 않는다)</li>
+  <li>ℓₚ 노름 = 각 성분의 절댓값을 p제곱해 더한 뒤 1/p 제곱 ·
+      <b>ℓ₁</b> = 절댓값의 합 · <b>ℓ₂</b> = 제곱합의 제곱근 · <b>ℓ∞</b> = 절댓값 중 최댓값</li>
+  <li>예: x = [1,2,3] → ‖x‖₁ = 6, ‖x‖₂ = √14, ‖x‖∞ = 3 · y = [−2,3,6] → ‖y‖₂ = 7</li>
+</ul></div>
 </section>
 
 <!-- ===================== 2.3 ===================== -->
@@ -350,6 +431,31 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li><b>내적(Dot product)</b> — u · v = Σ uᵢvᵢ 이고, 동시에 u · v = ‖u‖‖v‖ cos θ 로도 표현된다 → 여기서 <b>사잇각</b>이 나온다</li>
   <li>내적은 <b>대칭</b> 연산이다 (u · v = v · u)</li>
   <li><b>초평면(Hyperplane)</b> — n차원 공간을 둘로 가르는 n−1차원 경계. 분류 모델의 <b>결정 경계</b>가 바로 이것이다</li>
+</ul></div>
+<div class="live"><b>유사도를 재는 두 가지 — 내적과 사잇각</b>
+<ul class="ul">
+  <li><b>노름은 1차가 아니라 2차</b>가 기본이다 — 내적 공식의 ‖u‖는 <b>ℓ₂ 노름 ‖u‖₂</b>를 뜻한다</li>
+  <li><b>"이 벡터와 저 벡터가 얼마나 유사한가"</b>를 판단할 때 쓰는 것이 내적, 그리고 거기서 나오는 <b>사잇각</b>이다</li>
+  <li>각도 θ만 구하고 싶으면 <b>코사인의 역함수 arccos(= cos⁻¹)</b>를 쓴다</li>
+</ul>
+<span class="fml">cos θ = (u · v) / (‖u‖₂ ‖v‖₂)  →  θ = arccos( cos θ )</span>
+<ul class="ul">
+  <li>arccos(1) = 0 · arccos(0) = π/2 · arccos(−1) = π</li>
+  <li>cos(arccos(x)) = x — 단 x ∈ [−1, 1] 일 때만</li>
+  <li>arccos(cos θ) = θ — <b>θ ∈ [0, π] 일 때만 성립</b> (범위를 벗어나면 성립하지 않는다)</li>
+</ul></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml-04-dot-angle.png" alt="교안 13p — 내적의 정의와 기하학적 해석, cos θ 유도, 직교(내적 = 0)"><figcaption>교안 13p — 내적의 정의와 기하학적 해석, cos θ 유도, 직교(내적 = 0)</figcaption></figure><figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml-03-norm-shapes.png" alt="교안 11p — 같은 크기 1을 뜻하는 모양이 노름마다 다르다: ℓ₁(마름모) · ℓ₂(원) · ℓ∞(정사각형)"><figcaption>교안 11p — 같은 크기 1을 뜻하는 모양이 노름마다 다르다: ℓ₁(마름모) · ℓ₂(원) · ℓ∞(정사각형)</figcaption></figure><div class="live"><b>초평면(Hyperplane) — 분류 문제의 핵심</b>
+<ul class="ul">
+  <li>기계학습의 <b>분류 문제</b>에서 가장 중요한 개념 — <b>선형 분류에 사용되는 결정 경계(decision boundary)</b></li>
+  <li>경계의 <b>위냐 아래냐</b>로 클래스를 할당(결정)한다 — w · x + b 의 부호를 보는 것이 전부다</li>
+</ul></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml-05-hyperplane.png" alt="교안 15p — 2차원에서 초평면은 직선, 3차원에서는 평면. n차원에서는 n−1 차원으로 공간을 둘로 나눈다"><figcaption>교안 15p — 2차원에서 초평면은 직선, 3차원에서는 평면. n차원에서는 n−1 차원으로 공간을 둘로 나눈다</figcaption></figure><div class="qexp"><ul class="ul">
+  <li>내적은 <b>대칭 연산</b> — u · v = uᵀv = vᵀu = v · u</li>
+  <li>사잇각이 90°면 <b>직교</b>이고 이때 내적은 0이다</li>
+  <li><b>코사인 유사도는 내적을 두 ℓ₂ 노름의 곱으로 나눈 값</b> — 내적 크기만으로 비교하면 안 된다
+      (예: cos = 0.99 인 쪽이 0.84 인 쪽보다 더 가깝다)</li>
+  <li>초평면 판정식은 <b>w · x + b &gt; 0</b> 인지 검사하는 것이고, w와 b는 <b>학습 데이터로부터 결정</b>된다</li>
+  <li>원점에서 초평면까지의 거리는 <b>|b| / ‖w‖</b></li>
 </ul></div>
 </section>
 
@@ -364,6 +470,50 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li><b>텐서</b> — 스칼라(0차원) · 벡터(1차원) · 행렬(2차원)을 일반화한 N차원 배열</li>
   <li><b>선형 결합 · 선형 종속 / 독립</b> — 어떤 벡터가 다른 벡터들의 조합으로 표현되면 종속, 아니면 독립</li>
 </ul></div>
+<div class="live"><b>행렬 연산과 GPU</b>
+<ul class="ul">
+  <li>덧셈·뺄셈·스칼라 곱은 예시를 보며 <b>계산 방법을 몸에 익혀 둘 것</b></li>
+  <li><b>딥러닝은 행렬 곱셈이 대단히 많다</b> — 그래서 <b>GPU 연산량이 많이 필요한 것</b>이다
+      (GPU는 같은 곱셈·덧셈을 수천 개씩 동시에 수행하도록 만들어진 장치다)</li>
+  <li><b>곱셈에서는 크기가 가장 중요</b> — 가운데 <b>k가 서로 같아야</b> 하고, 결과는 바깥 크기가 남는다</li>
+</ul>
+<span class="fml">(n × k) · (k × m) = (n × m)　　※ 가운데 k가 다르면 아예 정의되지 않는다</span></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml-06-transpose-identity.png" alt="교안 21p — 전치행렬의 중요 속성(교수님이 강조한 부분) · 정방행렬 · 항등행렬 Iₙ"><figcaption>교안 21p — 전치행렬의 중요 속성(교수님이 강조한 부분) · 정방행렬 · 항등행렬 Iₙ</figcaption></figure><div class="note-box"><b>전치행렬의 중요 속성 — 텍스트로도 정리</b>
+<span class="fml">(Aᵀ)ᵢⱼ = Aⱼᵢ　·　(A + B)ᵀ = Aᵀ + Bᵀ　·　(Aᵀ)ᵀ = A　·　(AB)ᵀ = Bᵀ Aᵀ</span>
+<span class="fml">A + B = B + A　·　A(B + C) = AB + AC　·　A(BC) = (AB)C</span>
+<ul class="ul">
+  <li><b>곱의 전치는 순서가 뒤집힌다</b> — (AB)ᵀ = BᵀAᵀ. 시험에 가장 잘 나오는 성질이다</li>
+  <li><b>정방행렬</b> = 행과 열의 수가 같은 행렬 · <b>항등행렬 Iₙ</b> = 대각 성분만 1이고 나머지는 0</li>
+</ul></div>
+<div class="live"><b>항등행렬은 어디에 쓰이나 — 마스킹</b>
+<ul class="ul">
+  <li>항등행렬을 곱하면 <b>원래 값이 그대로 남는다</b>(AI = A). 이 성질을 이용해 <b>살릴 위치는 1, 지울 위치는 0</b>으로 둔
+      대각 행렬을 곱하면 <b>원하는 성분만 남기는 마스킹</b>이 된다</li>
+  <li>실제 사례 — <b>드롭아웃</b>(일부 뉴런만 0으로), <b>어텐션 마스크</b>(미래 단어를 못 보게 가림),
+      <b>패딩 마스크</b>(길이를 맞추려 채운 자리를 무시), <b>이미지 ROI 마스킹</b></li>
+</ul></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml-07-inverse-orthogonal.png" alt="교안 26p — 역행렬의 정의와 성질, 그리고 직교행렬 (A⁻¹ = Aᵀ 이면 직교, AᵀA = AAᵀ = I)"><figcaption>교안 26p — 역행렬의 정의와 성질, 그리고 직교행렬 (A⁻¹ = Aᵀ 이면 직교, AᵀA = AAᵀ = I)</figcaption></figure><div class="live"><b>텐서 — 언제부터 텐서라고 부르나</b>
+<ul class="ul">
+  <li><b>2D까지는 행렬이라 부르다가, 3D(3차원)부터 텐서</b>라고 부른다 (엄밀히는 벡터가 1차 텐서, 행렬이 2차 텐서다)</li>
+  <li><b>RGB 이미지는 3차원 배열이므로 3차 텐서</b> — 세 축은 <b>너비 · 높이 · 채널</b>이고, 채널은 빨강·초록·파랑을 뜻한다
+      ("가로/세로/채널 수"가 바로 이 세 축이다)</li>
+</ul></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml-08-linear-independence.png" alt="교안 28p — 선형 결합 · 선형 독립 · 선형 종속의 정확한 정의"><figcaption>교안 28p — 선형 결합 · 선형 독립 · 선형 종속의 정확한 정의</figcaption></figure><div class="warn"><b>선형 독립 / 종속 — 헷갈리기 쉬운 부분 바로잡기</b><br>
+"두 벡터를 더했을 때 0", "곱했을 때 0" 이 기준이 <b>아니다</b>. 기준은 <b>계수(a₁, a₂, …)</b>다.
+<span class="fml">a₁v₁ + a₂v₂ + … + a<sub>k</sub>v<sub>k</sub> = 0</span>
+<ul class="ul">
+  <li><b>선형 독립</b> — 위 식이 <b>모든 계수가 0일 때만</b> 성립한다 (자명한 해뿐)</li>
+  <li><b>선형 종속</b> — <b>0이 아닌 계수</b>로도 위 식을 만들 수 있다 = 어떤 벡터가 다른 벡터들의 조합으로 표현된다</li>
+  <li>예: v₁ = [1,0], v₂ = [2,0] → 2v₁ − v₂ = 0 이므로 <b>종속</b>. v₁ = [1,0], v₂ = [0,1] → <b>독립</b></li>
+  <li><b>내적이 0(직교)인 것과 선형 독립은 다른 개념</b>이다 — 직교면 독립이지만, 독립이라고 직교인 것은 아니다</li>
+</ul></div>
+<div class="qexp"><ul class="ul">
+  <li>행렬 곱은 <b>왼쪽의 열 수 = 오른쪽의 행 수</b>일 때만 정의되고, <b>교환 법칙이 성립하지 않는다</b> (AB ≠ BA)</li>
+  <li>성분별 곱셈은 행렬 곱이 아니라 <b>아다마르 곱</b>이다</li>
+  <li>행렬–벡터 곱 Ax의 i번째 성분은 <b>A의 i번째 행과 x의 내적</b>, 행렬–행렬 곱 C의 (i, j)는 <b>A의 i행과 B의 j열의 내적</b></li>
+  <li>역행렬 성질 — (A⁻¹)⁻¹ = A · <b>(AB)⁻¹ = B⁻¹A⁻¹</b> (전치와 마찬가지로 순서가 뒤집힌다)</li>
+  <li><b>큰 행렬의 역행렬은 계산 비용이 크고 수치적으로 불안정</b>하다. 전치로 대신할 수 있는 것은 <b>직교행렬뿐</b></li>
+</ul></div>
 </section>
 
 <!-- ===================== 2.5 ===================== -->
@@ -375,6 +525,35 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li><b>기울기(Gradient)</b> — 편미분을 모아 놓은 벡터. <b>함수 값이 가장 빠르게 증가하는 방향</b>을 가리킨다</li>
   <li><b>기계학습에서의 학습</b> — 손실함수를 최소화하도록 기울기의 <b>반대 방향</b>으로 파라미터를 갱신하는 과정</li>
   <li><b>임계점 · 극소점</b> — 기울기가 0이 되는 점이 임계점이고, 그중 주변보다 값이 작은 곳이 극소점(local minimum)이다</li>
+</ul></div>
+<div class="live"><b>미분을 배우는 이유</b>
+<ul class="ul">
+  <li>미분학은 <b>역전파 학습(Backpropagation)의 핵심 기초</b>다 — 오차를 뒤로 흘려보내며 각 가중치를 얼마나 고칠지 정하는 것이 전부 미분이다</li>
+  <li>직관: 함수가 위치라면 <b>한 번 미분하면 속도, 두 번 미분하면 가속도</b></li>
+  <li><b>기울기를 구하기 위해 편미분을 사용</b>한다 — 변수가 여러 개일 때 나머지를 상수로 두고 하나씩 미분한다</li>
+  <li>기울기는 <b>거꾸로 된 삼각형 ∇(nabla / del)</b>로 표기하며 <b>딥러닝 논문에서 아주 많이 쓰인다</b>.
+      <b>∇ₓ f(x)</b> 는 "<b>벡터 x에 대한 f의 기울기</b>"라고 읽는다</li>
+</ul></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml-09-partial-derivative.png" alt="교안 32p — 다변량 함수와 편미분의 정의, 그리고 같은 뜻을 갖는 여러 표기법"><figcaption>교안 32p — 다변량 함수와 편미분의 정의, 그리고 같은 뜻을 갖는 여러 표기법</figcaption></figure><figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml-10-gradient.png" alt="교안 33p — 기울기(Gradient)는 편미분을 모아 놓은 벡터. ∇ₓf(x) = [∂f/∂x₁, …, ∂f/∂xₙ]ᵀ"><figcaption>교안 33p — 기울기(Gradient)는 편미분을 모아 놓은 벡터. ∇ₓf(x) = [∂f/∂x₁, …, ∂f/∂xₙ]ᵀ</figcaption></figure><div class="live"><b>최적화 — 무엇을 찾는 일인가</b>
+<ul class="ul">
+  <li>비유: <b>경사가 가장 급한 경로로 가장 빠르게 도달하는 길을 찾는 것</b>. 예측(예: 몸무게)이 실제와 가까워지도록 내려간다</li>
+  <li>정확히는 <b>목적함수를 달성하는 모델의 인자 값(파라미터)을 탐색</b>하는 일이다</li>
+  <li><b>비용함수 = 손실함수 = 오류함수</b> — 최소화 문제에서 목적함수를 부르는 다른 이름들이다</li>
+  <li>"<b>인자값</b>"이란 모델이 학습으로 바꿔 나가는 값, 즉 <b>가중치와 편향(w, b)</b>이다.
+      기울기를 구해 <b>w ← w − η·∇w</b> 처럼 갱신하는 것이 경사하강법이다</li>
+</ul></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml-11-stationary-points.png" alt="교안 35p — 임계점(도함수 = 0): 최소값 · 최대값 · 안장점. 2차 도함수의 부호로 구분한다"><figcaption>교안 35p — 임계점(도함수 = 0): 최소값 · 최대값 · 안장점. 2차 도함수의 부호로 구분한다</figcaption></figure><figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml-12-minima.png" alt="교안 36p — 전역 최소값(Global minimum)과 지역 최소값(Local minimum). 그래프의 골짜기가 여러 개인 이유"><figcaption>교안 36p — 전역 최소값(Global minimum)과 지역 최소값(Local minimum). 그래프의 골짜기가 여러 개인 이유</figcaption></figure><div class="note-box"><b>임계점과 극소점 — 그래프로 기억하기</b>
+<ul class="ul">
+  <li><b>임계점(stationary point)</b> — 도함수가 0인 지점. "에러가 적게 발생하는 공간"으로 향하다 <b>기울기가 평평해지는 곳</b>이다</li>
+  <li>2차 도함수가 <b>양수면 최소값</b>, <b>음수면 최대값</b>, <b>0이면 안장점일 수도 아닐 수도</b> 있어 미정</li>
+  <li><b>전역 최소값</b>은 정의역 전체에서 가장 낮은 골짜기, <b>지역 최소값</b>은 주변보다만 낮은 골짜기다</li>
+  <li>기계학습의 목적함수에는 <b>지역 최소값이 여러 개</b> 존재하고, 한 번 빠지면 다른 인자 값을 탐색하기 어렵다 — 최적화가 어려운 이유</li>
+</ul></div>
+<div class="qexp"><ul class="ul">
+  <li>도함수 규칙 — 상수는 0, ax는 a, <b>xⁿ → n·xⁿ⁻¹</b>, eˣ는 그대로 eˣ, log x는 1/x</li>
+  <li><b>곱의 규칙</b>은 (앞 × 뒤′) + (앞′ × 뒤) — 도함수끼리 곱하는 형태가 아니다</li>
+  <li><b>연쇄 법칙</b> — 바깥 함수를 안쪽 값에서 미분한 것 × 안쪽 함수의 도함수 (역전파가 바로 이것)</li>
+  <li>편미분은 <b>한 변수에만 h를 더해</b> 변화를 보는 것이지 모든 변수를 동시에 바꾸는 것이 아니다</li>
 </ul></div>
 </section>
 
@@ -388,6 +567,50 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li><b>다변량 확률 변수</b> — 결합 확률 분포 · 주변 확률 분포 · 조건부 확률 분포</li>
   <li><b>베이즈 정리</b> — 관측(증거)을 이용해 사전확률을 사후확률로 갱신하는 규칙</li>
   <li><b>가우시안(정규) 분포</b> — 평균 μ 와 분산 σ² 로 정의되며, 신경망 가중치 초기화 등에서 널리 쓰인다</li>
+</ul></div>
+<div class="live"><b>확률이 딥러닝에서 하는 일</b>
+<ul class="ul">
+  <li>딥러닝 모델의 <b>feature를 설명할 때</b> 쓰이고, 특히 <b>생성형 인공지능</b> 분야에서 많이 쓰인다</li>
+  <li><b>GAN → VAE(변분 오토인코더) → Diffusion Model</b> 로 발전해 왔고, 그 바탕에 <b>변분 추론(variational inference)</b> 같은 확률 기법이 있다
+      <span style="color:#9a6b3a">(필기의 "UAE"는 VAE, Variational Auto-Encoder를 가리킨다)</span></li>
+  <li><b>가장 중요한 표기 두 가지</b> — <b>P(X)</b>(확률 분포)와 <b>X ~ P(·)</b>("확률 변수 X가 분포 P를 따른다")</li>
+  <li><b>이산 / 연속</b>을 구분하고, 각각 <b>PMF(확률질량함수) / PDF(확률밀도함수)</b>로 확률을 표현한다</li>
+</ul></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml-13-expected-value.png" alt="교안 40p — 기대값: 이산형은 시그마(∑)로 합, 연속형은 인테그랄(∫)로 적분"><figcaption>교안 40p — 기대값: 이산형은 시그마(∑)로 합, 연속형은 인테그랄(∫)로 적분</figcaption></figure><div class="note-box"><b>기대값 → 분산 → 표준편차</b>
+<span class="fml">E[f(X)] = ∑ₓ P(X) f(X)　(이산)　　E[f(X)] = ∫ P(X) f(X) dX　(연속)</span>
+<span class="fml">Var(X) = E[ (f(X) − E[f(X)])² ] = σ²　　표준편차 σ = √Var(X)</span>
+<ul class="ul">
+  <li><b>평균(기대값)</b>을 구했으면 <b>분산</b>으로 흩어진 정도를, <b>표준편차</b>로 원래 단위의 흩어짐을 본다</li>
+  <li>분산이 작다 = 반복 측정해도 값이 <b>기대값 주변</b>에 모인다</li>
+</ul></div>
+<div class="live"><b>다변량 · 결합 · 주변 · 조건부 — 그리고 베이즈</b>
+<ul class="ul">
+  <li><b>다변량 확률 변수</b> — 여러 확률 변수를 <b>동시에 관측</b>해야 할 때의 집합 (예: 자동차를 가격·배기량·연비·생산연도로)</li>
+  <li><b>결합 확률 분포</b> — 두 확률 변수가 <b>얼마나 잘 결합되어 있는지</b>, 즉 동시에 특정 값을 가질 확률 P(X, Y)</li>
+  <li><b>주변 확률 분포</b> — 관심 없는 변수를 <b>모두 더해(연속이면 적분해) 지우는 것</b>. 이 과정을 주변화라고 한다</li>
+  <li><b>조건부 확률 분포 ★</b> — <b>이 사건이 일어났을 때 다음 사건이 일어날 확률</b> P(X | Y). 결합확률을 조건 사건의 확률로 나눈다</li>
+  <li>이것이 발전하면 <b>베이즈 정리</b>다 — 딥러닝 모델에서 많이 쓰였고 지금도 쓰인다</li>
+  <li><b>프롬프트에 글을 넣으면 다음 단어를 예측하는 것</b>도 어느 정도 베이즈 정리를 함축하고 있다
+      (앞 단어들이 주어졌을 때 다음 단어의 조건부 확률을 최대로 만드는 것)</li>
+</ul></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml-14-bayes.png" alt="교안 46p — 베이즈 정리 P(X|Y) = P(Y|X)P(X) / P(Y) 와 곱셈 규칙"><figcaption>교안 46p — 베이즈 정리 P(X|Y) = P(Y|X)P(X) / P(Y) 와 곱셈 규칙</figcaption></figure><figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml-15-distributions.png" alt="교안 47p — 베르누이 분포(이진, 양쪽 끝값)와 균등 분포(모든 값이 같은 확률)"><figcaption>교안 47p — 베르누이 분포(이진, 양쪽 끝값)와 균등 분포(모든 값이 같은 확률)</figcaption></figure><div class="note-box"><b>세 가지 분포 정리</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>분포</th><th>표기</th><th>특징</th><th>쓰임</th></tr></thead>
+  <tbody>
+    <tr><td><b>베르누이</b></td><td>X ~ Bernoulli(p)</td><td>이진 확률 변수 하나. 한 결과가 p, 다른 결과가 1−p<br>P(X = x) = pˣ(1−p)¹⁻ˣ</td><td>이진 분류, 동전 던지기 — 다음 주 계산에서 쓰인다</td></tr>
+    <tr><td><b>균등</b></td><td>X ~ U(n)</td><td>모든 값을 같은 확률로 취함. P(X = i) = 1/n</td><td>초기화, 무작위 샘플링</td></tr>
+    <tr><td><b>가우시안(정규)</b></td><td>X ~ N(μ, σ²)</td><td><b>평균 μ와 분산 σ² 두 인자</b>로 정의</td><td>통상적으로 기본 가정 — 가중치 초기화, 노이즈 모델</td></tr>
+  </tbody>
+</table>
+</div></div>
+<div class="qexp"><ul class="ul">
+  <li><b>확률 변수는 표본 공간을 정의역으로 하는 함수</b>이고, 그 값이 나올 확률을 나타내는 것이 <b>확률 분포</b>다</li>
+  <li><b>이산의 예</b> — 동전 던지기 결과, 주사위 눈, 시행 횟수 · <b>연속의 예</b> — 각도, 키, 시간
+      (교안은 <b>아날로그 시계의 시침·분침이 이루는 각도</b>를 예로 든다)</li>
+  <li>확률의 <b>덧셈 공리는 두 사건이 서로소일 때만</b> 성립한다 — 교집합이 있으면 그냥 더할 수 없다</li>
+  <li>연속 확률 변수에서 구간의 확률은 <b>P(X ∈ [a,b]) = ∫ₐᵇ P(X) dX</b> 로 적분해 구한다</li>
+  <li>가우시안의 확률밀도함수는 <b>1/√(2πσ²) · exp(−(x−μ)² / 2σ²)</b></li>
 </ul></div>
 </section>
 
