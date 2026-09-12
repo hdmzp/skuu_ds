@@ -228,6 +228,7 @@ a.ext:hover{border-bottom-color:var(--accent)}
   <a href="#semantic">2.8 의미론 · 화용론</a>
   <a href="#summary">핵심 정리</a>
   <a href="#lab">실습 · 과제</a>
+  <a href="#next">다음 주 예고</a>
   <a href="#ref">참고문헌</a>
 </nav>
 
@@ -237,6 +238,7 @@ a.ext:hover{border-bottom-color:var(--accent)}
   <a href="nlp.html" class="plan">← 강의계획서</a>
   <a href="nlp-week01.html">1주차 · 자연어처리 개요</a>
   <span class="cur">2주차 · 수학과 언어학의 기본 원리</span>
+  <a href="nlp-week03.html">3주차 · 토큰화 · 품사 태깅 · 정규화</a>
 </div>
 
 <section class="hero">
@@ -766,6 +768,20 @@ a.ext:hover{border-bottom-color:var(--accent)}
 <div class="note-box"><b>환경 설정 메모</b> — KoNLPy(Okt)는 자바 분석기의 래퍼라 <code>openjdk-17-jdk-headless</code> 를 먼저 설치해야 <code>okt.pos()</code> 가 동작합니다
 (설치하지 않으면 <code>JVMNotFoundException</code>). 그래프의 한글 폰트는 설치만으로는 반영되지 않아 <code>fontManager.addfont()</code> 로 직접 등록합니다.</div>
 <div class="warn"><b>제출</b> — <code>런타임 → 모두 실행</code> 후 <b>모든 셀의 출력이 남아 있는 상태</b>로 <code>2주차_실습_학번_이름.ipynb</code> 저장하여 제출.</div>
+</section>
+
+<!-- ===================== 다음 주 ===================== -->
+<section class="sec" id="next">
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>3주차 — 토큰화, 품사 태깅, 불용어 제거, 텍스트 정규화</small></h2></div>
+<div class="note-box"><ul class="ul">
+  <li><b>전처리 파이프라인</b> — 원시 텍스트가 수치 벡터가 되기까지의 단계</li>
+  <li><b>토큰화</b> — 단어 · 문장 · 서브워드(BPE · WordPiece · SentencePiece) · 한국어 형태소</li>
+  <li><b>품사 태깅 · 불용어 제거 · 정규화</b> — 어간 추출과 표제어 추출</li>
+  <li><b>NER · WSD · 문장 경계 인식</b>과 전처리 순서 설계</li>
+</ul></div>
+<div class="link-list">
+  <a href="nlp-week03.html">3주차 수업내용 보기 →<small>CHAPTER 3 — 토큰화, 품사 태깅, 불용어 제거, 텍스트 정규화 (교안 · 100문제 포함)</small></a>
+</div>
 </section>
 
 <section class="sec" id="ref">

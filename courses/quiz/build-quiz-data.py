@@ -47,6 +47,25 @@ TERMS = {
    '구구조','문맥자유문법','생성 문법','구조적 중의성','의존구조','지배소','의존소','그래프 기반','전이 기반',
    '의미론','의미역','WSD','분포 가설','화용론','어휘 중의성',
  ],
+ 'nlp-w03': [
+   '전처리','파이프라인','원시 텍스트','정제','수치 벡터','어휘 사전','피처 추출',
+   '토큰화','토큰','타입','유니그램','바이그램','트라이그램','n-그램','희소성','스무딩',
+   'word_tokenize','WordPunct','RegexpTokenizer','TweetTokenizer','sent_tokenize','punkt','약어',
+   'OOV','[UNK]','서브워드','BPE','WordPiece','SentencePiece','병합','어휘 크기',
+   '어절','형태소','교착어','KoNLPy','Okt','Kiwi','Mecab','Komoran','띄어쓰기','중의성',
+   '품사 태깅','POS','Penn Treebank','태그셋','NNP','VBG','pos_tag','퍼셉트론','HMM','CRF','세종','조사','어미','선어말',
+   '불용어','stopwords','감성 분석','not','도메인','기능어',
+   '정규화','대소문자','case folding','유니코드','NFC','NFD','정규표현식','re.sub','HTML 태그','URL','이모지','replace',
+   '철자 수정','autocorrect','편집거리','SymSpell','고유명사',
+   '어간 추출','stemming','Porter','Lancaster','Snowball','접미사','battl','over-stemming',
+   '표제어 추출','lemmatization','WordNet','표제어','lemmatize',
+   '개체명','NER','BIO','B-LOC','PERSON','ORG','GPE','spaCy','ne_chunk','비식별화',
+   'WSD','Lesk','gloss','문맥','중의성 해결',
+   '문장 경계','SBD','종결어미',
+   '순서','설계','통합 파이프라인','preprocess',
+   '사전학습','BERT','GPT','문맥 임베딩','TF-IDF','BoW',
+   '데이터 수집','데이터 전처리','모델 개발','모델 평가','모델 배포','Garbage In','정확도','정밀도','재현율','F1','drift','크롤링','Word2Vec','GloVe',
+ ],
 }
 
 def build(key, quiz_path, out_path, meta):
@@ -79,6 +98,8 @@ build('nlp-w01', 'materials/자연어처리/week01-quiz100.html', 'courses/quiz/
       {'title': '1주차 · 자연어처리 개요', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week01-quiz100.html'})
 build('nlp-w02', 'materials/자연어처리/week02-quiz100.html', 'courses/quiz/nlp-w02.js',
       {'title': '2주차 · 수학과 언어학의 기본 원리', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week02-quiz100.html'})
+build('nlp-w03', 'materials/자연어처리/week03-quiz100.html', 'courses/quiz/nlp-w03.js',
+      {'title': '3주차 · 토큰화, 품사 태깅, 불용어 제거, 텍스트 정규화', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week03-quiz100.html'})
 build('ml-w01', 'materials/기계학습특론/week01-quiz100.html', 'courses/quiz/ml-w01.js',
       {'title': '1주차 · 강의소개와 생성형 AI(이미지)', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week01-quiz100.html'})
 build('ml-w02', 'materials/기계학습특론/week02-quiz100.html', 'courses/quiz/ml-w02.js',
