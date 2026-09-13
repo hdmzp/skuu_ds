@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>컴퓨터비전 | 3주차 수업내용 · Linear Filters</title>
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0c1a3a">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+
+/* 주차 내비 */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* ===== 필기 표기 ===== */
+.hw{color:#b45309;font-weight:700;background:#fff7ed;border-radius:3px;padding:0 3px}
+.legend{
+  display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;
+  background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius);
+  padding:11px 14px;margin:0 0 24px;font-size:12px;color:var(--muted);line-height:1.6;
+}
+.legend i{font-style:normal;display:flex;align-items:flex-start;gap:7px}
+.legend i > span:last-child{flex:1;min-width:0}
+.legend .sw{width:14px;height:14px;border-radius:4px;display:inline-block;flex-shrink:0}
+.legend .sw-hand{background:#fff7ed;border:1px solid #b45309}
+.legend .sw-term{background:#eef6ff;border-bottom:2px dotted var(--accent)}
+
+/* ===== 주차 내비 ===== */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* ===== 자료별 구분 ===== */
+.matbar{
+  background:linear-gradient(135deg,#122250,#24407f);color:#fff;border-radius:14px;
+  padding:16px 18px;margin:34px 0 18px;box-shadow:0 6px 18px rgba(18,34,80,.15);
+}
+.matbar .tagline{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--lime)}
+.matbar h2{font-size:clamp(16px,3.6vw,20px);font-weight:700;line-height:1.3;margin:5px 0 4px}
+.matbar p{font-size:12.5px;color:#c9d3ee;line-height:1.65}
+.matbar .acts{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.matbar .acts a{
+  font-size:12px;font-weight:700;text-decoration:none;border-radius:8px;padding:6px 12px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;
+}
+.matbar .acts a.primary{background:var(--lime);border-color:var(--lime);color:#16233f}
+.partbar{
+  display:flex;align-items:center;gap:10px;margin:26px 0 14px;
+  font-size:13px;font-weight:700;color:var(--accent);
+}
+.partbar::after{content:'';flex:1;height:1px;background:var(--border)}
+.partbar b{background:var(--accent-light);border:1px solid #c4d2ee;border-radius:999px;padding:4px 11px;font-size:11.5px}
+
+/* ===== 한눈에 보기 ===== */
+.mapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px;margin-top:10px}
+.mapgrid a{
+  display:block;text-decoration:none;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:9px;padding:10px 13px;transition:.15s;
+}
+.mapgrid a:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(18,34,80,.1)}
+.mapgrid b{display:block;font-size:12.5px;color:var(--ink)}
+.mapgrid span{font-size:11.5px;color:var(--muted);line-height:1.55}
+
+/* ===== 개념 하이라이트 + 툴팁 ===== */
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);
+  border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;
+  left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+
+/* ===== 행렬 ===== */
+.mtx{display:inline-flex;align-items:center;gap:4px;vertical-align:middle;margin:0 2px}
+.mtx .br{display:inline-block;width:7px;align-self:stretch;border:2px solid var(--ink);border-right:none;border-radius:3px 0 0 3px}
+.mtx .br.r{border:2px solid var(--ink);border-left:none;border-radius:0 3px 3px 0}
+.mtx .cells{display:grid;gap:2px 12px;padding:5px 2px;font-size:12.5px;text-align:center}
+.mtx .cells span{min-width:26px;line-height:1.5}
+.eq{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;justify-content:center;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 14px;margin:10px 0;
+}
+.eq .op{font-size:14px;font-weight:700;color:var(--muted)}
+/* ===== 변환 카드 ===== */
+.xf{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px}
+.xf-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:4px}
+.xf-head h4{font-size:14.5px;font-weight:700}
+.xf-head .en{font-size:11.5px;color:var(--muted)}
+.xf-dof{margin-left:auto;background:var(--accent);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.xf p{font-size:13px;color:#4b5563;line-height:1.78}
+.xf-keep{font-size:12.5px;color:#166534;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.65}
+.xf-sol{font-size:12.5px;color:#1b3f8b;background:#eef6ff;border:1px solid #c4d2ee;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.7}
+
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .st{color:#c9f24b}
+pre.code .fn{color:#7ec8ff}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 함수 카드 */
+.fnc{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:var(--radius);padding:13px 15px;margin:11px 0}
+.fnc h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fnc .sig{
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;color:#1b3f8b;
+  background:#eef2fb;border:1px solid #dbe3f5;border-radius:6px;padding:7px 10px;margin:7px 0 9px;
+  overflow-x:auto;white-space:pre;
+}
+.fnc dl{display:grid;grid-template-columns:minmax(88px,auto) 1fr;gap:5px 12px;font-size:12.5px;line-height:1.65}
+.fnc dt{font-weight:700;color:var(--ink)}
+.fnc dd{color:#4b5563}
+@media(max-width:440px){.fnc dl{grid-template-columns:1fr;gap:2px}.fnc dd{margin-bottom:6px}}
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#map">한눈에 보기</a>
+  <a href="#image">00 이미지란</a>
+  <a href="#types">01 필터링의 종류</a>
+  <a href="#lsi">02 선형 시불변 필터</a>
+  <a href="#mean">03 평균 필터</a>
+  <a href="#size">04 출력 크기</a>
+  <a href="#props">05 선형 필터의 성질</a>
+  <a href="#mask">06 마스크 크기</a>
+  <a href="#gauss">07 가우시안 필터</a>
+  <a href="#sep">08 분리 가능성</a>
+  <a href="#nonlinear">09 비선형 필터</a>
+  <a href="#conv">10 컨볼루션</a>
+  <a href="#edge">11 에지 검출</a>
+  <a href="#codes">12 Related Codes</a>
+  <a href="#live">실시간 강의</a>
+</nav>
+
+<div class="wrap">
+
+<div class="weeknav">
+  <a href="computer-vision.html" class="plan">← 강의계획서</a>
+  <a href="computer-vision-week01.html">1주차 · 오리엔테이션</a>
+  <a href="computer-vision-week02-1.html">2주차-1 · 실시간 (Python &amp; OpenCV)</a>
+  <a href="computer-vision-week02-2.html">2주차-2 · 교안 (Camera Models)</a>
+  <span class="cur">3주차 · Linear Filters</span>
+</div>
+
+<section class="hero">
+  <p class="kicker">3주차 · 9.16 · 2026-2학기</p>
+  <h1>03. Linear Filters — Cross-correlation &amp; Convolution</h1>
+  <p>이미지는 무엇이며 왜 필터링이 필요한가. <b>주변 화소를 함께 보는 연산</b>으로 노이즈를 줄이고(평균 · 가우시안 · 미디언), 같은 도구를 미분으로 바꿔 <b>에지를 찾아내는</b> 과정까지를 교안 순서대로 정리했습니다.</p>
+  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 64p</span><span class="chip">플립러닝 필기 반영</span><span class="chip">교안 캡처 43장</span></div>
+</section>
+
+<div class="legend">
+  <i><span class="sw sw-hand"></span><span>주황색 글씨 = 플립러닝 강의 필기에서 나온 표현</span></i>
+  <i><span class="sw sw-term"></span><span>파란 점선 = 어려운 개념 — PC는 커서를 올리면, 모바일은 <b>탭</b>하면 설명이 뜹니다</span></i>
+</div>
+
+<section class="sec" id="map">
+  <div class="sec-head"><span class="sec-badge">MAP</span><h2 class="sec-title">한눈에 보기<small>3주차는 플립러닝(온라인 콘텐츠)과 실시간 강의로 나뉩니다 — 누르면 해당 절로 이동합니다</small></h2></div>
+<div class="partbar"><b>1) 플립러닝 강의</b> 03. Linear Filters</div>
+<div class="mapgrid">
+  <a href="#image"><b>00 이미지란 무엇인가</b><span>빛 → 센서 → 화소 · f(x,y) · 노이즈</span></a>
+  <a href="#types"><b>01 필터링의 종류</b><span>포인트 연산 vs 이웃 연산</span></a>
+  <a href="#lsi"><b>02 선형 시불변 필터</b><span>커널 · 가중합 · 이동평균 수식</span></a>
+  <a href="#mean"><b>03 평균 필터</b><span>local average · 블러링 · stride</span></a>
+  <a href="#size"><b>04 출력 크기</b><span>full / same / valid · 패딩</span></a>
+  <a href="#props"><b>05 선형 필터의 성질</b><span>선형성 · 시불변성 · 예시 4가지</span></a>
+  <a href="#mask"><b>06 마스크 크기</b><span>클수록 더 흐릿하고 더 비싸다</span></a>
+  <a href="#gauss"><b>07 가우시안 필터</b><span>σ로 통제하는 부드러운 가중치</span></a>
+  <a href="#sep"><b>08 분리 가능성</b><span>O(n²m²) → O(n²m)</span></a>
+  <a href="#nonlinear"><b>09 비선형 필터</b><span>소금·후추 노이즈 · 미디언</span></a>
+  <a href="#conv"><b>10 컨볼루션</b><span>필터 뒤집기 · 상관과의 차이 · 성질</span></a>
+  <a href="#edge"><b>11 에지 검출</b><span>Prewitt · Sobel · DoG · LoG</span></a>
+  <a href="#codes"><b>12 Related Codes</b><span>OpenCV 그래디언트 실습 링크</span></a>
+</div>
+<div class="partbar"><b>2) 실시간 강의</b> Python/OpenCV (2) · HW1</div>
+<div class="mapgrid">
+  <a href="#live"><b>실시간 강의 정리</b><span>필기 정리 준비 중 — 자리만 마련해 두었습니다</span></a>
+</div>
+</section>
+
+<!-- ==================================================================== -->
+<!-- 1) 플립러닝 강의                                                       -->
+<!-- ==================================================================== -->
+<div class="matbar">
+  <p class="tagline">3주차 1) 플립러닝 강의 · 온라인 사전제작 콘텐츠</p>
+  <h2>03. Linear Filters (Cross-correlation, Convolution)</h2>
+  <p>64페이지 · What is an image → Linear filter → Convolution → Related Codes 순으로 이루어져 있습니다.</p>
+  <div class="acts">
+    <a class="primary" href="pdf-viewer.html?doc=cv-w03-filters">뷰어로 보기</a>
+    <a href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week03-linear-filters.pdf" download="컴퓨터비전_3주차_Linear_Filters.pdf">⬇ 다운로드</a>
+  </div>
+</div>
+
+<div class="partbar"><b>PART 1</b> What is an image</div>
+
+<!-- ===================== 00 이미지란 ===================== -->
+<section class="sec" id="image">
+  <div class="sec-head"><span class="sec-badge">00</span><h2 class="sec-title">이미지란 무엇인가<small>What is an image · 교안 3~10p</small></h2></div>
+
+<div class="note-box"><b>통상 영상이란</b>
+<ul class="ul">
+  <li>① <span class="hw">현실 세계에 있는 것을 카메라라는 입력장치를 통해 구현한 것</span></li>
+  <li>② <span class="hw">상상으로 그래픽적 요소들을 포함해 표현한 것</span></li>
+</ul></div>
+
+<div class="tip"><b>컴퓨터 비전이 하려는 일</b> — <span class="hw">인식(recognition) → 분류(classification) → 이해(understanding)</span>.
+그러기 위해서 컴퓨터는 <span class="hw">전체를 한 번에 보기보다 각각의 특징 · 요소들을 먼저 읽고</span>,
+<span class="hw">조각조각 모아 가면서 전체를 이해</span>한다. 이번 주차의 필터링이 바로 그 &ldquo;조각을 읽는&rdquo; 단계다.</div>
+
+<h3 class="sub-title">빛에서 화소까지</h3>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-01-image-formation.jpg" alt="교안 4p — 조명(에너지) 원천, 장면 요소, 이미징 시스템, 내부 이미지 평면을 거쳐 디지털 이미지가 만들어지는 과정"><figcaption>교안 4p — <b>Illumination (energy) source</b> → <b>Scene element</b> → <b>Imaging system</b> → <b>(Internal) image plane</b> → <b>Digital image</b> · Source: A. Efros</figcaption></figure>
+<div class="note-box"><ul class="ul">
+  <li><span class="hw">빛을 통해 반사된 컬러의 값을 영상 센서가 인식해서 화소로 이어 준다</span> — 필기에서 짚은 <span class="hw">lighting &amp; shading</span>, <span class="hw">color space</span>가 모두 이 단계의 이야기다</li>
+  <li>디지털 이미지의 <span class="hw">픽셀 하나는 값을 가지게 되고</span>, 이후 모든 처리는 <span class="hw">화소의 값을 연산해서 이해를 시키는</span> 일이다</li>
+</ul></div>
+
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-02-intensity-grid.png" alt="교안 5p — 이미지를 0~255 밝기 값이 격자로 배열된 행렬로 표현한 그림"><figcaption>교안 5p — 이미지는 결국 <b>밝기 값의 격자(행렬)</b>다. 보통 한 값당 <b>1바이트</b>를 쓴다 — <b>0 = 검정, 255 = 흰색</b></figcaption></figure>
+
+<h3 class="sub-title">이미지 = 함수 f</h3>
+<div class="note-box"><ul class="ul">
+  <li>그레이스케일 이미지는 <b>ℝ² → ℝ 함수 f</b>로 볼 수 있다 — <b>f(x, y)</b>는 위치 (x, y)에서의 <b>밝기(intensity)</b></li>
+  <li>필기 그대로 : <span class="hw">f라는 함수를 가정했을 때 2차원에서 1차원으로 가는 함수</span>다.
+    <span class="hw">2차원은 x, y의 좌표값 (x, y)이고, 1차원의 값은 그 좌표에 해당하는 화면의 값 하나하나</span>가 된다</li>
+</ul></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-03-image-as-function.jpg" alt="교안 6p — 눈 이미지 패치와 그 밝기 값을 3차원 곡면으로 그린 그래프"><figcaption>교안 6p — 왼쪽은 <b>이미지 패치</b>, 오른쪽은 같은 패치의 밝기를 높이로 그린 <b>함수 f의 치역</b>. 이미지를 &ldquo;지형&rdquo;처럼 보면 에지는 <b>가파른 경사</b>가 된다</figcaption></figure>
+
+<div class="note-box"><b>디지털 이미지의 두 가지 이산화</b> — 필기에서 짚은 두 도메인
+<ul class="ul">
+  <li><b>① <span class="hw">spatial domain</span></b> — 공간적인 측면에서 이산화된다 (격자로 잘라 샘플링)</li>
+  <li><b>② <span class="hw">brightness domain</span></b> — 밝기 측면에서 이산화된다 (0~255처럼 단계로 양자화)</li>
+  <li>교안 정의 : 디지털 이미지는 <b>2차원 광 강도 함수 f(x, y)</b>이며, x와 y는 공간 좌표, f의 값은 그 점의 <b>밝기(gray level)</b>에 비례한다</li>
+</ul></div>
+
+<h3 class="sub-title">노이즈 — 필터링이 필요한 이유</h3>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-04-noise.jpg" alt="교안 8p — 노이즈가 섞인 이미지 예시"><figcaption>교안 8p — 이미지는 노이즈를 갖는다. 원인은 <b>센서 품질 · 빛의 흔들림 · 양자화 효과</b></figcaption></figure>
+<div class="note-box"><ul class="ul">
+  <li>필기 : <span class="hw">센서 퀄리티</span>, <span class="hw">빛이 불균일하게 발산될 수도</span> 있고, <span class="hw">임의로 샘플링할 때 잘못 샘플링되면 노이즈가 발생</span>한다</li>
+  <li>그래서 던지는 두 질문이 이번 주차의 전부다 — <b>어떻게 노이즈를 줄일 것인가</b>, 그리고 <b>어떻게 유용한 특징을 찾을 것인가</b></li>
+  <li><span class="hw">노이즈들을 제거해서 좀 더 정확하게 인식</span>하는 것이 목표다</li>
+</ul></div>
+
+<h3 class="sub-title">워핑 vs 필터링 — 오늘은 필터링</h3>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-05-warp-vs-filter.jpg" alt="교안 9p — 이미지 워핑과 이미지 필터링의 차이를 보여 주는 예시"><figcaption>교안 9p — <b>image warping</b>: 이미지의 <b>정의역(좌표)</b>을 바꾼다 &nbsp;g(x) = f(h(x)) &nbsp;/&nbsp; <b>image filtering</b>: 이미지의 <b>치역(값)</b>을 바꾼다 &nbsp;g(x) = h(f(x))</figcaption></figure>
+<div class="good"><span class="hw">지난 시간에 나왔던 개념들 image warping, image filtering 중 오늘은 image filtering을 다룬다</span> —
+<span class="hw">요소들은 그대로 두고 빛(값)의 변화</span>를 다루는 쪽이다.</div>
+
+<div class="note-box"><b>필터링이란</b> — <span class="hw">기존 원 이미지에서 픽셀을 조합해서 새로운 값의 픽셀을 만든다</span>
+<ul class="ul">
+  <li><b>유용한 정보 추출</b> — <b>특징(features)</b> : 에지(edges), 코너(corners), 블롭(blobs) …</li>
+  <li><b>영상의 속성을 향상 · 수정</b> — <b>de-noising</b>(노이즈 제거), <b>super-resolution</b>(<span class="hw">저해상도를 고해상도로</span>), <b>in-painting</b>(복원)</li>
+</ul></div>
+</section>
+
+<div class="partbar"><b>PART 2</b> Image Filtering (Cross-correlation)</div>
+
+<!-- ===================== 01 필터링의 종류 ===================== -->
+<section class="sec" id="types">
+  <div class="sec-head"><span class="sec-badge">01</span><h2 class="sec-title">필터링의 종류<small>포인트 연산 vs 이웃 연산 · 교안 12~14p</small></h2></div>
+
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-06-point-vs-neighborhood.png" alt="교안 12p — 포인트 연산과 이웃 연산의 차이를 보여 주는 그림"><figcaption>교안 12p — <b>Point Operation</b>(한 화소 → 한 화소) vs <b>Neighborhood Operation</b>(주변 화소들 → 한 화소)</figcaption></figure>
+
+<div class="cards">
+  <div class="card2">
+    <h4>포인트 연산<em>Point Operations</em></h4>
+    <p>이미지의 <b>크기 · 기하 · 국소 구조를 바꾸지 않고</b> 화소 값만 매핑한다.
+    새 값 I&prime;(u, v)는 <b>같은 위치</b>의 이전 값 I(u, v)와 매핑 함수 f(·)에만 의존하며,
+    f(·)는 <b>좌표와 무관</b>하다 → <b>동차 포인트 연산(homogeneous point operation)</b>.</p>
+  </div>
+  <div class="card2">
+    <h4>필터 (이웃 연산)<em>Neighborhood Operation</em></h4>
+    <p>필기 그대로 <span class="hw">바꾸고자 하는 픽셀의 주변 요소들까지 고려</span>한다.
+    <span class="hw">주변의 내용을 활용해 화소를 변화시키는</span> 연산이다.</p>
+  </div>
+</div>
+
+<div class="warn"><b>왜 포인트 연산만으로는 안 되는가</b> — 교안 14p<br>
+포인트 연산은 <b>샤프닝이나 스무딩 같은 작업을 해낼 수 없다</b>.
+필기 : <span class="hw">포인트 연산은 샤프닝 · 스무딩할 때는 잘 판단이 안 된다. 하나의 화소를 가지고 처리하는 데는 한계가 있고 주변을 봐야 한다.</span>
+→ 각 화소 <b>이웃의 밝기(컬러)를 함께 쓰는 함수</b>가 필요하다.</div>
+</section>
+
+<!-- ===================== 02 LSI ===================== -->
+<section class="sec" id="lsi">
+  <div class="sec-head"><span class="sec-badge">02</span><h2 class="sec-title">선형 시불변 필터<small>Linear Shift-Invariant Image Filtering · 교안 15~17p</small></h2></div>
+
+<div class="note-box"><ul class="ul">
+  <li>각 픽셀을 <b>이웃들의 선형 결합</b>으로 바꾼다</li>
+  <li>그 결합을 결정하는 것이 필터의 <b><span class="term" tabindex="0" data-tip="필터의 가중치 표. 마스크(mask)라고도 부른다. 3×3, 5×5처럼 홀수 크기를 쓰는 것은 중심 화소가 하나로 정해지게 하기 위해서다.">커널(kernel)</span></b>이다</li>
+  <li><b>같은 커널</b>이 모든 픽셀 위치로 <b>이동(shift)</b>하므로, 모든 픽셀이 <b>같은 가중치 조합</b>을 쓴다</li>
+  <li>필기 : <span class="hw">위치는 변동이 없기 때문에 shift invariant라고 표현하는 것</span>이다</li>
+</ul></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-07-lsi-filtering.png" alt="교안 15p — 3×3 입력 격자가 함수 f를 거쳐 중앙 값 7을 가진 출력 격자로 바뀌는 그림"><figcaption>교안 15p — 입력 3×3 이웃이 <b>함수 f</b>를 거쳐 출력 화소 하나의 값이 된다</figcaption></figure>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-08-kernel-combination.png" alt="교안 16p — 입력 격자와 커널의 가중합으로 출력이 만들어지는 그림"><figcaption>교안 16p — <b>선형인 경우가 가장 단순하고 가장 쓸모 있다</b> — 각 픽셀을 이웃들의 <b>가중합</b>으로 바꾸되, <b>모든 지점에서 같은 가중치 집합</b>을 쓴다</figcaption></figure>
+
+<h3 class="sub-title">2D 이동평균 수식</h3>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-09-moving-average.png" alt="교안 17p — 3×3 창을 쓰는 2D 이산 이동평균 수식"><figcaption>교안 17p — f는 이미지, h는 커널(크기 2k+1 × 2k+1), g는 출력 이미지 &nbsp;&nbsp;<b>g[i, j] = Σ<sub>u=−k..k</sub> Σ<sub>v=−k..k</sub> h[u, v] · f[i+u, j+v]</b></figcaption></figure>
+<div class="tip"><b>읽는 법</b> — 커널 h의 각 칸 <b>h[u, v]</b>를 그 자리에 겹쳐지는 이미지 값 <b>f[i+u, j+v]</b>와 곱해 모두 더한 값이, 출력의 <b>(i, j)</b> 한 칸이 된다.
+부호가 <b>+</b>라는 점을 기억해 두자 — 뒤에서 볼 <b>컨볼루션</b>은 이 부호가 <b>−</b>로 바뀐다.</div>
+</section>
+
+<!-- ===================== 03 평균 필터 ===================== -->
+<section class="sec" id="mean">
+  <div class="sec-head"><span class="sec-badge">03</span><h2 class="sec-title">평균 필터<small>Square Mean filter · 교안 18~20p</small></h2></div>
+
+<div class="note-box"><ul class="ul">
+  <li>각 픽셀을 <b>국소 평균(local average)</b>으로 바꾼다 — 필기 : <span class="hw">주변의 값들을 평균을 내서 적용한다</span></li>
+  <li>결과는 <b>스무딩(블러링) 효과</b> — <span class="hw">흐릿하게 변한다</span></li>
+</ul></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-10-mean-filter.png" alt="교안 18p — 입력 이미지, 커널, 출력 이미지로 이루어진 평균 필터 동작 그림"><figcaption>교안 18p — 입력 이미지 <b>f</b> 위를 커널 <b>h</b>가 지나가며 출력 이미지 <b>g</b>를 만든다</figcaption></figure>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-11-mean-filter-step.jpg" alt="교안 20p — 커널이 한 칸 이동하며 출력 화소를 채워 가는 과정"><figcaption>교안 20p — 커널이 <b>한 칸씩 이동</b>하며 출력 화소를 하나씩 채운다</figcaption></figure>
+<div class="tip"><b>필기에서 나온 용어 — <span class="hw">stride</span></b><br>
+<span class="hw">한 번에 필터가 움직이는 거리</span>를 뜻한다. 기본값은 1칸이며, stride를 키우면 출력이 그만큼 더 작아진다.
+(강의에서는 발음 때문에 &ldquo;사라이드&rdquo;처럼 들리지만 <b>stride</b>가 정확한 표기다.)</div>
+</section>
+
+<!-- ===================== 04 출력 크기 ===================== -->
+<section class="sec" id="size">
+  <div class="sec-head"><span class="sec-badge">04</span><h2 class="sec-title">출력 크기 — full / same / valid<small>What is the size of the output? · 교안 21~22p</small></h2></div>
+
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-12-full-same-valid.png" alt="교안 21p — full, same, valid 세 가지 출력 크기를 커널의 겹침 범위로 설명한 그림"><figcaption>교안 21p — 커널이 이미지와 <b>어디까지 겹치도록 허용하는가</b>가 출력 크기를 결정한다</figcaption></figure>
+
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>모드</th><th>출력 크기</th><th>설명</th></tr></thead>
+  <tbody>
+    <tr><td>Full</td><td>f와 h의 크기의 <b>합</b></td><td>커널이 <b>한 칸이라도 겹치는</b> 모든 위치를 계산한다 — 출력이 가장 크다</td></tr>
+    <tr><td>Same</td><td>f와 <b>같은</b> 크기</td><td><b><span class="term" tabindex="0" data-tip="이미지 가장자리 바깥에 값을 덧대어, 커널이 테두리 화소 위에서도 완전히 겹칠 수 있게 하는 것. 0으로 채우기·가장자리 값 복제·거울 반사 등의 방식이 있다.">패딩(pad)</span>이 필요</b>하다 &nbsp;<b>ps = (hs − 1) / 2</b></td></tr>
+    <tr><td>Valid</td><td>f와 h의 크기의 <b>차</b></td><td>커널이 <b>완전히 이미지 안에 들어오는</b> 위치만 계산 &nbsp;<b>gs = fs − hs + 1</b></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="good"><b>필기의 계산 그대로</b> — <span class="hw">10 × 10 픽셀을 8 × 8로 줄이는</span> 경우가 바로 <b>valid</b>다.
+3 × 3 커널이면 <b>gs = 10 − 3 + 1 = 8</b>. 같은 상황에서 <b>same</b>으로 두고 싶다면 <b>ps = (3 − 1) / 2 = 1</b>칸씩 패딩을 넣으면 된다.</div>
+<div class="note-box"><b>g · f · h의 약속</b> — 필기에서 헷갈렸던 기호를 정리해 두자.
+<b>f = 입력 이미지</b>, <b>h = 커널(필터)</b>, <b>g = 출력 이미지</b>. 교안 전체가 이 표기를 그대로 쓴다.</div>
+</section>
+
+<!-- ===================== 05 선형 필터의 성질 ===================== -->
+<section class="sec" id="props">
+  <div class="sec-head"><span class="sec-badge">05</span><h2 class="sec-title">선형 필터의 주요 성질<small>Linear filter&rsquo;s key properties · 교안 23~27p</small></h2></div>
+
+<div class="note-box"><ul class="ul">
+  <li><b>선형성(Linearity)</b> — filter(h<sub>1</sub> + h<sub>2</sub>) = filter(h<sub>1</sub>) + filter(h<sub>2</sub>) &nbsp;<span style="color:#6b7280">(필기 : <span class="hw">선형성이 보장된다</span>)</span></li>
+  <li><b><span class="term" tabindex="0" data-tip="필터의 동작이 화소의 위치에 따라 달라지지 않는 성질. 이미지를 먼저 옮기고 필터링하든, 필터링하고 옮기든 결과가 같다.">시불변성(Shift invariance)</span></b> — 픽셀 위치와 무관하게 <b>같은 동작</b> : filter(shift(h)) = shift(filter(h))</li>
+  <li><b>이론적 결과</b> — <b>모든 선형 시불변 연산자는 컨볼루션으로 표현할 수 있다</b></li>
+</ul></div>
+
+<h3 class="sub-title">커널을 바꾸면 무엇이 달라지는가 — 교안의 네 가지 예</h3>
+<div class="figs">
+  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-13-ex-identity.jpg" alt="교안 24p — 중앙만 1인 커널을 적용해도 원본과 같은 항등 필터"><figcaption>교안 24p — <b>항등</b> : 중앙만 1 → <b>변화 없음</b></figcaption></figure>
+  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-14-ex-shift.jpg" alt="교안 25p — 커널의 1을 왼쪽으로 옮겨 이미지가 1픽셀 왼쪽으로 이동한 결과"><figcaption>교안 25p — <b>이동</b> : 상관 연산으로 <b>왼쪽 1픽셀</b> 이동</figcaption></figure>
+  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-15-ex-blur.jpg" alt="교안 26p — 전부 1인 박스 필터로 블러 처리한 결과"><figcaption>교안 26p — <b>블러</b> : 전부 1인 <b>박스 필터</b></figcaption></figure>
+  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-16-ex-sharpen.jpg" alt="교안 27p — 중앙 2인 항등 커널에서 박스 필터를 빼 샤프닝한 결과"><figcaption>교안 27p — <b>샤프닝</b> : (중앙 2) − (박스 필터)</figcaption></figure>
+</div>
+<div class="tip"><b>샤프닝이 왜 저 식인가</b> — &ldquo;원본을 두 배로 키운 것&rdquo;에서 &ldquo;흐린 버전&rdquo;을 빼면
+<b>원본 + (원본 − 흐린 것)</b>, 즉 <b>원본에 세부(디테일)를 한 번 더 얹는</b> 셈이 된다. 이것이 언샤프 마스킹의 원리다.</div>
+</section>
+
+<!-- ===================== 06 마스크 크기 ===================== -->
+<section class="sec" id="mask">
+  <div class="sec-head"><span class="sec-badge">06</span><h2 class="sec-title">마스크는 얼마나 커야 하는가<small>How big should the mask be? · 교안 28~30p</small></h2></div>
+
+<div class="note-box"><b>마스크(mask)란</b> — 필기 : <span class="hw">보통 3×3, 5×5, 7×7을 사용</span>한다. 커널과 같은 말이다.</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>마스크가 커지면</th><th>결과</th></tr></thead>
+  <tbody>
+    <tr><td>이웃이 더 많이 기여</td><td><span class="hw">가져오는 주변 화소들이 많아진다</span></td></tr>
+    <tr><td>출력의 노이즈 분산 <b>감소</b></td><td>평균을 내는 표본이 많아지므로 결과가 안정된다</td></tr>
+    <tr><td>노이즈 확산 <b>증가</b></td><td><span class="hw">bigger noise spread</span> — 한 점의 노이즈가 더 넓게 번진다</td></tr>
+    <tr><td>더 흐릿해짐</td><td><span class="hw">more blurring</span></td></tr>
+    <tr><td>계산 비용 <b>증가</b></td><td><span class="hw">마스크가 크면 클수록 연산이 더 부담이 된다</span></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 class="sub-title">그런데 — 이 그림의 무엇이 잘못됐나</h3>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-17-box-artifact.jpg" alt="교안 29p — 평균 필터로 블러한 결과에서 격자 모양 인공물이 보이는 예시"><figcaption>교안 29p — 평균으로 스무딩한 결과. <b>What is wrong with the picture?</b></figcaption></figure>
+<div class="warn"><b>필기 그대로</b> — <span class="hw">블러링되면서 격자가 살짝 보이는 문제가 발생한다.
+네모 영역에 해당하는 값들을 가져오다 보니 네모 블러가 생긴다.</span><br>
+원인은 <b>box filter</b>의 성질이다. <span class="hw">박스의 중심으로부터 같은 거리에 있는 이웃들의 값을 (거리와 무관하게 똑같이) 취하기</span> 때문에,
+정사각형 창의 모양이 결과에 그대로 새겨진다.</div>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-18-box-revisited.png" alt="교안 30p — 박스 필터의 에지 효과를 없애기 위한 해법을 설명한 슬라이드"><figcaption>교안 30p — <b>해법</b> : 에지 효과를 없애려면 <b>중심에 가까운 정도에 따라 이웃 화소의 기여도에 가중치</b>를 주면 된다</figcaption></figure>
+</section>
+
+<!-- ===================== 07 가우시안 ===================== -->
+<section class="sec" id="gauss">
+  <div class="sec-head"><span class="sec-badge">07</span><h2 class="sec-title">가우시안 필터<small>Gaussian Filter · 교안 31~34p</small></h2></div>
+
+<div class="note-box"><ul class="ul">
+  <li>평균 필터의 <b>특수한 경우</b> — 계수가 <b>2D 가우시안의 표본</b>이다</li>
+  <li>필기 : <span class="hw">필터를 사용하되 센터로부터 원형 형태를 유지하면서 최대한 부드럽게</span> 만든다.
+    <span class="hw">센터에는 가중치를 많이 두고 멀어질수록 가중치를 적게 두며, 가장자리로 갈수록 weight가 줄어든다</span></li>
+  <li><b>표준편차 σ</b>가 스무딩의 정도를 결정한다 — 필기 : <span class="hw">표준편차를 이용해서 거리를 통제한다. 표준편차가 클수록 활용 거리가 넓어진다.</span></li>
+</ul></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-19-gaussian-kernel.jpg" alt="교안 31p — 2D 가우시안 수식과 σ=2, σ=5일 때의 커널을 3차원 곡면으로 그린 그래프"><figcaption>교안 31p — <b>f(i, j) = (1 / 2πσ²) · e<sup>−(i²+j²)/2σ²</sup></b> · σ = 2와 σ = 5인 30×30 필터의 모양 비교</figcaption></figure>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-20-gaussian-sigma.jpg" alt="교안 32p — σ가 1, 5, 10, 30 픽셀일 때 블러 정도가 달라지는 비교 이미지"><figcaption>교안 32p — 가우시안 함수는 <b>무한한 받침(infinite support)</b>을 갖지만 이산 필터는 <b>유한한 커널</b>을 쓴다. σ = 1 → 5 → 10 → 30으로 갈수록 흐려진다</figcaption></figure>
+
+<h3 class="sub-title">가우시안 필터의 장점</h3>
+<div class="cards">
+  <div class="card2"><h4>회전 대칭<em>rotationally symmetric</em></h4>
+    <p>큰 필터에서 <b>방향에 무관</b>하게 대칭이다 — 필기 : <span class="hw">어떤 방향이든 상관없이 symmetric</span>. 박스 필터의 네모 자국이 사라지는 이유다.</p></div>
+  <div class="card2"><h4>가중치가 단조 감소<em>monotonic decrease</em></h4>
+    <p>중심 봉우리에서 멀어질수록 가중치가 <b>단조롭게 줄어들어</b>, 중심 화소에 가장 큰 비중을 준다.</p></div>
+  <div class="card2"><h4>σ와 스무딩의 관계가 직관적<em>simple &amp; intuitive</em></h4>
+    <p>필기 : <span class="hw">간단하고 직관적인 표현이 가능하다 — 시그마가 얼마냐에 따라</span> 흐림 정도가 정해진다.</p></div>
+  <div class="card2"><h4>가우시안끼리 합성해도 가우시안<em>self-convolution</em></h4>
+    <p>가우시안을 자기 자신과 컨볼루션하면 <b>또 다른 가우시안</b>이 된다 — 필기 : <span class="hw">가우시안끼리의 연산을 통해 선형 연산이 가능</span>하다.
+    σ<sub>1</sub>과 σ<sub>2</sub>를 잇달아 적용하면 <b>σ = √(σ<sub>1</sub>² + σ<sub>2</sub>²)</b>인 한 번의 가우시안과 같다.</p></div>
+</div>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-21-gaussian-smoothing.jpg" alt="교안 34p — 박스 필터와 가우시안 필터의 스무딩 결과 비교"><figcaption>교안 34p — <b>가우시안으로 스무딩한 결과</b>. 박스 필터에서 보이던 <b>블록화된 에지 현상이 개선</b>된다</figcaption></figure>
+</section>
+
+<!-- ===================== 08 분리 가능성 ===================== -->
+<section class="sec" id="sep">
+  <div class="sec-head"><span class="sec-badge">08</span><h2 class="sec-title">분리 가능성<small>Separability · 교안 35~36p</small></h2></div>
+
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-22-separability.png" alt="교안 35p — 2D 가우시안을 가로 1D 필터와 세로 1D 필터로 분리해 적용하는 그림"><figcaption>교안 35p — 먼저 <b>가로 방향 1차원 필터</b>로 컨볼루션하고, 그 결과를 <b>세로 방향 1차원 필터</b>로 다시 컨볼루션한다</figcaption></figure>
+<div class="note-box"><ul class="ul">
+  <li><b>k×k 가우시안 필터</b>를 2D 컨볼루션으로 하면 픽셀당 <b>k² 번</b>의 연산이 필요하다</li>
+  <li><span class="term" tabindex="0" data-tip="2차원 커널이 1차원 커널 두 개의 곱(외적)으로 쪼개지는 필터. 가우시안·박스·Sobel이 여기에 해당한다.">분리 가능 필터</span>를 쓰면 픽셀당 <b>2k 번</b>으로 줄어든다</li>
+  <li>n×n 이미지를 m×m 커널로 필터링하는 <b>복잡도</b> : <b>O(n²m²)</b> → 분리 가능하면 <b>O(n²m)</b></li>
+</ul></div>
+<div class="tip"><b>왜 가능한가</b> — 2D 가우시안은 <b>x 방향 가우시안 × y 방향 가우시안</b>으로 정확히 쪼개진다.
+지수의 <b>e<sup>−(i²+j²)/2σ²</sup> = e<sup>−i²/2σ²</sup> · e<sup>−j²/2σ²</sup></b> 이 성립하기 때문이다.
+뒤에 나올 <b>Prewitt · Sobel</b>도 같은 이유로 &ldquo;스무딩 1D × 미분 1D&rdquo;의 곱으로 분리된다.</div>
+</section>
+
+<!-- ===================== 09 비선형 필터 ===================== -->
+<section class="sec" id="nonlinear">
+  <div class="sec-head"><span class="sec-badge">09</span><h2 class="sec-title">비선형 필터링<small>Non-linear Filtering · 미디언 필터 · 교안 37~42p</small></h2></div>
+
+<h3 class="sub-title">노이즈의 유형</h3>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-23-noise-types.jpg" alt="교안 37p — 소금과 후추 노이즈, 임펄스 노이즈, 가우시안 노이즈를 비교한 이미지"><figcaption>교안 37p — 세 가지 대표 노이즈</figcaption></figure>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>노이즈</th><th>성격</th></tr></thead>
+  <tbody>
+    <tr><td>Salt and pepper</td><td><b>검은 점과 흰 점</b>이 무작위로 나타난다</td></tr>
+    <tr><td>Impulse</td><td><b>흰 점</b>이 무작위로 나타난다 — 필기 : <span class="hw">peak noise가 발생한다</span></td></tr>
+    <tr><td>Gaussian</td><td>밝기의 변동이 <b>정규분포</b>에서 뽑힌다</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 class="sub-title">선형 필터로는 왜 안 되는가</h3>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-24-saltpepper-mean.jpg" alt="교안 38p — 소금·후추 노이즈를 평균 필터로 줄인 결과가 만족스럽지 않은 예시"><figcaption>교안 38p — 소금 · 후추 노이즈를 평균으로 줄여 본 결과. <b>What&rsquo;s wrong with the results?</b></figcaption></figure>
+<div class="warn">필기 : <span class="hw">이런 주변 노이즈가 있을 때 앞서 말한 선형 필터를 사용할 수 있을까?
+주변 노이즈를 잘못 활용하면 노이즈 영향이 퍼져 나갈 수 있다.</span><br>
+평균은 <b>튀는 값(outlier)을 그대로 반영</b>하기 때문에, 점 하나의 극단적인 값이 이웃 전체로 <b>번져 나간다</b>.
+이때 <b>비선형 필터링</b>으로 노이즈를 제거한다.</div>
+
+<h3 class="sub-title">미디언 필터</h3>
+<div class="note-box">각 픽셀을 <b>이웃 화소들의 중앙값(MEDIAN)</b>으로 바꾼다.
+<ul class="ul">
+  <li><b>비선형</b>이다 — 가중합으로 쓸 수 없다</li>
+  <li><b>노이즈를 퍼뜨리지 않는다</b>(does not spread the noise)</li>
+  <li><b>스파이크 노이즈를 제거</b>할 수 있다 — 임펄스, 소금 · 후추 노이즈에 좋다</li>
+  <li>평균 필터에 비해 <b><span class="term" tabindex="0" data-tip="주변 값들과 동떨어지게 크거나 작은 값. 평균은 이런 값 하나에 크게 끌려가지만, 중앙값은 순서만 보므로 거의 영향을 받지 않는다.">이상치(outlier)</span>에 덜 민감</b>하다 <span style="color:#6b7280">(필기 : <span class="hw">MEAN Filter에 비해 outlier에 덜 민감하다</span>)</span></li>
+  <li>단점 — <b>실행 비용이 비싸다</b>(정렬이 필요하다)</li>
+</ul></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-25-median-advantage.jpg" alt="교안 41p — 소금·후추 노이즈 이미지와 미디언 필터 결과, 한 행의 밝기 그래프 비교"><figcaption>교안 41p — 이미지의 <b>한 행</b>을 그래프로 그려 보면, 미디언 필터가 <b>스파이크만 골라 없애고</b> 에지는 남기는 것이 보인다</figcaption></figure>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-26-gaussian-vs-median.jpg" alt="교안 42p — 가우시안 필터와 미디언 필터 결과 비교"><figcaption>교안 42p — <b>가우시안 vs 미디언</b>. 가우시안은 점을 뭉개 번지게 하고, 미디언은 점을 <b>지워 버린다</b></figcaption></figure>
+</section>
+
+<div class="partbar"><b>PART 3</b> Image Filtering (Convolution)</div>
+
+<!-- ===================== 10 컨볼루션 ===================== -->
+<section class="sec" id="conv">
+  <div class="sec-head"><span class="sec-badge">10</span><h2 class="sec-title">컨볼루션<small>Convolution Filtering · 상관과의 차이 · 성질 · 교안 44~47p</small></h2></div>
+
+<div class="note-box"><b>정의</b> — f는 이미지, h는 커널(2k+1 × 2k+1), g는 출력 이미지일 때
+<ul class="ul">
+  <li><b>필터를 두 방향 모두 뒤집는다</b> (bottom to top, right to left) — 필기 : <span class="hw">위가 아래로, 좌가 우로 등 flip the filter in both dimensions</span></li>
+  <li>그 다음 <b>교차 상관(cross-correlation)을 적용</b>한다</li>
+</ul></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-27-convolution-flip.png" alt="교안 44p — 커널을 뒤집어 이미지 위에서 이동시키는 컨볼루션 수식과 그림"><figcaption>교안 44p — <b>g[i, j] = Σ Σ h[u, v] · f[i−u, j−v]</b> &nbsp;·&nbsp; <b>g = h ★ f</b></figcaption></figure>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-28-conv-vs-corr.png" alt="교안 45p — 컨볼루션과 교차 상관의 수식을 나란히 놓고 부호 차이를 표시한 슬라이드"><figcaption>교안 45p — 두 식의 차이는 단 하나, <b>f의 첨자 부호</b>다. 컨볼루션은 <b>f[i−u, j−v]</b>, 교차 상관은 <b>f[i+u, j+v]</b></figcaption></figure>
+
+<h3 class="sub-title">Convolution vs Cross-correlation</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>구분</th><th>Convolution</th><th>Cross-correlation</th></tr></thead>
+  <tbody>
+    <tr><td>개념적 정의</td><td>한 함수가 다른 함수 위를 <b>이동(shift)</b>할 때 발생하는 <b>겹침의 양(amount of overlap)</b>을 표현하는 적분</td><td>두 입력 신호가 서로 이동하면서 나타나는 <b>유사도(measure of similarity)</b>를 계산</td></tr>
+    <tr><td>연산의 본질</td><td><b>필터링 연산</b>(filtering operation)</td><td>두 신호 간의 <b>연관성 측정</b>(measure of relatedness)</td></tr>
+    <tr><td>핵심 특성</td><td>신호 처리 관점에서 <b>시스템 응답 · 필터를 거친 결과</b>를 계산한다</td><td>두 신호가 <b>가장 잘 일치(match best)하는 지점</b>에서 상관 결과값이 <b>최댓값</b>에 도달한다</td></tr>
+    <tr><td>필터 뒤집기</td><td><b>상하좌우로 뒤집은 뒤</b> 겹친다</td><td>뒤집기 <b>없이</b> 원형 그대로 겹쳐 유사도를 구한다</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="tip"><b>실무 메모</b> — 커널이 <b>대칭</b>이면(박스 필터, 가우시안 등) 뒤집어도 같은 커널이므로 <b>두 연산의 결과가 같다</b>.
+그래서 딥러닝 프레임워크의 &ldquo;convolution&rdquo; 레이어는 실제로는 <b>교차 상관</b>을 계산한다 — 가중치를 학습으로 정하므로 뒤집을 이유가 없기 때문이다.</div>
+
+<h3 class="sub-title">컨볼루션의 성질</h3>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-29-conv-properties.jpg" alt="교안 47p — 컨볼루션의 교환·결합·분배·스칼라곱 결합·미분 성질을 수식으로 나열한 슬라이드"><figcaption>교안 47p — 필기 : <span class="hw">flexible한 성질을 보여 주는 법칙들</span></figcaption></figure>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>성질</th><th>뜻</th><th>왜 중요한가</th></tr></thead>
+  <tbody>
+    <tr><td>교환법칙</td><td>f ★ h = h ★ f</td><td>이미지와 커널의 역할을 바꿔도 된다</td></tr>
+    <tr><td>결합법칙</td><td>(f ★ h<sub>1</sub>) ★ h<sub>2</sub> = f ★ (h<sub>1</sub> ★ h<sub>2</sub>)</td><td><b>두 필터를 미리 하나로 합쳐</b> 한 번만 돌릴 수 있다 → 분리 가능성과 DoG의 근거</td></tr>
+    <tr><td>분배법칙</td><td>f ★ (h<sub>1</sub> + h<sub>2</sub>) = f ★ h<sub>1</sub> + f ★ h<sub>2</sub></td><td>선형성의 다른 표현</td></tr>
+    <tr><td>스칼라곱과의 결합</td><td>λ(f ★ h) = (λf) ★ h</td><td>임의의 실수 · 복소수 λ에 대해 성립</td></tr>
+    <tr><td>미분</td><td>d/dx (f ★ h) = f ★ (dh/dx)</td><td><b>미분을 필터 쪽에 미리 적용</b>할 수 있다 → <b>DoG</b>의 핵심</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="note-box"><b>필기 보충 — Max Pooling (최대 풀링)</b>
+<ul class="ul">
+  <li>강의에서 자주 나오는 용어. 발음 때문에 &ldquo;fulling&rdquo;처럼 들리지만 <b>pooling</b>(모아 둔다는 뜻의 pool)이 정확한 표기다</li>
+  <li>컨볼루션 뒤에 얻은 <b><span class="term" tabindex="0" data-tip="컨볼루션 필터 하나를 이미지 전체에 적용해 얻은 출력. 그 필터가 반응하는 특징이 이미지의 어느 위치에 얼마나 강하게 있는지를 담은 지도다.">특징 맵(feature map)</span></b>의 특정 영역(예 : 2×2)에서 <b>가장 큰 값 하나만</b> 남기고 나머지는 버리는 <b>다운샘플링</b> 기법</li>
+  <li>주요 특징(가장 강한 신호)은 유지하면서 <b>해상도를 줄여 연산량을 감소</b>시키고, <b>미세한 위치 변화에 강인</b>해진다</li>
+  <li>이번 주차의 선형 필터와는 달리 <b>비선형</b> 연산이라는 점에서 미디언 필터와 같은 계열이다</li>
+</ul></div>
+</section>
+
+<div class="partbar"><b>PART 4</b> Edge Detecting</div>
+
+<!-- ===================== 11 에지 검출 ===================== -->
+<section class="sec" id="edge">
+  <div class="sec-head"><span class="sec-badge">11</span><h2 class="sec-title">에지 검출<small>Edge detecting · Prewitt · Sobel · DoG · LoG · 교안 48~62p</small></h2></div>
+
+<h3 class="sub-title">에지는 왜 생기는가</h3>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-30-edge-causes.png" alt="교안 48p — 표면 법선 불연속, 깊이 불연속, 표면 색 불연속, 조명 불연속이 에지를 만드는 그림"><figcaption>교안 48p — 에지는 <b>표면 법선의 불연속 · 깊이의 불연속 · 표면 색의 불연속 · 조명의 불연속</b> 등 다양한 요인에서 생긴다</figcaption></figure>
+<div class="good">필기 : <span class="hw">edge들이 물체의 형상을 설명한다</span> — surface(표면), depth(깊이), surface color(표면 색), illumination(조명)의 <span class="hw">discontinuity</span>가 모두 에지로 나타난다.</div>
+
+<h3 class="sub-title">에지의 특징</h3>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-31-edge-characterize.png" alt="교안 49p — 에지는 밝기 함수가 급격히 변하는 자리임을 보여 주는 그림"><figcaption>교안 49p — <b>에지는 이미지 밝기 함수가 급격하게 변하는 자리</b>다</figcaption></figure>
+<div class="figs">
+  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-32-edge-1d.png" alt="교안 50p — 1차원 신호에서 미분의 극값으로 에지를 찾는 그림"><figcaption>교안 50p — <b>1D 에지 검출</b> : 미분의 <b>극값</b>이 에지</figcaption></figure>
+  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-33-edge-2d.jpg" alt="교안 51p — 2차원 이미지에서 x방향과 y방향 편미분으로 그래디언트를 구하는 그림"><figcaption>교안 51p — <b>2D 에지 검출</b> : x · y 방향 <b>편미분</b>으로 <span class="term" tabindex="0" data-tip="밝기가 가장 가파르게 증가하는 방향과 그 기울기의 크기를 담은 벡터. 크기는 에지의 세기, 방향은 에지에 수직인 방향이 된다.">그래디언트</span>를 구한다</figcaption></figure>
+</div>
+
+<h3 class="sub-title">노이즈가 있으면 — 에지는 어디인가</h3>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-34-edge-noise.png" alt="교안 52p — 노이즈가 섞인 신호를 미분하면 에지를 찾을 수 없게 되는 그래프"><figcaption>교안 52p — 노이즈가 있으면 미분값이 온통 요동쳐 <b>에지를 찾을 수 없다</b></figcaption></figure>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-35-noise-clean-edge.jpg" alt="교안 53p — 스무딩 필터와 미분 필터를 결합해 노이즈를 제거하고 에지를 찾는 그림"><figcaption>교안 53p — <b>해법</b> : 노이즈도 함께 다뤄야 한다 → <b>선형 필터를 결합</b>한다</figcaption></figure>
+<div class="good"><b>필기 그대로</b> — <span class="hw">노이즈 필터를 적용하고 에지 감지를 적용한다</span>.
+스무딩과 미분이 <b>둘 다 컨볼루션</b>이고 컨볼루션은 <b>결합법칙</b>을 만족하므로, 두 마스크를 <b>미리 하나로 합쳐</b> 한 번에 돌릴 수 있다.</div>
+
+<h3 class="sub-title">Prewitt 에지 검출기</h3>
+<div class="figs">
+  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-36-prewitt-v.png" alt="교안 54p — 세로 에지를 찾는 Prewitt 마스크"><figcaption>교안 54p — <b>(vertical) Prewitt</b> : 박스 필터 [1 1 1]<sup>T</sup>와 [−1 0 1]의 <b>외적</b></figcaption></figure>
+  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-37-prewitt-h.png" alt="교안 55p — 가로 에지를 찾는 Prewitt 마스크"><figcaption>교안 55p — <b>(horizontal) Prewitt</b> : 방향을 90° 돌린 같은 구조</figcaption></figure>
+</div>
+<div class="note-box">필기에서 <span class="hw">vertical과 horizontal을 나눠서 설명</span>한 그대로다.
+한 축으로는 <b>[1 1 1] 스무딩</b>이, 다른 축으로는 <b>[−1 0 1] 미분</b>이 동시에 일어난다 — 이것이 &ldquo;노이즈 제거 + 에지 검출&rdquo;을 한 마스크에 담은 형태다.</div>
+
+<h3 class="sub-title">Sobel 에지 검출기</h3>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-38-sobel.png" alt="교안 56p — 중앙 행에 가중치 2를 준 Sobel 마스크"><figcaption>교안 56p — <b>Sobel</b> : <b>4-이웃에 더 큰 가중치</b>를 준다 (가운데 줄이 1 대신 2)</figcaption></figure>
+<div class="note-box">필기 : <span class="hw">가중치를 더 살린다 — give more weight to the 4-neighbors</span>.
+Prewitt의 [1 1 1] 스무딩이 Sobel에서는 <b>[1 2 1]</b>이 된다. 가운데를 더 믿는 셈이라 <b>가우시안에 가까운 부드러운 스무딩</b>이 되고, 결과가 노이즈에 조금 더 강하다.</div>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-39-sobel-example.png" alt="교안 57p — Sobel 에지 검출 적용 예시"><figcaption>교안 57p — Sobel 적용 예시</figcaption></figure>
+
+<h3 class="sub-title">DoG — 가우시안의 미분</h3>
+<div class="note-box"><b>DoG (Derivative of Gaussian, 가우시안의 1차 미분)</b>
+<ul class="ul">
+  <li><b>컨볼루션의 미분 정리</b> — 미분도 컨볼루션이고, 컨볼루션은 결합법칙을 만족한다</li>
+  <li>따라서 <b>이미지를 스무딩한 뒤 미분</b>하는 대신, <b>가우시안을 미리 미분해 둔 필터</b>를 이미지에 한 번만 적용하면 된다 — <b>연산 한 번을 아낀다</b></li>
+  <li>필기 : <span class="hw">가우시안 필터의 미분</span> — 미분은 <b>선형 연산</b>이므로 <b>필터 쪽의 미분을 먼저 취하면</b> 된다</li>
+</ul></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-40-dog-theorem.jpg" alt="교안 58p — 이미지를 스무딩 후 미분하는 경로와 미분된 가우시안을 한 번 적용하는 경로를 비교한 그림"><figcaption>교안 58p — <b>(f ★ g)&prime; = f ★ g&prime;</b> — 두 경로의 결과는 같지만 오른쪽이 <b>연산이 한 번 적다</b></figcaption></figure>
+<div class="figs">
+  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-41-dog-xy.jpg" alt="교안 60p — x방향과 y방향의 가우시안 미분 필터 모양"><figcaption>교안 60p — <b>x 방향</b>과 <b>y 방향</b>의 DoG 필터</figcaption></figure>
+  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-42-dog-result.jpg" alt="교안 61p — 원본 이미지와 DoG를 적용한 에지 결과"><figcaption>교안 61p — 원본과 <b>DoG</b> 적용 결과</figcaption></figure>
+</div>
+
+<h3 class="sub-title">LoG — 가우시안의 2차 미분</h3>
+<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-43-dog-vs-log.jpg" alt="교안 62p — DoG와 LoG의 결과 이미지 비교 및 LoG 커널과 컨볼루션 결과 그래프"><figcaption>교안 62p — <b>DoG vs LoG (Laplacian of Gaussian)</b>. 오른쪽 그래프는 LoG 커널이 계단 신호를 만났을 때 <b>+에서 −로 부호가 바뀌며 0을 지나는</b> 모습이다</figcaption></figure>
+<div class="note-box"><b>LoG (Laplacian of Gaussian, 가우시안의 라플라시안 = 2차 미분)</b>
+<ul class="ul">
+  <li>1차 미분의 <b>극값</b>을 찾는 대신, 2차 미분의 <b><span class="term" tabindex="0" data-tip="2차 미분의 값이 +에서 −로(또는 그 반대로) 부호를 바꾸며 0을 지나는 지점. 1차 미분이 극값을 갖는 자리와 같으며, 그곳이 에지다.">영교차(zero-crossing)</span></b>로 에지를 찾는다</li>
+  <li>필기 : <span class="hw">연산량이 많다</span> — <span class="hw">나눠서 할 수가 없다</span>. 실제로 <b>DoG는 x · y 방향으로 분리</b>할 수 있지만
+    <b><span class="term" tabindex="0" data-tip="x·y 두 방향의 2차 편미분을 더한 값. 방향을 구분하지 않고 밝기의 볼록·오목함만 재기 때문에 등방성(isotropic)이라 부른다.">라플라시안</span>은 방향이 없는(등방성) 연산</b>이라 그런 분해의 이득을 그대로 누리기 어렵다</li>
+  <li>필기 : <span class="hw">이미지를 보면 선이 이중 현상이 나타나는 특징이 있다</span> — 2차 미분은 에지의 양쪽에서 <b>부호가 반대인 봉우리</b>를 만들기 때문에,
+    하나의 에지가 <b>두 줄</b>처럼 보인다. 그 사이의 <b>0을 지나는 지점</b>이 진짜 에지 위치다</li>
+</ul></div>
+</section>
+
+<!-- ===================== 12 Related Codes ===================== -->
+<section class="sec" id="codes">
+  <div class="sec-head"><span class="sec-badge">12</span><h2 class="sec-title">Related Codes<small>교안 63p에 실린 실습 링크</small></h2></div>
+
+<div class="link-list">
+  <a href="https://docs.opencv.org/master/da/d6e/tutorial_py_geometric_transformations.html" target="_blank" rel="noopener">
+    Week 2 — Geometric Transformations of Images ↗<small>docs.opencv.org · 크기 조절 · 평행이동 · 회전 · 아핀 · 원근 변환</small></a>
+  <a href="https://docs.opencv.org/master/d5/d0f/tutorial_py_gradients.html" target="_blank" rel="noopener">
+    Week 3 — Image Gradients (Sobel, Laplacian) ↗<small>docs.opencv.org · 이번 주차 에지 검출의 OpenCV 구현</small></a>
+  <a href="https://youtu.be/b-K-vA1eiMA" target="_blank" rel="noopener">
+    Sobel, Laplacian edge detection ↗<small>YouTube · 에지 검출 설명 영상</small></a>
+  <a href="https://youtu.be/CJMCoAsK-h0" target="_blank" rel="noopener">
+    Edge detection with moving pictures ↗<small>YouTube · 동영상에 적용한 예시</small></a>
+</div>
+
+<h3 class="sub-title">링크에서 다루는 내용 — 교안 개념과의 대응</h3>
+<div class="note-box"><b>Image Gradients 튜토리얼의 세 함수</b> — 이번 주차에서 배운 필터가 그대로 API가 된다.
+<ul class="ul">
+  <li><b><code>cv2.Sobel()</code></b> — 가우시안 스무딩과 미분을 합친 마스크. <code>dx</code>, <code>dy</code>로 방향을,
+    <code>ksize</code>로 마스크 크기를 정한다. 교안의 <b>Sobel 에지 검출기</b>와 <b>DoG</b>가 여기에 해당한다</li>
+  <li><b><code>cv2.Scharr()</code></b> — <code>ksize=-1</code>인 3×3 Sobel보다 <b>미분 근사가 더 정확한</b> 변형. 가중치가 [3 10 3]이다</li>
+  <li><b><code>cv2.Laplacian()</code></b> — 2차 미분을 한 번에 구한다. 교안의 <b>LoG</b>에 해당하며,
+    노이즈에 민감하므로 <b><code>cv2.GaussianBlur()</code>로 먼저 스무딩</b>한 뒤 적용하는 것이 정석이다</li>
+</ul></div>
+<div class="warn"><b>튜토리얼이 강조하는 함정 — 출력 자료형</b><br>
+검은 배경에서 흰 물체로 넘어가는 에지는 <b>양수 기울기</b>, 반대 방향은 <b>음수 기울기</b>가 된다.
+출력 <code>ddepth</code>를 <code>cv2.CV_8U</code>로 두면 <b>음수가 전부 0으로 잘려</b> 한쪽 에지가 통째로 사라진다.
+<code>cv2.CV_64F</code>로 받은 뒤 <code>np.absolute()</code>를 취하고 <code>np.uint8</code>로 변환하는 것이 안전하다.</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>교안의 개념</th><th>OpenCV 함수</th></tr></thead>
+  <tbody>
+    <tr><td>Square mean filter (박스 블러)</td><td><code>cv2.blur()</code> · <code>cv2.boxFilter()</code></td></tr>
+    <tr><td>Gaussian filter</td><td><code>cv2.GaussianBlur(img, (k, k), sigma)</code></td></tr>
+    <tr><td>Median filter (비선형)</td><td><code>cv2.medianBlur(img, k)</code></td></tr>
+    <tr><td>임의의 커널로 상관 연산</td><td><code>cv2.filter2D(img, -1, kernel)</code></td></tr>
+    <tr><td>Sobel · DoG</td><td><code>cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize=3)</code></td></tr>
+    <tr><td>LoG</td><td><code>cv2.GaussianBlur()</code> → <code>cv2.Laplacian(img, cv2.CV_64F)</code></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="tip"><b>주의</b> — <code>cv2.filter2D()</code>는 이름과 달리 <b>컨볼루션이 아니라 교차 상관</b>을 계산한다.
+진짜 컨볼루션이 필요하면 커널을 <code>cv2.flip(kernel, -1)</code>로 <b>상하좌우 뒤집어</b> 넣어야 한다 — 교안 44p의 &ldquo;flip the filter in both dimensions&rdquo; 그대로다.
+<span style="color:#6b7280">(위 정리는 링크의 튜토리얼 내용을 교안 개념에 맞춰 요약한 것입니다. 실제 코드와 결과 이미지는 링크에서 확인하세요.)</span></div>
+</section>
+
+<!-- ==================================================================== -->
+<!-- 2) 실시간 강의                                                         -->
+<!-- ==================================================================== -->
+<div class="matbar">
+  <p class="tagline">3주차 2) 실시간 강의 · 수요일 19:00~20:30 (Zoom)</p>
+  <h2>Python / OpenCV (2) · HW1 부여 &amp; 설명 · 논문 발표 시작</h2>
+  <p>강의계획서 기준 3주차 실시간 수업에서 진행되는 내용입니다. 필기가 정리되는 대로 이 자리에 채워 넣습니다.</p>
+</div>
+
+<section class="sec" id="live">
+  <div class="sec-head"><span class="sec-badge">LIVE</span><h2 class="sec-title">실시간 강의 정리<small>필기 추가 예정</small></h2></div>
+<div class="tip"><b>아직 필기가 등록되지 않았습니다.</b> 3주차 실시간 강의 필기를 받는 대로 이 절에 정리해 올립니다.</div>
+<div class="note-box"><b>강의계획서에 예고된 3주차 실시간 수업 내용</b>
+<ul class="ul">
+  <li><b>Python / OpenCV (2)</b> — Python Review 2회차 (2~3주차, 11주차 총 3주간 운영)</li>
+  <li><b>HW1 부여 &amp; 설명</b> — <b>2~3주차 범위</b>를 다루며, 부여 시 실시간 수업에서 설명하고 마감 후 Review를 진행합니다</li>
+  <li><b>논문 스터디 발표 시작</b> — 3주차(9/16)부터 총 11주 내외 운영. 해당 주차 온라인 콘텐츠 관련 주제 또는 CV 관련 회사 업무 · 연구</li>
+</ul></div>
+<div class="link-list">
+  <a href="computer-vision-week02-1.html">2주차-1 · Python &amp; OpenCV (1) 다시 보기 →<small>이번 실시간 수업은 이 내용의 이어지는 회차입니다</small></a>
+  <a href="computer-vision.html#weeks">강의계획서 · 주차별 수업내용 →<small>운영 방식 · 과제 · 발표 일정</small></a>
+</div>
+</section>
+
+<p class="src">출처 — 컴퓨터비전 03. Linear Filters (Cross-correlation, Convolution) · 3주차 플립러닝 강의 필기 (2026-2학기)<br>
+교안 64페이지의 내용을 절 단위로 정리하고, 도식 · 예시 슬라이드 43장을 캡처해 함께 실었습니다.</p>
+
+</div>
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive() {
+    var cur = '';
+    sections.forEach(function (s) { if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function (t) { t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      setTimeout(function () {
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+
+  /* ---- 개념 설명 말풍선 ---- */
+  var terms = document.querySelectorAll('.term');
+  if (!terms.length) return;
+  var tip = document.createElement('div');
+  tip.id = 'tipbox';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  var current = null;
+
+  function hide() {
+    tip.classList.remove('on');
+    if (current) { current.classList.remove('on'); current = null; }
+  }
+  function show(el) {
+    tip.textContent = el.getAttribute('data-tip') || '';
+    tip.classList.add('on');
+    if (current && current !== el) current.classList.remove('on');
+    current = el;
+    el.classList.add('on');
+    var pad = 8;
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+    var top = r.top - t.height - 10;
+    if (top < pad) top = r.bottom + 10;
+    top = Math.min(top, window.innerHeight - t.height - pad);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+  terms.forEach(function (el) {
+    el.addEventListener('mouseenter', function () { show(el); });
+    el.addEventListener('mouseleave', function () { if (current === el) hide(); });
+    el.addEventListener('focus', function () { show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (current === el && tip.classList.contains('on')) hide(); else show(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el); }
+      if (e.key === 'Escape') hide();
+    });
+  });
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide);
+});
+</script>
+
+</body>
+</html>
