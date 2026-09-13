@@ -226,6 +226,10 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
 .figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:12px 0}
 .figs .fig{margin:0}
+/* 용어 · 약어 표 — 좁은 화면에서도 가로 스크롤 없이 읽히게 */
+#terms table{min-width:0}
+#terms td:first-child{white-space:normal;width:1%;font-size:12.5px}
+#terms td{padding:9px 11px}
 </style>
 </head>
 <body>
@@ -248,6 +252,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <a href="#pretrained">3.12 사전학습 시대</a>
   <a href="#project">3.13 프로젝트 6단계</a>
   <a href="#summary">핵심 정리</a>
+  <a href="#terms">용어 · 약어</a>
   <a href="#lab">교안 실습</a>
   <a href="#next">다음 주 예고</a>
   <a href="#ref">참고자료</a>
@@ -393,7 +398,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <table>
   <thead><tr><th>단위</th><th>장점</th><th>단점</th></tr></thead>
   <tbody>
-    <tr><td>단어 단위</td><td>직관적이다</td><td>어휘가 커지고 <b>OOV</b>(사전에 없는 단어)가 발생한다</td></tr>
+    <tr><td>단어 단위</td><td>직관적이다</td><td>어휘가 커지고 <b>OOV</b>(<b>O</b>ut-<b>O</b>f-<b>V</b>ocabulary, 어휘 사전에 없는 단어)가 발생한다</td></tr>
     <tr><td>문자 단위</td><td>OOV가 없다</td><td>시퀀스가 길어지고 <b>의미 단위가 사라진다</b></td></tr>
     <tr><td>서브워드 단위</td><td>두 방식의 <b>절충안</b> — <b>현대 모델의 표준</b></td><td>분절 결과가 사람이 보기에 낯설 수 있다</td></tr>
   </tbody>
@@ -422,6 +427,16 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <figure class="fig"><img loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-03-hard-cases.png" alt="교안 11p — 토큰화가 어려운 대표 사례: 구두점, 축약형, 복합 개체, URL·이메일, 숫자·기호, 한국어 어절"><figcaption>교안 11p — <b>구두점</b>(Mr. Smith) · <b>축약형</b>(don&rsquo;t / I&rsquo;m) · <b>복합 개체</b>(United States, New York) · <b>URL · 이메일</b> · <b>숫자 · 기호</b>(3.14, 1,000원, C++) · <b>한국어 어절</b>(학교에서를 → 학교/에서/를)</figcaption></figure>
 
 <h3 class="sub-title">NLTK 토크나이저 비교</h3>
+<div class="note-box"><b>NLTK (Natural Language Toolkit)</b> — 이번 주차 실습 전체가 이 라이브러리 위에서 돌아간다
+<ul class="ul">
+  <li>파이썬에서 자연어처리에 가장 널리 쓰이는 <b>종합 라이브러리</b>. 이 장에서 다루는 거의 모든 단계를 함수 하나로 제공한다<br>
+    · <b>토큰화</b> <code>word_tokenize</code> · <code>sent_tokenize</code> · <code>RegexpTokenizer</code>
+    &nbsp;/&nbsp; <b>품사 태깅</b> <code>pos_tag</code> (<a class="ext" href="#pos">3.2</a>, Penn Treebank 태그셋)<br>
+    · <b>불용어</b> <code>stopwords</code> (<a class="ext" href="#stop">3.3</a>)
+    &nbsp;/&nbsp; <b>어간 · 표제어</b> Porter · Lancaster · Snowball · WordNetLemmatizer (<a class="ext" href="#stem">3.6</a> · <a class="ext" href="#lemma">3.7</a>)</li>
+  <li><b>한국어 지원은 미흡</b>하다 — 한국어 불용어 목록도, 형태소 분석기도 기본 제공하지 않는다.
+    그래서 한국어에서는 <b>KoNLPy · Kiwi · MeCab</b>을 따로 쓴다 (<a class="ext" href="#token">3.1</a> · <a class="ext" href="#stop">3.3</a>)</li>
+</ul></div>
 <div class="note-box">입력 : <code>"Don't stop! It's 3.14 — visit a-b.com @user #NLP :)"</code></div>
 <div class="tbl-wrap">
 <table>
@@ -477,7 +492,12 @@ print(len(sentences))   <span class="cm"># 4 ← A.I. 뒤에서 잘림</span>
 도메인 약어는 직접 등록해야 한다 : <code>tk = PunktSentenceTokenizer(); tk._params.abbrev_types.add("a.i")</code></div>
 
 <h3 class="sub-title">서브워드 토큰화 — OOV 문제</h3>
-<div class="note-box">단어 단위 토큰화는 학습 시 보지 못한 단어를 모두 <b>[UNK]</b>로 처리해 <b>정보를 잃는다</b>.</div>
+<div class="note-box">단어 단위 토큰화는 학습 시 보지 못한 단어를 모두 <b>[UNK]</b>로 처리해 <b>정보를 잃는다</b>.
+<ul class="ul">
+  <li><b>[UNK]</b> = <b>Unknown token</b>(미등록 단어 토큰). 라이브러리에 따라 <code>[UNK]</code> · <code>&lt;unk&gt;</code> · <code>&lt;UNK&gt;</code>로 표기가 갈린다</li>
+  <li><b>언제 나오나</b> — 토크나이저가 미리 만들어 둔 <b>어휘 사전(vocabulary)</b>에 없는 단어, 즉 <b>OOV</b>를 만났을 때 그 자리를 대신한다</li>
+  <li><b>무엇이 문제인가</b> — 서로 다른 미등록 단어가 <b>전부 같은 토큰 하나로 뭉뚱그려져</b>, 원래 단어가 갖고 있던 의미와 정보가 <b>완전히 사라진다</b></li>
+</ul></div>
 <figure class="fig"><img loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-04-oov-subword.png" alt="교안 17p — OOV 문제와 서브워드 토큰화: unhappiness → [UNK] vs unhappiness → un + happi + ness"><figcaption>교안 17p — 단어 단위는 &ldquo;unhappiness&rdquo; → <b>[UNK]</b>(정보 완전 손실), 서브워드는 &ldquo;unhappiness&rdquo; → <b>un + happi + ness</b>(의미 일부라도 보존). 핵심 아이디어는 <b>자주 등장하는 문자열은 통째로, 드문 문자열은 더 작은 조각으로 분해</b>하는 것</figcaption></figure>
 
 <h3 class="sub-title">BPE (Byte Pair Encoding)</h3>
@@ -492,8 +512,8 @@ print(len(sentences))   <span class="cm"># 4 ← A.I. 뒤에서 잘림</span>
 <table>
   <thead><tr><th>알고리즘</th><th>병합 기준</th><th>특징 · 대표 모델</th></tr></thead>
   <tbody>
-    <tr><td>BPE</td><td><b>빈도가 가장 높은</b> 인접 쌍을 병합</td><td><b>GPT 계열</b>에서 사용</td></tr>
-    <tr><td>WordPiece</td><td>병합 후 <b>언어모델 확률(우도)이 가장 크게 증가</b>하는 쌍을 선택</td><td>단어 중간 조각에 <b>&ldquo;##&rdquo; 접두어</b>를 붙임 → <b>BERT 계열</b></td></tr>
+    <tr><td>BPE</td><td><b>빈도가 가장 높은</b> 인접 쌍을 병합</td><td><b>GPT</b>(Generative Pre-trained Transformer) <b>계열</b>에서 사용</td></tr>
+    <tr><td>WordPiece</td><td>병합 후 <b>언어모델 확률(우도)이 가장 크게 증가</b>하는 쌍을 선택</td><td>단어 중간 조각에 <b>&ldquo;##&rdquo; 접두어</b>를 붙임 → <b>BERT</b>(Bidirectional Encoder Representations from Transformers) <b>계열</b></td></tr>
     <tr><td>SentencePiece</td><td><b>공백까지 하나의 기호(▁)</b>로 취급</td><td><b>언어에 독립적</b>이며 <b>사전 토큰화가 필요 없어</b> 한국어 · 일본어 · 중국어에 특히 유리</td></tr>
   </tbody>
 </table>
@@ -507,7 +527,10 @@ print(len(sentences))   <span class="cm"># 4 ← A.I. 뒤에서 잘림</span>
   <li>하나의 어간에 <b>조사 · 어미가 계속 결합</b>한다 (학교 / 학교가 / 학교를 / 학교에서 / 학교에서만 …)</li>
   <li><b>띄어쓰기 규칙이 느슨</b>하고 실제 문서에서 자주 어긋난다 (&ldquo;할수있다&rdquo; / &ldquo;할 수 있다&rdquo;)</li>
   <li>같은 형태가 <b>품사에 따라 다른 의미</b>를 가진다 (&ldquo;배&rdquo; : 과일 / 신체 / 선박 / 배수)</li>
-  <li>→ 따라서 <b>형태소 분석기(KoNLPy, Kiwi, MeCab)</b>를 이용한 토큰화가 필요하다</li>
+  <li>→ 따라서 <b>형태소 분석기</b>를 이용한 토큰화가 필요하다<br>
+    · <b>KoNLPy</b>(Korean NLP in Python) — 여러 분석기를 <b>하나의 인터페이스</b>로 묶은 패키지 (Okt · Komoran · Hannanum · Kkma)<br>
+    · <b>Kiwi</b>(Korean Intelligent Word Identifier) — <b>자바 없이</b> pip만으로 설치되는 빠른 최신 분석기<br>
+    · <b>MeCab</b> — 일본어용으로 개발된 분석기를 한국어에 맞게 이식한 <b>MeCab-ko</b>. 속도가 가장 빠르지만 별도 바이너리 설치가 필요하다</li>
 </ul></div>
 
 <h3 class="sub-title">한국어 토큰화의 중의성</h3>
@@ -603,6 +626,12 @@ print(nltk.pos_tag(words))
 <div class="warn">정확도가 높아도 <b>100%는 아니므로</b>, 태깅 오류가 <b>후속 단계에 전파</b>될 수 있다.</div>
 
 <h3 class="sub-title">한국어 품사 태깅 — 세종 말뭉치 태그셋</h3>
+<div class="note-box"><b>세종 말뭉치 태그셋이란</b>
+<ul class="ul">
+  <li>국립국어원의 <b>&lsquo;21세기 세종계획&rsquo;</b>에서 한국어 텍스트 분석과 말뭉치 구축을 위해 정립한 <b>한국어 품사 표준 태그 체계</b></li>
+  <li><b>MeCab-ko · Komoran · Kiwi</b> 등 대부분의 한국어 형태소 분석기가 이 규격을 따른다 — 영어의 <b>Penn Treebank</b>에 대응하는 위치다</li>
+  <li>영어 태그셋과의 결정적 차이는 <b>어절을 형태소로 쪼갠 뒤 각각에 태그를 붙인다</b>는 점이다 (아래 표 다음 항목 참고)</li>
+</ul></div>
 <div class="tbl-wrap">
 <table>
   <thead><tr><th>계열</th><th>태그</th></tr></thead>
@@ -707,12 +736,26 @@ nouns_verbs = [w <span class="cm">for</span> w, p <span class="cm">in</span> okt
 <div class="note-box"><b>유니코드 정규화 (NFC / NFD)</b>
 <ul class="ul">
   <li>한글은 <b>완성형(NFC)</b>과 <b>조합형(NFD)</b> 두 가지로 저장될 수 있어 <b>겉보기에 같아도 다르다</b></li>
+  <li><b>NFC</b> = <b>N</b>ormalization <b>F</b>orm Canonical <b>C</b>omposition — 자음 · 모음을 <b>하나의 완성된 글자로 합쳐서</b> 저장한다<br>
+    · <code>'ㅎ' + 'ㅏ' + 'ㄴ'</code> → <code>'한'</code> (<b>1글자</b>) &nbsp;·&nbsp; <b>Windows · Linux · 웹</b>의 기본 표준</li>
+  <li><b>NFD</b> = <b>N</b>ormalization <b>F</b>orm Canonical <b>D</b>ecomposition — 완성된 글자를 <b>낱자로 완전히 분해해서</b> 저장한다<br>
+    · <code>'한'</code> → <code>'ㅎ' + 'ㅏ' + 'ㄴ'</code> (<b>3글자</b>) &nbsp;·&nbsp; <b>macOS 파일 시스템</b>(HFS+)에서 주로 사용</li>
 </ul>
 <pre class="code"><span class="cm">import</span> unicodedata
 a = "한글"                            <span class="cm"># NFC (완성형)</span>
 b = unicodedata.normalize("NFD", a)  <span class="cm"># NFD (조합형)</span>
 print(a == b, len(a), len(b))
 <span class="out">False 2 6      ← 눈에는 같아 보이지만 다른 문자열</span></pre></div>
+<div class="warn"><b>실무에서 이렇게 터진다</b>
+<ul class="ul">
+  <li><b>한글 깨짐</b> — macOS에서 만든 파일명 · 텍스트를 Windows에서 열면 <code>ㅎㅏㄴㄱㅡㄹ</code>처럼 자모가 낱글자로 흩어져 보인다. NFD로 저장돼 있기 때문이다</li>
+  <li><b>문자열 비교 실패</b> — 화면에는 똑같이 &ldquo;한글&rdquo;로 보여도 코드값과 <code>len()</code>이 달라 <code>==</code> 비교가 <b>False</b>가 된다.
+    어휘 사전 조회 · 중복 제거 · 불용어 매칭이 <b>조용히 어긋나는</b> 원인이 된다</li>
+  <li><b>정제 규칙과의 충돌</b> — 아래 <b>기법 ②</b>의 특수문자 제거 정규식은 <b>호환 자모만</b> 남기므로,
+    NFD 조합형 자모는 <b>삭제되어 글자가 사라진다</b> → <b>NFC 정규화를 가장 먼저</b> 수행해야 하는 이유다</li>
+</ul></div>
+<div class="good"><b>표준 처리</b> — 파이프라인 맨 앞에서 <code>unicodedata.normalize("NFC", text)</code>로 <b>표기를 하나로 통일</b>한 뒤 나머지 전처리를 진행한다.
+<a class="ext" href="#order">3.11 통합 파이프라인</a>의 ⓪단계가 바로 이것이다.</div>
 
 <h3 class="sub-title">기법 ② 정규표현식 정제</h3>
 <div class="note-box">실제 웹 텍스트에는 분석에 <b>불필요한 요소가 다수</b> 섞여 있다.</div>
@@ -903,7 +946,7 @@ print(lemmatizer.lemmatize("was", pos="v"))
 
 <!-- ===================== 3.8 개체명 인식 ===================== -->
 <section class="sec" id="ner">
-  <div class="sec-head"><span class="sec-badge">3.8</span><h2 class="sec-title">개체명 인식 (NER)<small>개체명 · BIO 태깅 · 개체 범주 · NLTK와 spaCy</small></h2></div>
+  <div class="sec-head"><span class="sec-badge">3.8</span><h2 class="sec-title">개체명 인식 (NER)<small>Named Entity Recognition · 개체명 · BIO 태깅 · 개체 범주 · NLTK와 spaCy</small></h2></div>
 
 <div class="note-box"><b>개체명(named entity)</b>
 <ul class="ul">
@@ -951,7 +994,7 @@ print([(e.text, e.label_) <span class="cm">for</span> e <span class="cm">in</spa
 
 <!-- ===================== 3.9 WSD ===================== -->
 <section class="sec" id="wsd">
-  <div class="sec-head"><span class="sec-badge">3.9</span><h2 class="sec-title">단어 중의성 해결 (WSD)<small>문맥에 따른 의미 변화 · Lesk 알고리즘</small></h2></div>
+  <div class="sec-head"><span class="sec-badge">3.9</span><h2 class="sec-title">단어 중의성 해결 (WSD)<small>Word Sense Disambiguation · 문맥에 따른 의미 변화 · Lesk 알고리즘</small></h2></div>
 
 <div class="note-box"><ul class="ul">
   <li>&ldquo;<b>사귀는 친구를 보면 그 사람을 알 수 있다</b>&rdquo; — 이와 마찬가지로 단어의 의미도 <b>함께 쓰인 다른 단어</b>에 따라 달라진다</li>
@@ -980,7 +1023,7 @@ print(lesk(s2, "bank", "n").definition())
 
 <!-- ===================== 3.10 문장 경계 인식 ===================== -->
 <section class="sec" id="sbd">
-  <div class="sec-head"><span class="sec-badge">3.10</span><h2 class="sec-title">문장 경계 인식 (SBD)<small>Punkt의 약어 사전 · 미등록 약어 문제 · 한국어</small></h2></div>
+  <div class="sec-head"><span class="sec-badge">3.10</span><h2 class="sec-title">문장 경계 인식 (SBD)<small>Sentence Boundary Detection · Punkt의 약어 사전 · 미등록 약어 문제 · 한국어</small></h2></div>
 
 <div class="note-box"><b>문장 경계 인식(Sentence Boundary Detection)</b>
 <ul class="ul">
@@ -1048,6 +1091,29 @@ print(preprocess("The children were studying NLP books!"))
   <div class="sec-head"><span class="sec-badge">3.12</span><h2 class="sec-title">사전학습 모델 시대의 전처리<small>전통적 파이프라인 vs BERT · GPT 시대</small></h2></div>
 
 <div class="note-box"><b>BERT · GPT 이후</b> 전처리의 <b>역할과 관행이 크게 달라졌다</b>.</div>
+<div class="cards">
+  <div class="card2">
+    <h4>BERT<em>Bidirectional Encoder Representations from Transformers</em></h4>
+    <p>Google이 발표한, 트랜스포머의 <b>인코더 구조</b> 기반 사전학습 언어모델.
+    문장을 좌→우 한 방향으로만 읽지 않고 <b>양방향 문맥을 동시에</b> 보고 단어의 의미를 잡는다.</p>
+  </div>
+  <div class="card2">
+    <h4>GPT<em>Generative Pre-trained Transformer</em></h4>
+    <p>트랜스포머의 <b>디코더 구조</b> 기반. <b>앞의 단어들로 다음 단어를 예측</b>하며 학습하므로 생성에 강하다.
+    서브워드 토큰화로 <b>BPE</b>를 쓴다.</p>
+  </div>
+</div>
+<div class="note-box"><b>BERT는 어떻게 학습하는가 — 사전학습 두 과제</b>
+<ul class="ul">
+  <li><b>MLM (Masked Language Model)</b> — 문장 속 일부 단어를 <code>[MASK]</code> 토큰으로 가리고,
+    <b>앞뒤 문맥을 모두 이용해</b> 그 단어를 맞힌다. 양방향 문맥 학습이 가능한 이유다</li>
+  <li><b>NSP (Next Sentence Prediction)</b> — 두 문장이 <b>실제로 이어지는 문장인지</b> 맞히며 문장 사이의 관계를 학습한다</li>
+  <li>토큰화는 <b>WordPiece</b>를 쓴다 — 단어를 조각으로 쪼개므로 <a class="ext" href="#token">3.1</a>에서 본
+    <b>[UNK](OOV) 문제를 구조적으로 피한다</b></li>
+</ul></div>
+<div class="tip"><b>전처리 관점에서 기억할 것</b> — BERT는 문맥을 스스로 학습하므로
+<b>불용어를 제거하지 않는 것이 일반적</b>이고(<a class="ext" href="#stop">3.3</a>),
+<b>어간 · 표제어 추출로 원형을 복원할 필요도 없다</b>. 아래 비교표가 그 차이를 정리한 것이다.</div>
 <figure class="fig"><img loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-10-pretrained-era.png" alt="교안 59p — 전통적 NLP 전처리와 사전학습 모델 시대의 전처리 비교"><figcaption>교안 59p — 전통적 파이프라인과 BERT · GPT 시대의 전처리 관행 비교</figcaption></figure>
 <div class="tbl-wrap">
 <table>
@@ -1058,7 +1124,7 @@ print(preprocess("The children were studying NLP books!"))
     <tr><td>어간 · 표제어</td><td><b>추출 (필수)</b></td><td><b>원형 복원 불필요</b></td></tr>
     <tr><td>대소문자</td><td><b>소문자 변환</b> (관행)</td><td><b>대소문자 보존</b> (cased 모델)</td></tr>
     <tr><td>피처</td><td><b>수작업 피처 설계</b></td><td><b>모델이 표현을 학습</b></td></tr>
-    <tr><td>표현</td><td><b>BoW · TF-IDF</b></td><td><b>문맥 임베딩</b></td></tr>
+    <tr><td>표현</td><td><b>BoW</b>(Bag of Words) · <b>TF-IDF</b>(Term Frequency&ndash;Inverse Document Frequency)</td><td><b>문맥 임베딩</b>(contextual embedding)</td></tr>
   </tbody>
 </table>
 </div>
@@ -1126,6 +1192,86 @@ print(preprocess("The children were studying NLP books!"))
 남는 문제는 &ldquo;<b>어떤 순서로 조합할 것인가</b>&rdquo;(3.11)이고,
 그 답은 <b>후속 모델</b>(3.12)과 <b>프로젝트 단계</b>(3.13)가 결정한다.</div>
 </section>
+
+<!-- ===================== 용어 · 약어 풀이 ===================== -->
+<!-- ===================== 용어 · 약어 풀이 ===================== -->
+<section class="sec" id="terms">
+  <div class="sec-head"><span class="sec-badge">용어</span><h2 class="sec-title">용어 · 약어 풀이<small>이 장에 나온 약어의 정식 명칭과 뜻 — 괄호 안 절 번호를 누르면 해당 설명으로 이동합니다</small></h2></div>
+
+<h3 class="sub-title">과제 · 단계 약어</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>약어 · 이름</th><th>풀이</th></tr></thead>
+  <tbody>
+    <tr><td>NLP</td><td><b>Natural Language Processing</b><br>자연어처리</td></tr>
+    <tr><td>POS</td><td><b>Part-of-Speech</b><br>품사. <b>POS Tagging</b>은 각 토큰에 품사를 부여하는 작업 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#pos">3.2</a>)</span></td></tr>
+    <tr><td>NER</td><td><b>Named Entity Recognition</b><br>개체명 인식 — 사람 · 기관 · 장소 · 날짜처럼 <b>고유한 대상</b>을 찾아 미리 정한 범주에 매핑 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#ner">3.8</a>)</span></td></tr>
+    <tr><td>WSD</td><td><b>Word Sense Disambiguation</b><br>단어 중의성 해결 — 문맥을 보고 <b>여러 의미 중 하나</b>를 고르는 작업 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#wsd">3.9</a>)</span></td></tr>
+    <tr><td>SBD</td><td><b>Sentence Boundary Detection</b><br>문장 경계 인식 — 문서를 <b>문장 단위로 정확히</b> 나누는 작업 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#sbd">3.10</a>)</span></td></tr>
+    <tr><td>SRL</td><td><b>Semantic Role Labeling</b><br>의미역 결정 — &ldquo;누가 누구에게 무엇을 하였는가&rdquo;를 밝히는 과제 <span style="color:#6b7280">(2주차 2.8절)</span></td></tr>
+  </tbody>
+</table>
+</div>
+<h3 class="sub-title">토큰화 · 어휘 약어</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>약어 · 이름</th><th>풀이</th></tr></thead>
+  <tbody>
+    <tr><td>OOV</td><td><b>Out-Of-Vocabulary</b><br>어휘 사전에 <b>없는 단어</b>. 단어 단위 토큰화의 고질적 문제 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#token">3.1</a>)</span></td></tr>
+    <tr><td>[UNK]</td><td><b>Unknown token</b><br>OOV를 만났을 때 그 자리를 대신하는 <b>미등록 단어 토큰</b>. <code>&lt;unk&gt;</code>로도 표기하며, 서로 다른 미등록 단어가 <b>모두 같은 토큰으로 뭉개져 의미가 소실</b>된다 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#token">3.1</a>)</span></td></tr>
+    <tr><td>BPE</td><td><b>Byte Pair Encoding</b><br>가장 자주 함께 나오는 <b>문자 쌍을 반복 병합</b>해 서브워드 어휘를 만드는 알고리즘 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#token">3.1</a>)</span></td></tr>
+    <tr><td>n-gram</td><td>연속한 n개의 토큰 묶음. n=2는 <b>bigram</b>, n=3은 <b>trigram</b> &nbsp;<span style="color:#6b7280">(<a class="ext" href="#token">3.1</a>)</span></td></tr>
+  </tbody>
+</table>
+</div>
+<h3 class="sub-title">정규화 · 표현 약어</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>약어 · 이름</th><th>풀이</th></tr></thead>
+  <tbody>
+    <tr><td>NFC</td><td><b>Normalization Form Canonical <b>Composition</b></b><br>유니코드 <b>완성형</b> — 자모를 한 글자로 합쳐 저장. <b>Windows · Linux · 웹</b>의 기본 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#norm">3.4</a>)</span></td></tr>
+    <tr><td>NFD</td><td><b>Normalization Form Canonical <b>Decomposition</b></b><br>유니코드 <b>조합형</b> — 글자를 자모로 분해해 저장. <b>macOS 파일 시스템</b>의 기본 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#norm">3.4</a>)</span></td></tr>
+    <tr><td>BoW</td><td><b>Bag of Words</b><br>단어 모음 — 순서를 버리고 <b>단어 출현 빈도</b>만으로 문서를 벡터로 표현 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#project">3.13</a>)</span></td></tr>
+    <tr><td>TF-IDF</td><td><b>Term Frequency &ndash; Inverse Document Frequency</b><br>문서에 자주 나오되 <b>다른 문서에는 드문</b> 단어에 큰 가중치를 주는 표현 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#project">3.13</a>)</span></td></tr>
+  </tbody>
+</table>
+</div>
+<h3 class="sub-title">모델 · 라이브러리</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>약어 · 이름</th><th>풀이</th></tr></thead>
+  <tbody>
+    <tr><td>BERT</td><td><b>Bidirectional Encoder Representations from Transformers</b><br>트랜스포머 <b>인코더</b> 기반 사전학습 모델. <b>양방향 문맥</b>을 함께 보며 <b>MLM</b> · <b>NSP</b>로 학습하고 <b>WordPiece</b>를 쓴다 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#pretrained">3.12</a>)</span></td></tr>
+    <tr><td>GPT</td><td><b>Generative Pre-trained Transformer</b><br>트랜스포머 <b>디코더</b> 기반. <b>다음 단어 예측</b>으로 학습하며 <b>BPE</b>를 쓴다 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#pretrained">3.12</a>)</span></td></tr>
+    <tr><td>MLM</td><td><b>Masked Language Model</b><br>일부 단어를 <code>[MASK]</code>로 가리고 <b>앞뒤 문맥으로 맞히는</b> BERT의 사전학습 과제 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#pretrained">3.12</a>)</span></td></tr>
+    <tr><td>NSP</td><td><b>Next Sentence Prediction</b><br>두 문장이 <b>이어지는 문장인지</b> 맞히는 BERT의 사전학습 과제 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#pretrained">3.12</a>)</span></td></tr>
+    <tr><td>NLTK</td><td><b>Natural Language Toolkit</b><br>파이썬 자연어처리 <b>종합 라이브러리</b>. 이 장 실습 대부분의 기반이며 <b>한국어 지원은 미흡</b>하다 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#token">3.1</a>)</span></td></tr>
+    <tr><td>KoNLPy</td><td><b>Korean NLP in Python</b><br>여러 한국어 형태소 분석기(Okt · Komoran · Hannanum · Kkma)를 <b>하나의 인터페이스</b>로 묶은 패키지. <b>자바(JVM) 필요</b> &nbsp;<span style="color:#6b7280">(<a class="ext" href="#token">3.1</a>)</span></td></tr>
+    <tr><td>Kiwi</td><td><b>Korean Intelligent Word Identifier</b><br>자바 없이 <code>pip</code>만으로 설치되는 빠른 최신 형태소 분석기. 문장 분리 <code>split_into_sents()</code>도 제공 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#token">3.1</a>)</span></td></tr>
+    <tr><td>MeCab-ko</td><td>일본어용 MeCab을 한국어에 이식한 분석기. <b>가장 빠르지만</b> 별도 바이너리 설치가 필요 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#token">3.1</a>)</span></td></tr>
+    <tr><td>spaCy</td><td>산업용 NLP 라이브러리. NLTK보다 <b>NER 정확도가 높고 간결</b>하다 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#ner">3.8</a>)</span></td></tr>
+    <tr><td>WordNet</td><td>영어 <b>어휘 의미망 사전</b>. 표제어 추출과 Lesk 알고리즘이 이 사전을 참조한다 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#lemma">3.7</a>)</span></td></tr>
+    <tr><td>Punkt</td><td>NLTK의 문장 분리기. <b>학습된 약어 사전</b>으로 마침표가 문장 끝인지 판단한다 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#sbd">3.10</a>)</span></td></tr>
+    <tr><td>SymSpell</td><td><b>Symmetric Delete spelling correction</b><br><b>삭제 기반 인덱싱</b>으로 철자 교정을 수천 배 빠르게 하는 알고리즘 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#spell">3.5</a>)</span></td></tr>
+  </tbody>
+</table>
+</div>
+<h3 class="sub-title">태그셋 · 기타</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>약어 · 이름</th><th>풀이</th></tr></thead>
+  <tbody>
+    <tr><td>Penn Treebank</td><td>영어 품사 태깅의 <b>표준 태그 체계</b>(36개). 앞 두 글자 <b>NN · VB · JJ · RB</b>만 알아도 대부분 처리된다 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#pos">3.2</a>)</span></td></tr>
+    <tr><td>세종 태그셋</td><td>국립국어원 <b>&lsquo;21세기 세종계획&rsquo;</b>에서 정립한 한국어 품사 표준 태그 체계. 대부분의 한국어 형태소 분석기가 따른다 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#pos">3.2</a>)</span></td></tr>
+    <tr><td>BIO 태깅</td><td><b><b>B</b>egin · <b>I</b>nside · <b>O</b>utside</b><br>여러 토큰에 걸친 개체를 표현하는 표준 방식 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#ner">3.8</a>)</span></td></tr>
+    <tr><td>gloss</td><td>사전에 실린 각 의미의 <b>정의문</b>. Lesk 알고리즘은 이 정의문과 문맥 단어의 겹침을 센다 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#wsd">3.9</a>)</span></td></tr>
+    <tr><td>F1-점수</td><td><b>정밀도와 재현율의 조화평균</b>. 클래스 불균형이 있어 정확도만으로 부족할 때 쓴다 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#project">3.13</a>)</span></td></tr>
+    <tr><td>drift</td><td>배포 후 실제 <b>데이터 분포가 학습 때와 달라지는</b> 현상. 모니터링하며 재학습해야 한다 &nbsp;<span style="color:#6b7280">(<a class="ext" href="#project">3.13</a>)</span></td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
 
 <!-- ===================== 교안 실습 ===================== -->
 <section class="sec" id="lab">
