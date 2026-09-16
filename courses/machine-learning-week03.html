@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기계학습특론 | 3주차 수업내용</title>
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0c1a3a">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+/* 수식 카드 */
+.fx{background:#f8faff;border:1px solid #cfdcf5;border-left:3px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:10px 0}
+.fx + .fx{margin-top:8px}
+.fx-lab{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.fx-note{font-size:12px;color:#4b5563;line-height:1.7;margin-top:7px}
+.fx-note b{color:var(--ink)}
+.tex-d{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:9px 2px 5px;text-align:center}
+.tex-d .katex{font-size:1.12em}
+.tex{white-space:nowrap}
+/* 풀이 예제 */
+.ex{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin:10px 0}
+.ex-q{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.65;
+  background:#f1f0ec;border-radius:7px;padding:9px 12px;margin-bottom:4px}
+.ex-q em{font-style:normal;color:var(--red);font-size:11px;font-weight:700;display:block;margin-bottom:3px}
+.step{display:grid;grid-template-columns:20px 1fr;gap:9px;align-items:baseline;
+  font-size:12.5px;color:#4b5563;line-height:1.75;padding:5px 0}
+.step i{font-style:normal;font-weight:700;color:var(--accent);font-size:11.5px}
+.step .katex{font-size:1em}
+.ex-ans{margin-top:8px;background:#f0fdf4;border:1px solid #22c55e;border-radius:8px;
+  padding:9px 12px;font-size:12.5px;color:#14532d;line-height:1.7}
+.ex-ans b{color:var(--green)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+
+/* 주차 내비 */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* 노트북 주석 */
+.nbc{color:#b45309;font-weight:700;background:#fff7ed;border-radius:3px;padding:0 3px}
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .out{color:#c9f24b}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 함수 카드 */
+.fnc{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:var(--radius);padding:13px 15px;margin:11px 0}
+.fnc h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fnc .sig{
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;color:#1b3f8b;
+  background:#eef2fb;border:1px solid #dbe3f5;border-radius:6px;padding:7px 10px;margin:7px 0 9px;
+  overflow-x:auto;white-space:pre;
+}
+.fnc dl{display:grid;grid-template-columns:minmax(84px,auto) 1fr;gap:5px 12px;font-size:12.5px;line-height:1.65}
+.fnc dt{font-weight:700;color:var(--ink)}
+.fnc dd{color:#4b5563}
+@media(max-width:440px){.fnc dl{grid-template-columns:1fr;gap:2px}.fnc dd{margin-bottom:6px}}
+/* 개념 하이라이트 + 툴팁 */
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+/* 퀴즈 목록 */
+.qz{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 15px;margin-bottom:9px}
+.qz h4{font-size:13px;font-weight:700;margin-bottom:5px}
+.qz .ans{
+  display:block;margin-top:7px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;
+  padding:8px 11px;font-size:12.5px;color:#14532d;line-height:1.7;
+}
+.qz .ans summary{cursor:pointer;font-weight:700;color:#166534;list-style:none}
+.qz .ans summary::-webkit-details-marker{display:none}
+.qz .ans summary::before{content:'▸ ';font-weight:700}
+.qz .ans[open] summary::before{content:'▾ '}
+.qz .ans pre.code{margin:8px 0 0}
+
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 실시간 강의 강조 */
+.live{
+  background:#fffaf3;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#7c2d12;
+}
+.live::before{
+  content:'🎙 실시간 강의 강조';display:inline-block;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.live b{color:#7c2d12}
+.live .ul li{color:#7c2d12}
+.live .ul li::before{background:#b45309;opacity:.75}
+/* 100문제 해설 포인트 */
+.qexp{
+  background:#f0fdf4;border:1px solid #bbf7d0;border-left:4px solid #16a34a;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;font-size:13px;line-height:1.8;color:#14532d;
+}
+.qexp::before{
+  content:'✅ 100문제 해설에서 짚어 준 것';display:inline-block;background:#16a34a;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.qexp b{color:#14532d}
+.qexp .ul li{color:#166534}
+.qexp .ul li::before{background:#16a34a;opacity:.8}
+.fml{
+  display:block;background:#eef2fb;border:1px solid #dbe3f5;border-radius:8px;
+  padding:9px 12px;margin:8px 0;font-size:13px;color:#1b3f8b;text-align:center;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;overflow-x:auto;white-space:nowrap;
+}
+
+/* 계산으로 채운 수업시간 도식 (SVG) — 좁은 화면에서는 가로 스크롤 */
+.svgfig{padding:11px 11px 9px}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:560px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+.figs > .note-box{margin:0}
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#docs">강의자료</a>
+  <a href="#goal">학습 목표</a>
+  <a href="#reg">3.1 회귀와 분류</a>
+  <a href="#data">3.2 데이터셋 · 목적</a>
+  <a href="#slr">3.3 단순 선형 회귀</a>
+  <a href="#loss">3.4 손실 함수</a>
+  <a href="#gd">3.5 경사하강법</a>
+  <a href="#multi">3.6 다중 선형 회귀</a>
+  <a href="#plus">개정판 심화</a>
+  <a href="#lab2">개정판 실습</a>
+  <a href="#summary">핵심 정리</a>
+  <a href="#terms">용어 · 기호</a>
+  <a href="#lab">선형 회귀 실습</a>
+  <a href="#lab-gd">직접 구현</a>
+  <a href="#logi">로지스틱 회귀 1</a>
+  <a href="#next">다음 주 예고</a>
+</nav>
+
+<div class="wrap">
+
+<div class="weeknav">
+  <a href="machine-learning.html" class="plan">← 강의계획서</a>
+  <a href="machine-learning-week01.html">1주차 · 인공지능 기본 개념</a>
+  <a href="machine-learning-week02.html">2주차 · 인공지능 기초 수학</a>
+  <span class="cur">3주차 · 선형 회귀</span>
+</div>
+
+<section class="hero">
+  <p class="kicker">3주차 · 9.14 ~ 9.20 · 2026-2학기</p>
+  <h1>CHAPTER 1 — 선형 회귀 (Linear Regression)</h1>
+  <p>입력과 출력 사이의 관계를 <b>직선(초평면)</b>으로 표현하고, <b>손실 함수</b>로 얼마나 틀렸는지 재고, <b>경사하강법</b>으로 손실을 줄여 가며 파라미터를 찾는 과정 — 기계학습 &lsquo;학습&rsquo;의 기본 틀을 처음으로 완성하는 주차입니다.</p>
+  <div class="chips"><span class="chip">회귀 vs 분류</span><span class="chip">단순 선형 회귀</span><span class="chip">MSE · MAE</span><span class="chip">경사하강법 · 학습률</span><span class="chip">다중 선형 회귀</span><span class="chip">sklearn · 직접 구현</span><span class="chip">개정판 62페이지</span><span class="chip">최적화 · 정규화 심화</span></div>
+</section>
+
+<!-- ===================== 강의자료 ===================== -->
+<section class="sec" id="docs">
+  <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">3주차 강의자료<small>제목을 누르면 앱 실행 없이 화면에서 바로 열리고, 오른쪽 버튼으로 내려받을 수 있습니다</small></h2></div>
+
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📗</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=ml-w03-slides-v2">기계학습특론 3주차 선형 회귀 — 개정판 (최신)</a>
+      <p>회귀의 개념 · 손실함수와 MLE · 경사하강법 · 다중 회귀와 정규방정식 · 최적화 심화 · 정규화·평가·통계 해석 · 최신 동향 · 실습 · 62페이지 — <a class="ext" href="#plus">심화 내용 정리</a></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week03-slides-v2.pdf" download="기계학습특론_3주차_선형회귀_개정판.pdf">⬇ 다운로드</a>
+  </div>
+
+  <div class="doc">
+    <div class="doc-ico"><span>💻</span>IPYNB</div>
+    <div class="doc-main">
+      <a class="doc-open" href="#lab2">3주차 실습 노트북 — 문제 · 정답 (개정판)</a>
+      <p>sklearn · NumPy · PyTorch TODO 12개 · Colab에 올려 실행 · <a class="ext" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week03-lab-solution.ipynb" download="3주차_linear_regression_실습_정답.ipynb">정답본 받기</a> · <a class="ext" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week03-Salary_Data.csv" download="Salary_Data.csv">Salary_Data.csv</a> — <a class="ext" href="#lab2">실습 정리 보기</a></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week03-lab-problem.ipynb" download="3주차_linear_regression_실습_문제.ipynb">⬇ 문제본</a>
+  </div>
+
+  <div class="doc">
+    <div class="doc-ico"><span>📈</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=ml-w03-slides">기계학습특론 CHAPTER 1 — 선형 회귀 (기존판)</a>
+      <p>회귀와 분류 · 회귀 데이터셋 · 단순 선형 회귀 · 손실 함수(MSE · MAE) · 경사하강법 · 다중 선형 회귀 · 40페이지</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week03-slides.pdf" download="기계학습특론_3주차_단순선형회귀의개념_손실함수_학습방법.pdf">⬇ 다운로드</a>
+  </div>
+
+  <div class="doc">
+    <div class="doc-ico"><span>📝</span>HTML</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week03-quiz100.html" target="_blank" rel="noopener">3주차 선형 회귀 100문제 ↗</a>
+      <p>브라우저에서 바로 풀 수 있는 HTML 문제지 · 절별 문제는 아래 각 절 제목 옆 버튼으로도 열립니다</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week03-quiz100.html" download="기계학습특론_3주차_선형회귀_100문제.html">⬇ 다운로드</a>
+  </div>
+
+  <div class="doc">
+    <div class="doc-ico"><span>📘</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=ml-w03-logistic1">로지스틱 회귀 1 (4주차 선행 교안)</a>
+      <p>3주차 폴더에 함께 올라온 자료 · 선형회귀 복습 · 분류의 정의 · 특징 공간 · 분류 규칙 · 선형 판별 함수 · 로지스틱 함수 · 18페이지 — <a class="ext" href="#logi">요약 보기</a></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week03-logistic1.pdf" download="기계학습특론_4주차_로지스틱회귀1.pdf">⬇ 다운로드</a>
+  </div>
+</div>
+</section>
+
+<!-- ===================== 학습 목표 ===================== -->
+<section class="sec" id="goal">
+  <div class="sec-head"><span class="sec-badge">GOAL</span><h2 class="sec-title">학습 목표<small>3주차를 마치면 설명할 수 있어야 하는 것들</small></h2></div>
+<div class="note-box"><ul class="ul">
+  <li><b>회귀의 주요 개념</b> — 회귀와 분류 문제, 회귀 예시, 회귀의 정의, 데이터셋, 회귀의 목적, 회귀 함수</li>
+  <li><b>단순 선형 회귀 및 손실 함수</b> — 모델 정의, 손실 함수</li>
+  <li><b>단순 선형 회귀의 학습 방법</b> — 경사하강법</li>
+  <li><b>다중 선형 회귀</b></li>
+</ul></div>
+<div class="tip"><b>이번 주차를 관통하는 한 문장</b><br>
+<b>모델</b> <span class="tex">f_{\mathbf w}(x)=w_0+w_1x</span> 을 정하고 → <b>손실</b> <span class="tex">L(\mathbf w)</span> 로 틀린 정도를 재고 →
+<b>경사하강법</b> <span class="tex">\mathbf w \leftarrow \mathbf w-\alpha\,\nabla L</span> 으로 손실이 가장 작은 <span class="tex">\mathbf w^*</span> 를 찾는다.
+2주차에 배운 <b>벡터 · 내적 · 편미분 · 기울기</b>가 전부 여기서 쓰입니다.</div>
+</section>
+
+<!-- ===================== 3.1 ===================== -->
+<section class="sec" id="reg">
+  <div class="sec-head"><span class="sec-badge">3.1</span><h2 class="sec-title">회귀와 분류, 회귀 예시<small>Regression vs Classification · 집값 예측</small></h2></div>
+
+<h3 class="sub-title">회귀 문제와 분류 문제</h3>
+<div class="cards">
+  <div class="card2"><h4>회귀 (Regression)<em>연속적인 값을 예측</em></h4><p>가까운 정도(거리)를 색깔로 표현 — 파란색이면 가까운 곳, 빨간색이면 먼 곳. 출력이 <b>연속량</b>이다.</p></div>
+  <div class="card2" style="border-top-color:var(--red)"><h4>분류 (Classification)<em>범주(종류)를 예측</em></h4><p>물체의 종류별로 다른 색깔로 표현 — 각 픽셀별로 구분되므로 <b>세그멘테이션</b>으로 볼 수 있다. 출력이 <b>범주</b>다.</p></div>
+</div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-01-reg-vs-cls.jpg" alt="교안 3p — 실내 사진(원본)과 거리를 색으로 칠한 회귀 결과, 물체 종류를 색으로 칠한 분류 결과"><figcaption>교안 3p — 같은 사진이라도 <b>무엇을 출력하느냐</b>에 따라 회귀(거리 = 연속값)와 분류(물체 종류 = 범주)로 나뉜다</figcaption></figure>
+<div class="good"><b>구분 기준 한 줄</b> — 답이 <b>숫자의 크기</b>(가격 · 거리 · 몸무게)이면 회귀, 답이 <b>이름표</b>(개/고양이 · 스팸/정상)이면 분류.</div>
+
+<h3 class="sub-title">회귀 예시 — 집값 예측</h3>
+<div class="note-box">집값 예측 문제는 두 가지 질문으로 정리된다.
+<ul class="ul">
+  <li><b>관계 (Relation)</b> — 집 값(Price)과 집 크기(Size)의 관계는 어떻게 되는가?</li>
+  <li><b>예측 (Prediction)</b> — 집 크기가 1,202일 때, 예상되는 집 가격은 어떻게 되는가?</li>
+</ul></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-02-house-price.png" alt="교안 4p — 크기(feet²)와 가격(1000달러) 표, 그리고 크기-가격 산점도"><figcaption>교안 4p — 크기(단위 feet², x)와 가격(단위 1,000$, y). 점들이 오른쪽 위로 올라가는 경향 = <b>관계</b>, 그 경향으로 새 집의 값을 짐작 = <b>예측</b></figcaption></figure>
+
+<h3 class="sub-title">회귀(Regression)의 정의</h3>
+<div class="note-box"><ul class="ul">
+  <li><b>독립 변수(Independent variable)</b>와 <b>종속 변수(Dependent variable)</b> 간의 관계를 분석</li>
+  <li>새로운 <b>입력 값(Input)</b>에 대한 <b>출력 값(Output)</b>을 <b>예측(Prediction)</b></li>
+  <li>종속 변수에 대한 독립 변수의 <b>효과를 이해</b>하는 것</li>
+</ul></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-03-regression-plot.png" alt="교안 5p — 입력 x_i ∈ R^d, 출력 y_i ∈ R 산점도, 이 그래프에서 d는 1"><figcaption>교안 5p — 입력 <span class="tex">\mathbf x_i\in\mathbb R^d</span>, 출력 <span class="tex">y_i\in\mathbb R</span>. 가로축이 하나뿐인 이 그래프에서는 <b><span class="tex">d=1</span></b></figcaption></figure>
+<div class="tip"><b>기호 읽기</b> — <span class="tex">\mathbb R</span> 은 실수 전체, <span class="tex">\mathbb R^d</span> 는 실수 <span class="tex">d</span>개로 이루어진 벡터.
+그래서 &ldquo;입력은 <span class="tex">d</span>차원 벡터, 출력은 실수 하나(스칼라)&rdquo;가 회귀의 기본 설정이다.</div>
+</section>
+
+<!-- ===================== 3.2 ===================== -->
+<section class="sec" id="data">
+  <div class="sec-head"><span class="sec-badge">3.2</span><h2 class="sec-title">회귀 데이터셋 · 두 가지 목적 · 학습과 상관관계<small>Dataset · Purpose · Learning · Correlation ≠ Causation</small></h2></div>
+
+<h3 class="sub-title">회귀에서 데이터셋 — 지도학습 데이터셋</h3>
+<div class="fx">
+  <p class="fx-lab">데이터셋 표기</p>
+  <div class="tex-d">\{(\mathbf x_i,\;y_i)\}_{i=1}^{N},\qquad \mathbf x_i=[x_{i1}\;x_{i2}\;x_{i3}\;\cdots\;x_{ij}\;\cdots\;x_{id}]^{\mathsf T}\in\mathbb R^{d}</div>
+  <p class="fx-note">· <span class="tex">y_i</span> — <span class="tex">i</span>번째 <b>실제 값</b>(정답). 이 챕터에서는 <b>스칼라</b>(<span class="tex">y_i\in\mathbb R</span>)로 한정한다<br>
+  · <span class="tex">\mathbf x_i</span> — <span class="tex">i</span>번째 <b>특징 벡터</b>. <span class="tex">d</span>차원 벡터 형식으로 표현된 입력 값<br>
+  · <span class="tex">x_{ij}</span> — <span class="tex">i</span>번째 관측 값의 <span class="tex">j</span>번째 <b>특징 값(Feature)</b><br>
+  · <span class="tex">N</span> — 전체 관측 값의 수(<b>데이터셋의 크기</b>) &nbsp;·&nbsp; <span class="tex">d</span> — 관측 값을 구성하는 <b>특징의 수</b>, 특징 벡터의 차원</p>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>같은 것을 부르는 이름</th><th>다른 이름</th><th>집값 예시에서</th></tr></thead>
+  <tbody>
+    <tr><td>입력 변수 (Input variable)</td><td>특징(Features), 독립 변수(Independent variable)</td><td>집 크기 <span class="tex">x</span></td></tr>
+    <tr><td>출력 변수 (Output variable)</td><td>종속 변수(Dependent variable)</td><td>집 가격 <span class="tex">y</span></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 class="sub-title">회귀의 두 가지 목적</h3>
+<div class="cards">
+  <div class="card2"><h4>① 예측 측면<em>새로운 입력 값에 대한 출력 값을 예측</em></h4><p>예) 키가 <b>170cm</b>인 사람의 몸무게는 얼마인가?</p></div>
+  <div class="card2"><h4>② 해석 또는 관계 측면<em>입력 값에 대한 출력 값의 변화</em></h4><p>예) 키가 큰 사람은 몸무게가 무거운가?</p></div>
+</div>
+
+<h3 class="sub-title">회귀에서의 학습</h3>
+<div class="note-box"><ul class="ul">
+  <li>입력 값이 주어졌을 때, 적합한 출력 값을 내는 <b>함수(Function)를 찾는 과정</b></li>
+  <li>독립변수와 종속변수 간의 관계를 표현하는 함수를 찾는 과정</li>
+</ul></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-04-learning-function.png" alt="교안 8p — 훈련 데이터셋 → 학습 과정 → 함수, x_i를 넣으면 y_i ≈ f(x_i)"><figcaption>교안 8p — <b>훈련 데이터셋 → 학습 과정 → 함수</b>. 목표는 모든 <span class="tex">i</span>에 대해 <span class="tex">y_i\approx f(\mathbf x_i)</span></figcaption></figure>
+
+<h3 class="sub-title">참고 — 상관 관계(correlation)는 인과관계와 같지 않음</h3>
+<div class="warn"><b>회귀는 상관관계를 찾는 것</b>으로 인과 관계를 의미하지 않는다. 따라서 해석할 때 <b>인과 관계로 해석해서는 안 된다.</b></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-05-correlation-pirates.jpg" alt="교안 9p — 지구 평균 기온과 해적 수 그래프: 해적이 줄수록 기온이 오르는 것처럼 보인다"><figcaption>교안 9p — 해적 수가 줄어든 시기에 지구 평균 기온이 올랐다. 직선에 가깝게 맞지만 &ldquo;해적이 줄어서 더워졌다&rdquo;는 말은 성립하지 않는다 (둘 다 <b>시간</b>의 흐름과 함께 변했을 뿐)</figcaption></figure>
+</section>
+
+<!-- ===================== 3.3 ===================== -->
+<section class="sec" id="slr">
+  <div class="sec-head"><span class="sec-badge">3.3</span><h2 class="sec-title">단순 선형 회귀 모델<small>Simple Linear Regression</small></h2></div>
+<div class="note-box">입력 값의 차원이 <b>1개일 때</b>(<span class="tex">d=1</span>), 아래와 같은 식(함수 또는 모델)을 <b>단순 선형 회귀</b>라 한다.</div>
+<div class="fx">
+  <p class="fx-lab">단순 선형 회귀 모델</p>
+  <div class="tex-d">y_i\;\approx\;f(x_i)=f_{\mathbf w}(x_i)=w_0+w_1x_i,\qquad \mathbf w=[w_0\;\;w_1]^{\mathsf T}</div>
+  <p class="fx-note">· <span class="tex">\mathbf x_i=[x_{i1}]=x_i\in\mathbb R</span> — 특징이 하나라 벡터가 곧 실수<br>
+  · <span class="tex">f(x_i)</span> 를 <b><span class="tex">\hat y_i</span></b> (&ldquo;와이 햇&rdquo;, 예측 값)으로 표기하기도 한다<br>
+  · <span class="tex">\mathbf w=[w_0\;w_1]^{\mathsf T}</span> 는 <b>파라미터(매개변수)</b>들의 벡터로 <b>2개의 파라미터</b>를 갖는다 — 다른 말로 <b>가중치</b>라고도 한다</p>
+</div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-06-simple-linear-model.png" alt="교안 10p — 단순 선형 회귀 식과 그래프: 절편 w0, 기울기 w1인 직선"><figcaption>교안 10p — <span class="tex">w_0</span> 는 직선이 세로축과 만나는 <b>절편</b>, <span class="tex">w_1</span> 은 <span class="tex">x</span>가 1 늘 때 <span class="tex">y</span>가 늘어나는 양, 즉 <b>기울기</b></figcaption></figure>
+<div class="tip"><b>입력이 1차원인데 파라미터는 왜 2개?</b> — 직선은 <b>기울기와 절편 두 값</b>으로 결정되기 때문이다.
+<span class="tex">w_0</span> 가 없으면 직선이 항상 원점을 지나야 해서, 집값처럼 크기가 0이어도 값이 0이 아닌 데이터를 표현할 수 없다.</div>
+<div class="ex">
+  <p class="ex-q"><em>교안 예시로 계산해 보기</em> <span class="tex">w_0=50,\;w_1=0.06</span> 일 때 크기 <span class="tex">x=2000</span> 인 집의 예측 가격은?</p>
+  <div class="step"><i>①</i><div>모델 <span class="tex">f_{\mathbf w}(x)=50+0.06x</span></div></div>
+  <div class="step"><i>②</i><div><span class="tex">f_{\mathbf w}(2000)=50+0.06\times2000=50+120=170</span></div></div>
+  <div class="ex-ans"><b>답</b> — 170 (단위가 1,000$이므로 약 17만 달러)</div>
+</div>
+<div class="note-box"><b>남은 질문</b> — 훈련 데이터가 주어졌을 때 <span class="tex">\mathbf w=[w_0\;w_1]^{\mathsf T}</span> 의 값을 <b>어떻게 설정할 수 있을까?</b>
+&nbsp;→ &ldquo;얼마나 잘 맞는가&rdquo;를 숫자로 재는 <a class="ext" href="#loss">손실 함수</a>가 필요하다.</div>
+</section>
+
+<!-- ===================== 3.4 ===================== -->
+<section class="sec" id="loss">
+  <div class="sec-head"><span class="sec-badge">3.4</span><h2 class="sec-title">손실 함수 (Cost function 또는 Loss function)<small>MSE · MAE · 파라미터 공간에서 본 손실</small></h2></div>
+<div class="note-box"><b>핵심 아이디어</b> — 훈련 데이터 <span class="tex">\{(x_i,y_i)\}_{i=1}^N</span> 를 이용하여 <span class="tex">f_{\mathbf w}(x_i)</span> 가 <span class="tex">y_i</span> 값에 <b>가깝도록</b> <span class="tex">\mathbf w=[w_0\;w_1]^{\mathsf T}</span> 를 정하는 것.
+<ul class="ul">
+  <li>손실 함수(비용 함수, 훈련 목적 함수 등)는 모델의 파라미터 <span class="tex">\mathbf w</span> 를 <b>학습할 때 사용</b>한다</li>
+  <li>손실함수 <span class="tex">L(\mathbf w)</span> 를 <b>작게 할수록</b>, 훈련 데이터에 대해 모델이 예측한 출력 값 <span class="tex">f_{\mathbf w}(x_i)</span> 이 실제 값 <span class="tex">y_i</span> 과 <b>유사하다</b>는 것을 의미한다</li>
+</ul></div>
+<div class="fx">
+  <p class="fx-lab">손실 함수와 학습 목표</p>
+  <div class="tex-d">L(\mathbf w)=\frac1N\sum_{i=1}^{N}\bigl(f_{\mathbf w}(x_i)-y_i\bigr)^2,\qquad \mathbf w^*=\underset{\mathbf w}{\operatorname{argmin}}\;L(\mathbf w)</div>
+  <p class="fx-note"><b>argmin</b> 은 &ldquo;함수 값을 최소로 만드는 <b>입력</b>&rdquo;을 돌려준다. <span class="tex">\min L</span> 은 가장 작은 손실 <b>값</b>, <span class="tex">\operatorname{argmin} L</span> 은 그때의 <b>파라미터</b> <span class="tex">\mathbf w^*</span> 다 — 우리가 원하는 것은 뒤쪽이다.</p>
+</div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-07-loss-idea.png" alt="교안 12p — 데이터 점 (x_i, y_i)와 손실 L(w), argmin 식"><figcaption>교안 12p — 점과 직선 사이의 <b>세로 거리(오차)</b>를 제곱해서 평균 낸 것이 손실. 그 값을 가장 작게 만드는 <span class="tex">\mathbf w</span> 가 정답</figcaption></figure>
+
+<h3 class="sub-title">손실 함수 예시 — 파라미터 2개 vs 1개</h3>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-08-loss-example.png" alt="교안 14p — 왼쪽 모델 w0+w1x의 파라미터·손실·목표, 오른쪽 w0=0으로 둔 모델 w1x"><figcaption>교안 14p — 오른쪽은 <span class="tex">w_0=0</span> 으로 고정해 파라미터를 <span class="tex">w_1</span> 하나로 줄인 버전. 손실을 <b>2차원 그래프</b>로 그릴 수 있어 이해하기 쉽다</figcaption></figure>
+
+<h3 class="sub-title">수업시간 도식 ① — 데이터 공간과 파라미터 공간</h3>
+<div class="note-box">교안 15p는 &ldquo;<span class="tex">w_1</span>이 고정된 경우 <span class="tex">x</span>의 함수&rdquo;와 &ldquo;매개변수 <span class="tex">w_1</span>의 함수&rdquo; 두 축만 비워 두고 수업 시간에 그렸다.
+교안의 데이터 <span class="tex">(1,1),(2,2),(3,3)</span> 과 모델 <span class="tex">f(x)=w_1x</span> 로 직접 계산해서 채우면 아래와 같다.</div>
+<figure class="fig svgfig"><div class="svg-scroll"><svg viewBox="0 0 680 290" role="img" aria-label="왼쪽은 데이터 세 점과 w1=0.5, 1, 1.5 직선, 오른쪽은 손실 L(w1) 포물선" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar-loss_w1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arG-loss_w1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#166534"/></marker></defs>
+<line x1="50" y1="236" x2="288" y2="236" stroke="#6b7280" stroke-width="1.4" marker-end="url(#ar-loss_w1)"/>
+<line x1="50" y1="236" x2="50" y2="28" stroke="#6b7280" stroke-width="1.4" marker-end="url(#ar-loss_w1)"/>
+<text x="288" y="253" font-size="12" fill="#6b7280" text-anchor="end" font-weight="400">x</text>
+<text x="56" y="34" font-size="12" fill="#6b7280" text-anchor="start" font-weight="400">y</text>
+<text x="117.6" y="253" font-size="11" fill="#6b7280" text-anchor="middle" font-weight="400">1</text>
+<text x="42" y="201.5" font-size="11" fill="#6b7280" text-anchor="end" font-weight="400">1</text>
+<text x="185.3" y="253" font-size="11" fill="#6b7280" text-anchor="middle" font-weight="400">2</text>
+<text x="42" y="163.1" font-size="11" fill="#6b7280" text-anchor="end" font-weight="400">2</text>
+<text x="252.9" y="253" font-size="11" fill="#6b7280" text-anchor="middle" font-weight="400">3</text>
+<text x="42" y="124.6" font-size="11" fill="#6b7280" text-anchor="end" font-weight="400">3</text>
+<polyline fill="none" stroke="#b45309" stroke-width="2" points="50,236 51.4,235.6 52.8,235.2 54.2,234.8 55.6,234.4 57,234 58.4,233.6 59.8,233.2 61.2,232.8 62.6,232.4 64,232 65.3,231.6 66.7,231.2 68.1,230.8 69.5,230.4 70.9,230.1 72.3,229.7 73.7,229.3 75.1,228.9 76.5,228.5 77.9,228.1 79.3,227.7 80.7,227.3 82.1,226.9 83.5,226.5 84.9,226.1 86.3,225.7 87.7,225.3 89.1,224.9 90.5,224.5 91.9,224.1 93.3,223.7 94.6,223.3 96,222.9 97.4,222.5 98.8,222.1 100.2,221.7 101.6,221.3 103,220.9 104.4,220.5 105.8,220.1 107.2,219.7 108.6,219.3 110,218.9 111.4,218.5 112.8,218.2 114.2,217.8 115.6,217.4 117,217 118.4,216.6 119.8,216.2 121.2,215.8 122.6,215.4 123.9,215 125.3,214.6 126.7,214.2 128.1,213.8 129.5,213.4 130.9,213 132.3,212.6 133.7,212.2 135.1,211.8 136.5,211.4 137.9,211 139.3,210.6 140.7,210.2 142.1,209.8 143.5,209.4 144.9,209 146.3,208.6 147.7,208.2 149.1,207.8 150.5,207.4 151.9,207 153.2,206.6 154.6,206.3 156,205.9 157.4,205.5 158.8,205.1 160.2,204.7 161.6,204.3 163,203.9 164.4,203.5 165.8,203.1 167.2,202.7 168.6,202.3 170,201.9 171.4,201.5 172.8,201.1 174.2,200.7 175.6,200.3 177,199.9 178.4,199.5 179.8,199.1 181.2,198.7 182.5,198.3 183.9,197.9 185.3,197.5 186.7,197.1 188.1,196.7 189.5,196.3 190.9,195.9 192.3,195.5 193.7,195.1 195.1,194.8 196.5,194.4 197.9,194 199.3,193.6 200.7,193.2 202.1,192.8 203.5,192.4 204.9,192 206.3,191.6 207.7,191.2 209.1,190.8 210.5,190.4 211.8,190 213.2,189.6 214.6,189.2 216,188.8 217.4,188.4 218.8,188 220.2,187.6 221.6,187.2 223,186.8 224.4,186.4 225.8,186 227.2,185.6 228.6,185.2 230,184.8 231.4,184.4 232.8,184 234.2,183.6 235.6,183.2 237,182.9 238.4,182.5 239.8,182.1 241.1,181.7 242.5,181.3 243.9,180.9 245.3,180.5 246.7,180.1 248.1,179.7 249.5,179.3 250.9,178.9 252.3,178.5 253.7,178.1 255.1,177.7 256.5,177.3 257.9,176.9 259.3,176.5 260.7,176.1 262.1,175.7 263.5,175.3 264.9,174.9 266.3,174.5 267.7,174.1 269,173.7 270.4,173.3 271.8,172.9 273.2,172.5"/>
+<text x="277.2" y="176.5" font-size="11" fill="#b45309" text-anchor="start" font-weight="400">w₁=0.5</text>
+<polyline fill="none" stroke="#166534" stroke-width="2" points="50,236 51.4,235.2 52.8,234.4 54.2,233.6 55.6,232.8 57,232 58.4,231.2 59.8,230.4 61.2,229.7 62.6,228.9 64,228.1 65.3,227.3 66.7,226.5 68.1,225.7 69.5,224.9 70.9,224.1 72.3,223.3 73.7,222.5 75.1,221.7 76.5,220.9 77.9,220.1 79.3,219.3 80.7,218.5 82.1,217.8 83.5,217 84.9,216.2 86.3,215.4 87.7,214.6 89.1,213.8 90.5,213 91.9,212.2 93.3,211.4 94.6,210.6 96,209.8 97.4,209 98.8,208.2 100.2,207.4 101.6,206.6 103,205.9 104.4,205.1 105.8,204.3 107.2,203.5 108.6,202.7 110,201.9 111.4,201.1 112.8,200.3 114.2,199.5 115.6,198.7 117,197.9 118.4,197.1 119.8,196.3 121.2,195.5 122.6,194.8 123.9,194 125.3,193.2 126.7,192.4 128.1,191.6 129.5,190.8 130.9,190 132.3,189.2 133.7,188.4 135.1,187.6 136.5,186.8 137.9,186 139.3,185.2 140.7,184.4 142.1,183.6 143.5,182.9 144.9,182.1 146.3,181.3 147.7,180.5 149.1,179.7 150.5,178.9 151.9,178.1 153.2,177.3 154.6,176.5 156,175.7 157.4,174.9 158.8,174.1 160.2,173.3 161.6,172.5 163,171.7 164.4,171 165.8,170.2 167.2,169.4 168.6,168.6 170,167.8 171.4,167 172.8,166.2 174.2,165.4 175.6,164.6 177,163.8 178.4,163 179.8,162.2 181.2,161.4 182.5,160.6 183.9,159.8 185.3,159.1 186.7,158.3 188.1,157.5 189.5,156.7 190.9,155.9 192.3,155.1 193.7,154.3 195.1,153.5 196.5,152.7 197.9,151.9 199.3,151.1 200.7,150.3 202.1,149.5 203.5,148.7 204.9,147.9 206.3,147.2 207.7,146.4 209.1,145.6 210.5,144.8 211.8,144 213.2,143.2 214.6,142.4 216,141.6 217.4,140.8 218.8,140 220.2,139.2 221.6,138.4 223,137.6 224.4,136.8 225.8,136 227.2,135.3 228.6,134.5 230,133.7 231.4,132.9 232.8,132.1 234.2,131.3 235.6,130.5 237,129.7 238.4,128.9 239.8,128.1 241.1,127.3 242.5,126.5 243.9,125.7 245.3,124.9 246.7,124.1 248.1,123.4 249.5,122.6 250.9,121.8 252.3,121 253.7,120.2 255.1,119.4 256.5,118.6 257.9,117.8 259.3,117 260.7,116.2 262.1,115.4 263.5,114.6 264.9,113.8 266.3,113 267.7,112.3 269,111.5 270.4,110.7 271.8,109.9 273.2,109.1"/>
+<text x="277.2" y="113.1" font-size="11" fill="#166534" text-anchor="start" font-weight="400">w₁=1</text>
+<polyline fill="none" stroke="#7c3aed" stroke-width="2" points="50,236 51.4,234.8 52.8,233.6 54.2,232.4 55.6,231.2 57,230.1 58.4,228.9 59.8,227.7 61.2,226.5 62.6,225.3 64,224.1 65.3,222.9 66.7,221.7 68.1,220.5 69.5,219.3 70.9,218.2 72.3,217 73.7,215.8 75.1,214.6 76.5,213.4 77.9,212.2 79.3,211 80.7,209.8 82.1,208.6 83.5,207.4 84.9,206.3 86.3,205.1 87.7,203.9 89.1,202.7 90.5,201.5 91.9,200.3 93.3,199.1 94.6,197.9 96,196.7 97.4,195.5 98.8,194.4 100.2,193.2 101.6,192 103,190.8 104.4,189.6 105.8,188.4 107.2,187.2 108.6,186 110,184.8 111.4,183.6 112.8,182.5 114.2,181.3 115.6,180.1 117,178.9 118.4,177.7 119.8,176.5 121.2,175.3 122.6,174.1 123.9,172.9 125.3,171.7 126.7,170.6 128.1,169.4 129.5,168.2 130.9,167 132.3,165.8 133.7,164.6 135.1,163.4 136.5,162.2 137.9,161 139.3,159.8 140.7,158.7 142.1,157.5 143.5,156.3 144.9,155.1 146.3,153.9 147.7,152.7 149.1,151.5 150.5,150.3 151.9,149.1 153.2,147.9 154.6,146.8 156,145.6 157.4,144.4 158.8,143.2 160.2,142 161.6,140.8 163,139.6 164.4,138.4 165.8,137.2 167.2,136 168.6,134.9 170,133.7 171.4,132.5 172.8,131.3 174.2,130.1 175.6,128.9 177,127.7 178.4,126.5 179.8,125.3 181.2,124.1 182.5,123 183.9,121.8 185.3,120.6 186.7,119.4 188.1,118.2 189.5,117 190.9,115.8 192.3,114.6 193.7,113.4 195.1,112.2 196.5,111.1 197.9,109.9 199.3,108.7 200.7,107.5 202.1,106.3 203.5,105.1 204.9,103.9 206.3,102.7 207.7,101.5 209.1,100.4 210.5,99.2 211.8,98 213.2,96.8 214.6,95.6 216,94.4 217.4,93.2 218.8,92 220.2,90.8 221.6,89.6 223,88.5 224.4,87.3 225.8,86.1 227.2,84.9 228.6,83.7 230,82.5 231.4,81.3 232.8,80.1 234.2,78.9 235.6,77.7 237,76.6 238.4,75.4 239.8,74.2 241.1,73 242.5,71.8 243.9,70.6 245.3,69.4 246.7,68.2 248.1,67 249.5,65.8 250.9,64.7 252.3,63.5 253.7,62.3 255.1,61.1 256.5,59.9 257.9,58.7 259.3,57.5 260.7,56.3 262.1,55.1 263.5,53.9 264.9,52.8 266.3,51.6 267.7,50.4 269,49.2 270.4,48 271.8,46.8 273.2,45.6"/>
+<text x="277.2" y="49.6" font-size="11" fill="#7c3aed" text-anchor="start" font-weight="400">w₁=1.5</text>
+<circle cx="117.6" cy="197.5" r="4.5" fill="#b91c1c"/>
+<circle cx="185.3" cy="159.1" r="4.5" fill="#b91c1c"/>
+<circle cx="252.9" cy="120.6" r="4.5" fill="#b91c1c"/>
+<text x="165" y="276" font-size="12.5" fill="#1a1a2e" text-anchor="middle" font-weight="700">데이터 공간 — w₁을 고정하면 x의 함수</text>
+<line x1="410" y1="236" x2="648" y2="236" stroke="#6b7280" stroke-width="1.4" marker-end="url(#ar-loss_w1)"/>
+<line x1="429.2" y1="236" x2="429.2" y2="28" stroke="#6b7280" stroke-width="1.4" marker-end="url(#ar-loss_w1)"/>
+<text x="648" y="253" font-size="12" fill="#6b7280" text-anchor="end" font-weight="400">w₁</text>
+<text x="435.2" y="34" font-size="12" fill="#6b7280" text-anchor="start" font-weight="400">L(w₁)</text>
+<text x="477.1" y="253" font-size="11" fill="#6b7280" text-anchor="middle" font-weight="400">0.5</text>
+<text x="525" y="253" font-size="11" fill="#6b7280" text-anchor="middle" font-weight="400">1</text>
+<text x="572.9" y="253" font-size="11" fill="#6b7280" text-anchor="middle" font-weight="400">1.5</text>
+<text x="620.8" y="253" font-size="11" fill="#6b7280" text-anchor="middle" font-weight="400">2</text>
+<polyline fill="none" stroke="#1b3f8b" stroke-width="2.2" points="410,49.3 411.4,54 412.9,58.6 414.3,63.1 415.8,67.5 417.2,71.9 418.6,76.3 420.1,80.6 421.5,84.8 422.9,89 424.4,93.1 425.8,97.1 427.2,101.1 428.7,105.1 430.1,109 431.6,112.8 433,116.5 434.4,120.2 435.9,123.9 437.3,127.5 438.8,131 440.2,134.5 441.6,137.9 443.1,141.2 444.5,144.5 445.9,147.8 447.4,150.9 448.8,154.1 450.2,157.1 451.7,160.1 453.1,163.1 454.6,166 456,168.8 457.4,171.6 458.9,174.3 460.3,176.9 461.8,179.5 463.2,182.1 464.6,184.6 466.1,187 467.5,189.3 468.9,191.6 470.4,193.9 471.8,196.1 473.2,198.2 474.7,200.3 476.1,202.3 477.6,204.2 479,206.1 480.4,208 481.9,209.8 483.3,211.5 484.8,213.1 486.2,214.7 487.6,216.3 489.1,217.8 490.5,219.2 491.9,220.6 493.4,221.9 494.8,223.1 496.2,224.3 497.7,225.5 499.1,226.6 500.6,227.6 502,228.5 503.4,229.4 504.9,230.3 506.3,231.1 507.8,231.8 509.2,232.5 510.6,233.1 512.1,233.6 513.5,234.1 514.9,234.6 516.4,235 517.8,235.3 519.2,235.5 520.7,235.7 522.1,235.9 523.6,236 525,236 526.4,236 527.9,235.9 529.3,235.7 530.8,235.5 532.2,235.3 533.6,234.9 535.1,234.6 536.5,234.1 537.9,233.6 539.4,233.1 540.8,232.5 542.2,231.8 543.7,231.1 545.1,230.3 546.6,229.4 548,228.5 549.4,227.6 550.9,226.5 552.3,225.5 553.8,224.3 555.2,223.1 556.6,221.9 558.1,220.6 559.5,219.2 560.9,217.8 562.4,216.3 563.8,214.7 565.2,213.1 566.7,211.5 568.1,209.7 569.6,208 571,206.1 572.4,204.2 573.9,202.3 575.3,200.3 576.8,198.2 578.2,196.1 579.6,193.9 581.1,191.6 582.5,189.3 583.9,187 585.4,184.5 586.8,182.1 588.2,179.5 589.7,176.9 591.1,174.3 592.6,171.6 594,168.8 595.4,166 596.9,163.1 598.3,160.1 599.8,157.1 601.2,154.1 602.6,150.9 604.1,147.8 605.5,144.5 606.9,141.2 608.4,137.9 609.8,134.5 611.2,131 612.7,127.5 614.1,123.9 615.6,120.2 617,116.5 618.4,112.8 619.9,108.9 621.3,105.1 622.8,101.1 624.2,97.1 625.6,93.1 627.1,89 628.5,84.8 629.9,80.6 631.4,76.3 632.8,71.9 634.2,67.5 635.7,63.1 637.1,58.6 638.6,54 640,49.3"/>
+<line x1="477.1" y1="236" x2="477.1" y2="203.6" stroke="#b45309" stroke-width="1" stroke-dasharray="3 3"/>
+<circle cx="477.1" cy="203.6" r="5" fill="#b45309"/>
+<line x1="525" y1="236" x2="525" y2="236" stroke="#166534" stroke-width="1" stroke-dasharray="3 3"/>
+<circle cx="525" cy="236" r="5" fill="#166534"/>
+<line x1="572.9" y1="236" x2="572.9" y2="203.6" stroke="#7c3aed" stroke-width="1" stroke-dasharray="3 3"/>
+<circle cx="572.9" cy="203.6" r="5" fill="#7c3aed"/>
+<line x1="429.2" y1="236" x2="429.2" y2="106.4" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3 3"/>
+<circle cx="429.2" cy="106.4" r="5" fill="#9ca3af"/>
+<text x="469.1" y="197.6" font-size="11" fill="#b45309" text-anchor="end" font-weight="400">1.17</text>
+<text x="580.9" y="197.6" font-size="11" fill="#7c3aed" text-anchor="start" font-weight="400">1.17</text>
+<text x="525" y="224" font-size="11" fill="#166534" text-anchor="middle" font-weight="700">0 (최소)</text>
+<text x="438.2" y="110.4" font-size="11" fill="#9ca3af" text-anchor="start" font-weight="400">4.67</text>
+<text x="525" y="276" font-size="12.5" fill="#1a1a2e" text-anchor="middle" font-weight="700">파라미터 공간 — L(w₁) = (14/3)(w₁ − 1)²</text>
+<line x1="310" y1="140" x2="372" y2="140" stroke="#6b7280" stroke-width="1.4" marker-end="url(#ar-loss_w1)"/>
+<text x="340" y="128" font-size="10.5" fill="#6b7280" text-anchor="middle" font-weight="400">직선 1개</text>
+<text x="340" y="160" font-size="10.5" fill="#6b7280" text-anchor="middle" font-weight="400">= 점 1개</text>
+</svg></div><figcaption>왼쪽 그래프의 <b>직선 하나</b>가 오른쪽 그래프의 <b>점 하나</b>에 대응한다. 직선을 바꿔 가며 손실을 찍으면 <b>포물선</b>이 그려지고, 그 바닥이 <span class="tex">w_1^*=1</span></figcaption></figure>
+<div class="ex">
+  <p class="ex-q"><em>계산으로 확인</em> 데이터 <span class="tex">(1,1),(2,2),(3,3)</span>, 모델 <span class="tex">f(x)=w_1x</span> 일 때 <span class="tex">L(w_1)</span> 은?</p>
+  <div class="step"><i>①</i><div>오차 <span class="tex">w_1x_i-x_i=(w_1-1)x_i</span> 이므로 <span class="tex">L(w_1)=\frac13\sum_{i}(w_1-1)^2x_i^2=\frac{(w_1-1)^2}{3}(1+4+9)=\frac{14}{3}(w_1-1)^2</span></div></div>
+  <div class="step"><i>②</i><div><span class="tex">w_1=0.5</span> → 예측 0.5, 1, 1.5 · 오차 제곱 0.25, 1, 2.25 · 합 3.5 → <span class="tex">L=3.5/3\approx1.17</span></div></div>
+  <div class="step"><i>③</i><div><span class="tex">w_1=1</span> → 모든 점에서 예측 = 실제 → <span class="tex">L=0</span> (최소)</div></div>
+  <div class="ex-ans"><b>정리</b> — 손실은 <span class="tex">w_1</span>에 대한 <b>아래로 볼록한 2차 함수</b>이고, 최솟값은 <span class="tex">w_1=1</span> 에서 0</div>
+</div>
+
+<h3 class="sub-title">파라미터가 2개일 때 — 3차원 곡면과 등고선</h3>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-09-loss-surface.jpg" alt="교안 17p — w0, w1 두 축 위에 그린 그릇 모양의 손실 곡면"><figcaption>교안 17p — <span class="tex">\mathbf w=[w_0\;w_1]^{\mathsf T}</span> 이면 손실은 <b>그릇 모양 곡면</b>. 교안 16p의 빈 3축 도식이 바로 이 그림이다</figcaption></figure>
+<div class="note-box">곡면을 위에서 내려다보고 높이가 같은 곳끼리 이으면 <b>등고선</b>이 된다. 아래 네 장면은 &ldquo;왼쪽 직선 1개 = 오른쪽 X 표시 1개&rdquo;를 따라가며 손실이 줄어드는 과정이다.</div>
+<div class="figs">
+  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-10-contour-1.jpg" alt="교안 18p — 기울기가 음수인 직선, 등고선 바깥쪽 X"><figcaption>교안 18p — 추세와 반대인 직선 → 등고선 <b>바깥쪽</b>(큰 손실)</figcaption></figure>
+  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-11-contour-2.jpg" alt="교안 19p — 수평에 가까운 직선, w1≈0 위치의 X"><figcaption>교안 19p — 수평선(<span class="tex">w_1\approx0</span>) → 조금 안쪽</figcaption></figure>
+  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-12-contour-3.jpg" alt="교안 20p — 약간 기울어진 직선, 중심 쪽 X"><figcaption>교안 20p — 중심에 더 가까워짐</figcaption></figure>
+  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-13-contour-min.jpg" alt="교안 21p — 데이터 추세를 따라가는 직선, 등고선 중심 Minimum"><figcaption>교안 21p — 등고선 <b>중심 = Minimum</b>. 직선이 데이터를 가장 잘 설명</figcaption></figure>
+</div>
+
+<h3 class="sub-title">대표적인 손실 함수 — MSE와 MAE</h3>
+<div class="fx">
+  <p class="fx-lab">평균 제곱 오차 (Mean Square Error, MSE)</p>
+  <div class="tex-d">\mathrm{MSE}=\frac1N\sum_{i=1}^{N}\bigl(f_{\mathbf w}(x_i)-y_i\bigr)^2</div>
+</div>
+<div class="fx">
+  <p class="fx-lab">평균 절대 오차 (Mean Absolute Error, MAE)</p>
+  <div class="tex-d">\mathrm{MAE}=\frac1N\sum_{i=1}^{N}\bigl\lvert f_{\mathbf w}(x_i)-y_i\bigr\rvert</div>
+  <p class="fx-note">이외에도 다양한 손실함수가 존재하지만 대표적으로 MSE, MAE가 있다.</p>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>비교 (보충)</th><th>MSE — 제곱</th><th>MAE — 절대값</th></tr></thead>
+  <tbody>
+    <tr><td>오차 2 → 4로 두 배</td><td>손실 기여 4 → 16 (<b>4배</b>)</td><td>손실 기여 2 → 4 (<b>2배</b>)</td></tr>
+    <tr><td>큰 오차 · 이상치</td><td>크게 벌점 → 이상치에 <b>민감</b></td><td>비례해서만 벌점 → 이상치에 <b>덜 민감</b></td></tr>
+    <tr><td>미분</td><td>어디서나 매끄럽게 미분 가능 → 경사하강법과 궁합이 좋음</td><td>오차 0인 지점에서 뾰족해 미분 불가</td></tr>
+    <tr><td>단위</td><td>원래 단위의 제곱</td><td>원래 단위 그대로</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="tip"><b>왜 이 챕터는 MSE를 쓰나</b> — 다음 절의 경사하강법은 손실을 <b>미분</b>해서 움직인다. 제곱은 미분이 깔끔하게 <span class="tex">2(\hat y-y)</span> 로 떨어져 계산이 쉽다.</div>
+</section>
+
+<!-- ===================== 3.5 ===================== -->
+<section class="sec" id="gd">
+  <div class="sec-head"><span class="sec-badge">3.5</span><h2 class="sec-title">경사하강법 (Gradient descent)<small>기울기 · 학습률 · 초기값 · 알고리즘 · 특성과 한계점</small></h2></div>
+<div class="note-box"><b>모델의 학습 방법</b> — 손실함수 <span class="tex">L(\mathbf w)</span> 가 주어졌을 때, 손실함수를 가장 최소화하는 파라미터 <span class="tex">\mathbf w^*=[w_0^*\;w_1^*]^{\mathsf T}</span> 를 찾는 것.
+<ul class="ul">
+  <li><b>가장 간단한 방법</b> — 파라미터에 넣을 후보 값을 몇 개 정하고, 각 후보로 손실을 계산해 가장 작은 것을 선정한다</li>
+  <li>하지만 이 방법은 <b>후보 값을 정하는 것이 쉽지 않다</b> — 파라미터가 많아지면 조합이 폭발한다</li>
+</ul></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-14-mountain.jpg" alt="교안 24p — 높은 산에서 가장 빨리 내려가려면 어떻게 해야 하는가? 옆에 손실 곡면"><figcaption>교안 24p — &ldquo;높은 산에서 가장 빨리 내려가려면?&rdquo; 발밑에서 <b>가장 가파르게 내려가는 방향</b>으로 한 걸음씩 — 이것이 경사하강법의 직관</figcaption></figure>
+
+<h3 class="sub-title">기울기(Gradient) 이용</h3>
+<div class="note-box"><ul class="ul">
+  <li>(한 지점에서의) 기울기는 함수의 <b>접선 기울기</b></li>
+  <li>이 기울기는 함수를 <b>가장 최대로 증가시키는 방향</b>을 나타낸다</li>
+  <li>따라서 현재 지점 <span class="tex">\mathbf w</span> 에서의 <b>음의 기울기 방향</b> <span class="tex">-\frac{\partial}{\partial\mathbf w}L(\mathbf w)</span> 은 손실함수를 <b>최대로 감소</b>시키는 방향이고, 이를 <b>경사하강(gradient descent)의 방향</b>이라 한다</li>
+</ul></div>
+<div class="figs">
+  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-15-neg-gradient.png" alt="교안 25p — 곡면 위 현재 w에서 음의 기울기 방향 화살표"><figcaption>교안 25p — 현재 <span class="tex">\mathbf w</span>에서 <b>음의 기울기 방향</b>으로 이동</figcaption></figure>
+  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-19-tangent.png" alt="교안 31p — 곡선 y=f(x) 위 한 점의 접선과 Δf/Δx"><figcaption>교안 31p (참고) — 기울기 계산은 고등학교 미분: <span class="tex">\Delta x\to0</span> 일 때 <span class="tex">\Delta f/\Delta x</span></figcaption></figure>
+</div>
+<div class="fx">
+  <p class="fx-lab">편미분 표기 복습 (2주차)</p>
+  <div class="tex-d">\nabla L(\mathbf w)=\frac{\partial L}{\partial\mathbf w}=\begin{bmatrix}\dfrac{\partial L}{\partial w_0}\\[8pt]\dfrac{\partial L}{\partial w_1}\end{bmatrix}</div>
+  <p class="fx-note">파라미터가 여러 개면 <b>각 파라미터에 대해 따로 미분</b>(나머지는 상수 취급)해서 벡터로 모은다 — 이것이 기울기 벡터다.</p>
+</div>
+
+<h3 class="sub-title">경사하강법의 절차와 세 가지 질문</h3>
+<div class="flow">
+  <div class="fl"><div class="fl-n">1</div><div><h4>초기 값에서 시작</h4><p><span class="tex">\mathbf w=[w_0\;w_1]^{\mathsf T}</span> 의 초기 값을 정한다. 예) <span class="tex">w_0=0,\;w_1=1</span></p></div></div>
+  <div class="fl"><div class="fl-n">2</div><div><h4>종료 조건을 만족할 때까지 반복</h4><p><span class="tex">L(\mathbf w)</span> 를 <b>감소하는 방향</b>으로 <span class="tex">\mathbf w</span> 를 반복적으로 업데이트한다</p></div></div>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>질문</th><th>답</th><th>의미</th></tr></thead>
+  <tbody>
+    <tr><td>Q1. <span class="tex">\mathbf w</span>는 어디에서 시작하는가?</td><td><b>초기화 (Initialization)</b></td><td>시작점. 어디서 출발하느냐에 따라 도착점이 달라질 수 있다</td></tr>
+    <tr><td>Q2. 어느 방향으로 업데이트하는가?</td><td><b>기울기 (Gradient)</b></td><td>음의 기울기 방향 = 손실이 가장 빨리 줄어드는 방향</td></tr>
+    <tr><td>Q3. 업데이트할 때 얼마만큼 움직이는가?</td><td><b>학습률 (Learning rate)</b></td><td>한 걸음의 보폭 <span class="tex">\alpha</span></td></tr>
+  </tbody>
+</table>
+</div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-16-gd-three-questions.jpg" alt="교안 28p — 초기 상태에서 기울기 방향으로 학습률만큼씩 내려가는 경로"><figcaption>교안 28p — 초기 상태 → 기울기 방향으로 → 학습률만큼씩 이동하며 골짜기로 내려간다</figcaption></figure>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-17-init-dependence.jpg" alt="교안 29p — 초기 값이 조금 달라지자 다른 골짜기로 내려간 경로"><figcaption>교안 29p — <b><span class="tex">\mathbf w</span>의 최초 값에 따라 탐색 결과가 달라질 수 있다.</b> 따라서 초기 상태도 중요한 이슈 중 하나다</figcaption></figure>
+
+<h3 class="sub-title">경사하강법 알고리즘</h3>
+<div class="fx">
+  <p class="fx-lab">종료조건을 만족할 때까지 아래 과정을 반복한다 (예: for loop, while loop …)</p>
+  <div class="tex-d">\begin{aligned} w_0 &amp;\leftarrow w_0-\alpha\,\frac{\partial}{\partial w_0}L(w_0,w_1)\\ w_1 &amp;\leftarrow w_1-\alpha\,\frac{\partial}{\partial w_1}L(w_0,w_1)\end{aligned}</div>
+  <p class="fx-note">· <span class="tex">\alpha</span> — <b>학습률</b> &nbsp;·&nbsp; <span class="tex">\frac{\partial}{\partial w_0}L(w_0,w_1)</span> — <b>기울기</b> &nbsp;·&nbsp; 괄호 안의 <span class="tex">(w_0,w_1)</span> — <b><span class="tex">\mathbf w</span>의 현재 상태</b><br>
+  · 두 식은 <b>동시에</b> 갱신한다 — <span class="tex">w_0</span>를 먼저 바꾼 값으로 <span class="tex">w_1</span>의 기울기를 계산하지 않도록, 두 기울기를 모두 구한 뒤 한꺼번에 바꾼다</p>
+</div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-18-gd-algorithm.jpg" alt="교안 30p — 경사하강법 갱신식에 학습률, 기울기, w의 현재 상태를 표시한 도식"><figcaption>교안 30p — 갱신식의 각 부분이 무엇인지 표시한 원본 도식</figcaption></figure>
+<div class="ex">
+  <p class="ex-q"><em>보충 — MSE의 기울기를 직접 유도</em> <span class="tex">L(w_0,w_1)=\frac1N\sum_i(\hat y_i-y_i)^2,\;\hat y_i=w_0+w_1x_i</span> 를 각각 편미분하면?</p>
+  <div class="step"><i>①</i><div>연쇄법칙: 바깥 <span class="tex">(\cdot)^2</span> 을 미분하면 <span class="tex">2(\hat y_i-y_i)</span>, 안쪽 <span class="tex">\hat y_i</span> 를 미분하면 <span class="tex">\partial\hat y_i/\partial w_0=1,\;\partial\hat y_i/\partial w_1=x_i</span></div></div>
+  <div class="step"><i>②</i><div><span class="tex">\dfrac{\partial L}{\partial w_0}=\dfrac2N\sum_{i=1}^N(\hat y_i-y_i),\qquad \dfrac{\partial L}{\partial w_1}=\dfrac2N\sum_{i=1}^N(\hat y_i-y_i)\,x_i</span></div></div>
+  <div class="ex-ans"><b>핵심</b> — <span class="tex">w_1</span> 쪽에만 <b>입력 <span class="tex">x_i</span>가 곱해진다</b>. 이 모양이 <a class="ext" href="#lab-gd">실습 코드의 update()</a>와 <a class="ext" href="#multi">다중 선형 회귀 갱신식</a>에 그대로 나온다</div>
+</div>
+
+<h3 class="sub-title">수업시간 도식 ② — 경사하강법의 특성 : 기울기 부호</h3>
+<figure class="fig svgfig"><div class="svg-scroll"><svg viewBox="0 0 680 270" role="img" aria-label="기울기가 양수이면 w1이 줄고, 음수이면 w1이 커져 두 경우 모두 최솟값 쪽으로 이동" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar-gd_sign" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arG-gd_sign" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#166534"/></marker></defs>
+<line x1="40" y1="210" x2="308" y2="210" stroke="#6b7280" stroke-width="1.4" marker-end="url(#ar-gd_sign)"/>
+<line x1="40" y1="210" x2="40" y2="22" stroke="#6b7280" stroke-width="1.4" marker-end="url(#ar-gd_sign)"/>
+<text x="308" y="227" font-size="12" fill="#6b7280" text-anchor="end" font-weight="400">w₁</text>
+<text x="46" y="28" font-size="12" fill="#6b7280" text-anchor="start" font-weight="400">L(w₁)</text>
+<polyline fill="none" stroke="#1b3f8b" stroke-width="2.2" points="43.2,31.6 44.9,35.9 46.5,40.2 48.1,44.4 49.8,48.6 51.4,52.7 53,56.8 54.6,60.8 56.2,64.7 57.9,68.6 59.5,72.5 61.1,76.3 62.8,80 64.4,83.7 66,87.3 67.6,90.8 69.2,94.3 70.9,97.8 72.5,101.2 74.1,104.5 75.8,107.8 77.4,111 79,114.2 80.6,117.3 82.2,120.3 83.9,123.3 85.5,126.3 87.1,129.2 88.8,132 90.4,134.8 92,137.5 93.6,140.1 95.2,142.8 96.9,145.3 98.5,147.8 100.1,150.2 101.8,152.6 103.4,154.9 105,157.2 106.6,159.4 108.2,161.6 109.9,163.7 111.5,165.7 113.1,167.7 114.8,169.7 116.4,171.5 118,173.4 119.6,175.1 121.2,176.8 122.9,178.5 124.5,180.1 126.1,181.6 127.8,183.1 129.4,184.5 131,185.9 132.6,187.2 134.2,188.5 135.9,189.7 137.5,190.8 139.1,191.9 140.8,193 142.4,194 144,194.9 145.6,195.8 147.2,196.6 148.9,197.3 150.5,198 152.1,198.7 153.8,199.3 155.4,199.8 157,200.3 158.6,200.7 160.2,201 161.9,201.4 163.5,201.6 165.1,201.8 166.8,201.9 168.4,202 170,202.1 171.6,202 173.2,201.9 174.9,201.8 176.5,201.6 178.1,201.4 179.8,201 181.4,200.7 183,200.3 184.6,199.8 186.3,199.3 187.9,198.7 189.5,198 191.1,197.3 192.7,196.6 194.4,195.8 196,194.9 197.6,194 199.2,193 200.9,191.9 202.5,190.8 204.1,189.7 205.8,188.5 207.4,187.2 209,185.9 210.6,184.5 212.2,183.1 213.9,181.6 215.5,180.1 217.1,178.5 218.8,176.8 220.4,175.1 222,173.4 223.6,171.5 225.2,169.7 226.9,167.7 228.5,165.7 230.1,163.7 231.7,161.6 233.4,159.4 235,157.2 236.6,154.9 238.3,152.6 239.9,150.2 241.5,147.8 243.1,145.3 244.8,142.8 246.4,140.1 248,137.5 249.6,134.8 251.2,132 252.9,129.2 254.5,126.3 256.1,123.3 257.8,120.3 259.4,117.3 261,114.2 262.6,111 264.2,107.8 265.9,104.5 267.5,101.2 269.1,97.8 270.8,94.3 272.4,90.8 274,87.3 275.6,83.7 277.2,80 278.9,76.3 280.5,72.5 282.1,68.6 283.8,64.7 285.4,60.8 287,56.8 288.6,52.7 290.2,48.6 291.9,44.4 293.5,40.2 295.1,35.9 296.8,31.6"/>
+<polyline fill="none" stroke="#b91c1c" stroke-width="1.6" stroke-dasharray="5 4" points="223.2,185.4 223.6,184.5 224.1,183.7 224.5,182.9 225,182 225.4,181.2 225.8,180.4 226.3,179.5 226.7,178.7 227.2,177.9 227.6,177 228.1,176.2 228.5,175.4 228.9,174.5 229.4,173.7 229.8,172.9 230.3,172 230.7,171.2 231.2,170.4 231.6,169.5 232,168.7 232.5,167.9 232.9,167 233.4,166.2 233.8,165.4 234.3,164.5 234.7,163.7 235.1,162.9 235.6,162 236,161.2 236.5,160.4 236.9,159.5 237.4,158.7 237.8,157.9 238.2,157 238.7,156.2 239.1,155.4 239.6,154.5 240,153.7 240.5,152.9 240.9,152 241.4,151.2 241.8,150.4 242.2,149.5 242.7,148.7 243.1,147.9 243.6,147 244,146.2 244.5,145.4 244.9,144.5 245.3,143.7 245.8,142.9 246.2,142 246.7,141.2 247.1,140.4 247.6,139.5 248,138.7 248.4,137.9 248.9,137 249.3,136.2 249.8,135.4 250.2,134.5 250.7,133.7 251.1,132.9 251.5,132 252,131.2 252.4,130.3 252.9,129.5 253.3,128.7 253.8,127.8 254.2,127 254.6,126.2 255.1,125.3 255.5,124.5 256,123.7 256.4,122.8 256.9,122 257.3,121.2 257.8,120.3 258.2,119.5 258.6,118.7 259.1,117.8 259.5,117 260,116.2 260.4,115.3 260.9,114.5 261.3,113.7 261.7,112.8 262.2,112 262.6,111.2 263.1,110.3 263.5,109.5 264,108.7 264.4,107.8 264.8,107 265.3,106.2 265.7,105.3 266.2,104.5 266.6,103.7 267.1,102.8 267.5,102 267.9,101.2 268.4,100.3 268.8,99.5 269.3,98.7 269.7,97.8 270.2,97 270.6,96.2 271,95.3 271.5,94.5 271.9,93.7 272.4,92.8 272.8,92 273.3,91.2 273.7,90.3 274.1,89.5 274.6,88.7 275,87.8 275.5,87 275.9,86.2 276.4,85.3 276.8,84.5 277.2,83.7 277.7,82.8 278.1,82 278.6,81.2 279,80.3 279.5,79.5 279.9,78.7 280.4,77.8 280.8,77 281.2,76.2 281.7,75.3 282.1,74.5 282.6,73.7 283,72.8 283.5,72 283.9,71.1 284.3,70.3 284.8,69.5 285.2,68.6 285.7,67.8 286.1,67 286.6,66.1 287,65.3 287.4,64.5 287.9,63.6 288.3,62.8 288.8,62 289.2,61.1 289.7,60.3 290.1,59.5 290.5,58.6 291,57.8 291.4,57 291.9,56.1 292.3,55.3 292.8,54.5 293.2,53.6 293.6,52.8 294.1,52"/>
+<circle cx="258.6" cy="118.7" r="5.5" fill="#b91c1c"/>
+<line x1="258.6" y1="196" x2="205.5" y2="196" stroke="#166534" stroke-width="2.4" marker-end="url(#arG-gd_sign)"/>
+<circle cx="170" cy="202.1" r="4" fill="#166534"/>
+<text x="170" y="238" font-size="12.5" fill="#b91c1c" text-anchor="middle" font-weight="700">기울기 &gt; 0 (positive number)</text>
+<text x="170" y="258" font-size="12" fill="#166534" text-anchor="middle" font-weight="700">w₁ ← w₁ − α(양수) → w₁ 감소</text>
+<line x1="380" y1="210" x2="648" y2="210" stroke="#6b7280" stroke-width="1.4" marker-end="url(#ar-gd_sign)"/>
+<line x1="380" y1="210" x2="380" y2="22" stroke="#6b7280" stroke-width="1.4" marker-end="url(#ar-gd_sign)"/>
+<text x="648" y="227" font-size="12" fill="#6b7280" text-anchor="end" font-weight="400">w₁</text>
+<text x="386" y="28" font-size="12" fill="#6b7280" text-anchor="start" font-weight="400">L(w₁)</text>
+<polyline fill="none" stroke="#1b3f8b" stroke-width="2.2" points="383.2,31.6 384.9,35.9 386.5,40.2 388.1,44.4 389.8,48.6 391.4,52.7 393,56.8 394.6,60.8 396.2,64.7 397.9,68.6 399.5,72.5 401.1,76.3 402.8,80 404.4,83.7 406,87.3 407.6,90.8 409.2,94.3 410.9,97.8 412.5,101.2 414.1,104.5 415.8,107.8 417.4,111 419,114.2 420.6,117.3 422.2,120.3 423.9,123.3 425.5,126.3 427.1,129.2 428.8,132 430.4,134.8 432,137.5 433.6,140.1 435.2,142.8 436.9,145.3 438.5,147.8 440.1,150.2 441.8,152.6 443.4,154.9 445,157.2 446.6,159.4 448.2,161.6 449.9,163.7 451.5,165.7 453.1,167.7 454.8,169.7 456.4,171.5 458,173.4 459.6,175.1 461.2,176.8 462.9,178.5 464.5,180.1 466.1,181.6 467.8,183.1 469.4,184.5 471,185.9 472.6,187.2 474.2,188.5 475.9,189.7 477.5,190.8 479.1,191.9 480.8,193 482.4,194 484,194.9 485.6,195.8 487.2,196.6 488.9,197.3 490.5,198 492.1,198.7 493.8,199.3 495.4,199.8 497,200.3 498.6,200.7 500.2,201 501.9,201.4 503.5,201.6 505.1,201.8 506.8,201.9 508.4,202 510,202.1 511.6,202 513.2,201.9 514.9,201.8 516.5,201.6 518.1,201.4 519.8,201 521.4,200.7 523,200.3 524.6,199.8 526.2,199.3 527.9,198.7 529.5,198 531.1,197.3 532.8,196.6 534.4,195.8 536,194.9 537.6,194 539.2,193 540.9,191.9 542.5,190.8 544.1,189.7 545.8,188.5 547.4,187.2 549,185.9 550.6,184.5 552.2,183.1 553.9,181.6 555.5,180.1 557.1,178.5 558.8,176.8 560.4,175.1 562,173.4 563.6,171.5 565.2,169.7 566.9,167.7 568.5,165.7 570.1,163.7 571.8,161.6 573.4,159.4 575,157.2 576.6,154.9 578.2,152.6 579.9,150.2 581.5,147.8 583.1,145.3 584.8,142.8 586.4,140.1 588,137.5 589.6,134.8 591.2,132 592.9,129.2 594.5,126.3 596.1,123.3 597.8,120.3 599.4,117.3 601,114.2 602.6,111 604.2,107.8 605.9,104.5 607.5,101.2 609.1,97.8 610.8,94.3 612.4,90.8 614,87.3 615.6,83.7 617.2,80 618.9,76.3 620.5,72.5 622.1,68.6 623.8,64.7 625.4,60.8 627,56.8 628.6,52.7 630.2,48.6 631.9,44.4 633.5,40.2 635.1,35.9 636.8,31.6"/>
+<polyline fill="none" stroke="#b91c1c" stroke-width="1.6" stroke-dasharray="5 4" points="385.9,52 386.4,52.8 386.8,53.6 387.2,54.5 387.7,55.3 388.1,56.1 388.6,57 389,57.8 389.5,58.6 389.9,59.5 390.3,60.3 390.8,61.1 391.2,62 391.7,62.8 392.1,63.6 392.6,64.5 393,65.3 393.4,66.1 393.9,67 394.3,67.8 394.8,68.6 395.2,69.5 395.7,70.3 396.1,71.1 396.5,72 397,72.8 397.4,73.7 397.9,74.5 398.3,75.3 398.8,76.2 399.2,77 399.6,77.8 400.1,78.7 400.5,79.5 401,80.3 401.4,81.2 401.9,82 402.3,82.8 402.8,83.7 403.2,84.5 403.6,85.3 404.1,86.2 404.5,87 405,87.8 405.4,88.7 405.9,89.5 406.3,90.3 406.7,91.2 407.2,92 407.6,92.8 408.1,93.7 408.5,94.5 409,95.3 409.4,96.2 409.8,97 410.3,97.8 410.7,98.7 411.2,99.5 411.6,100.3 412.1,101.2 412.5,102 412.9,102.8 413.4,103.7 413.8,104.5 414.3,105.3 414.7,106.2 415.2,107 415.6,107.8 416,108.7 416.5,109.5 416.9,110.3 417.4,111.2 417.8,112 418.3,112.8 418.7,113.7 419.1,114.5 419.6,115.3 420,116.2 420.5,117 420.9,117.8 421.4,118.7 421.8,119.5 422.2,120.3 422.7,121.2 423.1,122 423.6,122.8 424,123.7 424.5,124.5 424.9,125.3 425.4,126.2 425.8,127 426.2,127.8 426.7,128.7 427.1,129.5 427.6,130.4 428,131.2 428.5,132 428.9,132.9 429.3,133.7 429.8,134.5 430.2,135.4 430.7,136.2 431.1,137 431.6,137.9 432,138.7 432.4,139.5 432.9,140.4 433.3,141.2 433.8,142 434.2,142.9 434.7,143.7 435.1,144.5 435.5,145.4 436,146.2 436.4,147 436.9,147.9 437.3,148.7 437.8,149.5 438.2,150.4 438.6,151.2 439.1,152 439.5,152.9 440,153.7 440.4,154.5 440.9,155.4 441.3,156.2 441.8,157 442.2,157.9 442.6,158.7 443.1,159.5 443.5,160.4 444,161.2 444.4,162 444.9,162.9 445.3,163.7 445.7,164.5 446.2,165.4 446.6,166.2 447.1,167 447.5,167.9 448,168.7 448.4,169.5 448.8,170.4 449.3,171.2 449.7,172 450.2,172.9 450.6,173.7 451.1,174.5 451.5,175.4 451.9,176.2 452.4,177 452.8,177.9 453.3,178.7 453.7,179.5 454.2,180.4 454.6,181.2 455,182 455.5,182.9 455.9,183.7 456.4,184.5 456.8,185.4"/>
+<circle cx="421.4" cy="118.7" r="5.5" fill="#b91c1c"/>
+<line x1="421.4" y1="196" x2="474.5" y2="196" stroke="#166534" stroke-width="2.4" marker-end="url(#arG-gd_sign)"/>
+<circle cx="510" cy="202.1" r="4" fill="#166534"/>
+<text x="510" y="238" font-size="12.5" fill="#b91c1c" text-anchor="middle" font-weight="700">기울기 &lt; 0 (negative number)</text>
+<text x="510" y="258" font-size="12" fill="#166534" text-anchor="middle" font-weight="700">w₁ ← w₁ − α(음수) → w₁ 증가</text>
+</svg></div><figcaption>교안 32p 빈칸 채우기 — 기울기가 양수면 <b>왼쪽</b>으로, 음수면 <b>오른쪽</b>으로. 부호와 상관없이 <b>항상 바닥 쪽</b>으로 움직인다는 것이 빼기(−) 부호의 역할이다</figcaption></figure>
+<div class="fx">
+  <div class="tex-d">\begin{aligned} w_1 &amp;\leftarrow w_1-\alpha\,(\textbf{positive}\ \text{number}) &amp;&amp;\Rightarrow\ w_1\ \text{감소}\\ w_1 &amp;\leftarrow w_1-\alpha\,(\textbf{negative}\ \text{number}) &amp;&amp;\Rightarrow\ w_1\ \text{증가}\end{aligned}</div>
+  <p class="fx-note">학습률 <span class="tex">\alpha</span> 는 양수이므로, 양수를 빼면 줄고 음수를 빼면(= 더하면) 는다.</p>
+</div>
+
+<h3 class="sub-title">수업시간 도식 ③ — 경사하강법의 특성 : 학습률 크기</h3>
+<div class="note-box"><ul class="ul">
+  <li><span class="tex">\alpha</span>가 <b>너무 작으면</b>, 경사 하강이 <b>천천히</b> 발생함</li>
+  <li><span class="tex">\alpha</span>가 <b>너무 크면</b>, 수렴되지 않고 <b>발산</b> 등이 됨</li>
+</ul></div>
+<figure class="fig svgfig"><div class="svg-scroll"><svg viewBox="0 0 700 280" role="img" aria-label="학습률 0.02는 천천히, 0.1은 빠르게 수렴, 0.25는 좌우로 튀며 발산" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar-gd_lr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arG-gd_lr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#166534"/></marker></defs>
+<line x1="34" y1="204" x2="228" y2="204" stroke="#6b7280" stroke-width="1.4" marker-end="url(#ar-gd_lr)"/>
+<line x1="34" y1="204" x2="34" y2="26" stroke="#6b7280" stroke-width="1.4" marker-end="url(#ar-gd_lr)"/>
+<text x="228" y="221" font-size="12" fill="#6b7280" text-anchor="end" font-weight="400">w₁</text>
+<text x="40" y="32" font-size="12" fill="#6b7280" text-anchor="start" font-weight="400">L</text>
+<polyline fill="none" stroke="#1b3f8b" stroke-width="2" points="34,40.5 35.2,44.6 36.3,48.6 37.5,52.5 38.6,56.4 39.8,60.3 41,64.1 42.1,67.9 43.3,71.6 44.5,75.2 45.6,78.8 46.8,82.4 48,85.9 49.1,89.3 50.3,92.7 51.4,96.1 52.6,99.4 53.8,102.6 54.9,105.8 56.1,108.9 57.2,112 58.4,115.1 59.6,118.1 60.7,121 61.9,123.9 63.1,126.7 64.2,129.5 65.4,132.2 66.5,134.9 67.7,137.6 68.9,140.1 70,142.7 71.2,145.1 72.4,147.6 73.5,149.9 74.7,152.3 75.8,154.5 77,156.8 78.2,158.9 79.3,161.1 80.5,163.1 81.7,165.1 82.8,167.1 84,169 85.1,170.9 86.3,172.7 87.5,174.5 88.6,176.2 89.8,177.8 91,179.4 92.1,181 93.3,182.5 94.5,184 95.6,185.4 96.8,186.7 97.9,188 99.1,189.3 100.3,190.5 101.4,191.6 102.6,192.7 103.8,193.8 104.9,194.8 106.1,195.7 107.2,196.6 108.4,197.5 109.6,198.3 110.7,199 111.9,199.7 113.1,200.3 114.2,200.9 115.4,201.4 116.5,201.9 117.7,202.4 118.9,202.7 120,203.1 121.2,203.4 122.4,203.6 123.5,203.8 124.7,203.9 125.8,204 127,204 128.2,204 129.3,203.9 130.5,203.8 131.7,203.6 132.8,203.4 134,203.1 135.1,202.7 136.3,202.4 137.5,201.9 138.6,201.4 139.8,200.9 140.9,200.3 142.1,199.7 143.3,199 144.4,198.3 145.6,197.5 146.8,196.6 147.9,195.7 149.1,194.8 150.2,193.8 151.4,192.7 152.6,191.6 153.7,190.5 154.9,189.3 156.1,188 157.2,186.7 158.4,185.4 159.5,184 160.7,182.5 161.9,181 163,179.4 164.2,177.8 165.4,176.2 166.5,174.5 167.7,172.7 168.8,170.9 170,169 171.2,167.1 172.3,165.1 173.5,163.1 174.7,161.1 175.8,158.9 177,156.8 178.2,154.5 179.3,152.3 180.5,149.9 181.6,147.6 182.8,145.1 184,142.7 185.1,140.1 186.3,137.6 187.4,134.9 188.6,132.2 189.8,129.5 190.9,126.7 192.1,123.9 193.3,121 194.4,118.1 195.6,115.1 196.7,112 197.9,108.9 199.1,105.8 200.2,102.6 201.4,99.4 202.6,96.1 203.7,92.7 204.9,89.3 206.1,85.9 207.2,82.4 208.4,78.8 209.5,75.2 210.7,71.6 211.9,67.9 213,64.1 214.2,60.3 215.3,56.4 216.5,52.5 217.7,48.6 218.8,44.6 220,40.5"/>
+<line x1="91.2" y1="179.8" x2="97.9" y2="188" stroke="#b45309" stroke-width="1.8"/>
+<line x1="97.9" y1="188" x2="103.3" y2="193.4" stroke="#b45309" stroke-width="1.8"/>
+<line x1="103.3" y1="193.4" x2="107.8" y2="197" stroke="#b45309" stroke-width="1.8"/>
+<line x1="107.8" y1="197" x2="111.3" y2="199.4" stroke="#b45309" stroke-width="1.8"/>
+<line x1="111.3" y1="199.4" x2="114.3" y2="200.9" stroke="#b45309" stroke-width="1.8"/>
+<circle cx="91.2" cy="179.8" r="5.5" fill="#b45309"/>
+<circle cx="97.9" cy="188" r="4.2" fill="#b45309"/>
+<circle cx="103.3" cy="193.4" r="4.2" fill="#b45309"/>
+<circle cx="107.8" cy="197" r="4.2" fill="#b45309"/>
+<circle cx="111.3" cy="199.4" r="4.2" fill="#b45309"/>
+<circle cx="114.3" cy="200.9" r="4.2" fill="#b45309"/>
+<text x="84.2" y="172.8" font-size="10.5" fill="#6b7280" text-anchor="end" font-weight="400">시작</text>
+<text x="127" y="234" font-size="12.5" fill="#b45309" text-anchor="middle" font-weight="700">α = 0.02 — 너무 작음</text>
+<text x="127" y="254" font-size="11.5" fill="#374151" text-anchor="middle" font-weight="400">5번 갱신해도 w₁ = 0.82</text>
+<line x1="262" y1="204" x2="456" y2="204" stroke="#6b7280" stroke-width="1.4" marker-end="url(#ar-gd_lr)"/>
+<line x1="262" y1="204" x2="262" y2="26" stroke="#6b7280" stroke-width="1.4" marker-end="url(#ar-gd_lr)"/>
+<text x="456" y="221" font-size="12" fill="#6b7280" text-anchor="end" font-weight="400">w₁</text>
+<text x="268" y="32" font-size="12" fill="#6b7280" text-anchor="start" font-weight="400">L</text>
+<polyline fill="none" stroke="#1b3f8b" stroke-width="2" points="262,40.5 263.2,44.6 264.3,48.6 265.5,52.5 266.6,56.4 267.8,60.3 269,64.1 270.1,67.9 271.3,71.6 272.5,75.2 273.6,78.8 274.8,82.4 275.9,85.9 277.1,89.3 278.3,92.7 279.4,96.1 280.6,99.4 281.8,102.6 282.9,105.8 284.1,108.9 285.2,112 286.4,115.1 287.6,118.1 288.7,121 289.9,123.9 291.1,126.7 292.2,129.5 293.4,132.2 294.6,134.9 295.7,137.6 296.9,140.1 298,142.7 299.2,145.1 300.4,147.6 301.5,149.9 302.7,152.3 303.9,154.5 305,156.8 306.2,158.9 307.3,161.1 308.5,163.1 309.7,165.1 310.8,167.1 312,169 313.1,170.9 314.3,172.7 315.5,174.5 316.6,176.2 317.8,177.8 319,179.4 320.1,181 321.3,182.5 322.4,184 323.6,185.4 324.8,186.7 325.9,188 327.1,189.3 328.3,190.5 329.4,191.6 330.6,192.7 331.8,193.8 332.9,194.8 334.1,195.7 335.2,196.6 336.4,197.5 337.6,198.3 338.7,199 339.9,199.7 341.1,200.3 342.2,200.9 343.4,201.4 344.5,201.9 345.7,202.4 346.9,202.7 348,203.1 349.2,203.4 350.4,203.6 351.5,203.8 352.7,203.9 353.8,204 355,204 356.2,204 357.3,203.9 358.5,203.8 359.6,203.6 360.8,203.4 362,203.1 363.1,202.7 364.3,202.4 365.5,201.9 366.6,201.4 367.8,200.9 368.9,200.3 370.1,199.7 371.3,199 372.4,198.3 373.6,197.5 374.8,196.6 375.9,195.7 377.1,194.8 378.2,193.8 379.4,192.7 380.6,191.6 381.7,190.5 382.9,189.3 384.1,188 385.2,186.7 386.4,185.4 387.5,184 388.7,182.5 389.9,181 391,179.4 392.2,177.8 393.4,176.2 394.5,174.5 395.7,172.7 396.9,170.9 398,169 399.2,167.1 400.3,165.1 401.5,163.1 402.7,161.1 403.8,158.9 405,156.8 406.1,154.5 407.3,152.3 408.5,149.9 409.6,147.6 410.8,145.1 412,142.7 413.1,140.1 414.3,137.6 415.4,134.9 416.6,132.2 417.8,129.5 418.9,126.7 420.1,123.9 421.3,121 422.4,118.1 423.6,115.1 424.8,112 425.9,108.9 427.1,105.8 428.2,102.6 429.4,99.4 430.6,96.1 431.7,92.7 432.9,89.3 434.1,85.9 435.2,82.4 436.4,78.8 437.5,75.2 438.7,71.6 439.9,67.9 441,64.1 442.2,60.3 443.4,56.4 444.5,52.5 445.7,48.6 446.8,44.6 448,40.5"/>
+<line x1="319.2" y1="179.8" x2="352.6" y2="203.9" stroke="#166534" stroke-width="1.8"/>
+<line x1="352.6" y1="203.9" x2="354.8" y2="204" stroke="#166534" stroke-width="1.8"/>
+<line x1="354.8" y1="204" x2="355" y2="204" stroke="#166534" stroke-width="1.8"/>
+<line x1="355" y1="204" x2="355" y2="204" stroke="#166534" stroke-width="1.8"/>
+<line x1="355" y1="204" x2="355" y2="204" stroke="#166534" stroke-width="1.8"/>
+<circle cx="319.2" cy="179.8" r="5.5" fill="#166534"/>
+<circle cx="352.6" cy="203.9" r="4.2" fill="#166534"/>
+<circle cx="354.8" cy="204" r="4.2" fill="#166534"/>
+<circle cx="355" cy="204" r="4.2" fill="#166534"/>
+<circle cx="355" cy="204" r="4.2" fill="#166534"/>
+<circle cx="355" cy="204" r="4.2" fill="#166534"/>
+<text x="312.2" y="172.8" font-size="10.5" fill="#6b7280" text-anchor="end" font-weight="400">시작</text>
+<text x="355" y="234" font-size="12.5" fill="#166534" text-anchor="middle" font-weight="700">α = 0.1 — 적당함</text>
+<text x="355" y="254" font-size="11.5" fill="#374151" text-anchor="middle" font-weight="400">2번 만에 w₁ ≈ 0.998</text>
+<line x1="490" y1="204" x2="684" y2="204" stroke="#6b7280" stroke-width="1.4" marker-end="url(#ar-gd_lr)"/>
+<line x1="490" y1="204" x2="490" y2="26" stroke="#6b7280" stroke-width="1.4" marker-end="url(#ar-gd_lr)"/>
+<text x="684" y="221" font-size="12" fill="#6b7280" text-anchor="end" font-weight="400">w₁</text>
+<text x="496" y="32" font-size="12" fill="#6b7280" text-anchor="start" font-weight="400">L</text>
+<polyline fill="none" stroke="#1b3f8b" stroke-width="2" points="490,40.5 491.2,44.6 492.3,48.6 493.5,52.5 494.6,56.4 495.8,60.3 497,64.1 498.1,67.9 499.3,71.6 500.5,75.2 501.6,78.8 502.8,82.4 503.9,85.9 505.1,89.3 506.3,92.7 507.4,96.1 508.6,99.4 509.8,102.6 510.9,105.8 512.1,108.9 513.2,112 514.4,115.1 515.6,118.1 516.7,121 517.9,123.9 519.1,126.7 520.2,129.5 521.4,132.2 522.5,134.9 523.7,137.6 524.9,140.1 526,142.7 527.2,145.1 528.4,147.6 529.5,149.9 530.7,152.3 531.9,154.5 533,156.8 534.2,158.9 535.3,161.1 536.5,163.1 537.7,165.1 538.8,167.1 540,169 541.1,170.9 542.3,172.7 543.5,174.5 544.6,176.2 545.8,177.8 547,179.4 548.1,181 549.3,182.5 550.5,184 551.6,185.4 552.8,186.7 553.9,188 555.1,189.3 556.3,190.5 557.4,191.6 558.6,192.7 559.8,193.8 560.9,194.8 562.1,195.7 563.2,196.6 564.4,197.5 565.6,198.3 566.7,199 567.9,199.7 569,200.3 570.2,200.9 571.4,201.4 572.5,201.9 573.7,202.4 574.9,202.7 576,203.1 577.2,203.4 578.4,203.6 579.5,203.8 580.7,203.9 581.8,204 583,204 584.2,204 585.3,203.9 586.5,203.8 587.6,203.6 588.8,203.4 590,203.1 591.1,202.7 592.3,202.4 593.5,201.9 594.6,201.4 595.8,200.9 597,200.3 598.1,199.7 599.3,199 600.4,198.3 601.6,197.5 602.8,196.6 603.9,195.7 605.1,194.8 606.2,193.8 607.4,192.7 608.6,191.6 609.7,190.5 610.9,189.3 612.1,188 613.2,186.7 614.4,185.4 615.5,184 616.7,182.5 617.9,181 619,179.4 620.2,177.8 621.4,176.2 622.5,174.5 623.7,172.7 624.9,170.9 626,169 627.2,167.1 628.3,165.1 629.5,163.1 630.7,161.1 631.8,158.9 633,156.8 634.1,154.5 635.3,152.3 636.5,149.9 637.6,147.6 638.8,145.1 640,142.7 641.1,140.1 642.3,137.6 643.5,134.9 644.6,132.2 645.8,129.5 646.9,126.7 648.1,123.9 649.3,121 650.4,118.1 651.6,115.1 652.8,112 653.9,108.9 655.1,105.8 656.2,102.6 657.4,99.4 658.6,96.1 659.7,92.7 660.9,89.3 662,85.9 663.2,82.4 664.4,78.8 665.5,75.2 666.7,71.6 667.9,67.9 669,64.1 670.2,60.3 671.4,56.4 672.5,52.5 673.7,48.6 674.8,44.6 676,40.5"/>
+<line x1="547.2" y1="179.8" x2="630.7" y2="161" stroke="#b91c1c" stroke-width="1.8"/>
+<line x1="630.7" y1="161" x2="519.4" y2="127.6" stroke="#b91c1c" stroke-width="1.8"/>
+<line x1="519.4" y1="127.6" x2="667.8" y2="68.1" stroke="#b91c1c" stroke-width="1.8"/>
+<circle cx="547.2" cy="179.8" r="5.5" fill="#b91c1c"/>
+<circle cx="630.7" cy="161" r="4.2" fill="#b91c1c"/>
+<circle cx="519.4" cy="127.6" r="4.2" fill="#b91c1c"/>
+<circle cx="667.8" cy="68.1" r="4.2" fill="#b91c1c"/>
+<text x="540.2" y="172.8" font-size="10.5" fill="#6b7280" text-anchor="end" font-weight="400">시작</text>
+<text x="583" y="234" font-size="12.5" fill="#b91c1c" text-anchor="middle" font-weight="700">α = 0.25 — 너무 큼</text>
+<text x="583" y="254" font-size="11.5" fill="#374151" text-anchor="middle" font-weight="400">0.5 → 1.67 → 0.11 → 2.19</text>
+</svg></div><figcaption>교안 33p 빈칸 채우기 — 앞의 <span class="tex">L(w_1)=\frac{14}{3}(w_1-1)^2</span> 에서 <span class="tex">w_1=0.5</span> 로 시작해 실제로 갱신한 경로</figcaption></figure>
+<div class="ex">
+  <p class="ex-q"><em>한 걸음씩 계산</em> <span class="tex">\dfrac{dL}{dw_1}=\dfrac{28}{3}(w_1-1)</span>, 시작 <span class="tex">w_1=0.5</span> 에서 기울기는 <span class="tex">-4.67</span></p>
+  <div class="step"><i>①</i><div><span class="tex">\alpha=0.1</span>: <span class="tex">w_1=0.5-0.1\times(-4.67)=0.967</span> → 다음 기울기 <span class="tex">-0.31</span> → <span class="tex">w_1=0.998</span> — 두 번 만에 거의 도착</div></div>
+  <div class="step"><i>②</i><div><span class="tex">\alpha=0.02</span>: <span class="tex">0.5\to0.593\to0.669\to0.731\to0.781\to0.822</span> — 방향은 맞지만 너무 느리다</div></div>
+  <div class="step"><i>③</i><div><span class="tex">\alpha=0.25</span>: <span class="tex">0.5\to1.667\to0.111\to2.185\to-0.580\to3.107</span> — 바닥을 넘어 반대편으로 튀면서 점점 멀어진다</div></div>
+  <div class="ex-ans"><b>왜 0.25는 발산할까</b> — 한 번 갱신하면 <span class="tex">(w_1-1)</span> 이 <span class="tex">(1-\alpha\cdot\tfrac{28}{3})</span> 배가 된다. 이 값의 절댓값이 1보다 크면(<span class="tex">\alpha&gt;0.214</span>) 오차가 매번 커진다</div>
+</div>
+
+<h3 class="sub-title">수업시간 도식 ④ — 경사하강법의 한계점</h3>
+<figure class="fig svgfig"><div class="svg-scroll"><svg viewBox="0 0 680 262" role="img" aria-label="지역 최솟값과 극대점에서는 기울기가 0이라 갱신이 멈춘다" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar-gd_limit" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arG-gd_limit" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#166534"/></marker></defs>
+<line x1="50" y1="210" x2="638" y2="210" stroke="#6b7280" stroke-width="1.4" marker-end="url(#ar-gd_limit)"/>
+<line x1="50" y1="210" x2="50" y2="32" stroke="#6b7280" stroke-width="1.4" marker-end="url(#ar-gd_limit)"/>
+<text x="638" y="227" font-size="12" fill="#6b7280" text-anchor="end" font-weight="400">w₁</text>
+<text x="56" y="38" font-size="12" fill="#6b7280" text-anchor="start" font-weight="400">L(w₁)</text>
+<polyline fill="none" stroke="#1b3f8b" stroke-width="2.4" points="55.8,84.9 57.2,84.3 58.6,83.6 60.1,82.9 61.5,82.2 62.9,81.5 64.3,80.8 65.7,80.2 67.2,79.5 68.6,78.9 70,78.3 71.4,77.7 72.9,77.1 74.3,76.5 75.7,75.9 77.1,75.4 78.5,74.8 80,74.3 81.4,73.8 82.8,73.4 84.2,72.9 85.6,72.5 87.1,72.1 88.5,71.7 89.9,71.3 91.3,71 92.7,70.7 94.2,70.4 95.6,70.2 97,70 98.4,69.8 99.9,69.6 101.3,69.5 102.7,69.4 104.1,69.3 105.5,69.2 107,69.2 108.4,69.2 109.8,69.3 111.2,69.4 112.6,69.5 114.1,69.6 115.5,69.8 116.9,70 118.3,70.2 119.7,70.5 121.2,70.8 122.6,71.1 124,71.5 125.4,71.9 126.9,72.4 128.3,72.8 129.7,73.3 131.1,73.9 132.5,74.4 134,75 135.4,75.7 136.8,76.3 138.2,77 139.6,77.7 141.1,78.5 142.5,79.3 143.9,80.1 145.3,80.9 146.7,81.8 148.2,82.6 149.6,83.6 151,84.5 152.4,85.5 153.8,86.5 155.3,87.5 156.7,88.5 158.1,89.6 159.5,90.6 161,91.7 162.4,92.9 163.8,94 165.2,95.1 166.6,96.3 168.1,97.5 169.5,98.7 170.9,99.9 172.3,101.1 173.7,102.4 175.2,103.6 176.6,104.9 178,106.2 179.4,107.4 180.8,108.7 182.3,110 183.7,111.3 185.1,112.6 186.5,113.9 188,115.2 189.4,116.5 190.8,117.8 192.2,119.1 193.6,120.4 195.1,121.6 196.5,122.9 197.9,124.2 199.3,125.5 200.7,126.7 202.2,128 203.6,129.2 205,130.4 206.4,131.7 207.8,132.9 209.3,134 210.7,135.2 212.1,136.4 213.5,137.5 215,138.6 216.4,139.7 217.8,140.8 219.2,141.8 220.6,142.9 222.1,143.9 223.5,144.8 224.9,145.8 226.3,146.7 227.7,147.6 229.2,148.5 230.6,149.4 232,150.2 233.4,151 234.8,151.7 236.3,152.5 237.7,153.2 239.1,153.8 240.5,154.5 242,155.1 243.4,155.6 244.8,156.2 246.2,156.7 247.6,157.1 249.1,157.5 250.5,157.9 251.9,158.3 253.3,158.6 254.7,158.9 256.2,159.2 257.6,159.4 259,159.6 260.4,159.7 261.8,159.8 263.3,159.9 264.7,159.9 266.1,159.9 267.5,159.9 268.9,159.8 270.4,159.7 271.8,159.6 273.2,159.4 274.6,159.2 276.1,158.9 277.5,158.6 278.9,158.3 280.3,158 281.7,157.6 283.2,157.2 284.6,156.7 286,156.3 287.4,155.7 288.8,155.2 290.3,154.6 291.7,154.1 293.1,153.4 294.5,152.8 295.9,152.1 297.4,151.4 298.8,150.7 300.2,149.9 301.6,149.1 303.1,148.3 304.5,147.5 305.9,146.7 307.3,145.8 308.7,145 310.2,144.1 311.6,143.1 313,142.2 314.4,141.3 315.8,140.3 317.3,139.4 318.7,138.4 320.1,137.4 321.5,136.4 322.9,135.4 324.4,134.4 325.8,133.3 327.2,132.3 328.6,131.3 330.1,130.2 331.5,129.2 332.9,128.2 334.3,127.1 335.7,126.1 337.2,125.1 338.6,124 340,123 341.4,122 342.8,121 344.3,120 345.7,119 347.1,118 348.5,117 349.9,116 351.4,115.1 352.8,114.2 354.2,113.2 355.6,112.3 357.1,111.4 358.5,110.6 359.9,109.7 361.3,108.9 362.7,108.1 364.2,107.3 365.6,106.5 367,105.8 368.4,105 369.8,104.3 371.3,103.7 372.7,103 374.1,102.4 375.5,101.8 376.9,101.2 378.4,100.7 379.8,100.2 381.2,99.7 382.6,99.3 384.1,98.8 385.5,98.4 386.9,98.1 388.3,97.8 389.7,97.5 391.2,97.2 392.6,97 394,96.8 395.4,96.6 396.8,96.4 398.3,96.3 399.7,96.3 401.1,96.2 402.5,96.2 403.9,96.3 405.4,96.3 406.8,96.4 408.2,96.5 409.6,96.7 411,96.9 412.5,97.1 413.9,97.4 415.3,97.6 416.7,98 418.2,98.3 419.6,98.7 421,99.1 422.4,99.5 423.8,100 425.3,100.5 426.7,101 428.1,101.5 429.5,102.1 430.9,102.7 432.4,103.3 433.8,104 435.2,104.6 436.6,105.3 438,106.1 439.5,106.8 440.9,107.6 442.3,108.3 443.7,109.1 445.2,109.9 446.6,110.8 448,111.6 449.4,112.5 450.8,113.3 452.3,114.2 453.7,115.1 455.1,116 456.5,117 457.9,117.9 459.4,118.8 460.8,119.8 462.2,120.7 463.6,121.7 465,122.6 466.5,123.6 467.9,124.6 469.3,125.5 470.7,126.5 472.2,127.5 473.6,128.4 475,129.4 476.4,130.3 477.8,131.3 479.3,132.2 480.7,133.1 482.1,134 483.5,134.9 484.9,135.8 486.4,136.7 487.8,137.6 489.2,138.4 490.6,139.3 492,140.1 493.5,140.9 494.9,141.7 496.3,142.4 497.7,143.2 499.2,143.9 500.6,144.6 502,145.3 503.4,145.9 504.8,146.6 506.3,147.2 507.7,147.7 509.1,148.3 510.5,148.8 511.9,149.3 513.4,149.8 514.8,150.2 516.2,150.6 517.6,151 519,151.3 520.5,151.6 521.9,151.9 523.3,152.1 524.7,152.3 526.2,152.5 527.6,152.6 529,152.7 530.4,152.8 531.8,152.9 533.3,152.8 534.7,152.8 536.1,152.7 537.5,152.6 538.9,152.5 540.4,152.3 541.8,152.1 543.2,151.8 544.6,151.5 546,151.2 547.5,150.8 548.9,150.5 550.3,150 551.7,149.5 553.2,149 554.6,148.5 556,147.9 557.4,147.3 558.8,146.7 560.3,146 561.7,145.3 563.1,144.6 564.5,143.8 565.9,143 567.4,142.2 568.8,141.3 570.2,140.4 571.6,139.5 573,138.5 574.5,137.5 575.9,136.5 577.3,135.5 578.7,134.4 580.1,133.4 581.6,132.3 583,131.1 584.4,130 585.8,128.8 587.3,127.6 588.7,126.4 590.1,125.2 591.5,124 592.9,122.7 594.4,121.4 595.8,120.1 597.2,118.8 598.6,117.5 600,116.2 601.5,114.9 602.9,113.5 604.3,112.2 605.7,110.8 607.1,109.5 608.6,108.1 610,106.7 611.4,105.3 612.8,104 614.3,102.6 615.7,101.2 617.1,99.9 618.5,98.5 619.9,97.1 621.4,95.8 622.8,94.4 624.2,93.1"/>
+<circle cx="532.4" cy="152.9" r="6" fill="#b45309"/>
+<polyline fill="none" stroke="#b45309" stroke-width="1.6" stroke-dasharray="5 4" points="486,152.9 486.6,152.9 487.2,152.9 487.7,152.9 488.3,152.9 488.9,152.9 489.5,152.9 490.1,152.9 490.6,152.9 491.2,152.9 491.8,152.9 492.4,152.9 493,152.9 493.5,152.9 494.1,152.9 494.7,152.9 495.3,152.9 495.9,152.9 496.4,152.9 497,152.9 497.6,152.9 498.2,152.9 498.8,152.9 499.3,152.9 499.9,152.9 500.5,152.9 501.1,152.9 501.7,152.9 502.2,152.9 502.8,152.9 503.4,152.9 504,152.9 504.6,152.9 505.1,152.9 505.7,152.9 506.3,152.9 506.9,152.9 507.5,152.9 508,152.9 508.6,152.9 509.2,152.9 509.8,152.9 510.4,152.9 510.9,152.9 511.5,152.9 512.1,152.9 512.7,152.9 513.3,152.9 513.8,152.9 514.4,152.9 515,152.9 515.6,152.9 516.2,152.9 516.7,152.9 517.3,152.9 517.9,152.9 518.5,152.9 519.1,152.9 519.6,152.9 520.2,152.9 520.8,152.9 521.4,152.9 522,152.9 522.5,152.9 523.1,152.9 523.7,152.9 524.3,152.9 524.9,152.9 525.4,152.9 526,152.9 526.6,152.9 527.2,152.9 527.8,152.9 528.3,152.9 528.9,152.9 529.5,152.9 530.1,152.9 530.7,152.9 531.2,152.9 531.8,152.9 532.4,152.9 533,152.9 533.6,152.9 534.1,152.9 534.7,152.9 535.3,152.9 535.9,152.9 536.5,152.9 537,152.9 537.6,152.9 538.2,152.9 538.8,152.9 539.4,152.9 539.9,152.9 540.5,152.9 541.1,152.9 541.7,152.9 542.3,152.9 542.8,152.9 543.4,152.9 544,152.9 544.6,152.9 545.2,152.9 545.7,152.9 546.3,152.9 546.9,152.9 547.5,152.9 548.1,152.9 548.6,152.9 549.2,152.9 549.8,152.9 550.4,152.9 551,152.9 551.5,152.9 552.1,152.9 552.7,152.9 553.3,152.9 553.9,152.9 554.4,152.9 555,152.9 555.6,152.9 556.2,152.9 556.8,152.9 557.3,152.9 557.9,152.9 558.5,152.9 559.1,152.9 559.7,152.9 560.2,152.9 560.8,152.9 561.4,152.9 562,152.9 562.6,152.9 563.1,152.9 563.7,152.9 564.3,152.9 564.9,152.9 565.5,152.9 566,152.9 566.6,152.9 567.2,152.9 567.8,152.9 568.4,152.9 568.9,152.9 569.5,152.9 570.1,152.9 570.7,152.9 571.3,152.9 571.8,152.9 572.4,152.9 573,152.9 573.6,152.9 574.2,152.9 574.7,152.9 575.3,152.9 575.9,152.9 576.5,152.9 577.1,152.9 577.6,152.9 578.2,152.9 578.8,152.9"/>
+<text x="532.4" y="174.9" font-size="12" fill="#b45309" text-anchor="middle" font-weight="700">지역 최솟값 — 여기서 멈춤</text>
+<circle cx="265.4" cy="159.9" r="6" fill="#166534"/>
+<text x="265.4" y="181.9" font-size="12" fill="#166534" text-anchor="middle" font-weight="700">전역 최솟값 (진짜 목표)</text>
+<circle cx="402.1" cy="96.2" r="4.5" fill="#9ca3af"/>
+<text x="402.1" y="86.2" font-size="11" fill="#9ca3af" text-anchor="middle" font-weight="400">극대점도 기울기 0</text>
+<text x="340" y="250" font-size="12.5" fill="#1a1a2e" text-anchor="middle" font-weight="700">w₁ ← w₁ − α·(0) — 기울기가 0인 지점에 닿으면 더 이상 움직이지 않는다</text>
+</svg></div><figcaption>교안 34p 빈칸 채우기 — 기울기가 0이면 갱신량 <span class="tex">\alpha\cdot0=0</span></figcaption></figure>
+<div class="warn"><b>한계점</b> — <span class="tex">w_1\leftarrow w_1-\alpha(0)</span>. 기울기가 0인 곳에 도착하면 <b>더 이상 갱신되지 않고 그 지점에 머무른다.</b>
+그 지점이 <b>전역 최솟값이 아니어도</b>(지역 최솟값, 평평한 구간) 멈추게 된다 — 그래서 초기값이 중요하다(교안 29p).</div>
+<div class="good"><b>선형 회귀는 안심해도 되는 이유 (보충)</b> — MSE를 쓰는 선형 회귀의 손실은 교안 17p처럼 <b>그릇 모양(볼록 함수)</b>이라 골짜기가 하나뿐이다.
+지역 최솟값 문제는 뒤에 배울 <b>신경망</b>처럼 손실 곡면이 울퉁불퉁한 모델에서 본격적으로 문제가 된다.</div>
+</section>
+
+<!-- ===================== 3.6 ===================== -->
+<section class="sec" id="multi">
+  <div class="sec-head"><span class="sec-badge">3.6</span><h2 class="sec-title">다중 선형 회귀 (Multiple linear regression)<small>특징이 여러 개일 때 · <span class="tex">\mathbf w^{\mathsf T}\mathbf x_i</span> 표기 · 갱신식</small></h2></div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-20-multi-table.png" alt="교안 35p — 크기, 방의 수, 층 수, 집 연식, 가격 표와 x_i, x_ij 표기"><figcaption>교안 35p — 크기 · 방의 수 · 층 수 · 집 연식 4개 특징이 <span class="tex">\mathbf x_i=[x_{i1}\;x_{i2}\;\cdots\;x_{id}]^{\mathsf T}</span>, 가격이 <span class="tex">y_i</span>. <span class="tex">x_{ij}</span> 는 <span class="tex">i</span>번째 데이터의 <span class="tex">j</span>번째 특징 값</figcaption></figure>
+
+<h3 class="sub-title">매핑 함수 (Mapping Function)</h3>
+<div class="fx">
+  <p class="fx-lab">단순 → 다중</p>
+  <div class="tex-d">\begin{aligned} \text{단순 선형 회귀}&amp;:\ f_{\mathbf w}(x_i)=w_0+w_1x_i\\ \text{다중 선형 회귀}&amp;:\ f_{\mathbf w}(\mathbf x_i)=w_0+w_1x_{i1}+w_2x_{i2}+w_3x_{i3}+w_4x_{i4}\end{aligned}</div>
+  <p class="fx-note">교안 예시 <span class="tex">f_{\mathbf w}(\mathbf x_i)=80+0.1x_{i1}+0.01x_{i2}+5x_{i3}-2x_{i4}</span></p>
+</div>
+<div class="ex">
+  <p class="ex-q"><em>계수 해석과 대입</em> 위 예시에 <span class="tex">x_{i1}=1000,\;x_{i2}=200,\;x_{i3}=2,\;x_{i4}=40</span> 을 넣으면?</p>
+  <div class="step"><i>①</i><div><span class="tex">80+0.1(1000)+0.01(200)+5(2)-2(40)=80+100+2+10-80=112</span></div></div>
+  <div class="step"><i>②</i><div>계수 <span class="tex">-2</span> 는 &ldquo;<b>다른 특징이 고정</b>된 상태에서 <span class="tex">x_{i4}</span>가 1 늘면 예측이 2 줄어든다&rdquo;는 뜻</div></div>
+  <div class="ex-ans"><b>답</b> — 112 · 각 가중치 = 그 특징이 1 증가할 때 출력의 변화량</div>
+</div>
+
+<h3 class="sub-title">간편한 표기 — <span class="tex">x_{i0}=1</span> 로 정의하자</h3>
+<div class="fx">
+  <p class="fx-lab">바이어스를 벡터 안으로</p>
+  <div class="tex-d">\begin{gathered}\mathbf x_i=[x_{i0}\;x_{i1}\;\cdots\;x_{ij}\;\cdots\;x_{id}]^{\mathsf T}\in\mathbb R^{d+1},\qquad \mathbf w=[w_0\;w_1\;\cdots\;w_j\;\cdots\;w_d]^{\mathsf T}\in\mathbb R^{d+1}\\[4pt] f_{\mathbf w}(\mathbf x_i)=\mathbf w^{\mathsf T}\mathbf x_i\end{gathered}</div>
+  <p class="fx-note"><span class="tex">x_{i0}=1</span> 을 앞에 붙이면 <span class="tex">w_0\cdot1</span> 이 절편 역할을 하므로, 식 전체가 <b>내적 한 번</b> <span class="tex">\mathbf w^{\mathsf T}\mathbf x_i=\sum_{j=0}^{d}w_jx_{ij}</span> 으로 정리된다. 이를 <b>다중 선형 회귀</b>라 한다.
+  벡터의 크기가 <span class="tex">d</span>가 아니라 <b><span class="tex">d+1</span></b> 이 되는 것에 주의.</p>
+</div>
+<div class="fx">
+  <p class="fx-lab">파라미터와 손실함수</p>
+  <div class="tex-d">\mathbf w=[w_0\;w_1\;\cdots\;w_d]^{\mathsf T}\in\mathbb R^{d+1},\qquad L(\mathbf w)=\frac1N\sum_{i=1}^{N}\bigl(f_{\mathbf w}(\mathbf x_i)-y_i\bigr)^2</div>
+</div>
+
+<h3 class="sub-title">경사하강법 갱신식 — 단순 vs 다중</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>단순 선형 회귀</th><th>다중 선형 회귀</th></tr></thead>
+  <tbody>
+    <tr><td>반복 (Repeat)</td><td><span class="tex">w_0\leftarrow w_0-\alpha\frac{\partial}{\partial w_0}L(w_0,w_1)</span><br><span class="tex">w_1\leftarrow w_1-\alpha\frac{\partial}{\partial w_1}L(w_0,w_1)</span></td><td><span class="tex">w_j\leftarrow w_j-\alpha\frac{\partial}{\partial w_j}L(\mathbf w)</span><br>(<span class="tex">j=0,1,\dots,d</span> 모두 동시에)</td></tr>
+    <tr><td>갱신 대상</td><td>2개</td><td><span class="tex">d+1</span>개</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="fx">
+  <p class="fx-lab">다중 선형 회귀 갱신식 유도 — 교안 39p</p>
+  <div class="tex-d">\begin{aligned} w_j &amp;\leftarrow w_j-\alpha\frac{\partial}{\partial w_j}\Bigl(\frac1N\sum_{i=1}^{N}\bigl(f_{\mathbf w}(\mathbf x_i)-y_i\bigr)^2\Bigr)\\ &amp;\leftarrow w_j-\alpha\,\frac2N\sum_{i=1}^{N}\bigl(f_{\mathbf w}(\mathbf x_i)-y_i\bigr)\,x_{ij}\end{aligned}</div>
+  <p class="fx-note">제곱을 미분해서 <b>2</b>가 나오고, 연쇄법칙으로 <span class="tex">\partial(\mathbf w^{\mathsf T}\mathbf x_i)/\partial w_j=x_{ij}</span> 가 곱해진다.
+  <span class="tex">j=0</span> 이면 <span class="tex">x_{i0}=1</span> 이라 <a class="ext" href="#gd">단순 선형 회귀의 <span class="tex">w_0</span> 기울기</a>와 똑같아진다 — 두 경우는 <b>갱신할 파라미터 개수만 다를 뿐</b> 같은 식이다.</p>
+</div>
+</section>
+
+<!-- ===================== 개정판 심화 ===================== -->
+<section class="sec" id="plus">
+  <div class="sec-head"><span class="sec-badge">PLUS</span><h2 class="sec-title">개정판 교안 심화 내용<small>3주차_선형회귀_개정판 (62페이지) — 기존 교안에 없던 부분만 모아 정리</small></h2></div>
+<div class="note-box">개정판은 위 3.1~3.6의 내용을 그대로 포함하면서 <b>대학원 심화</b> 파트(최적화 · 정규화 · 평가 · 통계 해석 · 최신 동향)와 <b>세 수준 실습</b>(sklearn · NumPy · PyTorch)이 추가됐다.
+예시 데이터도 집값 대신 <b>연봉(경력) 데이터</b>로 바뀌었다. 여기서는 겹치지 않는 내용만 정리한다.</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>개정판 파트</th><th>새로 추가된 핵심</th><th>이 페이지</th></tr></thead>
+  <tbody>
+    <tr><td>1 회귀의 개념</td><td>교란변수 · 심슨의 역설 · 외삽 금지, 학습 = 가설 공간 → 손실 → 최적화 → 평가</td><td><a class="ext" href="#data">3.2</a> + 아래</td></tr>
+    <tr><td>2 손실함수</td><td>최소제곱 = 가우시안 MLE, Huber · Log-cosh · Quantile 손실</td><td>아래 ①</td></tr>
+    <tr><td>3 경사하강법</td><td>1차 테일러 근사, 벡터화 기울기 <span class="tex">\frac2N\tilde X^{\mathsf T}(\tilde Xw-y)</span>, 볼록성 · 조건수</td><td>아래 ②</td></tr>
+    <tr><td>4 다중 회귀 · 정규방정식</td><td>행렬 미분, <span class="tex">w^*=(X^{\mathsf T}X)^{-1}X^{\mathsf T}y</span>, GD와 계산량 비교, 스케일링, 기저함수</td><td>아래 ③</td></tr>
+    <tr><td>5 최적화 심화</td><td>Batch · SGD · 미니배치, 모멘텀 · Nesterov, Adam(W), 학습률 스케줄, 수렴 이론</td><td>아래 ④</td></tr>
+    <tr><td>6 정규화 · 평가 · 해석</td><td>편향–분산, Ridge · Lasso · ElasticNet, RMSE · Adjusted R², 교차검증 · 누수, 신뢰구간, VIF · 잔차 진단</td><td>아래 ⑤</td></tr>
+    <tr><td>7 최신 동향</td><td>nn.Linear = 선형 회귀, 인컨텍스트 회귀, 스케일링 법칙, 컨포멀 예측</td><td>아래 ⑥</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 class="sub-title">① 왜 제곱오차인가 — 최소제곱 = 가우시안 MLE</h3>
+<div class="fx">
+  <div class="tex-d">y^{(i)}=f(x^{(i)};w)+\varepsilon^{(i)},\ \ \varepsilon^{(i)}\overset{iid}{\sim}\mathcal N(0,\sigma^2)\ \Rightarrow\ \log p(D\mid w)=-\frac{1}{2\sigma^2}\sum_i\bigl(y^{(i)}-f(x^{(i)};w)\bigr)^2-\frac N2\log2\pi\sigma^2</div>
+  <p class="fx-note">두 번째 항은 <span class="tex">w</span>와 무관하므로 <b>우도 최대화 = 제곱오차 최소화</b>. &ldquo;<b>손실함수 = 데이터 생성 과정에 대한 가정</b>&rdquo;이다 — 라플라스 노이즈면 MAE, 이상치가 있으면 Huber, 계수형이면 포아송 회귀(GLM), 가우시안 사전분포를 곱하면(MAP) Ridge.</p>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>손실</th><th>수식 (<span class="tex">e=f(x)-y</span>)</th><th>특징 · 언제</th></tr></thead>
+  <tbody>
+    <tr><td>MSE (L2)</td><td><span class="tex">e^2</span></td><td>미분 쉬움 · 닫힌 해, 이상치 민감 — 기본값</td></tr>
+    <tr><td>MAE (L1)</td><td><span class="tex">\lvert e\rvert</span></td><td>중앙값 추정, 이상치에 강건, 0에서 미분 불가</td></tr>
+    <tr><td>Huber</td><td><span class="tex">\tfrac12e^2\ (\lvert e\rvert\le\delta),\ \delta\lvert e\rvert-\tfrac12\delta^2</span></td><td>MSE·MAE 절충, <span class="tex">\delta</span> 조정 필요</td></tr>
+    <tr><td>Log-cosh</td><td><span class="tex">\log\cosh(e)</span></td><td>Huber와 비슷하나 매끄러움 — 딥러닝 회귀 헤드</td></tr>
+    <tr><td>Quantile</td><td><span class="tex">\max(-\tau e,(1-\tau)e)</span></td><td>조건부 분위수 → 예측구간, 비대칭 비용</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 class="sub-title">② 경사하강법을 한 단계 깊게</h3>
+<div class="note-box"><ul class="ul">
+  <li><b>왜 음의 기울기인가</b> — 1차 테일러 근사 <span class="tex">L(w+\Delta)\approx L(w)+\nabla L(w)^{\mathsf T}\Delta</span>. <span class="tex">\lVert\Delta\rVert</span>가 고정일 때 두 번째 항을 가장 작게 만드는 방향이 <span class="tex">-\nabla L</span> (코시–슈바르츠). <span class="tex">\eta</span>가 너무 크면 근사가 깨져 손실이 오히려 는다</li>
+  <li><b>종료 조건</b> — 최대 반복 수, <span class="tex">\lVert\nabla L\rVert&lt;\varepsilon</span>, 또는 손실 변화량 <span class="tex">&lt;\varepsilon</span></li>
+  <li><b>벡터화</b> — <span class="tex">\tilde X=[1,x]</span> (N×2)로 두면 <span class="tex">\nabla L=\frac2N\tilde X^{\mathsf T}(\tilde Xw-y)</span>. NumPy 한 줄 <code>grad = 2/N * Xb.T @ (Xb @ w - y)</code>. 한 반복 비용 <span class="tex">O(Nd)</span></li>
+  <li><b>볼록성</b> — 헤시안 <span class="tex">\frac2N\tilde X^{\mathsf T}\tilde X\succeq0</span> 이라 MSE는 볼록 → 국소 최소 = 전역 최소, 초기값은 <b>속도</b>에만 영향 (<a class="ext" href="#gd">3.5 한계점</a>은 신경망 같은 비볼록에서 문제)</li>
+  <li><b>조건수</b> <span class="tex">\kappa=\lambda_{\max}/\lambda_{\min}</span> — 특성 스케일이 다르면 등고선이 길쭉해져 zig-zag. <b>표준화</b>하면 등고선이 원에 가까워져 빨리 수렴</li>
+</ul></div>
+
+<h3 class="sub-title">③ 행렬 표기와 정규방정식</h3>
+<div class="fx">
+  <div class="tex-d">\begin{gathered}L(w)=\tfrac1N(Xw-y)^{\mathsf T}(Xw-y),\quad \nabla_wL=\tfrac2NX^{\mathsf T}(Xw-y),\quad \nabla^2_wL=\tfrac2NX^{\mathsf T}X\succeq0\\ \nabla L=0\iff X^{\mathsf T}Xw=X^{\mathsf T}y\iff w^*=(X^{\mathsf T}X)^{-1}X^{\mathsf T}y\end{gathered}</div>
+  <p class="fx-note">· 학습률 · 반복 없이 <b>한 번에</b> 최적해 — 선형 회귀만의 특권. <span class="tex">X^{\mathsf T}X</span>가 가역(완전 공선성 없음, <span class="tex">N\ge d+1</span>)이어야 한다<br>
+  · 역행렬은 수치적으로 불안정 → 실제로는 QR/SVD 기반 <code>np.linalg.lstsq</code>. <b>sklearn <code>LinearRegression</code>도 내부적으로 lstsq</b><br>
+  · 기하학적 의미: <span class="tex">\hat y=X(X^{\mathsf T}X)^{-1}X^{\mathsf T}y=Hy</span> — <span class="tex">y</span>를 <span class="tex">X</span>의 열공간에 <b>정사영</b></p>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>항목</th><th>정규방정식 (닫힌 해)</th><th>경사하강법 (반복)</th></tr></thead>
+  <tbody>
+    <tr><td>계산량</td><td><span class="tex">O(Nd^2+d^3)</span></td><td><span class="tex">O(Nd)\times k</span> (반복 수)</td></tr>
+    <tr><td>하이퍼파라미터</td><td>없음</td><td>학습률, 반복 수, 배치 크기</td></tr>
+    <tr><td>특성 스케일링</td><td>불필요</td><td>사실상 필수</td></tr>
+    <tr><td><span class="tex">d</span>가 매우 클 때</td><td><span class="tex">d^3</span> 때문에 불가</td><td>가능</td></tr>
+    <tr><td>적용 범위 · 정확도</td><td>선형 최소제곱·Ridge만, 정확해</td><td>미분 가능한 모든 모델, 근사해</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="tip"><b>경험칙</b> — <span class="tex">d\lesssim10^4</span>이고 데이터가 메모리에 들어오면 <code>lstsq</code>, 그 이상이거나 모델이 비선형이면 (미니배치) 경사하강법.
+<b>기저함수</b> <span class="tex">f(x)=\sum_jw_j\varphi_j(x)</span> (다항·스플라인·RBF)를 쓰면 곡선도 &ldquo;선형 회귀&rdquo;다 — 파라미터에 대해서만 선형이면 된다. 신경망은 <span class="tex">\varphi</span> 자체를 학습하는 모델.
+스케일러는 <b>훈련 데이터로만 fit</b>(→ <code>Pipeline</code>)해야 데이터 누수가 없다.</div>
+
+<h3 class="sub-title">④ 최적화 심화</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>방법</th><th>기울기에 쓰는 샘플</th><th>1스텝 비용</th><th>특징</th></tr></thead>
+  <tbody>
+    <tr><td>Batch GD</td><td>전체 N개</td><td><span class="tex">O(Nd)</span></td><td>정확한 기울기, 매끄러운 수렴, N 크면 느림</td></tr>
+    <tr><td>SGD</td><td>1개 (무작위)</td><td><span class="tex">O(d)</span></td><td>잡음 큼, 빠른 초기 진행, 온라인 학습 — <a class="ext" href="#lab-gd">기존 실습의 샘플 단위 루프</a></td></tr>
+    <tr><td>Mini-batch</td><td>B개 (32~4096)</td><td><span class="tex">O(Bd)</span></td><td>GPU 병렬화, 딥러닝 표준. <span class="tex">E[\hat g]=\nabla L</span>, 분산 <span class="tex">\propto1/B</span>, 매 에폭 셔플</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="fx">
+  <p class="fx-lab">모멘텀 · Nesterov · Adam</p>
+  <div class="tex-d">\begin{aligned}\text{Momentum}&amp;:\ v\leftarrow\beta v-\eta\nabla L(w),\ \ w\leftarrow w+v\quad(\beta\approx0.9)\\ \text{Nesterov}&amp;:\ v\leftarrow\beta v-\eta\nabla L(w+\beta v),\ \ w\leftarrow w+v\\ \text{Adam}&amp;:\ m_t=\beta_1m_{t-1}+(1-\beta_1)g_t,\ v_t=\beta_2v_{t-1}+(1-\beta_2)g_t^2,\ \ w\leftarrow w-\eta\frac{\hat m_t}{\sqrt{\hat v_t}+\epsilon}\end{aligned}</div>
+  <p class="fx-note">· 모멘텀 = 과거 기울기의 지수이동평균. 좁은 골짜기의 zig-zag를 상쇄하고 일관된 방향은 최대 <span class="tex">1/(1-\beta)</span>배 가속. 강볼록 2차 문제에서 반복 수 <span class="tex">O(\kappa)\to O(\sqrt\kappa)</span><br>
+  · Adam 기본값 <span class="tex">\beta_1=0.9,\beta_2=0.999,\epsilon=10^{-8}</span>, <span class="tex">\hat m=m/(1-\beta_1^t)</span> 편향 보정. <b>AdamW</b> = weight decay를 분리 — LLM·ViT 표준. Adagrad(학습률 단조 감소) → RMSProp → Adam → AdamW → Lion·Muon<br>
+  · 선형 회귀처럼 볼록·저차원이면 SGD+모멘텀으로 충분</p>
+</div>
+<div class="note-box"><b>학습률 스케줄</b> — Step decay · <b>Cosine annealing</b> <span class="tex">\eta_t=\tfrac12\eta_0(1+\cos(\pi t/T))</span> · <b>Warmup</b>(초반 선형 증가) · OneCycle · ReduceLROnPlateau. SGD 수렴 조건(Robbins–Monro) <span class="tex">\sum\eta_t=\infty,\ \sum\eta_t^2&lt;\infty</span>.<br>
+<b>수렴 이론</b> — L-smooth · μ-강볼록에서 <span class="tex">\eta=1/L</span>이면 <span class="tex">\lVert w_k-w^*\rVert^2\le(1-\mu/L)^k\lVert w_0-w^*\rVert^2</span>, 반복 수 <span class="tex">O(\kappa\log(1/\varepsilon))</span>.
+선형 회귀는 <span class="tex">L=\lambda_{\max}(\frac2NX^{\mathsf T}X)</span>이고 <b>안정 조건 <span class="tex">\eta&lt;2/L</span></b> — <a class="ext" href="#gd">3.5의 &ldquo;α &gt; 0.214면 발산&rdquo;</a>이 바로 이 경계다 (<span class="tex">L=28/3</span>).</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>상황</th><th>추천</th></tr></thead>
+  <tbody>
+    <tr><td>작은 선형 문제</td><td><code>lstsq</code> / 정규방정식 — sklearn <code>LinearRegression</code>, <code>Ridge</code></td></tr>
+    <tr><td>큰 N, 선형·볼록</td><td>미니배치 SGD + 모멘텀, 스케일링 필수, 학습률 decay — <code>SGDRegressor</code></td></tr>
+    <tr><td>고차원·비볼록 (신경망)</td><td>AdamW + warmup + cosine, weight decay, 그래디언트 클리핑</td></tr>
+    <tr><td>희소·초고차원</td><td>좌표하강법(Lasso), Adagrad 계열, L-BFGS</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 class="sub-title">⑤ 정규화 · 평가 · 통계적 해석</h3>
+<div class="fx">
+  <p class="fx-lab">편향–분산 분해</p>
+  <div class="tex-d">E\bigl[(y-\hat f(x))^2\bigr]=\bigl(f(x)-E[\hat f(x)]\bigr)^2+\mathrm{Var}[\hat f(x)]+\sigma^2</div>
+  <p class="fx-note">편향 = 너무 단순(과소적합), 분산 = 데이터에 따라 크게 흔들림(과적합). <b>정규화 = 편향을 조금 사고 분산을 판다.</b> (참고: 과매개변수화 영역의 double descent)</p>
+</div>
+<div class="cards">
+  <div class="card2"><h4>Ridge (L2)<em><span class="tex">\frac1N\lVert Xw-y\rVert^2+\lambda\lVert w\rVert_2^2</span></em></h4><p>닫힌 해 <span class="tex">(X^{\mathsf T}X+N\lambda I)^{-1}X^{\mathsf T}y</span> — λ&gt;0이면 항상 가역(공선성·d&gt;N 해결). 가우시안 사전분포의 MAP. 조건수를 줄여 GD도 빨라짐. <code>RidgeCV</code>로 λ 선택, 스케일링 필수</p></div>
+  <div class="card2" style="border-top-color:var(--red)"><h4>Lasso (L1) · ElasticNet<em><span class="tex">+\lambda\lVert w\rVert_1</span></em></h4><p>마름모 등고선 → 계수가 <b>정확히 0</b> = 자동 특성 선택. 닫힌 해 없음 → 좌표하강법 + soft-thresholding. 상관 높은 특성군은 ElasticNet이 그룹째 선택. 라플라스 사전분포의 MAP</p></div>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>지표</th><th>수식</th><th>해석 · 주의</th></tr></thead>
+  <tbody>
+    <tr><td>MSE / RMSE</td><td><span class="tex">\frac1N\sum(\hat y-y)^2</span> / <span class="tex">\sqrt{\mathrm{MSE}}</span></td><td>목적함수와 일치 / y 단위로 보고, 큰 오차에 가중</td></tr>
+    <tr><td>MAE · MAPE</td><td><span class="tex">\frac1N\sum\lvert\hat y-y\rvert</span> · <span class="tex">\frac{100}N\sum\frac{\lvert\hat y-y\rvert}{\lvert y\rvert}</span></td><td>강건 · y≈0에서 폭발</td></tr>
+    <tr><td>R² / Adjusted R²</td><td><span class="tex">1-\frac{\sum(y-\hat y)^2}{\sum(y-\bar y)^2}</span> / <span class="tex">1-(1-R^2)\frac{N-1}{N-d-1}</span></td><td>테스트셋에선 음수 가능 / 특성 수에 벌점</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note-box"><ul class="ul">
+  <li><b>검증</b> — 훈련(fit) · 검증(모델 선택) · 테스트(최종 1회). K-겹 CV(<code>cross_val_score</code>, <code>KFold(shuffle=True)</code>), 튜닝까지 하면 <b>중첩 CV</b>. 시계열 <code>TimeSeriesSplit</code>, 환자 단위 <code>GroupKFold</code></li>
+  <li><b>데이터 누수</b> — 스케일링·결측 대체·특성 선택은 <b>fold 안에서만 fit</b> → <code>Pipeline</code></li>
+  <li><b>계수의 불확실성</b> — <span class="tex">\mathrm{Var}(\hat w)=\hat\sigma^2(X^{\mathsf T}X)^{-1}</span>, 신뢰구간 <span class="tex">\hat w_j\pm t\cdot SE</span>. Gauss–Markov 가정(선형성·오차 평균 0·등분산·무상관)에서 OLS는 <b>BLUE</b>. 이분산이면 HC3 로버스트 표준오차 (<code>statsmodels</code>). &lsquo;유의함&rsquo; ≠ &lsquo;중요함&rsquo;</li>
+  <li><b>잔차 진단</b> — 잔차 vs 예측값(패턴=비선형, 깔때기=이분산), Q–Q 플롯(정규성), Cook's distance(영향점)</li>
+  <li><b>다중공선성</b> — <span class="tex">\mathrm{VIF}_j=1/(1-R_j^2)&gt;5\sim10</span>이면 문제. 예측은 괜찮아도 계수 해석이 무너짐 → 변수 제거·PCA·Ridge</li>
+</ul></div>
+
+<h3 class="sub-title">⑥ 최신 동향과의 연결</h3>
+<div class="cards">
+  <div class="card2"><h4>선형 회귀 → 신경망</h4><p><code>nn.Linear(d,1)</code> + <code>MSELoss</code> + SGD = 오늘 배운 선형 회귀. 은닉층 + 비선형 활성화 = MLP(6주차), 사전학습 표현 위 선형층 = 회귀 헤드 · 선형 프로빙</p></div>
+  <div class="card2"><h4>인컨텍스트 회귀</h4><p>트랜스포머에 <span class="tex">(x_i,y_i)</span> 예시를 넣으면 최소제곱 수준으로 예측 (Garg 2022). 선형 어텐션 한 층 ≈ 경사하강 한 스텝 (von Oswald 2023)</p></div>
+  <div class="card2"><h4>스케일링 법칙</h4><p><span class="tex">L(N)\approx(N_c/N)^\alpha\iff\log L=\alpha\log N_c-\alpha\log N</span> — 로그–로그 선형 회귀. Chinchilla는 Huber 손실로 적합. 외삽 위험이 실제 대규모 결정에 직결</p></div>
+  <div class="card2"><h4>예측 불확실성</h4><p>OLS 예측구간은 가우시안·등분산 가정. <b>컨포멀 예측</b>은 보정셋 잔차의 분위수 q로 <span class="tex">[\hat y-q,\hat y+q]</span> — 분포 가정 없이 커버리지 보장 (MAPIE, torchcp)</p></div>
+</div>
+<div class="tip"><b>교안의 생각해 볼 질문</b> ① 표준화는 정규방정식 예측값엔 영향이 없는데 GD엔 왜 큰 영향을 주나? (→ 조건수) ② Ridge λ를 키우면 조건수·편향·분산은? ③ &ldquo;트랜스포머가 문맥 안에서 GD 한 스텝&rdquo;은 어떻게 검증할까? ④ 의료 데이터에서 계수를 &lsquo;효과&rsquo;로 보고하려면? (→ 인과 설계)</div>
+</section>
+
+<!-- ===================== 개정판 실습 ===================== -->
+<section class="sec" id="lab2">
+  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">개정판 실습 — sklearn · NumPy · PyTorch<small>3주차_실습_문제 / 3주차_실습_정답 · TODO 12개 · 100점</small></h2></div>
+<div class="note-box">같은 문제(경력 → 연봉)를 <b>세 수준</b>으로 구현하고 세 결과의 계수가 일치하는지 확인한다. 노트북의 <code>raise NotImplementedError("TODO(n)")</code> 줄을 지우고 채운다.
+환경: Python ≥ 3.10, <b>scikit-learn ≥ 1.4 필수</b>(<code>root_mean_squared_error</code>), torch ≥ 2.0. CSV가 없으면 <code>[0]</code> 셀이 데이터를 생성한다. 예상 60~90분.</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>#</th><th>섹션</th><th>구현할 것 · 정답 핵심</th><th>배점</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>sklearn</td><td><code>make_pipeline(StandardScaler(), LinearRegression())</code> + <b>훈련 데이터만</b> <code>fit</code> (누수 방지)</td><td>8</td></tr>
+    <tr><td>2</td><td>sklearn</td><td>원 척도 복원 <code>w1 = coef/scale</code>, <code>w0 = intercept − w1·mean</code></td><td>8</td></tr>
+    <tr><td>3</td><td>5-겹 CV</td><td><code>cross_val_score(model, X, y, cv=KFold(5), scoring='r2')</code> — 파이프라인째 넘김</td><td>6</td></tr>
+    <tr><td>4</td><td>Ridge</td><td><code>RidgeCV(alphas=np.logspace(-3, 3, 13))</code> 를 표준화 뒤에</td><td>8</td></tr>
+    <tr><td>5</td><td>정규방정식</td><td><code>np.linalg.lstsq(Xb, y)[0]</code> 와 <code>inv(Xb.T@Xb) @ Xb.T @ y</code> — 절편 열 포함</td><td>10</td></tr>
+    <tr><td>6</td><td>배치 GD</td><td><code>err = Xb@w − y</code> → <code>grad = 2/N·Xb.T@err</code> → <code>w −= lr·grad</code> (부호 · 2/N 주의)</td><td>12</td></tr>
+    <tr><td>7</td><td>학습률 실험</td><td><code>L = eigvalsh(2/N·Xb.T@Xb).max()</code>, 안정 조건 <span class="tex">\eta&lt;2/L</span></td><td>8</td></tr>
+    <tr><td>8</td><td>SGD</td><td>에폭마다 <code>rng.permutation</code>, 샘플 하나로 <code>w −= 0.01·2·e·Xb[i]</code></td><td>8</td></tr>
+    <tr><td>9</td><td>비교표</td><td><code>to_raw(w)</code> — <code>[w0 − w1_raw·mu, w1_raw]</code> 순서</td><td>6</td></tr>
+    <tr><td>10</td><td>PyTorch</td><td><code>zero_grad → loss → backward → step</code> <b>이 순서대로</b></td><td>12</td></tr>
+    <tr><td>11</td><td>기울기 검증</td><td><span class="tex">w=0</span>에서 <code>2/N·Xb.T@(Xb@0 − y_s)</code> ≈ <code>[0.000, −1.888]</code> = autograd</td><td>8</td></tr>
+    <tr><td>12</td><td>확장</td><td><code>nn.Sequential(nn.Linear(1,32), nn.GELU(), nn.Linear(32,1))</code></td><td>6</td></tr>
+  </tbody>
+</table>
+</div>
+<pre class="code"><span class="cm"># TODO(6) 배치 경사하강법 — 벡터화</span>
+err  = Xb @ w - y
+grad = 2 / len(y) * Xb.T @ err
+w   -= lr * grad
+
+<span class="cm"># TODO(7) 립시츠 상수 → 안정 조건</span>
+L = np.linalg.eigvalsh(2 / len(y_tr) * Xb_tr.T @ Xb_tr).max()   <span class="out"># 표준화: 2/L = 1.000</span>
+
+<span class="cm"># TODO(10) PyTorch 학습 루프</span>
+opt.zero_grad()
+loss = loss_fn(model(Xt), yt_s)
+loss.backward()
+opt.step()</pre>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>정답 실행값 (시드 고정)</th><th>값</th></tr></thead>
+  <tbody>
+    <tr><td>원 척도 계수</td><td><code>w1 = 9345.9</code>, <code>w0 = 26816.2</code> — <a class="ext" href="#lab">기존 실습 sklearn 결과와 동일</a></td></tr>
+    <tr><td>테스트 성능</td><td>RMSE 4585.4 · MAE 3426.4 · R² 0.9749</td></tr>
+    <tr><td>5-겹 CV R²</td><td>[0.988 0.926 0.925 0.879 0.965], 평균 0.936 ± 0.038</td></tr>
+    <tr><td>RidgeCV</td><td>alpha 0.3162, RMSE 4662.4 — d=1, N=20에선 정규화 이득 없음</td></tr>
+    <tr><td>표준화 척도 계수</td><td>[71022.50, 23651.14] — lstsq · inv · Batch GD · PyTorch 모두 동일 / SGD(50에폭) [70986.45, 23794.71] 근접</td></tr>
+    <tr><td>안정 조건</td><td>표준화 <span class="tex">\eta&lt;1.000</span> (κ=1.0) → <code>lr=1.05</code>만 발산 / 원 척도 <span class="tex">\eta&lt;0.0338</span> (κ=136.4)</td></tr>
+    <tr><td>MLP</td><td>test RMSE 4441.5 (선형 4585.4) — 데이터가 선형이라 이득 거의 없음</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="warn"><b>자주 나오는 실수</b> ① 분할 전에 전체 X를 표준화(<b>누수</b>) ② 표준화 척도 계수를 그대로 &ldquo;연봉/년&rdquo;으로 해석 ③ 표준화 없이 <code>lr=0.1</code> → 발산 (원 척도 한계 0.0338) ④ <code>y − Xb@w</code> 부호 뒤집기, <code>2/N</code> 누락 ⑤ <code>zero_grad()</code> 누락 → 기울기 누적 ⑥ R²만 보고 &ldquo;경력이 연봉을 올린다&rdquo;고 인과 결론.</div>
+<div class="note-box"><b>제출</b> — TODO를 모두 채워 커널 재시작 후 끝까지 실행된 노트북 <code>3주차_linear_regression_학번_이름.ipynb</code> + TODO(9) 비교표(세 구현의 w0, w1, 테스트 RMSE) + 학습률 0.02 / 0.1 / 0.5 / 1.05 손실 곡선과 발산 이유 2~3줄.</div>
+</section>
+
+<!-- ===================== 핵심 정리 ===================== -->
+<section class="sec" id="summary">
+  <div class="sec-head"><span class="sec-badge">SUM</span><h2 class="sec-title">핵심 정리<small>시험 전에 이것만은</small></h2></div>
+<div class="flow">
+  <div class="fl"><div class="fl-n">1</div><div><h4>회귀 = 연속값 예측</h4><p>독립 변수와 종속 변수의 <b>관계 분석 · 예측</b>. 분류는 범주 예측. 회귀는 <b>상관관계</b>이지 인과관계가 아니다 → <a class="ext" href="#reg">3.1</a> <a class="ext" href="#data">3.2</a></p></div></div>
+  <div class="fl"><div class="fl-n">2</div><div><h4>모델</h4><p>단순 <span class="tex">f_{\mathbf w}(x)=w_0+w_1x</span> (파라미터 2개) · 다중 <span class="tex">f_{\mathbf w}(\mathbf x)=\mathbf w^{\mathsf T}\mathbf x</span> (<span class="tex">x_{i0}=1</span>, 파라미터 <span class="tex">d+1</span>개) → <a class="ext" href="#slr">3.3</a> <a class="ext" href="#multi">3.6</a></p></div></div>
+  <div class="fl"><div class="fl-n">3</div><div><h4>손실</h4><p>MSE <span class="tex">\frac1N\sum(f_{\mathbf w}(x_i)-y_i)^2</span>, MAE <span class="tex">\frac1N\sum\lvert f_{\mathbf w}(x_i)-y_i\rvert</span>. 목표는 <span class="tex">\mathbf w^*=\operatorname{argmin}L(\mathbf w)</span>. 데이터 공간의 직선 1개 = 파라미터 공간의 점 1개 → <a class="ext" href="#loss">3.4</a></p></div></div>
+  <div class="fl"><div class="fl-n">4</div><div><h4>경사하강법</h4><p><span class="tex">w_j\leftarrow w_j-\alpha\,\partial L/\partial w_j</span>. Q1 초기화 · Q2 기울기 · Q3 학습률. 너무 작은 <span class="tex">\alpha</span>는 느리고 너무 크면 발산. 기울기 0에서 멈추는 한계 → <a class="ext" href="#gd">3.5</a></p></div></div>
+  <div class="fl"><div class="fl-n">5</div><div><h4>코드로는</h4><p>sklearn <code>LinearRegression().fit()</code> · <code>predict()</code> · <code>r2_score</code>, 또는 <code>forward</code> → <code>loss_fn</code> → <code>update</code> 반복으로 직접 구현 → <a class="ext" href="#lab">실습</a></p></div></div>
+</div>
+</section>
+
+<!-- ===================== 용어 ===================== -->
+<section class="sec" id="terms">
+  <div class="sec-head"><span class="sec-badge">TERM</span><h2 class="sec-title">용어 · 기호 풀이<small>교안과 실습에 나오는 약어 · 기호를 한곳에</small></h2></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>용어 · 기호</th><th>뜻</th></tr></thead>
+  <tbody>
+    <tr><td><span class="tex">\hat y_i</span></td><td>&ldquo;와이 햇&rdquo; — 모델의 <b>예측 값</b> <span class="tex">f_{\mathbf w}(x_i)</span>. 햇(^)이 없는 <span class="tex">y_i</span> 는 실제 값</td></tr>
+    <tr><td><span class="tex">\mathbf w,\;\mathbf w^*</span></td><td>파라미터(가중치) 벡터와, 손실을 최소로 만드는 <b>최적</b> 파라미터</td></tr>
+    <tr><td><span class="tex">\mathbf x^{\mathsf T}</span></td><td>전치(Transpose) — 가로 벡터를 세로 벡터로. <span class="tex">\mathbf w^{\mathsf T}\mathbf x</span> 는 내적</td></tr>
+    <tr><td>argmin</td><td>argument of the minimum — 함수를 최소로 만드는 <b>입력 값</b></td></tr>
+    <tr><td><span class="tex">\alpha</span> · lr</td><td>학습률(learning rate). 코드에서는 보통 <code>lr</code></td></tr>
+    <tr><td><span class="tex">\partial,\ \nabla</span></td><td>편미분 기호와 기울기 벡터(나블라)</td></tr>
+    <tr><td>MSE / MAE</td><td>Mean Squared(Square) Error 평균 제곱 오차 / Mean Absolute Error 평균 절대 오차</td></tr>
+    <tr><td>GD</td><td>Gradient Descent 경사하강법. 교안 제목의 &ldquo;Graidient&rdquo;는 오타</td></tr>
+    <tr><td><span class="tex">R^2</span> score</td><td>결정계수(coefficient of determination) — 1에 가까울수록 모델이 데이터 변동을 잘 설명 → <a class="ext" href="#lab">실습</a></td></tr>
+    <tr><td>epoch</td><td>훈련 데이터 전체를 한 바퀴 다 사용하는 단위</td></tr>
+    <tr><td>sklearn</td><td>scikit-learn — 각종 기계학습 모델이 구현된 파이썬 라이브러리. <code>fit</code> / <code>predict</code> 인터페이스로 통일</td></tr>
+    <tr><td>pandas · DataFrame</td><td>행과 열로 구성된 2차원 데이터 처리 라이브러리와 그 객체</td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
+<!-- ===================== 실습 ===================== -->
+<section class="sec" id="lab">
+  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">선형 회귀 실습 ① — sklearn 라이브러리<small>3주차_linear_regression_실습.ipynb · 경력(년) → 연봉 예측</small></h2></div>
+<div class="note-box"><b>실습 구성</b> — 같은 문제를 두 번 푼다. 처음에는 <b>sklearn 라이브러리</b>로, 그 다음에는 <b>직접 함수를 구현</b>해서.
+데이터는 <code>Salary_Data.csv</code> — <code>YearsExperience</code>(경력)와 <code>Salary</code>(연봉) 두 열, 30행. 실행 전 <code>%cd /content/ML-01-Linear_Regression</code> 으로 실습 폴더로 이동한다.</div>
+
+<h3 class="sub-title">코드 구현의 흐름 — 5단계</h3>
+<div class="flow">
+  <div class="fl"><div class="fl-n">1</div><div><h4>(데이터) 데이터 불러오기</h4><p><code>pd.read_csv('Salary_Data.csv')</code></p></div></div>
+  <div class="fl"><div class="fl-n">2</div><div><h4>(데이터) 훈련 / 테스트 데이터로 구분</h4><p><code>train_test_split(X, y, test_size=1/3, random_state=0)</code> → 훈련 20개 · 테스트 10개</p></div></div>
+  <div class="fl"><div class="fl-n">3</div><div><h4>(모델) 선형 회귀 모델 정의</h4><p><code>LinearRegression()</code> 또는 직접 <code>forward(x)</code></p></div></div>
+  <div class="fl"><div class="fl-n">4</div><div><h4>(학습) 모델 학습</h4><p><code>regressor.fit()</code> 또는 직접 구현한 경사하강법</p></div></div>
+  <div class="fl"><div class="fl-n">5</div><div><h4>(성능 평가) 테스트 데이터로 평가</h4><p><code>predict()</code> → 노트북 흐름표에는 Mean Squared Error로 적혀 있고, 코드에서는 <code>r2_score</code>로 평가</p></div></div>
+</div>
+
+<h3 class="sub-title">pandas로 데이터 읽기</h3>
+<pre class="code">import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+dataset = pd.read_csv('Salary_Data.csv')   <span class="cm"># DataFrame 객체에 행·열 데이터 저장</span>
+X = dataset.iloc[:, :-1].values            <span class="cm"># 마지막 열 빼고 전부 → 특징 (30, 1)</span>
+y = dataset.iloc[:, 1].values              <span class="cm"># 1번 열 → 정답 (30,)</span></pre>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>인덱싱</th><th>행 자리</th><th>열 자리</th><th>예</th></tr></thead>
+  <tbody>
+    <tr><td><code>iloc[]</code></td><td>행 <b>번호</b></td><td>열 <b>번호</b></td><td><code>dataset.iloc[:, :-1]</code></td></tr>
+    <tr><td><code>loc[]</code></td><td>인덱스 <b>값</b></td><td>열 <b>이름</b></td><td><code>dataset.loc[1:3, 'YearsExperience']</code></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="warn"><b>shape 차이에 주의</b> — <code>iloc[:, :-1]</code> 은 슬라이스라 <b>2차원 (30, 1)</b>, <code>iloc[:, 1]</code> 은 정수 하나라 <b>1차원 (30,)</b>.
+sklearn은 특징 <code>X</code>를 반드시 <b>2차원</b>(샘플 수 × 특징 수)으로 받는다. 2주차의 <code>(3,)</code> vs <code>(1, 3)</code> 차이가 여기서 실제로 쓰인다.
+열 이름은 <code>print(dataset.describe())</code> 로 확인할 수 있다.</div>
+
+<h3 class="sub-title">훈련 데이터와 테스트 데이터</h3>
+<div class="note-box">학습된 모델의 성능은 <b>학습 과정에서 사용하지 않은 데이터</b>로 예측값을 산출해 참값과 비교해야 확인할 수 있다.
+<code>train_test_split</code> 은 학습 데이터를 <b>훈련 데이터</b>(모델 학습용)와 <b>테스트 데이터</b>(성능 확인용)로 분할한다.
+<ul class="ul">
+  <li>두 데이터에 <b>중복되는 개체가 존재하지 않도록</b> 주의한다</li>
+  <li><code>test_size=1/3</code> — 전체의 1/3을 테스트용으로 &nbsp;·&nbsp; <code>random_state=0</code> — 섞는 방식을 고정해 <b>매번 같은 결과</b></li>
+  <li>학습에는 <b>Train 데이터만</b>, 성능 평가에는 <b>Test 데이터만</b> 사용한다</li>
+</ul></div>
+
+<h3 class="sub-title">fit과 predict</h3>
+<pre class="code">from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=1/3, random_state=0)
+
+from sklearn.linear_model import LinearRegression
+regressor = LinearRegression()        <span class="cm"># (3) 모델 객체 생성</span>
+regressor.fit(X_train, y_train)       <span class="cm"># (4) 학습 — 이론에서 배운 과정이 fit 안에 감춰져 있다</span>
+
+print(regressor.coef_)                <span class="out"># [9345.94244312]     ← w1 (기울기)</span>
+print(regressor.intercept_)           <span class="out"># 26816.192244031183  ← w0 (절편)</span>
+
+y_pred = regressor.predict(X_test)    <span class="cm"># (5) 테스트 데이터로 예측</span>
+print(y_test.shape, y_pred.shape)     <span class="out"># (10,) (10,)</span>
+
+from sklearn.metrics import r2_score
+print(r2_score(y_test, y_pred))       <span class="out"># 0.9749154407708353</span></pre>
+<div class="tip"><b>sklearn의 표준 인터페이스</b> — 어떤 모델이든 학습은 <code>fit()</code>, 예측은 <code>predict()</code>.
+<code>regressor.fit(X_train, y_train)</code> 은 &ldquo;<code>X_train</code>의 특징 벡터 집합과 <code>y_train</code>의 참 값 집합으로 선형 회귀 모델을 학습하라&rdquo;는 뜻이다.
+이번 학기 내내 이 두 함수가 반복해서 나온다.</div>
+<div class="note-box"><b>결과 해석</b> — 학습된 모델은 <span class="tex">\widehat{\text{Salary}}\approx26816+9346\times\text{Years}</span>.
+경력이 0년이어도 약 2만 7천, <b>경력 1년당 약 9,346씩</b> 오른다는 관계(해석 측면)를 얻었고, 새 경력 값을 넣으면 연봉을 짐작(예측 측면)할 수 있다.</div>
+
+<h3 class="sub-title">평가 지표 — <span class="tex">R^2</span> score</h3>
+<div class="fx">
+  <p class="fx-lab">결정계수 — 노트북에 실린 식</p>
+  <div class="tex-d">R^2=\frac{\sum_{i=1}^{N}(\hat y_i-\bar y)^2}{\sum_{i=1}^{N}(y_i-\bar y)^2}=1-\frac{\sum_{i=1}^{N}(y_i-\hat y_i)^2}{\sum_{i=1}^{N}(y_i-\bar y)^2},\qquad \bar y=\frac1N\sum_{i=1}^{N}y_i</div>
+  <p class="fx-note">· <span class="tex">\hat y_i</span> 추정값 · <span class="tex">y_i</span> 참값 · <span class="tex">\bar y</span> 참값의 평균<br>
+  · 분자 <span class="tex">\sum(y_i-\hat y_i)^2</span> = 모델이 못 맞춘 양, 분모 <span class="tex">\sum(y_i-\bar y)^2</span> = &ldquo;그냥 평균으로 찍었을 때&rdquo; 틀린 양<br>
+  · <b>1</b>이면 완벽, <b>0</b>이면 평균으로 찍는 것과 같은 수준, 평균보다도 못하면 <b>음수</b>도 나온다</p>
+</div>
+
+<h3 class="sub-title">matplotlib로 그래프 그리기</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>함수</th><th>무엇을 그리나</th><th>이 실습에서</th></tr></thead>
+  <tbody>
+    <tr><td><code>plt.scatter(x, y)</code></td><td>데이터 <span class="tex">(x_i,y_i)</span> 를 <b>점</b>으로</td><td>실제 데이터</td></tr>
+    <tr><td><code>plt.plot(x, f(x))</code></td><td>입력과 예측값을 <b>선</b>으로</td><td>학습된 직선</td></tr>
+  </tbody>
+</table>
+</div>
+<pre class="code">plt.scatter(X_train, y_train, color='red')                     <span class="cm"># 훈련 데이터 — 빨간 점</span>
+plt.plot(X_train, regressor.predict(X_train), color='blue')    <span class="cm"># 학습된 직선 — 파란 선</span>
+plt.title('Salary vs Experience (Train set)')
+plt.xlabel('Years of Experience'); plt.ylabel('Salary')
+plt.show()</pre>
+<div class="figs">
+  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-27-sk-train.png" alt="sklearn 모델 — 훈련 데이터 20개(빨간 점)와 학습된 직선(파란 선)"><figcaption>노트북 출력 — 훈련 데이터(빨강)와 학습된 직선</figcaption></figure>
+  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-28-sk-test.png" alt="sklearn 모델 — 테스트 데이터 10개(파란 점)와 같은 직선(빨간 선)"><figcaption>노트북 출력 — 처음 보는 테스트 데이터(파랑)에도 직선이 잘 맞음 (<span class="tex">R^2=0.975</span>)</figcaption></figure>
+</div>
+<div class="note-box"><b>참고 — Feature Scaling</b> — 노트북에는 <code>StandardScaler</code> 코드가 주석(<code>"""…"""</code>)으로 들어 있다. 데이터에 따라 특징의 크기를 맞춰야 하는 경우가 있으며, 필요할 때 강의에서 다룬다고 되어 있다.</div>
+</section>
+
+<section class="sec" id="lab-gd">
+  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">선형 회귀 실습 ② — 직접 구현<small>forward · loss_fn · update — sklearn의 (3)(4)번을 손으로</small></h2></div>
+<pre class="code"><span class="cm"># (1)(2) 데이터 불러오기와 분할은 sklearn 실습과 동일</span>
+
+<span class="cm"># (3) 모델 정의 — 파라미터 초기값 + 하이퍼파라미터(학습률)</span>
+w1 = 10
+w0 = 10
+lr = 0.0025                  <span class="cm"># 학습률 (일반적으로 0 &lt; lr &lt; 1)</span>
+
+def forward(x):              <span class="cm"># 단순 선형회귀 f(x) = w0 + w1·x</span>
+    return w1 * x + w0
+
+<span class="cm"># (4-1) 손실함수 — "MSE의 식을 잘 생각해볼것! 1/N은 어디로??"</span>
+def loss_fn(y_pred, y):
+    return (y_pred - y) * (y_pred - y)       <span class="cm"># (예측값 − 정답값)²</span>
+
+<span class="cm"># (4-2) 경사하강법 — gradient 부분이 왜 이렇게 되는지 유도해보자</span>
+def update(x, y, y_pred):
+    global w1, w0
+    w1 = w1 - lr * 2 * x * (y_pred - y)
+    w0 = w0 - lr * 2 * 1 * (y_pred - y)
+
+<span class="cm"># (4-3) 정해진 반복수(100회)만큼 파라미터 업데이트</span>
+for epoch in range(100):
+    for x_val, y_val in zip(X_train, y_train):   <span class="cm"># zip: 같은 인덱스의 값을 함께</span>
+        y_pred = forward(x_val)          <span class="cm"># [2] 예측</span>
+        loss = loss_fn(y_pred, y_val)    <span class="cm"># [3] 손실</span>
+        update(x_val, y_val, y_pred)     <span class="cm"># [4] 경사하강법으로 w1, w0 갱신</span>
+
+print(w1, w0)                            <span class="out"># [9493.13629957] [24681.57417843]</span>
+
+<span class="cm"># (5) 성능 평가 — predict를 직접 구현</span>
+predict = [(w1[0] * x[0] + w0[0]) for x in X_test]
+u = np.sum((predict - y_test) ** 2)
+v = np.sum((y_test - np.average(y_test)) ** 2)
+print(1 - u / v)                         <span class="out"># 0.9784483372537969</span>
+print(r2_score(y_test, predict))         <span class="out"># 0.9784483372537969  ← 직접 계산과 일치</span></pre>
+
+<h3 class="sub-title">코드 속 질문 풀이</h3>
+<div class="ex">
+  <p class="ex-q"><em>Q1</em> update()의 <code>2 * x * (y_pred - y)</code> 는 어디서 왔나?</p>
+  <div class="step"><i>①</i><div>데이터 한 개의 손실 <span class="tex">\ell=(\hat y-y)^2,\ \hat y=w_0+w_1x</span></div></div>
+  <div class="step"><i>②</i><div><span class="tex">\dfrac{\partial\ell}{\partial w_1}=2(\hat y-y)\cdot x,\qquad \dfrac{\partial\ell}{\partial w_0}=2(\hat y-y)\cdot1</span></div></div>
+  <div class="ex-ans"><b>답</b> — <a class="ext" href="#gd">3.5의 MSE 기울기 유도</a>에서 합 기호와 <span class="tex">\frac1N</span> 만 뺀 것. 코드의 <code>2 * 1 *</code> 에서 1은 <span class="tex">\partial\hat y/\partial w_0=1</span> 을 일부러 적어 둔 것이다</div>
+</div>
+<div class="ex">
+  <p class="ex-q"><em>Q2</em> &ldquo;1/N은 어디로??&rdquo;</p>
+  <div class="step"><i>①</i><div>이 코드는 <b>데이터를 하나 볼 때마다</b> 곧바로 갱신한다(20개 × 100 epoch = <b>2,000번</b> 갱신). 한 번에 한 개만 보므로 평균 낼 <span class="tex">N</span>이 없다</div></div>
+  <div class="step"><i>②</i><div>교안 식처럼 <b>20개를 모두 본 뒤 평균 기울기로 한 번</b> 갱신하면 <span class="tex">\frac1N</span> 이 살아난다 (배치 경사하강법)</div></div>
+  <div class="ex-ans"><b>정리 (보충)</b> — 한 개씩 갱신하는 방식을 <b>확률적 경사하강법(SGD)</b>이라 부른다. 상수 배(<span class="tex">\frac1N</span>, 2)는 사실상 학습률에 흡수된다</div>
+</div>
+<div class="ex">
+  <p class="ex-q"><em>Q3</em> 왜 결과가 <code>[9493.13]</code> 처럼 대괄호에 싸여 있고, 예측할 때 <code>w1[0]</code> 을 쓰나?</p>
+  <div class="step"><i>①</i><div><code>X_train</code> 이 (20, 1)이라 <code>x_val</code> 이 숫자가 아니라 <b>길이 1짜리 배열</b>이다</div></div>
+  <div class="step"><i>②</i><div>정수 10이던 <code>w1</code>에 배열 <code>x</code>가 곱해진 값이 더해지면서 <code>w1</code>도 shape (1,) 배열이 된다 (브로드캐스팅)</div></div>
+  <div class="ex-ans"><b>답</b> — 그래서 스칼라를 꺼내려고 <code>w1[0]</code>, <code>x[0]</code> 으로 인덱싱한다. 직접 구현 셀 맨 위의 <code>import torch</code> 는 실제로 쓰이지 않는다</div>
+</div>
+
+<h3 class="sub-title">두 방법의 결과 비교</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>항목</th><th>sklearn <code>LinearRegression</code></th><th>직접 구현 (경사하강법)</th></tr></thead>
+  <tbody>
+    <tr><td><span class="tex">w_1</span> (기울기)</td><td>9345.94</td><td>9493.14</td></tr>
+    <tr><td><span class="tex">w_0</span> (절편)</td><td>26816.19</td><td>24681.57</td></tr>
+    <tr><td>테스트 <span class="tex">R^2</span></td><td>0.9749</td><td>0.9784</td></tr>
+    <tr><td>훈련 MSE</td><td><b>36,852,949</b> (더 작음)</td><td>39,060,669</td></tr>
+    <tr><td>테스트 MSE</td><td>21,026,037</td><td><b>18,064,741</b> (더 작음)</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="tip"><b>직접 구현이 테스트 점수는 더 높은데, 더 잘 학습한 걸까?</b> — 아니다. sklearn <code>LinearRegression</code>은 경사하강법을 반복하는 대신 훈련 MSE를 <b>정확히 최소</b>로 만드는 해(최소제곱해)를 한 번에 계산하므로 <b>훈련 MSE는 sklearn이 더 작다</b>(위 표).
+경사하강법은 2,000번 갱신 후에도 최솟값에 완전히 도착하지 않았는데, 테스트 데이터 10개가 우연히 그 직선에 조금 더 맞았을 뿐이다.
+테스트 데이터가 적을 때는 이런 역전이 흔하다. (훈련 · 테스트 MSE는 같은 데이터로 노트북 코드를 다시 실행해 계산한 값)</div>
+<div class="figs">
+  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-29-gd-train.png" alt="직접 구현 모델 — 훈련 데이터와 직선"><figcaption>직접 구현 — 훈련 데이터</figcaption></figure>
+  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-30-gd-test.png" alt="직접 구현 모델 — 테스트 데이터와 직선"><figcaption>직접 구현 — 테스트 데이터. sklearn 그래프와 거의 구분되지 않는다</figcaption></figure>
+</div>
+
+<h3 class="sub-title">더 해 보기 — 학습률만 바꿔서 다시 돌리면 (보충 실험)</h3>
+<div class="note-box">노트북 코드를 그대로 두고 <code>lr</code> 만 바꿔 100 epoch 학습한 결과다. <a class="ext" href="#gd">3.5의 학습률 도식</a>이 실제 데이터에서도 똑같이 나타난다.</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th><code>lr</code></th><th><span class="tex">w_1</span></th><th><span class="tex">w_0</span></th><th>상태</th></tr></thead>
+  <tbody>
+    <tr><td>0.0001</td><td>13069.40</td><td>4272.29</td><td><b>너무 작음</b> — 절편이 정답(약 26,816) 근처에도 못 감. 훈련 MSE 약 1.5억</td></tr>
+    <tr><td>0.0025 (노트북)</td><td>9493.14</td><td>24681.57</td><td><b>적당함</b> — 훈련 MSE 약 3,906만</td></tr>
+    <tr><td>0.05</td><td>9.78 × 10<sup>57</sup></td><td>1.12 × 10<sup>57</sup></td><td><b>발산</b> — 값이 폭발</td></tr>
+    <tr><td>0.1</td><td>nan</td><td>nan</td><td><b>발산</b> — 숫자로 표현할 수 없을 만큼 커져 계산 불능</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="warn"><b>제출</b> — 매주 <b>실습 실행 화면 캡쳐</b>와 <b>100문제 풀이 증명 캡쳐</b> 2건을 제출합니다. (1주차 OT 안내 기준, 100문제 정답률 50% 이상)</div>
+</section>
+
+<!-- ===================== 로지스틱 회귀 1 ===================== -->
+<section class="sec" id="logi">
+  <div class="sec-head"><span class="sec-badge">PRE</span><h2 class="sec-title">로지스틱 회귀 1 — 미리 보기<small>3주차 폴더에 함께 올라온 4주차 선행 교안(18페이지) 요약</small></h2></div>
+<div class="note-box"><b>학습 목표</b> — 선형회귀 중요 내용 · 분류 기초(분류의 정의, 특징 벡터와 특징 공간, 분류 규칙) · 선형 판별 함수(이해, 선형 구분 가능성과 분류) · 로지스틱 함수의 특성.
+교안 첫 장은 이번 주 내용을 <b>선형회귀 복습</b>으로 정리한다 — <span class="tex">\hat y_i=w_0+w_1x_i</span>, <span class="tex">L(\mathbf w)=\frac1N\sum(\hat y_i-y_i)^2</span>, 경사하강법, <span class="tex">\hat y_i=\mathbf w^{\mathsf T}\mathbf x_i</span>.</div>
+
+<h3 class="sub-title">분류(Classification)의 정의</h3>
+<div class="note-box"><ul class="ul">
+  <li>특성 값의 집합으로 설명되는 개체의 <b>소속 클래스 / 카테고리를 예측</b>하는 작업</li>
+  <li>사전에 클래스가 식별되며, 모든 개체가 어느 한 클래스에 속한다고 가정</li>
+  <li>학습 데이터 <span class="tex">\mathcal D=\{(\mathbf x_i,y_i)\}_{i=1}^{N},\;y_i\in\{C_1,C_2,\dots,C_K\}</span> — <span class="tex">K</span>는 클래스의 개수</li>
+  <li>클래스가 2개면 <span class="tex">C_1=1,\;C_2=0</span> 처럼 숫자로 표기 — 예) &ldquo;스팸메일&rdquo; = 1, &ldquo;스팸이 아닌 메일&rdquo; = 0</li>
+</ul></div>
+
+<h3 class="sub-title">특징 벡터와 특징 공간</h3>
+<div class="figs">
+  <div class="note-box"><ul class="ul">
+    <li><b>특징 벡터</b> — 모든 개체를 동일한 특징으로 설명할 때, 개별 관측 값을 표현하는 벡터</li>
+    <li>예) 학과를 숫자로(인공지능학과 1, 기계공학과 2, 수학과 3, 물리학과 4) → &ldquo;인공지능학과 · 평점 3.8 홍길동&rdquo; = <span class="tex">[1\;\;3.8]^{\mathsf T}</span>, &ldquo;수학과 · 평점 4.0 성춘향&rdquo; = <span class="tex">[3\;\;4.0]^{\mathsf T}</span></li>
+    <li><b>특징 공간</b> — 특징 벡터가 <span class="tex">d</span>개 성분이면 <span class="tex">d</span>차원 공간의 <b>점 하나</b>로 표시된다. 그 공간이 특징 공간</li>
+  </ul></div>
+  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-21-feature-space.png" alt="로지스틱1 교안 6p — 학과-학점 평면에 찍힌 홍길동과 성춘향"><figcaption>로지스틱1 6p — 두 학생이 특징 공간의 두 점</figcaption></figure>
+</div>
+
+<h3 class="sub-title">분류 규칙 — 구분선과 확률</h3>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-22-class-rule.jpg" alt="로지스틱1 교안 7p — 인공지능학과 3명(미수강)과 수학과 3명(수강)을 구분선 1, 2로 나누는 예제"><figcaption>로지스틱1 7p — &ldquo;정수론&rdquo; 수강 여부. 인공지능학과(미수강 0)와 수학과(수강 1)는 <b>구분선 1</b>이나 <b>구분선 2</b>로 나눌 수 있다</figcaption></figure>
+<div class="note-box"><b>확률 분포를 활용한 분류</b> — 체조 동아리 회원(<span class="tex">C_1</span>)과 비회원(<span class="tex">C_2</span>)의 몸무게 분포가 주어졌을 때, 몸무게 52kg(<span class="tex">x</span>)인 학생은 어느 쪽일까?</div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-23-histogram.png" alt="로지스틱1 교안 8p — 체조부 소속과 미소속 학생의 몸무게 비율 히스토그램"><figcaption>로지스틱1 8p — 체조부 소속(파랑)은 41~50kg에 몰려 있고, 미소속(빨강)은 넓게 퍼져 있다</figcaption></figure>
+<div class="fx">
+  <p class="fx-lab">사후 확률 비교 — 베이즈 규칙 (2주차 확률 복습)</p>
+  <div class="tex-d">P(C_1\mid x)=\frac{P(x\mid C_1)P(C_1)}{P(x\mid C_1)P(C_1)+P(x\mid C_2)P(C_2)},\qquad P(C_2\mid x)=1-P(C_1\mid x)</div>
+  <p class="fx-note"><b>분류 규칙</b> — <span class="tex">P(C_1\mid x)&gt;P(C_2\mid x)</span>, 즉 <span class="tex">P(C_1\mid x)&gt;0.5</span> 이면 <span class="tex">C_1</span>, 그 외에는 <span class="tex">C_2</span>.
+  비교하려면 <span class="tex">P(C_1),P(C_2),P(x\mid C_1),P(x\mid C_2)</span> 의 정보가 필요하다.<br>
+  <b>사후 확률(Posterior probability)</b> — <span class="tex">x</span>를 관찰했을 때 <span class="tex">x</span>의 소속 클래스가 <span class="tex">C_1</span>일 가능성을 수치로 표현한 조건부 확률</p>
+</div>
+
+<h3 class="sub-title">선형 판별 함수 (Linear discriminant function)</h3>
+<div class="fx">
+  <p class="fx-lab">정의</p>
+  <div class="tex-d">g(\mathbf x)=\mathbf w\cdot\mathbf x=\mathbf w^{\mathsf T}\mathbf x=w_0+w_1x_1+w_2x_2+\cdots+w_dx_d\qquad(x_0=1)</div>
+  <p class="fx-note">· <span class="tex">\mathbf x</span> 는 <span class="tex">d+1</span>개 성분의 특징 벡터(바이어스 성분 1로 고정), <span class="tex">\mathbf w</span> 는 <span class="tex">d+1</span>개 성분의 가중치 벡터 — <b>다중 선형 회귀와 똑같은 식</b>이다<br>
+  · <b>이진 분류</b> — <span class="tex">g(\mathbf x)&gt;0</span> 이면 <span class="tex">C_1</span>, 그 외에는 <span class="tex">C_2</span></p>
+</div>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-24-split-point-line.png" alt="로지스틱1 교안 12p — 1차원은 구분점, 2차원은 구분선으로 특징 공간을 분할"><figcaption>로지스틱1 12p — 특징 공간이 1차원이면 <b>점</b>, 2차원이면 <b>선</b>, 3차원이면 <b>평면</b>, 4차원 이상이면 <b>초평면(hyperplane)</b>으로 분할</figcaption></figure>
+<div class="ex">
+  <p class="ex-q"><em>교안 예제</em> <span class="tex">g(\mathbf x)=20x_1+3x_2-36</span> (<span class="tex">\mathbf w=[-36\;\;20\;\;3]^{\mathsf T}</span>, <span class="tex">x_1</span> 학과 · <span class="tex">x_2</span> 학점) 으로 <span class="tex">\mathbf x_2=[1\;\;3.8]^{\mathsf T}</span>, <span class="tex">\mathbf x_4=[3\;\;2.2]^{\mathsf T}</span> 를 분류하면?</p>
+  <div class="step"><i>①</i><div><span class="tex">g(\mathbf x_2)=20(1)+3(3.8)-36=20+11.4-36=-4.6&lt;0</span> → 미수강 쪽</div></div>
+  <div class="step"><i>②</i><div><span class="tex">g(\mathbf x_4)=20(3)+3(2.2)-36=60+6.6-36=30.6&gt;0</span> → 수강 쪽</div></div>
+  <div class="ex-ans"><b>정리</b> — <span class="tex">g(\mathbf x)=0</span> 이 특징 공간을 둘로 나누고, <b><span class="tex">g(\mathbf x)</span>의 부호</b>로 클래스를 구분한다</div>
+</div>
+<div class="flow">
+  <div class="fl"><div class="fl-n">1</div><div><h4>절차 1 (학습)</h4><p>학습데이터 <span class="tex">\mathcal D=\{(\mathbf x_i,y_i)\},\;y_i\in\{0,1\}</span> 로 <span class="tex">g(\mathbf x)=\mathbf w^{\mathsf T}\mathbf x</span> 의 구체적인 인자 <span class="tex">\mathbf w^*</span> 를 결정</p></div></div>
+  <div class="fl"><div class="fl-n">2</div><div><h4>절차 2 (예측)</h4><p>새 관측 <span class="tex">\mathbf x'</span> 에 대해 <span class="tex">g(\mathbf x')&gt;0</span> 이면 <span class="tex">C_1</span>, 아니면 <span class="tex">C_2</span></p></div></div>
+</div>
+<div class="note-box"><b>선형 구분 가능성(linear separability)</b> — <span class="tex">g(\mathbf x)=\mathbf w^{\mathsf T}\mathbf x</span> 로 두 클래스의 관측 값을 <b>정확하게 구분</b>(한 클래스는 전부 <span class="tex">g&gt;0</span>, 다른 클래스는 전부 <span class="tex">g&lt;0</span>)할 수 있을 때 &ldquo;선형 구분 가능하다&rdquo;고 한다.
+이 경우 <span class="tex">g(\mathbf x)=0</span> 은 성분 수에 따라 선 · 평면 · 초평면이 되어 특징 공간을 2개로 분할한다.</div>
+
+<h3 class="sub-title">로지스틱 함수 (Logistic function)</h3>
+<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-26-logistic-function.png" alt="로지스틱1 교안 16p — 로지스틱 함수 정의, S자 그래프, 미분 유도"><figcaption>로지스틱1 16p — 정의역 전체를 <b>0과 1 사이</b>로 사상하는 S자 곡선</figcaption></figure>
+<div class="fx">
+  <p class="fx-lab">정의와 미분 형태</p>
+  <div class="tex-d">\sigma(x)=\frac{1}{1+e^{-x}}=\frac{e^x}{1+e^x},\qquad \frac{d}{dx}\sigma(x)=\frac{e^x}{(1+e^x)^2}=\sigma(x)\bigl(1-\sigma(x)\bigr)</div>
+  <p class="fx-note">(1) 정의역을 0과 1 사이의 값으로 사상하고 (2) <b>미분 가능</b>하다는 특징 덕분에 기계학습에 많이 쓰인다.
+  미분 결과가 <b>자기 자신만으로</b> 표현되는 점이 경사하강법 계산을 아주 쉽게 만든다.</p>
+</div>
+<div class="cards">
+  <div class="card2"><h4>활용 1 — 확률 표현<em>로지스틱 회귀</em></h4><p>출력이 0~1이므로 특정 카테고리가 <b>발생할 확률</b>을 표현하는 데 쓴다. <span class="tex">\sigma(g(\mathbf x))</span> 가 0.5보다 크면 <span class="tex">C_1</span> — 앞의 &ldquo;<span class="tex">g&gt;0</span>&rdquo; 규칙과 같은 말이다 (<span class="tex">\sigma(0)=0.5</span>).</p></div>
+  <div class="card2"><h4>활용 2 — 활성화 함수<em>activation function</em></h4><p>인공신경망의 연산 과정에서 활성화 함수로 쓰이며, 로지스틱 함수와 그 <b>미분 형태가 모두</b> 중요하게 사용된다.</p></div>
+</div>
+</section>
+
+<!-- ===================== 다음 주 ===================== -->
+<section class="sec" id="next">
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>4주차 — 분류와 로지스틱 회귀</small></h2></div>
+<div class="note-box"><ul class="ul">
+  <li>분류와 선형 판별 — <a class="ext" href="#logi">위의 로지스틱 회귀 1</a>에서 미리 본 내용</li>
+  <li>로지스틱 함수</li>
+  <li>이진 분류를 위한 로지스틱 회귀</li>
+  <li>크로스 엔트로피 — 분류에서는 MSE 대신 어떤 손실을 쓰는가</li>
+</ul></div>
+</section>
+
+<p class="src">출처 — 기계학습특론 3주차 강의자료(CHAPTER 1 선형 회귀 40페이지 · 개정판 62페이지) · 개정판 실습 문제/정답 노트북 · 로지스틱 회귀 1(18페이지) · 3주차_linear_regression_실습 노트북<br>
+&lsquo;수업시간 도식&rsquo;과 &lsquo;보충&rsquo; 표시 내용은 교안의 식과 데이터로 직접 계산해 채웠습니다.</p>
+
+</div>
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive(){
+    var cur = '';
+    sections.forEach(function(s){ if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function(t){ t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      setTimeout(function(){
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+});
+</script>
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script src="../vendor/katex/katex.min.js"></script>
+<script>
+// .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.
+// KaTeX를 못 불러온 경우에는 원문이 그대로 남아 최소한 읽을 수는 있게 둔다.
+(function () {
+  if (typeof katex === 'undefined') { return; }
+  document.querySelectorAll('.tex, .tex-d').forEach(function (el) {
+    try {
+      katex.render(el.textContent.trim(), el, {
+        displayMode: el.classList.contains('tex-d'),
+        throwOnError: false,
+        strict: false
+      });
+    } catch (e) { if (window.console) { console.error('KaTeX', e, el.textContent); } }
+  });
+})();
+</script>
+
+<script src="quiz/ml-w03.js?v=1"></script>
+<script src="quiz/inline-quiz.js?v=2"></script>
+
+</body>
+</html>

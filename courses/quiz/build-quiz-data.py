@@ -25,6 +25,38 @@ TERMS = {
    '베이즈','가우시안','정규 분포','이산','연속',
    'Numpy','배열','ndim','shape','reshape','arange','인덱싱','슬라이싱','축','axis','브로드캐스팅','concatenate','stack','transpose',
  ],
+ 'ml-w03': [
+   '회귀','분류','세그멘테이션','예측','집값',
+   '독립 변수','종속 변수','입력 변수','출력 변수','특징 벡터','데이터셋','지도학습','스칼라',
+   '상관관계','인과관계','해적','학습 과정','훈련 데이터',
+   '단순 선형 회귀','파라미터','매개변수','가중치','절편','기울기',
+   '손실함수','손실 함수','비용 함수','Cost function','MSE','MAE','평균 제곱 오차','평균 절대 오차','argmin','등고선','Minimum','최솟값',
+   '경사하강법','Gradient','학습률','Learning rate','초기화','초기값','편미분','접선','발산','수렴','종료조건',
+   '다중 선형 회귀','매핑 함수','x_i0','내적','바이어스','w_j',
+ ],
+ 'nlp-w04': [
+   '분석 계층','오류 전파','Garbage In','규칙 기반',
+   '정형 데이터','비정형 데이터','구조적 노이즈','인코딩','mojibake','PDF','HTML','BeautifulSoup','파이프라인',
+   '정제','정규표현식','치환','<URL>','정규화','NFC','NFD','NFKC','case folding','대소문자','반복 문자',
+   '토큰화','축약형','교착어','어절','불용어','Stemming','Lemmatization','Porter','어간 추출','표제어 추출',
+   '띄어쓰기','n-gram','음절','sequence labeling','Bi-LSTM','CRF','Kiwi','PyKoSpacing',
+   '삽입','생략','대체','전치','편집 거리','Levenshtein','Damerau','동적 계획법','non-word','real-word',
+   '잡음 채널','오타 모델','언어 모델','사전 확률','acress','서브워드','BPE','WordPiece','SentencePiece','OOV','<UNK>',
+   '형태소','자립 형태소','의존 형태소','실질 형태소','형식 형태소','원형 복원','불규칙','후보 선택','감기는',
+   'KoNLPy','Okt','Komoran','Hannanum','Kkma','Mecab','사용자 사전',
+   '품사','체언','용언','수식언','독립언','관계언','조사','태그셋','세종','Penn Treebank','UPOS','NNG','JKS','JKO',
+   '품사 태깅','중의성','Brill','제약 문법','HMM','방출 확률','전이 확률','비터비','Viterbi','BERT',
+   '구문 분석','구구조','의존 문법','구성소','지배소','의존소','CFG','문맥 자유 문법','비단말','단말','시작 기호',
+   '구문 중의성','부착 중의성','등위 접속','카탈란','하향식','상향식','차트 파싱','CYK','Earley',
+   'PCFG','트리뱅크','inside-outside','Lexicalized','F1','전이 기반','그래프 기반','SHIFT','LEFT-ARC','빔 서치','동적 오라클',
+   '단일 지배소','비순환','연결성','사영성','head-final','MST','Chu-Liu','Biaffine',
+   '의미 분석','Colorless','어휘적 중의성','구조적 중의성','화용적 중의성','다의어','동음이의어','상호참조',
+   'WSD','sense inventory','WordNet','synset','KorLex','Lesk','gloss','지도학습','Yarowsky','의미 유도',
+   '정적 임베딩','문맥 임베딩','Word2Vec','GloVe','ELMo','GlossBERT','분포 가설','Firth',
+   '의미역','행동주','피동주','경험자','수혜자','도구','출처','도달점','수의적','필수','theta-criterion','의미역 기준',
+   'SRL','술어','논항','PropBank','FrameNet','ARG0','BIO',
+   '논리식','AMR','분산 표현','Sentence-BERT','RAG','의미 검색',
+ ],
  'nlp-w01': [
    'NLU','NLG','인공어','텍스트 분석','학제간','규칙 기반','통계 기반','신경망','사전학습',
    'ELIZA','튜링','Transformer','n-gram','word2vec','BERT','GPT','어텐션',
@@ -100,7 +132,11 @@ build('nlp-w02', 'materials/자연어처리/week02-quiz100.html', 'courses/quiz/
       {'title': '2주차 · 수학과 언어학의 기본 원리', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week02-quiz100.html'})
 build('nlp-w03', 'materials/자연어처리/week03-quiz100.html', 'courses/quiz/nlp-w03.js',
       {'title': '3주차 · 토큰화, 품사 태깅, 불용어 제거, 텍스트 정규화', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week03-quiz100.html'})
+build('nlp-w04', 'materials/자연어처리/week04-quiz100.html', 'courses/quiz/nlp-w04.js',
+      {'title': '4주차 · 텍스트의 전처리, 어휘, 구문 그리고 의미 분석', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week04-quiz100.html'})
 build('ml-w01', 'materials/기계학습특론/week01-quiz100.html', 'courses/quiz/ml-w01.js',
       {'title': '1주차 · 강의소개와 생성형 AI(이미지)', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week01-quiz100.html'})
 build('ml-w02', 'materials/기계학습특론/week02-quiz100.html', 'courses/quiz/ml-w02.js',
       {'title': '2주차 · 인공지능 기초 수학', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week02-quiz100.html'})
+build('ml-w03', 'materials/기계학습특론/week03-quiz100.html', 'courses/quiz/ml-w03.js',
+      {'title': '3주차 · 선형 회귀', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week03-quiz100.html'})
