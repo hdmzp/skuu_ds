@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>컴퓨터비전 | 1주차 오리엔테이션</title>
+<title>컴퓨터비전 | 4주차 수업내용 · Image Pyramids</title>
 <link rel="icon" href="../assets/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png">
 <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
@@ -286,13 +286,56 @@ a.ext:hover{border-bottom-color:var(--accent)}
 .xf p{font-size:13px;color:#4b5563;line-height:1.78}
 .xf-keep{font-size:12.5px;color:#166534;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.65}
 .xf-sol{font-size:12.5px;color:#1b3f8b;background:#eef6ff;border:1px solid #c4d2ee;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.7}
+
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .st{color:#c9f24b}
+pre.code .fn{color:#7ec8ff}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 함수 카드 */
+.fnc{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:var(--radius);padding:13px 15px;margin:11px 0}
+.fnc h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fnc .sig{
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;color:#1b3f8b;
+  background:#eef2fb;border:1px solid #dbe3f5;border-radius:6px;padding:7px 10px;margin:7px 0 9px;
+  overflow-x:auto;white-space:pre;
+}
+.fnc dl{display:grid;grid-template-columns:minmax(88px,auto) 1fr;gap:5px 12px;font-size:12.5px;line-height:1.65}
+.fnc dt{font-weight:700;color:var(--ink)}
+.fnc dd{color:#4b5563}
+@media(max-width:440px){.fnc dl{grid-template-columns:1fr;gap:2px}.fnc dd{margin-bottom:6px}}
+/* 자료 대기 안내 */
+.pending{
+  background:repeating-linear-gradient(135deg,#f8f7f4,#f8f7f4 10px,#f2f0ea 10px,#f2f0ea 20px);
+  border:2px dashed var(--border);border-radius:var(--radius);
+  padding:18px 18px;margin:12px 0;text-align:center;color:var(--muted);font-size:13px;line-height:1.75;
+}
+.pending b{display:block;font-size:14px;color:var(--ink);margin-bottom:5px}
 </style>
 </head>
 <body id="top">
 
 <nav class="tab-bar" id="tabbar">
-  <a href="#ot">수업 운영과 평가</a>
-  <a href="#goal">교과목 목표</a>
+  <a href="#map">한눈에 보기</a>
+  <a href="#flip">1) 플립러닝 교안</a>
+  <a href="#live">2) 실시간 강의</a>
+  <a href="#howto">공부 방법</a>
+  <a href="#pyr">피라미드 함수</a>
+  <a href="#cv2">cv2 이름의 뜻</a>
+  <a href="#libs">라이브러리 지도</a>
   <a href="#next">다음 주 예고</a>
 </nav>
 
@@ -300,82 +343,225 @@ a.ext:hover{border-bottom-color:var(--accent)}
 
 <div class="weeknav">
   <a href="computer-vision.html" class="plan">← 강의계획서</a>
-  <span class="cur">1주차 · 오리엔테이션</span>
-  <a href="computer-vision-week02-1.html">2주차-1 · Python &amp; OpenCV</a>
-  <a href="computer-vision-week02-2.html">2주차-2 · Geometric Camera Models</a>
+  <a href="computer-vision-week01.html">1주차 · 오리엔테이션</a>
+  <a href="computer-vision-week02-1.html">2주차-1 · 실시간</a>
+  <a href="computer-vision-week02-2.html">2주차-2 · 교안</a>
   <a href="computer-vision-week03.html">3주차 · Linear Filters</a>
-  <a href="computer-vision-week04.html">4주차 · Image Pyramids</a>
+  <span class="cur">4주차 · Image Pyramids</span>
 </div>
 
 <section class="hero">
-  <p class="kicker">1주차 · 9.2 (수) · 2026-2학기 · ADS5034-01</p>
-  <h1>Intro to the course — 오리엔테이션</h1>
-  <p>컴퓨터 비전이란 무엇인가에 대한 개관과 함께, 이 강좌가 한 학기 동안 어떻게 굴러가는지(플립러닝 · 출석 · 발표 · 과제 · 평가)를 정리합니다.</p>
-  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">OT 교안 18p</span><span class="chip">실시간: Orientation</span></div>
+  <p class="kicker">4주차 · 9.23 · 2026-2학기</p>
+  <h1>04. Image Pyramids</h1>
+  <p>이번 주차 <b>실시간 강의(파이썬) 필기</b>를 먼저 정리했습니다. 교수님 요지는 하나 &mdash;
+  <b>알고리즘을 외우려 들지 말고 &ldquo;이건 이렇게 쓰는 함수구나&rdquo;를 잡으라</b>는 것입니다.
+  플립러닝 교안은 등록되는 대로 이 페이지에 이어서 채웁니다.</p>
+  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">실시간 강의 필기</span><span class="chip">함수 위주 학습</span><span class="chip">교안 등록 예정</span></div>
+</section>
+
+<div class="legend">
+  <i><span class="sw sw-hand"></span><span>주황색 글씨 = 실시간 강의에서 교수님이 하신 말씀</span></i>
+  <i><span class="sw sw-term"></span><span>파란 점선 = 어려운 개념 — PC는 커서를 올리면, 모바일은 <b>탭</b>하면 설명이 뜹니다</span></i>
+</div>
+
+<section class="sec" id="map">
+  <div class="sec-head"><span class="sec-badge">MAP</span><h2 class="sec-title">한눈에 보기<small>4주차는 플립러닝(온라인 콘텐츠)과 실시간 강의로 나뉩니다</small></h2></div>
+<div class="partbar"><b>1) 플립러닝 강의</b> 04. Image Pyramids</div>
+<div class="mapgrid">
+  <a href="#flip"><b>교안 정리</b><span>Aliasing · Image Pyramid · Interpolation — 등록 예정</span></a>
+</div>
+<div class="partbar"><b>2) 실시간 강의</b> 파이썬 (Python Review)</div>
+<div class="mapgrid">
+  <a href="#howto"><b>01 이번 주 공부 방법</b><span>알고리즘 암기 ✗ → 함수 사용법 ○</span></a>
+  <a href="#pyr"><b>02 피라미드 함수</b><span>cv2.pyrDown · cv2.pyrUp</span></a>
+  <a href="#cv2"><b>03 cv2라는 이름의 뜻</b><span>버전 번호가 아니다</span></a>
+  <a href="#libs"><b>04 라이브러리 지도</b><span>NumPy · OpenCV · scikit 계열</span></a>
+  <a href="#next"><b>05 다음 주 예고</b><span>라인 · 코너 검출</span></a>
+</div>
 </section>
 
 <!-- ==================================================================== -->
-<!-- 1주차 교안                                                             -->
+<!-- 1) 플립러닝 강의                                                       -->
 <!-- ==================================================================== -->
 <div class="matbar">
-  <p class="tagline">1주차 교안 · 오리엔테이션</p>
-  <h2>01. Course Introduction (Orientation)</h2>
-  <p>18페이지 · 강좌 소개와 수업 운영 방식, 평가 기준을 안내한 1주차(9/2) 오리엔테이션 자료입니다.</p>
-  <div class="acts">
-    <a class="primary" href="pdf-viewer.html?doc=cv-w01-intro">뷰어로 보기</a>
-    <a href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week01-course-intro.pdf" download="컴퓨터비전_1주차_Course_Introduction(오리엔테이션).pdf">⬇ 다운로드</a>
-  </div>
+  <p class="tagline">4주차 1) 플립러닝 강의 · 온라인 사전제작 콘텐츠</p>
+  <h2>04. Image Pyramids</h2>
+  <p>강의계획서 기준 <b>Aliasing · Image Pyramid · Interpolation · Related Codes</b>로 이루어집니다.</p>
 </div>
 
-<section class="sec" id="ot">
-  <div class="sec-head"><span class="sec-badge">OT</span><h2 class="sec-title">수업 운영과 평가<small>Course Introduction 요약</small></h2></div>
-<div class="info">
-  <div class="info-row"><div class="info-key">수업 방식</div><div class="info-val"><span class="term" tabindex="0" data-tip="온라인 콘텐츠를 미리 보고 오고, 실시간 수업에서는 질의응답·실습 등 학생 활동 중심으로 진행하는 수업 방식.">Flipped Learning</span> — 온라인 콘텐츠(목~수) + 실시간 온라인 수업(수)</div></div>
-  <div class="info-row"><div class="info-key">실시간 수업</div><div class="info-val">매주 수요일 19:00~20:30 (필요 시 연장) · Zoom (i-Campus 링크)</div></div>
-  <div class="info-row"><div class="info-key">온라인 콘텐츠<br>출석 인정</div><div class="info-val">매주 목요일 00:00 ~ 다음 주 수요일 수업 직전<br><span style="color:#6b7280">예) 2주차 콘텐츠: 9/3(목) 00:00 ~ 9/9(수) 19:00</span></div></div>
-  <div class="info-row"><div class="info-key">선수 지식</div><div class="info-val">선형대수(행렬·벡터·변환) · 기초 확률과 통계 · 구현을 위한 프로그래밍(Python)</div></div>
-  <div class="info-row"><div class="info-key">Python Review</div><div class="info-val">총 3주간 (2~3주차, 11주차) — Python · OpenCV · PyTorch (Colab)</div></div>
-  <div class="info-row"><div class="info-key">논문 발표</div><div class="info-val">3주차(9/16)부터 11주 내외 · 발표 12분 + Q&amp;A 3~5분 · 주당 3~4명</div></div>
-  <div class="info-row"><div class="info-key">과제</div><div class="info-val">총 3회 (배점 5 + 8 + 12) · 부여 시 실시간 수업에서 설명, 마감 후 Review</div></div>
-  <div class="info-row"><div class="info-key">오프라인 강의실</div><div class="info-val">퇴계인문관 31705호 (중간/기말고사 및 필요 시)</div></div>
-</div>
-<div class="evals">
-  <div class="ev"><div class="ev-top"><span class="ev-name">출석 및 참여</span><span class="ev-pct">10%</span></div><div class="ev-bar"><i style="width:10%"></i></div></div>
-  <div class="ev"><div class="ev-top"><span class="ev-name">논문 발표</span><span class="ev-pct">15%</span></div><div class="ev-bar"><i style="width:15%"></i></div></div>
-  <div class="ev"><div class="ev-top"><span class="ev-name">과제 (3회)</span><span class="ev-pct">25%</span></div><div class="ev-bar"><i style="width:25%"></i></div></div>
-  <div class="ev"><div class="ev-top"><span class="ev-name">중간고사</span><span class="ev-pct">25%</span></div><div class="ev-bar"><i style="width:25%"></i></div></div>
-  <div class="ev"><div class="ev-top"><span class="ev-name">기말고사</span><span class="ev-pct">25%</span></div><div class="ev-bar"><i style="width:25%"></i></div></div>
-  <div class="ev-total"><span>합계</span><span>100%</span></div>
-</div>
-</section>
-
-
-<section class="sec" id="goal">
-  <div class="sec-head"><span class="sec-badge">GOAL</span><h2 class="sec-title">교과목 목표<small>The goal of the course</small></h2></div>
-<div class="note-box"><ul class="ul">
-  <li><b>계산적 방법으로 실제 문제 해결</b> — 컴퓨터 비전의 계산 기법으로 현실 세계의 문제를 푼다</li>
-  <li><b>이론에서 프로젝트로</b> — 컴퓨터 비전의 이론과 기법을 배우고 실제 연구 프로젝트(과제)에 적용한다</li>
-  <li><b>SOTA 연구 이해의 기초</b> — 전통적인 비전 이론·방법론 학습을 통해 최신 연구를 이해할 기본기를 갖춘다</li>
+<section class="sec" id="flip">
+  <div class="sec-head"><span class="sec-badge">교안</span><h2 class="sec-title">플립러닝 교안 정리<small>교안 등록 예정</small></h2></div>
+<div class="pending"><b>아직 교안이 등록되지 않았습니다.</b>
+4주차 교안 PDF를 받는 대로 3주차와 같은 방식으로 &mdash; 절 단위 정리 · 도식 슬라이드 캡처 · 뷰어와 다운로드 연결 &mdash; 이 자리에 채워 넣습니다.</div>
+<div class="note-box"><b>강의계획서에 예고된 4주차 교안 내용</b>
+<ul class="ul">
+  <li><b>Aliasing</b> &mdash; 표본을 너무 듬성듬성 뽑아 원래 신호가 <b>다른 신호처럼 보이게</b> 되는 현상</li>
+  <li><b>Image Pyramid</b> &mdash; 같은 이미지를 <b>여러 해상도로 쌓아 둔</b> 자료 구조</li>
+  <li><b>Interpolation · Related Codes</b> &mdash; 크기를 키울 때 <b>빈 화소를 채우는</b> 방법과 OpenCV 실습 링크</li>
 </ul></div>
-<div class="note-box"><b>Computer Vision이란?</b> 인간 시각 시스템의 복잡한 처리 과정을 컴퓨터에 적용하여,
-사람의 뇌가 하는 것과 같은 방식으로 영상·비디오 속 객체를 인식하고 처리하게 하는 컴퓨터과학 분야.<br>
-<span style="color:#6b7280">대표 응용 — Image classification · Localization · Instance segmentation · Object identification · Object generation</span></div>
+<div class="tip"><b>3주차와 이어지는 지점</b> &mdash; 피라미드를 한 단 내려갈 때 <b>가우시안 스무딩을 먼저 하고</b> 표본을 뽑는다.
+스무딩 없이 그냥 건너뛰며 뽑으면 <b>에일리어싱</b>이 생기기 때문이다.
+그 가우시안 필터가 <a class="ext" href="computer-vision-week03.html#gauss">3주차 07 가우시안 필터</a>에서 다룬 바로 그 필터다.</div>
 </section>
 
+<!-- ==================================================================== -->
+<!-- 2) 실시간 강의                                                         -->
+<!-- ==================================================================== -->
+<div class="matbar" id="live">
+  <p class="tagline">4주차 2) 실시간 강의 · 수요일 19:00~20:30 (Zoom)</p>
+  <h2>파이썬 &mdash; OpenCV 함수 익히기</h2>
+  <p>교수님 멘트를 그대로 옮기고, 언급된 함수·라이브러리의 정확한 뜻을 덧붙였습니다.</p>
+</div>
+
+<!-- ===================== 01 공부 방법 ===================== -->
+<section class="sec" id="howto">
+  <div class="sec-head"><span class="sec-badge">01</span><h2 class="sec-title">이번 주 공부 방법<small>교수님이 가장 강조하신 것</small></h2></div>
+
+<div class="good"><b>교수님 멘트</b><br>
+&ldquo;<span class="hw">오늘 내용은 알고리즘이 많은데 &mdash; 함수 위주로 보세요.</span>
+<span class="hw">예를 들어서 &lsquo;피라미드&rsquo;는 이렇게 쓰는 거구나~</span>&rdquo;<br>
+&ldquo;<span class="hw">여튼 함수 위주로 체크하라</span>&rdquo; · &ldquo;<span class="hw">OpenCV는 이런 거구나~</span>&rdquo;</div>
+
+<div class="note-box"><b>어떻게 읽으라는 뜻인가</b>
+<ul class="ul">
+  <li><b>알고리즘 내부를 외우는 것이 목표가 아니다</b> &mdash; 가우시안 커널을 손으로 계산하는 능력보다,
+    <b>어떤 상황에서 어떤 함수를 부르는지</b>를 아는 것이 이번 주의 목표다</li>
+  <li>함수 하나를 볼 때 <b>세 가지만</b> 챙기면 된다 &mdash; <b>① 무엇을 입력받고 ② 무엇을 돌려주고 ③ 언제 쓰는가</b></li>
+  <li>예) <code>cv2.pyrDown(img)</code> &mdash; ① 이미지를 받아 ② <b>가로 · 세로가 절반</b>인 이미지를 돌려주고 ③ <b>해상도를 낮출 때</b> 쓴다</li>
+</ul></div>
+<div class="tip"><b>시험 관점</b> &mdash; 함수 이름과 역할이 짝지어져 나오는 형태를 염두에 두면 좋다.
+&ldquo;<b>축소는 <code>pyrDown</code>, 확대는 <code>pyrUp</code></b>&rdquo;처럼 <b>이름에서 동작이 읽히는</b> 함수가 많다.</div>
+</section>
+
+<!-- ===================== 02 피라미드 함수 ===================== -->
+<section class="sec" id="pyr">
+  <div class="sec-head"><span class="sec-badge">02</span><h2 class="sec-title">피라미드 함수<small>cv2.pyrDown · cv2.pyrUp &mdash; 교수님이 예로 드신 함수</small></h2></div>
+
+<div class="good"><b>교수님 멘트</b> &mdash; &ldquo;<span class="hw">피라미드다운, 피라미드업</span>&rdquo;
+<pre class="code">cv2.pyrDown(img)
+cv2.pyrUp(img)</pre></div>
+
+<div class="fnc">
+  <h4>cv2.pyrDown &mdash; 한 단 내려가기 (축소)</h4>
+  <div class="sig">dst = cv2.pyrDown(src)</div>
+  <dl>
+    <dt>하는 일</dt><dd><b>가우시안 스무딩</b>을 먼저 하고, 그다음 <b>짝수 행 · 짝수 열만 뽑는다</b></dd>
+    <dt>결과 크기</dt><dd>가로 · 세로가 각각 <b>약 절반</b> &mdash; 화소 수는 <b>1/4</b>이 된다</dd>
+    <dt>왜 스무딩부터</dt><dd>바로 건너뛰며 뽑으면 <b><span class="term" tabindex="0" data-tip="표본을 너무 듬성듬성 뽑아, 원래의 촘촘한 무늬가 전혀 다른 굵은 무늬처럼 보이게 되는 현상. 줄무늬 옷이 화면에서 어른거리는 모아레가 대표적인 예다.">에일리어싱</span></b>이 생긴다.
+      고주파 성분을 <b>미리 뭉개서</b> 없애는 것이 스무딩의 역할이다</dd>
+  </dl>
+</div>
+
+<div class="fnc">
+  <h4>cv2.pyrUp &mdash; 한 단 올라가기 (확대)</h4>
+  <div class="sig">dst = cv2.pyrUp(src)</div>
+  <dl>
+    <dt>하는 일</dt><dd>행과 열 사이에 <b>0으로 채운 빈 줄을 끼워 크기를 두 배로 늘린 뒤</b>, 가우시안 필터로 그 빈칸을 메운다</dd>
+    <dt>결과 크기</dt><dd>가로 · 세로가 각각 <b>약 두 배</b></dd>
+  </dl>
+</div>
+
+<div class="warn"><b>꼭 짚고 갈 것 &mdash; 왕복해도 원본으로 돌아오지 않는다</b><br>
+<code>cv2.pyrUp(cv2.pyrDown(img))</code>는 <b>원본 img와 같지 않다</b>.
+내려갈 때 <b>버린 세부(고주파)는 되살아나지 않기</b> 때문이다. 크기만 같아지고 <b>흐릿해진다</b>.<br>
+바로 이 &ldquo;<b>잃어버린 차이</b>&rdquo;를 따로 모아 둔 것이 <b>라플라시안 피라미드</b>이며, 교안에서 다룰 내용이다.</div>
+
+<div class="note-box"><b>비슷해 보이지만 다른 함수 &mdash; <code>cv2.resize()</code></b>
+<ul class="ul">
+  <li><code>cv2.resize()</code>는 <b>임의의 배율</b>로 크기를 바꾸고, <b>보간(interpolation) 방식을 직접 고른다</b></li>
+  <li><code>pyrDown</code> / <code>pyrUp</code>은 <b>배율이 2배로 고정</b>되어 있고 <b>가우시안 처리가 안에 포함</b>되어 있다 &mdash; 피라미드를 쌓는 전용 함수다</li>
+</ul></div>
+</section>
+
+<!-- ===================== 03 cv2 이름 ===================== -->
+<section class="sec" id="cv2">
+  <div class="sec-head"><span class="sec-badge">03</span><h2 class="sec-title">cv2라는 이름의 뜻<small>수업 중 나온 궁금증에 대한 답</small></h2></div>
+
+<div class="note-box"><b>수업 중 나온 질문</b><br>
+&ldquo;<span class="hw">cv 2.0, 3.0 계속 나오고 있는데, 공통적으로 차세대 개념으로 cv2.로 통칭하는 건가?</span>&rdquo;</div>
+
+<div class="good"><b>정리하면 &mdash; &ldquo;차세대 API를 가리킨다&rdquo;는 감은 맞고, &ldquo;버전 2를 뜻한다&rdquo;는 아니다</b>
+<ul class="ul">
+  <li><code>cv2</code>의 <b>2는 OpenCV 버전 번호가 아니라 &ldquo;2세대 API&rdquo;</b>를 뜻한다</li>
+  <li>초기 OpenCV는 <b>C 언어 API</b>를 썼고 파이썬에서 <code>import cv</code>로 불렀다.
+    <b>OpenCV 2.0에서 C++ API가 새로 도입</b>되면서, 그 새 API를 감싼 파이썬 모듈 이름이 <code>cv2</code>가 되었다</li>
+  <li>그래서 <b>OpenCV 3.x든 4.x든 지금도 전부 <code>import cv2</code></b>다 &mdash; 모듈 이름은 버전과 함께 바뀌지 않는다</li>
+</ul></div>
+<div class="tip"><b>확인해 보는 법</b>
+<pre class="code"><span class="cm">import</span> cv2
+print(cv2.__version__)   <span class="cm"># 실제 설치된 버전은 여기에 찍힌다</span>
+<span class="out">4.10.0</span>          <span class="cm"># ← 4.x인데도 모듈 이름은 여전히 cv2</span></pre>
+설치할 때 쓰는 <b>패키지 이름</b>은 <code>opencv-python</code>이고, <b>불러올 때 쓰는 모듈 이름</b>이 <code>cv2</code>다 &mdash; 둘이 다르다는 점도 함께 기억해 두자.</div>
+</section>
+
+<!-- ===================== 04 라이브러리 지도 ===================== -->
+<section class="sec" id="libs">
+  <div class="sec-head"><span class="sec-badge">04</span><h2 class="sec-title">라이브러리 지도<small>무엇에 특화된 도구인가 &mdash; 교수님이 비교해 주신 내용</small></h2></div>
+
+<div class="note-box"><b>교수님 멘트</b>
+<ul class="ul">
+  <li><span class="hw">NumPy는 데이터분석 직군이면 많이 쓸 거야. 행렬 · 배열 위주로 최적화</span></li>
+  <li><span class="hw">OpenCV는 컴퓨터비전에 특화</span></li>
+  <li><span class="hw">사이킷런은 파이썬의 머신러닝 라이브러리, 사이킷이미지는 이미지처리 알고리즘 패키지. 사이킷 바이오도 있어요</span></li>
+  <li><span class="hw">import 시킬 땐 sklearn.~~, skimage.~~ 이렇게 불러서 쓴다</span></li>
+</ul></div>
+
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>라이브러리</th><th>무엇에 특화</th><th>설치 이름 → import 이름</th></tr></thead>
+  <tbody>
+    <tr><td>NumPy</td><td><b>행렬 · 배열</b> 연산 최적화. 아래 모든 라이브러리가 이 위에 올라간다</td><td><code>numpy</code> → <code>import numpy as np</code></td></tr>
+    <tr><td>OpenCV</td><td><b>컴퓨터비전</b> 특화 &mdash; 입출력 · 변환 · 필터링 · 검출</td><td><code>opencv-python</code> → <code>import cv2</code></td></tr>
+    <tr><td>SciPy</td><td><b>과학 · 공학 계산</b> 전반 &mdash; 적분 · 최적화 · 신호처리 · 통계</td><td><code>scipy</code> → <code>import scipy</code></td></tr>
+    <tr><td>scikit-learn</td><td><b>머신러닝</b> &mdash; 분류 · 회귀 · 군집 · 전처리 · 모델 평가</td><td><code>scikit-learn</code> → <code>import sklearn</code></td></tr>
+    <tr><td>scikit-image</td><td><b>이미지 처리 알고리즘</b> &mdash; 필터 · 분할 · 특징 · 측정</td><td><code>scikit-image</code> → <code>import skimage</code></td></tr>
+    <tr><td>scikit-bio</td><td><b>생물정보학</b> &mdash; 서열 · 계통 · 다양성 분석</td><td><code>scikit-bio</code> → <code>import skbio</code></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="warn"><b>설치 이름과 import 이름이 다르다</b> &mdash; 교수님이 짚어 주신 바로 그 지점이다.
+<code>pip install scikit-learn</code>으로 깔고 <code>import sklearn</code>으로 부른다.
+<code>pip install sklearn</code>은 <b>올바른 방법이 아니다</b>.</div>
+
+<h3 class="sub-title">scikit이라는 이름은 어디서 왔나</h3>
+<div class="note-box"><ul class="ul">
+  <li><b>SciPy</b> = <b>Sci</b>entific <b>Py</b>thon &mdash; 과학 계산용 파이썬</li>
+  <li><b>scikit</b> = <b>SciPy Toolkit</b> &mdash; SciPy 생태계에 얹어 쓰는 <b>전문 분야별 도구 모음</b>이라는 뜻</li>
+  <li>그래서 <b>scikit-learn</b>(머신러닝) · <b>scikit-image</b>(이미지) · <b>scikit-bio</b>(생물정보)처럼
+    <b>&ldquo;scikit- + 분야&rdquo;</b> 형태의 형제 패키지가 여럿 있다</li>
+</ul></div>
+<div class="tip"><b>발음 메모</b> &mdash; 수업에서 &ldquo;<span class="hw">싸이-킷 런</span>&rdquo;으로 들린 대로,
+<b>scikit은 &ldquo;사이킷&rdquo;</b>으로 읽고 <b>SciPy는 &ldquo;사이파이&rdquo;</b>로 읽는다.
+필기에 <b>scikit</b>과 <b>SciPy</b>가 섞여 적혀 있었는데, <b>scikit이 SciPy에서 파생된 이름</b>이라 생각하면 헷갈리지 않는다.</div>
+
+<h3 class="sub-title">그래서 이 수업에서는</h3>
+<div class="cards">
+  <div class="card2"><h4>주력<em>이 과목에서 계속 쓴다</em></h4>
+    <p><b>NumPy</b>로 이미지를 배열로 다루고, <b>OpenCV</b>로 변환 · 필터링 · 검출을 한다.
+    <a class="ext" href="computer-vision-week02-1.html">2주차-1 실습</a>이 그 기초였다.</p></div>
+  <div class="card2"><h4>참고<em>알아만 두면 되는 것</em></h4>
+    <p><b>scikit-image</b>는 OpenCV와 기능이 겹치는 부분이 많다. 같은 작업을 다른 문법으로 제공하는 <b>대안</b> 정도로 알아 두면 충분하다.</p></div>
+</div>
+</section>
+
+<!-- ===================== 05 다음 주 ===================== -->
 <section class="sec" id="next">
-  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>2주차 (9/9)</small></h2></div>
-<div class="note-box"><ul class="ul">
-  <li><b>온라인 콘텐츠</b> — 02. Geometric Camera Models (Image Transformation · Geometric Camera Model)</li>
-  <li><b>실시간</b> — Python/OpenCV (1) · 기초 코드 실습 1</li>
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>5주차 &mdash; Local Feature Detection</small></h2></div>
+<div class="good"><b>교수님 멘트</b> &mdash; &ldquo;<span class="hw">라인이랑 코너 디텍션은 다음 주 수업으로 오픈된다</span>&rdquo;</div>
+<div class="note-box">강의계획서의 5주차와 일치한다 &mdash; <b>Local Feature Detection</b>
+<ul class="ul">
+  <li><b>Local Features</b> &mdash; 이미지 전체가 아니라 <b>국소 영역</b>의 특징</li>
+  <li><b>Feature Detectors</b> &mdash; <b>Edge · Line · Corner · Blob</b></li>
+  <li><a class="ext" href="computer-vision-week03.html#edge">3주차 11 에지 검출</a>에서 다룬 <b>에지</b>가 그 출발점이다 &mdash;
+    거기서 <b>선(line)</b>과 <b>모서리(corner)</b>로 올라간다</li>
 </ul></div>
-<div class="weeknav" style="margin-top:16px">
-  <a href="computer-vision-week02-1.html">2주차-1 · Python &amp; OpenCV →</a>
-  <a href="computer-vision-week02-2.html">2주차-2 · Geometric Camera Models →</a>
-  <a href="computer-vision.html" class="plan">강의계획서 전체 주차 보기</a>
+<div class="link-list">
+  <a href="computer-vision.html#weeks">강의계획서 · 주차별 수업내용 →<small>이후 주차 일정과 과제 · 발표 계획</small></a>
 </div>
 </section>
 
-<p class="src">출처 — 컴퓨터비전 01. Course Introduction (Orientation) · 1주차 (2026-2학기)</p>
+<p class="src">출처 — 컴퓨터비전 4주차 실시간 강의 필기 (2026-2학기)<br>
+교수님 멘트를 그대로 싣고, 언급된 함수와 라이브러리의 정확한 명칭 · 동작을 덧붙였습니다. 플립러닝 교안은 등록 후 이어서 정리합니다.</p>
 
 </div>
 
@@ -383,7 +569,6 @@ a.ext:hover{border-bottom-color:var(--accent)}
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  /* ---- 상단 탭바 활성 표시 ---- */
   var tabs = document.querySelectorAll('.tab-bar a');
   var sections = document.querySelectorAll('.sec');
   function setActive() {
@@ -403,9 +588,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  /* ---- 개념 설명 말풍선 ----
-     화면에 고정된 상자 하나를 옮겨 쓰기 때문에 표·수식처럼 스크롤되는 영역 안에서도 잘리지 않고,
-     좌우로 화면을 벗어나지도 않는다. 데스크톱은 마우스를 올리면, 모바일은 탭하면 뜬다. */
+  /* ---- 개념 설명 말풍선 ---- */
   var terms = document.querySelectorAll('.term');
   if (!terms.length) return;
   var tip = document.createElement('div');
@@ -418,26 +601,23 @@ document.addEventListener('DOMContentLoaded', function () {
     tip.classList.remove('on');
     if (current) { current.classList.remove('on'); current = null; }
   }
-
   function show(el) {
     tip.textContent = el.getAttribute('data-tip') || '';
     tip.classList.add('on');
     if (current && current !== el) current.classList.remove('on');
     current = el;
     el.classList.add('on');
-
     var pad = 8;
     var r = el.getBoundingClientRect();
     var t = tip.getBoundingClientRect();
     var left = r.left + r.width / 2 - t.width / 2;
     left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
     var top = r.top - t.height - 10;
-    if (top < pad) top = r.bottom + 10;                       // 위가 좁으면 아래로
+    if (top < pad) top = r.bottom + 10;
     top = Math.min(top, window.innerHeight - t.height - pad);
     tip.style.left = Math.round(left) + 'px';
     tip.style.top = Math.round(top) + 'px';
   }
-
   terms.forEach(function (el) {
     el.addEventListener('mouseenter', function () { show(el); });
     el.addEventListener('mouseleave', function () { if (current === el) hide(); });
@@ -457,7 +637,6 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('resize', hide);
 });
 </script>
-
 
 </body>
 </html>
