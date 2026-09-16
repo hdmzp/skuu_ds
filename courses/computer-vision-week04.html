@@ -333,7 +333,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <a href="#flip">1) 플립러닝 교안</a>
   <a href="#live">2) 실시간 강의</a>
   <a href="#howto">공부 방법</a>
-  <a href="#pyr">피라미드 함수</a>
+  <a href="#pyr">지난 실습 복습</a>
   <a href="#cv2">cv2 이름의 뜻</a>
   <a href="#libs">라이브러리 지도</a>
   <a href="#next">다음 주 예고</a>
@@ -373,7 +373,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <div class="partbar"><b>2) 실시간 강의</b> 파이썬 (Python Review)</div>
 <div class="mapgrid">
   <a href="#howto"><b>01 이번 주 공부 방법</b><span>알고리즘 암기 ✗ → 함수 사용법 ○</span></a>
-  <a href="#pyr"><b>02 피라미드 함수</b><span>cv2.pyrDown · cv2.pyrUp</span></a>
+  <a href="#pyr"><b>02 지난 실습 복습</b><span>피라미드 · scikit 계열 — 3주차 실습으로 연결</span></a>
   <a href="#cv2"><b>03 cv2라는 이름의 뜻</b><span>버전 번호가 아니다</span></a>
   <a href="#libs"><b>04 라이브러리 지도</b><span>NumPy · OpenCV · scikit 계열</span></a>
   <a href="#next"><b>05 다음 주 예고</b><span>라인 · 코너 검출</span></a>
@@ -433,44 +433,31 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 &ldquo;<b>축소는 <code>pyrDown</code>, 확대는 <code>pyrUp</code></b>&rdquo;처럼 <b>이름에서 동작이 읽히는</b> 함수가 많다.</div>
 </section>
 
-<!-- ===================== 02 피라미드 함수 ===================== -->
+<!-- ===================== 02 지난 실습 복습 ===================== -->
 <section class="sec" id="pyr">
-  <div class="sec-head"><span class="sec-badge">02</span><h2 class="sec-title">피라미드 함수<small>cv2.pyrDown · cv2.pyrUp &mdash; 교수님이 예로 드신 함수</small></h2></div>
+  <div class="sec-head"><span class="sec-badge">02</span><h2 class="sec-title">지난 실습에서 다룬 함수 복습<small>교수님이 예로 드신 피라미드 &mdash; 자세한 코드와 결과는 3주차 실습 자료에 있습니다</small></h2></div>
 
-<div class="good"><b>교수님 멘트</b> &mdash; &ldquo;<span class="hw">피라미드다운, 피라미드업</span>&rdquo;
+<div class="good"><b>교수님 멘트</b> &mdash; &ldquo;<span class="hw">예를 들어서 &lsquo;피라미드&rsquo;는 이렇게 쓰는 거구나~</span>&rdquo;
+&ldquo;<span class="hw">피라미드다운, 피라미드업</span>&rdquo;
 <pre class="code">cv2.pyrDown(img)
 cv2.pyrUp(img)</pre></div>
 
-<div class="fnc">
-  <h4>cv2.pyrDown &mdash; 한 단 내려가기 (축소)</h4>
-  <div class="sig">dst = cv2.pyrDown(src)</div>
-  <dl>
-    <dt>하는 일</dt><dd><b>가우시안 스무딩</b>을 먼저 하고, 그다음 <b>짝수 행 · 짝수 열만 뽑는다</b></dd>
-    <dt>결과 크기</dt><dd>가로 · 세로가 각각 <b>약 절반</b> &mdash; 화소 수는 <b>1/4</b>이 된다</dd>
-    <dt>왜 스무딩부터</dt><dd>바로 건너뛰며 뽑으면 <b><span class="term" tabindex="0" data-tip="표본을 너무 듬성듬성 뽑아, 원래의 촘촘한 무늬가 전혀 다른 굵은 무늬처럼 보이게 되는 현상. 줄무늬 옷이 화면에서 어른거리는 모아레가 대표적인 예다.">에일리어싱</span></b>이 생긴다.
-      고주파 성분을 <b>미리 뭉개서</b> 없애는 것이 스무딩의 역할이다</dd>
-  </dl>
-</div>
-
-<div class="fnc">
-  <h4>cv2.pyrUp &mdash; 한 단 올라가기 (확대)</h4>
-  <div class="sig">dst = cv2.pyrUp(src)</div>
-  <dl>
-    <dt>하는 일</dt><dd>행과 열 사이에 <b>0으로 채운 빈 줄을 끼워 크기를 두 배로 늘린 뒤</b>, 가우시안 필터로 그 빈칸을 메운다</dd>
-    <dt>결과 크기</dt><dd>가로 · 세로가 각각 <b>약 두 배</b></dd>
-  </dl>
-</div>
-
-<div class="warn"><b>꼭 짚고 갈 것 &mdash; 왕복해도 원본으로 돌아오지 않는다</b><br>
-<code>cv2.pyrUp(cv2.pyrDown(img))</code>는 <b>원본 img와 같지 않다</b>.
-내려갈 때 <b>버린 세부(고주파)는 되살아나지 않기</b> 때문이다. 크기만 같아지고 <b>흐릿해진다</b>.<br>
-바로 이 &ldquo;<b>잃어버린 차이</b>&rdquo;를 따로 모아 둔 것이 <b>라플라시안 피라미드</b>이며, 교안에서 다룰 내용이다.</div>
-
-<div class="note-box"><b>비슷해 보이지만 다른 함수 &mdash; <code>cv2.resize()</code></b>
+<div class="note-box"><b>딱 이만큼만 기억하면 된다</b>
 <ul class="ul">
-  <li><code>cv2.resize()</code>는 <b>임의의 배율</b>로 크기를 바꾸고, <b>보간(interpolation) 방식을 직접 고른다</b></li>
-  <li><code>pyrDown</code> / <code>pyrUp</code>은 <b>배율이 2배로 고정</b>되어 있고 <b>가우시안 처리가 안에 포함</b>되어 있다 &mdash; 피라미드를 쌓는 전용 함수다</li>
+  <li><code>cv2.pyrDown(img)</code> &mdash; 가로 · 세로가 <b>절반</b>(화소 수 1/4). <b>가우시안 스무딩을 먼저 하고</b> 표본을 뽑기 때문에
+    <b><span class="term" tabindex="0" data-tip="표본을 너무 듬성듬성 뽑아, 원래의 촘촘한 무늬가 전혀 다른 굵은 무늬처럼 보이게 되는 현상. 줄무늬 옷이 화면에서 어른거리는 모아레가 대표적인 예다.">에일리어싱</span></b>을 피한다</li>
+  <li><code>cv2.pyrUp(img)</code> &mdash; 가로 · 세로가 <b>두 배</b>. 빈 화소를 가우시안으로 메운다</li>
+  <li><b>왕복해도 원본으로 돌아오지 않는다</b> &mdash; 내려갈 때 버린 세부는 되살아나지 않는다.
+    그 &lsquo;잃어버린 차이&rsquo;를 모아 둔 것이 <b>라플라시안 피라미드</b>다</li>
 </ul></div>
+
+<div class="link-list">
+  <a href="computer-vision-week03.html#py-pyramid">3주차 실습 · 이미지 피라미드 자세히 보기 →<small>실습 교안 캡처 · Laplacian 복원 코드 · 과제 3번 힌트까지 정리되어 있습니다</small></a>
+  <a href="computer-vision-week03.html#py-feature">3주차 실습 · 엣지에서 직선 · 코너 · 특징점으로 →<small>cv2.Canny · HoughLines · cornerHarris · goodFeaturesToTrack</small></a>
+</div>
+
+<div class="tip"><b>왜 여기서는 짧게만 다루나</b> &mdash; 이 함수들은 <b>3주차 실시간 강의(기초 코드 실습 2)</b> 자료에
+실습 교안 캡처와 함께 이미 정리되어 있다. 같은 내용을 두 번 적지 않고 <b>링크로 연결</b>했다.</div>
 </section>
 
 <!-- ===================== 03 cv2 이름 ===================== -->
@@ -541,6 +528,10 @@ print(cv2.__version__)   <span class="cm"># 실제 설치된 버전은 여기에
     <a class="ext" href="computer-vision-week02-1.html">2주차-1 실습</a>이 그 기초였다.</p></div>
   <div class="card2"><h4>참고<em>알아만 두면 되는 것</em></h4>
     <p><b>scikit-image</b>는 OpenCV와 기능이 겹치는 부분이 많다. 같은 작업을 다른 문법으로 제공하는 <b>대안</b> 정도로 알아 두면 충분하다.</p></div>
+</div>
+<div class="link-list">
+  <a href="computer-vision-week03.html#py-sklearn">3주차 실습 · scikit-learn 실제 코드 →<small>load_digits · train_test_split · KNN · accuracy_score</small></a>
+  <a href="computer-vision-week03.html#py-skimage">3주차 실습 · scikit-image 실제 코드 →<small>skimage.io · filters.sobel · threshold_otsu · 데이터 증강</small></a>
 </div>
 </section>
 
