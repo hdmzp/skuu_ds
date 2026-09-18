@@ -352,6 +352,64 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
   *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
 }
 
+/* ---------- 주차별 바로가기 ---------- */
+.card.weekly{grid-column:span 6;min-width:0}
+.weekly .wk-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:6px 16px;margin-bottom:14px}
+.weekly h3{font-size:1.1rem;font-weight:800;color:var(--navy-900)}
+.weekly .wk-top p{font-size:.8rem;color:var(--muted)}
+.weekly .wk-now{font-size:.78rem;font-weight:700;color:var(--lime-deep);background:var(--lime-soft);border:1px solid #d9eea2;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.wk-strip{display:flex;gap:6px;overflow-x:auto;padding:12px 2px 10px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.wk-chip{
+  flex:0 0 auto;min-width:52px;border:1px solid var(--border);background:#fff;border-radius:12px;
+  padding:7px 6px 6px;cursor:pointer;font:inherit;color:var(--ink);text-align:center;line-height:1.15;
+  transition:background .15s,border-color .15s,transform .15s;position:relative;
+}
+.wk-chip b{display:block;font-size:.95rem;font-weight:800}
+.wk-chip small{display:block;font-size:.64rem;color:var(--muted);margin-top:2px}
+.wk-chip .dots{display:flex;justify-content:center;gap:3px;margin-top:5px;height:5px}
+.wk-chip .dots i{width:5px;height:5px;border-radius:50%;background:#dfe3ec}
+.wk-chip .dots i.on{background:var(--lime-deep)}
+.wk-chip:hover{border-color:var(--navy-700);transform:translateY(-1px)}
+.wk-chip.exam{background:#f6f7fa;color:var(--muted)}
+.wk-chip.now::after{content:'이번 주';position:absolute;top:-9px;left:50%;transform:translateX(-50%);
+  font-size:.58rem;font-weight:800;background:var(--lime);color:var(--navy-950);border-radius:999px;padding:1px 6px;white-space:nowrap}
+.wk-chip[aria-selected="true"]{background:var(--navy-900);border-color:var(--navy-900);color:#fff}
+.wk-chip[aria-selected="true"] small{color:#c9d3ee}
+.wk-chip[aria-selected="true"] .dots i{background:rgba(255,255,255,.25)}
+.wk-chip[aria-selected="true"] .dots i.on{background:var(--lime)}
+.wk-chip:focus-visible{outline:2px solid var(--navy-700);outline-offset:2px}
+.wk-panel{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:4px}
+.wk-subj{border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 15px;display:flex;flex-direction:column;gap:6px;background:#fbfcfe}
+.wk-subj.has{border-color:#c9d6f0;background:#fff}
+.wk-subj .s-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.wk-subj .s-name{font-size:.92rem;font-weight:800;color:var(--navy-900)}
+.wk-subj .s-date{font-size:.72rem;color:var(--muted);white-space:nowrap}
+.wk-subj .s-topic{font-size:.82rem;color:var(--ink);line-height:1.5;flex:1}
+.wk-subj .s-btns{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.wk-go{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;border:0;border-radius:10px;cursor:pointer;
+  background:var(--navy-900);color:#fff;font:inherit;font-size:.82rem;font-weight:700;padding:9px 12px;text-align:left;
+}
+.wk-go::after{content:"→";color:var(--lime);font-weight:400}
+.wk-go:hover{background:var(--navy-700)}
+.wk-go:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+.wk-none{font-size:.78rem;color:var(--muted);background:#f1f3f7;border-radius:10px;padding:8px 12px}
+.wk-plan{align-self:flex-start;font-size:.72rem;color:var(--muted);background:none;border:0;padding:0;cursor:pointer;font-family:inherit;text-decoration:underline;text-underline-offset:2px}
+.wk-plan:hover{color:var(--navy-700)}
+.wk-all{margin-top:14px}
+.wk-all summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(--navy-800)}
+.wk-tbl-wrap{overflow-x:auto;margin-top:10px;border:1px solid var(--border);border-radius:var(--radius-sm)}
+.wk-tbl{border-collapse:collapse;width:100%;min-width:560px;font-size:.78rem}
+.wk-tbl th,.wk-tbl td{padding:7px 10px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+.wk-tbl th{background:#f6f7fa;font-weight:800;color:var(--navy-900);white-space:nowrap}
+.wk-tbl tr:last-child td{border-bottom:0}
+.wk-tbl td:first-child{font-weight:800;white-space:nowrap;color:var(--navy-900)}
+.wk-tbl tr.now td{background:var(--lime-soft)}
+.wk-tbl button{border:0;background:none;padding:0;font:inherit;color:var(--navy-700);font-weight:700;cursor:pointer;text-align:left;text-decoration:underline;text-underline-offset:2px}
+.wk-tbl .muted{color:#9aa3b5}
+@media (max-width:860px){.wk-panel{grid-template-columns:1fr}}
+@media (max-width:640px){.card.weekly{grid-column:span 1}}
+
 /* ---------- responsive ---------- */
 @media (max-width:860px){
   .card.hero{grid-column:span 6}
@@ -501,6 +559,7 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
       <h2 id="hero-title"><b>2026학년도 2학기</b> 수강 과목</h2>
       <p id="hero-desc">2학기가 개강했습니다. 강의계획서와 함께 주차별 수업내용·교안을 이어서 정리하고 있습니다.</p>
       <div class="chips" id="hero-chips">
+        <button class="chip" type="button" data-goto="#weekly">주차별 바로가기</button>
         <button class="chip" type="button" data-goto="#subj-cv">컴퓨터비전</button>
         <button class="chip" type="button" data-goto="#subj-ml">기계학습 · 딥러닝</button>
         <button class="chip" type="button" data-goto="#subj-nlp">자연어처리</button>
@@ -602,6 +661,23 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
 
     <!-- subjects: 2026-2학기 (개강 · 강의계획서 + 주차별 수업내용) -->
     <section id="subjects-2" role="tabpanel" aria-labelledby="tab-2026-2" style="display:contents">
+
+    <!-- 주차별 바로가기: 과목을 타고 들어가지 않고 주차 → 과목으로 바로 이동 -->
+    <article class="card weekly" id="weekly" aria-labelledby="weekly-title">
+      <div class="wk-top">
+        <div>
+          <h3 id="weekly-title">주차별 바로가기</h3>
+          <p>주차를 고르면 세 과목의 해당 주차 수업내용으로 바로 이동합니다 · 점 3개 = 월·수·목 과목별 등록 여부</p>
+        </div>
+        <span class="wk-now" id="wk-now"></span>
+      </div>
+      <div class="wk-strip" id="wk-strip" role="tablist" aria-label="주차 선택"></div>
+      <div class="wk-panel" id="wk-panel" role="tabpanel" aria-live="polite"></div>
+      <details class="wk-all">
+        <summary>전체 주차 한눈에 보기</summary>
+        <div class="wk-tbl-wrap"><table class="wk-tbl" id="wk-tbl"></table></div>
+      </details>
+    </article>
 
     <article class="card subject" id="subj-cv">
       <span class="tag">전공</span>
@@ -759,6 +835,7 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
       title: '<b>2026학년도 2학기</b> 수강 과목',
       desc: '2학기가 개강했습니다. 강의계획서와 함께 주차별 수업내용·교안을 이어서 정리하고 있습니다.',
       chips: [
+        { label: '주차별 바로가기', goto: '#weekly' },
         { label: '컴퓨터비전', goto: '#subj-cv' },
         { label: '기계학습 · 딥러닝', goto: '#subj-ml' },
         { label: '자연어처리', goto: '#subj-nlp' }
@@ -862,6 +939,156 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
       openModal(btn.dataset.src, btn.dataset.title);
     });
   });
+
+  /* ----- 주차별 바로가기 -----
+     새 주차 페이지를 올리면 해당 과목 · 주차에 p:[[버튼 이름, 경로]]만 추가하면 된다. */
+  var WEEK_START = new Date(2026, 7, 31);   // 1주차 월요일 (2026-08-31)
+  var WK_TOTAL = 16;
+  var WK_SUBJECTS = [
+    { name:'자연어처리', day:'월', offset:0, plan:'courses/nlp.html', weeks:{
+      1:{t:'자연어처리 개요', p:[['1주차 수업내용','courses/nlp-week01.html']]},
+      2:{t:'수학과 언어학의 기본 원리', p:[['2주차 수업내용','courses/nlp-week02.html']]},
+      3:{t:'토큰화 · 품사 태깅 · 불용어 제거 · 정규화', p:[['3주차 수업내용','courses/nlp-week03.html']]},
+      4:{t:'텍스트의 전처리 · 어휘 · 구문 · 의미 분석', p:[['4주차 수업내용','courses/nlp-week04.html']]},
+      5:{t:'단어 표현 · 텍스트 분류 · 텍스트 유사도'},
+      6:{t:'텍스트 요약 · 텍스트 생성 · 벡터 표현'},
+      7:{t:'개체명 인식 · 언어 모델 · 정보 추출'},
+      8:{t:'중간고사', exam:true},
+      9:{t:'질의 응답 · 기계 번역 · 대화시스템'},
+      10:{t:'토픽 모델링 · 감성 분석 · 기계 이해'},
+      11:{t:'자연어처리 딥러닝 Ⅰ (딥러닝 기초 · 단어벡터 추론 · CNN)'},
+      12:{t:'자연어처리 딥러닝 Ⅱ (RNN · Seq2Seq · 어텐션)'},
+      13:{t:'딥러닝 기반 형태소 · 품사 태깅 · 의미 분석 · 개체명 인식'},
+      14:{t:'딥러닝 기반 질의 응답 · 기계 번역 · 문장 생성'},
+      15:{t:'기말고사', exam:true},
+      16:{t:'자연어처리의 미래 연구 방향'}
+    }},
+    { name:'컴퓨터비전', day:'수', offset:2, plan:'courses/computer-vision.html', weeks:{
+      1:{t:'Intro to the course — 오리엔테이션', p:[['1주차 수업내용','courses/computer-vision-week01.html']]},
+      2:{t:'Python & OpenCV · Geometric Camera Models', p:[['2주차-1 실시간 (Python & OpenCV)','courses/computer-vision-week02-1.html'],['2주차-2 교안 (Camera Models)','courses/computer-vision-week02-2.html']]},
+      3:{t:'Linear Filters · 기초 코드 실습 2 · 과제 #1', p:[['3주차 수업내용','courses/computer-vision-week03.html']]},
+      4:{t:'Image Pyramids', p:[['4주차 수업내용','courses/computer-vision-week04.html']]},
+      5:{t:'Local Feature Detection'},
+      6:{t:'Feature Descriptors'},
+      7:{t:'Feature Matching & Homography'},
+      8:{t:'중간고사', exam:true},
+      9:{t:'Stereo Vision'},
+      10:{t:'Motion Tracking'},
+      11:{t:'Classification (1)'},
+      12:{t:'Classification (2)'},
+      13:{t:'Detection & Segmentation'},
+      14:{t:'Image Generative AI & Wrap up'},
+      15:{t:'기말고사', exam:true}
+    }},
+    { name:'기계학습특론', day:'목', offset:3, plan:'courses/machine-learning.html', weeks:{
+      1:{t:'인공지능 기본 개념 & 오리엔테이션', p:[['1주차 수업내용','courses/machine-learning-week01.html']]},
+      2:{t:'인공지능 기초 수학 · NumPy', p:[['2주차 수업내용','courses/machine-learning-week02.html']]},
+      3:{t:'선형 회귀', p:[['3주차 수업내용','courses/machine-learning-week03.html']]},
+      4:{t:'분류와 로지스틱 회귀', p:[['4주차 수업내용','courses/machine-learning-week04.html']]},
+      5:{t:'퍼셉트론'},
+      6:{t:'다층 퍼셉트론'},
+      7:{t:'K-NN'},
+      8:{t:'중간고사', exam:true},
+      9:{t:'의사결정트리 · 딥러닝 소개'},
+      10:{t:'딥러닝 응용 소개 · CNN'},
+      11:{t:'딥러닝 : 이미지 분류'},
+      12:{t:'딥러닝 : 이미지 분할'},
+      13:{t:'딥러닝 : 이미지 생성'},
+      14:{t:'딥러닝 : 이미지 검출'},
+      15:{t:'기말고사', exam:true}
+    }}
+  ];
+
+  function wkDate(n, offset){
+    var d = new Date(WEEK_START.getTime());
+    d.setDate(d.getDate() + 7*(n-1) + offset);
+    return (d.getMonth()+1) + '.' + d.getDate();
+  }
+  function wkEsc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  var wkCard  = document.getElementById('weekly');
+  var wkStrip = document.getElementById('wk-strip');
+  var wkPanel = document.getElementById('wk-panel');
+  var wkTbl   = document.getElementById('wk-tbl');
+  var wkNowEl = document.getElementById('wk-now');
+
+  if(wkCard && wkStrip && wkPanel){
+    var wkToday = new Date(); wkToday.setHours(0,0,0,0);
+    var nowWeek = Math.floor((wkToday - WEEK_START) / (7*24*3600*1000)) + 1;
+    var inTerm = nowWeek >= 1 && nowWeek <= WK_TOTAL;
+    var latest = 1;
+    for(var n = 1; n <= WK_TOTAL; n++){
+      if(WK_SUBJECTS.some(function(s){ return s.weeks[n] && s.weeks[n].p; })) latest = n;
+    }
+    // 기본 선택 = 자료가 올라온 가장 최근 주차 (미리 올린 다음 주 교안까지 포함)
+    var selected = latest;
+    if(wkNowEl) wkNowEl.textContent = inTerm ? ('오늘은 ' + nowWeek + '주차 · 최신 자료 ' + latest + '주차') : ('최신 자료 ' + latest + '주차');
+
+    var chips = '';
+    for(var w = 1; w <= WK_TOTAL; w++){
+      var dots = WK_SUBJECTS.map(function(s){ return '<i class="' + (s.weeks[w] && s.weeks[w].p ? 'on' : '') + '"></i>'; }).join('');
+      var exam = WK_SUBJECTS.every(function(s){ return !s.weeks[w] || s.weeks[w].exam; });
+      chips += '<button type="button" role="tab" class="wk-chip' + (exam ? ' exam' : '') + (inTerm && w === nowWeek ? ' now' : '') +
+        '" data-week="' + w + '" aria-selected="false" aria-label="' + w + '주차"><b>' + w + '</b><small>' + wkDate(w, 0) + '~</small><span class="dots">' + dots + '</span></button>';
+    }
+    wkStrip.innerHTML = chips;
+
+    var renderWeek = function(w){
+      selected = w;
+      wkStrip.querySelectorAll('.wk-chip').forEach(function(c){
+        c.setAttribute('aria-selected', String(+c.dataset.week === w));
+      });
+      wkPanel.innerHTML = WK_SUBJECTS.map(function(s){
+        var info = s.weeks[w], body;
+        if(!info){ body = '<p class="s-topic">해당 주차 수업 없음</p>'; }
+        else if(info.p){
+          body = '<p class="s-topic">' + wkEsc(info.t) + '</p><div class="s-btns">' + info.p.map(function(p){
+            return '<button type="button" class="wk-go" data-src="' + p[1] + '" data-title="' + wkEsc(s.name + ' — ' + p[0]) + '">' + wkEsc(p[0]) + '</button>';
+          }).join('') + '</div>';
+        } else {
+          body = '<p class="s-topic">' + wkEsc(info.t) + '</p><div class="wk-none">' + (info.exam ? '시험 주간' : '아직 등록 전 — 교안이 올라오면 추가됩니다') + '</div>';
+        }
+        return '<div class="wk-subj' + (info && info.p ? ' has' : '') + '"><div class="s-head"><span class="s-name">' + s.name +
+          '</span><span class="s-date">' + wkDate(w, s.offset) + '(' + s.day + ')</span></div>' + body +
+          '<button type="button" class="wk-plan" data-src="' + s.plan + '" data-title="' + wkEsc(s.name + ' — 강의계획서') + '">강의계획서</button></div>';
+      }).join('');
+    };
+
+    wkStrip.addEventListener('click', function(e){
+      var c = e.target.closest('.wk-chip'); if(c) renderWeek(+c.dataset.week);
+    });
+    wkStrip.addEventListener('keydown', function(e){
+      if(e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      var nw = Math.min(WK_TOTAL, Math.max(1, selected + (e.key === 'ArrowRight' ? 1 : -1)));
+      renderWeek(nw);
+      var c = wkStrip.querySelector('[data-week="' + nw + '"]'); if(c) c.focus();
+      e.preventDefault();
+    });
+    renderWeek(selected);
+    var selChip = wkStrip.querySelector('[data-week="' + selected + '"]');
+    if(selChip) wkStrip.scrollLeft = Math.max(0, selChip.offsetLeft - wkStrip.clientWidth / 2);
+
+    if(wkTbl){
+      var rows = '<thead><tr><th>주차</th>' + WK_SUBJECTS.map(function(s){ return '<th>' + s.name + ' (' + s.day + ')</th>'; }).join('') + '</tr></thead><tbody>';
+      for(var r = 1; r <= WK_TOTAL; r++){
+        rows += '<tr' + (inTerm && r === nowWeek ? ' class="now"' : '') + '><td>' + r + '주차</td>' + WK_SUBJECTS.map(function(s){
+          var info = s.weeks[r];
+          if(!info) return '<td class="muted">—</td>';
+          if(info.p) return '<td>' + info.p.map(function(p){
+            return '<button type="button" data-src="' + p[1] + '" data-title="' + wkEsc(s.name + ' — ' + p[0]) + '">' + wkEsc(info.p.length > 1 ? p[0] : info.t) + '</button>';
+          }).join('<br>') + '</td>';
+          return '<td class="muted">' + wkEsc(info.t) + '</td>';
+        }).join('') + '</tr>';
+      }
+      wkTbl.innerHTML = rows + '</tbody>';
+    }
+
+    // 카드 안의 모든 버튼은 과목 카드와 같은 팝업(모달)으로 연다
+    wkCard.addEventListener('click', function(e){
+      var b = e.target.closest('[data-src]');
+      if(b) openModal(b.dataset.src, b.dataset.title);
+    });
+  }
 
   modal.addEventListener('click', function(e){
     if(e.target.hasAttribute('data-close')) closeModal();
