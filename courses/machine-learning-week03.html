@@ -288,6 +288,28 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .live b{color:#7c2d12}
 .live .ul li{color:#7c2d12}
 .live .ul li::before{background:#b45309;opacity:.75}
+/* 본인 복습 필기 — 강의 복습 중 LLM으로 찾아본 추가 개념 */
+.mynote{
+  background:#f7f5ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.mynote::before{
+  content:'📝 내 복습 필기 · 추가 개념';display:inline-block;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.mynote b{color:#2e1065}
+.mynote .ul li{color:#3b2a6b}
+.mynote .ul li::before{background:#6d28d9;opacity:.75}
+.mynote table{min-width:0}
+.mynote .tbl-wrap{margin:8px 0 4px;background:#fff}
+.mynote .fix{display:block;margin-top:8px;font-size:12px;color:#6b7280;border-top:1px dashed #cfc4f5;padding-top:6px}
+.mynote .fix b{color:#4c1d95}
+.prof{display:inline-block;font-size:10.5px;font-weight:700;color:#b45309;background:#fff;border:1px solid #f0c48a;border-radius:999px;padding:0 7px;margin-left:4px}
+.live::before,.mynote::before{display:table}
+.notes-legend{display:flex;flex-wrap:wrap;gap:8px 18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;margin:-12px 0 26px;font-size:12.5px;color:#4b5563}
+.notes-legend span{display:inline-flex;align-items:center;gap:6px}
+.notes-legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
 /* 100문제 해설 포인트 */
 .qexp{
   background:#f0fdf4;border:1px solid #bbf7d0;border-left:4px solid #16a34a;
@@ -348,8 +370,13 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <p class="kicker">3주차 · 9.14 ~ 9.20 · 2026-2학기</p>
   <h1>CHAPTER 1 — 선형 회귀 (Linear Regression)</h1>
   <p>입력과 출력 사이의 관계를 <b>직선(초평면)</b>으로 표현하고, <b>손실 함수</b>로 얼마나 틀렸는지 재고, <b>경사하강법</b>으로 손실을 줄여 가며 파라미터를 찾는 과정 — 기계학습 &lsquo;학습&rsquo;의 기본 틀을 처음으로 완성하는 주차입니다.</p>
-  <div class="chips"><span class="chip">회귀 vs 분류</span><span class="chip">단순 선형 회귀</span><span class="chip">MSE · MAE</span><span class="chip">경사하강법 · 학습률</span><span class="chip">다중 선형 회귀</span><span class="chip">sklearn · 직접 구현</span><span class="chip">개정판 62페이지</span><span class="chip">최적화 · 정규화 심화</span></div>
+  <div class="chips"><span class="chip">회귀 vs 분류</span><span class="chip">단순 선형 회귀</span><span class="chip">MSE · MAE</span><span class="chip">경사하강법 · 학습률</span><span class="chip">다중 선형 회귀</span><span class="chip">sklearn · 직접 구현</span><span class="chip">실시간 복습 강의 필기 반영</span><span class="chip">개정판 62페이지</span><span class="chip">최적화 · 정규화 심화</span></div>
 </section>
+
+<div class="notes-legend">
+  <span><i style="background:#fffaf3;border:1px solid #b45309"></i><b>🎙 실시간 강의 강조</b> — 실시간 복습 강의에서 교수님이 짚은 내용</span>
+  <span><i style="background:#f7f5ff;border:1px solid #6d28d9"></i><b>📝 내 복습 필기</b> — 복습하며 따로 찾아본 개념 (교안에 없던 것)</span>
+</div>
 
 <!-- ===================== 강의자료 ===================== -->
 <section class="sec" id="docs">
@@ -447,6 +474,11 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <figure class="fig"><img width="668" height="360" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-03-regression-plot.png" alt="교안 5p — 입력 x_i ∈ R^d, 출력 y_i ∈ R 산점도, 이 그래프에서 d는 1"><figcaption>교안 5p — 입력 <span class="tex">\mathbf x_i\in\mathbb R^d</span>, 출력 <span class="tex">y_i\in\mathbb R</span>. 가로축이 하나뿐인 이 그래프에서는 <b><span class="tex">d=1</span></b></figcaption></figure>
 <div class="tip"><b>기호 읽기</b> — <span class="tex">\mathbb R</span> 은 실수 전체, <span class="tex">\mathbb R^d</span> 는 실수 <span class="tex">d</span>개로 이루어진 벡터.
 그래서 &ldquo;입력은 <span class="tex">d</span>차원 벡터, 출력은 실수 하나(스칼라)&rdquo;가 회귀의 기본 설정이다.</div>
+<div class="live"><ul class="ul">
+  <li><b>회귀에서 가장 중요한 것은 수학 표기(notation)</b> — <span class="tex">y_i</span> 는 스칼라 정답, <span class="tex">\mathbf x_i\in\mathbb R^d</span> 는 <span class="tex">d</span>차원 입력 벡터. 기호가 무엇을 뜻하는지 정확히 읽을 수 있어야 뒤의 손실 · 경사하강법 식이 읽힌다</li>
+  <li><b>scatter plot(산점도)으로 데이터를 시각화</b>한다 — 왜? <b>패턴과 outlier(이상치)의 분포를 빠르게 확인</b>할 수 있으니까. 직선으로 설명될 만한지, 튀는 점이 있는지를 모델을 만들기 전에 눈으로 먼저 본다</li>
+</ul>
+<span style="font-size:11.5px;color:#9a6b3d">필기의 &lsquo;수학 로테이션&rsquo;은 notation(표기법)으로 보고 정리했습니다.</span></div>
 </section>
 
 <!-- ===================== 3.2 ===================== -->
@@ -472,11 +504,30 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </table>
 </div>
 
+<div class="live"><ul class="ul">
+  <li>회귀의 데이터셋은 <b>지도학습 데이터셋</b> — <span class="tex">\mathbf x_i</span> 와 <span class="tex">y_i</span> 가 <b>쌍쌍이 매칭</b>되어 있다</li>
+  <li>학습 방법은 <b>지도 · 비지도 · 강화</b>학습 외에도 <b>준지도 · 자기지도</b> 등 &ldquo;잡다한 학습 방법들이 더 많이 있다&rdquo;</li>
+</ul></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>학습 방법 (보충)</th><th>데이터</th><th>한 줄 설명</th></tr></thead>
+  <tbody>
+    <tr><td>지도학습</td><td>입력 + 정답 쌍</td><td>정답을 맞히도록 학습 — <b>회귀 · 분류</b> (이번 주)</td></tr>
+    <tr><td>비지도학습</td><td>입력만</td><td>정답 없이 구조를 찾음 — 군집화 · 차원 축소</td></tr>
+    <tr><td>강화학습</td><td>행동 → 보상</td><td>시행착오로 보상을 최대화하는 행동 전략 학습</td></tr>
+    <tr><td>준지도학습</td><td>정답 일부 + 대량의 무정답</td><td>적은 레이블을 무정답 데이터로 보강</td></tr>
+    <tr><td>자기지도학습</td><td>입력만 (정답을 스스로 만듦)</td><td>가린 부분 맞히기처럼 데이터에서 과제를 만들어 사전학습 — BERT · GPT</td></tr>
+  </tbody>
+</table>
+</div>
+
 <h3 class="sub-title">회귀의 두 가지 목적</h3>
 <div class="cards">
   <div class="card2"><h4>① 예측 측면<em>새로운 입력 값에 대한 출력 값을 예측</em></h4><p>예) 키가 <b>170cm</b>인 사람의 몸무게는 얼마인가?</p></div>
   <div class="card2"><h4>② 해석 또는 관계 측면<em>입력 값에 대한 출력 값의 변화</em></h4><p>예) 키가 큰 사람은 몸무게가 무거운가?</p></div>
 </div>
+
+<div class="live">회귀의 두 가지 목적 — <b>(1) 예측</b> · <b>(2) 해석 또는 관계</b>. 교수님이 다시 한번 짚은 부분.</div>
 
 <h3 class="sub-title">회귀에서의 학습</h3>
 <div class="note-box"><ul class="ul">
@@ -485,9 +536,29 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </ul></div>
 <figure class="fig"><img width="923" height="459" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-04-learning-function.png" alt="교안 8p — 훈련 데이터셋 → 학습 과정 → 함수, x_i를 넣으면 y_i ≈ f(x_i)"><figcaption>교안 8p — <b>훈련 데이터셋 → 학습 과정 → 함수</b>. 목표는 모든 <span class="tex">i</span>에 대해 <span class="tex">y_i\approx f(\mathbf x_i)</span></figcaption></figure>
 
+<div class="live">학습 데이터를 잘라서 <b>train / valid / test 세 개로 나눠</b> 실험을 진행한다.
+<ul class="ul">
+  <li><b>train</b> — 가중치를 학습 &nbsp;·&nbsp; <b>valid</b> — 학습 중 성능을 보며 하이퍼파라미터 · <a class="ext" href="#flat">조기 종료</a> 시점을 정함 &nbsp;·&nbsp; <b>test</b> — 마지막에 한 번, 최종 성능 보고</li>
+  <li>이번 주 실습 노트북은 데이터가 30개뿐이라 <b>train / test 두 개로만</b> 나눴다 → <a class="ext" href="#lab">실습 ①</a></li>
+</ul></div>
+<div class="mynote"><b>학습(Training)과 추론(Inference)의 차이</b> — 모델 라이프사이클의 두 단계
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>학습 (Training)</th><th>추론 (Inference / Prediction)</th></tr></thead>
+  <tbody>
+    <tr><td>정의</td><td>준비된 데이터(train set)로 데이터 속 <b>패턴 · 규칙 · 특징을 익히는</b> 과정</td><td>학습이 끝난 모델에 <b>새 입력</b>(test set · 실제 서비스 데이터)을 넣어 <b>예측값 <span class="tex">\hat y</span></b>(<code>y_pred</code>)을 얻는 과정</td></tr>
+    <tr><td>입력</td><td><span class="tex">X_{\text{train}}</span> 와 정답 <span class="tex">y_{\text{train}}</span></td><td>새 입력 <span class="tex">X_{\text{test}}</span> 만</td></tr>
+    <tr><td>가중치</td><td>오차(Loss)를 줄이도록 <b>반복 갱신</b></td><td><b>고정</b> — 갱신 없이 순방향 연산(forward pass)만</td></tr>
+    <tr><td>sklearn</td><td><code>model.fit()</code></td><td><code>model.predict()</code></td></tr>
+    <tr><td>비용</td><td>계산 자원(GPU/TPU)과 시간이 많이 듦. 과적합 방지 · 데이터 증강 등을 함께 적용</td><td>역전파 · 갱신이 없어 훨씬 가볍고 빠름 — 웹 API · 엣지 디바이스 등 실제 서비스 단계</td></tr>
+  </tbody>
+</table>
+</div></div>
+
 <h3 class="sub-title">참고 — 상관 관계(correlation)는 인과관계와 같지 않음</h3>
 <div class="warn"><b>회귀는 상관관계를 찾는 것</b>으로 인과 관계를 의미하지 않는다. 따라서 해석할 때 <b>인과 관계로 해석해서는 안 된다.</b></div>
 <figure class="fig"><img width="1100" height="445" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-05-correlation-pirates.jpg" alt="교안 9p — 지구 평균 기온과 해적 수 그래프: 해적이 줄수록 기온이 오르는 것처럼 보인다"><figcaption>교안 9p — 해적 수가 줄어든 시기에 지구 평균 기온이 올랐다. 직선에 가깝게 맞지만 &ldquo;해적이 줄어서 더워졌다&rdquo;는 말은 성립하지 않는다 (둘 다 <b>시간</b>의 흐름과 함께 변했을 뿐)</figcaption></figure>
+<div class="live">상관관계와 인과관계는 <b>동일하지 않다</b> — 교수님이 다시 강조.</div>
 </section>
 
 <!-- ===================== 3.3 ===================== -->
@@ -504,6 +575,21 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <figure class="fig"><img width="1100" height="555" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-06-simple-linear-model.png" alt="교안 10p — 단순 선형 회귀 식과 그래프: 절편 w0, 기울기 w1인 직선"><figcaption>교안 10p — <span class="tex">w_0</span> 는 직선이 세로축과 만나는 <b>절편</b>, <span class="tex">w_1</span> 은 <span class="tex">x</span>가 1 늘 때 <span class="tex">y</span>가 늘어나는 양, 즉 <b>기울기</b></figcaption></figure>
 <div class="tip"><b>입력이 1차원인데 파라미터는 왜 2개?</b> — 직선은 <b>기울기와 절편 두 값</b>으로 결정되기 때문이다.
 <span class="tex">w_0</span> 가 없으면 직선이 항상 원점을 지나야 해서, 집값처럼 크기가 0이어도 값이 0이 아닌 데이터를 표현할 수 없다.</div>
+<div class="live"><b>y = ax + b</b> — <span class="tex">a</span> 는 기울기, <span class="tex">b</span> 는 절편. <b><span class="tex">a,b</span> 를 데이터에 최적화시켜서 잘 찾는 것이 목표</b>다.</div>
+<div class="mynote"><b>기호를 다시 정리하면</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>기호</th><th>뜻</th><th>교안 표기</th></tr></thead>
+  <tbody>
+    <tr><td><span class="tex">x</span></td><td>독립변수 — Feature / 입력 데이터</td><td><span class="tex">x_i</span></td></tr>
+    <tr><td><span class="tex">y</span></td><td>종속변수 — Target / 라벨 / 실제 정답</td><td><span class="tex">y_i</span></td></tr>
+    <tr><td><span class="tex">\hat y</span></td><td>&ldquo;와이 햇&rdquo; — 모델이 선형 식으로 계산한 <b>예측값</b>(<code>y_pred</code>)</td><td><span class="tex">f_{\mathbf w}(x_i)</span></td></tr>
+    <tr><td><span class="tex">a</span></td><td>기울기(Slope) = 머신러닝의 <b>가중치(Weight)</b></td><td><span class="tex">w_1</span></td></tr>
+    <tr><td><span class="tex">b</span></td><td>y절편(Intercept) = 머신러닝의 <b>편향(Bias)</b></td><td><span class="tex">w_0</span></td></tr>
+  </tbody>
+</table>
+</div>
+<span class="fix"><b>필기 정정</b> — 처음에 적은 &lsquo;y는 Linear regression&rsquo;은 바로잡아 둔 대로, Linear regression은 <b>모델(알고리즘)의 이름</b>이고 <span class="tex">y</span> 는 모델이 맞히려는 <b>목표값</b>이다. 교안은 <span class="tex">y=ax+b</span> 대신 <span class="tex">f_{\mathbf w}(x)=w_0+w_1x</span> 로 쓴다(순서만 다르고 같은 식).</span></div>
 <div class="ex">
   <p class="ex-q"><em>교안 예시로 계산해 보기</em> <span class="tex">w_0=50,\;w_1=0.06</span> 일 때 크기 <span class="tex">x=2000</span> 인 집의 예측 가격은?</p>
   <div class="step"><i>①</i><div>모델 <span class="tex">f_{\mathbf w}(x)=50+0.06x</span></div></div>
@@ -527,6 +613,20 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <div class="tex-d">L(\mathbf w)=\frac1N\sum_{i=1}^{N}\bigl(f_{\mathbf w}(x_i)-y_i\bigr)^2,\qquad \mathbf w^*=\underset{\mathbf w}{\operatorname{argmin}}\;L(\mathbf w)</div>
   <p class="fx-note"><b>argmin</b> 은 &ldquo;함수 값을 최소로 만드는 <b>입력</b>&rdquo;을 돌려준다. <span class="tex">\min L</span> 은 가장 작은 손실 <b>값</b>, <span class="tex">\operatorname{argmin} L</span> 은 그때의 <b>파라미터</b> <span class="tex">\mathbf w^*</span> 다 — 우리가 원하는 것은 뒤쪽이다.</p>
 </div>
+<div class="mynote"><b>손실함수를 말로 풀면</b> — 실제값 <span class="tex">y</span>(정답)와 예측값 <span class="tex">\hat y</span> 의 <b>차이(오차)를 제곱해 평균</b> 낸 것이 선형회귀의 대표 손실함수 <b>MSE(Mean Squared Error, 평균 제곱 오차)</b>다: <span class="tex">L=\frac1N\sum(y_i-\hat y_i)^2</span>.
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>질문</th><th>돌려주는 것</th></tr></thead>
+  <tbody>
+    <tr><td><span class="tex">L(\mathbf w)</span></td><td>가중치 <span class="tex">\mathbf w</span> 를 쓰면 오차가 얼마인가?</td><td>손실(Loss / Cost) 함수 자체</td></tr>
+    <tr><td><span class="tex">\min L(\mathbf w)</span></td><td>&ldquo;<b>가장 작은 결과값(오차의 크기)</b>이 얼마인가?&rdquo;</td><td>오차의 최솟값 — <b>숫자</b></td></tr>
+    <tr><td><span class="tex">\operatorname{argmin} L(\mathbf w)</span></td><td>&ldquo;<b>오차를 가장 작게 만드는 <span class="tex">\mathbf w</span></b>가 무엇인가?&rdquo;</td><td>그때의 입력 — <b>최적 파라미터</b></td></tr>
+    <tr><td><span class="tex">\mathbf w^*</span></td><td>최적화로 찾아낸 답</td><td>최적의 가중치(Optimal Parameter)</td></tr>
+  </tbody>
+</table>
+</div>
+<span class="fix">예 — 아래 <a class="ext" href="#loss">수업시간 도식 ①</a>의 <span class="tex">L(w_1)=\frac{14}{3}(w_1-1)^2</span> 에서 <span class="tex">\min L=0</span>, <span class="tex">\operatorname{argmin}L=w_1^*=1</span>.</span></div>
+<div class="live">MSE 값이 나오면 <b>이 오차를 계속 최소화</b>해 준다 — <b>오차를 최소화할 파라미터를 찾아가는 게 우리의 숙제</b>. 그리고 오차를 줄이기 위해 필요한 것이 다음 절의 <b>경사하강법</b>이다.</div>
 <figure class="fig"><img width="858" height="373" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-07-loss-idea.png" alt="교안 12p — 데이터 점 (x_i, y_i)와 손실 L(w), argmin 식"><figcaption>교안 12p — 점과 직선 사이의 <b>세로 거리(오차)</b>를 제곱해서 평균 낸 것이 손실. 그 값을 가장 작게 만드는 <span class="tex">\mathbf w</span> 가 정답</figcaption></figure>
 
 <h3 class="sub-title">손실 함수 예시 — 파라미터 2개 vs 1개</h3>
@@ -676,6 +776,13 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <p class="fx-note">· <span class="tex">\alpha</span> — <b>학습률</b> &nbsp;·&nbsp; <span class="tex">\frac{\partial}{\partial w_0}L(w_0,w_1)</span> — <b>기울기</b> &nbsp;·&nbsp; 괄호 안의 <span class="tex">(w_0,w_1)</span> — <b><span class="tex">\mathbf w</span>의 현재 상태</b><br>
   · 두 식은 <b>동시에</b> 갱신한다 — <span class="tex">w_0</span>를 먼저 바꾼 값으로 <span class="tex">w_1</span>의 기울기를 계산하지 않도록, 두 기울기를 모두 구한 뒤 한꺼번에 바꾼다</p>
 </div>
+<div class="live">경사하강법은 <b>초기값 설정</b>에서 시작한다 — 어디서 출발하든 오차가 줄어드는 방향으로 한 걸음씩 가서 <span class="tex">\mathbf w^*=\operatorname{argmin}L(\mathbf w)</span> 를 찾는 것이 목표.</div>
+<div class="mynote"><b>갱신식 <span class="tex">w\leftarrow w-\alpha\,\dfrac{\partial L}{\partial w}</span> 의 각 기호</b>
+<ul class="ul">
+  <li><span class="tex">w</span> — 모델의 가중치(기울기 파라미터)</li>
+  <li><span class="tex">\alpha</span>(또는 <span class="tex">\eta</span>) — <b>학습률(Learning Rate)</b>. 한 번 갱신할 때 가중치를 얼마만큼의 보폭으로 옮길지 정하는 <b>하이퍼파라미터</b>(사람이 정하는 값)</li>
+  <li><span class="tex">\partial L/\partial w</span> — 손실을 <span class="tex">w</span> 로 편미분한 <b>기울기(Gradient)</b>. 오차가 <b>증가하는 방향</b>을 가리키므로, 줄이려면 앞에 <b>마이너스</b>를 붙여 반대 방향으로 간다</li>
+</ul></div>
 <figure class="fig"><img width="1100" height="537" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-18-gd-algorithm.jpg" alt="교안 30p — 경사하강법 갱신식에 학습률, 기울기, w의 현재 상태를 표시한 도식"><figcaption>교안 30p — 갱신식의 각 부분이 무엇인지 표시한 원본 도식</figcaption></figure>
 <div class="ex">
   <p class="ex-q"><em>보충 — MSE의 기울기를 직접 유도</em> <span class="tex">L(w_0,w_1)=\frac1N\sum_i(\hat y_i-y_i)^2,\;\hat y_i=w_0+w_1x_i</span> 를 각각 편미분하면?</p>
@@ -720,6 +827,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li><span class="tex">\alpha</span>가 <b>너무 작으면</b>, 경사 하강이 <b>천천히</b> 발생함</li>
   <li><span class="tex">\alpha</span>가 <b>너무 크면</b>, 수렴되지 않고 <b>발산</b> 등이 됨</li>
 </ul></div>
+<div class="live"><b>&ldquo;알파값!&rdquo;</b> — 학습률 <span class="tex">\alpha</span>(<span class="tex">\eta</span>)는 기울기 방향으로 한 번 이동할 때의 <b>보폭(step size)</b>을 조절하는 하이퍼파라미터. <b>너무 작으면 학습이 느리고, 너무 크면 수렴하지 않고 발산</b>한다 — 아래 도식 ③과 <a class="ext" href="#lab-gd">실습의 학습률 재실험</a>에서 그대로 확인된다.</div>
 <figure class="fig svgfig"><div class="svg-scroll"><svg viewBox="0 0 700 280" role="img" aria-label="학습률 0.02는 천천히, 0.1은 빠르게 수렴, 0.25는 좌우로 튀며 발산" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar-gd_lr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arG-gd_lr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#166534"/></marker></defs>
 <line x1="34" y1="204" x2="228" y2="204" stroke="#6b7280" stroke-width="1.4" marker-end="url(#ar-gd_lr)"/>
@@ -784,6 +892,19 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <div class="ex-ans"><b>왜 0.25는 발산할까</b> — 한 번 갱신하면 <span class="tex">(w_1-1)</span> 이 <span class="tex">(1-\alpha\cdot\tfrac{28}{3})</span> 배가 된다. 이 값의 절댓값이 1보다 크면(<span class="tex">\alpha&gt;0.214</span>) 오차가 매번 커진다</div>
 </div>
 
+<div class="mynote"><b>배치 크기 · 에포크 · 이터레이션</b> — 데이터를 몇 개씩 묶어 몇 번 갱신하는가
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>용어</th><th>뜻</th></tr></thead>
+  <tbody>
+    <tr><td>에포크 (Epoch) <span class="prof">교수님 언급</span></td><td>전체 학습 데이터를 <b>처음부터 끝까지 한 번</b> 다 학습한 주기</td></tr>
+    <tr><td>배치 크기 (Batch Size)</td><td>가중치를 <b>한 번 갱신</b>하기 위해 묶어서 넣는 샘플 수. 전체를 한 번에 메모리에 올리기 어렵거나 연산 효율을 높이려고 나눈다. 보통 16 · 32 · 64 · 128 같은 2의 거듭제곱</td></tr>
+    <tr><td>이터레이션 (Iteration / Step)</td><td>1 에포크를 마치기 위해 가중치를 갱신하는 <b>횟수</b> = <span class="tex">\lceil N/B\rceil</span> (데이터 수 ÷ 배치 크기, 올림)</td></tr>
+  </tbody>
+</table>
+</div>
+<span class="fix"><b>실습으로 확인</b> — 이번 주 직접 구현은 훈련 데이터 20개를 <b>하나씩</b>(배치 크기 1) 넣으므로 1 에포크 = 20 이터레이션, 100 에포크면 <b>2,000번 갱신</b>한다. 4주차 로지스틱 실습은 300개를 배치 100으로 나눠 1 에포크 = 3 이터레이션이다.</span></div>
+
 <h3 class="sub-title">수업시간 도식 ④ — 경사하강법의 한계점</h3>
 <figure class="fig svgfig"><div class="svg-scroll"><svg viewBox="0 0 680 262" role="img" aria-label="지역 최솟값과 극대점에서는 기울기가 0이라 갱신이 멈춘다" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar-gd_limit" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arG-gd_limit" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#166534"/></marker></defs>
@@ -805,6 +926,20 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 그 지점이 <b>전역 최솟값이 아니어도</b>(지역 최솟값, 평평한 구간) 멈추게 된다 — 그래서 초기값이 중요하다(교안 29p).</div>
 <div class="good"><b>선형 회귀는 안심해도 되는 이유 (보충)</b> — MSE를 쓰는 선형 회귀의 손실은 교안 17p처럼 <b>그릇 모양(볼록 함수)</b>이라 골짜기가 하나뿐이다.
 지역 최솟값 문제는 뒤에 배울 <b>신경망</b>처럼 손실 곡면이 울퉁불퉁한 모델에서 본격적으로 문제가 된다.</div>
+<h3 class="sub-title" id="flat">울퉁불퉁한 손실 — 전역 최소점 vs 지역 최소점</h3>
+<div class="live">교수님 질문 — 손실 곡면에 <b>울퉁불퉁한 곳이 여러 개</b> 생기면, 경사하강법으로 <b>맨 밑의 전역 최소점</b>과 <b>중간의 지역 최소점</b> 중 어디로 가는 게 좋을까?</div>
+<div class="mynote"><b>원칙은 전역 최소점, 실전은 &lsquo;넓고 완만한&rsquo; 최소점</b>
+<div class="cards">
+  <div class="card2" style="border-top-color:#b91c1c"><h4>날카로운 전역 최소점<em>Sharp global minimum</em></h4><p>훈련 데이터 기준 오차가 가장 적은 맨 밑바닥. 그러나 좁고 가팔라서 새 데이터로 입력이 조금만 틀어져도 오차가 급증 → <b>과적합 위험</b></p></div>
+  <div class="card2" style="border-top-color:#166534"><h4>완만한 지역 최소점<em>Flat local minimum</em></h4><p>바닥은 조금 높아도 웅덩이가 넓고 평평해, 변동이 생겨도 오차 증가폭이 작음 → <b>일반화 성능</b>이 더 좋을 수 있음</p></div>
+</div>
+<ul class="ul">
+  <li>1차 목표는 <b>얕은 지역 최소점에 일찍 갇히지 않고</b> 깊은 곳을 향해 탐색하는 것</li>
+  <li>다만 딥러닝에서는 바닥의 깊이만큼 <b>웅덩이의 모양(완만함)</b>이 일반화를 좌우한다는 관찰이 있다</li>
+  <li>그래서 <b>모멘텀 · Adam</b> 같은 최적화 알고리즘과 적절한 <b>미니 배치</b>의 잡음을 이용해 얕은 지역 최소점을 건너뛰도록 유도한다 → <a class="ext" href="#plus">개정판 ④ 최적화 심화</a></li>
+</ul>
+<b>조기 종료 (Early Stopping)</b> — 경사하강법으로 학습할 때 모델이 훈련 데이터에만 지나치게 맞춰지는 <b>과적합을 막기 위해</b>, <b>검증 데이터(valid set)의 성능이 나빠지기 시작하는 시점</b>에서 학습을 스스로 멈추는 기법. 그래서 <a class="ext" href="#data">train / valid / test 3분할</a>에서 valid가 필요하다.
+<span class="fix"><b>이번 주 범위와의 연결</b> — MSE를 쓰는 <b>선형 회귀는 손실이 그릇 모양(볼록)</b>이라 최소점이 하나뿐이어서 이 고민이 없다(위 &lsquo;안심해도 되는 이유&rsquo;). 전역/지역 · sharp/flat 문제는 손실 곡면이 울퉁불퉁한 <b>신경망</b>(6주차~)에서 본격적으로 등장한다.</span></div>
 </section>
 
 <!-- ===================== 3.6 ===================== -->
@@ -853,6 +988,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <p class="fx-note">제곱을 미분해서 <b>2</b>가 나오고, 연쇄법칙으로 <span class="tex">\partial(\mathbf w^{\mathsf T}\mathbf x_i)/\partial w_j=x_{ij}</span> 가 곱해진다.
   <span class="tex">j=0</span> 이면 <span class="tex">x_{i0}=1</span> 이라 <a class="ext" href="#gd">단순 선형 회귀의 <span class="tex">w_0</span> 기울기</a>와 똑같아진다 — 두 경우는 <b>갱신할 파라미터 개수만 다를 뿐</b> 같은 식이다.</p>
 </div>
+<div class="live">다중 선형 회귀와 단순 선형 회귀의 차이는 <b>파라미터(매개변수)가 늘어났다는 것뿐</b>이다 — 모델 · 손실 · 경사하강법의 틀은 그대로.</div>
 </section>
 
 <!-- ===================== 개정판 심화 ===================== -->
@@ -1162,6 +1298,18 @@ print(r2_score(y_test, y_pred))       <span class="out"># 0.9749154407708353</sp
   · 분자 <span class="tex">\sum(y_i-\hat y_i)^2</span> = 모델이 못 맞춘 양, 분모 <span class="tex">\sum(y_i-\bar y)^2</span> = &ldquo;그냥 평균으로 찍었을 때&rdquo; 틀린 양<br>
   · <b>1</b>이면 완벽, <b>0</b>이면 평균으로 찍는 것과 같은 수준, 평균보다도 못하면 <b>음수</b>도 나온다</p>
 </div>
+
+<div class="mynote"><b>결정계수 R² 더 알아보기</b> — 회귀 모델이 데이터의 <b>전체 변동량을 얼마나 설명</b>하는지 나타내는 지표
+<div class="tex-d">R^2=1-\frac{SS_{\text{res}}}{SS_{\text{tot}}}=1-\frac{\sum(\text{실제값}-\text{예측값})^2}{\sum(\text{실제값}-\text{평균값})^2}</div>
+<ul class="ul">
+  <li><b><span class="tex">SS_{\text{tot}}</span>(총제곱합)</b> — 모델 없이 <b>평균값으로만 찍었을 때</b>의 전체 오차 · <b><span class="tex">SS_{\text{res}}</span>(잔차제곱합)</b> — 모델 예측과 실제값 사이의 오차</li>
+  <li>즉 &ldquo;<b>전체 변동 중 평균으로 찍는 것 대비 우리 모델이 몇 %를 설명했나</b>&rdquo;</li>
+  <li><b>1.0</b> 완벽 · <b>0.0</b> 평균으로 찍는 수준 · <b>음수</b> 평균보다도 못함 · <b>0.8 이상</b>이면 일반적인 데이터 분석에서 설명력이 높은 편</li>
+  <li><b>R² = 0.64</b>의 의미 — 입력이 목표 변동의 <b>64%를 설명</b>, 나머지 36%는 노이즈나 빠진 변수의 영향. 기본 경향은 잘 잡았지만 정밀 예측에는 부족할 수 있다</li>
+  <li><b>상관계수와의 관계</b> — 변수가 1개인 단순 선형회귀에서는 피어슨 상관계수 <span class="tex">r</span> 의 제곱이 <span class="tex">R^2</span>. <span class="tex">R^2=0.64</span> 면 <span class="tex">|r|=0.8</span>, 강한 선형 상관</li>
+</ul>
+<span class="fix"><b>실습 결과에 대입</b> — 이번 실습의 테스트 <span class="tex">R^2=0.975</span> 는 경력이 연봉 변동의 약 97.5%를 설명한다는 뜻이다.
+<b>주의 두 가지</b> — ① &lsquo;0.8 이상이면 우수&rsquo;는 분야마다 기준이 다르다(사람 행동을 다루는 데이터는 훨씬 낮아도 의미 있는 경우가 많다). ② <span class="tex">R^2=r^2</span> 는 <b>절편이 있는 최소제곱 모델을 학습한 데이터</b>에서 성립하는 관계라, 테스트셋에서 계산한 <span class="tex">R^2</span> 와는 다를 수 있다.</span></div>
 
 <h3 class="sub-title">matplotlib로 그래프 그리기</h3>
 <div class="tbl-wrap">
