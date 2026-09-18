@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4주차 · 로지스틱 회귀 100문제</title>
+<style>
+  :root{
+    --bg:#f4f6fa; --card:#ffffff; --ink:#16202e; --muted:#657189;
+    --line:#e2e8f2; --brand:#1560d8; --brand-deep:#0b3b8c; --brand-soft:#eaf1fe;
+    --ok:#0f8a5f; --ok-soft:#e6f6ef; --no:#d43c4a; --no-soft:#fdecee;
+    --warn:#b7791f; --shadow:0 1px 2px rgba(16,32,64,.05),0 8px 24px rgba(16,32,64,.07);
+    --r:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0e1420; --card:#161e2c; --ink:#e8edf6; --muted:#98a4bb;
+      --line:#273246; --brand:#5b96ff; --brand-deep:#a8c6ff; --brand-soft:#1a2740;
+      --ok:#48c99a; --ok-soft:#122c23; --no:#ff7b88; --no-soft:#33191e;
+      --warn:#e0b25c; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Malgun Gothic","맑은 고딕",system-ui,sans-serif;
+    line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:22px 16px 80px}
+
+  header.top{margin-bottom:18px}
+  .eyebrow{color:var(--brand);font-weight:700;font-size:13px;letter-spacing:.04em}
+  h1{font-size:25px;line-height:1.3;margin:4px 0 6px;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:14px;margin:0}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+
+  /* controls */
+  .controls{padding:14px 16px;margin-bottom:14px}
+  .ctl-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .ctl-row + .ctl-row{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+  .ctl-label{font-size:12px;font-weight:700;color:var(--muted);min-width:52px}
+  .chip{
+    border:1px solid var(--line);background:transparent;color:var(--ink);
+    padding:5px 11px;border-radius:999px;font-size:13px;cursor:pointer;
+    font-family:inherit;transition:.13s; white-space:nowrap;
+  }
+  .chip:hover{border-color:var(--brand);color:var(--brand)}
+  .chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+  .chip.ghost[aria-pressed="true"]{background:var(--brand-soft);color:var(--brand-deep);border-color:var(--brand)}
+  .spacer{flex:1}
+
+  /* progress */
+  .prog{padding:14px 16px;margin-bottom:14px}
+  .prog-head{display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;margin-bottom:9px}
+  .stat{font-size:13px;color:var(--muted)}
+  .stat b{color:var(--ink);font-size:15px;font-variant-numeric:tabular-nums}
+  .stat.ok b{color:var(--ok)} .stat.no b{color:var(--no)}
+  .bar{height:7px;background:var(--line);border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--ok));border-radius:99px;transition:width .3s}
+
+  /* question */
+  .qcard{padding:20px 20px 18px;margin-bottom:14px}
+  .qmeta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
+  .tag{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:.02em}
+  .tag.num{background:var(--brand-deep);color:#fff}
+  @media (prefers-color-scheme: dark){ .tag.num{background:var(--brand-soft);color:var(--brand-deep)} }
+  .tag.sec{background:var(--brand-soft);color:var(--brand-deep)}
+  .tag.d1{background:var(--ok-soft);color:var(--ok)}
+  .tag.d2{background:#fff4e0;color:var(--warn)}
+  .tag.d3{background:var(--no-soft);color:var(--no)}
+  @media (prefers-color-scheme: dark){ .tag.d2{background:#3a2e14} }
+  .qtext{font-size:17.5px;font-weight:600;letter-spacing:-.01em;margin:0 0 16px;line-height:1.55}
+
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{
+    display:flex;gap:11px;align-items:flex-start;text-align:left;width:100%;
+    padding:12px 14px;border:1.5px solid var(--line);background:var(--card);
+    border-radius:11px;cursor:pointer;font:inherit;font-size:15px;color:var(--ink);
+    transition:.13s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--brand);background:var(--brand-soft)}
+  .opt:disabled{cursor:default}
+  .opt .n{
+    flex:none;width:23px;height:23px;border-radius:50%;background:var(--line);color:var(--muted);
+    display:grid;place-items:center;font-size:12.5px;font-weight:700;margin-top:1px;
+  }
+  .opt.correct{border-color:var(--ok);background:var(--ok-soft)}
+  .opt.correct .n{background:var(--ok);color:#fff}
+  .opt.wrong{border-color:var(--no);background:var(--no-soft)}
+  .opt.wrong .n{background:var(--no);color:#fff}
+  .opt .mark{margin-left:auto;font-size:13px;font-weight:700;flex:none;padding-left:8px}
+  .opt.correct .mark{color:var(--ok)} .opt.wrong .mark{color:var(--no)}
+
+  .exp{margin-top:14px;padding:13px 15px;border-radius:11px;background:var(--brand-soft);border-left:3px solid var(--brand);font-size:14.5px}
+  .exp h4{margin:0 0 5px;font-size:12.5px;letter-spacing:.03em;color:var(--brand-deep)}
+  .exp p{margin:0}
+  .exp .ref{display:block;margin-top:7px;font-size:12.5px;color:var(--muted)}
+
+  .nav{display:flex;gap:8px;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+  .btn{
+    border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 16px;border-radius:10px;
+    font:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:.13s;
+  }
+  .btn:hover:not(:disabled){border-color:var(--brand);color:var(--brand)}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+  .btn.primary:hover:not(:disabled){filter:brightness(1.08);color:#fff}
+  .btn.danger{color:var(--no);border-color:var(--no)}
+  .btn.danger:hover{background:var(--no-soft)}
+
+  /* palette */
+  details.pal{padding:0;margin-bottom:14px;overflow:hidden}
+  details.pal summary{padding:13px 16px;cursor:pointer;font-size:14px;font-weight:600;list-style:none;display:flex;align-items:center;gap:8px}
+  details.pal summary::-webkit-details-marker{display:none}
+  details.pal summary::before{content:"▸";color:var(--muted);transition:.15s}
+  details.pal[open] summary::before{transform:rotate(90deg)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:6px;padding:0 16px 16px}
+  .cell{
+    aspect-ratio:1;border:1px solid var(--line);background:transparent;border-radius:8px;
+    font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;
+    font-variant-numeric:tabular-nums;transition:.1s;
+  }
+  .cell:hover{border-color:var(--brand);color:var(--brand)}
+  .cell.o{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+  .cell.x{background:var(--no-soft);border-color:var(--no);color:var(--no)}
+  .cell.cur{outline:2px solid var(--brand);outline-offset:1px}
+
+  /* result */
+  .result{padding:26px 22px;text-align:center}
+  .score{font-size:46px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:6px 0}
+  .score small{font-size:20px;color:var(--muted);font-weight:600}
+  .breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:20px 0 6px;text-align:left}
+  .bd{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .bd .k{font-size:12px;color:var(--muted)}
+  .bd .v{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+  .empty{padding:40px 20px;text-align:center;color:var(--muted);font-size:15px}
+  footer{margin-top:26px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.8}
+  @media (max-width:520px){
+    h1{font-size:21px} .qtext{font-size:16.5px} .opt{font-size:14.5px;padding:11px 12px}
+    .ctl-label{min-width:100%;margin-bottom:-3px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">CHAPTER 4 · 로지스틱 회귀</div>
+    <h1>4주차 &middot; 로지스틱 회귀 — 100문제</h1>
+    <p class="sub">강의자료 4.1~4.6절 전 범위 · 4지선다 · 난이도 3단계</p>
+  </header>
+
+  <section class="panel controls">
+    <div class="ctl-row">
+      <span class="ctl-label">단원</span>
+      <div id="secChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    </div>
+    <div class="ctl-row">
+      <span class="ctl-label">난이도</span>
+      <div id="diffChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    </div>
+    <div class="ctl-row">
+      <span class="ctl-label">설정</span>
+      <button class="chip ghost" id="shuffleQ" aria-pressed="false">문제 순서 섞기</button>
+      <button class="chip ghost" id="shuffleO" aria-pressed="false">보기 순서 섞기</button>
+      <span class="spacer"></span>
+      <button class="chip" id="reviewBtn">오답 다시 풀기 <b id="wrongCount">0</b></button>
+      <button class="chip" id="resetBtn">처음부터</button>
+    </div>
+  </section>
+
+  <section class="panel prog">
+    <div class="prog-head">
+      <span class="stat">진도 <b><span id="doneN">0</span> / <span id="totalN">0</span></b></span>
+      <span class="stat ok">정답 <b id="okN">0</b></span>
+      <span class="stat no">오답 <b id="noN">0</b></span>
+      <span class="spacer"></span>
+      <span class="stat">정답률 <b id="rate">—</b></span>
+    </div>
+    <div class="bar"><i id="barFill"></i></div>
+  </section>
+
+  <details class="panel pal">
+    <summary>문제 번호로 이동 <span style="color:var(--muted);font-weight:400">(초록 = 정답, 빨강 = 오답)</span></summary>
+    <div class="grid" id="palette"></div>
+  </details>
+
+  <main id="stage"></main>
+
+  <footer>
+    4주차 강의자료(로지스틱 회귀 1·2) 기반 자율 학습용 문제 세트<br>
+    풀이 기록은 이 브라우저에만 저장되며, '처음부터'를 누르면 초기화됩니다.
+  </footer>
+</div>
+
+<script>
+const QUESTIONS = [{"id": 1, "sec": "4.1", "diff": "기초", "q": "단순 선형회귀에서 i번째 관측 값의 예측값 ŷᵢ를 나타내는 식으로 옳은 것은?", "opts": ["ŷᵢ = w₀ + w₁xᵢ", "ŷᵢ = w₀xᵢ + w₁xᵢ²", "ŷᵢ = σ(w₀ + w₁xᵢ)", "ŷᵢ = w₁ ÷ (w₀ + xᵢ)"], "a": 0, "exp": "단순 선형회귀는 하나의 실수 입력 xᵢ에 대하여 ŷᵢ = w₀ + w₁xᵢ 형태의 1차식으로 예측값을 계산한다."}, {"id": 2, "sec": "4.1", "diff": "기초", "q": "단순 선형회귀 ŷᵢ = w₀ + w₁xᵢ에서 w₀와 w₁이 의미하는 것은?", "opts": ["손실함수가 출력하는 값", "학습 데이터의 개수", "모델의 동작을 결정하는 인자(파라미터)", "관측 값의 클래스 레이블"], "a": 2, "exp": "실수 xᵢ는 입력이고, w₀와 w₁은 모델의 동작을 결정하는 인자로서 학습을 통해 결정된다."}, {"id": 3, "sec": "4.1", "diff": "기초", "q": "선형회귀 함수의 학습 목표를 손실함수 L(w)로 표현하면 무엇인가?", "opts": ["L(w)의 값을 0으로 고정", "주어진 학습 데이터를 이용하여 L(w)를 최소화하는 w를 탐색", "L(w)의 미분값을 최대화하는 w를 탐색", "L(w)를 최대화하는 w를 탐색"], "a": 1, "exp": "선형회귀의 목표는 주어진 학습 데이터를 이용하여 손실함수 L(w)를 최소화하는 인자 w를 찾는 것이다."}, {"id": 4, "sec": "4.1", "diff": "중급", "q": "선형회귀의 손실함수 L(w) = (1/N)Σᵢ(ŷᵢ − yᵢ)²에 대한 설명으로 옳은 것은?", "opts": ["예측 확률의 로그 값을 모두 더한 값이다", "오드(odds)의 로그를 평균한 값이다", "가중치 벡터의 크기를 제곱한 값이다", "예측값과 실제값 차이의 제곱을 평균한 값이다"], "a": 3, "exp": "제시된 손실함수는 각 관측 값에 대한 (예측값 − 실제값)의 제곱을 N개에 대하여 평균한 형태이다."}, {"id": 5, "sec": "4.1", "diff": "중급", "q": "경사하강법(Gradient Descent)으로 인자 w₀를 갱신하는 식으로 옳은 것은?", "opts": ["w₀ ← w₀ + α·L(w)", "w₀ ← w₀ − α·∂L(w)/∂w₀", "w₀ ← α·∂L(w)/∂w₀", "w₀ ← w₀ × ∂L(w)/∂w₀"], "a": 1, "exp": "경사하강법은 손실함수의 편미분에 학습률 α를 곱한 값을 현재 인자에서 빼는 방식으로 인자를 갱신한다."}, {"id": 6, "sec": "4.1", "diff": "중급", "q": "w* = argmin L(w)라는 표기와 경사하강법의 관계를 설명한 것으로 가장 적절한 것은?", "opts": ["손실함수의 최댓값을 한 번에 구하는 해석적 공식이 경사하강법이다", "학습 데이터를 무작위로 재배열하는 기법이 경사하강법이다", "특징 벡터의 차원을 줄이는 기법이 경사하강법이다", "손실함수를 최소로 만드는 w를 반복적인 갱신으로 탐색하는 방법이 경사하강법이다"], "a": 3, "exp": "강의자료는 경사하강법을 L(w)를 최소화하는 w(즉 w* = argmin L(w))를 탐색하는 방법으로 소개한다."}, {"id": 7, "sec": "4.1", "diff": "중급", "q": "입력이 xᵢ = [xᵢ₁ … x_id]ᵀ인 다중 선형회귀의 예측식으로 옳은 것은?", "opts": ["ŷᵢ = w₀ + w₁xᵢ₁ + … + w_d x_id", "ŷᵢ = w₀ × xᵢ₁ × … × x_id", "ŷᵢ = Σₖ (xᵢₖ)²", "ŷᵢ = w₀ + w₁(xᵢ₁)²"], "a": 0, "exp": "다중 선형회귀는 d개의 특징 각각에 가중치를 곱하고 바이어스 w₀를 더한 형태로 예측값을 계산한다."}, {"id": 8, "sec": "4.1", "diff": "심화", "q": "다중 선형회귀를 ŷᵢ = wᵀxᵢ라는 간결한 형태로 표기할 수 있는 이유로 옳은 것은?", "opts": ["모든 가중치를 동일한 값으로 두기 때문", "손실함수를 제곱합 대신 절댓값 합으로 바꾸기 때문", "바이어스에 해당하는 특징 벡터의 성분을 1로 표기하기 때문", "모든 입력 특징을 0과 1 사이로 정규화하기 때문"], "a": 2, "exp": "특징 벡터를 [1 xᵢ₁ … x_id]ᵀ로, 인자를 w = [w₀ … w_d]ᵀ로 표기하면 바이어스가 내적 안에 흡수되어 ŷᵢ = wᵀxᵢ로 쓸 수 있다."}, {"id": 9, "sec": "4.1", "diff": "기초", "q": "분류(Classification)의 정의로 가장 적절한 것은?", "opts": ["군집의 개수를 자동으로 결정하는 작업", "연속적인 실수 값을 예측하는 작업", "특성 값의 집합으로 설명되는 개체의 소속 클래스/카테고리를 예측하는 작업", "데이터를 저차원 공간으로 사영하는 작업"], "a": 2, "exp": "분류는 특성 값의 집합으로 설명되는 개체가 어떤 클래스/카테고리에 속하는지를 예측하는 작업이다."}, {"id": 10, "sec": "4.1", "diff": "기초", "q": "분류 작업에서 전제하는 가정으로 옳은 것은?", "opts": ["클래스/카테고리가 사전에 식별되며 모든 개체가 어느 한 클래스에 속한다고 가정한다", "개체마다 서로 다른 특징의 집합으로 설명된다", "클래스의 개수는 항상 2개로 제한된다", "클래스는 학습 도중에 새롭게 생성된다"], "a": 0, "exp": "분류 작업에서는 클래스/카테고리가 사전에 식별되어 있고, 모든 개체가 어느 한 클래스에 속한다고 가정한다."}, {"id": 11, "sec": "4.1", "diff": "중급", "q": "분류 문제의 학습 데이터 D = {(xᵢ, yᵢ)}ᵢ₌₁ᴺ에 대한 설명으로 옳지 않은 것은?", "opts": ["xᵢ는 i번째 관측 값의 특징 벡터이다", "yᵢ는 i번째 관측 값이 속한 클래스/카테고리의 레이블 정보이다", "N은 관측 값의 개수를 의미한다", "yᵢ는 실수 전체 범위의 임의의 값을 가진다"], "a": 3, "exp": "분류에서 yᵢ는 yᵢ ∈ {C₁, C₂, …, C_K}처럼 미리 정해진 클래스 레이블 중 하나이며 실수 전체 범위를 갖지 않는다."}, {"id": 12, "sec": "4.1", "diff": "기초", "q": "yᵢ ∈ {C₁, C₂, …, C_K} 표기에서 K가 의미하는 것은?", "opts": ["특징의 개수", "클래스의 개수", "학습 데이터의 개수", "경사하강법의 반복 횟수"], "a": 1, "exp": "K는 분류 문제에서 사전에 식별된 클래스의 개수를 의미한다."}, {"id": 13, "sec": "4.1", "diff": "중급", "q": "메일을 “스팸메일”과 “스팸이 아닌 메일”로 분류할 때 강의자료가 설명한 레이블 표기 방식은?", "opts": ["C₁과 C₂를 모두 1이라는 값으로 표기", "클래스 레이블을 문자열 그대로 저장하여 사용", "클래스 레이블을 −1과 +1로만 표기", "“스팸메일”을 C₁, “스팸이 아닌 메일”을 C₂로 두고 실제 데이터에서는 각각 1과 0으로 표기"], "a": 3, "exp": "강의자료는 C₁을 “스팸메일”, C₂를 “스팸이 아닌 메일”로 두고, 실제 데이터 관리 시 C₁을 1, C₂를 0이라는 값으로 표기한다고 설명한다."}, {"id": 14, "sec": "4.1", "diff": "심화", "q": "2개의 클래스가 존재하는 도메인에서 클래스 레이블을 1과 0이라는 숫자로 표기하는 이유로 가장 적절한 것은?", "opts": ["확률 값을 그대로 저장하기 위해", "학습 데이터를 표기하고 관리할 때 구체적인 숫자를 사용하는 것이 편리하기 때문", "클래스의 개수를 줄이기 위해", "특징 공간의 차원을 늘리기 위해"], "a": 1, "exp": "강의자료는 학습 데이터를 표기할 때 구체적인 숫자를 사용하는 것이 편리하므로 실제 데이터에서는 C₁을 1, C₂를 0으로 표기한다고 설명한다."}, {"id": 15, "sec": "4.2", "diff": "기초", "q": "특징 벡터(feature vector)의 정의로 옳은 것은?", "opts": ["모델의 가중치 값을 모아 놓은 벡터", "손실함수의 기울기 성분을 모아 놓은 벡터", "모든 개체를 동일한 특징으로 설명할 때 개별 관측 값을 표현하는 벡터", "클래스 레이블만 모아 놓은 벡터"], "a": 2, "exp": "모든 개체를 동일한 특징으로 설명하면 개별 관측 값이 하나의 벡터로 표현되는데, 이러한 표현 형태를 특징 벡터라고 부른다."}, {"id": 16, "sec": "4.2", "diff": "기초", "q": "학과를 인공지능학과=1, 기계공학과=2, 수학과=3, 물리학과=4로 표기할 때 “인공지능학과”에 재학 중이고 평점이 3.8인 “홍길동”의 특징 벡터는?", "opts": ["[1 3.8]ᵀ", "[3.8 1]ᵀ", "[1 4.0]ᵀ", "[3 3.8]ᵀ"], "a": 0, "exp": "학과가 인공지능학과이므로 첫 성분은 1, 평점이 3.8이므로 두 번째 성분은 3.8이 되어 [1 3.8]ᵀ로 표현된다."}, {"id": 17, "sec": "4.2", "diff": "중급", "q": "같은 표기 규칙에서 “수학과”에 재학 중이고 평점이 4.0인 “성춘향”의 특징 벡터로 옳은 것은?", "opts": ["[3 4.0]ᵀ", "[1 4.0]ᵀ", "[4 3.0]ᵀ", "[2 4.0]ᵀ"], "a": 0, "exp": "수학과는 숫자 3으로 표기되고 평점이 4.0이므로 성춘향의 특징 벡터는 [3 4.0]ᵀ이다."}, {"id": 18, "sec": "4.2", "diff": "중급", "q": "“학과”라는 클래스 정보를 1, 2, 3, 4와 같은 숫자로 바꾸어 표현하는 이유는?", "opts": ["평점과 측정 단위를 일치시키기 위해", "특징 벡터의 차원을 줄이기 위해", "학과 사이의 우열을 표시하기 위해", "컴퓨터의 동작 편의를 위하여"], "a": 3, "exp": "강의자료는 컴퓨터의 동작 편의를 위하여 “학과”라는 클래스 정보를 숫자로 표현한다고 설명한다."}, {"id": 19, "sec": "4.2", "diff": "기초", "q": "특징 공간(feature space)에 대한 설명으로 옳은 것은?", "opts": ["학습률이 변화하는 구간", "손실함수의 값이 그려지는 공간", "특징 벡터들이 표시되는 공간", "클래스 레이블이 저장되는 표"], "a": 2, "exp": "특징 벡터들이 표시되는 공간을 특징 공간이라고 부른다."}, {"id": 20, "sec": "4.2", "diff": "기초", "q": "관측 값이 d개의 성분으로 구성된 특징 벡터로 표시될 때 특징 공간의 차원은?", "opts": ["항상 1차원", "d차원", "항상 2차원", "관측 값의 개수 N차원"], "a": 1, "exp": "관측 값이 d개의 성분으로 구성된 특징 벡터로 표시되면 모든 특징 벡터를 d차원의 공간에 표시할 수 있다."}, {"id": 21, "sec": "4.2", "diff": "기초", "q": "특징 벡터를 사용하면 개별 관측 값을 특징 공간에서 어떤 형태로 표시할 수 있는가?", "opts": ["하나의 확률 분포", "하나의 행렬", "하나의 점(point)", "하나의 직선"], "a": 2, "exp": "특징 벡터를 사용하면 개별 관측 값을 성분 개수와 동일한 차원의 공간에 존재하는 하나의 점으로 표시할 수 있다."}, {"id": 22, "sec": "4.2", "diff": "중급", "q": "“대학생”을 “학과”와 “평점”으로 관측하는 예제에서 특징 공간의 두 좌표축에 해당하는 것은?", "opts": ["학과와 학번", "학과와 평점(학점)", "평점과 수강 여부", "학과와 클래스 레이블"], "a": 1, "exp": "두 개의 특징인 “학과”와 “평점(학점)”이 각각 하나의 좌표축이 되어 2차원 특징 공간을 구성한다."}, {"id": 23, "sec": "4.2", "diff": "심화", "q": "동일한 개체를 “학과”, “평점”에 더해 “학년”까지 관측한다면 자료의 정의에 따라 특징 공간은 어떻게 되는가?", "opts": ["3차원 공간이 된다", "1차원으로 축소된다", "특징 공간을 정의할 수 없다", "여전히 2차원 공간이다"], "a": 0, "exp": "특징 공간의 차원은 특징 벡터의 성분 개수와 같으므로 특징이 3개가 되면 특징 공간도 3차원이 된다."}, {"id": 24, "sec": "4.2", "diff": "중급", "q": "특징 벡터 표기에 대한 설명으로 옳지 않은 것은?", "opts": ["모든 개체를 동일한 특징으로 설명해야 벡터 형태의 표현이 가능하다", "특징 벡터의 성분 개수와 특징 공간의 차원은 동일하다", "특징 벡터 하나는 관측 값 하나를 표현한다", "특징 벡터의 성분은 반드시 0 또는 1의 값이어야 한다"], "a": 3, "exp": "평점 3.8처럼 특징 벡터의 성분은 임의의 실수 값을 가질 수 있으므로 0 또는 1로 제한되지 않는다."}, {"id": 25, "sec": "4.2", "diff": "기초", "q": "관측된 특징 값들의 집합이 구성하는 것은 무엇인가?", "opts": ["학습률", "데이터", "손실함수", "가중치 벡터"], "a": 1, "exp": "강의자료는 관측된 특징 값들의 집합이 데이터를 구성한다고 설명한다."}, {"id": 26, "sec": "4.2", "diff": "중급", "q": "홍길동 [1 3.8]ᵀ과 성춘향 [3 4.0]ᵀ이 특징 공간에서 서로 다른 위치의 점으로 표시되는 직접적인 이유는?", "opts": ["두 개체의 특징 벡터 성분 값이 서로 다르기 때문", "두 개체의 클래스 레이블이 서로 다르기 때문", "두 개체의 특징 공간 차원이 서로 다르기 때문", "두 개체에 적용된 학습률이 서로 다르기 때문"], "a": 0, "exp": "특징 벡터의 성분 값이 곧 특징 공간에서의 좌표이므로 성분 값이 다르면 서로 다른 점으로 표시된다."}, {"id": 27, "sec": "4.2", "diff": "심화", "q": "특징 벡터와 특징 공간의 관계를 가장 정확하게 설명한 것은?", "opts": ["특징 벡터는 특징 공간을 둘로 나누는 구분선을 의미한다", "특징 공간은 클래스의 개수만큼의 차원을 가진다", "특징 공간의 차원은 학습 데이터의 개수 N과 같다", "특징 벡터는 특징 공간의 한 점이며, 공간의 차원은 벡터의 성분 개수와 같다"], "a": 3, "exp": "관측 값 하나는 특징 벡터로 표현되어 d차원 특징 공간의 한 점이 되며, 공간의 차원은 성분 개수 d와 같다."}, {"id": 28, "sec": "4.3", "diff": "기초", "q": "“정수론” 수강 여부 예제에서 “인공지능학과” 재학생 3명의 특징 벡터로 제시된 것은?", "opts": ["[1 2.2]ᵀ, [3 4.0]ᵀ, [1 3.9]ᵀ", "[2 2.2]ᵀ, [2 3.8]ᵀ, [2 3.9]ᵀ", "[1 2.2]ᵀ, [1 3.8]ᵀ, [1 3.9]ᵀ", "[3 2.2]ᵀ, [3 4.0]ᵀ, [3 3.2]ᵀ"], "a": 2, "exp": "인공지능학과는 학과 값 1로 표기되므로 세 학생은 x₁ = [1 2.2]ᵀ, x₂ = [1 3.8]ᵀ, x₃ = [1 3.9]ᵀ이다."}, {"id": 29, "sec": "4.3", "diff": "기초", "q": "“정수론” 예제에서 과목의 수강 여부를 숫자로 표현한 방식은?", "opts": ["수강을 +1, 미수강을 −1로 표현", "수강 여부를 0과 1 사이의 확률로 표현", "수강을 0, 미수강을 1로 표현", "수강을 1, 미수강을 0으로 표현"], "a": 3, "exp": "강의자료는 “정수론” 수강을 1, 미수강을 0의 값으로 표현하여 데이터를 구성한다."}, {"id": 30, "sec": "4.3", "diff": "중급", "q": "“정수론” 예제에서 인공지능학과 재학생에게 부여되는 레이블 값은?", "opts": ["정의되지 않는다", "모두 1", "모두 0", "학생마다 서로 다르다"], "a": 2, "exp": "조사 결과 인공지능학과 재학생은 정수론을 수강하지 않으므로 미수강에 해당하는 0의 레이블을 갖는다."}, {"id": 31, "sec": "4.3", "diff": "중급", "q": "“정수론” 예제에서 “수학과” 재학생 3명의 특징 벡터로 옳은 것은?", "opts": ["[4 2.2]ᵀ, [4 4.0]ᵀ, [4 3.2]ᵀ", "[3 2.2]ᵀ, [3 4.0]ᵀ, [3 3.2]ᵀ", "[1 2.2]ᵀ, [1 4.0]ᵀ, [1 3.2]ᵀ", "[3 2.2]ᵀ, [1 4.0]ᵀ, [3 3.2]ᵀ"], "a": 1, "exp": "수학과는 학과 값 3으로 표기되므로 x₄ = [3 2.2]ᵀ, x₅ = [3 4.0]ᵀ, x₆ = [3 3.2]ᵀ이다."}, {"id": 32, "sec": "4.3", "diff": "중급", "q": "“정수론” 예제 그림에서 “구분선 1”과 “구분선 2”가 함께 제시된 이유로 가장 적절한 것은?", "opts": ["수강생과 미수강생을 구분하는 선이 하나로 유일하지 않기 때문", "한 선은 학과를, 다른 선은 평점을 담당하기 때문", "두 선의 교점이 클래스의 중심을 의미하기 때문", "구분선은 항상 두 개가 필요하기 때문"], "a": 0, "exp": "강의자료는 “구분선 1” 혹은 “구분선 2”를 이용하여 수강생과 미수강생을 구분할 수 있다고 설명하므로 구분선이 유일하지 않음을 보여준다."}, {"id": 33, "sec": "4.3", "diff": "기초", "q": "확률 분포를 활용한 분류의 예제로 강의자료가 제시한 두 클래스는?", "opts": ["“체조 동아리 회원”과 “체조 동아리 비회원”", "정수론 수강생과 미수강생", "인공지능학과와 수학과", "스팸메일과 정상메일"], "a": 0, "exp": "확률 분포를 활용한 분류 예제에서는 A대학교 “체조” 동아리 회원과 비회원을 두 클래스로 삼는다."}, {"id": 34, "sec": "4.3", "diff": "기초", "q": "“체조 동아리 회원/비회원” 예제에서 분류의 근거로 사용한 관측 특징은?", "opts": ["평점", "키", "몸무게", "학과"], "a": 2, "exp": "이 예제는 동아리에 속한 학생과 속하지 않은 학생의 몸무게 분포 히스토그램을 이용한다."}, {"id": 35, "sec": "4.3", "diff": "중급", "q": "사후 확률(Posterior probability) P(C₁|x)의 의미로 옳은 것은?", "opts": ["클래스 C₁이 전체 데이터에서 차지하는 비율", "x를 관찰하였을 때 x의 소속 클래스로 C₁이 가능할 정도를 수치로 표현한 값", "클래스 C₁ 안에서 관측 값 x가 나타날 확률", "x와 C₁이 동시에 발생할 결합 확률"], "a": 1, "exp": "사후 확률은 조건부 확률로서, x가 주어졌을 때 그 소속 클래스가 C₁일 정도를 수치로 표현한 값이다."}, {"id": 36, "sec": "4.3", "diff": "심화", "q": "베이즈 규칙에 의한 P(C₁|x)의 전개식으로 옳은 것은?", "opts": ["P(C₁|x) = P(C₁, x) × P(x)", "P(C₁|x) = P(x|C₁) / P(C₁)", "P(C₁|x) = P(C₁) + P(x|C₁)", "P(C₁|x) = P(x|C₁)P(C₁) / {P(x|C₁)P(C₁) + P(x|C₂)P(C₂)}"], "a": 3, "exp": "P(C₁|x) = P(C₁,x)/P(x)이고 P(x) = P(C₁,x) + P(C₂,x)이므로 우도와 사전확률의 곱으로 전개된다."}, {"id": 37, "sec": "4.3", "diff": "기초", "q": "클래스가 C₁, C₂ 두 개뿐일 때 P(C₂|x)를 구하는 식은?", "opts": ["P(C₂|x) = P(C₁|x)", "P(C₂|x) = 1 − P(C₁|x)", "P(C₂|x) = 1 ÷ P(C₁|x)", "P(C₂|x) = P(C₁|x) − 1"], "a": 1, "exp": "두 클래스의 사후 확률의 합이 1이므로 P(C₂|x) = 1 − P(C₁|x)이다."}, {"id": 38, "sec": "4.3", "diff": "중급", "q": "몸무게 52kg인 학생 x의 동아리 소속을 판단하는 분류 규칙으로 옳은 것은?", "opts": ["P(x|C₁) > 0.5이면 C₁으로 결정", "P(C₁) > P(C₂)이면 C₁으로 결정", "P(C₁|x) < 0.5이면 C₁으로 결정", "P(C₁|x) > P(C₂|x)이면 x의 동아리를 C₁으로 결정"], "a": 3, "exp": "강의자료의 분류 규칙은 두 사후 확률을 비교하여 P(C₁|x) > P(C₂|x)이면 C₁, 그 외의 경우에는 C₂로 결정하는 것이다."}, {"id": 39, "sec": "4.3", "diff": "중급", "q": "두 클래스 문제에서 P(C₁|x) > P(C₂|x)라는 조건과 동일한 조건은?", "opts": ["P(C₁|x) > 0.5", "P(C₁|x) > P(C₁)", "P(C₁|x) > P(x|C₁)", "P(C₁|x) > 1"], "a": 0, "exp": "P(C₂|x) = 1 − P(C₁|x)이므로 P(C₁|x) > 1 − P(C₁|x), 즉 P(C₁|x) > 0.5와 같은 조건이다."}, {"id": 40, "sec": "4.3", "diff": "심화", "q": "사후 확률을 비교하기 위해 필요한 정보로 강의자료가 제시한 것이 아닌 것은?", "opts": ["P(C₂)", "P(x|C₁)", "학습률 α", "P(C₁)"], "a": 2, "exp": "강의자료는 사후 확률 비교를 위해 P(C₁), P(C₂), P(x|C₁), P(x|C₂)의 정보가 필요하다고 설명한다. 학습률은 경사하강법의 요소이다."}, {"id": 41, "sec": "4.3", "diff": "심화", "q": "P(C₁|x) = P(C₁, x)/P(x)에서 분모 P(x)를 두 클래스로 전개한 형태로 옳은 것은?", "opts": ["P(x) = P(C₁|x) + P(C₂|x)", "P(x) = P(x|C₁) − P(x|C₂)", "P(x) = P(C₁, x) + P(C₂, x)", "P(x) = P(C₁, x) × P(C₂, x)"], "a": 2, "exp": "모든 개체가 C₁ 또는 C₂에 속하므로 x의 주변확률은 두 결합확률의 합으로 전개된다."}, {"id": 42, "sec": "4.3", "diff": "기초", "q": "“체조 동아리” 예제에서 제시한 히스토그램이 보여주는 것은?", "opts": ["동아리 소속 학생과 미소속 학생의 몸무게 구간별 비율 분포", "학생들의 학점 분포", "시간에 따른 동아리 회원 수 변화", "경사하강법에 따른 손실의 감소 곡선"], "a": 0, "exp": "히스토그램은 “체조부소속”과 “체조부미소속” 학생들의 몸무게 구간별 비율 분포를 나타낸다."}, {"id": 43, "sec": "4.4", "diff": "기초", "q": "분류를 위한 선형 판별 함수 g(x)의 정의로 옳은 것은?", "opts": ["g(x) = σ(x)", "g(x) = ‖w − x‖", "g(x) = ln{x/(1 − x)}", "g(x) = w · x = wᵀx"], "a": 3, "exp": "분류를 위한 선형 판별 함수는 가중치 벡터와 특징 벡터의 내적, 즉 g(x) = w·x = wᵀx로 정의된다."}, {"id": 44, "sec": "4.4", "diff": "중급", "q": "선형 판별 함수 g(x) = wᵀx에서 x와 w를 구성하는 성분의 개수는?", "opts": ["둘 다 d개", "둘 다 d + 1개", "x는 d개, w는 d + 1개", "x는 d + 1개, w는 d개"], "a": 1, "exp": "바이어스 성분을 포함하므로 특징 벡터 x와 가중치 벡터 w는 모두 d + 1개의 성분으로 구성된다."}, {"id": 45, "sec": "4.4", "diff": "기초", "q": "선형 판별 함수에서 특징 벡터 x의 바이어스에 해당하는 성분 값은 어떻게 처리하는가?", "opts": ["학습을 통해 결정한다", "특징 값들의 평균으로 설정한다", "0으로 고정한다", "1로 고정한다"], "a": 3, "exp": "바이어스에 해당하는 성분의 값을 1로 고정하면 바이어스 w₀가 내적 안에 포함되어 표기가 간결해진다."}, {"id": 46, "sec": "4.4", "diff": "기초", "q": "w · x와 wᵀx라는 두 표기가 공통으로 의미하는 연산은?", "opts": ["두 벡터의 외적", "두 벡터의 내적", "성분별 나눗셈", "합성곱"], "a": 1, "exp": "강의자료는 w·x와 wᵀx가 모두 벡터 w와 x의 내적 연산을 의미한다고 명시한다."}, {"id": 47, "sec": "4.4", "diff": "중급", "q": "w = [w₀ w₁ w₂ w₃]ᵀ, x = [x₀ x₁ x₂ x₃]ᵀ이고 x₀ = 1일 때 wᵀx를 전개한 식은?", "opts": ["w₁x₁ + w₂x₂ + w₃x₃", "w₀ + w₁ + w₂ + w₃", "w₀ + w₁x₁ + w₂x₂ + w₃x₃", "w₀x₁ + w₁x₂ + w₂x₃"], "a": 2, "exp": "x₀ = 1이므로 w₀x₀ 항이 w₀가 되어 wᵀx = w₀ + w₁x₁ + w₂x₂ + w₃x₃가 된다."}, {"id": 48, "sec": "4.4", "diff": "기초", "q": "이진 분류(binary classification)의 정의로 옳은 것은?", "opts": ["특징 벡터로 표현된 개체들이 C₁과 C₂의 두 클래스 중 한 클래스에 속하는 분류 문제", "입력이 2차원인 분류 문제", "특징을 2개만 사용하는 분류 문제", "K개의 클래스 중 하나를 고르는 일반적인 분류 문제"], "a": 0, "exp": "이진 분류는 개체가 C₁과 C₂ 두 개의 클래스 중 한 클래스에 속하는 분류 문제를 말한다."}, {"id": 49, "sec": "4.4", "diff": "중급", "q": "선형 판별 함수 g(x)가 확보되었을 때 이진 분류의 결정 규칙으로 옳은 것은?", "opts": ["g(x) > 0이면 C₁, 그 외의 경우에는 C₂", "g(x) > 1이면 C₁, 그 외의 경우에는 C₂", "g(x) < 0이면 C₁, 그 외의 경우에는 C₂", "g(x) = 0이면 C₁, 그 외의 경우에는 C₂"], "a": 0, "exp": "강의자료는 g(x) > 0이면 C₁, 그 외의 경우에는 C₂로 개체 x의 소속 클래스를 결정한다고 설명한다."}, {"id": 50, "sec": "4.4", "diff": "기초", "q": "특징 공간이 2차원일 경우 선형 판별 함수가 특징 공간을 분할하는 도형은?", "opts": ["평면(plane)", "초평면(hyperplane)", "점(point)", "선(line)"], "a": 3, "exp": "강의자료는 특징 공간이 2차원일 경우 선(line)에 의해 특징 공간이 분할된다고 설명한다."}, {"id": 51, "sec": "4.4", "diff": "기초", "q": "특징 공간이 1차원일 경우 특징 공간을 분할하는 것은?", "opts": ["평면(plane)", "초평면(hyperplane)", "점(point)", "선(line)"], "a": 2, "exp": "1차원 특징 공간은 하나의 점(구분점)에 의해 두 영역으로 분할된다."}, {"id": 52, "sec": "4.4", "diff": "중급", "q": "특징 공간이 3차원일 경우 특징 공간을 분할하는 것은?", "opts": ["선", "평면(plane)", "구(sphere)", "점"], "a": 1, "exp": "강의자료는 특징 공간이 3차원일 경우 평면(plane)에 의해 특징 공간이 분할된다고 설명한다."}, {"id": 53, "sec": "4.4", "diff": "중급", "q": "특징 공간이 4차원 이상의 고차원일 경우 특징 공간을 분할하는 것은?", "opts": ["선", "평면", "초평면(hyperplane)", "점"], "a": 2, "exp": "4차원 이상의 고차원 특징 공간은 초평면(hyperplane)에 의해 분할된다."}, {"id": 54, "sec": "4.4", "diff": "중급", "q": "특징 공간의 차원과 이를 분할하는 도형의 대응으로 옳지 않은 것은?", "opts": ["3차원 — 평면", "4차원 이상 — 선", "1차원 — 점", "2차원 — 선"], "a": 1, "exp": "4차원 이상의 고차원 특징 공간을 분할하는 것은 선이 아니라 초평면(hyperplane)이다."}, {"id": 55, "sec": "4.4", "diff": "심화", "q": "“정수론” 예제에서 x₁이 “학과”, x₂가 “학점”을 나타낼 때 구분선을 표현하는 식으로 강의자료가 제시한 것은?", "opts": ["g(x) = 20x₁ + 3x₂ − 36 = 0", "g(x) = 3x₁ + 20x₂ − 36 = 0", "g(x) = 20x₁ − 3x₂ + 36 = 0", "g(x) = x₁ + x₂ − 36 = 0"], "a": 0, "exp": "강의자료는 g(x)의 값을 0으로 설정한 g(x) = 20x₁ + 3x₂ − 36 = 0으로 구분선을 표현할 수 있다고 설명한다."}, {"id": 56, "sec": "4.4", "diff": "심화", "q": "g(x) = 20x₁ + 3x₂ − 36에 대응하는 가중치 벡터 w의 표기로 옳은 것은?", "opts": ["[36 20 3]ᵀ", "[3 20 −36]ᵀ", "[20 3 −36]ᵀ", "[−36 20 3]ᵀ"], "a": 3, "exp": "바이어스 성분이 맨 앞에 오도록 표기하므로 w = [−36 20 3]ᵀ이다."}, {"id": 57, "sec": "4.4", "diff": "심화", "q": "g(x) = 20x₁ + 3x₂ − 36에 x₂ = [1 3.8]ᵀ를 대입한 결과의 부호는?", "opts": ["양수", "음수", "정확히 0", "계산할 수 없음"], "a": 1, "exp": "20 × 1 + 3 × 3.8 − 36 = −4.6이므로 g(x₂) < 0이며, 이는 미수강생 쪽 영역에 해당한다."}, {"id": 58, "sec": "4.4", "diff": "심화", "q": "g(x) = 20x₁ + 3x₂ − 36에 x₄ = [3 2.2]ᵀ를 대입하면 값과 부호는 어떻게 되는가?", "opts": ["30.6, 양수", "−4.6, 음수", "0, 경계 위", "−30.6, 음수"], "a": 0, "exp": "20 × 3 + 3 × 2.2 − 36 = 60 + 6.6 − 36 = 30.6이므로 g(x₄) > 0이다."}, {"id": 59, "sec": "4.4", "diff": "중급", "q": "g(x) = 0이라는 식이 특징 공간에서 의미하는 것은?", "opts": ["클래스 C₁의 중심 위치", "손실함수의 최솟값", "사후 확률이 1이 되는 지점", "두 클래스를 구분하는 구분선(경계)"], "a": 3, "exp": "g(x) = 0은 수강생과 미수강생이 나뉘는 경계로서 특징 공간을 분할하는 구분선을 표현한다."}, {"id": 60, "sec": "4.4", "diff": "중급", "q": "“정수론” 예제에서 g(x)의 부호를 이용하여 할 수 있는 일은?", "opts": ["학과의 개수를 추정", "전체 학생 수를 계산", "수강생과 미수강생을 구분", "학점 값 자체를 예측"], "a": 2, "exp": "g(x)의 부호를 이용하면 “정수론” 수강생과 미수강생을 구분할 수 있다."}, {"id": 61, "sec": "4.4", "diff": "중급", "q": "소속 클래스를 모르는 관측 값 x′의 클래스를 예측하는 절차의 순서로 옳은 것은?", "opts": ["g(x′)를 먼저 계산 → 학습 데이터 수집 → w* 결정", "클래스를 먼저 예측 → 손실함수 정의 → w* 결정", "w*를 임의 값으로 고정 → 학습 데이터를 새로 생성", "학습 데이터로 선형 판별 함수의 인자 w*를 결정 → g(x′)의 부호로 클래스 예측"], "a": 3, "exp": "절차 1은 학습 데이터로 w*를 결정하는 학습 단계이고, 절차 2는 g(x′) > 0이면 C₁, 그 외에는 C₂로 예측하는 단계이다."}, {"id": 62, "sec": "4.4", "diff": "중급", "q": "선형 판별 함수를 사용하여 분류를 수행하는 기계학습 모델에서 “학습”이 결정하는 대상은?", "opts": ["관측 값의 개수 N", "특징 공간의 차원", "선형 판별 함수의 동작을 결정하는 가중치 벡터 w", "클래스의 개수 K"], "a": 2, "exp": "강의자료는 선형 판별 함수의 동작을 결정하는 w를 다양한 접근법을 통해 결정한다고 설명한다."}, {"id": 63, "sec": "4.4", "diff": "중급", "q": "학습 데이터가 “선형 구분 가능하다(linearly separable)”는 표현의 정의로 옳은 것은?", "opts": ["특징 공간이 2차원인 모든 경우", "g(x) = wᵀx로 표시되는 선형 판별 함수를 이용하여 두 클래스의 관측 값을 정확하게 구분할 수 있는 경우", "모든 관측 값이 하나의 직선 위에 놓이는 경우", "클래스의 개수가 2개인 모든 경우"], "a": 1, "exp": "선형 판별 함수 하나로 두 클래스의 관측 값을 정확하게 구분할 수 있을 때 그 데이터를 선형 구분 가능하다고 표현한다."}, {"id": 64, "sec": "4.4", "diff": "심화", "q": "강의자료가 말하는 “정확한 구분”의 조건으로 옳은 것은?", "opts": ["한 클래스의 모든 관측 값에 대하여 g(x) > 0, 다른 클래스의 모든 관측 값에 대하여 g(x) < 0으로 계산되는 경우", "전체 관측 값의 절반 이상에서 g(x) > 0인 경우", "모든 관측 값에서 g(x) = 0인 경우", "g(x) 값들의 평균이 0인 경우"], "a": 0, "exp": "한 클래스에 속하는 모든 개체에서 g(x) > 0, 다른 클래스의 모든 개체에서 g(x) < 0이 될 때 정확하게 구분된다고 표현한다."}, {"id": 65, "sec": "4.4", "diff": "중급", "q": "관측 값의 집합이 선형 구분 가능할 때 두 클래스를 구분하는 g(x) = 0이 표현하는 것은?", "opts": ["특징 벡터를 구성하는 성분의 수에 따라 선, 평면 또는 초평면", "항상 하나의 점", "항상 곡선", "특징 공간 전체"], "a": 0, "exp": "g(x) = 0은 특징 벡터를 구성하는 성분의 수에 따라 선, 평면, 초평면(hyperplane)을 표현한다."}, {"id": 66, "sec": "4.4", "diff": "중급", "q": "선형 구분 가능한 경우 선·평면·초평면이 특징 공간에 대해 수행하는 역할은?", "opts": ["특징 공간을 회전시킴", "특징 공간을 확률 공간으로 변환", "특징 공간을 2개의 영역으로 분할", "특징 공간을 관측 값 개수 N개의 영역으로 분할"], "a": 2, "exp": "선형 구분 가능할 경우 선, 평면, 초평면은 특징 공간을 2개로 분할하게 된다."}, {"id": 67, "sec": "4.5", "diff": "기초", "q": "로지스틱 함수 σ(x)의 정의식으로 옳은 것은?", "opts": ["σ(x) = ln(1 + e^x)", "σ(x) = 1 / (1 + e^(−x))", "σ(x) = 1 / (1 + e^x)", "σ(x) = e^(−x) / (1 + e^x)"], "a": 1, "exp": "로지스틱 함수는 σ(x) = 1/(1 + e^(−x))로 정의되며, 이는 e^x/(1 + e^x)와 같다."}, {"id": 68, "sec": "4.5", "diff": "기초", "q": "로지스틱 함수가 기계학습에 많이 사용되는 이유로 강의자료가 제시한 두 가지 특징은?", "opts": ["출력이 항상 0 또는 1이며 계산이 빠르다", "단조 감소하며 항상 볼록하다", "입력의 부호를 반전시키며 선형이다", "정의역을 0과 1 사이의 값으로 사상하며 미분 가능하다"], "a": 3, "exp": "강의자료는 (1) 정의역을 0과 1 사이의 값으로 사상하고 (2) 미분 가능하다는 두 특징을 제시한다."}, {"id": 69, "sec": "4.5", "diff": "중급", "q": "σ(x) = 1/(1 + e^(−x))와 동일한 값을 갖는 표현은?", "opts": ["1 − e^x", "e^x / (1 + e^x)", "e^(−x) / (1 + e^x)", "(1 + e^x) / e^x"], "a": 1, "exp": "분자와 분모에 e^x를 곱하면 1/(1 + e^(−x)) = e^x/(1 + e^x)가 된다."}, {"id": 70, "sec": "4.5", "diff": "중급", "q": "로지스틱 함수의 미분 형태로 옳은 것은?", "opts": ["σ(x)²", "1 − σ(x)", "σ(x) + {1 − σ(x)}", "σ(x){1 − σ(x)}"], "a": 3, "exp": "몫의 미분을 정리하면 dσ/dx = e^x/(1 + e^x)² = σ(x){1 − σ(x)}가 된다."}, {"id": 71, "sec": "4.5", "diff": "심화", "q": "σ(x)를 미분하는 과정에서 얻어지는 중간 표현으로 옳은 것은?", "opts": ["e^x / (1 + e^x)²", "e^x / (1 + e^x)", "(1 + e^x)² / e^x", "e^(2x) / (1 + e^x)"], "a": 0, "exp": "{e^x(1 + e^x) − e^x·e^x}/(1 + e^x)² = e^x/(1 + e^x)²로 정리되고, 이를 다시 σ(x){1 − σ(x)}로 변형한다."}, {"id": 72, "sec": "4.5", "diff": "중급", "q": "로지스틱 함수의 그래프에서 x = 0일 때의 함수값은?", "opts": ["−1", "0", "0.5", "1"], "a": 2, "exp": "σ(0) = 1/(1 + e⁰) = 1/2 = 0.5이며, 그래프에서도 x = 0에서 0.5를 지난다."}, {"id": 73, "sec": "4.5", "diff": "기초", "q": "로지스틱 함수가 출력하는 값의 범위는?", "opts": ["0 이상의 모든 실수", "−∞와 ∞ 사이의 모든 실수", "0과 1 사이", "−1과 1 사이"], "a": 2, "exp": "로지스틱 함수는 정의역을 0과 1 사이의 값으로 사상하므로 출력이 항상 0과 1 사이이다."}, {"id": 74, "sec": "4.5", "diff": "중급", "q": "강의자료가 제시한 “로지스틱 함수의 활용 1”에 해당하는 것은?", "opts": ["특정 사건 또는 특정 카테고리가 발생할 확률을 표현", "특징 공간의 차원을 축소", "학습률을 자동으로 조절", "결측치를 평균값으로 대체"], "a": 0, "exp": "로지스틱 함수는 0과 1 사이의 값을 출력하므로 특정 카테고리가 발생할 확률을 표현하는 데 활용되며, 이것이 로지스틱 회귀이다."}, {"id": 75, "sec": "4.5", "diff": "중급", "q": "강의자료가 제시한 “로지스틱 함수의 활용 2”에 해당하는 것은?", "opts": ["군집의 개수를 결정하는 기준으로 활용", "데이터의 정규화 도구로 활용", "특징 선택의 평가 지표로 활용", "인공신경망의 연산 과정에서 활성화 함수(activation function)로 활용"], "a": 3, "exp": "로지스틱 함수는 인공신경망의 연산 과정에서 활성화 함수로 활용되며, 함수 자체와 미분 형태가 모두 중요하게 사용된다."}, {"id": 76, "sec": "4.5", "diff": "기초", "q": "특정 사건이 확률 p로 발생할 때 그 사건의 오드(Odds)를 나타내는 식은?", "opts": ["p(1 − p)", "p / (1 − p)", "(1 − p) / p", "ln p"], "a": 1, "exp": "오드는 사건이 발생할 확률을 발생하지 않을 확률로 나눈 p/(1 − p)로 정의된다."}, {"id": 77, "sec": "4.5", "diff": "중급", "q": "모든 눈이 나올 확률이 동일한 공정한 주사위를 한 번 던졌을 때 3의 배수가 아닌 눈이 나오는 사건(p = 2/3)의 오드는?", "opts": ["3", "1/2", "2/3", "2"], "a": 3, "exp": "p/(1 − p) = (2/3)/(1/3) = 2이므로 해당 사건의 오드는 2이다."}, {"id": 78, "sec": "4.5", "diff": "기초", "q": "로그 오드(log-odds)를 나타내는 식으로 옳은 것은?", "opts": ["ln p − p", "ln{p / (1 − p)}", "ln(1 − p)", "p ln p"], "a": 1, "exp": "로그 오드는 오드의 로그 값이므로 ln{p/(1 − p)}로 표기된다."}, {"id": 79, "sec": "4.5", "diff": "심화", "q": "로지스틱 회귀에서 로그 오드를 다루는 방식으로 옳은 것은?", "opts": ["로그 오드를 제곱하여 손실로 사용한다", "로그 오드를 무시하고 확률만 사용한다", "선형 함수 표현을 이용하여 로그 오드를 근사한다", "로그 오드를 상수로 고정한다"], "a": 2, "exp": "강의자료는 로지스틱 회귀에서 선형 함수 표현을 이용하여 로그 오드를 근사한다고 설명한다."}, {"id": 80, "sec": "4.5", "diff": "심화", "q": "어떤 사건의 확률이 p = 0.5일 때 그 사건의 로그 오드 값은?", "opts": ["0", "1", "0.5", "−1"], "a": 0, "exp": "p/(1 − p) = 0.5/0.5 = 1이고 ln 1 = 0이므로 로그 오드는 0이다."}, {"id": 81, "sec": "4.6", "diff": "중급", "q": "이진 분류에 대한 “접근법 2”로 강의자료가 정리한 방법은?", "opts": ["P(C₁|x)와 P(C₂|x)를 비교하여 클래스/카테고리 레이블을 결정한다", "특징 벡터의 차원을 줄여 계산량을 낮춘다", "학습 데이터를 클래스별로 균등하게 샘플링한다", "클래스 C₁과 C₂를 구분할 수 있도록 특징 공간을 분할한다"], "a": 0, "exp": "접근법 1은 특징 공간의 분할이고, 접근법 2는 두 사후 확률 P(C₁|x)와 P(C₂|x)를 비교하여 레이블을 결정하는 방법이다."}, {"id": 82, "sec": "4.6", "diff": "중급", "q": "특징 벡터 x로 관측된 개체가 C₁에 속할 확률의 로그 오드를 나타낸 식은?", "opts": ["ln P(C₁|x)", "P(C₁|x) / (1 − P(C₁|x))", "ln{1 − P(C₁|x)}", "ln{P(C₁|x) / (1 − P(C₁|x))}"], "a": 3, "exp": "C₁에 속할 확률이 P(C₁|x)이므로 그 로그 오드는 ln{P(C₁|x)/(1 − P(C₁|x))}이다."}, {"id": 83, "sec": "4.6", "diff": "기초", "q": "로지스틱 회귀 모델이 로그 오드를 표현하는 방식으로 옳은 것은?", "opts": ["P(C₁|x) = wᵀx", "P(C₁|x) / (1 − P(C₁|x)) = ln(wᵀx)", "ln{P(C₁|x) / (1 − P(C₁|x))} = wᵀx", "ln P(C₁|x) = wᵀx"], "a": 2, "exp": "로지스틱 회귀에서는 로그 오드를 선형 함수 wᵀx의 형태로 표현한다."}, {"id": 84, "sec": "4.6", "diff": "중급", "q": "ln{P(C₁|x)/(1 − P(C₁|x))} = wᵀx를 P(C₁|x)에 대해 정리한 결과는?", "opts": ["P(C₁|x) = ln σ(wᵀx)", "P(C₁|x) = σ(wᵀx)", "P(C₁|x) = wᵀx", "P(C₁|x) = 1 − σ(wᵀx)"], "a": 1, "exp": "양변에 지수를 취하면 P(C₁|x)/(1 − P(C₁|x)) = e^(wᵀx)이고 이를 정리하면 P(C₁|x) = 1/(1 + e^(−wᵀx)) = σ(wᵀx)가 된다."}, {"id": 85, "sec": "4.6", "diff": "기초", "q": "로지스틱 회귀 모델에서 P(C₂|x)를 나타내는 식으로 옳은 것은?", "opts": ["σ(wᵀx) − 1", "1 + σ(wᵀx)", "1 − σ(wᵀx)", "σ(wᵀx)"], "a": 2, "exp": "두 클래스만 존재하므로 P(C₂|x) = 1 − P(C₁|x) = 1 − σ(wᵀx)이며, 이는 e^(−wᵀx)/(1 + e^(−wᵀx))와 같다."}, {"id": 86, "sec": "4.6", "diff": "기초", "q": "P(X = 1) = p인 이진 확률 변수 X의 베르누이 분포(Bernoulli distribution) 표현으로 옳은 것은?", "opts": ["x^p (1 − x)^(1−p)", "p^x (1 − p)^(1−x), x ∈ {0,1}", "p^(1−x) (1 − p)^x, x ∈ {0,1}", "p^x + (1 − p)^(1−x)"], "a": 1, "exp": "베르누이 분포는 p^x(1 − p)^(1−x) 형태이며 x = 1이면 p, x = 0이면 1 − p가 된다."}, {"id": 87, "sec": "4.6", "diff": "중급", "q": "로지스틱 회귀에서 i번째 개체의 레이블 yᵢ의 조건부 확률 분포 P(yᵢ|xᵢ)를 나타낸 식은?", "opts": ["σ(wᵀxᵢ)^yᵢ {1 − σ(wᵀxᵢ)}^(1−yᵢ)", "σ(wᵀxᵢ)^(1−yᵢ) {1 − σ(wᵀxᵢ)}^yᵢ", "yᵢ σ(wᵀxᵢ)", "σ(wᵀxᵢ) + yᵢ"], "a": 0, "exp": "P(C₁|xᵢ)를 σ(wᵀxᵢ)로 근사하고 베르누이 분포 형태를 적용하면 σ(wᵀxᵢ)^yᵢ{1 − σ(wᵀxᵢ)}^(1−yᵢ)가 된다."}, {"id": 88, "sec": "4.6", "diff": "중급", "q": "학습 데이터 D의 우도(Likelihood) ℓ(w₀, w₁)을 나타내는 식으로 옳은 것은?", "opts": ["Σᵢ₌₁ᴺ P(yᵢ|xᵢ)", "∏ᵢ₌₁ᴺ P(xᵢ)", "(1/N) Σᵢ₌₁ᴺ yᵢ", "∏ᵢ₌₁ᴺ P(yᵢ|xᵢ)"], "a": 3, "exp": "우도는 P(y₁|x₁) × … × P(y_N|x_N), 즉 모든 관측 값에 대한 P(yᵢ|xᵢ)의 곱으로 표현된다."}, {"id": 89, "sec": "4.6", "diff": "중급", "q": "P(yᵢ|xᵢ)에 대한 해석으로 강의자료가 제시한 것은?", "opts": ["가중치 벡터의 크기", "현재 모델의 인자로 계산되는 사후 확률을 이용하여 xᵢ가 속한 클래스를 정확하게 추정할 확률", "xᵢ 자체가 관측될 사전 확률", "예측값과 실제값 차이의 제곱"], "a": 1, "exp": "yᵢ = 1이면 P(yᵢ=1|xᵢ) = σ(w₀ + w₁xᵢ), yᵢ = 0이면 1 − σ(w₀ + w₁xᵢ)가 되므로 xᵢ가 속한 클래스를 정확하게 추정할 확률을 의미한다."}, {"id": 90, "sec": "4.6", "diff": "중급", "q": "우도 ℓ(w₀, w₁)과 −ln ℓ(w₀, w₁)의 선호 방향에 대한 설명으로 옳은 것은?", "opts": ["우도는 큰 값일수록, −ln ℓ은 작은 값일수록 선호된다", "우도는 작은 값일수록, −ln ℓ은 큰 값일수록 선호된다", "둘 다 큰 값일수록 선호된다", "둘 다 작은 값일수록 선호된다"], "a": 0, "exp": "우도는 P(yᵢ|xᵢ)의 곱이므로 클수록 좋고, −ln ℓ은 우도 로그 값의 음수이므로 작을수록 선호된다."}, {"id": 91, "sec": "4.6", "diff": "심화", "q": "로지스틱 회귀의 모델 학습 목표에 대한 설명으로 옳은 것은?", "opts": ["우도를 최대화하는 것과 −ln ℓ을 최대화하는 것은 같은 의미이다", "우도와 −ln ℓ은 서로 무관한 값이다", "우도를 최소화해야 −ln ℓ도 최소가 된다", "“우도의 최대화”와 “−ln ℓ(w₀, w₁)의 최소화”는 같은 의미이다"], "a": 3, "exp": "−ln ℓ은 우도 로그 값의 음수이므로 우도를 최대화하는 것과 −ln ℓ을 최소화하는 것은 동일한 목표이다."}, {"id": 92, "sec": "4.6", "diff": "심화", "q": "N개의 관측 값이 존재할 때 로지스틱 회귀의 손실함수 L(w₀, w₁)로 사용하는 것은?", "opts": ["{ln ℓ(w₀, w₁)}²", "(1/N) Σᵢ(ŷᵢ − yᵢ)²", "−(1/N) ln ℓ(w₀, w₁)", "(1/N) ln ℓ(w₀, w₁)"], "a": 2, "exp": "N개의 관측값이 존재하므로 Negative log likelihood를 N으로 나눈 −(1/N)ln ℓ(w₀, w₁)을 손실함수로 사용한다."}, {"id": 93, "sec": "4.6", "diff": "심화", "q": "단순 로지스틱 회귀의 손실함수를 전개한 식으로 옳은 것은?", "opts": ["(1/N)Σᵢ{yᵢ σ(w₀+w₁xᵢ)}", "−(1/N)Σᵢ{yᵢ − σ(w₀+w₁xᵢ)}²", "(1/N)Σᵢ ln yᵢ", "−(1/N)Σᵢ{yᵢ ln σ(w₀+w₁xᵢ) + (1−yᵢ) ln(1 − σ(w₀+w₁xᵢ))}"], "a": 3, "exp": "σ(·)^yᵢ(1 − σ(·))^(1−yᵢ)에 로그를 취하면 지수가 계수로 내려와 yᵢ ln σ(·) + (1 − yᵢ) ln(1 − σ(·)) 형태가 된다."}, {"id": 94, "sec": "4.6", "diff": "중급", "q": "로지스틱 회귀 손실함수의 w₀에 대한 편미분 ∂L(w₀,w₁)/∂w₀로 옳은 것은?", "opts": ["−(1/N)Σᵢ xᵢ{yᵢ − σ(w₀ + w₁xᵢ)}", "−(1/N)Σᵢ yᵢ", "−(1/N)Σᵢ{yᵢ − σ(w₀ + w₁xᵢ)}", "(1/N)Σᵢ{yᵢ − σ(w₀ + w₁xᵢ)}²"], "a": 2, "exp": "w₀에 대한 편미분은 −(1/N)Σᵢ{yᵢ − σ(w₀ + w₁xᵢ)}이며, 입력 xᵢ가 곱해지지 않는다는 점이 w₁의 경우와 다르다."}, {"id": 95, "sec": "4.6", "diff": "중급", "q": "로지스틱 회귀 손실함수의 w₁에 대한 편미분 ∂L(w₀,w₁)/∂w₁로 옳은 것은?", "opts": ["−(1/N)Σᵢ (xᵢ)²", "−(1/N)Σᵢ xᵢ{yᵢ − σ(w₀ + w₁xᵢ)}", "−(1/N)Σᵢ{yᵢ − σ(w₀ + w₁xᵢ)}", "(1/N)Σᵢ xᵢ yᵢ"], "a": 1, "exp": "w₁에 대한 편미분에서는 연쇄법칙에 의해 입력 xᵢ가 곱해져 −(1/N)Σᵢ xᵢ{yᵢ − σ(w₀ + w₁xᵢ)}가 된다."}, {"id": 96, "sec": "4.6", "diff": "중급", "q": "바이너리 크로스 엔트로피 CE(yᵢ, ŷᵢ)의 정의로 옳은 것은? (yᵢ ∈ {0,1})", "opts": ["CE(yᵢ, ŷᵢ) = −yᵢ ln P(C₁|xᵢ) − (1 − yᵢ) ln(1 − P(C₁|xᵢ))", "CE(yᵢ, ŷᵢ) = (yᵢ − ŷᵢ)²", "CE(yᵢ, ŷᵢ) = |yᵢ − ŷᵢ|", "CE(yᵢ, ŷᵢ) = yᵢ ln yᵢ"], "a": 0, "exp": "바이너리 크로스 엔트로피는 −yᵢ ln P(C₁|xᵢ) − (1 − yᵢ)ln(1 − P(C₁|xᵢ))로 정의되며, 로지스틱 회귀에서는 P(C₁|xᵢ) = σ(wᵀxᵢ)이다."}, {"id": 97, "sec": "4.6", "diff": "중급", "q": "일반화된 표기에서 로지스틱 회귀의 학습 목표를 바이너리 크로스 엔트로피로 나타낸 식은?", "opts": ["w* = argmin_w (1/N)Σᵢ CE(yᵢ, ŷᵢ)", "w* = argmax_w (1/N)Σᵢ CE(yᵢ, ŷᵢ)", "w* = argmin_w ‖w‖", "w* = argmax_w wᵀxᵢ"], "a": 0, "exp": "학습 목표는 관측 값들의 바이너리 크로스 엔트로피 평균을 최소화하는 w*를 경사하강법으로 탐색하는 것이다."}, {"id": 98, "sec": "4.6", "diff": "심화", "q": "경사하강법 적용을 위해 (1/N)Σᵢ CE(yᵢ, ŷᵢ)를 wₖ로 편미분한 결과로 옳은 것은?", "opts": ["−(1/N)Σᵢ xᵢₖ", "−(1/N)Σᵢ {yᵢ − σ(wᵀxᵢ)}²", "−(1/N)Σᵢ {yᵢ − σ(wᵀxᵢ)} xᵢₖ", "(1/N)Σᵢ {yᵢ − σ(wᵀxᵢ)}"], "a": 2, "exp": "편미분 결과는 −(1/N)Σᵢ(yᵢ − σ(wᵀxᵢ))xᵢₖ이며, 여기서 xᵢₖ는 i번째 개체의 특징 벡터 xᵢ의 k번째 성분(xᵢ₀ = 1)이다."}, {"sec": "4.6", "diff": "심화", "q": "“경사하강법의 적용 I”에서 제시된 동작으로 옳은 것은?", "opts": ["학습률을 0으로 두고 갱신을 반복한다", "w를 임의의 값으로 초기화한 뒤, w를 구성하는 모든 성분 wₖ에 대하여 wₖ ← wₖ + (α/N)Σᵢ{yᵢ − σ(wᵀxᵢ)}xᵢₖ로 갱신한다", "w를 0으로 고정한 뒤 손실만 계산하고 종료한다", "특징 공간을 먼저 분할한 뒤 w를 해석적으로 한 번에 계산한다"], "a": 1, "exp": "적용 I의 동작은 (1) w를 임의의 값으로 초기화하고 (2) 모든 성분 wₖ를 wₖ ← wₖ + (α/N)Σ(yᵢ − σ(wᵀxᵢ))xᵢₖ로 갱신하는 것이다.", "id": 99}, {"id": 100, "sec": "4.6", "diff": "심화", "q": "“경사하강법의 적용 II”가 “적용 I”과 다른 점으로 옳은 것은?", "opts": ["학습률 α를 사용하지 않는다", "손실함수로 제곱오차를 사용한다", "가중치를 초기화하지 않고 시작한다", "모든 관측값으로부터 확보한 CE의 평균이 아니라 개별 관측 값의 CE를 이용하여 인자를 갱신한다"], "a": 3, "exp": "적용 II는 wₖ ← wₖ − α·∂CE(yᵢ, ŷᵢ)/∂wₖ = wₖ + α(yᵢ − σ(wᵀxᵢ))xᵢₖ처럼 개별 관측 값의 CE로 인자를 갱신한다."}];
+
+const SECTIONS = {
+  "4.1": "선형회귀 복습과 분류의 정의",
+  "4.2": "특징 벡터와 특징 공간",
+  "4.3": "분류 규칙과 확률 분포 기반 분류",
+  "4.4": "선형 판별 함수와 선형 구분 가능성",
+  "4.5": "로지스틱 함수와 로그 오드",
+  "4.6": "로지스틱 회귀 모델과 학습"
+};
+const DIFFS = ["기초","중급","심화"];
+const DIFFCLS = {"기초":"d1","중급":"d2","심화":"d3"};
+const KEY = "mlx_week4_quiz_v1";
+
+/* ---------- state ---------- */
+let state = {
+  answers:{},           // id -> chosen original option index
+  secFilter:"ALL",
+  diffFilter:"ALL",
+  shuffleQ:false,
+  shuffleO:false,
+  reviewMode:false,
+  order:[],             // array of question ids in display order
+  optOrder:{},          // id -> array of original indices
+  cursor:0
+};
+
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify({
+    answers:state.answers, shuffleQ:state.shuffleQ, shuffleO:state.shuffleO,
+    secFilter:state.secFilter, diffFilter:state.diffFilter, optOrder:state.optOrder
+  })); }catch(e){}
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY); if(!raw) return;
+    const d = JSON.parse(raw);
+    if(d && typeof d==="object"){
+      state.answers = d.answers||{};
+      state.shuffleQ = !!d.shuffleQ; state.shuffleO = !!d.shuffleO;
+      state.secFilter = d.secFilter||"ALL"; state.diffFilter = d.diffFilter||"ALL";
+      state.optOrder = d.optOrder||{};
+    }
+  }catch(e){}
+}
+
+/* ---------- helpers ---------- */
+function shuffled(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function optOrderFor(q){
+  if(!state.shuffleO) return [0,1,2,3];
+  if(!state.optOrder[q.id]) { state.optOrder[q.id] = shuffled([0,1,2,3]); save(); }
+  return state.optOrder[q.id];
+}
+function isWrong(q){ return q.id in state.answers && state.answers[q.id] !== q.a; }
+function isRight(q){ return state.answers[q.id] === q.a; }
+
+function buildOrder(keepCursor){
+  let pool = QUESTIONS.filter(q =>
+    (state.secFilter==="ALL" || q.sec===state.secFilter) &&
+    (state.diffFilter==="ALL" || q.diff===state.diffFilter)
+  );
+  if(state.reviewMode && state.reviewIds && state.reviewIds.length)
+    pool = state.reviewIds.map(id=>byId[id]);
+  let ids = pool.map(q=>q.id);
+  if(state.shuffleQ) ids = shuffled(ids);
+  state.order = ids;
+  if(!keepCursor) state.cursor = 0;
+  if(state.cursor >= ids.length) state.cursor = Math.max(0, ids.length-1);
+}
+
+const byId = {}; QUESTIONS.forEach(q => byId[q.id]=q);
+
+/* ---------- rendering ---------- */
+const $ = s => document.querySelector(s);
+const stage = $("#stage");
+
+function renderChips(){
+  const sc = $("#secChips"); sc.innerHTML="";
+  const mk = (label,val,cur,handler)=>{
+    const b=document.createElement("button");
+    b.className="chip"; b.textContent=label;
+    b.setAttribute("aria-pressed", String(cur===val));
+    b.onclick=()=>handler(val); return b;
+  };
+  sc.appendChild(mk("전체 "+QUESTIONS.length+"문항","ALL",state.secFilter,setSec));
+  Object.keys(SECTIONS).forEach(k=>{
+    const n = QUESTIONS.filter(q=>q.sec===k).length;
+    sc.appendChild(mk(k+" "+SECTIONS[k]+" ("+n+")",k,state.secFilter,setSec));
+  });
+  const dc = $("#diffChips"); dc.innerHTML="";
+  dc.appendChild(mk("전체","ALL",state.diffFilter,setDiff));
+  DIFFS.forEach(d=>{
+    const n = QUESTIONS.filter(q=>q.diff===d).length;
+    dc.appendChild(mk(d+" ("+n+")",d,state.diffFilter,setDiff));
+  });
+  $("#shuffleQ").setAttribute("aria-pressed", String(state.shuffleQ));
+  $("#shuffleO").setAttribute("aria-pressed", String(state.shuffleO));
+  $("#reviewBtn").setAttribute("aria-pressed", String(state.reviewMode));
+}
+
+function setSec(v){ state.secFilter=v; state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+function setDiff(v){ state.diffFilter=v; state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+
+function renderProgress(){
+  const ids = state.order;
+  const done = ids.filter(id=> id in state.answers).length;
+  const ok = ids.filter(id=> isRight(byId[id])).length;
+  const no = done - ok;
+  $("#doneN").textContent = done;
+  $("#totalN").textContent = ids.length;
+  $("#okN").textContent = ok;
+  $("#noN").textContent = no;
+  $("#rate").textContent = done ? Math.round(ok/done*100)+"%" : "—";
+  $("#barFill").style.width = ids.length ? (done/ids.length*100)+"%" : "0%";
+  $("#wrongCount").textContent = QUESTIONS.filter(isWrong).length;
+}
+
+function renderPalette(){
+  const p = $("#palette"); p.innerHTML="";
+  state.order.forEach((id,i)=>{
+    const q = byId[id];
+    const b=document.createElement("button");
+    b.className="cell" + (id in state.answers ? (isRight(q)?" o":" x") : "") + (i===state.cursor?" cur":"");
+    b.textContent = q.id;
+    b.title = q.sec+" · "+q.diff;
+    b.onclick=()=>{ state.cursor=i; renderAll(); window.scrollTo({top:0,behavior:"smooth"}); };
+    p.appendChild(b);
+  });
+}
+
+function renderQuestion(){
+  stage.innerHTML="";
+  if(!state.order.length){
+    const d=document.createElement("div"); d.className="panel empty";
+    d.textContent = state.reviewMode ? "틀린 문제가 없습니다. 잘하셨어요!" : "조건에 맞는 문제가 없습니다. 필터를 바꿔 보세요.";
+    stage.appendChild(d); return;
+  }
+  const idx = state.cursor;
+  const q = byId[state.order[idx]];
+  const answered = q.id in state.answers;
+  const order = optOrderFor(q);
+
+  const card=document.createElement("section"); card.className="panel qcard";
+
+  const meta=document.createElement("div"); meta.className="qmeta";
+  meta.innerHTML =
+    '<span class="tag num">'+ (idx+1) +' / '+ state.order.length +'</span>' +
+    '<span class="tag sec">'+ q.sec +' '+ SECTIONS[q.sec] +'</span>' +
+    '<span class="tag '+ DIFFCLS[q.diff] +'">'+ q.diff +'</span>' +
+    '<span style="margin-left:auto;font-size:12px;color:var(--muted)">문제 '+ q.id +'번</span>';
+  card.appendChild(meta);
+
+  const h=document.createElement("h2"); h.className="qtext"; h.textContent=q.q; card.appendChild(h);
+
+  const wrap=document.createElement("div"); wrap.className="opts";
+  order.forEach((orig,pos)=>{
+    const b=document.createElement("button"); b.className="opt"; b.type="button";
+    b.innerHTML = '<span class="n">'+(pos+1)+'</span><span class="t"></span>';
+    b.querySelector(".t").textContent = q.opts[orig];
+    if(answered){
+      b.disabled = true;
+      if(orig===q.a){ b.classList.add("correct"); b.insertAdjacentHTML("beforeend",'<span class="mark">정답</span>'); }
+      else if(orig===state.answers[q.id]){ b.classList.add("wrong"); b.insertAdjacentHTML("beforeend",'<span class="mark">내 선택</span>'); }
+    } else {
+      b.onclick=()=>{ state.answers[q.id]=orig; save(); renderAll(); };
+    }
+    wrap.appendChild(b);
+  });
+  card.appendChild(wrap);
+
+  if(answered){
+    const e=document.createElement("div"); e.className="exp";
+    const good = isRight(q);
+    e.innerHTML = '<h4>'+(good?'✓ 정답입니다':'✕ 다시 확인해 보세요')+'</h4><p></p>'+
+                  '<span class="ref">관련 단원 · '+q.sec+' '+SECTIONS[q.sec]+'</span>';
+    e.querySelector("p").textContent = q.exp;
+    if(!good){ e.style.background="var(--no-soft)"; e.style.borderLeftColor="var(--no)"; e.querySelector("h4").style.color="var(--no)"; }
+    card.appendChild(e);
+  }
+
+  const nav=document.createElement("div"); nav.className="nav";
+  const prev=document.createElement("button"); prev.className="btn"; prev.textContent="← 이전";
+  prev.disabled = idx===0; prev.onclick=()=>{ state.cursor--; renderAll(); };
+  const next=document.createElement("button"); next.className="btn primary";
+  next.textContent = idx===state.order.length-1 ? "결과 보기 →" : "다음 →";
+  next.onclick=()=>{
+    if(idx===state.order.length-1){ showResult(); }
+    else { state.cursor++; renderAll(); }
+  };
+  const redo=document.createElement("button"); redo.className="btn"; redo.textContent="이 문제 다시";
+  redo.disabled = !answered;
+  redo.onclick=()=>{ delete state.answers[q.id]; save(); renderAll(); };
+  nav.appendChild(prev); nav.appendChild(redo);
+  const sp=document.createElement("span"); sp.className="spacer"; nav.appendChild(sp);
+  nav.appendChild(next);
+  card.appendChild(nav);
+
+  stage.appendChild(card);
+}
+
+function showResult(){
+  const ids = state.order;
+  const done = ids.filter(id=> id in state.answers).length;
+  const ok = ids.filter(id=> isRight(byId[id])).length;
+  const card=document.createElement("section"); card.className="panel result";
+  const pct = done ? Math.round(ok/done*100) : 0;
+  let msg = pct>=90?"완벽합니다. 1주차 내용을 확실히 이해했어요."
+          : pct>=75?"좋습니다. 틀린 문제만 복습하면 충분해요."
+          : pct>=50?"절반 이상 맞혔습니다. 오답 노트를 한 번 더 돌려 보세요."
+          : "해설을 읽으며 오답부터 차근히 정리해 봅시다.";
+
+  const per = {};
+  Object.keys(SECTIONS).forEach(k=>{
+    const sub = ids.map(i=>byId[i]).filter(q=>q.sec===k && (q.id in state.answers));
+    if(sub.length) per[k] = [sub.filter(isRight).length, sub.length];
+  });
+
+  card.innerHTML =
+    '<div class="eyebrow">결과</div>'+
+    '<div class="score">'+ok+' <small>/ '+done+' 정답</small></div>'+
+    '<div class="stat" style="font-size:15px">정답률 <b>'+pct+'%</b> · '+msg+'</div>'+
+    '<div class="breakdown">'+ Object.keys(per).map(k=>
+       '<div class="bd"><div class="k">'+k+' '+SECTIONS[k]+'</div><div class="v">'+per[k][0]+' / '+per[k][1]+'</div></div>'
+     ).join('') +'</div>';
+
+  const nav=document.createElement("div"); nav.className="nav";
+  const back=document.createElement("button"); back.className="btn"; back.textContent="← 문제로 돌아가기";
+  back.onclick=()=>renderAll();
+  const rev=document.createElement("button"); rev.className="btn primary";
+  const wn = QUESTIONS.filter(isWrong).length;
+  rev.textContent="틀린 문제 "+wn+"개 다시 풀기"; rev.disabled = wn===0;
+  rev.onclick=()=>enterReview();
+  nav.appendChild(back);
+  const sp=document.createElement("span"); sp.className="spacer"; nav.appendChild(sp);
+  nav.appendChild(rev);
+  card.appendChild(nav);
+
+  stage.innerHTML=""; stage.appendChild(card);
+  renderProgress(); renderPalette();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function enterReview(){
+  const wrongIds = QUESTIONS.filter(isWrong).map(q=>q.id);
+  if(!wrongIds.length){
+    state.reviewMode=false; buildOrder(false); renderAll();
+    alert("틀린 문제가 없습니다.");
+    return;
+  }
+  wrongIds.forEach(id=> delete state.answers[id]);
+  state.reviewMode = true;
+  state.reviewIds = wrongIds;
+  state.order = state.shuffleQ ? shuffled(wrongIds) : wrongIds.slice();
+  state.cursor = 0;
+  save(); renderAll(); window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function renderAll(){ renderChips(); renderProgress(); renderPalette(); renderQuestion(); }
+
+/* ---------- events ---------- */
+$("#shuffleQ").onclick=()=>{ state.shuffleQ=!state.shuffleQ; buildOrder(false); save(); renderAll(); };
+$("#shuffleO").onclick=()=>{
+  state.shuffleO=!state.shuffleO;
+  if(!state.shuffleO) state.optOrder={};
+  save(); renderAll();
+};
+$("#reviewBtn").onclick=()=>{
+  if(state.reviewMode){ state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+  else enterReview();
+};
+$("#resetBtn").onclick=()=>{
+  state.answers={}; state.optOrder={}; state.reviewMode=false;
+  buildOrder(false); save(); renderAll(); window.scrollTo({top:0,behavior:"smooth"});
+};
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT") return;
+  if(e.key==="ArrowRight" && state.cursor < state.order.length-1){ state.cursor++; renderAll(); }
+  if(e.key==="ArrowLeft" && state.cursor>0){ state.cursor--; renderAll(); }
+  if(["1","2","3","4"].includes(e.key)){
+    const btns = document.querySelectorAll(".opt:not(:disabled)");
+    const b = btns[Number(e.key)-1]; if(b) b.click();
+  }
+});
+
+/* ---------- init ---------- */
+load();
+buildOrder(false);
+// resume at first unanswered
+const firstUn = state.order.findIndex(id=> !(id in state.answers));
+state.cursor = firstUn === -1 ? 0 : firstUn;
+renderAll();
+</script>
+</body>
+</html>

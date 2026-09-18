@@ -57,6 +57,14 @@ TERMS = {
    'SRL','술어','논항','PropBank','FrameNet','ARG0','BIO',
    '논리식','AMR','분산 표현','Sentence-BERT','RAG','의미 검색',
  ],
+ 'ml-w04': [
+   '분류','클래스','레이블','카테고리','스팸','특징 벡터','특징 공간','홍길동','성춘향','학과','평점',
+   '정수론','구분선','사후 확률','베이즈','분류 규칙','체조',
+   '선형 판별','판별 함수','초평면','평면','선형 구분','linearly separable',
+   '로지스틱 함수','시그모이드','미분','활성화 함수','오드','로그 오드','주사위',
+   '베르누이','우도','Likelihood','log likelihood','크로스 엔트로피','cross-entropy',
+   '경사하강법','편미분','학습률','argmin','바이어스','초기화',
+ ],
  'nlp-w01': [
    'NLU','NLG','인공어','텍스트 분석','학제간','규칙 기반','통계 기반','신경망','사전학습',
    'ELIZA','튜링','Transformer','n-gram','word2vec','BERT','GPT','어텐션',
@@ -140,3 +148,5 @@ build('ml-w02', 'materials/기계학습특론/week02-quiz100.html', 'courses/qui
       {'title': '2주차 · 인공지능 기초 수학', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week02-quiz100.html'})
 build('ml-w03', 'materials/기계학습특론/week03-quiz100.html', 'courses/quiz/ml-w03.js',
       {'title': '3주차 · 선형 회귀', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week03-quiz100.html'})
+build('ml-w04', 'materials/기계학습특론/week04-quiz100.html', 'courses/quiz/ml-w04.js',
+      {'title': '4주차 · 로지스틱 회귀', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week04-quiz100.html'})
