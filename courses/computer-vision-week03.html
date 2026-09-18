@@ -341,6 +341,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <a href="#py-pyramid">PY 피라미드</a>
   <a href="#py-sklearn">PY Scikit-learn</a>
   <a href="#py-skimage">PY Scikit-image</a>
+  <a href="#py-libs">PY 라이브러리 지도</a>
   <a href="#pres">학생 발표</a>
   <a href="#hw1">과제 #1</a>
 </nav>
@@ -422,13 +423,13 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <span class="hw">조각조각 모아 가면서 전체를 이해</span>한다. 이번 주차의 필터링이 바로 그 &ldquo;조각을 읽는&rdquo; 단계다.</div>
 
 <h3 class="sub-title">빛에서 화소까지</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-01-image-formation.jpg" alt="교안 4p — 조명(에너지) 원천, 장면 요소, 이미징 시스템, 내부 이미지 평면을 거쳐 디지털 이미지가 만들어지는 과정"><figcaption>교안 4p — <b>Illumination (energy) source</b> → <b>Scene element</b> → <b>Imaging system</b> → <b>(Internal) image plane</b> → <b>Digital image</b> · Source: A. Efros</figcaption></figure>
+<figure class="fig"><img width="1273" height="658" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-01-image-formation.jpg" alt="교안 4p — 조명(에너지) 원천, 장면 요소, 이미징 시스템, 내부 이미지 평면을 거쳐 디지털 이미지가 만들어지는 과정"><figcaption>교안 4p — <b>Illumination (energy) source</b> → <b>Scene element</b> → <b>Imaging system</b> → <b>(Internal) image plane</b> → <b>Digital image</b> · Source: A. Efros</figcaption></figure>
 <div class="note-box"><ul class="ul">
   <li><span class="hw">빛을 통해 반사된 컬러의 값을 영상 센서가 인식해서 화소로 이어 준다</span> — 필기에서 짚은 <span class="hw">lighting &amp; shading</span>, <span class="hw">color space</span>가 모두 이 단계의 이야기다</li>
   <li>디지털 이미지의 <span class="hw">픽셀 하나는 값을 가지게 되고</span>, 이후 모든 처리는 <span class="hw">화소의 값을 연산해서 이해를 시키는</span> 일이다</li>
 </ul></div>
 
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-02-intensity-grid.png" alt="교안 5p — 이미지를 0~255 밝기 값이 격자로 배열된 행렬로 표현한 그림"><figcaption>교안 5p — 이미지는 결국 <b>밝기 값의 격자(행렬)</b>다. 보통 한 값당 <b>1바이트</b>를 쓴다 — <b>0 = 검정, 255 = 흰색</b></figcaption></figure>
+<figure class="fig"><img width="1315" height="693" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-02-intensity-grid.png" alt="교안 5p — 이미지를 0~255 밝기 값이 격자로 배열된 행렬로 표현한 그림"><figcaption>교안 5p — 이미지는 결국 <b>밝기 값의 격자(행렬)</b>다. 보통 한 값당 <b>1바이트</b>를 쓴다 — <b>0 = 검정, 255 = 흰색</b></figcaption></figure>
 
 <h3 class="sub-title">이미지 = 함수 f</h3>
 <div class="note-box"><ul class="ul">
@@ -436,7 +437,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li>필기 그대로 : <span class="hw">f라는 함수를 가정했을 때 2차원에서 1차원으로 가는 함수</span>다.
     <span class="hw">2차원은 x, y의 좌표값 (x, y)이고, 1차원의 값은 그 좌표에 해당하는 화면의 값 하나하나</span>가 된다</li>
 </ul></div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-03-image-as-function.jpg" alt="교안 6p — 눈 이미지 패치와 그 밝기 값을 3차원 곡면으로 그린 그래프"><figcaption>교안 6p — 왼쪽은 <b>이미지 패치</b>, 오른쪽은 같은 패치의 밝기를 높이로 그린 <b>함수 f의 치역</b>. 이미지를 &ldquo;지형&rdquo;처럼 보면 에지는 <b>가파른 경사</b>가 된다</figcaption></figure>
+<figure class="fig"><img width="1214" height="593" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-03-image-as-function.jpg" alt="교안 6p — 눈 이미지 패치와 그 밝기 값을 3차원 곡면으로 그린 그래프"><figcaption>교안 6p — 왼쪽은 <b>이미지 패치</b>, 오른쪽은 같은 패치의 밝기를 높이로 그린 <b>함수 f의 치역</b>. 이미지를 &ldquo;지형&rdquo;처럼 보면 에지는 <b>가파른 경사</b>가 된다</figcaption></figure>
 
 <div class="note-box"><b>디지털 이미지의 두 가지 이산화</b> — 필기에서 짚은 두 도메인
 <ul class="ul">
@@ -446,7 +447,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </ul></div>
 
 <h3 class="sub-title">노이즈 — 필터링이 필요한 이유</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-04-noise.jpg" alt="교안 8p — 노이즈가 섞인 이미지 예시"><figcaption>교안 8p — 이미지는 노이즈를 갖는다. 원인은 <b>센서 품질 · 빛의 흔들림 · 양자화 효과</b></figcaption></figure>
+<figure class="fig"><img width="1311" height="668" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-04-noise.jpg" alt="교안 8p — 노이즈가 섞인 이미지 예시"><figcaption>교안 8p — 이미지는 노이즈를 갖는다. 원인은 <b>센서 품질 · 빛의 흔들림 · 양자화 효과</b></figcaption></figure>
 <div class="note-box"><ul class="ul">
   <li>필기 : <span class="hw">센서 퀄리티</span>, <span class="hw">빛이 불균일하게 발산될 수도</span> 있고, <span class="hw">임의로 샘플링할 때 잘못 샘플링되면 노이즈가 발생</span>한다
     &nbsp;<span style="color:#6b7280">— 교안이 적은 세 번째 원인은 정확히는 <b>양자화 효과(quantization effects)</b>다.
@@ -456,7 +457,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </ul></div>
 
 <h3 class="sub-title">워핑 vs 필터링 — 오늘은 필터링</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-05-warp-vs-filter.jpg" alt="교안 9p — 이미지 워핑과 이미지 필터링의 차이를 보여 주는 예시"><figcaption>교안 9p — <b>image warping</b>: 이미지의 <b>정의역(좌표)</b>을 바꾼다 &nbsp;g(x) = f(h(x)) &nbsp;/&nbsp; <b>image filtering</b>: 이미지의 <b>치역(값)</b>을 바꾼다 &nbsp;g(x) = h(f(x))</figcaption></figure>
+<figure class="fig"><img width="1352" height="536" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-05-warp-vs-filter.jpg" alt="교안 9p — 이미지 워핑과 이미지 필터링의 차이를 보여 주는 예시"><figcaption>교안 9p — <b>image warping</b>: 이미지의 <b>정의역(좌표)</b>을 바꾼다 &nbsp;g(x) = f(h(x)) &nbsp;/&nbsp; <b>image filtering</b>: 이미지의 <b>치역(값)</b>을 바꾼다 &nbsp;g(x) = h(f(x))</figcaption></figure>
 <div class="good"><span class="hw">지난 시간에 나왔던 개념들 image warping, image filtering 중 오늘은 image filtering을 다룬다</span> —
 <span class="hw">요소들은 그대로 두고 빛(값)의 변화</span>를 다루는 쪽이다.</div>
 
@@ -473,7 +474,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <section class="sec" id="types">
   <div class="sec-head"><span class="sec-badge">01</span><h2 class="sec-title">필터링의 종류<small>포인트 연산 vs 이웃 연산 · 교안 12~14p</small></h2></div>
 
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-06-point-vs-neighborhood.png" alt="교안 12p — 포인트 연산과 이웃 연산의 차이를 보여 주는 그림"><figcaption>교안 12p — <b>Point Operation</b>(한 화소 → 한 화소) vs <b>Neighborhood Operation</b>(주변 화소들 → 한 화소)</figcaption></figure>
+<figure class="fig"><img width="1376" height="586" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-06-point-vs-neighborhood.png" alt="교안 12p — 포인트 연산과 이웃 연산의 차이를 보여 주는 그림"><figcaption>교안 12p — <b>Point Operation</b>(한 화소 → 한 화소) vs <b>Neighborhood Operation</b>(주변 화소들 → 한 화소)</figcaption></figure>
 
 <div class="cards">
   <div class="card2">
@@ -507,11 +508,11 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
     &nbsp;<span style="color:#6b7280">— 정확히는 <b>&ldquo;커널이 위치에 따라 바뀌지 않는다&rdquo;</b>는 뜻이다.
     화소가 움직이지 않는다는 말이 아니라, <b>어느 위치에서든 같은 가중치로 같게 동작한다</b>는 의미다</span></li>
 </ul></div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-07-lsi-filtering.png" alt="교안 15p — 3×3 입력 격자가 함수 f를 거쳐 중앙 값 7을 가진 출력 격자로 바뀌는 그림"><figcaption>교안 15p — 입력 3×3 이웃이 <b>함수 f</b>를 거쳐 출력 화소 하나의 값이 된다</figcaption></figure>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-08-kernel-combination.png" alt="교안 16p — 입력 격자와 커널의 가중합으로 출력이 만들어지는 그림"><figcaption>교안 16p — <b>선형인 경우가 가장 단순하고 가장 쓸모 있다</b> — 각 픽셀을 이웃들의 <b>가중합</b>으로 바꾸되, <b>모든 지점에서 같은 가중치 집합</b>을 쓴다</figcaption></figure>
+<figure class="fig"><img width="1255" height="650" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-07-lsi-filtering.png" alt="교안 15p — 3×3 입력 격자가 함수 f를 거쳐 중앙 값 7을 가진 출력 격자로 바뀌는 그림"><figcaption>교안 15p — 입력 3×3 이웃이 <b>함수 f</b>를 거쳐 출력 화소 하나의 값이 된다</figcaption></figure>
+<figure class="fig"><img width="1216" height="599" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-08-kernel-combination.png" alt="교안 16p — 입력 격자와 커널의 가중합으로 출력이 만들어지는 그림"><figcaption>교안 16p — <b>선형인 경우가 가장 단순하고 가장 쓸모 있다</b> — 각 픽셀을 이웃들의 <b>가중합</b>으로 바꾸되, <b>모든 지점에서 같은 가중치 집합</b>을 쓴다</figcaption></figure>
 
 <h3 class="sub-title">2D 이동평균 수식</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-09-moving-average.png" alt="교안 17p — 3×3 창을 쓰는 2D 이산 이동평균 수식"><figcaption>교안 17p — f는 이미지, h는 커널(크기 2k+1 × 2k+1), g는 출력 이미지 &nbsp;&nbsp;<b>g[i, j] = Σ<sub>u=−k..k</sub> Σ<sub>v=−k..k</sub> h[u, v] · f[i+u, j+v]</b></figcaption></figure>
+<figure class="fig"><img width="1062" height="536" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-09-moving-average.png" alt="교안 17p — 3×3 창을 쓰는 2D 이산 이동평균 수식"><figcaption>교안 17p — f는 이미지, h는 커널(크기 2k+1 × 2k+1), g는 출력 이미지 &nbsp;&nbsp;<b>g[i, j] = Σ<sub>u=−k..k</sub> Σ<sub>v=−k..k</sub> h[u, v] · f[i+u, j+v]</b></figcaption></figure>
 <div class="tip"><b>읽는 법</b> — 커널 h의 각 칸 <b>h[u, v]</b>를 그 자리에 겹쳐지는 이미지 값 <b>f[i+u, j+v]</b>와 곱해 모두 더한 값이, 출력의 <b>(i, j)</b> 한 칸이 된다.
 부호가 <b>+</b>라는 점을 기억해 두자 — 뒤에서 볼 <b>컨볼루션</b>은 이 부호가 <b>−</b>로 바뀐다.</div>
 </section>
@@ -524,8 +525,8 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li>각 픽셀을 <b>국소 평균(local average)</b>으로 바꾼다 — 필기 : <span class="hw">주변의 값들을 평균을 내서 적용한다</span></li>
   <li>결과는 <b>스무딩(블러링) 효과</b> — <span class="hw">흐릿하게 변한다</span></li>
 </ul></div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-10-mean-filter.png" alt="교안 18p — 입력 이미지, 커널, 출력 이미지로 이루어진 평균 필터 동작 그림"><figcaption>교안 18p — 입력 이미지 <b>f</b> 위를 커널 <b>h</b>가 지나가며 출력 이미지 <b>g</b>를 만든다</figcaption></figure>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-11-mean-filter-step.jpg" alt="교안 20p — 커널이 한 칸 이동하며 출력 화소를 채워 가는 과정"><figcaption>교안 20p — 커널이 <b>한 칸씩 이동</b>하며 출력 화소를 하나씩 채운다</figcaption></figure>
+<figure class="fig"><img width="1108" height="677" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-10-mean-filter.png" alt="교안 18p — 입력 이미지, 커널, 출력 이미지로 이루어진 평균 필터 동작 그림"><figcaption>교안 18p — 입력 이미지 <b>f</b> 위를 커널 <b>h</b>가 지나가며 출력 이미지 <b>g</b>를 만든다</figcaption></figure>
+<figure class="fig"><img width="1033" height="650" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-11-mean-filter-step.jpg" alt="교안 20p — 커널이 한 칸 이동하며 출력 화소를 채워 가는 과정"><figcaption>교안 20p — 커널이 <b>한 칸씩 이동</b>하며 출력 화소를 하나씩 채운다</figcaption></figure>
 <div class="tip"><b>필기에서 나온 용어 — <span class="hw">stride</span></b><br>
 <span class="hw">한 번에 필터가 움직이는 거리</span>를 뜻한다. 기본값은 1칸이며, stride를 키우면 출력이 그만큼 더 작아진다.
 (강의에서는 발음 때문에 &ldquo;사라이드&rdquo;처럼 들리지만 <b>stride</b>가 정확한 표기다.)</div>
@@ -535,7 +536,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <section class="sec" id="size">
   <div class="sec-head"><span class="sec-badge">04</span><h2 class="sec-title">출력 크기 — full / same / valid<small>What is the size of the output? · 교안 21~22p</small></h2></div>
 
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-12-full-same-valid.png" alt="교안 21p — full, same, valid 세 가지 출력 크기를 커널의 겹침 범위로 설명한 그림"><figcaption>교안 21p — 커널이 이미지와 <b>어디까지 겹치도록 허용하는가</b>가 출력 크기를 결정한다</figcaption></figure>
+<figure class="fig"><img width="1194" height="637" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-12-full-same-valid.png" alt="교안 21p — full, same, valid 세 가지 출력 크기를 커널의 겹침 범위로 설명한 그림"><figcaption>교안 21p — 커널이 이미지와 <b>어디까지 겹치도록 허용하는가</b>가 출력 크기를 결정한다</figcaption></figure>
 
 <div class="tbl-wrap">
 <table>
@@ -566,10 +567,10 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 
 <h3 class="sub-title">커널을 바꾸면 무엇이 달라지는가 — 교안의 네 가지 예</h3>
 <div class="figs">
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-13-ex-identity.jpg" alt="교안 24p — 중앙만 1인 커널을 적용해도 원본과 같은 항등 필터"><figcaption>교안 24p — <b>항등</b> : 중앙만 1 → <b>변화 없음</b></figcaption></figure>
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-14-ex-shift.jpg" alt="교안 25p — 커널의 1을 왼쪽으로 옮겨 이미지가 1픽셀 왼쪽으로 이동한 결과"><figcaption>교안 25p — <b>이동</b> : 상관 연산으로 <b>왼쪽 1픽셀</b> 이동</figcaption></figure>
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-15-ex-blur.jpg" alt="교안 26p — 전부 1인 박스 필터로 블러 처리한 결과"><figcaption>교안 26p — <b>블러</b> : 전부 1인 <b>박스 필터</b></figcaption></figure>
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-16-ex-sharpen.jpg" alt="교안 27p — 중앙 2인 항등 커널에서 박스 필터를 빼 샤프닝한 결과"><figcaption>교안 27p — <b>샤프닝</b> : (중앙 2) − (박스 필터)</figcaption></figure>
+  <figure class="fig"><img width="1022" height="375" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-13-ex-identity.jpg" alt="교안 24p — 중앙만 1인 커널을 적용해도 원본과 같은 항등 필터"><figcaption>교안 24p — <b>항등</b> : 중앙만 1 → <b>변화 없음</b></figcaption></figure>
+  <figure class="fig"><img width="946" height="411" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-14-ex-shift.jpg" alt="교안 25p — 커널의 1을 왼쪽으로 옮겨 이미지가 1픽셀 왼쪽으로 이동한 결과"><figcaption>교안 25p — <b>이동</b> : 상관 연산으로 <b>왼쪽 1픽셀</b> 이동</figcaption></figure>
+  <figure class="fig"><img width="1004" height="342" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-15-ex-blur.jpg" alt="교안 26p — 전부 1인 박스 필터로 블러 처리한 결과"><figcaption>교안 26p — <b>블러</b> : 전부 1인 <b>박스 필터</b></figcaption></figure>
+  <figure class="fig"><img width="1363" height="578" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-16-ex-sharpen.jpg" alt="교안 27p — 중앙 2인 항등 커널에서 박스 필터를 빼 샤프닝한 결과"><figcaption>교안 27p — <b>샤프닝</b> : (중앙 2) − (박스 필터)</figcaption></figure>
 </div>
 <div class="tip"><b>샤프닝이 왜 저 식인가</b> — &ldquo;원본을 두 배로 키운 것&rdquo;에서 &ldquo;흐린 버전&rdquo;을 빼면
 <b>원본 + (원본 − 흐린 것)</b>, 즉 <b>원본에 세부(디테일)를 한 번 더 얹는</b> 셈이 된다. 이것이 언샤프 마스킹의 원리다.</div>
@@ -594,7 +595,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </div>
 
 <h3 class="sub-title">그런데 — 이 그림의 무엇이 잘못됐나</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-17-box-artifact.jpg" alt="교안 29p — 평균 필터로 블러한 결과에서 격자 모양 인공물이 보이는 예시"><figcaption>교안 29p — 평균으로 스무딩한 결과. <b>What is wrong with the picture?</b></figcaption></figure>
+<figure class="fig"><img width="1035" height="582" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-17-box-artifact.jpg" alt="교안 29p — 평균 필터로 블러한 결과에서 격자 모양 인공물이 보이는 예시"><figcaption>교안 29p — 평균으로 스무딩한 결과. <b>What is wrong with the picture?</b></figcaption></figure>
 <div class="warn"><b>필기 그대로</b> — <span class="hw">블러링되면서 격자가 살짝 보이는 문제가 발생한다.
 네모 영역에 해당하는 값들을 가져오다 보니 네모 블러가 생긴다.</span><br>
 원인은 <b>box filter</b>가 <b>정사각형 창 안의 모든 화소를 거리와 무관하게 똑같은 가중치로</b> 평균 내기 때문이다.
@@ -602,7 +603,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <div class="tip"><b>필기 정정</b> — 필기에는 &ldquo;박스의 중심으로부터 <b>같은 거리</b>에 있는 이웃들의 값을 취한다&rdquo;고 적혀 있으나,
 박스 필터는 <b>거리를 따지지 않고</b> 창 안의 모든 화소를 같게 취급한다. 교안 30p가 제시하는 해법이
 &ldquo;<b>중심에 가까운 정도에 따라 가중치를 준다</b>&rdquo;인 것이 그 반증이다 — 즉 <b>거리를 반영하지 않는 것이 박스 필터의 문제</b>다.</div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-18-box-revisited.png" alt="교안 30p — 박스 필터의 에지 효과를 없애기 위한 해법을 설명한 슬라이드"><figcaption>교안 30p — <b>해법</b> : 에지 효과를 없애려면 <b>중심에 가까운 정도에 따라 이웃 화소의 기여도에 가중치</b>를 주면 된다</figcaption></figure>
+<figure class="fig"><img width="1207" height="504" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-18-box-revisited.png" alt="교안 30p — 박스 필터의 에지 효과를 없애기 위한 해법을 설명한 슬라이드"><figcaption>교안 30p — <b>해법</b> : 에지 효과를 없애려면 <b>중심에 가까운 정도에 따라 이웃 화소의 기여도에 가중치</b>를 주면 된다</figcaption></figure>
 </section>
 
 <!-- ===================== 07 가우시안 ===================== -->
@@ -615,8 +616,8 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
     <span class="hw">센터에는 가중치를 많이 두고 멀어질수록 가중치를 적게 두며, 가장자리로 갈수록 weight가 줄어든다</span></li>
   <li><b>표준편차 σ</b>가 스무딩의 정도를 결정한다 — 필기 : <span class="hw">표준편차를 이용해서 거리를 통제한다. 표준편차가 클수록 활용 거리가 넓어진다.</span></li>
 </ul></div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-19-gaussian-kernel.jpg" alt="교안 31p — 2D 가우시안 수식과 σ=2, σ=5일 때의 커널을 3차원 곡면으로 그린 그래프"><figcaption>교안 31p — <b>f(i, j) = (1 / 2πσ²) · e<sup>−(i²+j²)/2σ²</sup></b> · σ = 2와 σ = 5인 30×30 필터의 모양 비교</figcaption></figure>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-20-gaussian-sigma.jpg" alt="교안 32p — σ가 1, 5, 10, 30 픽셀일 때 블러 정도가 달라지는 비교 이미지"><figcaption>교안 32p — 가우시안 함수는 <b>무한한 받침(infinite support)</b>을 갖지만 이산 필터는 <b>유한한 커널</b>을 쓴다. σ = 1 → 5 → 10 → 30으로 갈수록 흐려진다</figcaption></figure>
+<figure class="fig"><img width="1333" height="683" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-19-gaussian-kernel.jpg" alt="교안 31p — 2D 가우시안 수식과 σ=2, σ=5일 때의 커널을 3차원 곡면으로 그린 그래프"><figcaption>교안 31p — <b>f(i, j) = (1 / 2πσ²) · e<sup>−(i²+j²)/2σ²</sup></b> · σ = 2와 σ = 5인 30×30 필터의 모양 비교</figcaption></figure>
+<figure class="fig"><img width="1474" height="638" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-20-gaussian-sigma.jpg" alt="교안 32p — σ가 1, 5, 10, 30 픽셀일 때 블러 정도가 달라지는 비교 이미지"><figcaption>교안 32p — 가우시안 함수는 <b>무한한 받침(infinite support)</b>을 갖지만 이산 필터는 <b>유한한 커널</b>을 쓴다. σ = 1 → 5 → 10 → 30으로 갈수록 흐려진다</figcaption></figure>
 
 <h3 class="sub-title">가우시안 필터의 장점</h3>
 <div class="cards">
@@ -630,14 +631,14 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
     <p>가우시안을 자기 자신과 컨볼루션하면 <b>또 다른 가우시안</b>이 된다 — 필기 : <span class="hw">가우시안끼리의 연산을 통해 선형 연산이 가능</span>하다.
     σ<sub>1</sub>과 σ<sub>2</sub>를 잇달아 적용하면 <b>σ = √(σ<sub>1</sub>² + σ<sub>2</sub>²)</b>인 한 번의 가우시안과 같다.</p></div>
 </div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-21-gaussian-smoothing.jpg" alt="교안 34p — 박스 필터와 가우시안 필터의 스무딩 결과 비교"><figcaption>교안 34p — <b>가우시안으로 스무딩한 결과</b>. 박스 필터에서 보이던 <b>블록화된 에지 현상이 개선</b>된다</figcaption></figure>
+<figure class="fig"><img width="1132" height="551" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-21-gaussian-smoothing.jpg" alt="교안 34p — 박스 필터와 가우시안 필터의 스무딩 결과 비교"><figcaption>교안 34p — <b>가우시안으로 스무딩한 결과</b>. 박스 필터에서 보이던 <b>블록화된 에지 현상이 개선</b>된다</figcaption></figure>
 </section>
 
 <!-- ===================== 08 분리 가능성 ===================== -->
 <section class="sec" id="sep">
   <div class="sec-head"><span class="sec-badge">08</span><h2 class="sec-title">분리 가능성<small>Separability · 교안 35~36p</small></h2></div>
 
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-22-separability.png" alt="교안 35p — 2D 가우시안을 가로 1D 필터와 세로 1D 필터로 분리해 적용하는 그림"><figcaption>교안 35p — 먼저 <b>가로 방향 1차원 필터</b>로 컨볼루션하고, 그 결과를 <b>세로 방향 1차원 필터</b>로 다시 컨볼루션한다</figcaption></figure>
+<figure class="fig"><img width="1270" height="575" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-22-separability.png" alt="교안 35p — 2D 가우시안을 가로 1D 필터와 세로 1D 필터로 분리해 적용하는 그림"><figcaption>교안 35p — 먼저 <b>가로 방향 1차원 필터</b>로 컨볼루션하고, 그 결과를 <b>세로 방향 1차원 필터</b>로 다시 컨볼루션한다</figcaption></figure>
 <div class="note-box"><ul class="ul">
   <li><b>k×k 가우시안 필터</b>를 2D 컨볼루션으로 하면 픽셀당 <b>k² 번</b>의 연산이 필요하다</li>
   <li><span class="term" tabindex="0" data-tip="2차원 커널이 1차원 커널 두 개의 곱(외적)으로 쪼개지는 필터. 가우시안·박스·Sobel이 여기에 해당한다.">분리 가능 필터</span>를 쓰면 픽셀당 <b>2k 번</b>으로 줄어든다</li>
@@ -653,7 +654,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <div class="sec-head"><span class="sec-badge">09</span><h2 class="sec-title">비선형 필터링<small>Non-linear Filtering · 미디언 필터 · 교안 37~42p</small></h2></div>
 
 <h3 class="sub-title">노이즈의 유형</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-23-noise-types.jpg" alt="교안 37p — 소금과 후추 노이즈, 임펄스 노이즈, 가우시안 노이즈를 비교한 이미지"><figcaption>교안 37p — 세 가지 대표 노이즈</figcaption></figure>
+<figure class="fig"><img width="1292" height="667" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-23-noise-types.jpg" alt="교안 37p — 소금과 후추 노이즈, 임펄스 노이즈, 가우시안 노이즈를 비교한 이미지"><figcaption>교안 37p — 세 가지 대표 노이즈</figcaption></figure>
 <div class="tbl-wrap">
 <table>
   <thead><tr><th>노이즈</th><th>성격</th></tr></thead>
@@ -666,7 +667,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </div>
 
 <h3 class="sub-title">선형 필터로는 왜 안 되는가</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-24-saltpepper-mean.jpg" alt="교안 38p — 소금·후추 노이즈를 평균 필터로 줄인 결과가 만족스럽지 않은 예시"><figcaption>교안 38p — 소금 · 후추 노이즈를 평균으로 줄여 본 결과. <b>What&rsquo;s wrong with the results?</b></figcaption></figure>
+<figure class="fig"><img width="1092" height="562" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-24-saltpepper-mean.jpg" alt="교안 38p — 소금·후추 노이즈를 평균 필터로 줄인 결과가 만족스럽지 않은 예시"><figcaption>교안 38p — 소금 · 후추 노이즈를 평균으로 줄여 본 결과. <b>What&rsquo;s wrong with the results?</b></figcaption></figure>
 <div class="warn">필기 : <span class="hw">이런 주변 노이즈가 있을 때 앞서 말한 선형 필터를 사용할 수 있을까?
 주변 노이즈를 잘못 활용하면 노이즈 영향이 퍼져 나갈 수 있다.</span><br>
 평균은 <b>튀는 값(outlier)을 그대로 반영</b>하기 때문에, 점 하나의 극단적인 값이 이웃 전체로 <b>번져 나간다</b>.
@@ -681,8 +682,8 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li>평균 필터에 비해 <b><span class="term" tabindex="0" data-tip="주변 값들과 동떨어지게 크거나 작은 값. 평균은 이런 값 하나에 크게 끌려가지만, 중앙값은 순서만 보므로 거의 영향을 받지 않는다.">이상치(outlier)</span>에 덜 민감</b>하다 <span style="color:#6b7280">(필기 : <span class="hw">MEAN Filter에 비해 outlier에 덜 민감하다</span>)</span></li>
   <li>단점 — <b>실행 비용이 비싸다</b>(정렬이 필요하다)</li>
 </ul></div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-25-median-advantage.jpg" alt="교안 41p — 소금·후추 노이즈 이미지와 미디언 필터 결과, 한 행의 밝기 그래프 비교"><figcaption>교안 41p — 이미지의 <b>한 행</b>을 그래프로 그려 보면, 미디언 필터가 <b>스파이크만 골라 없애고</b> 에지는 남기는 것이 보인다</figcaption></figure>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-26-gaussian-vs-median.jpg" alt="교안 42p — 가우시안 필터와 미디언 필터 결과 비교"><figcaption>교안 42p — <b>가우시안 vs 미디언</b>. 가우시안은 점을 뭉개 번지게 하고, 미디언은 점을 <b>지워 버린다</b></figcaption></figure>
+<figure class="fig"><img width="1348" height="613" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-25-median-advantage.jpg" alt="교안 41p — 소금·후추 노이즈 이미지와 미디언 필터 결과, 한 행의 밝기 그래프 비교"><figcaption>교안 41p — 이미지의 <b>한 행</b>을 그래프로 그려 보면, 미디언 필터가 <b>스파이크만 골라 없애고</b> 에지는 남기는 것이 보인다</figcaption></figure>
+<figure class="fig"><img width="1332" height="675" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-26-gaussian-vs-median.jpg" alt="교안 42p — 가우시안 필터와 미디언 필터 결과 비교"><figcaption>교안 42p — <b>가우시안 vs 미디언</b>. 가우시안은 점을 뭉개 번지게 하고, 미디언은 점을 <b>지워 버린다</b></figcaption></figure>
 </section>
 
 <div class="partbar"><b>PART 3</b> Image Filtering (Convolution)</div>
@@ -696,8 +697,8 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li><b>필터를 두 방향 모두 뒤집는다</b> (bottom to top, right to left) — 필기 : <span class="hw">위가 아래로, 좌가 우로 등 flip the filter in both dimensions</span></li>
   <li>그 다음 <b>교차 상관(cross-correlation)을 적용</b>한다</li>
 </ul></div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-27-convolution-flip.png" alt="교안 44p — 커널을 뒤집어 이미지 위에서 이동시키는 컨볼루션 수식과 그림"><figcaption>교안 44p — <b>g[i, j] = Σ Σ h[u, v] · f[i−u, j−v]</b> &nbsp;·&nbsp; <b>g = h ★ f</b></figcaption></figure>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-28-conv-vs-corr.png" alt="교안 45p — 컨볼루션과 교차 상관의 수식을 나란히 놓고 부호 차이를 표시한 슬라이드"><figcaption>교안 45p — 두 식의 차이는 단 하나, <b>f의 첨자 부호</b>다. 컨볼루션은 <b>f[i−u, j−v]</b>, 교차 상관은 <b>f[i+u, j+v]</b></figcaption></figure>
+<figure class="fig"><img width="1306" height="584" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-27-convolution-flip.png" alt="교안 44p — 커널을 뒤집어 이미지 위에서 이동시키는 컨볼루션 수식과 그림"><figcaption>교안 44p — <b>g[i, j] = Σ Σ h[u, v] · f[i−u, j−v]</b> &nbsp;·&nbsp; <b>g = h ★ f</b></figcaption></figure>
+<figure class="fig"><img width="981" height="601" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-28-conv-vs-corr.png" alt="교안 45p — 컨볼루션과 교차 상관의 수식을 나란히 놓고 부호 차이를 표시한 슬라이드"><figcaption>교안 45p — 두 식의 차이는 단 하나, <b>f의 첨자 부호</b>다. 컨볼루션은 <b>f[i−u, j−v]</b>, 교차 상관은 <b>f[i+u, j+v]</b></figcaption></figure>
 
 <h3 class="sub-title">Convolution vs Cross-correlation</h3>
 <div class="tbl-wrap">
@@ -715,7 +716,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 그래서 딥러닝 프레임워크의 &ldquo;convolution&rdquo; 레이어는 실제로는 <b>교차 상관</b>을 계산한다 — 가중치를 학습으로 정하므로 뒤집을 이유가 없기 때문이다.</div>
 
 <h3 class="sub-title">컨볼루션의 성질</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-29-conv-properties.jpg" alt="교안 47p — 컨볼루션의 교환·결합·분배·스칼라곱 결합·미분 성질을 수식으로 나열한 슬라이드"><figcaption>교안 47p — 필기 : <span class="hw">flexible한 성질을 보여 주는 법칙들</span></figcaption></figure>
+<figure class="fig"><img width="1040" height="608" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-29-conv-properties.jpg" alt="교안 47p — 컨볼루션의 교환·결합·분배·스칼라곱 결합·미분 성질을 수식으로 나열한 슬라이드"><figcaption>교안 47p — 필기 : <span class="hw">flexible한 성질을 보여 주는 법칙들</span></figcaption></figure>
 <div class="tbl-wrap">
 <table>
   <thead><tr><th>성질</th><th>뜻</th><th>왜 중요한가</th></tr></thead>
@@ -745,35 +746,35 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <div class="sec-head"><span class="sec-badge">11</span><h2 class="sec-title">에지 검출<small>Edge detecting · Prewitt · Sobel · DoG · LoG · 교안 48~62p</small></h2></div>
 
 <h3 class="sub-title">에지는 왜 생기는가</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-30-edge-causes.png" alt="교안 48p — 표면 법선 불연속, 깊이 불연속, 표면 색 불연속, 조명 불연속이 에지를 만드는 그림"><figcaption>교안 48p — 에지는 <b>표면 법선의 불연속 · 깊이의 불연속 · 표면 색의 불연속 · 조명의 불연속</b> 등 다양한 요인에서 생긴다</figcaption></figure>
+<figure class="fig"><img width="1260" height="636" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-30-edge-causes.png" alt="교안 48p — 표면 법선 불연속, 깊이 불연속, 표면 색 불연속, 조명 불연속이 에지를 만드는 그림"><figcaption>교안 48p — 에지는 <b>표면 법선의 불연속 · 깊이의 불연속 · 표면 색의 불연속 · 조명의 불연속</b> 등 다양한 요인에서 생긴다</figcaption></figure>
 <div class="good">필기 : <span class="hw">edge들이 물체의 형상을 설명한다</span> — surface(표면), depth(깊이), surface color(표면 색), illumination(조명)의 <span class="hw">discontinuity</span>가 모두 에지로 나타난다.</div>
 
 <h3 class="sub-title">에지의 특징</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-31-edge-characterize.png" alt="교안 49p — 에지는 밝기 함수가 급격히 변하는 자리임을 보여 주는 그림"><figcaption>교안 49p — <b>에지는 이미지 밝기 함수가 급격하게 변하는 자리</b>다</figcaption></figure>
+<figure class="fig"><img width="1084" height="569" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-31-edge-characterize.png" alt="교안 49p — 에지는 밝기 함수가 급격히 변하는 자리임을 보여 주는 그림"><figcaption>교안 49p — <b>에지는 이미지 밝기 함수가 급격하게 변하는 자리</b>다</figcaption></figure>
 <div class="figs">
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-32-edge-1d.png" alt="교안 50p — 1차원 신호에서 미분의 극값으로 에지를 찾는 그림"><figcaption>교안 50p — <b>1D 에지 검출</b> : 미분의 <b>극값</b>이 에지</figcaption></figure>
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-33-edge-2d.jpg" alt="교안 51p — 2차원 이미지에서 x방향과 y방향 편미분으로 그래디언트를 구하는 그림"><figcaption>교안 51p — <b>2D 에지 검출</b> : x · y 방향 <b>편미분</b>으로 <span class="term" tabindex="0" data-tip="밝기가 가장 가파르게 증가하는 방향과 그 기울기의 크기를 담은 벡터. 크기는 에지의 세기, 방향은 에지에 수직인 방향이 된다.">그래디언트</span>를 구한다</figcaption></figure>
+  <figure class="fig"><img width="1366" height="564" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-32-edge-1d.png" alt="교안 50p — 1차원 신호에서 미분의 극값으로 에지를 찾는 그림"><figcaption>교안 50p — <b>1D 에지 검출</b> : 미분의 <b>극값</b>이 에지</figcaption></figure>
+  <figure class="fig"><img width="1309" height="698" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-33-edge-2d.jpg" alt="교안 51p — 2차원 이미지에서 x방향과 y방향 편미분으로 그래디언트를 구하는 그림"><figcaption>교안 51p — <b>2D 에지 검출</b> : x · y 방향 <b>편미분</b>으로 <span class="term" tabindex="0" data-tip="밝기가 가장 가파르게 증가하는 방향과 그 기울기의 크기를 담은 벡터. 크기는 에지의 세기, 방향은 에지에 수직인 방향이 된다.">그래디언트</span>를 구한다</figcaption></figure>
 </div>
 
 <h3 class="sub-title">노이즈가 있으면 — 에지는 어디인가</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-34-edge-noise.png" alt="교안 52p — 노이즈가 섞인 신호를 미분하면 에지를 찾을 수 없게 되는 그래프"><figcaption>교안 52p — 노이즈가 있으면 미분값이 온통 요동쳐 <b>에지를 찾을 수 없다</b></figcaption></figure>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-35-noise-clean-edge.jpg" alt="교안 53p — 스무딩 필터와 미분 필터를 결합해 노이즈를 제거하고 에지를 찾는 그림"><figcaption>교안 53p — <b>해법</b> : 노이즈도 함께 다뤄야 한다 → <b>선형 필터를 결합</b>한다</figcaption></figure>
+<figure class="fig"><img width="1047" height="644" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-34-edge-noise.png" alt="교안 52p — 노이즈가 섞인 신호를 미분하면 에지를 찾을 수 없게 되는 그래프"><figcaption>교안 52p — 노이즈가 있으면 미분값이 온통 요동쳐 <b>에지를 찾을 수 없다</b></figcaption></figure>
+<figure class="fig"><img width="1309" height="655" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-35-noise-clean-edge.jpg" alt="교안 53p — 스무딩 필터와 미분 필터를 결합해 노이즈를 제거하고 에지를 찾는 그림"><figcaption>교안 53p — <b>해법</b> : 노이즈도 함께 다뤄야 한다 → <b>선형 필터를 결합</b>한다</figcaption></figure>
 <div class="good"><b>필기 그대로</b> — <span class="hw">노이즈 필터를 적용하고 에지 감지를 적용한다</span>.
 스무딩과 미분이 <b>둘 다 컨볼루션</b>이고 컨볼루션은 <b>결합법칙</b>을 만족하므로, 두 마스크를 <b>미리 하나로 합쳐</b> 한 번에 돌릴 수 있다.</div>
 
 <h3 class="sub-title">Prewitt 에지 검출기</h3>
 <div class="figs">
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-36-prewitt-v.png" alt="교안 54p — 세로 에지를 찾는 Prewitt 마스크"><figcaption>교안 54p — <b>(vertical) Prewitt</b> : 박스 필터 [1 1 1]<sup>T</sup>와 [−1 0 1]의 <b>외적</b></figcaption></figure>
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-37-prewitt-h.png" alt="교안 55p — 가로 에지를 찾는 Prewitt 마스크"><figcaption>교안 55p — <b>(horizontal) Prewitt</b> : 방향을 90° 돌린 같은 구조</figcaption></figure>
+  <figure class="fig"><img width="992" height="545" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-36-prewitt-v.png" alt="교안 54p — 세로 에지를 찾는 Prewitt 마스크"><figcaption>교안 54p — <b>(vertical) Prewitt</b> : 박스 필터 [1 1 1]<sup>T</sup>와 [−1 0 1]의 <b>외적</b></figcaption></figure>
+  <figure class="fig"><img width="1038" height="545" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-37-prewitt-h.png" alt="교안 55p — 가로 에지를 찾는 Prewitt 마스크"><figcaption>교안 55p — <b>(horizontal) Prewitt</b> : 방향을 90° 돌린 같은 구조</figcaption></figure>
 </div>
 <div class="note-box">필기에서 <span class="hw">vertical과 horizontal을 나눠서 설명</span>한 그대로다.
 한 축으로는 <b>[1 1 1] 스무딩</b>이, 다른 축으로는 <b>[−1 0 1] 미분</b>이 동시에 일어난다 — 이것이 &ldquo;노이즈 제거 + 에지 검출&rdquo;을 한 마스크에 담은 형태다.</div>
 
 <h3 class="sub-title">Sobel 에지 검출기</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-38-sobel.png" alt="교안 56p — 중앙 행에 가중치 2를 준 Sobel 마스크"><figcaption>교안 56p — <b>Sobel</b> : <b>4-이웃에 더 큰 가중치</b>를 준다 (가운데 줄이 1 대신 2)</figcaption></figure>
+<figure class="fig"><img width="988" height="576" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-38-sobel.png" alt="교안 56p — 중앙 행에 가중치 2를 준 Sobel 마스크"><figcaption>교안 56p — <b>Sobel</b> : <b>4-이웃에 더 큰 가중치</b>를 준다 (가운데 줄이 1 대신 2)</figcaption></figure>
 <div class="note-box">필기 : <span class="hw">가중치를 더 살린다 — give more weight to the 4-neighbors</span>.
 Prewitt의 [1 1 1] 스무딩이 Sobel에서는 <b>[1 2 1]</b>이 된다. 가운데를 더 믿는 셈이라 <b>가우시안에 가까운 부드러운 스무딩</b>이 되고, 결과가 노이즈에 조금 더 강하다.</div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-39-sobel-example.png" alt="교안 57p — Sobel 에지 검출 적용 예시"><figcaption>교안 57p — Sobel 적용 예시</figcaption></figure>
+<figure class="fig"><img width="1075" height="599" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-39-sobel-example.png" alt="교안 57p — Sobel 에지 검출 적용 예시"><figcaption>교안 57p — Sobel 적용 예시</figcaption></figure>
 
 <h3 class="sub-title">DoG — 가우시안의 미분</h3>
 <div class="note-box"><b>DoG (Derivative of Gaussian, 가우시안의 1차 미분)</b>
@@ -786,14 +787,14 @@ Prewitt의 [1 1 1] 스무딩이 Sobel에서는 <b>[1 2 1]</b>이 된다. 가운�
 이 교안(61 · 62p)에서 <b>DoG = Derivative of Gaussian</b>(가우시안의 <b>1차 미분</b>)이다.
 그러나 일반적인 컴퓨터 비전 문헌에서 DoG는 대개 <b>Difference of Gaussians</b>(σ가 다른 <b>두 가우시안의 차</b>, SIFT의 블롭 검출에 쓰임)를 가리킨다.
 <b>시험과 논문에서 뜻이 갈리는 지점</b>이므로, 이 과목에서는 <b>교안 표기(Derivative)</b>를 따른다.</div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-40-dog-theorem.jpg" alt="교안 58p — 이미지를 스무딩 후 미분하는 경로와 미분된 가우시안을 한 번 적용하는 경로를 비교한 그림"><figcaption>교안 58p — <b>(f ★ g)&prime; = f ★ g&prime;</b> — 두 경로의 결과는 같지만 오른쪽이 <b>연산이 한 번 적다</b></figcaption></figure>
+<figure class="fig"><img width="1243" height="638" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-40-dog-theorem.jpg" alt="교안 58p — 이미지를 스무딩 후 미분하는 경로와 미분된 가우시안을 한 번 적용하는 경로를 비교한 그림"><figcaption>교안 58p — <b>(f ★ g)&prime; = f ★ g&prime;</b> — 두 경로의 결과는 같지만 오른쪽이 <b>연산이 한 번 적다</b></figcaption></figure>
 <div class="figs">
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-41-dog-xy.jpg" alt="교안 60p — x방향과 y방향의 가우시안 미분 필터 모양"><figcaption>교안 60p — <b>x 방향</b>과 <b>y 방향</b>의 DoG 필터</figcaption></figure>
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-42-dog-result.jpg" alt="교안 61p — 원본 이미지와 DoG를 적용한 에지 결과"><figcaption>교안 61p — 원본과 <b>DoG</b> 적용 결과</figcaption></figure>
+  <figure class="fig"><img width="1371" height="589" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-41-dog-xy.jpg" alt="교안 60p — x방향과 y방향의 가우시안 미분 필터 모양"><figcaption>교안 60p — <b>x 방향</b>과 <b>y 방향</b>의 DoG 필터</figcaption></figure>
+  <figure class="fig"><img width="1142" height="625" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-42-dog-result.jpg" alt="교안 61p — 원본 이미지와 DoG를 적용한 에지 결과"><figcaption>교안 61p — 원본과 <b>DoG</b> 적용 결과</figcaption></figure>
 </div>
 
 <h3 class="sub-title">LoG — 가우시안의 2차 미분</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-43-dog-vs-log.jpg" alt="교안 62p — DoG와 LoG의 결과 이미지 비교 및 LoG 커널과 컨볼루션 결과 그래프"><figcaption>교안 62p — <b>DoG vs LoG (Laplacian of Gaussian)</b>. 오른쪽 그래프는 LoG 커널이 계단 신호를 만났을 때 <b>+에서 −로 부호가 바뀌며 0을 지나는</b> 모습이다</figcaption></figure>
+<figure class="fig"><img width="1455" height="607" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-43-dog-vs-log.jpg" alt="교안 62p — DoG와 LoG의 결과 이미지 비교 및 LoG 커널과 컨볼루션 결과 그래프"><figcaption>교안 62p — <b>DoG vs LoG (Laplacian of Gaussian)</b>. 오른쪽 그래프는 LoG 커널이 계단 신호를 만났을 때 <b>+에서 −로 부호가 바뀌며 0을 지나는</b> 모습이다</figcaption></figure>
 <div class="note-box"><b>LoG (Laplacian of Gaussian, 가우시안의 라플라시안 = 2차 미분)</b>
 <ul class="ul">
   <li>1차 미분의 <b>극값</b>을 찾는 대신, 2차 미분의 <b><span class="term" tabindex="0" data-tip="2차 미분의 값이 +에서 −로(또는 그 반대로) 부호를 바꾸며 0을 지나는 지점. 1차 미분이 극값을 갖는 자리와 같으며, 그곳이 에지다.">영교차(zero-crossing)</span></b>로 에지를 찾는다</li>
@@ -871,6 +872,16 @@ Prewitt의 [1 1 1] 스무딩이 Sobel에서는 <b>[1 2 1]</b>이 된다. 가운�
   <li><b>과제 #1 부여 · 설명</b> — 2~3주차 범위, 제출 마감 <b>10월 7일(수) 19:00</b></li>
 </ul></div>
 
+<div class="tip"><b>이번 실습을 보는 법 — 알고리즘이 아니라 함수</b><br>
+다루는 알고리즘 수는 많지만(Hough · Harris · 피라미드 · KNN · Otsu), 지금 단계에서 요구되는 것은
+<b>내부 원리를 유도하는 능력이 아니라 &ldquo;어떤 상황에서 어떤 함수를 부르는가&rdquo;</b>다.
+함수 하나마다 <b>① 무엇을 넣고 ② 무엇이 나오고 ③ 언제 쓰는지</b> 세 가지만 잡으면 된다.
+<ul class="ul">
+  <li>예) <code>cv2.pyrDown(img)</code> → ① 이미지를 넣으면 ② <b>가로 · 세로가 절반</b>인 이미지가 나오고 ③ <b>해상도를 낮출 때</b> 쓴다</li>
+  <li><b>직선 · 코너 검출의 이론</b>은 <b>5주차 Local Feature Detection</b> 교안에서 다룬다 —
+    이번 주는 <b>함수 사용법</b>까지만 확인하면 충분하다</li>
+</ul></div>
+
 <div class="docs">
   <div class="doc">
     <div class="doc-ico"><span>🐍</span>PDF</div>
@@ -944,7 +955,7 @@ lines = cv2.HoughLines(edges, 1, np.pi/180, 150)</pre>
     cv2.line(img, (x1,y1), (x2,y2), (0,0,255), 1)        <span class="cm"># (이미지, 시작점, 끝점, 색 BGR, 두께)</span></pre>
 <div class="warn"><b>왜 1000을 곱하나</b> — <code>HoughLines</code>가 돌려주는 것은 <b>길이가 무한한 직선</b>이라 시작·끝점이 없다. 그래서 직선 위의 한 점 <code>(x₀, y₀)</code> 에서 직선 방향 벡터 <code>(−sinθ, cosθ)</code> 로 <b>화면 밖까지 충분히(1000픽셀) 늘려</b> 두 점을 만든 뒤 <code>cv2.line</code>으로 그리는 것이다.
 <b>색 <code>(0,0,255)</code>는 빨강</b> — OpenCV는 RGB가 아니라 <b>BGR 순서</b>다.</div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-01-hough.png" alt="실습 교안 — HoughLines 코드와 체크무늬 천에서 검출된 직선들"><figcaption>실습 교안 — <code>lines.shape</code>가 <b>(66, 1, 2)</b>: 직선 66개, 각각 <code>(ρ, θ)</code> 2개 값. 검출된 직선이 이미지 끝까지 그어진 것이 보인다</figcaption></figure>
+<figure class="fig"><img width="1150" height="543" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-01-hough.png" alt="실습 교안 — HoughLines 코드와 체크무늬 천에서 검출된 직선들"><figcaption>실습 교안 — <code>lines.shape</code>가 <b>(66, 1, 2)</b>: 직선 66개, 각각 <code>(ρ, θ)</code> 2개 값. 검출된 직선이 이미지 끝까지 그어진 것이 보인다</figcaption></figure>
 
 <h3 class="sub-title">선분 찾기 — cv2.HoughLinesP (P = Probabilistic)</h3>
 <div class="note-box"><b>왜 필요한가</b> — 기본 Hough 변환은 <b>모든 엣지 픽셀에 대해</b> 투표를 수행해 시간이 많이 걸린다. <code>HoughLinesP</code>는 <b>무작위로 뽑은 엣지 픽셀만</b> 사용하고, 직선이 아니라 <b>끊기지 않고 이어진 구간(선분)</b>을 돌려준다.</div>
@@ -957,7 +968,7 @@ print(lines.shape)     <span class="out"># (528, 1, 4) — 선분 528개, 각각
 for line in lines:
     for x1, y1, x2, y2 in line:
         cv2.line(img, (x1,y1), (x2,y2), (0,0,255), 2)   <span class="cm"># 시작점·끝점이 이미 있으니 그대로 그린다</span></pre>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-02-houghp.png" alt="실습 교안 — HoughLinesP 코드와 선분 528개가 그려진 결과"><figcaption>실습 교안 — 반환값이 <b>(528, 1, 4)</b>로 좌표 4개(시작점·끝점)라는 점이 <code>HoughLines</code>와의 결정적 차이</figcaption></figure>
+<figure class="fig"><img width="1150" height="345" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-02-houghp.png" alt="실습 교안 — HoughLinesP 코드와 선분 528개가 그려진 결과"><figcaption>실습 교안 — 반환값이 <b>(528, 1, 4)</b>로 좌표 4개(시작점·끝점)라는 점이 <code>HoughLines</code>와의 결정적 차이</figcaption></figure>
 <div class="good"><b>원을 찾고 싶다면</b> — <code>cv2.HoughCircles(img, method, dp, minDist, param1, param2, minRadius, maxRadius)</code>.
 <code>method</code>는 보통 <code>cv2.HOUGH_GRADIENT</code>, <code>dp</code>는 누적 배열의 해상도 비율(1이면 원본과 같은 크기), <code>minDist</code>는 <b>원 중심 사이의 최소 거리</b>(너무 작으면 같은 원이 여러 번 검출), <code>param1</code>은 내부 Canny의 높은 임계값, <code>param2</code>는 <b>중심으로 인정할 투표 수</b>(작을수록 가짜 원이 늘어남), 마지막 둘은 찾을 반지름 범위다.</div>
 
@@ -979,7 +990,7 @@ img[dst &gt; 0.01*dst.max()] = [0, 0, 255]           <span class="cm"># 코너 �
 </table>
 </div>
 <div class="tip"><code>img[dst &gt; 0.01*dst.max()] = [0,0,255]</code> 는 <b>NumPy 불리언 인덱싱</b>이다. &ldquo;조건을 만족하는 픽셀 위치만 골라 한꺼번에 값을 바꿔라&rdquo;는 뜻으로, for문 없이 마스킹하는 1주차 실습의 방식과 같다. <b>0.01은 민감도</b> — 키우면 확실한 코너만 남는다.</div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-03-harris.png" alt="실습 교안 — cornerHarris 코드와 코너가 빨갛게 표시된 결과"><figcaption>실습 교안 — 체크무늬의 교차점들이 코너로 잡힌다</figcaption></figure>
+<figure class="fig"><img width="1150" height="325" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-03-harris.png" alt="실습 교안 — cornerHarris 코드와 코너가 빨갛게 표시된 결과"><figcaption>실습 교안 — 체크무늬의 교차점들이 코너로 잡힌다</figcaption></figure>
 
 <h3 class="sub-title">코너 찾기 ② — cv2.goodFeaturesToTrack (Shi &amp; Tomasi)</h3>
 <div class="note-box">Harris의 <b>개선 버전</b>. 점수 계산식이 더 안정적이고, 무엇보다 <b>좌표 목록을 바로</b> 돌려준다 — 추적(tracking)에 쓰기 좋아 이름도 &lsquo;추적하기 좋은 특징&rsquo;이다.</div>
@@ -998,7 +1009,7 @@ for corner in dst:
   </tbody>
 </table>
 </div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-04-goodfeatures.png" alt="실습 교안 — goodFeaturesToTrack 코드와 코너 80개가 원으로 표시된 결과"><figcaption>실습 교안 — Harris와 달리 <b>좌표 배열</b>이 나오므로 <code>cv2.circle</code>로 하나씩 그린다</figcaption></figure>
+<figure class="fig"><img width="1150" height="332" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-04-goodfeatures.png" alt="실습 교안 — goodFeaturesToTrack 코드와 코너 80개가 원으로 표시된 결과"><figcaption>실습 교안 — Harris와 달리 <b>좌표 배열</b>이 나오므로 <code>cv2.circle</code>로 하나씩 그린다</figcaption></figure>
 
 <h3 class="sub-title">여러 Feature Detector를 같은 방식으로 쓰기</h3>
 <pre class="code">detector = cv2.GFTTDetector_create()             <span class="cm"># ① 검출기 생성 (cv2.??Detector_create)</span>
@@ -1014,7 +1025,7 @@ imgfe = cv2.drawKeypoints(img, keypoint, None)   <span class="cm"># ③ 특징�
   </tbody>
 </table>
 </div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-05-detectors.png" alt="실습 교안 — GFTT · FAST · SimpleBlob 세 검출기의 코드와 고양이 이미지 결과 비교"><figcaption>실습 교안 — <b>생성 → detect → drawKeypoints</b> 세 줄 구조는 같고 <b>검출기 이름만</b> 바뀐다. Blob 검출기는 특징점이 거의 없는 것이 정상(파라미터를 따로 줘야 한다)</figcaption></figure>
+<figure class="fig"><img width="1150" height="379" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-05-detectors.png" alt="실습 교안 — GFTT · FAST · SimpleBlob 세 검출기의 코드와 고양이 이미지 결과 비교"><figcaption>실습 교안 — <b>생성 → detect → drawKeypoints</b> 세 줄 구조는 같고 <b>검출기 이름만</b> 바뀐다. Blob 검출기는 특징점이 거의 없는 것이 정상(파라미터를 따로 줘야 한다)</figcaption></figure>
 <div class="warn"><b>&lsquo;특징점(keypoint)&rsquo;은 좌표만이 아니다</b> — 위치 <code>pt</code>, 크기 <code>size</code>, 방향 <code>angle</code>, 반응 강도 <code>response</code>를 담은 객체다. <code>drawKeypoints</code>에 <code>flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS</code>를 주면 크기·방향까지 원으로 그려 준다.</div>
 </section>
 
@@ -1027,14 +1038,14 @@ up   = cv2.pyrUp(img)       <span class="cm"># 가로·세로 2배  → 픽셀 �
 
 for i in [img, down, up]:
     print(i.shape)          <span class="out"># (646,880,3) → (323,440,3) → (1292,1760,3)</span></pre>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-06-pyramid.png" alt="실습 교안 — pyrDown/pyrUp 코드와 축소·확대된 여우 이미지, shape 출력"><figcaption>실습 교안 — 한 단계마다 크기가 정확히 <b>절반/두 배</b>가 된다</figcaption></figure>
+<figure class="fig"><img width="1150" height="575" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-06-pyramid.png" alt="실습 교안 — pyrDown/pyrUp 코드와 축소·확대된 여우 이미지, shape 출력"><figcaption>실습 교안 — 한 단계마다 크기가 정확히 <b>절반/두 배</b>가 된다</figcaption></figure>
 <div class="warn"><b>줄였다 키우면 원래대로 돌아오지 않는다</b> — <code>pyrDown</code>에서 <b>버려진 디테일은 복구되지 않고</b>, <code>pyrUp</code>은 빈 픽셀을 보간으로 채우므로 결과가 흐릿하다. 이 <b>&lsquo;잃어버린 차이&rsquo;</b>를 따로 저장한 것이 <b>Laplacian pyramid</b>다.</div>
 <pre class="code">down = cv2.pyrDown(img)
 up   = cv2.pyrUp(down)                    <span class="cm"># 원본 → 축소 → 확대 (흐려진 이미지)</span>
 
 laplacian = cv2.subtract(img, up)         <span class="cm"># 원본 − 흐린 이미지 = 손실된 디테일(고주파)</span>
 img_restored = up + laplacian             <span class="cm"># 흐린 이미지 + 디테일 = 원본 복원</span></pre>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-07-laplacian.png" alt="실습 교안 — pyrDown→pyrUp으로 흐려진 눈 부분과 Laplacian을 더해 복원한 눈 부분 비교"><figcaption>실습 교안 — 확대한 눈 주변을 보면 왼쪽(pyrUp 결과)은 뭉개져 있고, 오른쪽(+ Laplacian)은 원본의 선명함이 돌아왔다</figcaption></figure>
+<figure class="fig"><img width="1150" height="453" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-07-laplacian.png" alt="실습 교안 — pyrDown→pyrUp으로 흐려진 눈 부분과 Laplacian을 더해 복원한 눈 부분 비교"><figcaption>실습 교안 — 확대한 눈 주변을 보면 왼쪽(pyrUp 결과)은 뭉개져 있고, 오른쪽(+ Laplacian)은 원본의 선명함이 돌아왔다</figcaption></figure>
 <div class="tip"><b>과제 3-3 힌트</b> — &ldquo;Laplacian 피라미드로 복원&rdquo;은 위 네 줄이 전부다. <code>cv2.subtract</code>를 쓰는 이유는 <b>uint8에서 음수가 잘리는 것(포화 연산)</b>을 OpenCV가 처리해 주기 때문이고, 크기가 홀수라 <code>up</code>과 <code>img</code>의 shape이 어긋나면 <code>cv2.resize(up, (img.shape[1], img.shape[0]))</code>로 맞춘 뒤 빼야 한다.</div>
 </section>
 
@@ -1049,7 +1060,7 @@ print(digits.images[0].shape)   <span class="out"># (8, 8)        — 한 장의
 print(digits.data.shape)        <span class="out"># (1797, 64)    — 8×8을 한 줄(64개)로 펴 놓은 형태</span></pre>
 <div class="tip"><b><code>images</code>와 <code>data</code>의 차이</b> — 같은 데이터를 <b>2차원 이미지</b>로 볼 것이냐, <b>길이 64짜리 특징 벡터</b>로 볼 것이냐의 차이다. 모델에 넣을 때는 <code>data</code>(평탄화된 쪽)를 쓰고, 사람이 눈으로 볼 때는 <code>images</code>를 <code>plt.imshow(..., cmap='gray')</code>로 띄운다.
 <code>digits.target</code>은 각 이미지의 <b>정답 숫자(0~9)</b>다.</div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-08-digits.png" alt="실습 교안 — load_digits 코드와 0~9 숫자 이미지 10장"><figcaption>실습 교안 — <code>np.where(digits.target == digit)[0][0]</code> 은 &ldquo;해당 숫자가 처음 나오는 위치&rdquo;를 찾는 코드다</figcaption></figure>
+<figure class="fig"><img width="1150" height="536" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-08-digits.png" alt="실습 교안 — load_digits 코드와 0~9 숫자 이미지 10장"><figcaption>실습 교안 — <code>np.where(digits.target == digit)[0][0]</code> 은 &ldquo;해당 숫자가 처음 나오는 위치&rdquo;를 찾는 코드다</figcaption></figure>
 <pre class="code">from sklearn.model_selection import train_test_split
 
 X = digits.data       <span class="cm"># 입력 (1797, 64)</span>
@@ -1066,7 +1077,7 @@ print(X_train.shape, X_test.shape)     <span class="out"># (1437, 64) (360, 64) 
   </tbody>
 </table>
 </div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-09-split.png" alt="실습 교안 — train_test_split 공식 문서와 코드에 Train input/label, Test input/label을 표시한 그림"><figcaption>실습 교안 — 전체 데이터가 <b>입력(X)·정답(y)</b> 두 축과 <b>train·test</b> 두 축으로 네 조각이 된다</figcaption></figure>
+<figure class="fig"><img width="1150" height="673" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-09-split.png" alt="실습 교안 — train_test_split 공식 문서와 코드에 Train input/label, Test input/label을 표시한 그림"><figcaption>실습 교안 — 전체 데이터가 <b>입력(X)·정답(y)</b> 두 축과 <b>train·test</b> 두 축으로 네 조각이 된다</figcaption></figure>
 <pre class="code">from sklearn.neighbors import KNeighborsClassifier
 
 model = KNeighborsClassifier(n_neighbors=3)   <span class="cm"># 가까운 이웃 3개를 보고 다수결</span>
@@ -1083,8 +1094,8 @@ print("Accuracy:", accuracy)                  <span class="out"># 0.983333333333
   <li>어떤 모델이든 <b><code>fit</code> → <code>predict</code> → 평가</b> 순서는 동일하다 — scikit-learn의 통일된 인터페이스</li>
 </ul></div>
 <div class="figs">
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-10-knn.png" alt="실습 교안 — KNN 학습·예측 코드와 True 6 / Pred 6 결과 이미지"><figcaption>실습 교안 — 학습(fit)과 예측(predict)</figcaption></figure>
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-11-accuracy.png" alt="실습 교안 — accuracy_score 코드와 0.9833 출력"><figcaption>실습 교안 — 정확도 98.3%</figcaption></figure>
+  <figure class="fig"><img width="1150" height="469" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-10-knn.png" alt="실습 교안 — KNN 학습·예측 코드와 True 6 / Pred 6 결과 이미지"><figcaption>실습 교안 — 학습(fit)과 예측(predict)</figcaption></figure>
+  <figure class="fig"><img width="1051" height="418" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-11-accuracy.png" alt="실습 교안 — accuracy_score 코드와 0.9833 출력"><figcaption>실습 교안 — 정확도 98.3%</figcaption></figure>
 </div>
 </section>
 
@@ -1109,14 +1120,53 @@ binary = gray &gt; threshold                 <span class="cm"># 임계값보다 
 print("Otsu threshold:", threshold)       <span class="out"># 0.388671875</span></pre>
 <div class="note-box"><b>Otsu 임계값이란</b> — 히스토그램을 보고 <b>두 그룹(배경/물체)으로 나눴을 때 각 그룹 내부의 분산이 가장 작아지는</b> 값을 자동으로 찾아 준다. 사람이 숫자를 손으로 고르지 않아도 된다는 것이 핵심.
 <b>binary는 True/False 배열</b>이라 <code>plt.imshow(binary, cmap='gray')</code>로 흑백 두 값으로만 보인다.</div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-12-otsu.png" alt="실습 교안 — Otsu 임계값 코드와 흑백 이진화된 우주인 사진"><figcaption>실습 교안 — 자동으로 고른 임계값 0.389로 배경과 인물이 분리됐다</figcaption></figure>
+<figure class="fig"><img width="1150" height="506" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-12-otsu.png" alt="실습 교안 — Otsu 임계값 코드와 흑백 이진화된 우주인 사진"><figcaption>실습 교안 — 자동으로 고른 임계값 0.389로 배경과 인물이 분리됐다</figcaption></figure>
 <div class="note-box"><b>데이터 증강 (Data Augmentation)</b> — 학습 데이터를 늘리기 위해 <b>기존 이미지에 변환을 적용해 새 이미지를 만드는</b> 것. 같은 사진이라도 조금 회전하거나 노이즈가 낀 버전을 함께 학습하면 모델이 더 다양한 상황에 견딘다.
 <ul class="ul">
   <li><b>randomAffine</b> — 회전 · 이동 · 확대(직선은 유지) &nbsp;·&nbsp; <b>randomPerspective</b> — 원근 왜곡(보는 각도가 바뀐 효과)</li>
   <li><b>randomFilter</b> — 블러 · 샤프닝 등 필터 &nbsp;·&nbsp; <b>randomNoise</b> — 노이즈 추가</li>
   <li>이번 <b>과제 1번(변환)과 2번(필터 · 노이즈)</b>이 정확히 이 변환들을 손으로 해 보는 문제다</li>
 </ul></div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-13-augment.png" alt="실습 교안 — 데이터 증강 개념도와 여우 이미지에 적용한 5가지 변환 결과"><figcaption>실습 교안 — 원본 하나에서 여러 학습 데이터를 만들어 낸다</figcaption></figure>
+<figure class="fig"><img width="1150" height="422" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-13-augment.png" alt="실습 교안 — 데이터 증강 개념도와 여우 이미지에 적용한 5가지 변환 결과"><figcaption>실습 교안 — 원본 하나에서 여러 학습 데이터를 만들어 낸다</figcaption></figure>
+</section>
+
+<!-- ===================== 라이브러리 지도 ===================== -->
+<section class="sec" id="py-libs">
+  <div class="sec-head"><span class="sec-badge">PY 5</span><h2 class="sec-title">정리 — 라이브러리 지도<small>NumPy · OpenCV · SciPy · scikit 계열, 그리고 cv2라는 이름</small></h2></div>
+
+<div class="note-box"><b>이번 실습에서 네 개의 라이브러리를 오갔다</b> — 각각 <b>무엇에 특화</b>되어 있는지 갈래를 잡아 두면 이후 코드를 읽기 쉽다.</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>라이브러리</th><th>특화 영역</th><th>설치 이름 → import 이름</th></tr></thead>
+  <tbody>
+    <tr><td>NumPy</td><td><b>행렬 · 배열</b> 연산. 아래 모든 라이브러리가 이 위에 올라간다</td><td><code>numpy</code> → <code>numpy</code></td></tr>
+    <tr><td>OpenCV</td><td><b>컴퓨터비전</b> — 입출력 · 변환 · 필터링 · 검출</td><td><code>opencv-python</code> → <code>cv2</code></td></tr>
+    <tr><td>SciPy</td><td><b>과학 · 공학 계산</b> 전반 — 적분 · 최적화 · 신호처리 · 통계</td><td><code>scipy</code> → <code>scipy</code></td></tr>
+    <tr><td>scikit-learn</td><td><b>머신러닝</b> — 분류 · 회귀 · 군집 · 모델 평가 <span style="color:#6b7280">(<a class="ext" href="#py-sklearn">PY 3</a>)</span></td><td><code>scikit-learn</code> → <code>sklearn</code></td></tr>
+    <tr><td>scikit-image</td><td><b>이미지 처리 알고리즘</b> — 필터 · 분할 · 측정 <span style="color:#6b7280">(<a class="ext" href="#py-skimage">PY 4</a>)</span></td><td><code>scikit-image</code> → <code>skimage</code></td></tr>
+    <tr><td>scikit-bio</td><td><b>생물정보학</b> — 같은 계열의 형제 패키지</td><td><code>scikit-bio</code> → <code>skbio</code></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="warn"><b>설치 이름과 import 이름이 다르다</b> — <code>pip install scikit-learn</code>으로 깔고 <code>import sklearn</code>으로 부른다.
+<code>pip install sklearn</code>은 <b>올바른 설치 방법이 아니다</b>(설치를 안내하다 중단되는 껍데기 패키지다).</div>
+
+<div class="note-box"><b>scikit이라는 이름의 뿌리</b>
+<ul class="ul">
+  <li><b>SciPy</b> = <b>Sci</b>entific <b>Py</b>thon — 과학 계산용 파이썬</li>
+  <li><b>scikit</b> = <b>SciPy Toolkit</b> — SciPy 생태계에 얹는 <b>분야별 도구 모음</b>이라는 뜻</li>
+  <li>그래서 <b>scikit-learn</b>(머신러닝) · <b>scikit-image</b>(이미지) · <b>scikit-bio</b>(생물정보)처럼
+    <b>&ldquo;scikit- + 분야&rdquo;</b> 형태의 형제 패키지가 여럿이다 — 이름이 비슷한 것은 우연이 아니다</li>
+</ul></div>
+
+<h3 class="sub-title">cv2의 &lsquo;2&rsquo;는 버전 번호가 아니다</h3>
+<div class="note-box"><ul class="ul">
+  <li>OpenCV는 2.x · 3.x · 4.x로 올라왔지만, 파이썬에서는 <b>어느 버전이든 <code>import cv2</code></b>다</li>
+  <li><b>2는 &ldquo;2세대 API&rdquo;</b>를 뜻한다. 초기의 <b>C 언어 API</b>는 <code>cv</code>로 불렀고,
+    <b>OpenCV 2.0에서 도입된 C++ API</b>를 감싼 파이썬 모듈이 <code>cv2</code>가 되어 그대로 굳었다</li>
+  <li>실제 버전은 코드로 확인한다 — <code>cv2.__version__</code></li>
+</ul></div>
+<div class="tip"><b>한 줄로</b> — <b>모듈 이름 <code>cv2</code>는 &ldquo;C++ 기반의 현대 API&rdquo;라는 표시이지, 설치된 버전과는 무관하다.</b></div>
 </section>
 
 <!-- ===================== 학생 발표 ===================== -->

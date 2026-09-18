@@ -357,11 +357,11 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li>전처리는 하나의 기법이 아니라 <b>여러 단계가 순서대로 연결된 파이프라인</b>이다</li>
   <li>각 단계는 <b>앞 단계의 출력을 입력으로 받아</b> 점진적으로 텍스트를 정제한다</li>
 </ul></div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-01-pipeline.png" alt="교안 5p — NLP 텍스트 전처리 파이프라인: 원시 텍스트 → 정제 → 정규화 → 토큰화 → 품사 태깅 → 불용어 제거 → 어간/표제어 → 피처 표현(수치 벡터)"><figcaption>교안 5p — 원시 텍스트 → 정제(Cleaning) → 정규화(Normalization) → 토큰화(Tokenization) → 품사 태깅(POS Tagging) → 불용어 제거(Stopword) → 어간/표제어(Stem · Lemma) → <b>피처 표현(수치 벡터)</b></figcaption></figure>
+<figure class="fig"><img width="1422" height="418" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-01-pipeline.png" alt="교안 5p — NLP 텍스트 전처리 파이프라인: 원시 텍스트 → 정제 → 정규화 → 토큰화 → 품사 태깅 → 불용어 제거 → 어간/표제어 → 피처 표현(수치 벡터)"><figcaption>교안 5p — 원시 텍스트 → 정제(Cleaning) → 정규화(Normalization) → 토큰화(Tokenization) → 품사 태깅(POS Tagging) → 불용어 제거(Stopword) → 어간/표제어(Stem · Lemma) → <b>피처 표현(수치 벡터)</b></figcaption></figure>
 
 <h3 class="sub-title">전처리의 최종 목적</h3>
 <div class="note-box">전처리의 목표는 <b>&ldquo;텍스트를 모델이 학습할 수 있는 수치 표현으로 바꾸는 것&rdquo;</b>이다.</div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-02-text-to-vector.png" alt="교안 6p — 원시 문장 → 토큰 → 정규화 토큰 → 어휘 사전 인덱스 → 수치 벡터로 이어지는 변환 과정"><figcaption>교안 6p — 원시 문장 → 토큰 → 정규화 토큰 → <b>어휘 사전 인덱스</b> → <b>수치 벡터</b>. 머신러닝 모델은 숫자만 이해하므로 전처리는 그 변환을 위한 준비 작업이다</figcaption></figure>
+<figure class="fig"><img width="1367" height="620" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-02-text-to-vector.png" alt="교안 6p — 원시 문장 → 토큰 → 정규화 토큰 → 어휘 사전 인덱스 → 수치 벡터로 이어지는 변환 과정"><figcaption>교안 6p — 원시 문장 → 토큰 → 정규화 토큰 → <b>어휘 사전 인덱스</b> → <b>수치 벡터</b>. 머신러닝 모델은 숫자만 이해하므로 전처리는 그 변환을 위한 준비 작업이다</figcaption></figure>
 </section>
 
 <!-- ===================== 3.1 토큰화 ===================== -->
@@ -425,7 +425,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 
 <h3 class="sub-title">토큰화가 어려운 사례</h3>
 <div class="note-box"><b>공백만으로 자르는 단순한 방식</b>은 많은 경우에 잘못된 결과를 만든다.</div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-03-hard-cases.png" alt="교안 11p — 토큰화가 어려운 대표 사례: 구두점, 축약형, 복합 개체, URL·이메일, 숫자·기호, 한국어 어절"><figcaption>교안 11p — <b>구두점</b>(Mr. Smith) · <b>축약형</b>(don&rsquo;t / I&rsquo;m) · <b>복합 개체</b>(United States, New York) · <b>URL · 이메일</b> · <b>숫자 · 기호</b>(3.14, 1,000원, C++) · <b>한국어 어절</b>(학교에서를 → 학교/에서/를)</figcaption></figure>
+<figure class="fig"><img width="1496" height="758" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-03-hard-cases.png" alt="교안 11p — 토큰화가 어려운 대표 사례: 구두점, 축약형, 복합 개체, URL·이메일, 숫자·기호, 한국어 어절"><figcaption>교안 11p — <b>구두점</b>(Mr. Smith) · <b>축약형</b>(don&rsquo;t / I&rsquo;m) · <b>복합 개체</b>(United States, New York) · <b>URL · 이메일</b> · <b>숫자 · 기호</b>(3.14, 1,000원, C++) · <b>한국어 어절</b>(학교에서를 → 학교/에서/를)</figcaption></figure>
 
 <h3 class="sub-title">NLTK 토크나이저 비교</h3>
 <div class="note-box"><b>NLTK (Natural Language Toolkit)</b> — 이번 주차 실습 전체가 이 라이브러리 위에서 돌아간다
@@ -499,14 +499,14 @@ print(len(sentences))   <span class="cm"># 4 ← A.I. 뒤에서 잘림</span>
   <li><b>언제 나오나</b> — 토크나이저가 미리 만들어 둔 <b>어휘 사전(vocabulary)</b>에 없는 단어, 즉 <b>OOV</b>를 만났을 때 그 자리를 대신한다</li>
   <li><b>무엇이 문제인가</b> — 서로 다른 미등록 단어가 <b>전부 같은 토큰 하나로 뭉뚱그려져</b>, 원래 단어가 갖고 있던 의미와 정보가 <b>완전히 사라진다</b></li>
 </ul></div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-04-oov-subword.png" alt="교안 17p — OOV 문제와 서브워드 토큰화: unhappiness → [UNK] vs unhappiness → un + happi + ness"><figcaption>교안 17p — 단어 단위는 &ldquo;unhappiness&rdquo; → <b>[UNK]</b>(정보 완전 손실), 서브워드는 &ldquo;unhappiness&rdquo; → <b>un + happi + ness</b>(의미 일부라도 보존). 핵심 아이디어는 <b>자주 등장하는 문자열은 통째로, 드문 문자열은 더 작은 조각으로 분해</b>하는 것</figcaption></figure>
+<figure class="fig"><img width="1368" height="512" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-04-oov-subword.png" alt="교안 17p — OOV 문제와 서브워드 토큰화: unhappiness → [UNK] vs unhappiness → un + happi + ness"><figcaption>교안 17p — 단어 단위는 &ldquo;unhappiness&rdquo; → <b>[UNK]</b>(정보 완전 손실), 서브워드는 &ldquo;unhappiness&rdquo; → <b>un + happi + ness</b>(의미 일부라도 보존). 핵심 아이디어는 <b>자주 등장하는 문자열은 통째로, 드문 문자열은 더 작은 조각으로 분해</b>하는 것</figcaption></figure>
 
 <h3 class="sub-title">BPE (Byte Pair Encoding)</h3>
 <div class="note-box"><ul class="ul">
   <li>가장 자주 함께 등장하는 <b>문자 쌍을 반복적으로 하나로 병합</b>하는 알고리즘</li>
   <li>원하는 <b>어휘 크기에 도달할 때까지</b> 병합을 반복한다</li>
 </ul></div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-05-bpe-merge.png" alt="교안 18p — BPE 병합 과정: 문자 단위 분해에서 시작해 (e,s)→es, (es,t)→est, (l,o)→lo, (lo,w)→low 순으로 병합"><figcaption>교안 18p — 문자 단위 분해에서 시작해 빈도가 가장 높은 쌍부터 <b>(e,s)→es · (es,t)→est · (l,o)→lo · (lo,w)→low</b> 순으로 병합해 간다</figcaption></figure>
+<figure class="fig"><img width="1396" height="685" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-05-bpe-merge.png" alt="교안 18p — BPE 병합 과정: 문자 단위 분해에서 시작해 (e,s)→es, (es,t)→est, (l,o)→lo, (lo,w)→low 순으로 병합"><figcaption>교안 18p — 문자 단위 분해에서 시작해 빈도가 가장 높은 쌍부터 <b>(e,s)→es · (es,t)→est · (l,o)→lo · (lo,w)→low</b> 순으로 병합해 간다</figcaption></figure>
 
 <h3 class="sub-title">서브워드 알고리즘 비교</h3>
 <div class="tbl-wrap">
@@ -522,7 +522,7 @@ print(len(sentences))   <span class="cm"># 4 ← A.I. 뒤에서 잘림</span>
 <div class="good">한국어에서는 <b>SentencePiece(Unigram/BPE)</b>가 사실상 <b>표준</b>으로 사용된다.</div>
 
 <h3 class="sub-title">한국어 토큰화 — 어절 ≠ 단어</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-06-korean-eojeol.png" alt="교안 20p — 한국어 토큰화: 공백(어절) 기준 분리와 형태소 기준 분리 비교, 교착어의 특성"><figcaption>교안 20p — &ldquo;나는 학교에서 책을 읽었다&rdquo; : <b>공백(어절) 기준</b>은 ['나는','학교에서','책을','읽었다']로 <b>조사 · 어미가 붙어 어휘 폭발</b>, <b>형태소 기준</b>은 ['나','는','학교','에서','책','을','읽','었','다']로 <b>어휘 축소</b></figcaption></figure>
+<figure class="fig"><img width="1405" height="614" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-06-korean-eojeol.png" alt="교안 20p — 한국어 토큰화: 공백(어절) 기준 분리와 형태소 기준 분리 비교, 교착어의 특성"><figcaption>교안 20p — &ldquo;나는 학교에서 책을 읽었다&rdquo; : <b>공백(어절) 기준</b>은 ['나는','학교에서','책을','읽었다']로 <b>조사 · 어미가 붙어 어휘 폭발</b>, <b>형태소 기준</b>은 ['나','는','학교','에서','책','을','읽','었','다']로 <b>어휘 축소</b></figcaption></figure>
 <div class="note-box"><b>왜 이런 차이가 생기나 — 한국어는 교착어(agglutinative language)</b>
 <ul class="ul">
   <li>하나의 어간에 <b>조사 · 어미가 계속 결합</b>한다 (학교 / 학교가 / 학교를 / 학교에서 / 학교에서만 …)</li>
@@ -535,7 +535,7 @@ print(len(sentences))   <span class="cm"># 4 ← A.I. 뒤에서 잘림</span>
 </ul></div>
 
 <h3 class="sub-title">한국어 토큰화의 중의성</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-07-korean-ambiguity.png" alt="교안 21p — '아버지가방에들어가신다'의 잘못된 분해와 올바른 분해 비교"><figcaption>교안 21p — 띄어쓰기가 잘못되면 완전히 다른 의미로 분해된다. &ldquo;아버지가방에들어가신다&rdquo; → <b>잘못된 분해</b>(아버지/가방/에/들어가신다) vs <b>올바른 분해</b>(아버지/가/방/에/들어가/신다)</figcaption></figure>
+<figure class="fig"><img width="1275" height="606" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-07-korean-ambiguity.png" alt="교안 21p — '아버지가방에들어가신다'의 잘못된 분해와 올바른 분해 비교"><figcaption>교안 21p — 띄어쓰기가 잘못되면 완전히 다른 의미로 분해된다. &ldquo;아버지가방에들어가신다&rdquo; → <b>잘못된 분해</b>(아버지/가방/에/들어가신다) vs <b>올바른 분해</b>(아버지/가/방/에/들어가/신다)</figcaption></figure>
 
 <h3 class="sub-title">실습 ④ 한국어 형태소 분석 (KoNLPy · Kiwi)</h3>
 <pre class="code"><span class="cm">!pip install konlpy</span>
@@ -915,7 +915,7 @@ print(stemmer.stem("battling"))
 </ul></div>
 
 <h3 class="sub-title">어간 추출 vs 표제어 추출</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-08-stem-vs-lemma.png" alt="교안 46p — studies/studying/better/battling/was에 대한 어간 추출과 표제어 추출 결과 비교"><figcaption>교안 46p — <b>어간 추출</b>(studi · studi · better · battl · wa)과 <b>표제어 추출</b>(study · study · good · battle · be)의 결과 비교</figcaption></figure>
+<figure class="fig"><img width="1390" height="663" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-08-stem-vs-lemma.png" alt="교안 46p — studies/studying/better/battling/was에 대한 어간 추출과 표제어 추출 결과 비교"><figcaption>교안 46p — <b>어간 추출</b>(studi · studi · better · battl · wa)과 <b>표제어 추출</b>(study · study · good · battle · be)의 결과 비교</figcaption></figure>
 <div class="tbl-wrap">
 <table>
   <thead><tr><th>구분</th><th>어간 추출 (Stemming)</th><th>표제어 추출 (Lemmatization)</th></tr></thead>
@@ -1053,7 +1053,7 @@ print(len(sents))
 <section class="sec" id="order">
   <div class="sec-head"><span class="sec-badge">3.11</span><h2 class="sec-title">전처리 순서 설계와 통합 파이프라인<small>순서가 결과를 바꾼다 · preprocess() 함수</small></h2></div>
 
-<figure class="fig"><img loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-09-pipeline-order.png" alt="교안 55p — 권장 순서(정제·정규화 → 토큰화 → POS 태깅 → 표제어 추출)와 잘못된 순서 비교, 핵심 원칙 4가지"><figcaption>교안 55p — <b>권장 순서</b>(정제 · 정규화 → 토큰화 → POS 태깅 → 표제어 추출)에서는 &ldquo;was&rdquo; → <b>be</b>(정확), <b>잘못된 순서</b>(불용어 제거 → 표제어 추출 → POS 태깅 → 정제)에서는 &ldquo;was&rdquo; → <b>wa</b>(부정확)</figcaption></figure>
+<figure class="fig"><img width="1557" height="681" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-09-pipeline-order.png" alt="교안 55p — 권장 순서(정제·정규화 → 토큰화 → POS 태깅 → 표제어 추출)와 잘못된 순서 비교, 핵심 원칙 4가지"><figcaption>교안 55p — <b>권장 순서</b>(정제 · 정규화 → 토큰화 → POS 태깅 → 표제어 추출)에서는 &ldquo;was&rdquo; → <b>be</b>(정확), <b>잘못된 순서</b>(불용어 제거 → 표제어 추출 → POS 태깅 → 정제)에서는 &ldquo;was&rdquo; → <b>wa</b>(부정확)</figcaption></figure>
 
 <div class="good"><b>핵심 원칙</b><br>
 ① <b>표제어 추출</b>은 품사 정보를 필요로 하므로 <b>POS 태깅 뒤에</b> 수행한다<br>
@@ -1115,7 +1115,7 @@ print(preprocess("The children were studying NLP books!"))
 <div class="tip"><b>전처리 관점에서 기억할 것</b> — BERT는 문맥을 스스로 학습하므로
 <b>불용어를 제거하지 않는 것이 일반적</b>이고(<a class="ext" href="#stop">3.3</a>),
 <b>어간 · 표제어 추출로 원형을 복원할 필요도 없다</b>. 아래 비교표가 그 차이를 정리한 것이다.</div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-10-pretrained-era.png" alt="교안 59p — 전통적 NLP 전처리와 사전학습 모델 시대의 전처리 비교"><figcaption>교안 59p — 전통적 파이프라인과 BERT · GPT 시대의 전처리 관행 비교</figcaption></figure>
+<figure class="fig"><img width="1485" height="681" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-10-pretrained-era.png" alt="교안 59p — 전통적 NLP 전처리와 사전학습 모델 시대의 전처리 비교"><figcaption>교안 59p — 전통적 파이프라인과 BERT · GPT 시대의 전처리 관행 비교</figcaption></figure>
 <div class="tbl-wrap">
 <table>
   <thead><tr><th>항목</th><th>전통적 파이프라인</th><th>BERT · GPT 시대</th></tr></thead>
@@ -1140,7 +1140,7 @@ print(preprocess("The children were studying NLP books!"))
   <li>프로젝트는 여러 하위 단계로 나눌 수 있으며 이 단계들은 <b>순차적으로 수행</b>된다</li>
   <li>각 단계를 <b>전문화된 리소스</b>로 수행하므로 전체 <b>효율성이 향상</b>되는 경향이 있다</li>
 </ul></div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-11-project-6steps.png" alt="교안 60p — NLP 프로젝트의 6단계: 데이터 수집, 데이터 전처리, 피처 추출, 모델 개발, 모델 평가, 모델 배포"><figcaption>교안 60p — ① 데이터 수집 → ② 데이터 전처리 → ③ 피처 추출 → ④ 모델 개발 → ⑤ 모델 평가 → ⑥ 모델 배포. <b>성능이 부족하면 전처리 · 피처 · 모델 단계로 되돌아가 반복 개선</b>하며, 실무에서 전체 소요 시간의 <b>60~80%는 1~2단계</b>에 쓰인다</figcaption></figure>
+<figure class="fig"><img width="1384" height="627" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-11-project-6steps.png" alt="교안 60p — NLP 프로젝트의 6단계: 데이터 수집, 데이터 전처리, 피처 추출, 모델 개발, 모델 평가, 모델 배포"><figcaption>교안 60p — ① 데이터 수집 → ② 데이터 전처리 → ③ 피처 추출 → ④ 모델 개발 → ⑤ 모델 평가 → ⑥ 모델 배포. <b>성능이 부족하면 전처리 · 피처 · 모델 단계로 되돌아가 반복 개선</b>하며, 실무에서 전체 소요 시간의 <b>60~80%는 1~2단계</b>에 쓰인다</figcaption></figure>
 
 <div class="flow">
   <div class="fl"><div class="fl-n">1</div><div><h4>데이터 수집 (Data Collection)</h4>
