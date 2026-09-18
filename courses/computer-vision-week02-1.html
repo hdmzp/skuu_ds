@@ -445,8 +445,8 @@ t = (9, 2, 3)   <span class="cm"># 새 튜플을 다시 할당하는 것은 OK</
   <li><b>슬라이싱 <code>list[start:end]</code> 는 start부터 (end−1)까지</b> — 끝 번호는 <b>포함하지 않는다</b></li>
 </ul></div>
 <div class="figs">
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-01-list-index.png" alt="교안 — 리스트·문자열 인덱싱 (index는 0부터)"><figcaption>교안 — 리스트·문자열 인덱싱 (index는 0부터)</figcaption></figure>
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-02-list-slice.png" alt="교안 — 슬라이싱 [start:end] 는 end−1까지 ('vision'[1:4] → 'isi')"><figcaption>교안 — 슬라이싱 [start:end] 는 end−1까지 ('vision'[1:4] → 'isi')</figcaption></figure>
+  <figure class="fig"><img width="466" height="424" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-01-list-index.png" alt="교안 — 리스트·문자열 인덱싱 (index는 0부터)"><figcaption>교안 — 리스트·문자열 인덱싱 (index는 0부터)</figcaption></figure>
+  <figure class="fig"><img width="514" height="332" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-02-list-slice.png" alt="교안 — 슬라이싱 [start:end] 는 end−1까지 ('vision'[1:4] → 'isi')"><figcaption>교안 — 슬라이싱 [start:end] 는 end−1까지 ('vision'[1:4] → 'isi')</figcaption></figure>
 </div>
 <div class="note-box"><b>더 알아 두면 편한 것</b>
 <pre class="code">a = [0, 1, 2, 3, 4, 5]
@@ -506,10 +506,10 @@ m.sum(axis=1)    <span class="cm"># [6 15]   행끼리 합 (좌우로)</span></p
 </div>
 
 <h3 class="sub-title">교안의 같은 배열로 비교하기</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-04-example-array.png" alt="교안 — 비교에 쓰는 원본 배열 example (shape (2, 3, 4), 값은 0~23)"><figcaption>교안 — 비교에 쓰는 원본 배열 example (shape (2, 3, 4), 값은 0~23)</figcaption></figure>
+<figure class="fig"><img width="297" height="207" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-04-example-array.png" alt="교안 — 비교에 쓰는 원본 배열 example (shape (2, 3, 4), 값은 0~23)"><figcaption>교안 — 비교에 쓰는 원본 배열 example (shape (2, 3, 4), 값은 0~23)</figcaption></figure>
 <div class="figs">
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-03-reshape.png" alt="reshape(4, 3, 2) — 0,1,2,3… 순서 그대로 다시 끊어 담는다"><figcaption>reshape(4, 3, 2) — 0,1,2,3… 순서 그대로 다시 끊어 담는다</figcaption></figure>
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-05-transpose.png" alt="transpose(2, 1, 0) — 축이 뒤집혀 0과 12가 새로 짝지어진다 (shape (4, 3, 2))"><figcaption>transpose(2, 1, 0) — 축이 뒤집혀 0과 12가 새로 짝지어진다 (shape (4, 3, 2))</figcaption></figure>
+  <figure class="fig"><img width="379" height="381" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-03-reshape.png" alt="reshape(4, 3, 2) — 0,1,2,3… 순서 그대로 다시 끊어 담는다"><figcaption>reshape(4, 3, 2) — 0,1,2,3… 순서 그대로 다시 끊어 담는다</figcaption></figure>
+  <figure class="fig"><img width="419" height="406" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-05-transpose.png" alt="transpose(2, 1, 0) — 축이 뒤집혀 0과 12가 새로 짝지어진다 (shape (4, 3, 2))"><figcaption>transpose(2, 1, 0) — 축이 뒤집혀 0과 12가 새로 짝지어진다 (shape (4, 3, 2))</figcaption></figure>
 </div>
 <div class="note-box"><b>무엇이 달라졌나</b>
 <ul class="ul">
@@ -548,7 +548,7 @@ PIL·OpenCV로 이미지를 열었을 때 왼쪽 위가 (0, 0)이고 아래로 �
 <pre class="code">image[0:50, 100:200] = 0
 <span class="cm"># 세로 0~50, 가로 100~200 픽셀을 검은색(0,0,0)으로 만든다</span>
 <span class="cm"># 아래와 같은 뜻: image[0:50, 100:200, :] = [0, 0, 0]</span></pre></div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-06-image-masking.jpg" alt="교안 — image[0:50, 100:200] = [0,0,0] 슬라이싱으로 영역을 검게 칠한 결과"><figcaption>교안 — image[0:50, 100:200] = [0,0,0] 슬라이싱으로 영역을 검게 칠한 결과</figcaption></figure>
+<figure class="fig"><img width="681" height="588" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-06-image-masking.jpg" alt="교안 — image[0:50, 100:200] = [0,0,0] 슬라이싱으로 영역을 검게 칠한 결과"><figcaption>교안 — image[0:50, 100:200] = [0,0,0] 슬라이싱으로 영역을 검게 칠한 결과</figcaption></figure>
 <div class="tip"><b>활용</b> — 이 한 줄이 <b>Masking</b>, ROI 잘라내기, 이미지 위에 사각형 채우기, 이미지 합성의 기본이 된다.
 필요한 부분만 잘라 처리하면 계산량도 줄어든다.</div>
 </section>
@@ -557,12 +557,12 @@ PIL·OpenCV로 이미지를 열었을 때 왼쪽 위가 (0, 0)이고 아래로 �
   <div class="sec-head"><span class="sec-badge">06</span><h2 class="sec-title">OpenCV의 BGR 채널 순서<small>과제 감점 1순위 — 반드시 기억할 것</small></h2></div>
 <div class="note-box">OpenCV(<code>cv2</code>)는 Open Source Computer Vision 라이브러리로 C·C++·Java·Python에서 쓸 수 있고,
 warping · filtering · binarize · edge detect · pattern recognition · ROI 처리를 제공한다. Python에서는 <b>NumPy + OpenCV</b> 조합이 강력하다.</div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-08-channel-order.png" alt="교안 — OpenCV의 채널 인덱스: 0 = blue, 1 = green, 2 = red"><figcaption>교안 — OpenCV의 채널 인덱스: 0 = blue, 1 = green, 2 = red</figcaption></figure>
+<figure class="fig"><img width="1264" height="477" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-08-channel-order.png" alt="교안 — OpenCV의 채널 인덱스: 0 = blue, 1 = green, 2 = red"><figcaption>교안 — OpenCV의 채널 인덱스: 0 = blue, 1 = green, 2 = red</figcaption></figure>
 <div class="warn"><b>핵심 차이</b> — <span class="hw">matplotlib은 R-G-B, OpenCV는 B-G-R 순서</span>로 채널을 다룬다.
 그래서 <span class="hw">cv2.imread로 불러온 이미지를 matplotlib으로 띄우면 이미지 색이 다르게</span> 나온다 (파란 것이 빨갛게, 노란 눈이 파랗게).</div>
 <div class="figs">
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-07-imread-bgr.jpg" alt="cv2.imread 결과를 그대로 plt.imshow — 노란 눈이 파랗게 나온다 (BGR을 RGB로 해석)"><figcaption>cv2.imread 결과를 그대로 plt.imshow — 노란 눈이 파랗게 나온다 (BGR을 RGB로 해석)</figcaption></figure>
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-09-cvtcolor-rgb.jpg" alt="cv2.cvtColor(img, cv2.COLOR_BGR2RGB) 적용 후 — 원래 색으로 보인다"><figcaption>cv2.cvtColor(img, cv2.COLOR_BGR2RGB) 적용 후 — 원래 색으로 보인다</figcaption></figure>
+  <figure class="fig"><img width="374" height="391" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-07-imread-bgr.jpg" alt="cv2.imread 결과를 그대로 plt.imshow — 노란 눈이 파랗게 나온다 (BGR을 RGB로 해석)"><figcaption>cv2.imread 결과를 그대로 plt.imshow — 노란 눈이 파랗게 나온다 (BGR을 RGB로 해석)</figcaption></figure>
+  <figure class="fig"><img width="390" height="338" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-09-cvtcolor-rgb.jpg" alt="cv2.cvtColor(img, cv2.COLOR_BGR2RGB) 적용 후 — 원래 색으로 보인다"><figcaption>cv2.cvtColor(img, cv2.COLOR_BGR2RGB) 적용 후 — 원래 색으로 보인다</figcaption></figure>
 </div>
 <div class="fnc">
   <h4>cv2.cvtColor — 색공간 변환</h4>
@@ -605,7 +605,7 @@ print(img.shape, img.dtype)                        <span class="cm"># (384, 512,
     <dt>주의 ②</dt><dd><span class="term" tabindex="0" data-tip="지정한 밀리초만큼 키 입력을 기다리는 함수. 0을 주면 아무 키나 누를 때까지 기다린다. 이 함수가 없으면 창이 그려지기도 전에 프로그램이 끝난다.">cv2.waitKey()</span>를 함께 불러야 창이 유지된다. <code>cv2.waitKey(0)</code> → 아무 키나 누를 때까지 대기</dd>
     <dt>주의 ③</dt><dd>Colab·주피터에서는 창을 띄울 수 없다 → <code>cv2_imshow(img)</code> 또는 <code>plt.imshow</code> 사용</dd>
   </dl>
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-10-imshow.png" alt="교안 — cv2.imshow + waitKey + destroyAllWindows"><figcaption>교안 — cv2.imshow + waitKey + destroyAllWindows</figcaption></figure>
+  <figure class="fig"><img width="283" height="68" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-10-imshow.png" alt="교안 — cv2.imshow + waitKey + destroyAllWindows"><figcaption>교안 — cv2.imshow + waitKey + destroyAllWindows</figcaption></figure>
 <pre class="code">cv2.imshow('cat', img)      <span class="cm"># BGR 그대로 넣는다</span>
 cv2.waitKey(0)              <span class="cm"># 키 입력 대기 (없으면 창이 바로 닫힘)</span>
 cv2.destroyAllWindows()     <span class="cm"># 창 정리</span></pre>
@@ -619,7 +619,7 @@ cv2.destroyAllWindows()     <span class="cm"># 창 정리</span></pre>
     <dt>확장자</dt><dd>확장자로 형식이 결정된다 (<code>.jpg</code> 손실 압축 / <code>.png</code> 무손실)</dd>
     <dt>채널</dt><dd>저장할 때도 <b>BGR 기준</b>이다. RGB로 바꿔 둔 배열을 그대로 저장하면 색이 뒤집혀 저장된다</dd>
   </dl>
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-11-imwrite.png" alt="교안 — cv2.imwrite(파일명, 이미지)"><figcaption>교안 — cv2.imwrite(파일명, 이미지)</figcaption></figure>
+  <figure class="fig"><img width="279" height="27" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-11-imwrite.png" alt="교안 — cv2.imwrite(파일명, 이미지)"><figcaption>교안 — cv2.imwrite(파일명, 이미지)</figcaption></figure>
 </div>
 </section>
 
@@ -657,8 +657,8 @@ cv2.destroyAllWindows()     <span class="cm"># 창 정리</span></pre>
   </dl>
 </div>
 
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-12-threshold-code.png" alt="교안 코드 — threshold(전역) vs adaptiveThreshold(MEAN_C / GAUSSIAN_C), blockSize 15 · C 2"><figcaption>교안 코드 — threshold(전역) vs adaptiveThreshold(MEAN_C / GAUSSIAN_C), blockSize 15 · C 2</figcaption></figure>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-13-threshold-result.png" alt="결과 — Global은 뭉개지고, Mean·Gaussian(적응형)은 털의 결까지 살아난다"><figcaption>결과 — Global은 뭉개지고, Mean·Gaussian(적응형)은 털의 결까지 살아난다</figcaption></figure>
+<figure class="fig"><img width="647" height="250" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-12-threshold-code.png" alt="교안 코드 — threshold(전역) vs adaptiveThreshold(MEAN_C / GAUSSIAN_C), blockSize 15 · C 2"><figcaption>교안 코드 — threshold(전역) vs adaptiveThreshold(MEAN_C / GAUSSIAN_C), blockSize 15 · C 2</figcaption></figure>
+<figure class="fig"><img width="361" height="250" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-13-threshold-result.png" alt="결과 — Global은 뭉개지고, Mean·Gaussian(적응형)은 털의 결까지 살아난다"><figcaption>결과 — Global은 뭉개지고, Mean·Gaussian(적응형)은 털의 결까지 살아난다</figcaption></figure>
 <div class="note-box"><b>결과 읽는 법</b> — 같은 고양이 사진인데도 <b>Global(전역)</b> 은 밝은 부분이 통째로 날아가 형체가 뭉개졌고,
 <b>Mean · Gaussian(적응형)</b> 은 털의 결까지 살아 있다. 조명이 고르지 않은 사진에서는 적응형이 유리하다는 것을 보여 주는 예다.</div>
 </section>
@@ -678,12 +678,12 @@ cv2.destroyAllWindows()     <span class="cm"># 창 정리</span></pre>
     <dt>주의</dt><dd>dsize는 <code>(width, height)</code> 순서인데 <code>img.shape</code>는 <code>(height, width)</code> 순서다 — <b>서로 반대</b></dd>
   </dl>
 </div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-14-resize.png" alt="교안 코드 — 축소는 INTER_AREA, 확대는 INTER_CUBIC. dsize를 None으로 두고 fx·fy로 배수 지정"><figcaption>교안 코드 — 축소는 INTER_AREA, 확대는 INTER_CUBIC. dsize를 None으로 두고 fx·fy로 배수 지정</figcaption></figure>
+<figure class="fig"><img width="550" height="357" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-14-resize.png" alt="교안 코드 — 축소는 INTER_AREA, 확대는 INTER_CUBIC. dsize를 None으로 두고 fx·fy로 배수 지정"><figcaption>교안 코드 — 축소는 INTER_AREA, 확대는 INTER_CUBIC. dsize를 None으로 두고 fx·fy로 배수 지정</figcaption></figure>
 
 <h3 class="sub-title">② 이동(Translation) — cv2.warpAffine</h3>
 <div class="note-box">교안의 평행이동 행렬을 그대로 <code>np.float32</code> 배열로 만들어 넣는다. 마지막 열이 이동량 (t<sub>x</sub>, t<sub>y</sub>)다.
 <div class="eq"><span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>1</span><span>0</span><span>t<sub>x</sub></span><span>0</span><span>1</span><span>t<sub>y</sub></span></span><span class="br r"></span></span></div></div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-15-warpaffine-translation.png" alt="교안 코드 — 변환 행렬로 x축 100, y축 200 이동 후 warpAffine"><figcaption>교안 코드 — 변환 행렬로 x축 100, y축 200 이동 후 warpAffine</figcaption></figure>
+<figure class="fig"><img width="327" height="170" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-15-warpaffine-translation.png" alt="교안 코드 — 변환 행렬로 x축 100, y축 200 이동 후 warpAffine"><figcaption>교안 코드 — 변환 행렬로 x축 100, y축 200 이동 후 warpAffine</figcaption></figure>
 <div class="fnc">
   <div class="sig">dst = cv2.warpAffine(src, M, dsize)</div>
   <dl>
@@ -708,7 +708,7 @@ dst = cv2.warpAffine(img, M, (width, height))</pre>
     <dt>주의</dt><dd>회전하면 모서리가 캔버스 밖으로 나간다. 다 담으려면 dsize를 키우거나 회전 후 크기를 다시 계산해야 한다</dd>
   </dl>
 </div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-16-rotation.png" alt="교안 코드 — 중심 (width/2, height/2), 90도, 0.8배로 회전"><figcaption>교안 코드 — 중심 (width/2, height/2), 90도, 0.8배로 회전</figcaption></figure>
+<figure class="fig"><img width="411" height="123" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-16-rotation.png" alt="교안 코드 — 중심 (width/2, height/2), 90도, 0.8배로 회전"><figcaption>교안 코드 — 중심 (width/2, height/2), 90도, 0.8배로 회전</figcaption></figure>
 
 <h3 class="sub-title">④ 아핀 변환 — <span class="hw">3개의 대응점</span>을 활용</h3>
 <div class="fnc">
@@ -719,7 +719,7 @@ dst = cv2.warpAffine(img, M, (width, height))</pre>
     <dt>성질</dt><dd>변환 후에도 <b>평행선은 평행하게</b> 유지된다</dd>
   </dl>
 </div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-17-affine.png" alt="교안 코드 — 대응점 3쌍(pts1 → pts2)으로 getAffineTransform"><figcaption>교안 코드 — 대응점 3쌍(pts1 → pts2)으로 getAffineTransform</figcaption></figure>
+<figure class="fig"><img width="363" height="213" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-17-affine.png" alt="교안 코드 — 대응점 3쌍(pts1 → pts2)으로 getAffineTransform"><figcaption>교안 코드 — 대응점 3쌍(pts1 → pts2)으로 getAffineTransform</figcaption></figure>
 
 <h3 class="sub-title">⑤ 원근 변환 — 4개의 대응점</h3>
 <div class="fnc">
@@ -731,7 +731,7 @@ dst = cv2.warpPerspective(src, M, dsize)</div>
     <dt>활용</dt><dd>비스듬히 찍은 문서·표지판을 정면으로 펴는 보정(문서 스캔), 도로를 위에서 본 것처럼 바꾸는 bird's-eye view</dd>
   </dl>
 </div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-18-perspective.png" alt="교안 코드 — 대응점 4쌍(좌상→좌하→우상→우하)으로 getPerspectiveTransform, circle로 점 표시"><figcaption>교안 코드 — 대응점 4쌍(좌상→좌하→우상→우하)으로 getPerspectiveTransform, circle로 점 표시</figcaption></figure>
+<figure class="fig"><img width="430" height="317" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-18-perspective.png" alt="교안 코드 — 대응점 4쌍(좌상→좌하→우상→우하)으로 getPerspectiveTransform, circle로 점 표시"><figcaption>교안 코드 — 대응점 4쌍(좌상→좌하→우상→우하)으로 getPerspectiveTransform, circle로 점 표시</figcaption></figure>
 <div class="note-box"><b>교안 코드의 <code>cv2.circle</code></b> — 어떤 점을 잡았는지 눈으로 확인하려고 대응점 위치에 원을 그려 표시한 것이다.
 <code>cv2.circle(img, center, radius, color, thickness)</code> 에서 <b>thickness에 −1</b>을 주면 속이 채워진 원이 된다.</div>
 </section>
@@ -753,7 +753,7 @@ cv2.medianBlur(src, ksize)</div>
     <dt>공통</dt><dd>커널이 클수록 더 많이 흐려진다. 크기는 <b>홀수</b>로 주는 것이 원칙</dd>
   </dl>
 </div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-19-blur.png" alt="교안 코드 — blur(7,7) / GaussianBlur(5,5) / medianBlur(9) 비교"><figcaption>교안 코드 — blur(7,7) / GaussianBlur(5,5) / medianBlur(9) 비교</figcaption></figure>
+<figure class="fig"><img width="265" height="232" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-19-blur.png" alt="교안 코드 — blur(7,7) / GaussianBlur(5,5) / medianBlur(9) 비교"><figcaption>교안 코드 — blur(7,7) / GaussianBlur(5,5) / medianBlur(9) 비교</figcaption></figure>
 
 <div class="fnc">
   <h4>cv2.filter2D — 직접 만든 커널 적용</h4>
@@ -764,8 +764,8 @@ cv2.medianBlur(src, ksize)</div>
   </dl>
 </div>
 <div class="figs">
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-20-mean-kernel.png" alt="3×3 평균 커널 — 전부 1인 커널을 9로 나눈다"><figcaption>3×3 평균 커널 — 전부 1인 커널을 9로 나눈다</figcaption></figure>
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-21-filter2d.png" alt="교안 코드 — np.ones((3,3))/9 커널을 filter2D로 적용"><figcaption>교안 코드 — np.ones((3,3))/9 커널을 filter2D로 적용</figcaption></figure>
+  <figure class="fig"><img width="162" height="138" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-20-mean-kernel.png" alt="3×3 평균 커널 — 전부 1인 커널을 9로 나눈다"><figcaption>3×3 평균 커널 — 전부 1인 커널을 9로 나눈다</figcaption></figure>
+  <figure class="fig"><img width="625" height="213" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-21-filter2d.png" alt="교안 코드 — np.ones((3,3))/9 커널을 filter2D로 적용"><figcaption>교안 코드 — np.ones((3,3))/9 커널을 filter2D로 적용</figcaption></figure>
 </div>
 <div class="note-box">3×3 전부 1인 커널을 9로 나누면 <b>주변 9칸의 평균</b>이 되어 <code>cv2.blur</code>와 같은 효과가 난다.
 <pre class="code">kernel = np.ones((3, 3)) / 9.
@@ -779,8 +779,8 @@ dst = cv2.filter2D(img, -1, kernel)    <span class="cm"># -1은 입력·출력 �
 
 <h3 class="sub-title">① 커스텀 커널로 방향별 에지 뽑기</h3>
 <div class="figs">
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-22-vertical-kernel.png" alt="교안 — [[-1,0,1]] 형태의 커널은 좌우 차이를 재므로 수직 에지가 뽑힌다"><figcaption>교안 — [[-1,0,1]] 형태의 커널은 좌우 차이를 재므로 수직 에지가 뽑힌다</figcaption></figure>
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-23-custom-edge.png" alt="교안 코드 — 수직·수평 커널을 각각 filter2D로 적용하고 합치기"><figcaption>교안 코드 — 수직·수평 커널을 각각 filter2D로 적용하고 합치기</figcaption></figure>
+  <figure class="fig"><img width="426" height="191" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-22-vertical-kernel.png" alt="교안 — [[-1,0,1]] 형태의 커널은 좌우 차이를 재므로 수직 에지가 뽑힌다"><figcaption>교안 — [[-1,0,1]] 형태의 커널은 좌우 차이를 재므로 수직 에지가 뽑힌다</figcaption></figure>
+  <figure class="fig"><img width="741" height="434" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-23-custom-edge.png" alt="교안 코드 — 수직·수평 커널을 각각 filter2D로 적용하고 합치기"><figcaption>교안 코드 — 수직·수평 커널을 각각 filter2D로 적용하고 합치기</figcaption></figure>
 </div>
 <div class="note-box"><b>커널을 읽는 법</b> — <code>[[-1,0,1], [-1,0,1], [-1,0,1]]</code> 은 <b>오른쪽 값에서 왼쪽 값을 빼는</b> 모양이다.
 좌우 밝기가 같으면 0(검정), 급격히 달라지면 큰 값(밝음) → <b>세로선(수직 에지)</b>이 뽑힌다.
@@ -797,7 +797,7 @@ dst = cv2.filter2D(img, -1, kernel)    <span class="cm"># -1은 입력·출력 �
     <dt>주의</dt><dd><code>ddepth=-1</code>(uint8)로 두면 <b>음수 그래디언트가 0으로 잘린다</b>. 정확히 보려면 <code>cv2.CV_64F</code>로 받고 <code>np.absolute</code> 후 <code>uint8</code>로 되돌린다</dd>
   </dl>
 </div>
-<figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-24-sobel.png" alt="교안 코드 — cv2.Sobel(img, -1, dx, dy, ksize=3) 로 방향별 에지 추출"><figcaption>교안 코드 — cv2.Sobel(img, -1, dx, dy, ksize=3) 로 방향별 에지 추출</figcaption></figure>
+<figure class="fig"><img width="733" height="234" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-24-sobel.png" alt="교안 코드 — cv2.Sobel(img, -1, dx, dy, ksize=3) 로 방향별 에지 추출"><figcaption>교안 코드 — cv2.Sobel(img, -1, dx, dy, ksize=3) 로 방향별 에지 추출</figcaption></figure>
 
 <h3 class="sub-title">③ cv2.Canny — 가장 널리 쓰는 에지 검출</h3>
 <div class="fnc">
@@ -809,8 +809,8 @@ dst = cv2.filter2D(img, -1, kernel)    <span class="cm"># -1은 입력·출력 �
   </dl>
 </div>
 <div class="figs">
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-25-canny-code.png" alt="교안 코드 — cv2.Canny(img, 100, 200)"><figcaption>교안 코드 — cv2.Canny(img, 100, 200)</figcaption></figure>
-  <figure class="fig"><img loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-26-canny-result.png" alt="Canny 결과 — 격자무늬의 윤곽만 얇은 흰 선으로 남는다"><figcaption>Canny 결과 — 격자무늬의 윤곽만 얇은 흰 선으로 남는다</figcaption></figure>
+  <figure class="fig"><img width="340" height="115" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-25-canny-code.png" alt="교안 코드 — cv2.Canny(img, 100, 200)"><figcaption>교안 코드 — cv2.Canny(img, 100, 200)</figcaption></figure>
+  <figure class="fig"><img width="380" height="456" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/py-26-canny-result.png" alt="Canny 결과 — 격자무늬의 윤곽만 얇은 흰 선으로 남는다"><figcaption>Canny 결과 — 격자무늬의 윤곽만 얇은 흰 선으로 남는다</figcaption></figure>
 </div>
 </section>
 

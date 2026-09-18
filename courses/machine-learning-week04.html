@@ -434,7 +434,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
     <li>홍길동(인공지능학과, 평점 3.8) = <span class="tex">[1\;\;3.8]^{\mathsf T}</span> · 성춘향(수학과, 4.0) = <span class="tex">[3\;\;4.0]^{\mathsf T}</span></li>
     <li><b>특징 공간</b> — 성분이 <span class="tex">d</span>개면 <span class="tex">d</span>차원 공간의 <b>한 점</b>. 학년까지 관측하면 3차원이 된다</li>
   </ul></div>
-  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-21-feature-space.png" alt="로지스틱1 6p — 학과-학점 평면의 홍길동과 성춘향"><figcaption>로지스틱1 6p — 성분 값이 다르니 다른 위치의 점</figcaption></figure>
+  <figure class="fig"><img width="550" height="484" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-21-feature-space.png" alt="로지스틱1 6p — 학과-학점 평면의 홍길동과 성춘향"><figcaption>로지스틱1 6p — 성분 값이 다르니 다른 위치의 점</figcaption></figure>
 </div>
 <div class="warn"><b>주의 — 숫자로 바꾼 범주</b> — 학과 1·2·3·4는 <b>이름표를 숫자로 적은 것</b>이지 &ldquo;수학과(3)가 인공지능학과(1)의 3배&rdquo;라는 뜻이 아니다. 교안은 편의상 이렇게 쓰지만, 실무에서는 이런 범주형 특징을 <b>원-핫 인코딩</b>으로 바꿔 거리·크기 관계가 생기지 않게 하는 경우가 많다 (보충).</div>
 </section>
@@ -442,10 +442,10 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <!-- ===================== 4.3 ===================== -->
 <section class="sec" id="rule">
   <div class="sec-head"><span class="sec-badge">4.3</span><h2 class="sec-title">분류 규칙과 확률 분포 기반 분류<small>구분선 · 사후 확률 · 베이즈 규칙</small></h2></div>
-<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-22-class-rule.jpg" alt="로지스틱1 7p — 정수론 수강 여부 예제와 구분선 1, 2"><figcaption>로지스틱1 7p — 인공지능학과 3명 <span class="tex">[1\;2.2],[1\;3.8],[1\;3.9]</span> 은 미수강(<b>0</b>), 수학과 3명 <span class="tex">[3\;2.2],[3\;4.0],[3\;3.2]</span> 는 수강(<b>1</b>). <b>구분선이 하나로 유일하지 않다</b>(1도 2도 된다)</figcaption></figure>
+<figure class="fig"><img width="1100" height="524" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-22-class-rule.jpg" alt="로지스틱1 7p — 정수론 수강 여부 예제와 구분선 1, 2"><figcaption>로지스틱1 7p — 인공지능학과 3명 <span class="tex">[1\;2.2],[1\;3.8],[1\;3.9]</span> 은 미수강(<b>0</b>), 수학과 3명 <span class="tex">[3\;2.2],[3\;4.0],[3\;3.2]</span> 는 수강(<b>1</b>). <b>구분선이 하나로 유일하지 않다</b>(1도 2도 된다)</figcaption></figure>
 <div class="note-box"><b>확률 분포로 분류하기</b> — 체조 동아리 회원(<span class="tex">C_1</span>)과 비회원(<span class="tex">C_2</span>)의 몸무게 분포를 알 때, 52kg 학생은 어느 쪽인가?
 <b>사후 확률</b> <span class="tex">P(C_1\mid x)</span> = <span class="tex">x</span>를 관찰했을 때 소속이 <span class="tex">C_1</span>일 가능성을 수치로 표현한 조건부 확률.</div>
-<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-23-histogram.png" alt="로지스틱1 8p — 체조부 소속·미소속 몸무게 비율 히스토그램"><figcaption>로지스틱1 8p — 몸무게별 두 집단의 비율</figcaption></figure>
+<figure class="fig"><img width="982" height="445" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-23-histogram.png" alt="로지스틱1 8p — 체조부 소속·미소속 몸무게 비율 히스토그램"><figcaption>로지스틱1 8p — 몸무게별 두 집단의 비율</figcaption></figure>
 <div class="fx">
   <p class="fx-lab">베이즈 규칙 (2주차 확률 복습)</p>
   <div class="tex-d">P(C_1\mid x)=\frac{P(C_1,x)}{P(x)}=\frac{P(x\mid C_1)P(C_1)}{P(x\mid C_1)P(C_1)+P(x\mid C_2)P(C_2)},\qquad P(x)=P(C_1,x)+P(C_2,x)</div>
@@ -465,8 +465,8 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <b>결정 규칙</b>: <span class="tex">g(\mathbf x)&gt;0</span> 이면 <span class="tex">C_1</span>, 그 외에는 <span class="tex">C_2</span>. <b>학습이 결정하는 것은 가중치 벡터 <span class="tex">\mathbf w</span></b></p>
 </div>
 <div class="figs">
-  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-24-split-point-line.png" alt="로지스틱1 12p — 1차원 구분점, 2차원 구분선"><figcaption>로지스틱1 12p — 1차원: 점 · 2차원: 선 · 3차원: <b>평면</b> · 4차원 이상: <b>초평면</b></figcaption></figure>
-  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-25-discriminant-example.jpg" alt="로지스틱1 13p — g(x)=20x1+3x2-36 예제"><figcaption>로지스틱1 13p — 정수론 예제의 구분선</figcaption></figure>
+  <figure class="fig"><img width="1100" height="252" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-24-split-point-line.png" alt="로지스틱1 12p — 1차원 구분점, 2차원 구분선"><figcaption>로지스틱1 12p — 1차원: 점 · 2차원: 선 · 3차원: <b>평면</b> · 4차원 이상: <b>초평면</b></figcaption></figure>
+  <figure class="fig"><img width="1100" height="544" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-25-discriminant-example.jpg" alt="로지스틱1 13p — g(x)=20x1+3x2-36 예제"><figcaption>로지스틱1 13p — 정수론 예제의 구분선</figcaption></figure>
 </div>
 <div class="ex">
   <p class="ex-q"><em>교안 예제</em> <span class="tex">g(\mathbf x)=20x_1+3x_2-36</span>, 즉 <span class="tex">\mathbf w=[-36\;\;20\;\;3]^{\mathsf T}</span> (<span class="tex">x_1</span> 학과, <span class="tex">x_2</span> 학점)</p>
@@ -524,7 +524,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
     · <span class="tex">p=0.5</span> 이면 오드 1, 로그 오드 <b>0</b><br>
     · 로그 오드의 <b>정의역은 확률 (0, 1)</b>, 치역은 실수 전체 (−∞, ∞)</p>
   </div>
-  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4-01-logit.png" alt="로지스틱2 4p — 로그 오드 함수 그래프"><figcaption>로지스틱2 4p — <span class="tex">\ln\frac{x}{1-x}</span>. 확률 0~1을 실수 전체로 편다</figcaption></figure>
+  <figure class="fig"><img width="491" height="373" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4-01-logit.png" alt="로지스틱2 4p — 로그 오드 함수 그래프"><figcaption>로지스틱2 4p — <span class="tex">\ln\frac{x}{1-x}</span>. 확률 0~1을 실수 전체로 편다</figcaption></figure>
 </div>
 <div class="good"><b>왜 로그 오드인가</b> — 확률은 0~1에 갇혀 있어 선형식 <span class="tex">\mathbf w^{\mathsf T}\mathbf x</span>(−∞~∞)로 바로 근사할 수 없다. 로그 오드는 치역이 실수 전체라 <b>선형 함수로 근사하기에 딱 맞다</b>. 그래서 로지스틱 회귀는 &ldquo;<b>로그 오드를 선형 함수 표현으로 근사</b>&rdquo;한다. 그리고 <b>로지스틱 함수는 로그 오드의 역함수</b>다: <span class="tex">\text{logit}(\sigma(z))=z</span>.</div>
 </section>

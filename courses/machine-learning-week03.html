@@ -427,7 +427,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <div class="card2"><h4>회귀 (Regression)<em>연속적인 값을 예측</em></h4><p>가까운 정도(거리)를 색깔로 표현 — 파란색이면 가까운 곳, 빨간색이면 먼 곳. 출력이 <b>연속량</b>이다.</p></div>
   <div class="card2" style="border-top-color:var(--red)"><h4>분류 (Classification)<em>범주(종류)를 예측</em></h4><p>물체의 종류별로 다른 색깔로 표현 — 각 픽셀별로 구분되므로 <b>세그멘테이션</b>으로 볼 수 있다. 출력이 <b>범주</b>다.</p></div>
 </div>
-<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-01-reg-vs-cls.jpg" alt="교안 3p — 실내 사진(원본)과 거리를 색으로 칠한 회귀 결과, 물체 종류를 색으로 칠한 분류 결과"><figcaption>교안 3p — 같은 사진이라도 <b>무엇을 출력하느냐</b>에 따라 회귀(거리 = 연속값)와 분류(물체 종류 = 범주)로 나뉜다</figcaption></figure>
+<figure class="fig"><img width="720" height="432" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-01-reg-vs-cls.jpg" alt="교안 3p — 실내 사진(원본)과 거리를 색으로 칠한 회귀 결과, 물체 종류를 색으로 칠한 분류 결과"><figcaption>교안 3p — 같은 사진이라도 <b>무엇을 출력하느냐</b>에 따라 회귀(거리 = 연속값)와 분류(물체 종류 = 범주)로 나뉜다</figcaption></figure>
 <div class="good"><b>구분 기준 한 줄</b> — 답이 <b>숫자의 크기</b>(가격 · 거리 · 몸무게)이면 회귀, 답이 <b>이름표</b>(개/고양이 · 스팸/정상)이면 분류.</div>
 
 <h3 class="sub-title">회귀 예시 — 집값 예측</h3>
@@ -436,7 +436,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li><b>관계 (Relation)</b> — 집 값(Price)과 집 크기(Size)의 관계는 어떻게 되는가?</li>
   <li><b>예측 (Prediction)</b> — 집 크기가 1,202일 때, 예상되는 집 가격은 어떻게 되는가?</li>
 </ul></div>
-<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-02-house-price.png" alt="교안 4p — 크기(feet²)와 가격(1000달러) 표, 그리고 크기-가격 산점도"><figcaption>교안 4p — 크기(단위 feet², x)와 가격(단위 1,000$, y). 점들이 오른쪽 위로 올라가는 경향 = <b>관계</b>, 그 경향으로 새 집의 값을 짐작 = <b>예측</b></figcaption></figure>
+<figure class="fig"><img width="667" height="465" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-02-house-price.png" alt="교안 4p — 크기(feet²)와 가격(1000달러) 표, 그리고 크기-가격 산점도"><figcaption>교안 4p — 크기(단위 feet², x)와 가격(단위 1,000$, y). 점들이 오른쪽 위로 올라가는 경향 = <b>관계</b>, 그 경향으로 새 집의 값을 짐작 = <b>예측</b></figcaption></figure>
 
 <h3 class="sub-title">회귀(Regression)의 정의</h3>
 <div class="note-box"><ul class="ul">
@@ -444,7 +444,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li>새로운 <b>입력 값(Input)</b>에 대한 <b>출력 값(Output)</b>을 <b>예측(Prediction)</b></li>
   <li>종속 변수에 대한 독립 변수의 <b>효과를 이해</b>하는 것</li>
 </ul></div>
-<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-03-regression-plot.png" alt="교안 5p — 입력 x_i ∈ R^d, 출력 y_i ∈ R 산점도, 이 그래프에서 d는 1"><figcaption>교안 5p — 입력 <span class="tex">\mathbf x_i\in\mathbb R^d</span>, 출력 <span class="tex">y_i\in\mathbb R</span>. 가로축이 하나뿐인 이 그래프에서는 <b><span class="tex">d=1</span></b></figcaption></figure>
+<figure class="fig"><img width="668" height="360" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-03-regression-plot.png" alt="교안 5p — 입력 x_i ∈ R^d, 출력 y_i ∈ R 산점도, 이 그래프에서 d는 1"><figcaption>교안 5p — 입력 <span class="tex">\mathbf x_i\in\mathbb R^d</span>, 출력 <span class="tex">y_i\in\mathbb R</span>. 가로축이 하나뿐인 이 그래프에서는 <b><span class="tex">d=1</span></b></figcaption></figure>
 <div class="tip"><b>기호 읽기</b> — <span class="tex">\mathbb R</span> 은 실수 전체, <span class="tex">\mathbb R^d</span> 는 실수 <span class="tex">d</span>개로 이루어진 벡터.
 그래서 &ldquo;입력은 <span class="tex">d</span>차원 벡터, 출력은 실수 하나(스칼라)&rdquo;가 회귀의 기본 설정이다.</div>
 </section>
@@ -483,11 +483,11 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li>입력 값이 주어졌을 때, 적합한 출력 값을 내는 <b>함수(Function)를 찾는 과정</b></li>
   <li>독립변수와 종속변수 간의 관계를 표현하는 함수를 찾는 과정</li>
 </ul></div>
-<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-04-learning-function.png" alt="교안 8p — 훈련 데이터셋 → 학습 과정 → 함수, x_i를 넣으면 y_i ≈ f(x_i)"><figcaption>교안 8p — <b>훈련 데이터셋 → 학습 과정 → 함수</b>. 목표는 모든 <span class="tex">i</span>에 대해 <span class="tex">y_i\approx f(\mathbf x_i)</span></figcaption></figure>
+<figure class="fig"><img width="923" height="459" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-04-learning-function.png" alt="교안 8p — 훈련 데이터셋 → 학습 과정 → 함수, x_i를 넣으면 y_i ≈ f(x_i)"><figcaption>교안 8p — <b>훈련 데이터셋 → 학습 과정 → 함수</b>. 목표는 모든 <span class="tex">i</span>에 대해 <span class="tex">y_i\approx f(\mathbf x_i)</span></figcaption></figure>
 
 <h3 class="sub-title">참고 — 상관 관계(correlation)는 인과관계와 같지 않음</h3>
 <div class="warn"><b>회귀는 상관관계를 찾는 것</b>으로 인과 관계를 의미하지 않는다. 따라서 해석할 때 <b>인과 관계로 해석해서는 안 된다.</b></div>
-<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-05-correlation-pirates.jpg" alt="교안 9p — 지구 평균 기온과 해적 수 그래프: 해적이 줄수록 기온이 오르는 것처럼 보인다"><figcaption>교안 9p — 해적 수가 줄어든 시기에 지구 평균 기온이 올랐다. 직선에 가깝게 맞지만 &ldquo;해적이 줄어서 더워졌다&rdquo;는 말은 성립하지 않는다 (둘 다 <b>시간</b>의 흐름과 함께 변했을 뿐)</figcaption></figure>
+<figure class="fig"><img width="1100" height="445" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-05-correlation-pirates.jpg" alt="교안 9p — 지구 평균 기온과 해적 수 그래프: 해적이 줄수록 기온이 오르는 것처럼 보인다"><figcaption>교안 9p — 해적 수가 줄어든 시기에 지구 평균 기온이 올랐다. 직선에 가깝게 맞지만 &ldquo;해적이 줄어서 더워졌다&rdquo;는 말은 성립하지 않는다 (둘 다 <b>시간</b>의 흐름과 함께 변했을 뿐)</figcaption></figure>
 </section>
 
 <!-- ===================== 3.3 ===================== -->
@@ -501,7 +501,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   · <span class="tex">f(x_i)</span> 를 <b><span class="tex">\hat y_i</span></b> (&ldquo;와이 햇&rdquo;, 예측 값)으로 표기하기도 한다<br>
   · <span class="tex">\mathbf w=[w_0\;w_1]^{\mathsf T}</span> 는 <b>파라미터(매개변수)</b>들의 벡터로 <b>2개의 파라미터</b>를 갖는다 — 다른 말로 <b>가중치</b>라고도 한다</p>
 </div>
-<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-06-simple-linear-model.png" alt="교안 10p — 단순 선형 회귀 식과 그래프: 절편 w0, 기울기 w1인 직선"><figcaption>교안 10p — <span class="tex">w_0</span> 는 직선이 세로축과 만나는 <b>절편</b>, <span class="tex">w_1</span> 은 <span class="tex">x</span>가 1 늘 때 <span class="tex">y</span>가 늘어나는 양, 즉 <b>기울기</b></figcaption></figure>
+<figure class="fig"><img width="1100" height="555" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-06-simple-linear-model.png" alt="교안 10p — 단순 선형 회귀 식과 그래프: 절편 w0, 기울기 w1인 직선"><figcaption>교안 10p — <span class="tex">w_0</span> 는 직선이 세로축과 만나는 <b>절편</b>, <span class="tex">w_1</span> 은 <span class="tex">x</span>가 1 늘 때 <span class="tex">y</span>가 늘어나는 양, 즉 <b>기울기</b></figcaption></figure>
 <div class="tip"><b>입력이 1차원인데 파라미터는 왜 2개?</b> — 직선은 <b>기울기와 절편 두 값</b>으로 결정되기 때문이다.
 <span class="tex">w_0</span> 가 없으면 직선이 항상 원점을 지나야 해서, 집값처럼 크기가 0이어도 값이 0이 아닌 데이터를 표현할 수 없다.</div>
 <div class="ex">
@@ -527,10 +527,10 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <div class="tex-d">L(\mathbf w)=\frac1N\sum_{i=1}^{N}\bigl(f_{\mathbf w}(x_i)-y_i\bigr)^2,\qquad \mathbf w^*=\underset{\mathbf w}{\operatorname{argmin}}\;L(\mathbf w)</div>
   <p class="fx-note"><b>argmin</b> 은 &ldquo;함수 값을 최소로 만드는 <b>입력</b>&rdquo;을 돌려준다. <span class="tex">\min L</span> 은 가장 작은 손실 <b>값</b>, <span class="tex">\operatorname{argmin} L</span> 은 그때의 <b>파라미터</b> <span class="tex">\mathbf w^*</span> 다 — 우리가 원하는 것은 뒤쪽이다.</p>
 </div>
-<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-07-loss-idea.png" alt="교안 12p — 데이터 점 (x_i, y_i)와 손실 L(w), argmin 식"><figcaption>교안 12p — 점과 직선 사이의 <b>세로 거리(오차)</b>를 제곱해서 평균 낸 것이 손실. 그 값을 가장 작게 만드는 <span class="tex">\mathbf w</span> 가 정답</figcaption></figure>
+<figure class="fig"><img width="858" height="373" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-07-loss-idea.png" alt="교안 12p — 데이터 점 (x_i, y_i)와 손실 L(w), argmin 식"><figcaption>교안 12p — 점과 직선 사이의 <b>세로 거리(오차)</b>를 제곱해서 평균 낸 것이 손실. 그 값을 가장 작게 만드는 <span class="tex">\mathbf w</span> 가 정답</figcaption></figure>
 
 <h3 class="sub-title">손실 함수 예시 — 파라미터 2개 vs 1개</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-08-loss-example.png" alt="교안 14p — 왼쪽 모델 w0+w1x의 파라미터·손실·목표, 오른쪽 w0=0으로 둔 모델 w1x"><figcaption>교안 14p — 오른쪽은 <span class="tex">w_0=0</span> 으로 고정해 파라미터를 <span class="tex">w_1</span> 하나로 줄인 버전. 손실을 <b>2차원 그래프</b>로 그릴 수 있어 이해하기 쉽다</figcaption></figure>
+<figure class="fig"><img width="1100" height="547" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-08-loss-example.png" alt="교안 14p — 왼쪽 모델 w0+w1x의 파라미터·손실·목표, 오른쪽 w0=0으로 둔 모델 w1x"><figcaption>교안 14p — 오른쪽은 <span class="tex">w_0=0</span> 으로 고정해 파라미터를 <span class="tex">w_1</span> 하나로 줄인 버전. 손실을 <b>2차원 그래프</b>로 그릴 수 있어 이해하기 쉽다</figcaption></figure>
 
 <h3 class="sub-title">수업시간 도식 ① — 데이터 공간과 파라미터 공간</h3>
 <div class="note-box">교안 15p는 &ldquo;<span class="tex">w_1</span>이 고정된 경우 <span class="tex">x</span>의 함수&rdquo;와 &ldquo;매개변수 <span class="tex">w_1</span>의 함수&rdquo; 두 축만 비워 두고 수업 시간에 그렸다.
@@ -592,13 +592,13 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </div>
 
 <h3 class="sub-title">파라미터가 2개일 때 — 3차원 곡면과 등고선</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-09-loss-surface.jpg" alt="교안 17p — w0, w1 두 축 위에 그린 그릇 모양의 손실 곡면"><figcaption>교안 17p — <span class="tex">\mathbf w=[w_0\;w_1]^{\mathsf T}</span> 이면 손실은 <b>그릇 모양 곡면</b>. 교안 16p의 빈 3축 도식이 바로 이 그림이다</figcaption></figure>
+<figure class="fig"><img width="969" height="569" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-09-loss-surface.jpg" alt="교안 17p — w0, w1 두 축 위에 그린 그릇 모양의 손실 곡면"><figcaption>교안 17p — <span class="tex">\mathbf w=[w_0\;w_1]^{\mathsf T}</span> 이면 손실은 <b>그릇 모양 곡면</b>. 교안 16p의 빈 3축 도식이 바로 이 그림이다</figcaption></figure>
 <div class="note-box">곡면을 위에서 내려다보고 높이가 같은 곳끼리 이으면 <b>등고선</b>이 된다. 아래 네 장면은 &ldquo;왼쪽 직선 1개 = 오른쪽 X 표시 1개&rdquo;를 따라가며 손실이 줄어드는 과정이다.</div>
 <div class="figs">
-  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-10-contour-1.jpg" alt="교안 18p — 기울기가 음수인 직선, 등고선 바깥쪽 X"><figcaption>교안 18p — 추세와 반대인 직선 → 등고선 <b>바깥쪽</b>(큰 손실)</figcaption></figure>
-  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-11-contour-2.jpg" alt="교안 19p — 수평에 가까운 직선, w1≈0 위치의 X"><figcaption>교안 19p — 수평선(<span class="tex">w_1\approx0</span>) → 조금 안쪽</figcaption></figure>
-  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-12-contour-3.jpg" alt="교안 20p — 약간 기울어진 직선, 중심 쪽 X"><figcaption>교안 20p — 중심에 더 가까워짐</figcaption></figure>
-  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-13-contour-min.jpg" alt="교안 21p — 데이터 추세를 따라가는 직선, 등고선 중심 Minimum"><figcaption>교안 21p — 등고선 <b>중심 = Minimum</b>. 직선이 데이터를 가장 잘 설명</figcaption></figure>
+  <figure class="fig"><img width="1100" height="544" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-10-contour-1.jpg" alt="교안 18p — 기울기가 음수인 직선, 등고선 바깥쪽 X"><figcaption>교안 18p — 추세와 반대인 직선 → 등고선 <b>바깥쪽</b>(큰 손실)</figcaption></figure>
+  <figure class="fig"><img width="1100" height="538" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-11-contour-2.jpg" alt="교안 19p — 수평에 가까운 직선, w1≈0 위치의 X"><figcaption>교안 19p — 수평선(<span class="tex">w_1\approx0</span>) → 조금 안쪽</figcaption></figure>
+  <figure class="fig"><img width="1100" height="561" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-12-contour-3.jpg" alt="교안 20p — 약간 기울어진 직선, 중심 쪽 X"><figcaption>교안 20p — 중심에 더 가까워짐</figcaption></figure>
+  <figure class="fig"><img width="1100" height="553" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-13-contour-min.jpg" alt="교안 21p — 데이터 추세를 따라가는 직선, 등고선 중심 Minimum"><figcaption>교안 21p — 등고선 <b>중심 = Minimum</b>. 직선이 데이터를 가장 잘 설명</figcaption></figure>
 </div>
 
 <h3 class="sub-title">대표적인 손실 함수 — MSE와 MAE</h3>
@@ -633,7 +633,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li><b>가장 간단한 방법</b> — 파라미터에 넣을 후보 값을 몇 개 정하고, 각 후보로 손실을 계산해 가장 작은 것을 선정한다</li>
   <li>하지만 이 방법은 <b>후보 값을 정하는 것이 쉽지 않다</b> — 파라미터가 많아지면 조합이 폭발한다</li>
 </ul></div>
-<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-14-mountain.jpg" alt="교안 24p — 높은 산에서 가장 빨리 내려가려면 어떻게 해야 하는가? 옆에 손실 곡면"><figcaption>교안 24p — &ldquo;높은 산에서 가장 빨리 내려가려면?&rdquo; 발밑에서 <b>가장 가파르게 내려가는 방향</b>으로 한 걸음씩 — 이것이 경사하강법의 직관</figcaption></figure>
+<figure class="fig"><img width="1086" height="550" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-14-mountain.jpg" alt="교안 24p — 높은 산에서 가장 빨리 내려가려면 어떻게 해야 하는가? 옆에 손실 곡면"><figcaption>교안 24p — &ldquo;높은 산에서 가장 빨리 내려가려면?&rdquo; 발밑에서 <b>가장 가파르게 내려가는 방향</b>으로 한 걸음씩 — 이것이 경사하강법의 직관</figcaption></figure>
 
 <h3 class="sub-title">기울기(Gradient) 이용</h3>
 <div class="note-box"><ul class="ul">
@@ -642,8 +642,8 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li>따라서 현재 지점 <span class="tex">\mathbf w</span> 에서의 <b>음의 기울기 방향</b> <span class="tex">-\frac{\partial}{\partial\mathbf w}L(\mathbf w)</span> 은 손실함수를 <b>최대로 감소</b>시키는 방향이고, 이를 <b>경사하강(gradient descent)의 방향</b>이라 한다</li>
 </ul></div>
 <div class="figs">
-  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-15-neg-gradient.png" alt="교안 25p — 곡면 위 현재 w에서 음의 기울기 방향 화살표"><figcaption>교안 25p — 현재 <span class="tex">\mathbf w</span>에서 <b>음의 기울기 방향</b>으로 이동</figcaption></figure>
-  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-19-tangent.png" alt="교안 31p — 곡선 y=f(x) 위 한 점의 접선과 Δf/Δx"><figcaption>교안 31p (참고) — 기울기 계산은 고등학교 미분: <span class="tex">\Delta x\to0</span> 일 때 <span class="tex">\Delta f/\Delta x</span></figcaption></figure>
+  <figure class="fig"><img width="674" height="249" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-15-neg-gradient.png" alt="교안 25p — 곡면 위 현재 w에서 음의 기울기 방향 화살표"><figcaption>교안 25p — 현재 <span class="tex">\mathbf w</span>에서 <b>음의 기울기 방향</b>으로 이동</figcaption></figure>
+  <figure class="fig"><img width="642" height="484" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-19-tangent.png" alt="교안 31p — 곡선 y=f(x) 위 한 점의 접선과 Δf/Δx"><figcaption>교안 31p (참고) — 기울기 계산은 고등학교 미분: <span class="tex">\Delta x\to0</span> 일 때 <span class="tex">\Delta f/\Delta x</span></figcaption></figure>
 </div>
 <div class="fx">
   <p class="fx-lab">편미분 표기 복습 (2주차)</p>
@@ -666,8 +666,8 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   </tbody>
 </table>
 </div>
-<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-16-gd-three-questions.jpg" alt="교안 28p — 초기 상태에서 기울기 방향으로 학습률만큼씩 내려가는 경로"><figcaption>교안 28p — 초기 상태 → 기울기 방향으로 → 학습률만큼씩 이동하며 골짜기로 내려간다</figcaption></figure>
-<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-17-init-dependence.jpg" alt="교안 29p — 초기 값이 조금 달라지자 다른 골짜기로 내려간 경로"><figcaption>교안 29p — <b><span class="tex">\mathbf w</span>의 최초 값에 따라 탐색 결과가 달라질 수 있다.</b> 따라서 초기 상태도 중요한 이슈 중 하나다</figcaption></figure>
+<figure class="fig"><img width="1100" height="607" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-16-gd-three-questions.jpg" alt="교안 28p — 초기 상태에서 기울기 방향으로 학습률만큼씩 내려가는 경로"><figcaption>교안 28p — 초기 상태 → 기울기 방향으로 → 학습률만큼씩 이동하며 골짜기로 내려간다</figcaption></figure>
+<figure class="fig"><img width="943" height="478" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-17-init-dependence.jpg" alt="교안 29p — 초기 값이 조금 달라지자 다른 골짜기로 내려간 경로"><figcaption>교안 29p — <b><span class="tex">\mathbf w</span>의 최초 값에 따라 탐색 결과가 달라질 수 있다.</b> 따라서 초기 상태도 중요한 이슈 중 하나다</figcaption></figure>
 
 <h3 class="sub-title">경사하강법 알고리즘</h3>
 <div class="fx">
@@ -676,7 +676,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <p class="fx-note">· <span class="tex">\alpha</span> — <b>학습률</b> &nbsp;·&nbsp; <span class="tex">\frac{\partial}{\partial w_0}L(w_0,w_1)</span> — <b>기울기</b> &nbsp;·&nbsp; 괄호 안의 <span class="tex">(w_0,w_1)</span> — <b><span class="tex">\mathbf w</span>의 현재 상태</b><br>
   · 두 식은 <b>동시에</b> 갱신한다 — <span class="tex">w_0</span>를 먼저 바꾼 값으로 <span class="tex">w_1</span>의 기울기를 계산하지 않도록, 두 기울기를 모두 구한 뒤 한꺼번에 바꾼다</p>
 </div>
-<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-18-gd-algorithm.jpg" alt="교안 30p — 경사하강법 갱신식에 학습률, 기울기, w의 현재 상태를 표시한 도식"><figcaption>교안 30p — 갱신식의 각 부분이 무엇인지 표시한 원본 도식</figcaption></figure>
+<figure class="fig"><img width="1100" height="537" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-18-gd-algorithm.jpg" alt="교안 30p — 경사하강법 갱신식에 학습률, 기울기, w의 현재 상태를 표시한 도식"><figcaption>교안 30p — 갱신식의 각 부분이 무엇인지 표시한 원본 도식</figcaption></figure>
 <div class="ex">
   <p class="ex-q"><em>보충 — MSE의 기울기를 직접 유도</em> <span class="tex">L(w_0,w_1)=\frac1N\sum_i(\hat y_i-y_i)^2,\;\hat y_i=w_0+w_1x_i</span> 를 각각 편미분하면?</p>
   <div class="step"><i>①</i><div>연쇄법칙: 바깥 <span class="tex">(\cdot)^2</span> 을 미분하면 <span class="tex">2(\hat y_i-y_i)</span>, 안쪽 <span class="tex">\hat y_i</span> 를 미분하면 <span class="tex">\partial\hat y_i/\partial w_0=1,\;\partial\hat y_i/\partial w_1=x_i</span></div></div>
@@ -810,7 +810,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <!-- ===================== 3.6 ===================== -->
 <section class="sec" id="multi">
   <div class="sec-head"><span class="sec-badge">3.6</span><h2 class="sec-title">다중 선형 회귀 (Multiple linear regression)<small>특징이 여러 개일 때 · <span class="tex">\mathbf w^{\mathsf T}\mathbf x_i</span> 표기 · 갱신식</small></h2></div>
-<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-20-multi-table.png" alt="교안 35p — 크기, 방의 수, 층 수, 집 연식, 가격 표와 x_i, x_ij 표기"><figcaption>교안 35p — 크기 · 방의 수 · 층 수 · 집 연식 4개 특징이 <span class="tex">\mathbf x_i=[x_{i1}\;x_{i2}\;\cdots\;x_{id}]^{\mathsf T}</span>, 가격이 <span class="tex">y_i</span>. <span class="tex">x_{ij}</span> 는 <span class="tex">i</span>번째 데이터의 <span class="tex">j</span>번째 특징 값</figcaption></figure>
+<figure class="fig"><img width="1100" height="592" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-20-multi-table.png" alt="교안 35p — 크기, 방의 수, 층 수, 집 연식, 가격 표와 x_i, x_ij 표기"><figcaption>교안 35p — 크기 · 방의 수 · 층 수 · 집 연식 4개 특징이 <span class="tex">\mathbf x_i=[x_{i1}\;x_{i2}\;\cdots\;x_{id}]^{\mathsf T}</span>, 가격이 <span class="tex">y_i</span>. <span class="tex">x_{ij}</span> 는 <span class="tex">i</span>번째 데이터의 <span class="tex">j</span>번째 특징 값</figcaption></figure>
 
 <h3 class="sub-title">매핑 함수 (Mapping Function)</h3>
 <div class="fx">
@@ -1179,8 +1179,8 @@ plt.title('Salary vs Experience (Train set)')
 plt.xlabel('Years of Experience'); plt.ylabel('Salary')
 plt.show()</pre>
 <div class="figs">
-  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-27-sk-train.png" alt="sklearn 모델 — 훈련 데이터 20개(빨간 점)와 학습된 직선(파란 선)"><figcaption>노트북 출력 — 훈련 데이터(빨강)와 학습된 직선</figcaption></figure>
-  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-28-sk-test.png" alt="sklearn 모델 — 테스트 데이터 10개(파란 점)와 같은 직선(빨간 선)"><figcaption>노트북 출력 — 처음 보는 테스트 데이터(파랑)에도 직선이 잘 맞음 (<span class="tex">R^2=0.975</span>)</figcaption></figure>
+  <figure class="fig"><img width="407" height="278" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-27-sk-train.png" alt="sklearn 모델 — 훈련 데이터 20개(빨간 점)와 학습된 직선(파란 선)"><figcaption>노트북 출력 — 훈련 데이터(빨강)와 학습된 직선</figcaption></figure>
+  <figure class="fig"><img width="407" height="278" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-28-sk-test.png" alt="sklearn 모델 — 테스트 데이터 10개(파란 점)와 같은 직선(빨간 선)"><figcaption>노트북 출력 — 처음 보는 테스트 데이터(파랑)에도 직선이 잘 맞음 (<span class="tex">R^2=0.975</span>)</figcaption></figure>
 </div>
 <div class="note-box"><b>참고 — Feature Scaling</b> — 노트북에는 <code>StandardScaler</code> 코드가 주석(<code>"""…"""</code>)으로 들어 있다. 데이터에 따라 특징의 크기를 맞춰야 하는 경우가 있으며, 필요할 때 강의에서 다룬다고 되어 있다.</div>
 </section>
@@ -1260,8 +1260,8 @@ print(r2_score(y_test, predict))         <span class="out"># 0.9784483372537969 
 경사하강법은 2,000번 갱신 후에도 최솟값에 완전히 도착하지 않았는데, 테스트 데이터 10개가 우연히 그 직선에 조금 더 맞았을 뿐이다.
 테스트 데이터가 적을 때는 이런 역전이 흔하다. (훈련 · 테스트 MSE는 같은 데이터로 노트북 코드를 다시 실행해 계산한 값)</div>
 <div class="figs">
-  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-29-gd-train.png" alt="직접 구현 모델 — 훈련 데이터와 직선"><figcaption>직접 구현 — 훈련 데이터</figcaption></figure>
-  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-30-gd-test.png" alt="직접 구현 모델 — 테스트 데이터와 직선"><figcaption>직접 구현 — 테스트 데이터. sklearn 그래프와 거의 구분되지 않는다</figcaption></figure>
+  <figure class="fig"><img width="407" height="278" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-29-gd-train.png" alt="직접 구현 모델 — 훈련 데이터와 직선"><figcaption>직접 구현 — 훈련 데이터</figcaption></figure>
+  <figure class="fig"><img width="407" height="278" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-30-gd-test.png" alt="직접 구현 모델 — 테스트 데이터와 직선"><figcaption>직접 구현 — 테스트 데이터. sklearn 그래프와 거의 구분되지 않는다</figcaption></figure>
 </div>
 
 <h3 class="sub-title">더 해 보기 — 학습률만 바꿔서 다시 돌리면 (보충 실험)</h3>
@@ -1301,13 +1301,13 @@ print(r2_score(y_test, predict))         <span class="out"># 0.9784483372537969 
     <li>예) 학과를 숫자로(인공지능학과 1, 기계공학과 2, 수학과 3, 물리학과 4) → &ldquo;인공지능학과 · 평점 3.8 홍길동&rdquo; = <span class="tex">[1\;\;3.8]^{\mathsf T}</span>, &ldquo;수학과 · 평점 4.0 성춘향&rdquo; = <span class="tex">[3\;\;4.0]^{\mathsf T}</span></li>
     <li><b>특징 공간</b> — 특징 벡터가 <span class="tex">d</span>개 성분이면 <span class="tex">d</span>차원 공간의 <b>점 하나</b>로 표시된다. 그 공간이 특징 공간</li>
   </ul></div>
-  <figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-21-feature-space.png" alt="로지스틱1 교안 6p — 학과-학점 평면에 찍힌 홍길동과 성춘향"><figcaption>로지스틱1 6p — 두 학생이 특징 공간의 두 점</figcaption></figure>
+  <figure class="fig"><img width="550" height="484" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-21-feature-space.png" alt="로지스틱1 교안 6p — 학과-학점 평면에 찍힌 홍길동과 성춘향"><figcaption>로지스틱1 6p — 두 학생이 특징 공간의 두 점</figcaption></figure>
 </div>
 
 <h3 class="sub-title">분류 규칙 — 구분선과 확률</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-22-class-rule.jpg" alt="로지스틱1 교안 7p — 인공지능학과 3명(미수강)과 수학과 3명(수강)을 구분선 1, 2로 나누는 예제"><figcaption>로지스틱1 7p — &ldquo;정수론&rdquo; 수강 여부. 인공지능학과(미수강 0)와 수학과(수강 1)는 <b>구분선 1</b>이나 <b>구분선 2</b>로 나눌 수 있다</figcaption></figure>
+<figure class="fig"><img width="1100" height="524" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-22-class-rule.jpg" alt="로지스틱1 교안 7p — 인공지능학과 3명(미수강)과 수학과 3명(수강)을 구분선 1, 2로 나누는 예제"><figcaption>로지스틱1 7p — &ldquo;정수론&rdquo; 수강 여부. 인공지능학과(미수강 0)와 수학과(수강 1)는 <b>구분선 1</b>이나 <b>구분선 2</b>로 나눌 수 있다</figcaption></figure>
 <div class="note-box"><b>확률 분포를 활용한 분류</b> — 체조 동아리 회원(<span class="tex">C_1</span>)과 비회원(<span class="tex">C_2</span>)의 몸무게 분포가 주어졌을 때, 몸무게 52kg(<span class="tex">x</span>)인 학생은 어느 쪽일까?</div>
-<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-23-histogram.png" alt="로지스틱1 교안 8p — 체조부 소속과 미소속 학생의 몸무게 비율 히스토그램"><figcaption>로지스틱1 8p — 체조부 소속(파랑)은 41~50kg에 몰려 있고, 미소속(빨강)은 넓게 퍼져 있다</figcaption></figure>
+<figure class="fig"><img width="982" height="445" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-23-histogram.png" alt="로지스틱1 교안 8p — 체조부 소속과 미소속 학생의 몸무게 비율 히스토그램"><figcaption>로지스틱1 8p — 체조부 소속(파랑)은 41~50kg에 몰려 있고, 미소속(빨강)은 넓게 퍼져 있다</figcaption></figure>
 <div class="fx">
   <p class="fx-lab">사후 확률 비교 — 베이즈 규칙 (2주차 확률 복습)</p>
   <div class="tex-d">P(C_1\mid x)=\frac{P(x\mid C_1)P(C_1)}{P(x\mid C_1)P(C_1)+P(x\mid C_2)P(C_2)},\qquad P(C_2\mid x)=1-P(C_1\mid x)</div>
@@ -1323,7 +1323,7 @@ print(r2_score(y_test, predict))         <span class="out"># 0.9784483372537969 
   <p class="fx-note">· <span class="tex">\mathbf x</span> 는 <span class="tex">d+1</span>개 성분의 특징 벡터(바이어스 성분 1로 고정), <span class="tex">\mathbf w</span> 는 <span class="tex">d+1</span>개 성분의 가중치 벡터 — <b>다중 선형 회귀와 똑같은 식</b>이다<br>
   · <b>이진 분류</b> — <span class="tex">g(\mathbf x)&gt;0</span> 이면 <span class="tex">C_1</span>, 그 외에는 <span class="tex">C_2</span></p>
 </div>
-<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-24-split-point-line.png" alt="로지스틱1 교안 12p — 1차원은 구분점, 2차원은 구분선으로 특징 공간을 분할"><figcaption>로지스틱1 12p — 특징 공간이 1차원이면 <b>점</b>, 2차원이면 <b>선</b>, 3차원이면 <b>평면</b>, 4차원 이상이면 <b>초평면(hyperplane)</b>으로 분할</figcaption></figure>
+<figure class="fig"><img width="1100" height="252" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-24-split-point-line.png" alt="로지스틱1 교안 12p — 1차원은 구분점, 2차원은 구분선으로 특징 공간을 분할"><figcaption>로지스틱1 12p — 특징 공간이 1차원이면 <b>점</b>, 2차원이면 <b>선</b>, 3차원이면 <b>평면</b>, 4차원 이상이면 <b>초평면(hyperplane)</b>으로 분할</figcaption></figure>
 <div class="ex">
   <p class="ex-q"><em>교안 예제</em> <span class="tex">g(\mathbf x)=20x_1+3x_2-36</span> (<span class="tex">\mathbf w=[-36\;\;20\;\;3]^{\mathsf T}</span>, <span class="tex">x_1</span> 학과 · <span class="tex">x_2</span> 학점) 으로 <span class="tex">\mathbf x_2=[1\;\;3.8]^{\mathsf T}</span>, <span class="tex">\mathbf x_4=[3\;\;2.2]^{\mathsf T}</span> 를 분류하면?</p>
   <div class="step"><i>①</i><div><span class="tex">g(\mathbf x_2)=20(1)+3(3.8)-36=20+11.4-36=-4.6&lt;0</span> → 미수강 쪽</div></div>
@@ -1338,7 +1338,7 @@ print(r2_score(y_test, predict))         <span class="out"># 0.9784483372537969 
 이 경우 <span class="tex">g(\mathbf x)=0</span> 은 성분 수에 따라 선 · 평면 · 초평면이 되어 특징 공간을 2개로 분할한다.</div>
 
 <h3 class="sub-title">로지스틱 함수 (Logistic function)</h3>
-<figure class="fig"><img loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-26-logistic-function.png" alt="로지스틱1 교안 16p — 로지스틱 함수 정의, S자 그래프, 미분 유도"><figcaption>로지스틱1 16p — 정의역 전체를 <b>0과 1 사이</b>로 사상하는 S자 곡선</figcaption></figure>
+<figure class="fig"><img width="1100" height="515" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-26-logistic-function.png" alt="로지스틱1 교안 16p — 로지스틱 함수 정의, S자 그래프, 미분 유도"><figcaption>로지스틱1 16p — 정의역 전체를 <b>0과 1 사이</b>로 사상하는 S자 곡선</figcaption></figure>
 <div class="fx">
   <p class="fx-lab">정의와 미분 형태</p>
   <div class="tex-d">\sigma(x)=\frac{1}{1+e^{-x}}=\frac{e^x}{1+e^x},\qquad \frac{d}{dx}\sigma(x)=\frac{e^x}{(1+e^x)^2}=\sigma(x)\bigl(1-\sigma(x)\bigr)</div>
