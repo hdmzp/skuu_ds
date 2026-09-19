@@ -337,6 +337,23 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .lev table{min-width:0;width:auto;margin:0 auto;font-family:'Consolas','D2Coding',ui-monospace,monospace}
 .lev th,.lev td{text-align:center;padding:6px 10px;white-space:nowrap}
 .lev td.on{background:#fde68a;font-weight:700;color:#7c2d12}
+
+/* 플립러닝 강의 필기 · 필기 속 질문 풀이 */
+.lec,.qa{border-radius:var(--radius);padding:12px 15px;margin:12px 0;font-size:13px;line-height:1.85}
+.lec{background:#fffaf3;border:1px solid #f0c48a;border-left:4px solid #b45309;color:#7c2d12}
+.qa{background:#f0fdfa;border:1px solid #99e0d6;border-left:4px solid #0f766e;color:#134e4a}
+.lec::before,.qa::before{display:table;font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;color:#fff}
+.lec::before{content:'🎧 플립러닝 강의 필기';background:#b45309}
+.qa::before{content:'💡 필기 속 질문 풀이';background:#0f766e}
+.lec b{color:#7c2d12}.qa b{color:#0f3d3a}
+.lec .ul li{color:#7c2d12}.lec .ul li::before{background:#b45309;opacity:.75}
+.qa .ul li{color:#134e4a}.qa .ul li::before{background:#0f766e;opacity:.8}
+.qa .q{display:block;font-weight:700;color:#0f766e;margin-bottom:2px}
+.lec .fix,.qa .fix{display:block;margin-top:8px;font-size:12px;color:#6b7280;border-top:1px dashed currentColor;padding-top:6px}
+.lec .fix b{color:#92400e}
+.part2{background:#f1f3f7;border:1px dashed #9aa3b5;border-radius:var(--radius);padding:9px 14px;font-size:12.5px;color:#4b5563;margin:0 0 14px}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:640px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
 </style>
 </head>
 <body id="top">
@@ -371,10 +388,12 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <p class="kicker">4주차 · 9.23 · 2026-2학기</p>
   <h1>04. Image Pyramids — Aliasing · Pyramid · Interpolation</h1>
   <p>이미지를 <b>줄일 때</b>는 왜 깨지는가(에일리어싱), 어떻게 하면 안 깨지는가(가우시안 → 서브샘플), 줄이며 잃은 정보를 어떻게 보관하는가(라플라시안 피라미드 · 웨이블릿), <b>키울 때</b>는 빈칸을 어떻게 채우는가(보간)까지를 교안 순서대로 정리했습니다.</p>
-  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 54p</span><span class="chip">교안 캡처 40장</span><span class="chip">과제 #1 3번과 직결</span></div>
+  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 54p</span><span class="chip">교안 캡처 40장</span><span class="chip">과제 #1 3번과 직결</span><span class="chip">플립러닝 1부 필기 반영</span></div>
 </section>
 
 <div class="legend">
+  <i><span class="sw" style="background:#fffaf3;border:1px solid #b45309"></span><span><b>🎧 플립러닝 강의 필기</b> — 1부 강의를 들으며 적은 내용</span></i>
+  <i><span class="sw" style="background:#f0fdfa;border:1px solid #0f766e"></span><span><b>💡 필기 속 질문 풀이</b> — 필기에 남긴 질문 · 헷갈린 부분에 대한 답과 정정</span></i>
   <i><span class="sw sw-term"></span><span>파란 점선 = 어려운 개념 — PC는 커서를 올리면, 모바일은 <b>탭</b>하면 설명이 뜹니다</span></i>
 </div>
 
@@ -415,6 +434,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <figure class="fig"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv4-05-pixelated.jpg" alt="교안 5p — 1/2, 1/4, 1/8 결과를 같은 크기로 확대하면 심하게 깨져 보인다"><figcaption>교안 5p — 같은 크기로 키워 보면 <b>심하게 깨져(pixelated)</b> 있다</figcaption></figure>
 </div>
 <figure class="fig"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv4-06-downsample2.jpg" alt="교안 6p — 빌딩 사진을 줄였을 때 창문 무늬가 이상한 줄무늬로 바뀐 예"><figcaption>교안 6p — 규칙적인 창문 무늬가 줄이면서 <b>원래 없던 줄무늬</b>로 바뀌었다. 단순히 &lsquo;흐려진&rsquo; 것이 아니라 <b>틀린 무늬가 생긴</b> 것 — 이것이 에일리어싱이다</figcaption></figure>
+<div class="lec">줄인 영상을 <b>다시 확대</b>해 보았다 — <b>다운사이징을 하면 할수록 블록화 · 픽셀화</b>되는 현상이 보인다.</div>
 </section>
 
 <!-- ===================== 01 ===================== -->
@@ -422,6 +442,12 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <div class="sec-head"><span class="sec-badge">01</span><h2 class="sec-title">에일리어싱 (Aliasing)<small>샘플링이 촘촘하지 않으면 가짜 신호가 보인다</small></h2></div>
 <div class="note-box"><b>샘플링</b> — 연속적인 신호(빛, 사인파)를 일정 간격으로 찍어 숫자로 만드는 것. 디지털 이미지 자체가 연속적인 장면을 화소 간격으로 샘플링한 결과다(3주차 00).<br>
 <b>에일리어싱</b> — <b>샘플링 간격이 이미지의 세밀함을 담기에 충분하지 않을 때</b> 생기며, <b>원래와 다른 신호(alias, &lsquo;가명&rsquo;)</b>를 보여 준다.</div>
+<div class="lec"><ul class="ul">
+  <li>에일리어싱 = <b>아날로그(연속) 신호를 디지털 신호로 바꾸는 과정</b>에서 일어나는 오류. 연속된 신호를 <b>수치화하기 위해 이산적인(discrete) 신호</b>로 바꾸는 것이 디지털화(digitize)다</li>
+  <li>예시 — 사인파. 샘플링 <b>주기를 조절</b>해서 주기에 맞는 신호를 샘플링하는데, <b>주기를 길게 하면(드문드문 찍으면) 복원이 원래와 다르게</b> 될 수 있다</li>
+  <li>샘플링 비율이 높지 못해 <b>상세한 정보만큼을 가져오지 못하면</b>, 원래 신호를 표현하지 못하고 <b>부족한 정보에 의해 왜곡된 신호 · 화면</b>이 나타난다</li>
+</ul>
+<span class="fix"><b>정확히는</b> — 필기의 &lsquo;여러 시그널의 중첩에 의해 발생&rsquo;은 이렇게 이해하면 된다: 실제 신호(이미지)는 <b>여러 주파수 성분의 합</b>이고, 그중 <b>샘플링 주파수의 절반보다 빠른 성분</b>이 샘플링 뒤에 <b>느린 성분으로 둔갑</b>해 원래 느린 성분과 섞여 버리는 것이 에일리어싱이다(아래 10p 그림의 회색 → 검은 곡선).</span></div>
 <div class="figs">
   <figure class="fig"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv4-08-sampling1.jpg" alt="교안 8p — 사인파를 촘촘하게 샘플링한 점들"><figcaption>교안 8p — 촘촘히 찍으면 점들만으로도 원래 파형이 보인다</figcaption></figure>
   <figure class="fig"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv4-09-sampling2.jpg" alt="교안 9p — 드문드문 샘플링하면 점들이 다른 느린 파형 위에 놓인다"><figcaption>교안 9p — 드문드문 찍으면 점들이 <b>다른(느린) 파형</b>으로도 설명된다</figcaption></figure>
@@ -431,7 +457,14 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <figure class="fig"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv4-11-aliasing-texture.jpg" alt="교안 11p — 멀어질수록 깨지는 체커보드와 물결무늬 천"><figcaption>교안 11p — Texture: 먼 곳의 체커보드가 깨지고 천에 물결(모아레)이 생긴다</figcaption></figure>
   <figure class="fig"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv4-12-aliasing-photo.jpg" alt="교안 12p — 에스컬레이터와 체크무늬 재킷 사진의 모아레"><figcaption>교안 12p — Photograph: 촘촘한 무늬를 찍으면 사진에 가짜 무늬가 생긴다</figcaption></figure>
 </div>
+<div class="lec">예) <b>텍스처가 왜곡</b>되는 현상 — 비단 섬유 표면에 생기는 <b>모아레(물결무늬)</b>, 사진에서도 모아레가 생긴다. <b>고주파(촘촘한 무늬)가 많이 들어오면서</b> 생기며, 주로 <b>격자무늬 · 스트라이프(줄무늬)</b>에서 많이 발생한다.</div>
 <figure class="fig"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv4-13-wagon-wheel.jpg" alt="교안 13p — 마차 바퀴 효과: 프레임 간격 때문에 바퀴가 거꾸로 도는 것처럼 보임"><figcaption>교안 13p — <b>마차 바퀴 효과(Wagon-wheel effect)</b>: 시간축의 에일리어싱. 영상은 1/30초(필름 1/24초)마다 한 장씩 찍으므로, 바퀴살이 한 프레임 사이에 거의 한 바퀴를 돌면 <b>느리게 거꾸로 도는 것처럼</b> 보인다. 헬리콥터 날개가 멈춰 보이는 영상도 같은 원리(교안 14p는 동영상)</figcaption></figure>
+<div class="lec"><b>마차 바퀴 효과</b> — 필름은 1/24초, 영상은 1/30초마다 한 장씩 찍는다.
+<ul class="ul">
+  <li>바퀴(날개)의 회전과 찍는 속도가 <b>딱 맞으면</b> 찍을 때마다 같은 위치에 있는 것처럼 보여 <b>헬리콥터 날개가 멈춰 보이고, 새의 날갯짓이 없는 것처럼</b> 보인다</li>
+  <li>카메라 프레임이 회전을 <b>따라가지 못하면</b> 바퀴가 <b>반시계 방향(거꾸로)</b>으로 도는 것처럼 보인다</li>
+</ul>
+<span class="fix"><b>정확히는</b> — &lsquo;거꾸로 도는&rsquo; 조건은 &ldquo;사진이 더 느리게 찍힐 때&rdquo;라기보다, <b>한 프레임 사이에 바퀴가 바퀴살 한 칸 간격보다 살짝 덜 돌 때</b>다. 그러면 바로 옆 살이 직전 위치보다 <b>조금 뒤쪽</b>에 찍혀서 뒤로 천천히 도는 것처럼 보인다. 딱 한 칸(또는 정수 배)을 돌면 멈춰 보이고, 한 칸보다 살짝 더 돌면 앞으로 천천히 도는 것처럼 보인다 — 모두 <b>시간축에서 샘플링이 회전을 못 따라가는</b>(나이퀴스트 위반) 에일리어싱이다.</span></div>
 </section>
 
 <!-- ===================== 02 ===================== -->
@@ -446,17 +479,53 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <div class="tex-d">f_s\;\ge\;2f_0\qquad(f_s:\text{ 샘플링 주파수},\;f_0:\text{ 신호의 최대 주파수})</div>
   <p class="fx-note">교안 15p 오른쪽 그림: 샘플링하면 원래 스펙트럼이 <span class="tex">f_s</span> 간격으로 <b>복제</b>되는데, <span class="tex">f_s&lt;2f_0</span> 이면 복제본끼리 <b>겹쳐서</b>(aliasing) 원래 신호를 분리할 수 없게 된다. 겹치기 전에 저역 통과 필터(LPF)로 고주파를 잘라 두면 겹치지 않는다 — 이것이 Solution 2의 원리다.</p>
 </div>
+<figure class="fig"><img width="822" height="350" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv4-15-nyquist-spectrum.png" alt="교안 15p 상단 — 왼쪽은 fs가 2f0보다 작아 복제된 스펙트럼이 겹치는 Aliasing, 오른쪽은 fs가 2f0 이상이라 겹치지 않고 LPF로 원래 신호만 걸러낼 수 있는 No aliasing"><figcaption>교안 15p 상단 — <b>왼쪽</b> <span class="tex">f_s&lt;2f_0</span>: 샘플링으로 복제된 삼각형(스펙트럼)들이 <b>서로 겹쳐</b> 분홍선처럼 뭉개진다 = <b>Aliasing</b>. <b>오른쪽</b> <span class="tex">f_s\ge2f_0</span>: 복제본이 <b>떨어져 있어서</b> 가운데 것만 점선 상자(<b>LPF</b>)로 걸러 내면 원래 신호가 그대로 복원된다 = <b>No aliasing</b></figcaption></figure>
+<div class="lec"><b>ANTI-ALIASING ① — 샘플링 개수를 늘린다</b> = 나이퀴스트율 이상으로 샘플링한다 (<span class="tex">f_s\ge2f_0</span>). 주기는 반으로 줄어야 하고, 고주파는 LPF로…</div>
+<div class="qa"><span class="q">Q. &ldquo;주기는 반으로 줄어야 하고 + 고주파를 해서 ldf&rdquo;?</span>
+<ul class="ul">
+  <li><b>주기를 반으로</b> — 샘플을 찍는 <b>간격</b>이 신호에서 가장 빠르게 변하는 성분의 <b>주기의 절반 이하</b>여야 한다는 뜻. 즉 한 번 오르내리는 동안 <b>최소 2번은 찍어야</b> 한다 = <span class="tex">f_s\ge2f_0</span></li>
+  <li><b>ldf → LPF(Low-Pass Filter, 저역 통과 필터)</b> — 낮은 주파수만 통과시키고 높은 주파수를 잘라 내는 필터. 위 그림 오른쪽 아래 <b>점선 상자</b>가 LPF다. 샘플링 전에 <span class="tex">f_s/2</span> 를 넘는 고주파를 미리 잘라 두면 겹칠 것 자체가 없어진다</li>
+</ul></div>
 <figure class="fig"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv4-16-nyquist-2d.jpg" alt="교안 16p — 체커보드를 2배 다운샘플링할 때 좋은 샘플링과 나쁜 샘플링 비교"><figcaption>교안 16p — Nyquist limit 2D 예: 체커보드 칸 하나에 샘플이 2개 이상이면 무늬가 유지되지만(Good), 칸마다 1개 이하로 찍으면 <b>전혀 다른 무늬</b>가 된다(Bad). 2배 축소하면 원본의 무늬가 &lsquo;너무 고주파&rsquo;가 되기 때문</figcaption></figure>
 <div class="figs">
   <figure class="fig"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv4-18-gauss-subsample.jpg" alt="교안 18p — 가우시안으로 블러 후 절반씩 줄인 고흐 자화상"><figcaption>교안 18p — <b>가우시안 스무딩을 먼저</b> 하고 행·열을 절반 버린다</figcaption></figure>
   <figure class="fig"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv4-19-compare.jpg" alt="교안 19p — 가우시안 후 축소한 결과(위)와 그냥 축소한 결과(아래)를 확대 비교"><figcaption>교안 19p — 위(G 1/2 · 1/4 · 1/8)는 부드럽고 자연스럽고, 아래(그냥 1/2 · 1/4 · 1/8)는 깨져 있다</figcaption></figure>
 </div>
+<div class="lec"><b>ANTI-ALIASING ② — 필터를 사용하고, 서브샘플링을 한다</b>
+<ul class="ul">
+  <li>가우시안 필터를 적용해 노이즈를 제거하는 <b>블러링</b>을 한다 — <b>인근 주변 픽셀들을 평균화</b>했으니 튀는 값 사이의 <b>이질감이 줄어든다</b></li>
+  <li>이것이 <b>저주파 필터(LPF)를 통과시키는 효과</b>를 가져오고, 그 다음에 다운샘플링을 진행한다</li>
+  <li>이 절차의 가장 큰 내용은 <b>필터로 스무딩을 먼저 하는 것</b></li>
+</ul></div>
 <div class="tip"><b>3주차와의 연결</b> — 가우시안 필터는 <b>저역 통과 필터</b>다(가는 무늬 = 고주파를 걸러 냄). 3주차에는 &lsquo;노이즈를 줄이는 도구&rsquo;였던 가우시안이 이번 주에는 <b>&lsquo;줄여도 안 깨지게 하는 도구&rsquo;</b>로 쓰인다.</div>
 </section>
 
 <!-- ===================== 03 ===================== -->
 <section class="sec" id="gpyr">
   <div class="sec-head"><span class="sec-badge">03</span><h2 class="sec-title">가우시안 피라미드 (Gaussian Image Pyramid)<small>blur → subsample 을 반복해 쌓은 해상도 계층</small></h2></div>
+<div class="qa"><span class="q">Q. 가우시안 피라미드는? — 교안 그림만으로는 개념이 안 잡힌다</span>
+<b>한 줄 정의</b> — 같은 이미지를 <b>&ldquo;블러 → 절반으로 줄이기&rdquo;를 반복해서</b> 여러 해상도로 만들어 쌓아 둔 것. 층마다 이미지는 같은 장면이지만 <b>크기는 1/2, 선명도는 한 단계씩 낮아진다</b>. 원본을 맨 아래(Level 0)에 두고 작아진 것을 위로 쌓으면 피라미드 모양이 되어서 붙은 이름이다.
+<div class="tbl-wrap" style="margin:8px 0">
+<table>
+  <thead><tr><th>층</th><th>만드는 법</th><th>크기 (512 원본 예)</th><th>남아 있는 것</th></tr></thead>
+  <tbody>
+    <tr><td>G₀ (Level 0)</td><td>원본</td><td>512 × 512</td><td>가는 선 · 질감 · 노이즈까지 전부</td></tr>
+    <tr><td>G₁</td><td>G₀ 블러 → 절반</td><td>256 × 256</td><td>가장 가는 무늬가 사라짐</td></tr>
+    <tr><td>G₂</td><td>G₁ 블러 → 절반</td><td>128 × 128</td><td>중간 크기 무늬도 사라짐</td></tr>
+    <tr><td>G₃ …</td><td>반복</td><td>64 × 64 …</td><td>큰 덩어리 · 윤곽 · 배치만</td></tr>
+  </tbody>
+</table>
+</div>
+<ul class="ul">
+  <li><b>왜 블러부터?</b> — 02절 그대로. 블러(가우시안 = <b>저주파 통과 필터</b>)로 줄였을 때 깨질 고주파를 먼저 지워 두면, 줄여도 에일리어싱이 생기지 않는다. OpenCV <code>cv2.pyrDown</code>은 5×5 가우시안 커널(1 · 4 · 6 · 4 · 1 가중치)로 블러한 뒤 짝수 행 · 열을 버린다</li>
+  <li><b>저주파 · 고주파를 이미지 말로 하면</b> — <b>저주파</b> = 밝기가 천천히 변하는 넓은 영역(하늘, 벽, 얼굴 전체 형태). <b>고주파</b> = 밝기가 급하게 바뀌는 곳(가는 선, 경계, 머리카락, 노이즈). 블러는 고주파를 깎고 저주파만 남긴다</li>
+  <li><b>왜 여러 해상도가 필요한가</b>
+    <br>① <b>크기가 다른 물체 찾기(스케일 불변성)</b> — 얼굴 검출기가 24×24 창만 본다면, 원본에선 작은 얼굴을, 위층(줄인 이미지)에선 원래 큰 얼굴을 찾게 된다. 검출기를 바꾸지 않고 <b>층마다 한 번씩 돌리면</b> 모든 크기의 얼굴이 걸린다
+    <br>② <b>대충 먼저, 정밀하게 나중에(coarse-to-fine)</b> — 두 이미지를 맞추거나 움직임을 찾을 때, 작은 위층에서 대략의 위치를 싸게 찾고 아래층으로 내려오며 다듬는다. 큰 원본에서 처음부터 전부 뒤지는 것보다 훨씬 빠르다
+    <br>③ <b>디노이징 · 압축 · 블렌딩</b> — 05절 응용</li>
+  <li><b>비용</b> — 전부 쌓아도 원본의 4/3배(아래 예제)</li>
+</ul></div>
+
 <div class="fx">
   <p class="fx-lab">만드는 법</p>
   <div class="tex-d">F_0\;\xrightarrow{\;*H\ (\text{blur})\;}\;F_0*H\;\xrightarrow{\;\downarrow2\ (\text{subsample})\;}\;F_1\;\xrightarrow{\;*H\;}\;F_1*H\;\xrightarrow{\;\downarrow2\;}\;F_2\;\cdots</div>
@@ -482,19 +551,81 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   </tbody>
 </table>
 </div>
+<div class="lec"><ul class="ul">
+  <li>가우시안 피라미드는 컴퓨터 비전에서 매우 다양하게 활용된다 — <b>디노이징</b>, 영상을 <b>멀티스케일로 이해</b>할 때 등</li>
+  <li>피라미드 위로 올라갈수록 영상은 점점 <b>스무딩</b>된다. 위층에는 <b>uniform regions</b>(크고 균일한 영역)가 남아 <b>전체를 글로벌하게 파악</b>하는 데 유용하게 쓰인다</li>
+  <li>위층으로 갈수록 원본을 복원할 수 있을까? <b>불가능</b> — 블러로 잃은 정보는 돌아오지 않는다</li>
+  <li>그렇다면 <b>손실한 정보를 활용할 방법은 없을까?</b> 가우시안은 블러링된 <b>저주파</b> 영역이고, 빼고 남은 <b>잔차</b>는 <b>엣지를 추출한 듯한 모습(윤곽선 같은 이미지)</b>이다 → &ldquo;<b>제일 위 영상을 갖고 복원이 가능할까?</b>&rdquo;라는 고민을 해결할 수 있지 않을까 → 그래서 다음에 나오는 것이 라플라시안 피라미드</li>
+</ul></div>
+<div class="qa"><span class="q">Q. &ldquo;uniform regions · 전체를 글로벌하게 파악&rdquo;이 무슨 소리?</span>
+위층일수록 고주파(가는 무늬 · 질감 · 작은 물체)가 블러로 지워져서 <b>크고 균일한 영역</b>(넓은 면, 큰 물체의 덩어리, 전체 윤곽)만 남는다. 말하자면 <b>나무를 지우고 숲만 남긴 이미지</b>다.
+그래서 위층을 보면 &ldquo;<b>이미지 전체에 어떤 큰 구조가 어디쯤 있는가</b>&rdquo;(하늘은 위, 건물은 가운데 같은 전체 배치)를 디테일에 방해받지 않고 빠르게 알 수 있다 — 이것이 &lsquo;글로벌하게 파악&rsquo;. 반대로 아래층(원본)은 한 부분의 세밀한 정보, 즉 <b>로컬(local)</b> 정보를 준다.
+<span class="fix">예) 표지판 찾기 — 위층에서 &ldquo;빨간 원형 덩어리가 오른쪽 위에 있다&rdquo;를 먼저 찾고(글로벌), 아래층으로 내려와 그 자리에서 글자를 읽는다(로컬). 위 &lsquo;coarse-to-fine&rsquo;과 같은 이야기다.</span></div>
 <figure class="fig"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv4-24-residual.jpg" alt="교안 24p — G0에서 G1을 업샘플링한 이미지를 빼면 L0, G1에서 G2 업샘플을 빼면 L1"><figcaption>교안 24p — &ldquo;잃은 것(잔차)을 따로 쓸 방법은 없을까?&rdquo; <span class="tex">G_0-\text{up}(G_1)=L_0</span>, <span class="tex">G_1-\text{up}(G_2)=L_1</span>. 빼고 남은 <b>윤곽선 같은 이미지</b>가 바로 잃어버린 디테일이다</figcaption></figure>
 </section>
 
 <!-- ===================== 04 ===================== -->
 <section class="sec" id="lpyr">
   <div class="sec-head"><span class="sec-badge">04</span><h2 class="sec-title">라플라시안 피라미드 (Laplacian Image Pyramid)<small>블러 이미지 대신 &lsquo;예측 오차(잔차)&rsquo;를 저장한다</small></h2></div>
+<div class="lec"><ul class="ul">
+  <li>라플라시안 피라미드는 가우시안과 달리 <b>업샘플링</b>(영상 크기를 키우는 것)이 들어간다 — 가우시안 과정의 역순</li>
+  <li>재복원을 하기 위해선 어떻게 해야 할까? → <b>잔차를 보관</b>해서</li>
+</ul>
+<span class="fix"><b>정정</b> — &lsquo;가우시안과 달리 업샘플링에 대한 것 · 역순&rsquo;은 반만 맞다. 라플라시안 피라미드도 <b>만들 때는 가우시안처럼 줄여 가면서</b>(블러 + ↓2) 층마다 <b>한 번씩 다시 키워(↑2 + 보간) 빼 보는</b> 것이고, <b>역순</b>(위에서부터 키우며 잔차를 더해 내려오기)은 <b>복원할 때</b>의 이야기다. 식으로 <span class="tex">L_k=G_k-\text{up}(G_{k+1})</span>, 복원은 <span class="tex">G_k=L_k+\text{up}(G_{k+1})</span>.</span></div>
+
 <div class="figs">
   <div class="note-box"><b>복원하려면 무엇을 저장해야 하나?</b> — 각 층에서 <b>블러 이미지 자체 대신 잔차(residual)</b>를 보관한다.
   오른쪽 그림 아래줄의 잔차 이미지들은 대부분 <b>회색(0 근처)</b>이고 히스토그램이 가운데 한 점에 몰려 있다 — 값이 0 주변에 모여 있으면 <b>압축이 아주 잘 된다</b>.</div>
   <figure class="fig"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv4-26-lap-store.jpg" alt="교안 26p — 가우시안 층과 잔차 층, 각각의 히스토그램"><figcaption>교안 26p — 위: 원본 계열(히스토그램 넓음) / 아래: 잔차(히스토그램 뾰족)</figcaption></figure>
 </div>
+<div class="lec">플로우차트 부분 — <b>교안 27p</b>. 다운샘플링한 것을 다시 업샘플링하고 <b>인터폴레이션</b>해서 그 <b>예측 오차를 보존</b>한다.</div>
 <figure class="fig"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv4-27-lap-decomp1.jpg" alt="교안 27p — Smooth, Down-sampling, Up-sampling, Interpolate 후 원본과 빼서 예측 오차를 얻는 블록도"><figcaption>교안 27p — <b>Q. 다운샘플링 후 잃은 정보는?</b> A. <b>예측 오차 이미지</b>. N×N 원본 → Smooth → ↓2 (N/2×N/2) → ↑2 · Interpolate → 예측 이미지(N×N). <b>원본 − 예측 = 예측 오차</b></figcaption></figure>
 <figure class="fig"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv4-28-lap-decomp2.jpg" alt="교안 28p — 같은 과정을 N/2, N/4 크기에서 반복하는 다단계 분해"><figcaption>교안 28p — 같은 과정을 근사 이미지(N/2, N/4 …)에 반복 → 층마다 예측 오차 하나씩</figcaption></figure>
+<div class="lec">블록 다이어그램을 확장해서 보자 — <b>교안 28p</b>. 다운샘플링한 걸 다시 업샘플링 · 인터폴레이션해서 그 예측 오차를 보존하고, 다시 스무딩 · 다운샘플링을 한 후에(다시 가우시안), 다시 업샘플링과 인터폴레이션을 해서 또 예측 오차를 보존… <b>이 잔차를 모아 모아요</b>. 원 영상이 있으면 이 방법으로 발생하는 예측 오차들을 만들어 나가면, 맨 마지막에서는…</div>
+<figure class="fig svgfig"><div class="svg-scroll"><svg viewBox="0 0 800 390" role="img" aria-label="라플라시안 피라미드 2단 분해 흐름도: 하늘색은 블러와 절반 축소로 가우시안 층을 만드는 길, 초록은 한 층 위 이미지를 다시 키우고 보간해 예측을 만드는 길, 주황은 원래 층에서 예측을 뺀 잔차로 라플라시안 층이 되어 저장된다" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<marker id="fa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+<marker id="fb" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0891b2"/></marker>
+<marker id="fg" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#16a34a"/></marker>
+<marker id="fo" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ea580c"/></marker>
+</defs>
+<g font-size="12">
+<rect x="20" y="40" width="120" height="50" rx="8" fill="#fff" stroke="#1b3f8b" stroke-width="1.6"/><text x="80" y="61" text-anchor="middle" font-weight="700" fill="#1b3f8b">G₀ 원본</text><text x="80" y="79" text-anchor="middle" fill="#475569">N × N</text>
+<rect x="180" y="40" width="120" height="50" rx="8" fill="#cffafe" stroke="#0891b2" stroke-width="1.6"/><text x="240" y="61" text-anchor="middle" font-weight="700" fill="#0e7490">① 가우시안 블러</text><text x="240" y="79" text-anchor="middle" fill="#0e7490">② ↓2 (절반)</text>
+<rect x="340" y="40" width="120" height="50" rx="8" fill="#fff" stroke="#1b3f8b" stroke-width="1.6"/><text x="400" y="61" text-anchor="middle" font-weight="700" fill="#1b3f8b">G₁</text><text x="400" y="79" text-anchor="middle" fill="#475569">N/2 × N/2</text>
+<rect x="500" y="40" width="120" height="50" rx="8" fill="#cffafe" stroke="#0891b2" stroke-width="1.6"/><text x="560" y="61" text-anchor="middle" font-weight="700" fill="#0e7490">① 가우시안 블러</text><text x="560" y="79" text-anchor="middle" fill="#0e7490">② ↓2 (절반)</text>
+<rect x="660" y="40" width="120" height="50" rx="8" fill="#eef2fb" stroke="#1b3f8b" stroke-width="2.4"/><text x="720" y="61" text-anchor="middle" font-weight="700" fill="#1b3f8b">G₂ 꼭대기</text><text x="720" y="79" text-anchor="middle" fill="#475569">N/4 × N/4</text>
+<line x1="140" y1="65" x2="178" y2="65" stroke="#0891b2" stroke-width="2" marker-end="url(#fb)"/>
+<line x1="300" y1="65" x2="338" y2="65" stroke="#0891b2" stroke-width="2" marker-end="url(#fb)"/>
+<line x1="460" y1="65" x2="498" y2="65" stroke="#0891b2" stroke-width="2" marker-end="url(#fb)"/>
+<line x1="620" y1="65" x2="658" y2="65" stroke="#0891b2" stroke-width="2" marker-end="url(#fb)"/>
+<rect x="180" y="130" width="120" height="50" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="1.6"/><text x="240" y="151" text-anchor="middle" font-weight="700" fill="#15803d">③ ↑2 업샘플</text><text x="240" y="169" text-anchor="middle" fill="#15803d">④ 보간 → 예측</text>
+<rect x="500" y="130" width="120" height="50" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="1.6"/><text x="560" y="151" text-anchor="middle" font-weight="700" fill="#15803d">③ ↑2 업샘플</text><text x="560" y="169" text-anchor="middle" fill="#15803d">④ 보간 → 예측</text>
+<polyline points="360,90 360,155 302,155" fill="none" stroke="#16a34a" stroke-width="2" marker-end="url(#fg)"/>
+<polyline points="680,90 680,155 622,155" fill="none" stroke="#16a34a" stroke-width="2" marker-end="url(#fg)"/>
+<line x1="80" y1="90" x2="80" y2="138" stroke="#475569" stroke-width="1.8" marker-end="url(#fa)"/><text x="88" y="124" fill="#475569" font-weight="700">+</text>
+<line x1="440" y1="90" x2="440" y2="138" stroke="#475569" stroke-width="1.8" marker-end="url(#fa)"/><text x="448" y="124" fill="#475569" font-weight="700">+</text>
+<line x1="180" y1="155" x2="97" y2="155" stroke="#16a34a" stroke-width="2" marker-end="url(#fg)"/><text x="104" y="148" fill="#15803d" font-weight="700">−</text>
+<line x1="500" y1="155" x2="457" y2="155" stroke="#16a34a" stroke-width="2" marker-end="url(#fg)"/><text x="462" y="148" fill="#15803d" font-weight="700">−</text>
+<circle cx="80" cy="155" r="15" fill="#fff" stroke="#475569" stroke-width="1.8"/><text x="80" y="160" text-anchor="middle" font-size="14" font-weight="700" fill="#475569">Σ</text>
+<circle cx="440" cy="155" r="15" fill="#fff" stroke="#475569" stroke-width="1.8"/><text x="440" y="160" text-anchor="middle" font-size="14" font-weight="700" fill="#475569">Σ</text>
+<line x1="80" y1="170" x2="80" y2="216" stroke="#ea580c" stroke-width="2" marker-end="url(#fo)"/>
+<line x1="440" y1="170" x2="440" y2="216" stroke="#ea580c" stroke-width="2" marker-end="url(#fo)"/>
+<rect x="20" y="220" width="170" height="54" rx="8" fill="#ffedd5" stroke="#ea580c" stroke-width="1.8"/><text x="105" y="242" text-anchor="middle" font-weight="700" fill="#c2410c">L₀ = G₀ − 예측</text><text x="105" y="261" text-anchor="middle" fill="#9a3412">예측 오차 (N × N) · 저장</text>
+<rect x="355" y="220" width="170" height="54" rx="8" fill="#ffedd5" stroke="#ea580c" stroke-width="1.8"/><text x="440" y="242" text-anchor="middle" font-weight="700" fill="#c2410c">L₁ = G₁ − 예측</text><text x="440" y="261" text-anchor="middle" fill="#9a3412">예측 오차 (N/2) · 저장</text>
+<line x1="720" y1="90" x2="720" y2="216" stroke="#1b3f8b" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#fa)"/>
+<rect x="640" y="220" width="150" height="54" rx="8" fill="#eef2fb" stroke="#1b3f8b" stroke-width="1.8"/><text x="715" y="242" text-anchor="middle" font-weight="700" fill="#1b3f8b">G₂ 그대로 저장</text><text x="715" y="261" text-anchor="middle" fill="#475569">맨 마지막 = 작은 근사 이미지</text>
+<text x="400" y="306" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a2e">최종 저장물 = L₀ · L₁ · G₂  →  복원: G₁ = L₁ + 키운 G₂,  G₀ = L₀ + 키운 G₁</text>
+<rect x="20" y="326" width="14" height="14" rx="3" fill="#cffafe" stroke="#0891b2"/><text x="40" y="338" fill="#334155">하늘색 = 가우시안 피라미드를 만드는 길 (블러 + 절반) — 교안 27·28p의 하늘색 블록</text>
+<rect x="20" y="348" width="14" height="14" rx="3" fill="#dcfce7" stroke="#16a34a"/><text x="40" y="360" fill="#334155">초록 = 한 층 위를 다시 키워 &lsquo;예측&rsquo; 만들기 (업샘플 + 보간) — 교안의 연두 블록</text>
+<rect x="20" y="370" width="14" height="14" rx="3" fill="#ffedd5" stroke="#ea580c"/><text x="40" y="382" fill="#334155">주황 = 원래 층 − 예측 = 잔차 = 라플라시안 층 (교안의 흰 Prediction error 상자)</text>
+</g></svg></div><figcaption>교안 27 · 28p 블록도를 색으로 다시 그린 것 — 한 단계(G₀ → L₀)가 27p, 그것을 한 번 더 이어 붙인 것(G₁ → L₁)이 28p다</figcaption></figure>
+<div class="qa"><span class="q">Q. 파란색이 가우시안이었다면 초록색이 라플라시안?</span>
+<b>반쯤 맞다.</b> 교안 27 · 28p의 <b>하늘색 블록(Smooth · Down-sampling)</b>은 가우시안 피라미드를 한 층 만드는 부분이 맞다. 하지만 <b>연두 블록(Up-sampling · Interpolate)</b>은 라플라시안 층 자체가 아니라 &ldquo;<b>한 층 위 이미지를 다시 키워 만든 예측</b>&rdquo;이다. 라플라시안 층은 그 예측을 원래 이미지에서 <b>뺀 결과</b>, 즉 Σ 아래 흰 상자 <b>Prediction error</b>다 (위 도식의 <b>주황</b>).
+<span class="q" style="margin-top:8px">Q. interpolate가 뭐야?</span>
+<b>보간</b> — 아는 값들 사이의 <b>모르는 값을 주변 값으로 추정해 채우는 것</b>. N/2 × N/2 이미지를 ↑2 하면 N × N 이 되는데, 새로 생긴 칸(4칸 중 3칸)에는 값이 없다. 그 빈칸을 옆 값 복사(최근접)나 거리에 따른 가중평균(선형)으로 채우는 것이 interpolate다. OpenCV <code>cv2.pyrUp</code>은 0을 끼워 넣고 가우시안 커널로 컨볼루션해서 채운다. 자세한 방법들은 <a class="ext" href="#interp">07 보간</a>(2부 강의)에서 다룬다.
+<span class="q" style="margin-top:8px">Q. 그래서 &ldquo;맨 마지막에서는…&rdquo;?</span>
+맨 마지막 층에는 <b>아주 작은 가우시안 근사 이미지 하나</b>(위 도식의 G₂, 교안 29p의 N/8 근사 이미지)가 남는다. 결국 저장하는 것은 <b>&lsquo;작은 근사 이미지 1장 + 층마다의 예측 오차들&rsquo;</b>이고, 이것만 있으면 위에서부터 &ldquo;키우고 → 잔차 더하기&rdquo;를 반복해 <b>원본을 정확히 복원</b>할 수 있다(31p). 가우시안만으로는 불가능했던 복원이 잔차 덕분에 가능해진 것 — 03절에서 던진 질문의 답이다.</div>
 <div class="figs">
   <figure class="fig"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv4-29-lap-decomp3.jpg" alt="교안 29p — 원본 N×N = 가장 작은 근사 이미지 + 층별 예측 오차들"><figcaption>교안 29p — 원본 = 제일 작은 근사 이미지(N/8×N/8) + 예측 오차 N/4 · N/2 · N</figcaption></figure>
   <figure class="fig"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv4-30-lap-residuals.jpg" alt="교안 30p — (I − F1G1)x1 등 잔차 계산 도식"><figcaption>교안 30p — 잔차를 연산자로 쓰면 <span class="tex">(I-F_kG_k)\,x_k</span></figcaption></figure>
@@ -528,11 +659,24 @@ restored = cv2.add(up, L)                  <span class="cm"># 복원 x = F(G x) 
   <figure class="fig"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv4-33-pyramid-summary.jpg" alt="교안 33p — 얼룩말의 가우시안 피라미드와 라플라시안 피라미드"><figcaption>교안 33p — 두 피라미드 요약</figcaption></figure>
 </div>
 <figure class="fig"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv4-34-applications.jpg" alt="교안 34p — 이미지 압축, 다중 스케일 텍스처 매핑, 노이즈 제거, 초점 스택 합성, 다중 스케일 분석"><figcaption>교안 34p — 응용: <b>이미지 압축 · 다중 스케일 텍스처 매핑(밉맵) · 노이즈 제거 · 초점 스택 합성 · 다중 스케일 이미지 분석</b>. Related Codes의 &lsquo;Image Blending using Pyramids&rsquo;(사과+오렌지 합성)도 대표 응용</figcaption></figure>
+<div class="lec"><ul class="ul">
+  <li><b>이미지 압축</b>도 <b>손실(lossy) 압축</b>과 <b>무손실(lossless) 압축</b>으로 나뉜다</li>
+  <li><b>다양한 해상도로 텍스처 매핑</b>, <b>디노이징</b></li>
+  <li>다양한 스케일을 가진 영상으로 <b>전체적인 특징</b>을 확인</li>
+</ul></div>
+<div class="qa"><ul class="ul">
+  <li><b>압축과 피라미드</b> — 라플라시안 층은 대부분 <b>0 근처 값</b>이라(04절 26p 히스토그램) 적은 비트로 저장된다. 잔차를 그대로 다 저장하면 원본이 완벽히 돌아오는 <b>무손실</b>, 작은 잔차를 0으로 버리거나 거칠게 저장하면 용량이 더 줄지만 화질이 조금 떨어지는 <b>손실</b> 압축이 된다</li>
+  <li><b>다양한 해상도로 텍스처 매핑 = 밉맵(mipmap)</b> — 게임 · 3D 그래픽에서 멀리 있어 작게 보이는 벽에는 미리 줄여 둔 피라미드 위층 텍스처를 붙인다. 큰 텍스처를 억지로 작게 찍을 때 생기는 <b>모아레(에일리어싱)를 막고</b> 속도도 빨라진다 — 01 · 02절 내용이 그대로 응용된 것</li>
+  <li><b>디노이징</b> — 노이즈는 주로 아래층 라플라시안(고주파)에 작은 값으로 흩어져 있다. 그 작은 값들을 줄인 뒤 복원하면 윤곽은 살리고 노이즈만 줄일 수 있다</li>
+  <li><b>&ldquo;다양한 스케일로 전체적인 특징을 확인&rdquo;</b> — 03절 &lsquo;글로벌하게 파악&rsquo;과 같은 말이다. 위층에서 큰 구조(숲)를, 아래층에서 디테일(나무)을 보며 <b>여러 크기의 특징을 함께</b> 쓰는 것</li>
+</ul></div>
 </section>
 
 <!-- ===================== 06 ===================== -->
 <section class="sec" id="wavelet">
   <div class="sec-head"><span class="sec-badge">06</span><h2 class="sec-title">웨이블릿 변환 (Wavelet Transform)<small>근사(a) + 가로(h) · 세로(v) · 대각(d) 디테일로 쪼개기</small></h2></div>
+<div class="part2">🎧 여기부터(06 웨이블릿 · 07 보간 · 08 바이리니어 · 바이큐빅)는 <b>플립러닝 2부</b> 범위 — 아직 필기 전입니다. 교안 정리만 먼저 올려 두었습니다.</div>
+
 <div class="note-box"><b>무엇인가</b> — 웨이블릿 부호화는 <span class="term" tabindex="0" data-tip="Discrete Cosine Transform. 이미지를 8×8 블록으로 나눠 코사인 주파수 성분으로 바꾸는 변환. JPEG 압축의 핵심.">DCT</span> 부호화의 변형으로, DCT의 <b>블록 단위</b> 방식 대신 <b>웨이블릿</b>을 쓴다(JPEG 2000이 대표 예).
 라플라시안 피라미드와 발상이 같지만, <b>디테일을 방향별로 나누고 전체 계수 개수가 원본과 똑같다</b>는 점이 다르다.</div>
 <figure class="fig"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv4-36-wavelet-1d.jpg" alt="교안 36p — 1D 이산 웨이블릿 변환 필터뱅크"><figcaption>교안 36p — 1D DWT: 신호 <span class="tex">x(n)</span>(N점)을 고역 <span class="tex">h_\psi</span>·저역 <span class="tex">h_\varphi</span> 필터에 통과시키고 각각 ↓2. 고역 쪽은 디테일 <span class="tex">d_1</span>(N/2)로 저장, 저역 쪽을 다시 쪼개 <span class="tex">d_2</span>(N/4), <span class="tex">d_3</span>(N/8), 마지막 근사 <span class="tex">a_3</span>(N/8)</figcaption></figure>
