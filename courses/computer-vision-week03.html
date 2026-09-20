@@ -317,6 +317,9 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .fnc dt{font-weight:700;color:var(--ink)}
 .fnc dd{color:#4b5563}
 @media(max-width:440px){.fnc dl{grid-template-columns:1fr;gap:2px}.fnc dd{margin-bottom:6px}}
+/* 직접 그린 도식 */
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:640px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
 </style>
 </head>
 <body id="top">
@@ -377,7 +380,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <a href="#types"><b>01 필터링의 종류</b><span>포인트 연산 vs 이웃 연산</span></a>
   <a href="#lsi"><b>02 선형 시불변 필터</b><span>커널 · 가중합 · 이동평균 수식</span></a>
   <a href="#mean"><b>03 평균 필터</b><span>local average · 블러링 · stride</span></a>
-  <a href="#size"><b>04 출력 크기</b><span>full / same / valid · 패딩</span></a>
+  <a href="#size"><b>04 출력 크기</b><span>full / same / valid · 패딩 · stride 일반식</span></a>
   <a href="#props"><b>05 선형 필터의 성질</b><span>선형성 · 시불변성 · 예시 4가지</span></a>
   <a href="#mask"><b>06 마스크 크기</b><span>클수록 더 흐릿하고 더 비싸다</span></a>
   <a href="#gauss"><b>07 가우시안 필터</b><span>σ로 통제하는 부드러운 가중치</span></a>
@@ -536,23 +539,75 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <section class="sec" id="size">
   <div class="sec-head"><span class="sec-badge">04</span><h2 class="sec-title">출력 크기 — full / same / valid<small>What is the size of the output? · 교안 21~22p</small></h2></div>
 
-<figure class="fig"><img width="1194" height="637" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-12-full-same-valid.png" alt="교안 21p — full, same, valid 세 가지 출력 크기를 커널의 겹침 범위로 설명한 그림"><figcaption>교안 21p — 커널이 이미지와 <b>어디까지 겹치도록 허용하는가</b>가 출력 크기를 결정한다</figcaption></figure>
+<div class="note-box"><b>기호 먼저 정리 — f · h · g</b>, 그리고 뒤에 붙는 <b>s</b>는 <b>size(크기)</b>다.
+<ul class="ul">
+  <li><b>f</b> = 입력 이미지, <b>fs</b> = 그 크기 &nbsp;<span style="color:#6b7280">(예 : 10 × 10 이면 fs = 10)</span></li>
+  <li><b>h</b> = 커널(필터), <b>hs</b> = 그 크기 &nbsp;<span style="color:#6b7280">(예 : 3 × 3 이면 hs = 3)</span></li>
+  <li><b>g</b> = 출력 이미지, <b>gs</b> = 그 크기 &nbsp;<span style="color:#6b7280">(구하려는 값)</span></li>
+  <li><b>ps</b> = 한쪽 가장자리에 덧대는 <b>패딩 칸 수</b>, <b>s(stride)</b> = 커널이 한 번에 움직이는 거리</li>
+</ul>
+교안 전체가 이 표기를 그대로 쓴다 — <span class="hw">g · f · h가 헷갈렸던</span> 지점이니 여기서 고정해 두자.</div>
 
+<h3 class="sub-title">커널(h)은 &lsquo;입력하는 데이터&rsquo;가 아니라 &lsquo;훑고 지나가는 틀&rsquo;이다</h3>
+<div class="note-box">&ldquo;3 × 3 커널을 쓴다&rdquo;는 말은 <b>3 × 3 크기의 숫자를 따로 입력한다</b>는 뜻이 아니다.
+사진 위를 지나가며 계산할 <b>가로 3칸 · 세로 3칸짜리 창(돋보기 틀)</b>을 쓰겠다는 뜻이다.
+<ul class="ul">
+  <li><b>입력 이미지 f</b> — 분석할 원본 사진. 예 : 가로 10화소 × 세로 10화소짜리 모눈종이</li>
+  <li><b>커널 h</b> — 그 위를 지나가는 작은 계산 틀. <b>크기(3 × 3)</b>와 <b>안에 적힌 가중치</b>를 함께 갖는다</li>
+  <li><b>동작</b> — 왼쪽 위부터 시작해 <b>한 칸(stride 1)씩</b> 오른쪽 · 아래로 옮기며, 창 안의 9개 화소에 가중치를 곱해 더한 값 하나를 출력 화소로 적는다</li>
+</ul>
+즉 사진 전체를 한 번에 보는 것이 아니라 <b>작은 창으로 조금씩 훑는 것</b>이고, 그래서 창을 놓을 수 있는 <b>자리의 개수</b>가 곧 출력 크기가 된다.</div>
+<div class="tip"><b>가중치는 어디서 오나</b> — 이 주차에서 다루는 필터는 커널의 숫자가 <b>사람이 정한 고정값</b>이다
+(평균 필터는 전부 1/9, 가우시안은 종 모양 가중치, Sobel은 좌우 부호가 반대인 값). 뒤에 나올 CNN은 <b>이 숫자 자체를 학습으로 찾는다</b> — 훑는 방식은 똑같다.</div>
+
+<figure class="fig"><img width="1194" height="637" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-12-full-same-valid.png" alt="교안 21p — full, same, valid 세 가지 출력 크기를 커널의 겹침 범위로 설명한 그림"><figcaption>교안 21p — 커널이 이미지와 <b>어디까지 겹치도록 허용하는가</b>가 출력 크기를 결정한다</figcaption></figure>
+<div class="note-box"><b>그림 속 초록색 네모 h 네 개가 뜻하는 것</b> — 커널이 <b>갈 수 있는 네 모서리의 한계 위치</b>다. 네 점을 이으면 그 모드에서 커널 중심이 움직일 수 있는 영역이 되고, 그 영역의 칸 수가 곧 출력 크기다.
+<ul class="ul">
+  <li><b>valid</b> — 초록 커널이 주황 이미지 <b>안쪽 경계에 딱 맞춰</b> 있다. 밖으로 한 칸도 못 나가므로 출력이 <b>작아진다</b></li>
+  <li><b>same</b> — 커널의 <b>중심</b>이 이미지 모서리 화소 위에 오도록 걸쳐 둔다. 밖으로 삐져나간 <b>1칸만큼 패딩</b>을 채우므로 크기가 <b>보존된다</b></li>
+  <li><b>full</b> — 커널의 <b>모서리 한 칸만 겹쳐도</b> 계산한다. 양 끝 바깥까지 훑으므로 출력이 <b>커진다</b></li>
+</ul></div>
+
+<h3 class="sub-title">1차원으로 세어 보기 — 왜 10이 8이 되는가</h3>
+<div class="note-box">2차원은 가로 · 세로가 똑같은 계산이므로, <b>한 줄(1차원)</b>로 놓고 자리를 세어 보면 공식이 그대로 보인다.
+1번부터 10번까지 적힌 10칸짜리 줄에 <b>길이 3칸짜리 자(커널)</b>를 올려놓고, 줄 바깥으로 삐져나가지 않게(valid) 놓아 보자.
+<b>[1,2,3] · [2,3,4] · … · [8,9,10]</b> — 놓을 수 있는 자리는 <b>8군데</b>뿐이다. 가로로 8번, 세로로 8번이니 출력은 <b>8 × 8</b>이 된다.</div>
+<figure class="fig svgfig"><div class="svg-scroll"><svg viewBox="0 0 700 346" role="img" aria-label="1부터 10까지 번호를 붙인 열 칸짜리 1차원 이미지 위에 폭 3칸짜리 커널을 올려 세 가지 모드를 비교한 도식. valid는 패딩 없이 커널이 1에서 3, 8에서 10까지 여덟 자리에 놓여 출력이 여덟 칸, same은 좌우에 패딩 한 칸씩을 더해 열 자리가 되어 입력과 같은 열 칸, full은 좌우에 패딩 두 칸씩을 더해 열두 자리가 되어 출력이 열두 칸이 된다" xmlns="http://www.w3.org/2000/svg"><g font-size="12"><text x="16" y="44" font-size="12.5" font-weight="700" fill="#1a1a2e">valid</text><text x="102" y="44" font-size="12" fill="#6b7280">gs = fs − hs + 1</text><rect x="172" y="56" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="191" y="77" text-anchor="middle" font-size="12" fill="#475569">1</text><rect x="210" y="56" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="229" y="77" text-anchor="middle" font-size="12" fill="#475569">2</text><rect x="248" y="56" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="267" y="77" text-anchor="middle" font-size="12" fill="#475569">3</text><rect x="286" y="56" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="305" y="77" text-anchor="middle" font-size="12" fill="#475569">4</text><rect x="324" y="56" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="343" y="77" text-anchor="middle" font-size="12" fill="#475569">5</text><rect x="362" y="56" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="381" y="77" text-anchor="middle" font-size="12" fill="#475569">6</text><rect x="400" y="56" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="419" y="77" text-anchor="middle" font-size="12" fill="#475569">7</text><rect x="438" y="56" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="457" y="77" text-anchor="middle" font-size="12" fill="#475569">8</text><rect x="476" y="56" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="495" y="77" text-anchor="middle" font-size="12" fill="#475569">9</text><rect x="514" y="56" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="533" y="77" text-anchor="middle" font-size="12" fill="#475569">10</text><rect x="170" y="51" width="118" height="44" rx="5" fill="none" stroke="#16a34a" stroke-width="2.2"/><rect x="436" y="51" width="118" height="44" rx="5" fill="none" stroke="#ea580c" stroke-width="2.2" stroke-dasharray="6 3"/><text x="16" y="77" font-size="11.5" font-weight="700" fill="#1b3f8b">h = 3</text><text x="172" y="112" font-size="12" fill="#334155">커널이 놓일 수 있는 자리 <tspan font-weight="700" fill="#15803d">8군데</tspan> → 출력 8칸 (10 − 3 + 1)</text><text x="16" y="140" font-size="12.5" font-weight="700" fill="#1a1a2e">same</text><text x="102" y="140" font-size="12" fill="#6b7280">ps = (hs − 1) / 2 = 1</text><rect x="134" y="152" width="38" height="34" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/><text x="153" y="173" text-anchor="middle" font-size="11.5" fill="#94a3b8">p</text><rect x="552" y="152" width="38" height="34" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/><text x="571" y="173" text-anchor="middle" font-size="11.5" fill="#94a3b8">p</text><rect x="172" y="152" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="191" y="173" text-anchor="middle" font-size="12" fill="#475569">1</text><rect x="210" y="152" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="229" y="173" text-anchor="middle" font-size="12" fill="#475569">2</text><rect x="248" y="152" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="267" y="173" text-anchor="middle" font-size="12" fill="#475569">3</text><rect x="286" y="152" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="305" y="173" text-anchor="middle" font-size="12" fill="#475569">4</text><rect x="324" y="152" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="343" y="173" text-anchor="middle" font-size="12" fill="#475569">5</text><rect x="362" y="152" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="381" y="173" text-anchor="middle" font-size="12" fill="#475569">6</text><rect x="400" y="152" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="419" y="173" text-anchor="middle" font-size="12" fill="#475569">7</text><rect x="438" y="152" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="457" y="173" text-anchor="middle" font-size="12" fill="#475569">8</text><rect x="476" y="152" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="495" y="173" text-anchor="middle" font-size="12" fill="#475569">9</text><rect x="514" y="152" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="533" y="173" text-anchor="middle" font-size="12" fill="#475569">10</text><rect x="132" y="147" width="118" height="44" rx="5" fill="none" stroke="#16a34a" stroke-width="2.2"/><rect x="474" y="147" width="118" height="44" rx="5" fill="none" stroke="#ea580c" stroke-width="2.2" stroke-dasharray="6 3"/><text x="16" y="173" font-size="11.5" font-weight="700" fill="#1b3f8b">h = 3</text><text x="172" y="208" font-size="12" fill="#334155">패딩 1칸씩 → 자리 <tspan font-weight="700" fill="#15803d">10군데</tspan> → 출력 10칸 (입력과 같다)</text><text x="16" y="236" font-size="12.5" font-weight="700" fill="#1a1a2e">full</text><text x="102" y="236" font-size="12" fill="#6b7280">gs = fs + hs − 1</text><rect x="134" y="248" width="38" height="34" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/><text x="153" y="269" text-anchor="middle" font-size="11.5" fill="#94a3b8">p</text><rect x="552" y="248" width="38" height="34" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/><text x="571" y="269" text-anchor="middle" font-size="11.5" fill="#94a3b8">p</text><rect x="96" y="248" width="38" height="34" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/><text x="115" y="269" text-anchor="middle" font-size="11.5" fill="#94a3b8">p</text><rect x="590" y="248" width="38" height="34" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/><text x="609" y="269" text-anchor="middle" font-size="11.5" fill="#94a3b8">p</text><rect x="172" y="248" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="191" y="269" text-anchor="middle" font-size="12" fill="#475569">1</text><rect x="210" y="248" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="229" y="269" text-anchor="middle" font-size="12" fill="#475569">2</text><rect x="248" y="248" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="267" y="269" text-anchor="middle" font-size="12" fill="#475569">3</text><rect x="286" y="248" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="305" y="269" text-anchor="middle" font-size="12" fill="#475569">4</text><rect x="324" y="248" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="343" y="269" text-anchor="middle" font-size="12" fill="#475569">5</text><rect x="362" y="248" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="381" y="269" text-anchor="middle" font-size="12" fill="#475569">6</text><rect x="400" y="248" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="419" y="269" text-anchor="middle" font-size="12" fill="#475569">7</text><rect x="438" y="248" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="457" y="269" text-anchor="middle" font-size="12" fill="#475569">8</text><rect x="476" y="248" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="495" y="269" text-anchor="middle" font-size="12" fill="#475569">9</text><rect x="514" y="248" width="38" height="34" fill="#fff" stroke="#cbd5e1" stroke-width="1"/><text x="533" y="269" text-anchor="middle" font-size="12" fill="#475569">10</text><rect x="94" y="243" width="118" height="44" rx="5" fill="none" stroke="#16a34a" stroke-width="2.2"/><rect x="512" y="243" width="118" height="44" rx="5" fill="none" stroke="#ea580c" stroke-width="2.2" stroke-dasharray="6 3"/><text x="16" y="269" font-size="11.5" font-weight="700" fill="#1b3f8b">h = 3</text><text x="172" y="304" font-size="12" fill="#334155">패딩 2칸씩(= hs − 1) → 자리 <tspan font-weight="700" fill="#15803d">12군데</tspan> → 출력 12칸 (10 + 3 − 1)</text><rect x="16" y="324" width="18" height="12" rx="3" fill="none" stroke="#16a34a" stroke-width="2.2"/><text x="42" y="335" font-size="11.5" fill="#334155">커널이 놓이는 첫 자리</text><rect x="186" y="324" width="18" height="12" rx="3" fill="none" stroke="#ea580c" stroke-width="2.2" stroke-dasharray="6 3"/><text x="212" y="335" font-size="11.5" fill="#334155">마지막 자리</text><rect x="316" y="324" width="18" height="12" rx="3" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/><text x="342" y="335" font-size="11.5" fill="#334155">패딩(원래 없던 가상의 칸)</text></g></svg></div><figcaption>같은 10칸 줄에 3칸 커널을 올렸을 때 <b>패딩을 몇 칸 허용하느냐</b>에 따라 놓을 수 있는 자리가 8 → 10 → 12로 늘어난다 — 이 <b>자리의 개수</b>가 곧 출력 크기다</figcaption></figure>
+
+<h3 class="sub-title">세 가지 모드 정리</h3>
 <div class="tbl-wrap">
 <table>
-  <thead><tr><th>모드</th><th>출력 크기</th><th>설명</th></tr></thead>
+  <thead><tr><th>모드</th><th>출력 크기</th><th>fs = 10, hs = 3 이면</th><th>설명</th></tr></thead>
   <tbody>
-    <tr><td>Full</td><td>f와 h의 크기의 <b>합</b></td><td>커널이 <b>한 칸이라도 겹치는</b> 모든 위치를 계산한다 — 출력이 가장 크다</td></tr>
-    <tr><td>Same</td><td>f와 <b>같은</b> 크기</td><td><b><span class="term" tabindex="0" data-tip="이미지 가장자리 바깥에 값을 덧대어, 커널이 테두리 화소 위에서도 완전히 겹칠 수 있게 하는 것. 0으로 채우기·가장자리 값 복제·거울 반사 등의 방식이 있다.">패딩(pad)</span>이 필요</b>하다 &nbsp;<b>ps = (hs − 1) / 2</b></td></tr>
-    <tr><td>Valid</td><td>f와 h의 크기의 <b>차</b></td><td>커널이 <b>완전히 이미지 안에 들어오는</b> 위치만 계산 &nbsp;<b>gs = fs − hs + 1</b></td></tr>
+    <tr><td>Full</td><td>f와 h의 크기의 <b>합</b> &nbsp;<b>gs = fs + hs − 1</b></td><td><b>12 × 12</b><br>(패딩 hs − 1 = 2칸씩)</td><td>커널이 <b>한 칸이라도 겹치는</b> 모든 위치를 계산한다 — 출력이 가장 크다</td></tr>
+    <tr><td>Same</td><td>f와 <b>같은</b> 크기 &nbsp;<b>gs = fs</b></td><td><b>10 × 10</b><br>(패딩 ps = 1칸씩)</td><td><b><span class="term" tabindex="0" data-tip="이미지 가장자리 바깥에 값을 덧대어, 커널이 테두리 화소 위에서도 완전히 겹칠 수 있게 하는 것. 0으로 채우기·가장자리 값 복제·거울 반사 등의 방식이 있다.">패딩(pad)</span>이 필요</b>하다 &nbsp;<b>ps = (hs − 1) / 2</b></td></tr>
+    <tr><td>Valid</td><td>f와 h의 크기의 <b>차</b> &nbsp;<b>gs = fs − hs + 1</b></td><td><b>8 × 8</b><br>(패딩 없음)</td><td>커널이 <b>완전히 이미지 안에 들어오는</b> 위치만 계산 — 지어낸 값이 하나도 섞이지 않는다</td></tr>
   </tbody>
 </table>
 </div>
 <div class="good"><b>필기의 계산 짚어 보기</b> — <span class="hw">10 × 10 픽셀을 8 × 8로 줄이는</span> 예는 필기에 커널 크기가 적혀 있지 않지만,
 <b>3 × 3 커널을 stride 1로 valid 적용</b>한 경우로 보면 정확히 맞아떨어진다.
-3 × 3 커널이면 <b>gs = 10 − 3 + 1 = 8</b>. 같은 상황에서 <b>same</b>으로 두고 싶다면 <b>ps = (3 − 1) / 2 = 1</b>칸씩 패딩을 넣으면 된다.</div>
-<div class="note-box"><b>g · f · h의 약속</b> — 필기에서 헷갈렸던 기호를 정리해 두자.
-<b>f = 입력 이미지</b>, <b>h = 커널(필터)</b>, <b>g = 출력 이미지</b>. 교안 전체가 이 표기를 그대로 쓴다.</div>
+3 × 3 커널이면 <b>gs = 10 − 3 + 1 = 8</b>. 같은 상황에서 <b>same</b>으로 두고 싶다면 <b>ps = (3 − 1) / 2 = 1</b>칸씩 패딩을 넣으면 되고, <b>full</b>이면 <b>gs = 10 + 3 − 1 = 12</b>로 오히려 커진다.</div>
+
+<h3 class="sub-title">stride까지 넣은 일반식</h3>
+<div class="note-box">앞의 세 공식은 모두 <b>stride = 1</b>일 때의 이야기다. 03절에서 나온 <span class="hw">stride</span>까지 넣으면 하나의 식으로 묶인다.
+<div class="eq"><b>gs = ⌊ (fs + 2·ps − hs) / s ⌋ + 1</b></div>
+<ul class="ul">
+  <li><b>valid</b> = ps 0 · s 1 &nbsp;→&nbsp; gs = fs − hs + 1 &nbsp;<span style="color:#6b7280">(10 − 3 + 1 = 8)</span></li>
+  <li><b>same</b> = ps (hs−1)/2 · s 1 &nbsp;→&nbsp; gs = fs &nbsp;<span style="color:#6b7280">(10 + 2 − 3 + 1 = 10)</span></li>
+  <li><b>full</b> = ps hs−1 · s 1 &nbsp;→&nbsp; gs = fs + hs − 1 &nbsp;<span style="color:#6b7280">(10 + 4 − 3 + 1 = 12)</span></li>
+  <li><b>stride를 키우면</b> — 10 × 10에 3 × 3, 패딩 없이 <b>s = 2</b>면 ⌊(10 − 3)/2⌋ + 1 = <b>4</b>. 자리를 한 칸 걸러 하나씩만 쓰므로 출력이 절반 가까이 줄어든다</li>
+</ul>
+<b>⌊ ⌋(내림)</b>이 붙는 이유는 마지막에 한 칸이 남아도 커널이 온전히 들어가지 못하면 그 자리는 버리기 때문이다.</div>
+
+<div class="tip"><b>커널 크기가 왜 대개 홀수인가</b> — same 패딩 <b>ps = (hs − 1) / 2</b>가 정수로 떨어지려면 hs가 <b>홀수</b>여야 한다.
+4 × 4처럼 짝수 커널이면 좌우에 1.5칸씩 붙일 수 없어 <b>한쪽에 한 칸을 더</b> 붙이게 되고, 그만큼 결과가 반 칸 밀린다.
+&ldquo;중심 화소가 딱 하나 존재한다&rdquo;는 점도 홀수 커널을 쓰는 이유다.</div>
+<div class="warn"><b>same이 공짜는 아니다</b> — 테두리에 덧댄 값은 <b>원래 사진에 없던 지어낸 값</b>이다.
+0으로 채우면 가장자리가 어둡게 깔리고(가장 흔한 zero padding), 가장자리 값을 <b>복제</b>하거나 <b>거울처럼 반사</b>해 채우면 그 왜곡이 줄어든다.
+크기는 보존되지만 <b>테두리 화소의 값은 valid 영역만큼 믿을 수 없다</b>는 점을 기억해 두자.</div>
+<div class="good"><b>한 줄 요약</b> — <b>Valid는 가장자리를 잘라내 줄어들고, Same은 줄어드는 것을 막으려 테두리에 살(패딩)을 붙여 크기를 지키고, Full은 끝까지 훑어 오히려 커진다.</b>
+세 모드의 차이는 결국 <b>&ldquo;커널이 이미지 밖으로 얼마나 나가도 되는가&rdquo;</b> 하나뿐이다.</div>
 </section>
 
 <!-- ===================== 05 선형 필터의 성질 ===================== -->
