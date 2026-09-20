@@ -384,7 +384,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <a href="#props"><b>05 선형 필터의 성질</b><span>선형성 · 시불변성 · 예시 4가지</span></a>
   <a href="#mask"><b>06 마스크 크기</b><span>클수록 더 흐릿하고 더 비싸다</span></a>
   <a href="#gauss"><b>07 가우시안 필터</b><span>σ로 통제하는 부드러운 가중치</span></a>
-  <a href="#sep"><b>08 분리 가능성</b><span>O(n²m²) → O(n²m)</span></a>
+  <a href="#sep"><b>08 분리 가능성</b><span>2D = 1D × 1D · O(n²m²) → O(n²m)</span></a>
   <a href="#nonlinear"><b>09 비선형 필터</b><span>소금·후추 노이즈 · 미디언</span></a>
   <a href="#conv"><b>10 컨볼루션</b><span>필터 뒤집기 · 상관과의 차이 · 성질</span></a>
   <a href="#edge"><b>11 에지 검출</b><span>Prewitt · Sobel · DoG · LoG</span></a>
@@ -452,9 +452,11 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <h3 class="sub-title">노이즈 — 필터링이 필요한 이유</h3>
 <figure class="fig"><img width="1311" height="668" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-04-noise.jpg" alt="교안 8p — 노이즈가 섞인 이미지 예시"><figcaption>교안 8p — 이미지는 노이즈를 갖는다. 원인은 <b>센서 품질 · 빛의 흔들림 · 양자화 효과</b></figcaption></figure>
 <div class="note-box"><ul class="ul">
-  <li>필기 : <span class="hw">센서 퀄리티</span>, <span class="hw">빛이 불균일하게 발산될 수도</span> 있고, <span class="hw">임의로 샘플링할 때 잘못 샘플링되면 노이즈가 발생</span>한다
-    &nbsp;<span style="color:#6b7280">— 교안이 적은 세 번째 원인은 정확히는 <b>양자화 효과(quantization effects)</b>다.
-    연속적인 밝기를 0~255 같은 <b>단계로 끊어 담을 때</b> 생기는 오차를 가리키며, 필기의 &ldquo;샘플링&rdquo;은 그 이웃 개념이다</span></li>
+  <li>노이즈의 원인은 세 가지다 — <b>① 센서 품질</b> <span style="color:#6b7280">(<span class="hw">센서 퀄리티</span>)</span>,
+    <b>② 조명의 흔들림</b> <span style="color:#6b7280">(<span class="hw">빛이 불균일하게 발산될 수도</span> 있다)</span>,
+    <b>③ 양자화 효과(quantization effects)</b> — 연속적인 밝기를 0~255 같은 <b>단계로 끊어 담을 때</b> 생기는 오차다</li>
+  <li>③과 짝을 이루는 것이 <b>샘플링 오차</b>다. 연속적인 장면을 격자로 잘라 값을 취하는 과정에서도 원래 정보가 어긋날 수 있다
+    <span style="color:#6b7280">(<span class="hw">임의로 샘플링할 때 잘못 샘플링되면 노이즈가 발생</span>한다)</span> — <b>밝기를 끊는 것이 양자화, 위치를 끊는 것이 샘플링</b>이다</li>
   <li>그래서 던지는 두 질문이 이번 주차의 전부다 — <b>어떻게 노이즈를 줄일 것인가</b>, 그리고 <b>어떻게 유용한 특징을 찾을 것인가</b></li>
   <li><span class="hw">노이즈들을 제거해서 좀 더 정확하게 인식</span>하는 것이 목표다</li>
 </ul></div>
@@ -507,9 +509,9 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li>각 픽셀을 <b>이웃들의 선형 결합</b>으로 바꾼다</li>
   <li>그 결합을 결정하는 것이 필터의 <b><span class="term" tabindex="0" data-tip="필터의 가중치 표. 마스크(mask)라고도 부른다. 3×3, 5×5처럼 홀수 크기를 쓰는 것은 중심 화소가 하나로 정해지게 하기 위해서다.">커널(kernel)</span></b>이다</li>
   <li><b>같은 커널</b>이 모든 픽셀 위치로 <b>이동(shift)</b>하므로, 모든 픽셀이 <b>같은 가중치 조합</b>을 쓴다</li>
-  <li>필기 : <span class="hw">위치는 변동이 없기 때문에 shift invariant라고 표현하는 것</span>이다
-    &nbsp;<span style="color:#6b7280">— 정확히는 <b>&ldquo;커널이 위치에 따라 바뀌지 않는다&rdquo;</b>는 뜻이다.
-    화소가 움직이지 않는다는 말이 아니라, <b>어느 위치에서든 같은 가중치로 같게 동작한다</b>는 의미다</span></li>
+  <li><b>shift invariant</b>라는 이름은 <b>커널이 위치에 따라 바뀌지 않는다</b>는 뜻이다 — 화소가 움직이지 않는다는 말이 아니라,
+    커널이 <b>어느 위치로 옮겨 가든 같은 가중치로 같게 동작한다</b>는 의미다
+    &nbsp;<span style="color:#6b7280">(필기 : <span class="hw">위치는 변동이 없기 때문에 shift invariant라고 표현하는 것</span>)</span></li>
 </ul></div>
 <figure class="fig"><img width="1255" height="650" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-07-lsi-filtering.png" alt="교안 15p — 3×3 입력 격자가 함수 f를 거쳐 중앙 값 7을 가진 출력 격자로 바뀌는 그림"><figcaption>교안 15p — 입력 3×3 이웃이 <b>함수 f</b>를 거쳐 출력 화소 하나의 값이 된다</figcaption></figure>
 <figure class="fig"><img width="1216" height="599" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-08-kernel-combination.png" alt="교안 16p — 입력 격자와 커널의 가중합으로 출력이 만들어지는 그림"><figcaption>교안 16p — <b>선형인 경우가 가장 단순하고 가장 쓸모 있다</b> — 각 픽셀을 이웃들의 <b>가중합</b>으로 바꾸되, <b>모든 지점에서 같은 가중치 집합</b>을 쓴다</figcaption></figure>
@@ -530,9 +532,9 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </ul></div>
 <figure class="fig"><img width="1108" height="677" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-10-mean-filter.png" alt="교안 18p — 입력 이미지, 커널, 출력 이미지로 이루어진 평균 필터 동작 그림"><figcaption>교안 18p — 입력 이미지 <b>f</b> 위를 커널 <b>h</b>가 지나가며 출력 이미지 <b>g</b>를 만든다</figcaption></figure>
 <figure class="fig"><img width="1033" height="650" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-11-mean-filter-step.jpg" alt="교안 20p — 커널이 한 칸 이동하며 출력 화소를 채워 가는 과정"><figcaption>교안 20p — 커널이 <b>한 칸씩 이동</b>하며 출력 화소를 하나씩 채운다</figcaption></figure>
-<div class="tip"><b>필기에서 나온 용어 — <span class="hw">stride</span></b><br>
-<span class="hw">한 번에 필터가 움직이는 거리</span>를 뜻한다. 기본값은 1칸이며, stride를 키우면 출력이 그만큼 더 작아진다.
-(강의에서는 발음 때문에 &ldquo;사라이드&rdquo;처럼 들리지만 <b>stride</b>가 정확한 표기다.)</div>
+<div class="tip"><b>stride (스트라이드)</b> — <span class="hw">한 번에 필터가 움직이는 거리</span>를 뜻한다.
+기본값은 <b>1칸</b>이고, 값을 키우면 커널을 놓는 자리를 건너뛰므로 출력이 그만큼 더 작아진다.
+바로 다음 절의 출력 크기 일반식에 들어가는 <b>s</b>가 이 값이다.</div>
 </section>
 
 <!-- ===================== 04 출력 크기 ===================== -->
@@ -546,7 +548,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <li><b>g</b> = 출력 이미지, <b>gs</b> = 그 크기 &nbsp;<span style="color:#6b7280">(구하려는 값)</span></li>
   <li><b>ps</b> = 한쪽 가장자리에 덧대는 <b>패딩 칸 수</b>, <b>s(stride)</b> = 커널이 한 번에 움직이는 거리</li>
 </ul>
-교안 전체가 이 표기를 그대로 쓴다 — <span class="hw">g · f · h가 헷갈렸던</span> 지점이니 여기서 고정해 두자.</div>
+교안 전체가 이 표기를 그대로 쓰므로, 아래의 모든 식은 이 다섯 기호만으로 읽을 수 있다.</div>
 
 <h3 class="sub-title">커널(h)은 &lsquo;입력하는 데이터&rsquo;가 아니라 &lsquo;훑고 지나가는 틀&rsquo;이다</h3>
 <div class="note-box">&ldquo;3 × 3 커널을 쓴다&rdquo;는 말은 <b>3 × 3 크기의 숫자를 따로 입력한다</b>는 뜻이 아니다.
@@ -585,9 +587,10 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   </tbody>
 </table>
 </div>
-<div class="good"><b>필기의 계산 짚어 보기</b> — <span class="hw">10 × 10 픽셀을 8 × 8로 줄이는</span> 예는 필기에 커널 크기가 적혀 있지 않지만,
-<b>3 × 3 커널을 stride 1로 valid 적용</b>한 경우로 보면 정확히 맞아떨어진다.
-3 × 3 커널이면 <b>gs = 10 − 3 + 1 = 8</b>. 같은 상황에서 <b>same</b>으로 두고 싶다면 <b>ps = (3 − 1) / 2 = 1</b>칸씩 패딩을 넣으면 되고, <b>full</b>이면 <b>gs = 10 + 3 − 1 = 12</b>로 오히려 커진다.</div>
+<div class="good"><b>예제 — <span class="hw">10 × 10 픽셀을 8 × 8로</span></b> 만드는 경우는 <b>3 × 3 커널 · stride 1 · valid</b>다.
+<b>gs = 10 − 3 + 1 = 8</b>이므로 8 × 8이 된다.
+같은 입력을 <b>same</b>으로 두고 싶다면 <b>ps = (3 − 1) / 2 = 1</b>칸씩 패딩을 넣어 10 × 10을 지키고,
+<b>full</b>로 두면 <b>gs = 10 + 3 − 1 = 12</b>로 오히려 커진다. <b>커널 크기를 알면 세 결과가 모두 한 번에 정해진다.</b></div>
 
 <h3 class="sub-title">stride까지 넣은 일반식</h3>
 <div class="note-box">앞의 세 공식은 모두 <b>stride = 1</b>일 때의 이야기다. 03절에서 나온 <span class="hw">stride</span>까지 넣으면 하나의 식으로 묶인다.
@@ -655,9 +658,10 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 네모 영역에 해당하는 값들을 가져오다 보니 네모 블러가 생긴다.</span><br>
 원인은 <b>box filter</b>가 <b>정사각형 창 안의 모든 화소를 거리와 무관하게 똑같은 가중치로</b> 평균 내기 때문이다.
 중심에서 멀든 가깝든 기여도가 같으므로, 정사각형 창의 모양이 결과에 그대로 새겨진다.</div>
-<div class="tip"><b>필기 정정</b> — 필기에는 &ldquo;박스의 중심으로부터 <b>같은 거리</b>에 있는 이웃들의 값을 취한다&rdquo;고 적혀 있으나,
-박스 필터는 <b>거리를 따지지 않고</b> 창 안의 모든 화소를 같게 취급한다. 교안 30p가 제시하는 해법이
-&ldquo;<b>중심에 가까운 정도에 따라 가중치를 준다</b>&rdquo;인 것이 그 반증이다 — 즉 <b>거리를 반영하지 않는 것이 박스 필터의 문제</b>다.</div>
+<div class="tip"><b>정리하면 — 박스 필터는 거리를 전혀 보지 않는다</b><br>
+창 안이면 중심 바로 옆이든 모서리든 <b>기여도가 똑같이 1/9</b>이고, 창 밖이면 <b>0</b>이다. 가중치가 <b>네모난 절벽</b>처럼 뚝 끊기는 셈이라
+그 네모가 결과에 무늬로 남는다. 그래서 해법은 <b>거리를 반영하는 것</b> — 중심에 가까울수록 큰 가중치를 주고 멀어질수록 부드럽게 0으로 떨어뜨리면 된다.
+그 가중치를 <b>종 모양</b>으로 준 것이 바로 다음 절의 <b>가우시안 필터</b>다.</div>
 <figure class="fig"><img width="1207" height="504" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-18-box-revisited.png" alt="교안 30p — 박스 필터의 에지 효과를 없애기 위한 해법을 설명한 슬라이드"><figcaption>교안 30p — <b>해법</b> : 에지 효과를 없애려면 <b>중심에 가까운 정도에 따라 이웃 화소의 기여도에 가중치</b>를 주면 된다</figcaption></figure>
 </section>
 
@@ -691,17 +695,88 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 
 <!-- ===================== 08 분리 가능성 ===================== -->
 <section class="sec" id="sep">
-  <div class="sec-head"><span class="sec-badge">08</span><h2 class="sec-title">분리 가능성<small>Separability · 교안 35~36p</small></h2></div>
+  <div class="sec-head"><span class="sec-badge">08</span><h2 class="sec-title">분리 가능성<small>Separability · 2D 커널 = 1D 커널 두 개의 곱 · 교안 35~36p</small></h2></div>
+
+<div class="note-box"><b>한 문장으로</b> — 2차원 커널이 <b>1차원 커널 두 개의 곱</b>으로 쪼개지면,
+<b>2D 컨볼루션 한 번</b> 대신 <b>1D 컨볼루션 두 번</b>으로 <b>똑같은 결과</b>를 얻을 수 있다.
+결과는 완전히 같고 <b>연산량만 줄어든다</b> — 근사나 타협이 아니라 <b>수학적으로 동일한 계산</b>이다.</div>
 
 <figure class="fig"><img width="1270" height="575" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-22-separability.png" alt="교안 35p — 2D 가우시안을 가로 1D 필터와 세로 1D 필터로 분리해 적용하는 그림"><figcaption>교안 35p — 먼저 <b>가로 방향 1차원 필터</b>로 컨볼루션하고, 그 결과를 <b>세로 방향 1차원 필터</b>로 다시 컨볼루션한다</figcaption></figure>
-<div class="note-box"><ul class="ul">
-  <li><b>k×k 가우시안 필터</b>를 2D 컨볼루션으로 하면 픽셀당 <b>k² 번</b>의 연산이 필요하다</li>
-  <li><span class="term" tabindex="0" data-tip="2차원 커널이 1차원 커널 두 개의 곱(외적)으로 쪼개지는 필터. 가우시안·박스·Sobel이 여기에 해당한다.">분리 가능 필터</span>를 쓰면 픽셀당 <b>2k 번</b>으로 줄어든다</li>
-  <li>n×n 이미지를 m×m 커널로 필터링하는 <b>복잡도</b> : <b>O(n²m²)</b> → 분리 가능하면 <b>O(n²m)</b></li>
+
+<h3 class="sub-title">왜 가우시안이 쪼개지는가 — 지수법칙</h3>
+<div class="note-box">2D 가우시안의 지수에는 <b>x² + y²</b>가 <b>더해진 꼴</b>로 들어 있다.
+<b>e<sup>a+b</sup> = e<sup>a</sup> · e<sup>b</sup></b>이므로, 지수가 덧셈이면 함수는 곱셈으로 갈라진다.
+<div class="eq"><b>G<sub>2D</sub>(x, y)</b> <span class="op">=</span> <b>1 / (2πσ²)</b> <span class="op">·</span> <b>e<sup>−(x² + y²) / 2σ²</sup></b></div>
+<div class="eq"><span class="op">=</span> <b>( 1 / (√2π σ) · e<sup>−x² / 2σ²</sup> )</b> <span class="op">×</span> <b>( 1 / (√2π σ) · e<sup>−y² / 2σ²</sup> )</b> <span class="op">=</span> <b>G<sub>1D</sub>(x) · G<sub>1D</sub>(y)</b></div>
+<ul class="ul">
+  <li><b>지수 부분</b> — x²과 y²이 서로 섞이지 않고 각각 자기 변수만 갖는다</li>
+  <li><b>앞의 상수도 정확히 반씩</b> 나뉜다 — <b>1 / (2πσ²) = ( 1 / (√2π σ) )²</b></li>
+  <li>즉 <b>2D 가우시안 = x축 가우시안 × y축 가우시안</b>. 두 변수가 완전히 독립적으로 떨어지는 형태이므로 <b>완벽히 분리(separable)</b>된다</li>
 </ul></div>
-<div class="tip"><b>왜 가능한가</b> — 2D 가우시안은 <b>x 방향 가우시안 × y 방향 가우시안</b>으로 정확히 쪼개진다.
-지수의 <b>e<sup>−(i²+j²)/2σ²</sup> = e<sup>−i²/2σ²</sup> · e<sup>−j²/2σ²</sup></b> 이 성립하기 때문이다.
-뒤에 나올 <b>Prewitt · Sobel</b>도 같은 이유로 &ldquo;스무딩 1D × 미분 1D&rdquo;의 곱으로 분리된다.</div>
+
+<h3 class="sub-title">연산까지 나눌 수 있는 근거 — 컨볼루션의 결합법칙</h3>
+<div class="note-box">커널이 쪼개진다고 해서 곧바로 <b>연산</b>이 쪼개지는 것은 아니다. 여기에 쓰이는 성질이 10절에서 볼 <b>결합법칙</b>이다.
+<div class="eq"><b>I ∗ G<sub>2D</sub></b> <span class="op">=</span> <b>I ∗ ( G<sub>1D</sub>(x) ∗ G<sub>1D</sub>(y) )</b> <span class="op">=</span> <b>( I ∗ G<sub>1D</sub>(x) ) ∗ G<sub>1D</sub>(y)</b></div>
+괄호를 옮길 수 있으므로 <b>가로 1D 필터로 이미지 전체를 한 번 훑고, 그 중간 결과를 세로 1D 필터로 다시 한 번 훑으면</b> 끝이다.
+순서를 바꿔 세로를 먼저 해도 결과는 같다.</div>
+
+<h3 class="sub-title">연산량 — 화소당 m² 에서 2m 으로</h3>
+<div class="note-box"><b>n × n 이미지</b>에 <b>m × m 커널</b>을 적용한다고 하자.
+<ul class="ul">
+  <li><b>2D 그대로</b> — 화소 하나를 만들 때마다 창 안의 <b>m²</b>개 값에 가중치를 곱해 더한다 → 전체 <b>O(n²m²)</b></li>
+  <li><b>분리해서</b> — 가로로 <b>m</b>번, 세로로 <b>m</b>번, 합쳐 화소당 <b>2m</b>번이면 된다 → 전체 <b>O(n²m)</b></li>
+  <li><b>줄어드는 비율 = m² / 2m = m / 2</b> — <b>커널이 커질수록 이득이 커진다</b>. σ를 키워 커널을 넓게 잡을수록 분리는 선택이 아니라 필수가 된다</li>
+</ul></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>커널 크기</th><th>2D 그대로 (m²)</th><th>분리 적용 (2m)</th><th>몇 배 빨라지나</th></tr></thead>
+  <tbody>
+    <tr><td>3 × 3</td><td>9회</td><td>6회</td><td>1.5배 — 차이가 크지 않다</td></tr>
+    <tr><td>5 × 5</td><td>25회</td><td>10회</td><td>2.5배</td></tr>
+    <tr><td>7 × 7</td><td>49회</td><td>14회</td><td>3.5배</td></tr>
+    <tr><td>11 × 11</td><td>121회</td><td>22회</td><td><b>5.5배</b></td></tr>
+    <tr><td>15 × 15</td><td>225회</td><td>30회</td><td><b>7.5배</b></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="good"><b>체감해 보기</b> — 512 × 512 이미지에 <b>11 × 11</b> 가우시안을 걸면,
+2D 그대로는 곱셈이 약 <b>3,172만 번</b>(262,144 × 121)이지만 분리하면 약 <b>577만 번</b>(262,144 × 22)이다.
+<b>커널 크기(m)만 커질 뿐 비용은 선형으로만 늘어난다</b>는 것이 이 방식의 진짜 가치다.</div>
+<div class="tip"><b>공짜는 아니다</b> — 가로 결과를 담아 둘 <b>중간 버퍼</b>가 하나 더 필요하고, 메모리를 두 번 훑는다.
+그래도 3 × 3을 넘어가는 순간 곱셈 횟수의 이득이 훨씬 크기 때문에 실제 구현은 거의 항상 분리 방식을 쓴다.</div>
+
+<h3 class="sub-title">분리되는지 확인하는 법 — 외적(outer product)</h3>
+<div class="note-box"><b>세로 벡터 × 가로 벡터</b>를 하면 2D 커널이 나온다. 반대로 <b>2D 커널을 그런 곱으로 되돌릴 수 있으면</b> 분리 가능한 필터다.
+<div class="eq"><span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>1</span><span>2</span><span>1</span><span>2</span><span>4</span><span>2</span><span>1</span><span>2</span><span>1</span></span><span class="br r"></span></span> <span class="op">/ 16 =</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>1</span><span>2</span><span>1</span></span><span class="br r"></span></span> <span class="op">×</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>1</span><span>2</span><span>1</span></span><span class="br r"></span></span> <span class="op">/ 16</span></div>
+가장 널리 쓰는 <b>3 × 3 가우시안</b>이 바로 이 꼴이다 — 세로 [1 2 1], 가로 [1 2 1]의 곱이고, 전체 합 16으로 나눈다.
+<ul class="ul">
+  <li><b>판정 기준</b> — 2D 커널의 <b>모든 행이 서로 상수배</b>이면(행렬의 <b>rank가 1</b>이면) 분리 가능하다.
+    위 커널은 2행 = 1행 × 2, 3행 = 1행 × 1이므로 분리된다</li>
+  <li><b>평균(박스) 필터</b>도 모든 행이 같으므로 분리 가능하다 — [1 1 1]<sup>T</sup> × [1 1 1] / 9</li>
+  <li>반대로 행끼리 비례하지 않는 <b>일반적인 커널은 분리되지 않는다</b>. 분리 가능한 필터는 오히려 특별한 경우다</li>
+</ul></div>
+
+<h3 class="sub-title">Prewitt · Sobel도 같은 구조 — 미분 × 스무딩</h3>
+<div class="note-box">에지 검출기(11절)는 <b>&ldquo;한 방향으로는 미분해 에지를 찾고, 그와 직각인 방향으로는 스무딩해 노이즈를 줄인다&rdquo;</b>를
+<b>두 1D 커널의 곱</b> 하나로 담은 것이다. 가로 방향 에지를 찾는 마스크를 예로 들면 —
+<div class="eq"><span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>−1</span><span>0</span><span>1</span><span>−2</span><span>0</span><span>2</span><span>−1</span><span>0</span><span>1</span></span><span class="br r"></span></span> <span class="op">=</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>1</span><span>2</span><span>1</span></span><span class="br r"></span></span> <span class="op">×</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>−1</span><span>0</span><span>1</span></span><span class="br r"></span></span></div>
+<div class="eq"><span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>−1</span><span>0</span><span>1</span><span>−1</span><span>0</span><span>1</span><span>−1</span><span>0</span><span>1</span></span><span class="br r"></span></span> <span class="op">=</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>1</span><span>1</span><span>1</span></span><span class="br r"></span></span> <span class="op">×</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>−1</span><span>0</span><span>1</span></span><span class="br r"></span></span></div>
+<ul class="ul">
+  <li><b>세로 방향 3 × 1 성분</b> — Sobel은 <b>[1 2 1]</b>, Prewitt은 <b>[1 1 1]</b>. 둘 다 <b>스무딩</b>이며, 가운데를 더 믿는 Sobel 쪽이 가우시안에 가깝다</li>
+  <li><b>가로 방향 1 × 3 성분</b> — <b>[−1 0 1]</b>. 좌우 값의 차를 재는 <b>미분(차분)</b>이다</li>
+  <li>그래서 에지 검출도 <b>1D 두 번</b>으로 처리할 수 있고, <b>DoG</b>(가우시안의 미분)도 같은 이유로 x · y 1D 필터로 분리된다</li>
+</ul></div>
+
+<div class="warn"><b>분리되지 않는 것들</b>
+<ul class="ul">
+  <li><b>미디언 필터</b> — 애초에 선형 연산이 아니라 컨볼루션이 아니다. 가로로 중앙값, 세로로 중앙값을 구해도 <b>2D 중앙값과 값이 다르다</b></li>
+  <li><b>LoG(가우시안의 라플라시안)</b> — <b>∂²/∂x²</b> 항과 <b>∂²/∂y²</b> 항은 각각 분리되지만, <b>그 둘을 더한 커널 하나</b>는 1D 한 쌍으로 쪼개지지 않는다.
+    두 항을 따로 분리해 계산한 뒤 더하는 우회는 가능하지만, 그만큼 <b>DoG보다 비싸다</b></li>
+  <li><b>임의의 학습된 커널</b> — CNN이 배운 필터는 대개 rank가 2 이상이라 분리되지 않는다. 그래서 <b>일부러 1D 두 개로 설계</b>해 연산을 줄이는 구조(separable convolution)가 따로 있다</li>
+</ul></div>
+<div class="tip"><b>코드에서는</b> — <code>cv2.GaussianBlur()</code>는 내부에서 이미 분리해 적용한다.
+1D 커널을 직접 만들고 싶으면 <code>cv2.getGaussianKernel(ksize, sigma)</code>가 <b>1차원 커널</b>을 돌려주고,
+그 두 개를 <code>cv2.sepFilter2D(src, ddepth, kx, ky)</code>에 넘기면 가로 · 세로로 연달아 적용된다.</div>
 </section>
 
 <!-- ===================== 09 비선형 필터 ===================== -->
@@ -823,12 +898,14 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <figure class="fig"><img width="1038" height="545" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-37-prewitt-h.png" alt="교안 55p — 가로 에지를 찾는 Prewitt 마스크"><figcaption>교안 55p — <b>(horizontal) Prewitt</b> : 방향을 90° 돌린 같은 구조</figcaption></figure>
 </div>
 <div class="note-box">필기에서 <span class="hw">vertical과 horizontal을 나눠서 설명</span>한 그대로다.
-한 축으로는 <b>[1 1 1] 스무딩</b>이, 다른 축으로는 <b>[−1 0 1] 미분</b>이 동시에 일어난다 — 이것이 &ldquo;노이즈 제거 + 에지 검출&rdquo;을 한 마스크에 담은 형태다.</div>
+한 축으로는 <b>[1 1 1] 스무딩</b>이, 다른 축으로는 <b>[−1 0 1] 미분</b>이 동시에 일어난다 — 이것이 &ldquo;노이즈 제거 + 에지 검출&rdquo;을 한 마스크에 담은 형태다.
+캡션의 <b>외적</b>이 곧 <a class="ext" href="#sep">08절의 분리 가능성</a>이다 — 이 마스크는 1D 두 번으로 계산할 수 있다.</div>
 
 <h3 class="sub-title">Sobel 에지 검출기</h3>
 <figure class="fig"><img width="988" height="576" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-38-sobel.png" alt="교안 56p — 중앙 행에 가중치 2를 준 Sobel 마스크"><figcaption>교안 56p — <b>Sobel</b> : <b>4-이웃에 더 큰 가중치</b>를 준다 (가운데 줄이 1 대신 2)</figcaption></figure>
 <div class="note-box">필기 : <span class="hw">가중치를 더 살린다 — give more weight to the 4-neighbors</span>.
-Prewitt의 [1 1 1] 스무딩이 Sobel에서는 <b>[1 2 1]</b>이 된다. 가운데를 더 믿는 셈이라 <b>가우시안에 가까운 부드러운 스무딩</b>이 되고, 결과가 노이즈에 조금 더 강하다.</div>
+Prewitt의 [1 1 1] 스무딩이 Sobel에서는 <b>[1 2 1]</b>이 된다. 가운데를 더 믿는 셈이라 <b>가우시안에 가까운 부드러운 스무딩</b>이 되고, 결과가 노이즈에 조금 더 강하다.
+분해하면 <b>[1 2 1]<sup>T</sup> × [−1 0 1]</b> — <a class="ext" href="#sep">08절</a>에 마스크 전개를 적어 두었다.</div>
 <figure class="fig"><img width="1075" height="599" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-39-sobel-example.png" alt="교안 57p — Sobel 에지 검출 적용 예시"><figcaption>교안 57p — Sobel 적용 예시</figcaption></figure>
 
 <h3 class="sub-title">DoG — 가우시안의 미분</h3>
@@ -853,11 +930,10 @@ Prewitt의 [1 1 1] 스무딩이 Sobel에서는 <b>[1 2 1]</b>이 된다. 가운�
 <div class="note-box"><b>LoG (Laplacian of Gaussian, 가우시안의 라플라시안 = 2차 미분)</b>
 <ul class="ul">
   <li>1차 미분의 <b>극값</b>을 찾는 대신, 2차 미분의 <b><span class="term" tabindex="0" data-tip="2차 미분의 값이 +에서 −로(또는 그 반대로) 부호를 바꾸며 0을 지나는 지점. 1차 미분이 극값을 갖는 자리와 같으며, 그곳이 에지다.">영교차(zero-crossing)</span></b>로 에지를 찾는다</li>
-  <li>필기 : <span class="hw">연산량이 많다</span> — <span class="hw">나눠서 할 수가 없다</span>.
-    <b>DoG</b>는 x · y 방향 1차원 필터로 <b>그대로 분리</b>되지만,
+  <li><b>DoG</b>는 x · y 방향 1차원 필터로 <b>그대로 분리</b>되지만,
     <b><span class="term" tabindex="0" data-tip="x·y 두 방향의 2차 편미분을 더한 값. 방향을 구분하지 않고 밝기의 볼록·오목함만 재기 때문에 등방성(isotropic)이라 부른다.">라플라시안</span></b>은
     <b>하나의 2차원 커널로는 분리되지 않는다</b>(∂²/∂x²와 ∂²/∂y²를 <b>각각 분리해 계산한 뒤 더하는</b> 우회는 가능하다).
-    그래서 같은 크기라도 <b>DoG보다 비싸다</b>는 것이 필기의 요지다</li>
+    그래서 같은 크기라도 <b>DoG보다 비싸다</b> <span style="color:#6b7280">(필기 : <span class="hw">연산량이 많다</span> · <span class="hw">나눠서 할 수가 없다</span>)</span></li>
   <li>필기 : <span class="hw">이미지를 보면 선이 이중 현상이 나타나는 특징이 있다</span> — 2차 미분은 에지의 양쪽에서 <b>부호가 반대인 봉우리</b>를 만들기 때문에,
     하나의 에지가 <b>두 줄</b>처럼 보인다. 그 사이의 <b>0을 지나는 지점</b>이 진짜 에지 위치다</li>
 </ul></div>
