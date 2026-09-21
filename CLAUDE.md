@@ -7,27 +7,36 @@
 
 ## 배포 — 작업이 끝나면 여기까지가 한 세트
 
-배포 브랜치는 **`main` 하나**다. `.github/workflows/deploy-pages.yml`이
-`main` 푸시에만 반응해 저장소 루트를 통째로 Pages에 올린다.
+배포 브랜치는 **`claude/masters-course-summary-site-4vp2sc`** 하나다.
+`.github/workflows/deploy-pages.yml`이 이 브랜치 푸시에만 반응해 저장소 루트를
+통째로 Pages에 올린다.
 
 사용자가 따로 막지 않는 한, 페이지를 고쳤으면 **커밋 → 작업 브랜치 푸시 →
-`main` 반영 → 배포 성공 확인 → 링크 안내**까지 한 번에 진행한다.
+배포 브랜치 반영 → 배포 성공 확인 → 링크 안내**까지 한 번에 진행한다.
 "배포해 줘"라는 말을 매번 기다리지 않는다.
 
 ```bash
 git push -u origin <작업브랜치>
-git push origin HEAD:refs/heads/main      # 배포 — 보통 fast-forward
+git push origin HEAD:refs/heads/claude/masters-course-summary-site-4vp2sc
 ```
 
-- `main`이 작업 브랜치의 조상이면 그대로 fast-forward 된다. 아니면 **먼저
-  `main`을 작업 브랜치로 병합**해 충돌을 해소하고 푸시한다. `main`에
-  강제 푸시하지 않는다.
+- 배포 브랜치가 작업 브랜치의 조상이면 그대로 fast-forward 된다. 아니면
+  **먼저 배포 브랜치를 작업 브랜치로 병합**해 충돌을 해소하고 푸시한다.
+  배포 브랜치에 강제 푸시하지 않는다.
 - 배포 확인은 GitHub MCP(`mcp__github__actions_list` / `actions_get`)로
   `deploy-pages.yml`의 최신 run이 `conclusion: success`인지 본다.
   샌드박스에서 `hdmzp.github.io`는 egress 정책상 직접 열리지 않으므로
   run 결과로 확인하고 페이지 주소를 안내한다.
-- `claude/masters-course-summary-site-4vp2sc`는 예전 배포 브랜치다.
-  이제 트리거가 걸려 있지 않으니 배포 용도로 쓰지 않는다.
+
+### `main`으로 옮기려면 (사용자 설정 한 번 필요)
+
+사용자는 배포를 `main`으로 일원화하기를 원한다. 다만 `github-pages` **환경의
+배포 허용 브랜치 목록에 `main`이 없어서**, `main`에 푸시하면 잡이 실행되기도
+전에 거부된다(로그 없이 2초 만에 실패 — run #74, #76이 그 사례).
+
+사용자가 **Settings → Environments → github-pages → Deployment branches**에
+`main`을 추가하고 나면, 워크플로의 `branches:`를 `[main]`으로 바꾸고
+그때부터 `main`으로 배포한다. 그 전에는 위의 배포 브랜치를 쓴다.
 
 ## 구조
 
