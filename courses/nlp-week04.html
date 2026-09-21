@@ -250,6 +250,60 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .lev table{min-width:0;width:auto;margin:0 auto;font-family:'Consolas','D2Coding',ui-monospace,monospace}
 .lev th,.lev td{text-align:center;padding:6px 10px;white-space:nowrap}
 .lev td.on{background:#fde68a;font-weight:700;color:#7c2d12}
+/* ===== 개념 하이라이트(형광펜) + 툴팁 ===== */
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);
+  border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+td .term,th .term{font-weight:700}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;
+  left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+/* ===== 심화 — 한 걸음 더 ===== */
+.deep{
+  background:#f7f5ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:13px 16px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.deep::before{
+  content:'🔎 한 걸음 더 — 심화 개념';display:table;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:8px;
+}
+.deep b{color:#2e1065}
+.deep .ul li{color:#3b2a6b}
+.deep .ul li::before{background:#6d28d9;opacity:.75}
+.deep .tbl-wrap{margin:9px 0 4px;background:#fff}
+.deep pre.code{margin:9px 0}
+.deep .fx{background:#fff;border-color:#d8cdf7;border-left-color:#6d28d9;margin:9px 0}
+.deep .fx-lab{color:#6d28d9}
+.deep .term{background:#ede7ff;color:#5b21b6;border-bottom-color:#6d28d9}
+.deep .term:hover,.deep .term.on{background:#ddd2fb}
+/* ===== 오답 포인트 — 문제에서 갈린 지점 ===== */
+.pit{
+  background:#fff7ed;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:12.5px;line-height:1.8;color:#7c2d12;
+}
+.pit::before{
+  content:'⚠ 여기서 갈린다';display:table;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.pit b{color:#7c2d12}
+.pit .ul li{color:#7c2d12}
+.pit .ul li::before{background:#b45309;opacity:.8}
+.pit table{min-width:0}
+.pit .tbl-wrap{margin:8px 0 4px;background:#fff}
+/* 범례 */
+.mark-legend{display:flex;flex-wrap:wrap;gap:8px 18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px 14px;margin:-14px 0 26px;font-size:12.5px;color:#4b5563;line-height:1.6}
+.mark-legend span{display:inline-flex;align-items:center;gap:6px}
+.mark-legend i{width:12px;height:12px;border-radius:3px;display:inline-block;flex-shrink:0}
 </style>
 </head>
 <body id="top">
@@ -290,9 +344,14 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <p class="kicker">4주차 · 9.21 ~ 9.27 · 2026-2학기</p>
   <h1>CHAPTER 4 — 텍스트의 전처리, 어휘, 구문 그리고 의미 분석</h1>
   <p>텍스트의 구조와 의미는 어떻게 분석하는가. <b>전처리 → 어휘 분석 → 구문 분석 → 의미 분석</b>의 네 계층을 차례로 올라가며, 각 계층에서 <b>규칙 기반 → 통계 기반 → 딥러닝 기반</b> 접근이 어떻게 반복되는지 정리하는 주차입니다.</p>
-  <div class="chips"><span class="chip">띄어쓰기 · 맞춤법 교정</span><span class="chip">편집 거리 · 잡음 채널</span><span class="chip">형태소 · HMM 태깅</span><span class="chip">구구조 · 의존 파싱</span><span class="chip">WSD · 의미역</span><span class="chip">교안 69페이지</span></div>
+  <div class="chips"><span class="chip">띄어쓰기 · 맞춤법 교정</span><span class="chip">편집 거리 · 잡음 채널</span><span class="chip">형태소 · HMM 태깅</span><span class="chip">구구조 · 의존 파싱</span><span class="chip">WSD · 의미역</span><span class="chip">교안 69페이지</span><span class="chip">심화 개념 19편</span><span class="chip">형광펜 용어 87개</span></div>
 </section>
 
+<div class="mark-legend">
+  <span><i style="background:#eef6ff;border:1px solid #1b3f8b"></i><b class="term" tabindex="0" data-tip="이렇게 파란 형광펜이 칠해진 말에 손을 올리거나(모바일은 손가락으로 톡) 누르면 이 말풍선이 뜹니다. 교안을 읽다가 모르는 용어가 나오면 바로 확인하세요.">형광펜 용어</b> — 누르면 개념 설명 말풍선</span>
+  <span><i style="background:#f7f5ff;border:1px solid #6d28d9"></i><b>🔎 한 걸음 더</b> — 교안 한 줄을 끝까지 파고든 심화 설명</span>
+  <span><i style="background:#fff7ed;border:1px solid #b45309"></i><b>⚠ 여기서 갈린다</b> — 헷갈리기 쉬운 지점을 정면으로 비교</span>
+</div>
 <!-- ===================== 강의자료 ===================== -->
 <section class="sec" id="docs">
   <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">4주차 강의자료<small>제목을 누르면 앱 실행 없이 화면에서 바로 열리고, 오른쪽 버튼으로 내려받을 수 있습니다</small></h2></div>
@@ -309,7 +368,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
     <div class="doc-ico"><span>📝</span>HTML</div>
     <div class="doc-main">
       <a class="doc-open" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week04-quiz100.html" target="_blank" rel="noopener">4주차 어휘·구문·의미 분석 100문제 ↗</a>
-      <p>브라우저에서 바로 풀 수 있는 HTML 문제지 · 절별 문제는 아래 각 절 제목 옆 버튼으로도 열립니다</p>
+      <p>브라우저에서 바로 풀 수 있는 HTML 문제지 · 절별 문제는 아래 각 절 제목 옆 버튼으로도 열립니다 · <b>중급 48 · 심화 22문항에서 갈리는 지점</b>은 본문의 <b>⚠ 여기서 갈린다</b> 상자에 개념으로 정리해 두었습니다</p>
     </div>
     <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week04-quiz100.html" download="자연어처리_4주차_어휘구문의미분석_100문제.html">⬇ 다운로드</a>
   </div>
@@ -360,7 +419,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <thead><tr><th>유형</th><th>내용</th></tr></thead>
   <tbody>
     <tr><td>1. 구조적 노이즈</td><td>HTML 태그, 마크다운 기호, PDF 머리말·꼬리말·쪽번호, 각주 번호, 본문과 사족(광고·내비게이션·저작권)의 구분 어려움</td></tr>
-    <tr><td>2. 인코딩 오류</td><td>EUC-KR / CP949 / UTF-8 혼용 → 글자 깨짐(<b>mojibake</b>), 한글 자모 분리(NFD) '한글' vs 'ㅎㅏㄴㄱㅡㄹ'</td></tr>
+    <tr><td>2. 인코딩 오류</td><td>EUC-KR / CP949 / UTF-8 혼용 → 글자 깨짐(<span class="term" tabindex="0" data-tip="文字化け(모지바케). 어떤 인코딩으로 저장한 바이트를 다른 인코딩으로 해석해 글자가 엉뚱하게 나오는 현상. UTF-8 바이트를 CP949로 읽으면 이렇게 됩니다."><b>mojibake</b></span>), 한글 자모 분리(NFD) '한글' vs 'ㅎㅏㄴㄱㅡㄹ'</td></tr>
     <tr><td>3. 표기 불일치</td><td>대소문자, 전각/반각, 자모, 이모지, 반복 문자('좋아요오오오')</td></tr>
     <tr><td>4. 언어적 오류</td><td>띄어쓰기 오류, 맞춤법·오타, 구어체 축약, 신조어와 미등록어</td></tr>
   </tbody>
@@ -399,6 +458,37 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </table>
 </div>
 <div class="tip"><b>공통 원칙</b> — 기계는 &lsquo;어디까지가 본문이고 어디부터가 사족인지&rsquo; 스스로 구분하지 못한다. 그 판단을 <b>코드로 명시</b>해 주어야 한다.</div>
+<div class="deep"><b>PDF 변환이 세 형식 중 가장 까다로운 이유 — &ldquo;좌표만 저장된다&rdquo;의 정확한 뜻</b>
+<ul class="ul">
+  <li><b>PDF는 문서가 아니라 &lsquo;인쇄 지시서&rsquo;다</b> — 내부에는 &ldquo;이 글자를 (x=72.0, y=655.3) 위치에 이 폰트로 찍어라&rdquo;는 명령이 나열되어 있을 뿐, <b>문단·제목·표라는 개념 자체가 없다</b>. HTML이 <code>&lt;p&gt;</code>·<code>&lt;table&gt;</code>로 <span class="term" tabindex="0" data-tip="문서의 논리적 구조. 이것이 제목인지 본문인지 표의 한 칸인지를 문서 스스로 표시하고 있는 상태를 말합니다. HTML은 태그로 이를 표현하지만 PDF에는 원칙적으로 없습니다.">구조 정보</span>를 스스로 들고 있는 것과 정반대다</li>
+  <li><b>읽기 순서(reading order)가 보장되지 않는다</b> — 추출기는 좌표를 보고 순서를 <b>추측</b>할 수밖에 없다. 2단 편집이면 왼쪽 단 1줄 → 오른쪽 단 1줄 → 왼쪽 단 2줄… 처럼 <b>좌우를 오가며</b> 뽑히는 사고가 전형적이다</li>
+  <li><b>표가 가장 심하게 망가진다</b> — 표는 선과 글자 좌표의 조합일 뿐이라, 셀 경계를 잃으면 &ldquo;항목 값 항목 값&rdquo;이 한 줄로 늘어서고 행·열 관계가 사라진다</li>
+  <li><b>머리말·꼬리말·쪽번호·각주가 본문에 끼어든다</b> — 페이지마다 같은 문장이 반복 삽입되어 통계가 오염된다</li>
+  <li><b>띄어쓰기가 &lsquo;없을&rsquo; 수도 있다</b> — 공백 문자를 넣는 대신 <b>글자 간격을 벌려</b> 표현한 PDF가 많다. 그래서 추출 결과가 <code>자연어처리는재미있다</code>가 되기도 한다 → 4.1.3의 <a class="ext" href="#space">띄어쓰기 교정</a>이 곧바로 필요해진다</li>
+</ul>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>도구</th><th>무엇을 하나</th><th>언제 쓰나</th></tr></thead>
+  <tbody>
+    <tr><td><span class="term" tabindex="0" data-tip="파이썬 PDF 추출 라이브러리. 글자의 좌표·폰트·크기 정보를 그대로 노출하고, 선(line) 정보를 이용한 표 추출(extract_table)이 강합니다.">pdfplumber</span></td><td>글자 좌표·폰트 정보 노출, <b>표 추출</b>(<code>extract_table</code>)</td><td>표가 많은 보고서·논문</td></tr>
+    <tr><td><span class="term" tabindex="0" data-tip="MuPDF 기반의 매우 빠른 PDF 라이브러리(import fitz). 블록 단위로 텍스트를 뽑아 레이아웃을 비교적 잘 보존합니다.">PyMuPDF</span></td><td>블록 단위 추출로 <b>레이아웃 보존</b>, 매우 빠름</td><td>대량 문서 일괄 처리</td></tr>
+    <tr><td><span class="term" tabindex="0" data-tip="Optical Character Recognition, 광학 문자 인식. 글자가 '이미지'로만 들어 있는 스캔 PDF에서 픽셀을 보고 문자를 알아내는 기술입니다.">OCR</span></td><td>이미지로만 된 스캔본에서 <b>픽셀 → 문자</b></td><td>스캔 PDF·사진. Tesseract, EasyOCR</td></tr>
+  </tbody>
+</table>
+</div>
+<b>판별 요령</b> — PDF를 열어 본문을 <b>드래그로 선택할 수 있으면</b> 텍스트 레이어가 있는 것(추출 가능), 선택이 안 되면 <b>이미지 스캔본</b>이므로 OCR이 필요하다.</div>
+<div class="pit"><b>형식별 &lsquo;문제 → 해결&rsquo; 짝이 섞이면 틀린다</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>형식</th><th>고유한 문제</th><th>그 형식의 해결책</th></tr></thead>
+  <tbody>
+    <tr><td>HTML</td><td>태그·스크립트·광고가 본문과 섞임</td><td><span class="term" tabindex="0" data-tip="Document Object Model. 브라우저가 HTML을 해석해 만드는 계층적 트리 구조입니다. BeautifulSoup 등으로 이 트리를 따라가며 텍스트 노드만 골라냅니다.">DOM</span> 파싱 후 텍스트 노드만 + <span class="term" tabindex="0" data-tip="boilerplate는 '어느 페이지에나 똑같이 들어가는 상용구'라는 뜻. 내비게이션·광고·저작권 표시·댓글처럼 본문이 아닌 부분을 걷어내는 작업을 boilerplate removal이라고 합니다.">boilerplate removal</span></td></tr>
+    <tr><td>PDF</td><td>좌표만 저장 → 읽기 순서 미보장</td><td>레이아웃 기반 추출, 필요 시 OCR</td></tr>
+    <tr><td>텍스트·로그</td><td>인코딩 정보 없음, 제어문자·<span class="term" tabindex="0" data-tip="Byte Order Mark. 파일 맨 앞에 붙는 보이지 않는 표식(UTF-8에서는 EF BB BF)으로, 그대로 두면 첫 토큰에 붙어 '﻿안녕' 같은 이상한 단어가 생깁니다.">BOM</span></td><td><span class="term" tabindex="0" data-tip="바이트 분포를 통계적으로 분석해 파일의 인코딩(UTF-8/CP949/EUC-KR 등)을 추정해 주는 파이썬 라이브러리입니다. 추정이므로 100% 정확하지는 않습니다.">chardet</span>으로 인코딩 추정 → UTF-8 통일</td></tr>
+  </tbody>
+</table>
+</div>
+&ldquo;DOM 파싱&rdquo;을 텍스트·로그의 해결책으로 적어 두거나, &ldquo;PDF는 UTF-8을 지원하지 않는다&rdquo;처럼 <b>인코딩 문제로 착각</b>하는 것이 대표적인 오답 경로다. PDF의 문제는 인코딩이 아니라 <b>구조의 부재</b>다.</div>
 </section>
 
 <!-- ===================== 4.1.2 ===================== -->
@@ -416,13 +506,47 @@ re.sub(r'[^가-힣a-zA-Z ]', ' ', t)       <span class="cm"># 한글·영문·�
 re.sub(r'\s+', ' ', t).strip()          <span class="cm"># 연속 공백 축약</span></pre>
 <div class="good"><b>제거가 아니라 &lsquo;치환&rsquo;이 유리한 경우</b> — URL → <code>&lt;URL&gt;</code>, 숫자 → <code>&lt;NUM&gt;</code>, 이메일 → <code>&lt;EMAIL&gt;</code>. 구체적 값은 지우면서 <b>&lsquo;여기에 링크가 있었다&rsquo;는 정보는 보존</b>된다.
 <b>빈도 기반 제거</b> — 극단적으로 드문 단어(오타·고유명사)와 지나치게 흔한 단어는 목적에 따라 제외를 검토.</div>
+<div class="deep"><b>정제의 제1원칙 — &lsquo;제거&rsquo;보다 &lsquo;치환&rsquo;이 유리할 때가 많다</b>
+<p style="margin-top:6px">노이즈를 <b>지우면</b> 그 자리에 무엇이 있었는지까지 사라진다. <b>바꿔 넣으면</b> 구체적인 값은 감추면서 &ldquo;여기에 링크가 있었다&rdquo;는 <b>사실 자체는 보존</b>된다. 이 차이가 모델 성능을 가르는 경우가 많다.</p>
+<pre class="code">원문 : 자세한 건 https://ex.com/a?id=77 참고, 문의는 me@ex.com 으로 010-1234-5678
+
+제거 : 자세한 건  참고, 문의는  으로                  <span class="cm"># 문장이 뚝뚝 끊기고 단서가 사라짐</span>
+치환 : 자세한 건 &lt;URL&gt; 참고, 문의는 &lt;EMAIL&gt; 으로 &lt;PHONE&gt;  <span class="cm"># 구조는 그대로, 값만 감춤</span></pre>
+<b>치환이 이기는 네 가지 이유</b>
+<ul class="ul">
+  <li><b>① 신호 보존</b> — 스팸 분류에서 &ldquo;링크가 몇 개 들어 있는가&rdquo;는 <b>강력한 자질</b>이다. 지우면 그 자질이 사라지지만 <code>&lt;URL&gt;</code>로 두면 <b>빈도를 셀 수 있다</b></li>
+  <li><b>② 어휘 폭발 억제</b> — URL 1만 개는 서로 다른 토큰 1만 개지만, <code>&lt;URL&gt;</code>로 묶으면 <b>토큰 1개</b>가 된다. <span class="term" tabindex="0" data-tip="Out-Of-Vocabulary, 미등록어. 학습 때 본 적 없어 사전에 없는 단어를 말합니다. 그 자리는 보통 <UNK> 토큰으로 대체되어 정보가 사라집니다.">OOV</span>를 줄이는 가장 값싼 방법</li>
+  <li><b>③ 문장 구조 유지</b> — 통째로 지우면 문장이 비문이 되어 <b>형태소 분석·구문 분석이 연쇄 실패</b>한다(4.0의 오류 전파)</li>
+  <li><b>④ 개인정보 보호와 양립</b> — 전화번호·이메일의 <b>실제 값만</b> 가리면서 데이터는 그대로 쓸 수 있다</li>
+</ul>
+<b>그래도 &lsquo;제거&rsquo;가 맞는 경우</b>
+<ul class="ul">
+  <li>HTML 태그·스크립트·스타일처럼 <b>본문이 아닌 기계용 문자열</b> — 남길 정보 자체가 없다</li>
+  <li>머리말·꼬리말·쪽번호처럼 <b>모든 문서에 반복</b>되어 오히려 통계를 오염시키는 것</li>
+  <li>목표 언어가 아닌 문자를 통째로 걷어내는 2차 정제</li>
+</ul>
+<b>특수 토큰 이름 짓는 요령</b> — <code>&lt;URL&gt;</code>처럼 <b>꺾쇠와 대문자</b>를 쓰는 관습은, 본문에 우연히 같은 문자열이 나올 일이 없게 하려는 것이다. 단 <b>HTML 태그를 지우는 정규식보다 나중에</b> 넣어야 <code>&lt;URL&gt;</code>이 태그로 오인되어 삭제되지 않는다(실습 <code>preprocess()</code>의 순서가 그래서 중요하다).</div>
+<div class="pit"><b>&ldquo;전처리는 많이 할수록 좋다&rdquo;가 왜 틀린 말인가</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>지우려는 것</th><th>지워도 되는 과제</th><th>지우면 망하는 과제</th></tr></thead>
+  <tbody>
+    <tr><td>이모지 😍😡</td><td>주제 분류·토픽 모델링</td><td><b>감성 분석</b> — 가장 강한 감정 신호</td></tr>
+    <tr><td>느낌표·물음표</td><td>정보 검색 색인</td><td>감성·의도 분류, <b>문장 유형</b> 판별</td></tr>
+    <tr><td>불용어 <code>not</code>, <code>안</code>, <code>못</code></td><td>키워드 추출</td><td><b>감성 분석</b> — 의미가 정반대로 뒤집힘</td></tr>
+    <tr><td>대소문자 통일</td><td>일반적 검색·어휘 축소</td><td><b>고유명사 구분</b>(Apple 회사 vs apple 과일), 개체명 인식</td></tr>
+    <tr><td>숫자</td><td>일반 문서 분류</td><td>금융·의료 문서, 수치 질의응답</td></tr>
+  </tbody>
+</table>
+</div>
+전처리는 &lsquo;청소&rsquo;가 아니라 <b>&lsquo;목적에 맞는 정보 선택&rsquo;</b>이다. 판단 기준은 언제나 <b>&ldquo;이 신호가 내 과제의 정답과 상관이 있는가&rdquo;</b> 하나뿐이다.</div>
 
 <h3 class="sub-title">정규화 (Normalization) — 같은 의미를 같은 문자열로</h3>
 <div class="tbl-wrap">
 <table>
   <thead><tr><th>기법</th><th>내용</th></tr></thead>
   <tbody>
-    <tr><td>1. 유니코드 정규화</td><td>한글은 완성형(<b>NFC</b>)과 조합형(<b>NFD</b>)으로 모두 표현 가능 — macOS 파일명이 Windows에서 깨지는 원인. <b>NFKC</b>는 전각(ＡＢＣ)→반각(ABC), 호환 문자→표준 문자</td></tr>
+    <tr><td>1. 유니코드 정규화</td><td>한글은 완성형(<span class="term" tabindex="0" data-tip="Normalization Form Canonical Composition. 쪼갤 수 있는 것을 최대한 합쳐서 저장하는 정규화. 한글은 완성형 글자 하나가 됩니다. 웹·DB의 사실상 표준."><b>NFC</b></span>)과 조합형(<span class="term" tabindex="0" data-tip="Normalization Form Canonical Decomposition. 합쳐진 글자를 구성 요소로 쪼개어 저장하는 정규화. 한글은 초성·중성·종성 자모로 분해됩니다. macOS 파일 시스템이 이 방식."><b>NFD</b></span>)으로 모두 표현 가능 — macOS 파일명이 Windows에서 깨지는 원인. <span class="term" tabindex="0" data-tip="Normalization Form Compatibility Composition. 호환 문자를 표준 문자로 바꾼 뒤 합치는 정규화. 전각→반각, ①→1, ㈜→(주), ㎏→kg. 되돌릴 수 없습니다."><b>NFKC</b></span>는 전각(ＡＢＣ)→반각(ABC), 호환 문자→표준 문자</td></tr>
     <tr><td>2. 대소문자 통일</td><td>case folding. 단, <b>고유명사 구분이 필요한 과제에서는 적용하지 않음</b></td></tr>
     <tr><td>3. 반복 문자 축약</td><td>'좋아요오오오오' → '좋아요오오' (반복 2회로 제한 — 3주차 <code>(.)\1{2,}</code>와 같은 기준)</td></tr>
     <tr><td>4. 동의어 · 표기 변형</td><td>'핸드폰/휴대폰/휴대전화', 'USA/US/United States'를 사전 기반으로 대표형에 매핑</td></tr>
@@ -437,6 +561,60 @@ print(text, len(text))    <span class="out"># 한글 2</span>
 print(nfd, len(nfd))      <span class="out"># 한글 6   ← 눈에는 같지만 자모 6개</span>
 print(nfc, len(nfc))      <span class="out"># 한글 2</span></pre>
 <div class="warn"><b>실습에서 드러난 NFKC의 부작용</b> — NFKC를 거치면 호환 자모 'ㅋ'(U+314B)가 조합용 자모 'ᄏ'(U+110F)로 바뀐다. 'ㅋㅋ'를 지우려면 <code>[ㄱ-ㅎㅏ-ㅣᄀ-ᇿ]</code>처럼 <b>두 영역을 모두</b> 지정해야 한다. (3주차 NFC/NFD 설명은 <a class="ext" href="nlp-week03.html#norm">3.4</a>)</div>
+<h3 class="sub-title">유니코드 정규화 끝까지 — NFC · NFD · NFKC · NFKD</h3>
+<div class="deep"><b>① 출발점 — 한글은 같은 글자를 두 가지 방식으로 저장할 수 있다</b>
+<ul class="ul">
+  <li><b>완성형(미리 조합된 글자)</b> — &lsquo;한&rsquo;을 <code>U+D55C</code> <b>한 개의 코드포인트</b>로 저장. 이것이 <span class="term" tabindex="0" data-tip="Normalization Form Canonical Composition. 쪼갤 수 있는 것은 최대한 '합쳐서' 저장하는 정규화 형태. 한글은 완성형 글자 하나로 모입니다. 웹·데이터베이스의 사실상 표준입니다.">NFC</span></li>
+  <li><b>조합형(자모를 이어 붙인 것)</b> — &lsquo;한&rsquo;을 초성 <code>ᄒ U+1112</code> + 중성 <code>ᅡ U+1161</code> + 종성 <code>ᆫ U+11AB</code> <b>세 개</b>로 저장. 이것이 <span class="term" tabindex="0" data-tip="Normalization Form Canonical Decomposition. 합쳐진 글자를 구성 요소로 '쪼개서' 저장하는 정규화 형태. 한글은 초성·중성·종성 자모로 분해됩니다. macOS 파일 시스템이 이 방식을 씁니다.">NFD</span></li>
+  <li><b>화면에는 똑같이 &lsquo;한&rsquo;으로 보인다</b> — 눈으로는 절대 구분할 수 없지만, <b>기계에게는 완전히 다른 문자열</b>이다</li>
+</ul>
+<div class="fx">
+  <p class="fx-lab">문제 20번이 묻는 바로 그 계산 — 왜 &lsquo;한글&rsquo;이 6이 되는가</p>
+<pre class="code">import unicodedata
+text = "한글"
+nfd  = unicodedata.normalize("NFD", text)
+nfc  = unicodedata.normalize("NFC", nfd)
+
+print(text, len(text))   <span class="out"># 한글 2   ← 완성형 2글자</span>
+print(nfd,  len(nfd))    <span class="out"># 한글 6   ← ᄒ+ᅡ+ᆫ / ᄀ+ᅳ+ᆯ = 3+3</span>
+print(nfc,  len(nfc))    <span class="out"># 한글 2   ← 다시 합쳐져 원래대로</span>
+
+<span class="cm"># 눈으로는 같지만 문자열로는 다르다</span>
+print(text == nfd)       <span class="out"># False  ← 검색·중복제거·groupby가 전부 어긋나는 원인</span></pre>
+  <p class="fx-note"><b>한 = ᄒ + ᅡ + ᆫ (3개)</b> · <b>글 = ᄀ + ᅳ + ᆯ (3개)</b> → 합계 <b>6</b>. 종성이 없는 글자(예: &lsquo;가&rsquo;)는 2개로 분해되므로, <b>&ldquo;무조건 3배&rdquo;가 아니라 받침 유무에 따라 2~3개</b>다. &lsquo;가나&rsquo;는 NFD에서 4가 된다.</p>
+</div>
+<b>② 정준(canonical) vs 호환(compatibility) — K가 붙고 안 붙고의 차이</b>
+<ul class="ul">
+  <li><b>정준 등가</b>(NFC·NFD) — <b>같은 글자를 저장하는 방식만 다른</b> 경우. 되돌릴 수 있고 <b>의미가 바뀌지 않는다</b>. &lsquo;한&rsquo;(완성형) ↔ &lsquo;한&rsquo;(조합형)</li>
+  <li><b>호환 등가</b>(<span class="term" tabindex="0" data-tip="Normalization Form Compatibility Composition. 호환 문자를 표준 문자로 바꾼 뒤 다시 합치는 정규화. 전각→반각, 원문자 ①→1, ㈜→(주), ㎏→kg 처럼 '모양은 다르지만 사실상 같은 글자'를 하나로 통일합니다. 되돌릴 수 없습니다.">NFKC</span>·NFKD) — <b>모양이나 서식은 다르지만 사실상 같은 글자</b>로 취급해 통일. <b>되돌릴 수 없고 정보가 일부 손실</b>된다</li>
+</ul>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>입력</th><th>NFC</th><th>NFKC</th><th>무엇이 바뀌었나</th></tr></thead>
+  <tbody>
+    <tr><td><code>ＮＬＰ</code> (전각)</td><td><code>ＮＬＰ</code> 그대로</td><td><code>NLP</code></td><td>전각 → 반각</td></tr>
+    <tr><td><code>①</code></td><td><code>①</code> 그대로</td><td><code>1</code></td><td>원문자 → 숫자</td></tr>
+    <tr><td><code>㈜</code></td><td><code>㈜</code> 그대로</td><td><code>(주)</code></td><td>괄호문자 → 일반 문자 <b>3글자</b></td></tr>
+    <tr><td><code>㎏</code></td><td><code>㎏</code> 그대로</td><td><code>kg</code></td><td>단위 합자 → 알파벳 2글자</td></tr>
+    <tr><td><code>x²</code></td><td><code>x²</code> 그대로</td><td><code>x2</code></td><td>위첨자 서식 <b>소실</b> — 의미가 달라질 수 있음</td></tr>
+    <tr><td><code>ﬁ</code> (합자)</td><td><code>ﬁ</code> 그대로</td><td><code>fi</code></td><td>합자 분해 — PDF 추출문에서 자주 등장</td></tr>
+  </tbody>
+</table>
+</div>
+<b>③ 그래서 무엇을 쓰나</b>
+<ul class="ul">
+  <li><b>기본값은 NFC</b> — 웹 표준·데이터베이스·대부분의 한국어 말뭉치가 NFC다. 저장·비교의 기준으로 삼는다</li>
+  <li><b>NFKC는 &lsquo;표기 흔들림&rsquo;을 잡고 싶을 때</b> — 전각 섞인 크롤링 데이터, PDF 추출문, 이모지·특수기호가 난무하는 SNS 텍스트. 단 <b>단위·지수 의미가 중요한 도메인(화학식·수식)에서는 쓰면 안 된다</b></li>
+  <li><b>NFD/NFKD는 분석용</b> — 자모 단위 모델, 초성 검색(&lsquo;ㅅㅈ&rsquo; → &lsquo;시장&rsquo;), 오타 교정에서 <b>일부러</b> 분해한다</li>
+  <li><b>파이프라인 원칙</b> — 데이터가 들어오는 <b>가장 앞에서 한 번</b> 정규화하고, 그 뒤로는 형태를 건드리지 않는다</li>
+</ul></div>
+<div class="pit"><b>macOS 파일명이 Windows에서 깨지는 진짜 이유</b>
+<ul class="ul">
+  <li><b>원인은 인코딩이 아니라 정규화</b> — 양쪽 다 유니코드(UTF-8)를 쓴다. 다만 <b>macOS(APFS/HFS+)는 파일명을 NFD로</b>, <b>Windows·대부분의 리눅스는 NFC로</b> 저장한다</li>
+  <li>그래서 맥에서 만든 <code>보고서.docx</code>를 옮기면 <code>보고서.docx</code>(자모 분해 상태)가 되어 &ldquo;ㅂㅗㄱㅗㅅㅓ&rdquo;처럼 자모가 흩어져 보이거나, <b>같은 이름인데 다른 파일로 인식</b>된다</li>
+  <li><b>해결</b> — 전송 전후에 파일명을 <code>unicodedata.normalize("NFC", name)</code>으로 통일. 압축 프로그램이 이 변환을 해 주기도 한다</li>
+</ul>
+<b>혼동 주의</b> — 같은 &lsquo;글자 깨짐&rsquo;이라도 <code>ì•ˆë…•í•˜ì„¸ìš”</code>처럼 <b>전혀 다른 문자로 보이는 것</b>은 <span class="term" tabindex="0" data-tip="文字化け(모지바케). 어떤 인코딩으로 저장한 바이트를 다른 인코딩으로 해석해서 글자가 엉뚱하게 나오는 현상. UTF-8 바이트를 CP949로 읽으면 이렇게 됩니다.">mojibake</span> = <b>인코딩 혼용</b>이고, <b>자모가 흩어져 보이는 것</b>은 <b>정규화(NFD) 문제</b>다. 교안이 둘을 같은 &lsquo;2. 인코딩 오류&rsquo; 항목에 넣었지만 <b>원인과 해결책이 다르다</b> — 전자는 <code>chardet</code> + 디코딩 재시도, 후자는 <code>normalize</code>.</div>
 
 <h3 class="sub-title">토큰화 — 무엇을 토큰으로 삼을지는 설계의 문제</h3>
 <div class="cards">
@@ -450,6 +628,35 @@ print(nfc, len(nfc))      <span class="out"># 한글 2</span></pre>
   <li><b>한국어는?</b> 어간/표제어 추출 대신 <b>형태소 분석기가 그 역할</b>을 수행한다</li>
   <li>문장 분할도 토큰화의 일부 — 마침표는 문장 끝 · 약어 · 소수점일 수 있다</li>
 </ul></div>
+<div class="pit"><b>토큰화 · 불용어 · 어간/표제어 — 짝을 바꿔 물으면 틀리는 것들</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>문제</th><th>어느 언어의 이야기인가</th><th>예</th></tr></thead>
+  <tbody>
+    <tr><td>축약형 · 소유격 · 하이픈 · 마침표</td><td><b>영어</b> 토큰화의 네 가지 문제</td><td><code>don't → do + n't</code> · <code>John's → John + 's</code> · <code>state-of-the-art</code> · <code>U.S.A.</code></td></tr>
+    <tr><td><b>교착어 문제</b> — 어절 하나에 형태소 여럿</td><td><b>한국어</b> 토큰화의 문제</td><td><code>학교에서는 → 학교 + 에서 + 는</code></td></tr>
+  </tbody>
+</table>
+</div>
+&ldquo;교착어 문제 — 학교에서는을 분해&rdquo;를 <b>영어 토큰화</b> 항목에 넣어 두는 것이 전형적인 함정이다. 영어의 네 문제에 교착어는 없다.
+<b>세 가지 &ldquo;하면 안 되는 경우&rdquo;를 한 줄씩</b>
+<ul class="ul">
+  <li><b>대소문자 통일(case folding)</b> — 검색 색인·어휘 축소에는 좋지만, <b>고유명사 구분이 필요한 과제</b>에서는 금물. <code>Apple</code>과 <code>apple</code>이 한 덩어리가 된다</li>
+  <li><b>불용어 제거</b> — 정보 검색·토픽 모델링에는 효과적이지만, <b>감성 분석에서 <code>not</code>·&lsquo;안&rsquo;·&lsquo;못&rsquo;을 지우면 의미가 정반대</b>가 된다. &ldquo;감성 분석에서도 not을 반드시 제거해야 한다&rdquo;는 틀린 진술이다</li>
+  <li><b>어절 단위 토큰화</b> — 한국어에서 <code>학교에서</code>·<code>학교에서는</code>·<code>학교를</code>이 전부 다른 토큰이 되어 <b>어휘가 폭발</b>한다. 그래서 형태소 단위가 표준이다</li>
+</ul>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>어간 추출 (Stemming)</th><th>표제어 추출 (Lemmatization)</th></tr></thead>
+  <tbody>
+    <tr><td>방법</td><td><b>규칙</b>으로 접사를 잘라 냄</td><td><b>사전 + 품사 정보</b>로 기본형(lemma)을 찾음</td></tr>
+    <tr><td>속도 · 정확도</td><td>빠름 / 거칢</td><td>느림 / 정확</td></tr>
+    <tr><td>결과가 실제 단어인가</td><td><b>아닐 수 있다</b> — <code>automates·automation → autom</code></td><td>항상 실제 단어 — <code>am/are/is → be</code>, <code>better → good</code></td></tr>
+    <tr><td>품사 정보</td><td>필요 없음</td><td><b>필요</b> — 지정하지 않으면 <code>was → wa</code> 같은 비단어가 나온다</td></tr>
+  </tbody>
+</table>
+</div>
+<b>뒤집어 묻는 함정</b> — &ldquo;Stemming이 사전을 필요로 하고 Lemmatization은 규칙만 쓴다&rdquo;(반대), &ldquo;Lemmatization이 항상 더 빠르다&rdquo;(반대), &ldquo;Stemming이 better를 good으로 바꾼다&rdquo;(그건 Lemmatization). <b>한국어에는 이 둘 대신 형태소 분석기가 그 역할을 한다.</b></div>
 </section>
 
 <!-- ===================== 4.1.3 ===================== -->
@@ -464,9 +671,9 @@ print(nfc, len(nfc))      <span class="out"># 한글 2</span></pre>
 <table>
   <thead><tr><th>접근</th><th>원리</th><th>장점</th><th>한계</th></tr></thead>
   <tbody>
-    <tr><td>① 규칙 기반</td><td>형태소 분석기 + 휴리스틱 규칙(어휘 지식·문법 규칙·오류 유형). 입력 어절을 사전과 대조해 분리 지점 탐색</td><td>규칙 범위 안에서 정확·예측 가능, <b>왜 교정했는지 설명 가능</b>, 학습 데이터 불필요</td><td>언어 자원 별도 구축, 휴리스틱이 복잡, 유지·보수 비용 큼, 중의 구간·오타에서 성능 급락</td></tr>
+    <tr><td>① 규칙 기반</td><td>형태소 분석기 + <span class="term" tabindex="0" data-tip="그리스어 heuriskein(찾아내다)에서 온 말. 최적해를 보장하지는 않지만 경험적으로 충분히 좋은 답을 빠르게 주는 어림규칙을 말합니다.">휴리스틱</span> 규칙(어휘 지식·문법 규칙·오류 유형). 입력 어절을 사전과 대조해 분리 지점 탐색</td><td>규칙 범위 안에서 정확·예측 가능, <b>왜 교정했는지 설명 가능</b>, 학습 데이터 불필요</td><td>언어 자원 별도 구축, 휴리스틱이 복잡, 유지·보수 비용 큼, 중의 구간·오타에서 성능 급락</td></tr>
     <tr><td>② 통계 · 확률 기반</td><td>말뭉치에서 자동 추출한 <b>음절 n-gram</b>으로 각 음절 사이에 공백이 올 확률 추정</td><td>구현 용이, 어휘 지식을 사람이 만들 필요 없음, 미등록어에 비교적 견고</td><td>말뭉치 영향 큼, <b>띄어쓰기가 올바른 대용량 말뭉치</b> 필요</td></tr>
-    <tr><td>③ 딥러닝 기반</td><td>음절마다 뒤에 공백이 오는지(1/0) 예측하는 <b>시퀀스 레이블링</b>. Bi-LSTM+CRF, CNN, Transformer</td><td>음절 임베딩으로 미등록어에 강건, 양방향 문맥, 사전·규칙 불필요</td><td>대량의 정답 데이터·학습 자원, 오류 원인 설명 어려움(블랙박스)</td></tr>
+    <tr><td>③ 딥러닝 기반</td><td>음절마다 뒤에 공백이 오는지(1/0) 예측하는 <b>시퀀스 레이블링</b>. <span class="term" tabindex="0" data-tip="양방향 LSTM으로 좌우 문맥을 읽고, CRF 층이 레이블 열 전체를 동시에 최적화하는 구조. 디코딩에 비터비를 씁니다.">Bi-LSTM+CRF</span>, <span class="term" tabindex="0" data-tip="합성곱 신경망. 커널 크기만큼의 창을 미끄러뜨리며 지역 n-gram 패턴을 뽑습니다. 완전 병렬이라 매우 빠릅니다.">CNN</span>, <span class="term" tabindex="0" data-tip="self-attention으로 모든 위치가 거리에 상관없이 서로를 참조하는 구조. BERT·GPT의 뼈대입니다.">Transformer</span></td><td>음절 임베딩으로 미등록어에 강건, 양방향 문맥, 사전·규칙 불필요</td><td>대량의 정답 데이터·학습 자원, 오류 원인 설명 어려움(블랙박스)</td></tr>
   </tbody>
 </table>
 </div>
@@ -484,6 +691,48 @@ kiwi = Kiwi()
 kiwi.space('아버지가방에들어가신다')     <span class="out"># '아버지가 방에 들어가신다'</span></pre>
 실무 도구: <b>Kiwi(space)</b>, PyKoSpacing, soyspacing</div>
 <div class="tip"><b>실습에서 확인한 함정</b> — <code>kiwi.space()</code>의 기본값은 공백을 <b>추가만</b> 한다. &ldquo;오늘 은날씨가&rdquo;처럼 <b>잘못 들어간 공백</b>까지 고치려면 <code>reset_whitespace=True</code>로 기존 공백을 지우고 다시 띄어써야 한다.</div>
+<div class="deep"><b>&lsquo;휴리스틱 규칙&rsquo;이란 무엇인가 — 규칙 기반 방법의 정체</b>
+<ul class="ul">
+  <li><b>어원</b> — 그리스어 <i>heuriskein</i>(찾아내다). 아르키메데스의 &ldquo;유레카(heureka)&rdquo;와 같은 뿌리다</li>
+  <li><b>정의</b> — <b>최적해를 보장하지는 않지만</b>, 경험적으로 <b>충분히 좋은 답을 빠르게</b> 내놓는 규칙·전략. 우리말로는 <b>어림규칙 · 경험칙</b>. 영어 표현 <i>rule of thumb</i>와 거의 같은 뜻</li>
+  <li><b>자연어처리에서는</b> — 언어 전문가가 관찰한 경험을 <b>&ldquo;만약 ~이면 ~하라&rdquo;는 if-then 규칙</b>으로 옮겨 놓은 것을 말한다</li>
+</ul>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>띄어쓰기 교정에서 실제로 쓰는 휴리스틱 예</th><th>근거가 되는 경험</th></tr></thead>
+  <tbody>
+    <tr><td>사전에 있는 <b>가장 긴 문자열부터</b> 잘라 본다 (longest match)</td><td>긴 단어가 우연히 만들어질 확률이 낮다</td></tr>
+    <tr><td>조사 <b>은/는/이/가/을/를</b> 뒤는 어절 경계로 본다</td><td>조사는 체언에 붙고 그 뒤에서 어절이 끝난다</td></tr>
+    <tr><td>용언 어간 + 어미 결합은 <b>붙여</b> 쓴다</td><td>활용형은 한 어절을 이룬다</td></tr>
+    <tr><td>수사 뒤의 <b>개·명·년·원</b>은 단위 명사로 처리</td><td>의존 명사의 결합 패턴</td></tr>
+  </tbody>
+</table>
+</div>
+<b>장점과 한계가 동전의 양면이다</b>
+<ul class="ul">
+  <li>👍 <b>학습 데이터가 필요 없다</b> · 규칙 범위 안에서는 정확하다 · <b>&ldquo;왜 그렇게 고쳤는지&rdquo; 설명할 수 있다</b>(교육용 맞춤법 검사기가 규칙 기반인 이유)</li>
+  <li>👎 <b>예외가 규칙보다 많아진다</b> · 규칙끼리 충돌한다 · 도메인이 바뀌면 전부 다시 써야 한다 · 이 누적된 부담을 <span class="term" tabindex="0" data-tip="knowledge bottleneck. 규칙이나 사전 같은 지식을 사람이 일일이 만들어 넣어야 해서, 그 구축 속도가 시스템 전체의 발목을 잡는 현상을 말합니다.">지식 병목</span>이라 부른다</li>
+  <li>👎 <b>말뭉치를 아무리 키워도 저절로 좋아지지 않는다</b> — 성능이 데이터 양에 비례하는 것은 <b>통계·확률 기반</b>의 성질이다</li>
+</ul></div>
+<div class="deep"><b>딥러닝 3인방 — Bi-LSTM+CRF · CNN · Transformer는 각각 무엇인가</b>
+<p style="margin-top:6px">셋 다 &ldquo;음절마다 <b>뒤에 공백이 오는가(1/0)</b>&rdquo;를 맞히는 <span class="term" tabindex="0" data-tip="sequence labeling. 입력 열의 각 위치마다 레이블을 하나씩 붙이는 문제. 띄어쓰기 교정(0/1), 품사 태깅(태그), 개체명 인식(BIO)이 모두 같은 틀입니다.">시퀀스 레이블링</span> 문제를 푼다. <b>차이는 &lsquo;문맥을 어떻게 보는가&rsquo;</b>에 있다.</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>모델</th><th>문맥을 보는 방식</th><th>강점</th><th>약점</th></tr></thead>
+  <tbody>
+    <tr><td><span class="term" tabindex="0" data-tip="Bidirectional Long Short-Term Memory. 순방향으로 한 번, 역방향으로 한 번 읽는 두 개의 LSTM을 붙여, 각 위치가 왼쪽 문맥과 오른쪽 문맥을 모두 보게 만든 구조입니다.">Bi-LSTM</span> + <span class="term" tabindex="0" data-tip="Conditional Random Field, 조건부 무작위장. 각 위치를 따로 예측하지 않고 '레이블 열 전체'의 점수를 매겨 최적 열을 고르는 출력층입니다. 레이블 사이의 전이 점수를 학습합니다.">CRF</span></td><td>순방향·역방향 <b>순차적으로</b> 읽으며 기억을 누적 → <b>좌우 전체 문맥</b></td><td>순서 정보에 강함, 데이터가 적어도 잘 됨</td><td>순차 계산이라 <b>병렬화가 어려움</b>, 아주 긴 문장은 기억이 흐려짐</td></tr>
+    <tr><td><span class="term" tabindex="0" data-tip="Convolutional Neural Network, 합성곱 신경망. 텍스트에서는 1차원 합성곱으로 '연속한 n개 음절'이라는 창을 훑으며 지역 패턴을 뽑아냅니다.">CNN</span></td><td>커널 크기만큼의 <b>창(window)</b>을 미끄러뜨리며 <b>지역 n-gram 패턴</b> 추출</td><td><b>완전 병렬</b>이라 매우 빠름, 파라미터 적음</td><td>한 층이 보는 범위(<span class="term" tabindex="0" data-tip="receptive field, 수용 영역. 출력 한 칸이 입력의 몇 칸을 보고 만들어졌는지를 뜻합니다. 층을 쌓거나 커널을 키워야 넓어집니다.">수용 영역</span>)가 좁아 <b>먼 문맥</b>은 층을 쌓아야</td></tr>
+    <tr><td><span class="term" tabindex="0" data-tip="self-attention(자기 주의) 기반 신경망 구조(Vaswani et al., 2017). 모든 위치가 모든 위치를 한 번에 참조하므로 거리와 무관하게 관계를 잡아냅니다. BERT·GPT의 뼈대입니다.">Transformer</span></td><td><b>self-attention</b>으로 모든 음절이 <b>거리에 상관없이</b> 서로를 한 번에 참조</td><td>장거리 의존에 가장 강함, <b>병렬 처리</b>, 사전학습(BERT)과 결합</td><td>길이 <span class="tex">n</span>에 대해 <span class="tex">O(n^2)</span> 비용, <b>데이터·연산 요구 큼</b></td></tr>
+  </tbody>
+</table>
+</div>
+<b>왜 LSTM 뒤에 굳이 CRF를 붙이나 — 이것이 핵심 포인트</b>
+<ul class="ul">
+  <li>LSTM 위에 softmax만 얹으면 <b>각 위치를 독립적으로</b> 예측한다. 그러면 <b>불가능한 레이블 연쇄</b>(개체명 인식에서 <code>B-인명</code> 다음에 <code>I-지명</code>이 오는 것 같은)를 막지 못한다</li>
+  <li>CRF는 <b>레이블 사이의 전이 점수</b>를 함께 학습해, <b>문장 전체 레이블 열의 점수</b>가 최대가 되도록 고른다 → 문법적으로 말이 되는 열만 남는다</li>
+  <li>그 최적 열을 찾는 디코딩에 쓰이는 알고리즘이 바로 <b><a class="ext" href="#pos">4.2.2의 비터비</a></b>다. 즉 <b>HMM과 CRF는 뼈대가 같고</b>, 확률을 세는 방식(생성 vs 판별)만 다르다</li>
+</ul>
+<b>실무 감각</b> — 한국어 띄어쓰기처럼 레이블이 0/1 둘뿐이면 CRF의 이득이 크지 않지만, <b>품사 태깅·개체명 인식</b>처럼 레이블이 수십 개면 CRF가 확실히 성능을 올린다. 오늘날 실무 도구(Kiwi, PyKoSpacing)는 대체로 <b>CNN/LSTM 계열의 가벼운 모델</b>을 쓰고, 최고 성능이 필요하면 <b>Transformer 사전학습 모델을 미세조정</b>한다.</div>
 </section>
 
 <!-- ===================== 4.1.4 ===================== -->
@@ -521,6 +770,45 @@ kiwi.space('아버지가방에들어가신다')     <span class="out"># '아버�
 </table>
 </div>
 <div class="note-box"><b>kitten → sitting = 3</b> — 표의 강조 칸이 최소 경로다. ① k→s <b>대체</b> (1) ② t·t·i 일치 ③ e→i <b>대체</b> (2) ④ n 일치 ⑤ 마지막에 g <b>삽입</b> (3). 행렬 마지막 칸 <code>D[6][7] = 3</code>이 곧 편집 거리.</div>
+<div class="deep"><b>Levenshtein과 Damerau-Levenshtein — 무엇이 다르고 왜 나뉘었나</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th><span class="term" tabindex="0" data-tip="1965년 소련 수학자 블라디미르 레벤슈타인이 제안한 거리. 삽입·삭제·대체 세 연산만으로 한 문자열을 다른 문자열로 바꾸는 최소 횟수입니다.">Levenshtein distance</span></th><th><span class="term" tabindex="0" data-tip="프레더릭 데머라우가 1964년에 '사람의 오타 80% 이상이 인접 두 글자 뒤바뀜을 포함한 네 유형'임을 보고한 데서 비롯된 거리. Levenshtein의 세 연산에 전치(transposition)를 더합니다.">Damerau-Levenshtein distance</span></th></tr></thead>
+  <tbody>
+    <tr><td>허용 연산</td><td>삽입 · 삭제 · <b>대체</b> (3종)</td><td>삽입 · 삭제 · 대체 · <b>전치</b> (4종)</td></tr>
+    <tr><td>전치를 세는 법</td><td>대체 <b>2회</b>로 계산</td><td>전치 <b>1회</b>로 계산</td></tr>
+    <tr><td><code>the → hte</code></td><td><b>2</b> (t→h, h→t)</td><td><b>1</b> (인접 두 글자 교환)</td></tr>
+    <tr><td><code>그래서 → 그서래</code></td><td><b>2</b></td><td><b>1</b></td></tr>
+    <tr><td>어디에 맞나</td><td>일반적 문자열 유사도, 생물정보학(DNA 정렬)</td><td><b>사람의 타이핑 오타</b> 교정 — 자판을 치다 손가락 순서가 엇갈리는 실수가 압도적으로 흔하다</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="fx">
+  <p class="fx-lab">점화식 — Damerau는 &lsquo;한 줄&rsquo;이 추가될 뿐이다</p>
+  <div class="tex-d">D[i][j]=\min\begin{cases}D[i-1][j]+1 &amp; \text{삭제}\\ D[i][j-1]+1 &amp; \text{삽입}\\ D[i-1][j-1]+\text{cost} &amp; \text{대체(또는 일치)}\\ \textcolor{#6d28d9}{D[i-2][j-2]+1} &amp; \textcolor{#6d28d9}{\text{전치 — Damerau에만}}\end{cases}</div>
+  <p class="fx-note">전치 항은 <b><span class="tex">a_i=b_{j-1}</span> 이고 <span class="tex">a_{i-1}=b_j</span> 일 때만</b>(즉 두 글자가 서로 엇갈릴 때만) 적용한다. 초기 조건 <span class="tex">D[i][0]=i,\;D[0][j]=j</span> 는 &ldquo;빈 문자열로 만들려면 글자 수만큼 지워야 한다&rdquo;는 뜻이고, 답은 언제나 <b>표의 오른쪽 아래 끝 칸</b>이다.</p>
+</div>
+<b>표를 채우는 세 방향의 의미 — 한 번에 외우는 법</b>
+<ul class="ul">
+  <li><b>↑ 위에서 오면 삭제</b> — 원본 글자 하나를 버렸다 (행이 원본)</li>
+  <li><b>← 왼쪽에서 오면 삽입</b> — 목표 글자 하나를 새로 넣었다 (열이 목표)</li>
+  <li><b>↖ 대각선에서 오면 대체 또는 일치</b> — 두 글자가 같으면 cost 0(공짜로 통과), 다르면 cost 1</li>
+  <li>그러므로 <b>세 경로 중 최솟값</b>을 취하는 것이 곧 &ldquo;가장 적게 고치는 길&rdquo;이다</li>
+</ul>
+<b>실무에서 자주 쓰는 변형</b>
+<ul class="ul">
+  <li><b>OSA(Optimal String Alignment)</b> — 대부분의 라이브러리가 &ldquo;Damerau&rdquo;라 부르며 구현하는 <b>제한판</b>. 같은 구간을 두 번 편집하지 못한다. <code>CA → ABC</code>가 OSA에서는 3, <b>진짜 Damerau에서는 2</b>로 갈린다</li>
+  <li><b>가중 편집 거리</b> — 자판에서 가까운 글자(<code>ㅁ↔ㄴ</code>, <code>e↔r</code>)의 대체 비용을 1보다 작게 준다. 잡음 채널 모형의 <span class="tex">P(w\mid c)</span> 추정이 바로 이 아이디어다</li>
+  <li><b>한국어에서는 자모 단위로</b> — &lsquo;학교 → 학꾜&rsquo;는 글자 단위로 보면 대체 1회지만, <b>NFD로 분해</b>해 자모 단위로 보면 <code>ㄱ→ㄲ</code> 한 글자 차이라는 것이 드러난다. 앞 절의 정규화가 여기서 쓰인다</li>
+  <li><b>속도</b> — 시간·공간 모두 <span class="tex">O(mn)</span>. 사전 전체와 비교하면 느리므로, 실무에서는 <b>BK-트리·심메트릭 삭제</b>로 후보를 먼저 좁힌 뒤 정확한 거리를 잰다</li>
+</ul></div>
+<div class="pit"><b>편집 거리에서 실수하는 세 지점</b>
+<ul class="ul">
+  <li><b>&ldquo;길이 차이&rdquo;와 헷갈리기</b> — 편집 거리는 <b>길이 차이가 아니다</b>. <code>kitten</code>(6)과 <code>sitting</code>(7)은 길이 차 1이지만 거리는 <b>3</b>이다. 길이 차는 <b>거리의 하한</b>일 뿐이다</li>
+  <li><b>최댓값과 헷갈리기</b> — 거리는 <b>긴 쪽 길이를 넘지 못하지만</b> 그것과 같지도 않다. 거리는 <b>최소 연산 횟수</b>다</li>
+  <li><b>점화식에 <code>max</code>를 쓰기</b> — 반드시 <code>min</code>이다. &lsquo;가장 적게 고치는 길&rsquo;을 찾는 문제이기 때문</li>
+</ul>
+<b>kitten → sitting = 3 을 말로 풀면</b> ① k를 s로 <b>대체</b> → sitten ② e를 i로 <b>대체</b> → sittin ③ 끝에 g를 <b>삽입</b> → sitting. 표의 마지막 칸 <code>D[6][7] = 3</code>이 곧 이 세 걸음이다.</div>
 
 <h3 class="sub-title">맞춤법 교정 — 오류 감지와 오류 수정</h3>
 <div class="cards">
@@ -554,11 +842,104 @@ kiwi.space('아버지가방에들어가신다')     <span class="out"># '아버�
 <h3 class="sub-title">서브워드 토큰화 — 현대적 대안</h3>
 <div class="note-box"><ul class="ul">
   <li><b>단어 단위의 한계</b> — 사전에 없는 단어는 모두 <code>&lt;UNK&gt;</code>, 교착어는 활용형이 많아 어휘 폭발, '먹었다/먹는다/먹겠다'가 전혀 다른 토큰 → <b>사전 크기와 OOV 사이의 딜레마</b></li>
-  <li><b>서브워드</b> — 자주 나오는 문자열 조각을 토큰으로 학습. BPE(가장 빈번한 인접 쌍 반복 병합) · WordPiece(BERT) · SentencePiece(다국어) · Unigram LM</li>
+  <li><b>서브워드</b> — 자주 나오는 문자열 조각을 토큰으로 학습. <span class="term" tabindex="0" data-tip="Byte Pair Encoding. 가장 자주 붙어 나오는 인접 쌍을 반복해 병합하며 어휘를 키웁니다. 기준은 오직 빈도.">BPE</span>(가장 빈번한 인접 쌍 반복 병합) · <span class="term" tabindex="0" data-tip="BERT가 쓰는 방식. 병합 기준이 빈도가 아니라 freq(AB)/(freq(A)·freq(B)) 즉 우도 증가량이며, 이어지는 조각에 ## 를 붙입니다.">WordPiece</span>(BERT) · <span class="term" tabindex="0" data-tip="알고리즘이 아니라 구현 도구. 공백을 ▁로 바꿔 원시 텍스트를 그대로 학습하므로 언어에 독립적이고 역토큰화가 완벽합니다.">SentencePiece</span>(다국어) · <span class="term" tabindex="0" data-tip="큰 후보 어휘에서 출발해 지웠을 때 우도 손실이 작은 토큰부터 깎아 내는 방식. 토큰마다 확률이 있어 여러 분할을 샘플링할 수 있습니다.">Unigram LM</span></li>
   <li>'자연어처리' → '자연' + '##어' + '##처리', 문자 단위 폴백으로 OOV를 사실상 제거 (원천적 제거는 <b>바이트 수준 BPE</b>)</li>
   <li>BERT · GPT 등 사전학습 모델은 모두 서브워드 사용. 단 형태소 경계와 어긋날 수 있어 한국어에서는 <b>형태소 분석과 병용</b>하기도 한다</li>
 </ul></div>
 <div class="tip">BPE 병합 과정과 세 방식 비교는 <a class="ext" href="nlp-week03.html#token">3주차 3.1</a>에 도식과 함께 정리되어 있다.</div>
+<h3 class="sub-title">서브워드 4종 상세 — BPE · WordPiece · SentencePiece · Unigram LM</h3>
+<div class="note-box"><b>넷의 관계부터 정리하고 들어가자</b> — 이름이 나란히 나열되어 있어 같은 층위처럼 보이지만 <b>그렇지 않다</b>.
+<ul class="ul">
+  <li><b>BPE · WordPiece · Unigram LM</b> = <b>어휘를 만드는 알고리즘</b> (세 가지 서로 다른 방법)</li>
+  <li><b>SentencePiece</b> = 그 알고리즘들을 담아 실행하는 <b>구현 도구(라이브러리)</b> — 안에서 BPE 또는 Unigram을 골라 쓴다</li>
+  <li>그래서 &ldquo;SentencePiece vs BPE&rdquo;는 성립하지 않는 비교다. 정확히는 <b>&ldquo;SentencePiece의 BPE 모드 vs SentencePiece의 Unigram 모드&rdquo;</b>다</li>
+</ul></div>
+<div class="deep"><b>① <span class="term" tabindex="0" data-tip="Byte Pair Encoding. 1994년 Philip Gage가 만든 데이터 압축 기법을 Sennrich 등이 2016년 기계번역 토큰화에 가져온 것. 가장 자주 붙어 나오는 인접 쌍을 반복해서 하나로 합칩니다.">BPE</span> (Byte Pair Encoding) — &ldquo;가장 자주 붙어 다니는 쌍부터 합친다&rdquo;</b>
+<b>학습 절차</b>
+<div class="flow">
+  <div class="fl"><div class="fl-n">1</div><div><h4>글자 단위로 쪼갠다</h4><p>모든 단어를 문자 하나하나로 분해하고, 단어 끝에 <code>&lt;/w&gt;</code> 같은 <b>경계 표시</b>를 붙인다</p></div></div>
+  <div class="fl"><div class="fl-n">2</div><div><h4>인접 쌍의 빈도를 센다</h4><p>말뭉치 전체에서 &ldquo;나란히 붙어 있는 두 조각&rdquo;이 몇 번 나오는지 집계</p></div></div>
+  <div class="fl"><div class="fl-n">3</div><div><h4>가장 빈번한 쌍을 하나로 병합</h4><p>그 결과를 <b>병합 규칙 목록</b>에 순서대로 기록</p></div></div>
+  <div class="fl"><div class="fl-n">4</div><div><h4>목표 어휘 크기까지 2~3 반복</h4><p>보통 수천~수만 회. 병합 횟수가 곧 <b>하이퍼파라미터</b></p></div></div>
+</div>
+<pre class="code"><span class="cm"># 말뭉치(단어:빈도) — 교과서에 늘 나오는 예제</span>
+low:5   lower:2   newest:6   widest:3
+
+<span class="cm"># 0단계 — 글자로 분해</span>
+l o w &lt;/w&gt;(5)   l o w e r &lt;/w&gt;(2)   n e w e s t &lt;/w&gt;(6)   w i d e s t &lt;/w&gt;(3)
+
+<span class="cm"># 1단계 — 쌍 빈도: (e,s)=6+3=9 가 최다  →  병합</span>
+n e w <b>es</b> t &lt;/w&gt;      w i d <b>es</b> t &lt;/w&gt;
+<span class="cm"># 2단계 — (es,t)=9        →  병합</span>
+n e w <b>est</b> &lt;/w&gt;        w i d <b>est</b> &lt;/w&gt;
+<span class="cm"># 3단계 — (est,&lt;/w&gt;)=9    →  병합</span>
+n e w <b>est&lt;/w&gt;</b>          w i d <b>est&lt;/w&gt;</b>
+<span class="cm"># 4단계 — (l,o)=5+2=7     →  병합  …  이렇게 계속</span>
+
+<span class="cm"># 최종 결과: 'est&lt;/w&gt;'라는 조각이 어휘에 생겼다 = 영어 최상급 접미사를 스스로 발견</span></pre>
+<ul class="ul">
+  <li><b>적용(inference)</b> — 학습 때 기록한 <b>병합 규칙을 같은 순서로</b> 새 단어에 적용한다. 처음 보는 단어 <code>lowest</code>도 <code>low</code> + <code>est&lt;/w&gt;</code>로 쪼개져 <b>OOV가 되지 않는다</b></li>
+  <li><b>빈도만 본다</b> — 의미나 형태소 경계를 전혀 모른다. 그래서 &lsquo;자연어처리&rsquo;가 &lsquo;자연 + 어처 + 리&rsquo;처럼 <b>형태소와 어긋나게</b> 쪼개질 수 있다</li>
+  <li><b>바이트 수준 BPE</b>(GPT-2, RoBERTa) — 글자가 아니라 <b>바이트 256개</b>에서 출발한다. 세상의 어떤 문자도 바이트로는 표현되므로 <b>OOV가 원천적으로 사라진다</b></li>
+</ul></div>
+<div class="deep"><b>② <span class="term" tabindex="0" data-tip="구글이 일본어·한국어 음성 검색을 위해 만든 서브워드 기법(Schuster & Nakajima, 2012). BERT가 채택했습니다. BPE와 절차는 같지만 '무엇을 합칠지' 고르는 기준이 빈도가 아니라 우도(likelihood)입니다.">WordPiece</span> — BERT가 쓰는 방식, &ldquo;빈도&rdquo; 대신 &ldquo;우도&rdquo;로 고른다</b>
+<div class="fx">
+  <p class="fx-lab">병합 기준의 차이 — 이 한 줄이 BPE와의 전부다</p>
+  <div class="tex-d">\text{BPE} : \underset{(A,B)}{\operatorname{argmax}}\;\text{freq}(AB) \qquad\text{vs}\qquad \text{WordPiece} : \underset{(A,B)}{\operatorname{argmax}}\;\frac{\text{freq}(AB)}{\text{freq}(A)\cdot\text{freq}(B)}</div>
+  <p class="fx-note">분모가 생겼다는 것이 핵심이다. <b>A와 B가 각각은 흔한데 우연히 붙어 나온 쌍</b>은 분모가 커져 점수가 깎이고, <b>거의 항상 같이 나오는 쌍</b>(예: <code>##ing</code>, <code>##tion</code>)은 점수가 높아진다. 즉 <b>&ldquo;둘을 합쳤을 때 말뭉치 전체의 확률이 가장 많이 오르는 쌍&rdquo;</b>을 고른다.</p>
+</div>
+<ul class="ul">
+  <li><b><code>##</code> 표기</b> — 단어의 <b>첫 조각이 아님</b>을 뜻한다. <code>자연어처리</code> → <code>자연</code> + <code>##어</code> + <code>##처리</code>. 이 표시 덕분에 <b>원문 복원이 정확</b>하다(<code>##</code>은 붙이고, 없으면 앞에 공백)</li>
+  <li><b>적용</b> — 왼쪽부터 <b>사전에 있는 가장 긴 조각</b>을 떼어 내는 greedy longest-match. 끝까지 못 쪼개면 <code>[UNK]</code></li>
+  <li><b>공백으로 먼저 자른 뒤</b> 각 단어 안에서만 쪼갠다 → 공백이 없는 언어(중국어·일본어)나 띄어쓰기가 불안정한 한국어에서 약점이 된다. 이 약점을 푸는 것이 다음의 SentencePiece다</li>
+</ul></div>
+<div class="deep"><b>③ <span class="term" tabindex="0" data-tip="구글이 2018년 공개한 서브워드 토크나이저 라이브러리(Kudo & Richardson). 공백을 특수문자 ▁로 바꿔 원시 텍스트를 그대로 처리하므로 언어에 독립적이고, 토큰을 이어 붙이면 원문이 완벽히 복원됩니다.">SentencePiece</span> — 언어를 가리지 않는 &lsquo;구현 도구&rsquo;</b>
+<ul class="ul">
+  <li><b>공백을 문자로 취급한다</b> — 공백을 <b><code>▁</code>(U+2581)</b>로 바꿔 텍스트에 그대로 남긴다. 그래서 <b>사전 토큰화가 필요 없다</b>
+  <pre class="code">입력  : 저는 자연어처리를 공부합니다
+치환  : ▁저는▁자연어처리를▁공부합니다
+분할  : ▁저 는 ▁자연 어 처리 를 ▁공부 합니다
+복원  : 토큰을 그냥 이어 붙이고 ▁ → 공백 <span class="cm"># 손실 없이 원문 그대로</span></pre></li>
+  <li><b>왜 한국어·일본어·중국어에 중요한가</b> — WordPiece 방식은 &ldquo;공백으로 단어를 먼저 자른다&rdquo;를 전제하는데, 이 전제가 성립하지 않는 언어가 많다. SentencePiece는 <b>원시 문자열 자체를 학습</b>하므로 전제가 필요 없다</li>
+  <li><b><span class="term" tabindex="0" data-tip="토큰 열을 다시 원래 문장으로 되돌리는 작업. 토큰 사이에 공백을 넣을지 말지 규칙이 필요한데, SentencePiece는 ▁ 기호 하나로 이 문제를 없앴습니다.">역토큰화(detokenization)</span>가 완벽하다</b> — 번역·생성 모델에서 출력 토큰을 문장으로 되돌릴 때 규칙이 필요 없다</li>
+  <li><b>내부에서 BPE 또는 Unigram을 고른다</b> — <code>model_type='bpe'</code> / <code>model_type='unigram'</code>(기본값)</li>
+</ul></div>
+<div class="deep"><b>④ <span class="term" tabindex="0" data-tip="Kudo(2018)가 제안한 서브워드 기법. 문장의 확률을 '서브워드 확률의 곱'으로 보는 유니그램 언어 모델을 세우고, 큰 어휘에서 출발해 덜 쓸모 있는 토큰을 깎아 내려가며 어휘를 만듭니다.">Unigram LM</span> — 거꾸로 깎아 내려가는 확률 모형</b>
+<div class="fx">
+  <p class="fx-lab">모형 — 문장의 확률을 조각 확률의 곱으로 본다</p>
+  <div class="tex-d">P(\mathbf{x})=\prod_{i=1}^{k}p(x_i),\qquad \hat{\mathbf{x}}=\underset{\mathbf{x}\in S(X)}{\operatorname{argmax}}\;P(\mathbf{x})</div>
+  <p class="fx-note"><span class="tex">S(X)</span> 는 문장 <span class="tex">X</span> 를 쪼갤 수 있는 <b>모든 분할 후보</b>의 집합. 그중 확률이 가장 큰 분할을 고르는데, 후보가 지수적으로 많으므로 <b><a class="ext" href="#pos">비터비 알고리즘</a></b>으로 찾는다 — 품사 태깅에서 쓰는 그 알고리즘이 여기서 다시 나온다.</p>
+</div>
+<b>학습 방향이 BPE와 정반대다</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>BPE · WordPiece</th><th>Unigram LM</th></tr></thead>
+  <tbody>
+    <tr><td>출발점</td><td><b>글자</b>에서 시작 (작게)</td><td><b>아주 큰 후보 어휘</b>에서 시작 (크게)</td></tr>
+    <tr><td>진행</td><td>합치며 <b>키워 간다</b> (bottom-up)</td><td>덜 쓸모없는 것을 <b>깎아 낸다</b> (top-down pruning)</td></tr>
+    <tr><td>기준</td><td>빈도 / 우도 증가량</td><td><b>그 토큰을 지웠을 때 전체 우도가 얼마나 떨어지는가</b>(손실이 작은 것부터 제거, EM으로 확률 재추정)</td></tr>
+    <tr><td>결과</td><td>분할이 <b>하나로 고정</b></td><td>각 토큰에 <b>확률이 있어</b> 여러 분할을 비교·<b>샘플링</b>할 수 있다</td></tr>
+  </tbody>
+</table>
+</div>
+<b>Unigram만의 무기 — <span class="term" tabindex="0" data-tip="subword regularization. 학습할 때마다 같은 문장을 조금씩 다르게 분할해 입력함으로써, 모델이 특정 분할 방식에 과의존하지 않도록 만드는 데이터 증강 기법입니다.">서브워드 정규화</span></b> — 같은 문장을 학습할 때마다 <b>조금씩 다르게</b> 쪼개서 넣으면(<code>자연어처리</code> → 어떤 때는 <code>자연/어/처리</code>, 어떤 때는 <code>자연어/처리</code>) 모델이 특정 분할에 과적합되지 않아 <b>번역·저자원 언어에서 성능이 올라간다</b>. BPE로는 분할이 하나뿐이라 불가능한 기법이다(BPE-dropout이 이를 흉내 낸다).</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>기법</th><th>어휘 만드는 기준</th><th>공백 처리</th><th>표시 방식</th><th>대표 모델</th></tr></thead>
+  <tbody>
+    <tr><td>BPE</td><td>인접 쌍 <b>빈도</b> 최대</td><td>단어 단위로 먼저 자름</td><td><code>&lt;/w&gt;</code> 등 경계 기호</td><td>GPT-2 · RoBERTa (바이트 수준)</td></tr>
+    <tr><td>WordPiece</td><td><b>우도 증가량</b> 최대</td><td>단어 단위로 먼저 자름</td><td><code>##</code> 접두</td><td><b>BERT</b> · DistilBERT · ELECTRA</td></tr>
+    <tr><td>Unigram LM</td><td>제거 시 <b>우도 손실</b> 최소인 것부터 <b>가지치기</b></td><td>도구에 따름</td><td>확률값 보유</td><td>ALBERT · T5 · XLNet · mBART</td></tr>
+    <tr><td>SentencePiece</td><td><b>도구</b> — 위의 BPE/Unigram을 실행</td><td><b>공백도 문자로</b> (<code>▁</code>)</td><td><code>▁</code> 접두</td><td>T5 · LLaMA · 다국어 모델 전반</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="pit"><b>한국어에서 특히 기억할 점</b>
+<ul class="ul">
+  <li>서브워드는 <b>형태소를 모른다</b> — 빈도·확률만 본다. 그래서 <code>먹었다</code>가 <code>먹/었다</code>(형태소와 일치)로 쪼개질 수도, <code>먹었/다</code>(형태소와 어긋남)로 쪼개질 수도 있다</li>
+  <li><b>해결 관행</b> — ① 형태소 분석을 먼저 돌려 그 결과 위에 서브워드를 얹거나(형태소 기반 사전학습 모델), ② 어휘 크기를 충분히 키우거나, ③ 도메인 말뭉치로 토크나이저를 다시 학습시킨다</li>
+  <li><b>OOV가 &lsquo;사라진다&rsquo;는 말의 정확한 뜻</b> — 미등록 <b>토큰</b>이 사라지는 것이지 <b>미등록 의미</b>가 해결되는 것은 아니다. 처음 보는 신조어는 글자 조각으로 쪼개져 들어갈 뿐, 모델이 그 뜻을 아는 것은 아니다</li>
+</ul></div>
 </section>
 
 <!-- ===================== 4.2.1 ===================== -->
@@ -606,13 +987,13 @@ kiwi.space('아버지가방에들어가신다')     <span class="out"># '아버�
 <table>
   <thead><tr><th>분석기</th><th>기반</th><th>속도</th><th>특징</th></tr></thead>
   <tbody>
-    <tr><td>※ KoNLPy</td><td>—</td><td>—</td><td>Hannanum · Kkma · Komoran · Mecab · Okt 5종을 하나의 파이썬 인터페이스로 (<b>Kiwi는 포함 안 됨</b>)</td></tr>
-    <tr><td>Okt (구 Twitter)</td><td>Scala / 규칙</td><td>보통</td><td>구어체·SNS에 강함, 정규화(normalize)·어구 추출(phrases)</td></tr>
-    <tr><td>Komoran</td><td>Java / 사전</td><td>빠름</td><td>오탈자·띄어쓰기 오류에 비교적 강건, 사용자 사전 추가 쉬움</td></tr>
-    <tr><td>Hannanum</td><td>Java (KAIST)</td><td>보통</td><td>오래된 분석기, 어절 단위 분석 특성</td></tr>
-    <tr><td>Kkma (꼬꼬마)</td><td>Java (서울대)</td><td>느림</td><td>가장 상세한 태그셋(약 56종), 정확하지만 느림</td></tr>
-    <tr><td>Mecab-ko</td><td>C++ / CRF</td><td>매우 빠름</td><td>대용량 처리에 적합, 설치 번거로움(Windows 주의)</td></tr>
-    <tr><td>Kiwi</td><td>C++ / 통계+신경망</td><td>매우 빠름</td><td>독립 패키지 <code>kiwipiepy</code>, 띄어쓰기 교정·문장 분리·오탈자 대응 내장, pip만으로 사용</td></tr>
+    <tr><td><span class="term" tabindex="0" data-tip="Korean NLP in Python. 여러 한국어 형태소 분석기를 파이썬에서 같은 방식으로 부를 수 있게 감싼 묶음 패키지. 자신이 분석하지는 않습니다.">※ KoNLPy</span></td><td>—</td><td>—</td><td>Hannanum · Kkma · Komoran · Mecab · Okt 5종을 하나의 파이썬 인터페이스로 (<b>Kiwi는 포함 안 됨</b>)</td></tr>
+    <tr><td><span class="term" tabindex="0" data-tip="Open Korean Text. 트위터가 공개한 분석기에서 이름이 바뀐 것. 구어체·신조어에 강하고 normalize·phrases가 유용하지만 태그셋이 약 19종으로 거칩니다.">Okt (구 Twitter)</span></td><td>Scala / 규칙</td><td>보통</td><td>구어체·SNS에 강함, 정규화(normalize)·어구 추출(phrases)</td></tr>
+    <tr><td><span class="term" tabindex="0" data-tip="Shineware의 자바 기반 분석기. 오탈자·띄어쓰기 오류에 비교적 강건하고 사용자 사전 추가가 가장 쉬워 도메인 용어가 많은 프로젝트에 적합합니다.">Komoran</span></td><td>Java / 사전</td><td>빠름</td><td>오탈자·띄어쓰기 오류에 비교적 강건, 사용자 사전 추가 쉬움</td></tr>
+    <tr><td><span class="term" tabindex="0" data-tip="KAIST가 만든 한나눔 분석기. 오래된 축에 속하며 어절 단위 분석 성향이 강합니다.">Hannanum</span></td><td>Java (KAIST)</td><td>보통</td><td>오래된 분석기, 어절 단위 분석 특성</td></tr>
+    <tr><td><span class="term" tabindex="0" data-tip="서울대가 만든 분석기. 태그를 약 56종으로 가장 잘게 나누어 국어학 연구·정밀 문법 분석에 좋지만 느려서 대용량에는 부적합합니다.">Kkma (꼬꼬마)</span></td><td>Java (서울대)</td><td>느림</td><td>가장 상세한 태그셋(약 56종), 정확하지만 느림</td></tr>
+    <tr><td><span class="term" tabindex="0" data-tip="일본어 MeCab을 한국어로 이식한 C++·CRF 기반 분석기. 속도가 압도적이라 대용량 배치 처리의 표준이지만 설치가 번거롭습니다.">Mecab-ko</span></td><td>C++ / CRF</td><td>매우 빠름</td><td>대용량 처리에 적합, 설치 번거로움(Windows 주의)</td></tr>
+    <tr><td><span class="term" tabindex="0" data-tip="bab2min이 만든 C++ 기반 분석기. pip만으로 설치되고 자바가 필요 없으며 띄어쓰기 교정·문장 분리·오탈자 대응이 내장되어 있습니다. KoNLPy에는 포함되지 않습니다.">Kiwi</span></td><td>C++ / 통계+신경망</td><td>매우 빠름</td><td>독립 패키지 <code>kiwipiepy</code>, 띄어쓰기 교정·문장 분리·오탈자 대응 내장, pip만으로 사용</td></tr>
   </tbody>
 </table>
 </div>
@@ -624,6 +1005,48 @@ Kiwi : 아버지/NNG 가/JKS 방/NNG 에/JKB 들어가/VV 시/EP ᆫ다/EF      
   <li>차이의 원인: <b>사전 · 태그셋 · 분석 단위</b> — 복합명사 '자연어처리'를 하나로 볼지, 신조어 '코로나19'를 어떻게 쪼갤지, 태그셋 크기(Kkma 약 56종 vs Okt 약 19종)</li>
   <li><b>미등록어 대응</b> — ① 사용자 사전에 도메인 용어 등록 ② 통계적 단어 추출(soynlp)로 신조어 발굴 ③ 서브워드 토큰화 병용</li>
   <li>선택 기준: 속도 · 정확도 · 도메인(구어/문어) · 사용자 사전 · 설치 편의성 → <b>프로젝트 초기에 자기 데이터로 비교 실험</b></li>
+</ul></div>
+<div class="deep"><b><span class="term" tabindex="0" data-tip="Korean NLP in Python. 자바·C++ 등으로 따로 만들어진 여러 한국어 형태소 분석기를 파이썬에서 똑같은 방식으로 부를 수 있게 감싸 놓은 '묶음 패키지'입니다. 자신이 분석을 하는 것이 아닙니다.">KoNLPy</span>는 분석기가 아니라 &lsquo;어댑터&rsquo;다</b>
+<ul class="ul">
+  <li>KoNLPy 자체는 형태소를 분석하지 않는다. 서로 다른 언어·기관에서 만든 분석기 <b>5종을 하나의 파이썬 인터페이스로 감싼 것</b>뿐이다 — <code>.morphs()</code> <code>.pos()</code> <code>.nouns()</code> 세 메서드가 어느 분석기에서나 똑같이 동작하는 것이 KoNLPy의 존재 이유다</li>
+  <li>그래서 <b>대부분 자바(JVM)가 필요</b>하다. Colab이나 윈도우에서 설치가 실패하는 사고의 8할이 JDK·JPype 문제다</li>
+  <li><b>Kiwi는 KoNLPy에 들어 있지 않다</b> — <code>pip install kiwipiepy</code>로 따로 설치하는 <b>독립 패키지</b>이고, 자바가 필요 없어 설치가 가장 쉽다. 시험에서 가장 자주 묻는 구분이다</li>
+</ul>
+<pre class="code">from konlpy.tag import Okt, Kkma, Komoran, Hannanum, Mecab   <span class="cm"># KoNLPy 5종</span>
+from kiwipiepy import Kiwi                                   <span class="cm"># 별도 패키지</span>
+
+Okt().pos("아버지가 방에 들어가신다")
+<span class="out"># [('아버지','Noun'),('가','Josa'),('방','Noun'),('에','Josa'),('들어가신다','Verb')]</span>
+Kiwi().tokenize("아버지가 방에 들어가신다")
+<span class="out"># 아버지/NNG 가/JKS 방/NNG 에/JKB 들어가/VV 시/EP ᆫ다/EF   ← 어미까지 분해</span></pre>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>분석기</th><th>만든 곳 · 기반</th><th>속도 경향</th><th>태그셋</th><th>무엇에 쓰면 좋은가 (목적)</th></tr></thead>
+  <tbody>
+    <tr><td><span class="term" tabindex="0" data-tip="Open Korean Text. 트위터(현 X)가 공개한 twitter-korean-text에서 이름이 바뀐 분석기. 스칼라로 작성되었고 구어체·신조어·이모티콘이 섞인 짧은 글에 강합니다.">Okt</span></td><td>Open Korean Text · Scala · 규칙</td><td>보통</td><td><b>약 19종</b>(가장 성김)</td><td><b>SNS·리뷰·댓글</b> 같은 구어체. <code>normalize=True</code>로 &lsquo;그래욬ㅋㅋ&rsquo;→&lsquo;그래요&rsquo; 정규화, <code>phrases()</code>로 명사구 추출. <b>태그가 거칠어 정밀 분석에는 부적합</b></td></tr>
+    <tr><td><span class="term" tabindex="0" data-tip="Shineware가 공개한 자바 기반 분석기. 사용자 사전 추가가 간단하고, 띄어쓰기가 틀린 입력에도 비교적 잘 버팁니다.">Komoran</span></td><td>Shineware · Java · 사전</td><td>빠름</td><td>중간</td><td><b>오탈자·띄어쓰기가 불안정한 실서비스 텍스트</b>. 사용자 사전(<code>userdic.txt</code>) 추가가 가장 쉬워 <b>도메인 용어가 많은 프로젝트</b>에 적합</td></tr>
+    <tr><td><span class="term" tabindex="0" data-tip="KAIST에서 개발한 한나눔 분석기. KoNLPy에 포함된 분석기 중 가장 오래된 축에 속하며 어절 단위 분석 성향이 강합니다.">Hannanum</span></td><td>KAIST · Java</td><td>보통</td><td>성김</td><td>어절 단위 분석 성향. <b>오래된 연구 코드와의 호환</b>이 필요할 때. 신규 프로젝트에서 먼저 고를 이유는 크지 않다</td></tr>
+    <tr><td><span class="term" tabindex="0" data-tip="서울대 IDS 연구실이 만든 꼬꼬마 형태소 분석기. 태그를 약 56종으로 매우 잘게 나누어 문법 정보가 풍부하지만, 그만큼 느립니다.">Kkma</span></td><td>서울대 · Java</td><td><b>느림</b></td><td><b>약 56종</b>(가장 상세)</td><td><b>국어학 연구·정밀 문법 분석</b>. 태그가 가장 잘게 나뉘어 정보량이 많다. <b>대용량 처리에는 부적합</b> — 수십만 문장을 돌리면 체감할 만큼 느리다</td></tr>
+    <tr><td><span class="term" tabindex="0" data-tip="일본어 분석기 MeCab을 한국어용으로 이식한 것. C++과 CRF 기반이라 속도가 압도적이며 대용량 배치 처리의 표준으로 쓰입니다.">Mecab-ko</span></td><td>은전한닢 · C++ · <span class="term" tabindex="0" data-tip="Conditional Random Field. 어떤 형태소 분할·태그 열이 가장 그럴듯한지를 열 전체 단위로 판별하는 통계 모형입니다.">CRF</span></td><td><b>매우 빠름</b></td><td>세종 계열</td><td><b>대용량 말뭉치 일괄 처리</b>의 사실상 표준. 속도·정확도 균형이 가장 좋다. 단 <b>설치가 번거롭고 윈도우 지원이 까다롭다</b></td></tr>
+    <tr><td><span class="term" tabindex="0" data-tip="bab2min(이동주)이 만든 C++ 기반 분석기. pip만으로 설치되고 자바가 필요 없으며, 띄어쓰기 교정·문장 분리·오탈자 대응이 내장되어 있습니다. KoNLPy에는 포함되지 않습니다.">Kiwi</span> <b>(KoNLPy 밖)</b></td><td>bab2min · C++ · 통계+신경망</td><td><b>매우 빠름</b></td><td>세종 계열(상세)</td><td><b>요즘 실무의 기본 선택.</b> <code>pip install kiwipiepy</code> 한 줄로 끝. <b>띄어쓰기 교정(<code>space</code>) · 문장 분리(<code>split_into_sents</code>) · 오탈자 대응</b>이 내장되어 전처리와 분석을 한 도구로 끝낼 수 있다</td></tr>
+  </tbody>
+</table>
+</div>
+<b>고르는 순서 — 실무 결정 트리</b>
+<ul class="ul">
+  <li><b>일단 Kiwi부터</b> — 설치가 가장 쉽고 속도·정확도가 좋으며 띄어쓰기까지 해결된다. 특별한 이유가 없다면 여기서 시작</li>
+  <li><b>구어체·신조어가 압도적</b>(SNS 댓글) → Okt의 <code>normalize</code>·<code>phrases</code>가 유용. Kiwi와 결과를 비교해 본다</li>
+  <li><b>도메인 전문용어가 많다</b>(의료·법률) → 사용자 사전이 관건. Komoran 또는 Kiwi의 <code>add_user_word</code></li>
+  <li><b>수백만 문장 배치</b> → Mecab-ko 또는 Kiwi</li>
+  <li><b>문법 태그를 잘게 봐야 한다</b>(국어학) → Kkma</li>
+  <li><b>어떤 경우든 마지막 판단은 같다</b> — <b>자기 데이터 100문장을 직접 돌려 보고 눈으로 비교</b>한다. 벤치마크 점수보다 내 도메인에서의 결과가 중요하다</li>
+</ul></div>
+<div class="pit"><b>&ldquo;어느 분석기가 정답인가&rdquo;라는 질문 자체가 함정이다</b>
+<ul class="ul">
+  <li>같은 문장의 결과가 다른 것은 <b>어느 한쪽이 틀렸기 때문이 아니다.</b> <b>사전 · 태그셋 · 분석 단위</b>가 다를 뿐이다</li>
+  <li>Okt의 <code>들어가신다/Verb</code>와 Kiwi의 <code>들어가/VV + 시/EP + ᆫ다/EF</code>는 <b>둘 다 맞다</b> — 어디까지 쪼갤지에 대한 설계 결정이 다른 것이다</li>
+  <li>그래서 <b>실험 결과를 보고할 때는 반드시 분석기와 버전을 함께 밝혀야</b> 재현이 된다</li>
+  <li><b>미등록어 대응 3종 세트</b> — ① 사용자 사전 등록 ② <span class="term" tabindex="0" data-tip="통계적으로 '이 문자열은 한 단어처럼 쓰인다'를 판별해 사전 없이 신조어를 뽑아내는 한국어 라이브러리입니다. 응집도(cohesion)와 분기 엔트로피를 씁니다.">soynlp</span> 같은 통계적 단어 추출로 신조어 발굴 ③ 서브워드 토큰화 병용</li>
 </ul></div>
 </section>
 
@@ -677,16 +1100,113 @@ Kiwi : 아버지/NNG 가/JKS 방/NNG 에/JKB 들어가/VV 시/EP ᆫ다/EF      
 <div class="fx">
   <p class="fx-lab">HMM 품사 태깅</p>
   <div class="tex-d">\hat T=\underset{T}{\operatorname{argmax}}\;P(T\mid W)=\underset{T}{\operatorname{argmax}}\;P(W\mid T)\,P(T)\;\approx\;\underset{T}{\operatorname{argmax}}\prod_i\underbrace{P(w_i\mid t_i)}_{\text{방출 확률}}\;\underbrace{P(t_i\mid t_{i-1})}_{\text{전이 확률}}</div>
-  <p class="fx-note">· <b>전이 확률</b> <span class="tex">P(t_i\mid t_{i-1})</span> — 관형사 다음에 명사가 올 확률처럼 태그 사이의 연쇄 확률 (2주차 <b>마르코프 가정</b>)<br>
+  <p class="fx-note">· <b>전이 확률</b> <span class="tex">P(t_i\mid t_{i-1})</span> — 관형사 다음에 명사가 올 확률처럼 태그 사이의 연쇄 확률 (2주차 <span class="term" tabindex="0" data-tip="다음 상태는 직전 상태에만 의존하고 그 이전 이력과는 무관하다고 보는 근사. 이 가정이 없으면 파라미터가 |T|^n 으로 폭발해 추정 자체가 불가능합니다."><b>마르코프 가정</b></span>)<br>
   · <b>방출 확률</b> <span class="tex">P(w_i\mid t_i)</span> — 태그 &lsquo;명사&rsquo;가 단어 &lsquo;학교&rsquo;로 실현될 확률<br>
-  · 가능한 태그 열은 <span class="tex">|T|^n</span>개로 지수적이지만 <b>비터비 알고리즘</b>(동적 계획법)으로 <span class="tex">O(n\cdot|T|^2)</span>에 최적해</p>
+  · 가능한 태그 열은 <span class="tex">|T|^n</span>개로 지수적이지만 <b>비터비 알고리즘</b>(<span class="term" tabindex="0" data-tip="Dynamic Programming. 큰 문제를 부분 문제로 쪼개고, 겹쳐서 반복되는 부분 문제의 답을 표에 저장해 두 번 계산하지 않는 기법입니다.">동적 계획법</span>)으로 <span class="tex">O(n\cdot|T|^2)</span>에 최적해</p>
 </div>
 <div class="note-box"><b>한국어 품사 태깅 성능 추이</b> — 규칙 기반 약 90% → HMM/CRF 약 95~96% → Bi-LSTM-CRF 약 97% → <b>BERT 기반 약 98% 이상</b></div>
+<div class="deep"><b><span class="term" tabindex="0" data-tip="러시아 수학자 안드레이 마르코프(1856~1922)의 이름에서 온 확률 과정. '미래는 현재에만 의존하고 과거와는 무관하다'는 성질을 가진 과정을 말합니다.">마르코프 과정</span>이란 무엇인가 — 전이 확률이 성립하는 이유</b>
+<ul class="ul">
+  <li><b>한 문장 정의</b> — <b>다음에 무엇이 올지는 &lsquo;지금 상태&rsquo;만 보면 알 수 있고, 여기까지 어떻게 왔는지는 몰라도 된다</b>는 성질(<span class="term" tabindex="0" data-tip="memorylessness, 무기억성. 과거의 이력이 미래 예측에 추가 정보를 주지 않는다는 성질입니다.">무기억성</span>)을 가진 확률 과정</li>
+  <li><b>일상의 비유</b> — 주사위를 굴릴 때 &ldquo;지금까지 무엇이 나왔는지&rdquo;는 다음 눈에 영향을 주지 않는다. 뱀사다리 게임에서 다음 칸은 <b>지금 서 있는 칸</b>과 주사위로만 정해진다</li>
+  <li><b>마르코프 연쇄(chain)</b> — 상태와 시간이 띄엄띄엄(이산)인 마르코프 과정. 품사 태깅에서 <b>상태 = 품사 태그</b>, <b>한 걸음 = 한 형태소</b></li>
+</ul>
+<div class="fx">
+  <p class="fx-lab">마르코프 가정 — 감당 못 할 식을 감당 가능하게 만드는 근사</p>
+  <div class="tex-d">P(t_i\mid t_1,t_2,\ldots,t_{i-1})\;\approx\;P(t_i\mid t_{i-1})</div>
+  <p class="fx-note"><b>왜 이 근사가 꼭 필요한가</b> — 근사하지 않으면 &ldquo;앞의 태그 <span class="tex">i-1</span>개가 이러이러했을 때&rdquo;의 경우가 <span class="tex">|T|^{\,i-1}</span>가지다. 태그가 45종인 영어 문장 10단어면 <span class="tex">45^9\approx 8\times10^{14}</span>가지 — <b>세상의 어떤 말뭉치로도 빈도를 셀 수 없다</b>. 직전 하나만 보기로 하면 파라미터가 <span class="tex">|T|^2=2025</span>개로 줄어 <b>실제로 셀 수 있는 수</b>가 된다.<br>
+  · <b>1차(bigram)</b> 마르코프 = 직전 1개 · <b>2차(trigram)</b> = 직전 2개 <span class="tex">P(t_i\mid t_{i-2},t_{i-1})</span> — 문맥은 넓어지지만 <span class="tex">|T|^3</span>으로 희소해진다. 이 맞바꿈이 통계적 자연어처리의 영원한 주제다.</p>
+</div>
+<b>그래서 &lsquo;<span class="term" tabindex="0" data-tip="Hidden Markov Model. 상태(품사 태그)는 눈에 보이지 않고, 그 상태가 내놓는 관측(단어)만 보이는 마르코프 모형입니다. 보이는 단어로부터 숨은 태그 열을 역추정하는 것이 품사 태깅입니다.">은닉</span>&rsquo; 마르코프 모형인가</b>
+<ul class="ul">
+  <li><b>보이는 것</b> = 단어 열 &ldquo;나는 학교에 간다&rdquo; · <b>숨은 것(hidden)</b> = 그 뒤의 품사 열 <code>NP JX NNG JKB VV EF</code></li>
+  <li>우리는 <b>숨은 상태가 내놓은 결과물(단어)만 보고 상태를 역추정</b>한다. 그래서 &lsquo;은닉&rsquo;이다</li>
+  <li><b>모형의 부품은 딱 세 개</b> — ① <b>전이 확률</b> <span class="tex">P(t_i\mid t_{i-1})</span>: 태그 → 태그 ② <b>방출 확률</b> <span class="tex">P(w_i\mid t_i)</span>: 태그 → 단어 ③ 초기 확률 <span class="tex">P(t_1)</span></li>
+  <li><b>방향을 혼동하지 말 것</b> — 방출은 <b>&ldquo;태그가 주어졌을 때 그 단어가 나올 확률&rdquo;</b>이다. &ldquo;단어가 주어졌을 때 태그일 확률&rdquo;(<span class="tex">P(t\mid w)</span>)이 아니다. 베이즈 정리로 뒤집어 놓은 결과가 이 모양이다</li>
+</ul>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>확률</th><th>읽는 법</th><th>말뭉치에서 세는 법</th><th>예</th></tr></thead>
+  <tbody>
+    <tr><td><b>전이</b> <span class="tex">P(t_i\mid t_{i-1})</span></td><td>이 태그 다음에 저 태그가 올 확률</td><td><code>count(관형사→명사) / count(관형사)</code></td><td>관형사 뒤엔 명사가 거의 확실 → 0.9 이상</td></tr>
+    <tr><td><b>방출</b> <span class="tex">P(w_i\mid t_i)</span></td><td>이 태그가 저 단어로 실현될 확률</td><td><code>count(명사이면서 &lsquo;학교&rsquo;) / count(명사)</code></td><td>명사가 &lsquo;학교&rsquo;일 확률은 작지만 0은 아님</td></tr>
+  </tbody>
+</table>
+</div></div>
+<div class="deep"><b>비터비 알고리즘 — 지수를 다항으로 끌어내리는 <span class="term" tabindex="0" data-tip="Dynamic Programming, 동적 계획법. 큰 문제를 작은 부분 문제로 쪼개고, 겹쳐서 반복되는 부분 문제의 답을 표에 저장해 두 번 계산하지 않는 기법입니다. '계획법(programming)'은 프로그래밍이 아니라 '계획표를 짠다'는 뜻입니다.">동적 계획법</span></b>
+<b>① 먼저, 왜 무식하게 풀면 안 되는가</b>
+<ul class="ul">
+  <li>단어가 <span class="tex">n</span>개, 태그가 <span class="tex">|T|</span>종이면 가능한 태그 열은 <b><span class="tex">|T|^n</span>개</b>. 태그 45종, 단어 20개면 <span class="tex">45^{20}\approx 10^{33}</span> — <b>우주가 끝날 때까지 못 센다</b></li>
+  <li>그런데 전부 셀 필요가 없다. <b>중간에 이미 진 후보는 나중에도 절대 이기지 못하기</b> 때문이다</li>
+</ul>
+<b>② 동적 계획법이 성립하는 두 가지 조건</b>
+<ul class="ul">
+  <li><b>최적 부분 구조</b> — 전체의 최적해가 <b>부분 문제의 최적해로 조립</b>된다. &ldquo;<span class="tex">i</span>번째 단어를 태그 N으로 끝내는 최선의 경로&rdquo;를 알면, <span class="tex">i+1</span>번째는 그 위에 한 걸음만 더 얹으면 된다</li>
+  <li><b>부분 문제의 중복</b> — 같은 부분 계산이 수없이 반복된다 → <b>한 번 계산해 표에 저장</b>(메모이제이션)하면 전부 아낄 수 있다</li>
+  <li>이 두 조건은 <b>편집 거리 DP</b>(4.1.4)와 <b>차트 파싱 CYK</b>(4.3.2)에도 똑같이 성립한다 — <b>셋은 같은 기법의 다른 얼굴</b>이다</li>
+</ul>
+<div class="fx">
+  <p class="fx-lab">비터비 점화식 — &ldquo;앞의 최고 기록 × 전이 × 방출&rdquo;</p>
+  <div class="tex-d">v_t(j)=\Bigl[\max_{i}\;v_{t-1}(i)\cdot P(t_j\mid t_i)\Bigr]\cdot P(w_t\mid t_j),\qquad bt_t(j)=\underset{i}{\operatorname{argmax}}\;v_{t-1}(i)\cdot P(t_j\mid t_i)</div>
+  <p class="fx-note"><span class="tex">v_t(j)</span> = &ldquo;<span class="tex">t</span>번째 단어를 태그 <span class="tex">j</span>로 끝내는 <b>경로 중 최고 점수</b>&rdquo;. <span class="tex">bt</span>(<b>backpointer, 역추적 포인터</b>)는 &ldquo;그 최고 점수가 <b>어디서 왔는지</b>&rdquo;를 기억해 둔다. 끝까지 채운 뒤 <b>가장 높은 칸에서 포인터를 거꾸로 따라가면</b> 최적 태그 열이 복원된다.</p>
+</div>
+<b>③ 손으로 한 번 굴려 보기 — 태그 2종, 단어 2개</b>
+<pre class="code">태그 : NP(대명사) · VV(동사)        문장 : "나는  간다"
+초기 : P(NP)=0.6   P(VV)=0.4
+전이 : NP→VV 0.7   NP→NP 0.3   VV→VV 0.2   VV→NP 0.8
+방출 : P(나는|NP)=0.5  P(나는|VV)=0.1   P(간다|VV)=0.6  P(간다|NP)=0.01
+
+t=1  v(NP) = 0.6 × 0.5 = <b>0.30</b>          v(VV) = 0.4 × 0.1 = <b>0.04</b>
+t=2  v(VV) = max(0.30×0.7, 0.04×0.2) × 0.6 = 0.21 × 0.6 = <b>0.126</b>   ← NP에서 왔음
+     v(NP) = max(0.30×0.3, 0.04×0.8) × 0.01 = 0.09 × 0.01 = <b>0.0009</b> ← NP에서 왔음
+
+최고 칸 = v₂(VV) = 0.126  →  포인터 역추적  →  <b>NP VV</b>  ("나는/대명사  간다/동사")</pre>
+<ul class="ul">
+  <li><b>핵심 관찰</b> — <code>t=2</code>를 계산할 때 <code>t=1</code>의 <b>두 칸만</b> 보면 됐다. <code>t=1</code>에서 이미 진 경로는 <b>두 번 다시 고려하지 않는다</b>. 이것이 지수를 다항으로 바꾸는 지점이다</li>
+  <li><b>복잡도 <span class="tex">O(n\cdot|T|^2)</span>의 출처</b> — 단어 <span class="tex">n</span>칸 × 각 칸마다 태그 <span class="tex">|T|</span>개 × 각 태그마다 직전 태그 후보 <span class="tex">|T|</span>개를 훑는다. <span class="tex">45^{20}</span>이 <span class="tex">20\times45^2=40{,}500</span>번으로 줄어든다</li>
+  <li><b>실무 구현 팁</b> — 확률을 계속 곱하면 값이 0에 수렴해 버리므로(<span class="term" tabindex="0" data-tip="underflow. 아주 작은 수를 계속 곱하다가 컴퓨터가 표현할 수 있는 최솟값 아래로 내려가 0이 되어 버리는 현상입니다.">언더플로</span>), <b>로그를 취해 덧셈으로</b> 바꿔 계산한다</li>
+</ul>
+<b>④ 비터비가 나오는 다른 자리들</b> — <b>CRF의 디코딩</b>(4.1.3의 Bi-LSTM+CRF), <b>Unigram LM 서브워드의 최적 분할</b>(4.1.4), 음성 인식, 통신의 오류 정정 부호. <b>&ldquo;열(sequence) 중에서 최고를 하나 고른다&rdquo;는 문제면 거의 언제나 비터비</b>다.</div>
+<div class="pit"><b>비터비 문제에서 갈리는 지점</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>알고리즘</th><th>푸는 문제</th><th>복잡도</th></tr></thead>
+  <tbody>
+    <tr><td><b>비터비</b></td><td>HMM/CRF에서 <b>최적 태그 열</b> 찾기 (순차 레이블링)</td><td><span class="tex">O(n\cdot|T|^2)</span></td></tr>
+    <tr><td>CYK</td><td>CFG/PCFG에서 <b>최적 구문 트리</b> 찾기 (차트 파싱)</td><td><span class="tex">O(n^3\cdot|G|)</span></td></tr>
+    <tr><td>Chu-Liu/Edmonds</td><td>그래프 기반 의존 파싱에서 <b>최대 신장 트리</b></td><td><span class="tex">O(n^2)</span></td></tr>
+    <tr><td>빔 서치</td><td>상위 <span class="tex">k</span>개만 유지하는 <b>근사</b> 탐색 — 최적 보장 없음</td><td><span class="tex">O(n\cdot k)</span></td></tr>
+  </tbody>
+</table>
+</div>
+네 알고리즘 모두 &ldquo;후보가 너무 많다&rdquo;를 푸는 도구지만 <b>푸는 대상이 다르다</b>. 비터비를 파싱에, CYK를 태깅에 갖다 붙이면 틀린다. 또 <b>비터비는 근사가 아니라 정확한 최적해</b>를 준다 — 근사인 것은 빔 서치다.</div>
 <div class="note-box"><b>활용 분야</b> — 형태소 분석·품사 태깅은 그 자체가 목적이라기보다 <b>기반 기술</b>이다.
 <ul class="ul">
   <li><b>구문 분석의 전처리</b> · <b>정보 검색</b>(조사·어미를 빼고 실질 형태소만 색인 → 정확률·재현율 향상) · <b>기계 번역</b>(대역어 선택)</li>
   <li>질의응답(질문의 초점·정답 유형) · 철자 교정·사전 구축 · <b>텍스트 마이닝</b>(명사·동사만 뽑아 키워드·워드클라우드·토픽 모델링) · 국어 연구·교육</li>
 </ul></div>
+<div class="pit"><b>품사 · 태그셋에서 갈리는 지점</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>헷갈리는 짝</th><th>정확히</th></tr></thead>
+  <tbody>
+    <tr><td><b>JKS</b> vs <b>JKO</b></td><td><code>JKS</code>=<b>주격</b> 조사(이·가) · <code>JKO</code>=<b>목적격</b> 조사(을·를) · <code>JKB</code>=부사격(에·에서) · <code>JX</code>=보조사(은·는·도)</td></tr>
+    <tr><td><b>NN</b> vs <b>NNS</b> (영어)</td><td>명사 <b>단수 / 복수</b>다. &lsquo;일반명사/고유명사&rsquo; 구분은 한국어 세종의 <code>NNG/NNP</code></td></tr>
+    <tr><td><b>JJ</b> vs <b>RB</b> (영어)</td><td><code>JJ</code>=<b>형용사</b>(quick) · <code>RB</code>=<b>부사</b>(quickly). 뒤바꿔 놓는 선택지가 흔하다</td></tr>
+    <tr><td><b>관계언</b> vs <b>독립언</b></td><td>조사(관계언)는 <b>문법 관계를 표시</b>한다. &ldquo;다른 성분과 관계를 맺지 않는다&rdquo;는 <b>감탄사(독립언)</b>의 설명이다</td></tr>
+    <tr><td>태그셋 소속</td><td><b>세종</b>=한국어(NNG·VV·JKS·EP…) · <b>Penn Treebank</b>=영어 · <b>UPOS/UD</b>=다국어 공통 17종</td></tr>
+  </tbody>
+</table>
+</div>
+<b>형태론적 중의성 — 문맥 없이는 못 푼다</b>
+<pre class="code">나는 학교에 간다.      → 나/NP  + 는/JX     <span class="cm"># 대명사 '나' + 보조사</span>
+새가 하늘을 나는 모습   → 날/VV  + 는/ETM    <span class="cm"># 동사 '날다' + 관형형 전성어미</span>
+
+감기는 조심해야 한다.   → 감기/NNG + 는/JX   <span class="cm"># 질병</span>
+실을 감기는 어렵다.     → 감/VV + 기/ETN + 는 <span class="cm"># 동사 '감다'의 명사형</span></pre>
+<b>Brill Tagger를 오해하지 말 것</b> — Brill Tagger는 언어 전문가가 규칙을 <b>전부 수동으로 쓰는</b> 방식이 <b>아니다</b>. <b>최소한의 규칙에서 출발해 말뭉치로부터 변환 규칙을 스스로 학습</b>하는 자동·반자동 구축의 대표 사례이며, 그래서 <b>코퍼스 의존적</b>이라는 단점을 갖는다. 수동 구축의 문제점이 <b>지식 병목</b>이고, 불가능한 태그를 지워 나가는 방식은 <b>제약 문법</b>이다.
+<b>성능 추이는 방향만 기억하면 된다</b> — 규칙 약 90% → HMM/CRF 약 95~96% → Bi-LSTM-CRF 약 97% → BERT 기반 약 98% 이상. <b>발전할수록 올라간다</b>. 다만 <b>미등록어·구어체 오류는 끝까지 남는다</b> — &ldquo;BERT로 미등록어 오류가 완전히 사라졌다&rdquo;는 틀린 진술이다.
+<b>활용 분야의 위치</b> — 형태소 분석·품사 태깅은 <b>구문 분석의 전처리</b>다. &ldquo;구문 분석이 끝난 뒤 검증하는 후처리&rdquo;라는 설명은 순서를 거꾸로 뒤집은 것이다.</div>
 </section>
 
 <!-- ===================== 4.3.1 ===================== -->
@@ -716,6 +1236,69 @@ S
 에지는 <b>지배소 → 의존소</b>. <b>노드 수 = 단어 수</b>(내부 노드 없음), 최종 지배소는 대개 <b>서술어</b>. 한국어는 <b>지배소가 의존소보다 뒤</b>에 온다고 가정(head-final, 구어 도치문은 예외).</div>
 </div>
 
+<h3 class="sub-title">구구조(Phrase Structure) 상세 — 문장은 평평하지 않다</h3>
+<div class="deep"><b>① 핵심 주장 — 문장은 단어의 &lsquo;줄&rsquo;이 아니라 &lsquo;층&rsquo;이다</b>
+<p style="margin-top:6px">언어학의 <span class="term" tabindex="0" data-tip="Syntax, 통사론. 단어가 어떤 규칙으로 결합해 구와 문장을 이루는지를 연구하는 언어학의 분야입니다. '구문론'이라고도 합니다.">통사론</span>에서 말하는 구구조란, 문장이 <b>단어들의 단순한 선형적 나열</b>이 아니라 — 단어가 모여 <b>구(Phrase)</b>를 이루고, 그 구가 모여 다시 더 큰 구나 문장을 이루는 — <b><span class="term" tabindex="0" data-tip="Hierarchical Structure. 작은 단위가 모여 큰 단위를 이루고 그것이 다시 더 큰 단위에 포함되는, 층층이 겹쳐진 구조를 말합니다. 문장의 구구조 트리가 대표적입니다.">위계적 층위 구조</span></b>를 갖는다는 개념이다.</p>
+<pre class="code"><span class="cm"># 같은 단어 6개인데 '묶는 방식'이 다르면 뜻이 달라진다</span>
+[늙은 남자]와 여자      ← 늙은 것은 남자뿐
+늙은 [남자와 여자]      ← 둘 다 늙었다
+
+<span class="cm"># 선형적으로는 똑같이 "늙은 남자 와 여자"다. 차이는 '층'에만 있다.</span></pre>
+<b>② 구구조 규칙 (Phrase Structure Rules; PSR) = <span class="term" tabindex="0" data-tip="Rewrite Rules. 화살표 왼쪽의 기호를 오른쪽의 기호들로 '고쳐 쓰는' 규칙. 이 규칙을 반복 적용하면 문장이 생성되고, 거꾸로 적용하면 문장이 분석됩니다.">재작성 규칙</span></b>
+<p style="margin-top:4px">문장의 구조를 <b>생성</b>하고 <b>분석</b>하기 위한 규칙으로, 화살표(<code>→</code>) 왼쪽의 범주를 오른쪽의 하위 요소들로 확장한다.</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>규칙</th><th>읽는 법</th></tr></thead>
+  <tbody>
+    <tr><td><code>S → NP VP</code></td><td><b>문장</b>은 <b>명사구</b>와 <b>동사구</b>로 구성된다</td></tr>
+    <tr><td><code>NP → (Det) (AdjP) N (PP)</code></td><td><b>명사구</b>는 한정사 · 형용사구 · <b>명사 핵어</b> · 전치사구 등으로 구성된다</td></tr>
+    <tr><td><code>VP → V (NP) (PP) (AdvP)</code></td><td><b>동사구</b>는 <b>동사 핵어</b>와 목적어 명사구 · 부사구 등으로 구성된다</td></tr>
+    <tr><td><code>PP → P NP</code></td><td><b>전치사구</b>는 전치사와 목적어 명사구로 구성된다</td></tr>
+  </tbody>
+</table>
+</div>
+<ul class="ul">
+  <li><b>괄호는 &lsquo;선택 요소&rsquo;</b>다 — <code>(Det)</code>는 있어도 되고 없어도 된다. <code>the big dog in the park</code>(전부 있음)도, <code>dogs</code>(핵어만)도 모두 NP다</li>
+  <li><b>괄호 없는 것이 <span class="term" tabindex="0" data-tip="head, 핵어(머리어). 구의 문법적 성격을 결정하는 필수 요소. 명사구의 핵어는 명사, 동사구의 핵어는 동사입니다. 핵어를 빼면 그 구는 성립하지 않습니다.">핵어(head)</span></b> — NP에서는 <code>N</code>, VP에서는 <code>V</code>, PP에서는 <code>P</code>. <b>핵어가 그 구의 이름을 결정한다</b>. 명사가 핵어니까 명사구인 것이다</li>
+  <li><b>재귀적이다</b> — <code>NP</code> 안에 <code>PP</code>가 오고 그 <code>PP</code> 안에 다시 <code>NP</code>가 온다. 이 되먹임 때문에 <b>유한한 규칙으로 무한한 문장</b>을 만들 수 있다. 촘스키가 말한 언어의 생성력이 여기서 나온다</li>
+  <li><b>한국어에 맞게 고치면</b> — 전치사가 없고 조사가 뒤에 붙으므로 <code>PP</code> 대신 조사구를 두고, 핵어가 뒤에 오므로 <code>VP → (NP) (AdvP) V</code>처럼 <b>V를 맨 뒤</b>에 놓는다(head-final)</li>
+</ul>
+<b>③ 무엇이 &lsquo;구&rsquo;인지 어떻게 아는가 — <span class="term" tabindex="0" data-tip="constituent, 구성소. 한 덩어리로 행동하는 단어 뭉치. 대치·이동·생략 같은 시험을 통과하면 구성소로 인정합니다.">구성소</span> 판별 시험</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>시험</th><th>방법</th><th>예</th></tr></thead>
+  <tbody>
+    <tr><td>대치</td><td>대명사 하나로 <b>바꿔치기</b> 되는가</td><td>[그 빨간 사과]를 먹었다 → <b>그것</b>을 먹었다 ✔</td></tr>
+    <tr><td>이동</td><td>통째로 <b>자리를 옮겨도</b> 문장이 되는가</td><td>[도서관에서] 철수가 공부한다 ↔ 철수가 [도서관에서] 공부한다 ✔</td></tr>
+    <tr><td>생략</td><td>통째로 <b>지워도</b> 문장이 되는가</td><td>철수가 [빨간] 사과를 먹었다 → 철수가 사과를 먹었다 ✔</td></tr>
+    <tr><td>단독 대답</td><td>질문에 <b>그것만으로</b> 답할 수 있는가</td><td>&ldquo;무엇을 먹었니?&rdquo; → &ldquo;빨간 사과&rdquo; ✔ / &ldquo;사과를 먹&rdquo; ✘</td></tr>
+  </tbody>
+</table>
+</div>
+&ldquo;빨간 사과&rdquo;는 네 시험을 모두 통과하므로 <b>구성소(NP)</b>이고, &ldquo;사과를 먹&rdquo;은 전부 실패하므로 구성소가 아니다. <b>구구조 트리는 이 판정 결과를 그림으로 옮긴 것</b>일 뿐이다.
+<b>④ 구구조 트리 ↔ CFG 규칙은 같은 것의 두 표기</b>
+<pre class="code">(S (NP 철수가) (VP (NP 사과를) (V 먹었다)))
+
+S                          ← 괄호를 펼치면 규칙이 보인다
+├─ NP → 철수가             S  → NP VP
+└─ VP                      VP → NP V
+   ├─ NP → 사과를          NP → 철수가 | 사과를
+   └─ V  → 먹었다          V  → 먹었다</pre>
+<b>괄호 표기를 규칙으로 바꾸는 법</b> — <b>여는 괄호 바로 뒤의 기호가 화살표 왼쪽</b>, <b>그 안에 <span style="white-space:nowrap">한 단계</span> 아래로 들어 있는 기호들이 화살표 오른쪽</b>이다. <code>(VP (NP …) (V …))</code> → <code>VP → NP V</code>. 이 변환만 연습해 두면 표기를 바꿔 묻는 문제는 전부 풀린다.</div>
+<div class="pit"><b>구구조 vs 의존 — 한 표로 끝내기</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>구구조 문법</th><th>의존 문법</th></tr></thead>
+  <tbody>
+    <tr><td>묻는 질문</td><td>무엇이 무엇과 <b>묶이는가</b></td><td>무엇이 무엇에 <b>걸리는가</b></td></tr>
+    <tr><td>관계의 이름</td><td><b>구성소</b>(constituent) 관계</td><td><b>의존</b>(dependency) 관계</td></tr>
+    <tr><td>노드</td><td>단어 = 잎, <b>구(NP·VP) = 내부 노드</b> → <b>노드 수 &gt; 단어 수</b></td><td>단어만 노드 → <b>노드 수 = 단어 수</b></td></tr>
+    <tr><td>주역</td><td>구 범주</td><td><b>지배소(head) → 의존소(dependent)</b></td></tr>
+    <tr><td>잘 맞는 언어</td><td>어순이 <b>고정적</b>인 언어(영어)</td><td>어순이 <b>유연</b>한 언어(한국어·체코어)</td></tr>
+  </tbody>
+</table>
+</div>
+<b>가장 흔한 오답</b> — &ldquo;의존 트리에도 NP·VP 내부 노드가 있다&rdquo;(없다), &ldquo;구구조가 지배소-의존소를 기술한다&rdquo;(반대다), &ldquo;의존 문법은 어순 고정 언어에만 쓴다&rdquo;(오히려 자유 어순에 강하다). 한국어가 의존 분석 위주인 이유는 ① <b>지배소 후위</b> ② <b>조사가 관계를 직접 표시</b>해 어순이 바뀌어도 관계를 알 수 있기 때문이다.</div>
 <h3 class="sub-title">구문 중의성 (Syntactic Ambiguity)</h3>
 <div class="tbl-wrap">
 <table>
@@ -727,7 +1310,41 @@ S
   </tbody>
 </table>
 </div>
-<div class="warn"><b>왜 어려운가</b> — 가능한 이진 트리 수는 <b>카탈란 수</b> <span class="tex">C(n-1)</span>로 폭발한다: 단어 4개 → 5개, 6개 → 42개, 9개 → 1,430개. 모든 후보를 나열할 수 없으므로 <b>확률 · 학습 기반 선택</b>이 필요하고, 해소에는 의미 · 문맥 정보가 필요하다.</div>
+<div class="warn"><b>왜 어려운가</b> — 가능한 이진 트리 수는 <span class="term" tabindex="0" data-tip="1, 1, 2, 5, 14, 42, 132, 429, 1430 … 으로 커지는 수열. 괄호 짝짓기·이진 트리 개수처럼 「쪼개는 방법의 수」를 세는 자리마다 나타납니다."><b>카탈란 수</b></span> <span class="tex">C(n-1)</span>로 폭발한다: 단어 4개 → 5개, 6개 → 42개, 9개 → 1,430개. 모든 후보를 나열할 수 없으므로 <b>확률 · 학습 기반 선택</b>이 필요하고, 해소에는 의미 · 문맥 정보가 필요하다.</div>
+<div class="deep"><b><span class="term" tabindex="0" data-tip="벨기에 수학자 외젠 샤를 카탈란(1814~1894)의 이름을 딴 수열. 1, 1, 2, 5, 14, 42, 132, 429, 1430 … 괄호 짝짓기, 이진 트리 개수, 다각형 삼각분할 등 '쪼개는 방법의 수'를 세는 자리마다 나타납니다.">카탈란 수</span>란 무엇인가 — 왜 하필 이 수가 파스 트리를 세는가</b>
+<div class="fx">
+  <p class="fx-lab">정의와 점화식</p>
+  <div class="tex-d">C_n=\frac{1}{n+1}\binom{2n}{n},\qquad C_n=\sum_{i=0}^{n-1}C_i\,C_{n-1-i},\qquad C_0=1</div>
+  <p class="fx-note">값: <span class="tex">C_0 \sim C_9</span> = <b>1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862</b>. 단어가 <span class="tex">n</span>개인 문장의 이진 트리 수는 <b><span class="tex">C_{n-1}</span></b> 이다.</p>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>단어 수 <span class="tex">n</span></th><th>이진 트리 수 <span class="tex">C_{n-1}</span></th><th>체감</th></tr></thead>
+  <tbody>
+    <tr><td>3</td><td><span class="tex">C_2=2</span></td><td>둘 중 하나 — 사람도 금방 고른다</td></tr>
+    <tr><td>4</td><td><span class="tex">C_3=5</span></td><td>교안의 &ldquo;4개면 5개&rdquo;</td></tr>
+    <tr><td>6</td><td><span class="tex">C_5=42</span></td><td>교안의 &ldquo;6개면 42개&rdquo;</td></tr>
+    <tr><td>9</td><td><span class="tex">C_8=1{,}430</span></td><td>교안의 &ldquo;9개면 1,430개&rdquo;</td></tr>
+    <tr><td>15</td><td><span class="tex">C_{14}=2{,}674{,}440</span></td><td>267만 — 이미 나열이 불가능</td></tr>
+    <tr><td>20</td><td><span class="tex">C_{19}=1{,}767{,}263{,}190</span></td><td><b>17억 개</b> — 평범한 한 문장이 이렇다</td></tr>
+  </tbody>
+</table>
+</div>
+<b>왜 파스 트리 개수가 카탈란 수인가 — 점화식을 말로 읽으면 보인다</b>
+<ul class="ul">
+  <li>단어 <span class="tex">n</span>개를 이진 트리로 묶으려면, <b>맨 위에서 어딘가 한 곳을 골라 좌우로 가른다</b>. 가르는 자리는 <span class="tex">n-1</span>군데</li>
+  <li>왼쪽에 <span class="tex">i</span>개, 오른쪽에 <span class="tex">n-i</span>개가 가면 <b>왼쪽을 묶는 방법 × 오른쪽을 묶는 방법</b>이 그 경우의 수다</li>
+  <li>모든 가름 자리에 대해 더하면 <span class="tex">C_{n-1}=\sum C_i\,C_{n-1-i}</span> — <b>점화식이 그대로 나온다</b></li>
+  <li>같은 이유로 카탈란 수는 <b>올바른 괄호 짝짓기의 수</b>, <b>다각형을 삼각형으로 쪼개는 방법의 수</b>이기도 하다. 전부 &ldquo;<b>쪼개는 방법이 몇 가지냐</b>&rdquo;를 묻는 같은 문제다</li>
+</ul>
+<b>증가 속도</b> — <span class="tex">C_n\sim 4^n/(n^{3/2}\sqrt{\pi})</span>, 즉 대략 <b>단어 하나 늘 때마다 4배</b>씩 커진다. <span class="tex">n!</span>보다는 느리지만 <b>명백한 지수 폭발</b>이다.
+<b>그래서 무엇을 뜻하는가 — 이것이 결론이다</b>
+<ul class="ul">
+  <li>&ldquo;모든 트리를 만들어 보고 제일 좋은 것을 고른다&rdquo;는 전략은 <b>원천적으로 불가능</b>하다</li>
+  <li>그래서 ① <b>동적 계획법</b>으로 부분 트리를 공유해 세고(<b>CYK</b>가 <span class="tex">O(n^3)</span>으로 해내는 일), ② <b>확률</b>로 좋은 것만 남기고(<b>PCFG</b>), ③ 아예 <b>매 순간 하나씩 결정</b>해 버린다(<b>전이 기반 파싱</b>, <span class="tex">O(n)</span>)</li>
+  <li><b>카탈란 수는 &lsquo;왜 파싱에 확률과 학습이 필요한가&rsquo;에 대한 수학적 대답</b>이다. 다음 절의 세 기법은 전부 이 폭발을 피하려는 시도다</li>
+</ul>
+<b>혼동 주의</b> — 피보나치 수(<span class="tex">1,1,2,3,5,8</span>)와 앞 세 항이 비슷해 보이지만 다르다. 팩토리얼(<span class="tex">n!</span>)은 <b>순서를 매기는</b> 경우의 수여서 성격 자체가 다르다.</div>
 </section>
 
 <!-- ===================== 4.3.2 ===================== -->
@@ -739,8 +1356,8 @@ S
   <thead><tr><th>접근</th><th>핵심</th><th>장점</th><th>한계</th></tr></thead>
   <tbody>
     <tr><td>(1) 규칙 기반 — CFG</td><td><span class="tex">G=(N,\Sigma,R,S)</span>: 비단말 기호 · 단말 기호 · 생성 규칙 <span class="tex">A\to\beta</span> · 시작 기호. 파싱: <b>하향식</b>(S에서 전개) · <b>상향식</b>(단어에서 거꾸로) · <b>차트 파싱</b>(CYK, Earley — 부분 결과를 표에 저장, 동적 계획법)</td><td>규칙이 적용되는 문장은 정확, 근거 명확</td><td>실제 문장의 다양성을 규칙으로 다 못 담음, 중의성 발생 시 어느 트리가 옳은지 선택 불가</td></tr>
-    <tr><td>(2) 통계 기반 — PCFG</td><td>각 규칙에 조건부 확률. 트리뱅크에서 계산하거나, 태그 없는 문장으로 반복 갱신(<b>EM, inside-outside</b>). <b>확률 CYK</b>로 최대 확률 트리</td><td>중의 문장도 각 분석의 확률을 계산해 가장 타당한 것 선택</td><td>규칙 확률이 문맥과 무관하게 고정 → 어휘 정보(lexical head) 미반영 → <b>Lexicalized PCFG</b>로 보완</td></tr>
-    <tr><td>(3) 딥러닝 기반 — 전이 기반</td><td>문장을 한 단어씩 읽으며 액션(SHIFT, REDUCE)을 신경망이 선택</td><td>단어 수에 선형인 <span class="tex">O(n)</span> 액션, 매우 빠름</td><td>지역적 결정, 장거리 관계 약함, 한 번의 실수가 이후 전부에 영향(<b>오류 전파</b>)</td></tr>
+    <tr><td>(2) 통계 기반 — PCFG</td><td>각 규칙에 조건부 확률. 트리뱅크에서 계산하거나, 태그 없는 문장으로 반복 갱신(<b>EM, inside-outside</b>). <b>확률 CYK</b>로 최대 확률 트리</td><td>중의 문장도 각 분석의 확률을 계산해 가장 타당한 것 선택</td><td>규칙 확률이 문맥과 무관하게 고정 → 어휘 정보(lexical head) 미반영 → <span class="term" tabindex="0" data-tip="각 비단말 기호에 그 구의 핵어 단어를 함께 적어(VP(ate), NP(pizza)) 규칙 확률이 단어에 따라 달라지게 만든 모형. Collins·Charniak 파서의 뼈대입니다."><b>Lexicalized PCFG</b></span>로 보완</td></tr>
+    <tr><td>(3) 딥러닝 기반 — <span class="term" tabindex="0" data-tip="가능한 트리를 모두 세는 대신, 문장을 왼쪽부터 훑으며 스택·버퍼 상태에서 SHIFT/LEFT-ARC/RIGHT-ARC 같은 액션을 하나씩 고르는 방식. 액션 수가 2n이라 O(n)입니다.">전이 기반</span></td><td>문장을 한 단어씩 읽으며 액션(SHIFT, REDUCE)을 신경망이 선택</td><td>단어 수에 선형인 <span class="tex">O(n)</span> 액션, 매우 빠름</td><td>지역적 결정, 장거리 관계 약함, 한 번의 실수가 이후 전부에 영향(<b>오류 전파</b>)</td></tr>
   </tbody>
 </table>
 </div>
@@ -750,6 +1367,51 @@ S
   <p class="fx-note">대표 자원: <b>Penn Treebank</b>(영어, 약 100만 어절), 세종 구문 분석 말뭉치(한국어). 성능 지표 F1(labeled bracketing): 영어 PCFG ≈ 73%, 현대 신경망 파서 ≈ 95%.
   전이 기반 보완 기법: <b>빔 서치</b>(상위 k개 후보 유지) · <b>동적 오라클</b>(잘못된 상태에서도 최선의 액션 학습) · <b>사전학습 인코더</b>(BERT로 문장 전체를 표현)</p>
 </div>
+<div class="deep"><b>PCFG — 개념 · 한계 · 그리고 Lexicalized PCFG</b>
+<b>① 개념 — CFG에 &lsquo;확률&rsquo;이라는 한 칸을 더한 것</b>
+<ul class="ul">
+  <li>CFG는 &ldquo;이 문장이 문법에 맞는가&rdquo;만 답한다. 중의적 문장에 대해 트리를 <b>여러 개 내놓고는 어느 것이 옳은지 말하지 못한다</b></li>
+  <li>PCFG는 <b>모든 규칙에 조건부 확률</b>을 붙인다. 같은 왼쪽 기호를 갖는 규칙들의 확률 합은 <b>1</b>이다 — <span class="tex">\sum_\beta P(A\to\beta\mid A)=1</span></li>
+  <li>확률은 <span class="term" tabindex="0" data-tip="treebank. 사람이 직접 구문 트리를 달아 놓은 말뭉치. 영어는 Penn Treebank, 한국어는 세종 구문 분석 말뭉치가 대표적입니다.">트리뱅크</span>에서 <b>세기만 하면</b> 나온다 — <span class="tex">P(A\to\beta\mid A)=\dfrac{\text{count}(A\to\beta)}{\text{count}(A)}</span></li>
+  <li>트리뱅크가 없으면 태그 없는 문장만으로 <span class="term" tabindex="0" data-tip="Expectation-Maximization. 숨겨진 값(여기서는 정답 트리)을 모를 때, 현재 파라미터로 기댓값을 구하고(E) 그 기댓값으로 파라미터를 갱신하기를(M) 반복하는 학습 기법입니다. PCFG용 EM을 inside-outside 알고리즘이라 부릅니다.">EM(inside-outside)</span>으로 반복 추정한다</li>
+</ul>
+<pre class="code"><span class="cm"># 트리 확률 = 그 트리에 쓰인 모든 규칙 확률의 곱</span>
+S  → NP VP   0.9        P(T) = 0.9 × 0.4 × 0.7 × ... 
+VP → V NP    0.4        가장 큰 P(T)를 갖는 트리 하나를 고른다 (확률 CYK)
+VP → V NP PP 0.2        ← 같은 VP의 규칙들 확률 합 = 1</pre>
+<b>② 한계 — 규칙 확률이 &lsquo;어디에 있든, 무슨 단어든&rsquo; 똑같다</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>한계</th><th>무슨 뜻인가</th><th>보완책</th></tr></thead>
+  <tbody>
+    <tr><td><b>어휘 무시</b> (가장 치명적)</td><td>규칙만 보고 <b>어떤 단어인지는 보지 않는다</b>. 그래서 아래 두 문장을 구분할 방법이 없다</td><td><b>Lexicalized PCFG</b></td></tr>
+    <tr><td><b>구조적 문맥 독립</b></td><td>NP가 <b>주어 자리</b>에 있든 <b>목적어 자리</b>에 있든 확률이 같다. 실제로는 주어 NP는 대명사가 압도적으로 많다</td><td><span class="term" tabindex="0" data-tip="parent annotation. 비단말 기호에 부모 기호를 함께 적어(NP^S, NP^VP) 위치에 따라 다른 확률을 갖게 만드는 기법입니다. 규칙을 잘게 쪼개는 효과가 있습니다.">부모 주석</span> (NP^S vs NP^VP)</td></tr>
+    <tr><td><b>규칙 희소성</b></td><td>규칙을 잘게 쪼갤수록 각 규칙의 관측 횟수가 줄어 확률 추정이 불안정해진다</td><td>스무딩 · 백오프 · 마르코프화</td></tr>
+  </tbody>
+</table>
+</div>
+<pre class="code">I ate <b>pizza with a fork</b>       ← with a fork 는 '먹는 방법' → <b>VP</b>에 붙어야 옳다
+I ate <b>pizza with anchovies</b>    ← with anchovies 는 '피자의 종류' → <b>NP</b>에 붙어야 옳다
+
+<span class="cm"># 두 문장의 CFG 규칙 구성은 완전히 동일하다.</span>
+<span class="cm"># 판단을 가르는 것은 오직 'fork'냐 'anchovies'냐 하는 단어다.</span>
+<span class="cm"># 그런데 PCFG는 단어를 보지 않는다 → 반드시 한쪽을 틀린다.</span></pre>
+<b>③ <span class="term" tabindex="0" data-tip="어휘화된 PCFG. 각 비단말 기호에 그 구의 핵어 단어를 함께 적어(VP(ate), NP(pizza)) 규칙 확률이 단어에 따라 달라지게 만든 모형입니다. Collins(1997)와 Charniak(2000)의 파서가 대표적입니다.">Lexicalized PCFG</span> — 규칙에 &lsquo;핵어 단어&rsquo;를 얹는다</b>
+<ul class="ul">
+  <li>모든 비단말 기호에 <b>그 구의 핵어(head word)</b>를 함께 적는다 → <code>VP(ate)</code>, <code>NP(pizza)</code>, <code>PP(with)</code></li>
+  <li>확률이 <code>P(VP(ate) → VP(ate) PP(with-fork))</code> 형태가 되어, <b>&ldquo;ate에 fork가 붙는 경향&rdquo;과 &ldquo;pizza에 anchovies가 붙는 경향&rdquo;을 서로 다른 확률로</b> 학습할 수 있다</li>
+  <li><b>대가</b> — 파라미터가 <b>단어 수만큼 폭발</b>한다. 그래서 확률을 여러 작은 확률의 곱으로 분해하고(핵어 생성 → 좌우 자식 생성) <b>백오프·스무딩</b>을 반드시 쓴다. 이것이 <b>Collins 파서</b>(1997/1999)와 <b>Charniak 파서</b>(2000)의 뼈대다</li>
+  <li><b>성능</b> — 소박한 PCFG의 F1 약 73%에서 <b>88~90%대</b>로 올라갔고, 이후 <b>신경망 파서</b>(문장 전체를 인코더로 표현)가 <b>약 95%</b>에 도달했다. 신경망은 &ldquo;핵어 단어를 손으로 얹는&rdquo; 일을 <b>표현 학습으로 대신</b>하는 셈이다</li>
+</ul>
+<b>한 줄 요약</b> — <b>CFG는 가능/불가능만, PCFG는 어느 쪽이 더 그럴듯한지, Lexicalized PCFG는 &lsquo;어떤 단어인지&rsquo;까지 본다.</b></div>
+<div class="pit"><b>PCFG 관련해 자주 나오는 오답</b>
+<ul class="ul">
+  <li>&ldquo;PCFG는 중의성 있는 문장을 분석할 수 없다&rdquo; → <b>반대</b>다. 중의 문장에 <b>확률을 매겨 고르려고</b> 만든 것이 PCFG다</li>
+  <li>&ldquo;확률을 사람이 손으로 지정해야 한다&rdquo; → <b>트리뱅크에서 세거나 EM으로 추정</b>한다</li>
+  <li>&ldquo;확률이 1을 넘어 정규화가 필요하다&rdquo; → <b>같은 좌변 규칙들의 합이 1</b>이 되도록 정의되어 있다</li>
+  <li>&ldquo;트리뱅크 없이 학습되어 과적합이 심하다&rdquo; → PCFG의 한계는 과적합이 아니라 <b>문맥·어휘 정보의 부재</b>다</li>
+  <li><b>파싱 방향 혼동</b> — <b>하향식</b>은 시작 기호 <code>S</code>에서 출발해 규칙을 펼치고, <b>상향식</b>은 단어에서 출발해 규칙을 거꾸로 적용한다. <b>차트 파싱</b>(CYK·Earley)은 부분 결과를 표에 저장하는 <b>동적 계획법</b>이다</li>
+</ul></div>
 
 <h3 class="sub-title">의존 구문 분석</h3>
 <div class="note-box"><b>의존 트리의 조건</b> — ① <b>단일 지배소</b>: 루트를 뺀 모든 노드는 정확히 하나의 지배소 ② <b>비순환</b> ③ <b>연결성</b>: 루트에서 모든 노드에 도달.
@@ -776,6 +1438,75 @@ S
 </table>
 </div>
 <div class="good"><b>세 접근은 대체 관계가 아니라 자원과 목적에 따른 선택</b>의 문제다. 한국어는 지배소 후위 · 자유 어순 · 조사 표지 때문에 <b>의존 구문 분석</b>이 주로 쓰인다.</div>
+<div class="deep"><b>전이 기반(Transition-based) 파싱이란 — &ldquo;사람처럼 왼쪽부터 한 단어씩 결정한다&rdquo;</b>
+<b>① 발상</b>
+<p style="margin-top:4px">가능한 트리를 전부 세는 대신(카탈란 수!), <b>문장을 왼쪽에서 오른쪽으로 한 번 훑으면서 매 순간 &lsquo;다음에 무엇을 할지&rsquo;만 고른다.</b> 트리는 그 결정들이 쌓여서 <b>부산물로</b> 완성된다. 컴파일러의 shift-reduce 파싱에서 온 발상이다.</p>
+<b>② 구성 요소 세 개 (arc-standard 시스템)</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>이름</th><th>역할</th></tr></thead>
+  <tbody>
+    <tr><td><b>스택(stack)</b> <span class="tex">\sigma</span></td><td>지금 <b>처리 중</b>인 단어들. 맨 아래에 ROOT</td></tr>
+    <tr><td><b>버퍼(buffer)</b> <span class="tex">\beta</span></td><td>아직 <b>손대지 않은</b> 나머지 단어들</td></tr>
+    <tr><td><b>에지 집합</b> <span class="tex">A</span></td><td>지금까지 확정한 <b>의존 관계</b>들</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>액션</th><th>하는 일</th></tr></thead>
+  <tbody>
+    <tr><td><code>SHIFT</code></td><td>버퍼의 <b>첫 단어를 스택으로</b> 옮긴다 (&ldquo;판단 보류, 일단 쌓아 둔다&rdquo;)</td></tr>
+    <tr><td><code>LEFT-ARC(r)</code></td><td>스택 맨 위 단어가 <b>그 아래 단어의 지배소</b>임을 확정하고, <b>아래 단어를 스택에서 제거</b></td></tr>
+    <tr><td><code>RIGHT-ARC(r)</code></td><td>스택 아래 단어가 <b>맨 위 단어의 지배소</b>임을 확정하고, <b>맨 위 단어를 제거</b></td></tr>
+  </tbody>
+</table>
+</div>
+<b>③ 한 문장 완주해 보기 — &ldquo;철수가 사과를 먹었다&rdquo;</b>
+<pre class="code">     스택                      버퍼                       액션
+ 0  [ROOT]                   [철수가, 사과를, 먹었다]      SHIFT
+ 1  [ROOT, 철수가]            [사과를, 먹었다]             SHIFT
+ 2  [ROOT, 철수가, 사과를]     [먹었다]                    SHIFT
+ 3  [ROOT, 철수가, 사과를, 먹었다] []                      LEFT-ARC(NP_OBJ)  <span class="cm"># 먹었다 → 사과를</span>
+ 4  [ROOT, 철수가, 먹었다]     []                          LEFT-ARC(NP_SBJ)  <span class="cm"># 먹었다 → 철수가</span>
+ 5  [ROOT, 먹었다]            []                          RIGHT-ARC(root)   <span class="cm"># ROOT → 먹었다</span>
+ 6  [ROOT]                   []                          <b>종료</b>
+
+결과: 먹었다(ROOT) ─ 철수가(NP_SBJ) · 사과를(NP_OBJ)     <span class="cm"># 4.3.1의 의존 트리와 동일</span></pre>
+<ul class="ul">
+  <li><b>액션 수가 정확히 <span class="tex">2n</span>번</b>이다 — 단어 <span class="tex">n</span>개를 스택에 올리는 SHIFT <span class="tex">n</span>번 + 에지를 만드는 ARC <span class="tex">n</span>번. 그래서 <b><span class="tex">O(n)</span> 선형 시간</b>이다. 그래프 기반의 <span class="tex">O(n^2)\sim O(n^3)</span>과 비교되는 압도적 장점</li>
+  <li><b>한국어는 지배소 후위</b>라 위 예처럼 <b>LEFT-ARC가 몰려서</b> 나온다 — 다 쌓아 둔 뒤 마지막 서술어가 앞의 것들을 차례로 거두어 간다</li>
+  <li><b>변형</b> — <code>arc-eager</code>는 <code>SHIFT/REDUCE/LEFT-ARC/RIGHT-ARC</code> 4개 액션을 써서 에지를 <b>더 일찍</b> 확정한다</li>
+</ul>
+<b>④ 무엇을 학습하는가 — <span class="term" tabindex="0" data-tip="oracle, 신탁. 정답 트리를 알고 있을 때 '지금 이 상태에서 어떤 액션을 해야 정답 트리에 도달하는가'를 알려 주는 기준. 이 (상태, 정답 액션) 쌍으로 분류기를 학습시킵니다.">오라클</span></b>
+<ul class="ul">
+  <li>학습 데이터(정답 트리)로부터 <b>액션 열을 역으로 유도</b>해 <code>(상태 → 정답 액션)</code> 쌍을 만들고, 이것으로 <b>분류기를 학습</b>한다. 상태의 자질은 스택·버퍼 맨 위 단어와 품사, 이미 붙은 에지 등</li>
+  <li>예측할 때는 매 단계 분류기가 고른 액션을 <b>그냥 실행</b>한다 — 되돌리지 않는다</li>
+</ul>
+<b>⑤ 약점과 보완 — 여기가 시험 포인트</b>
+<ul class="ul">
+  <li><b>지역적 결정 → <span class="term" tabindex="0" data-tip="error propagation. 앞 단계의 잘못된 결정이 뒤 단계의 입력이 되어 오류가 눈덩이처럼 커지는 현상. 4.0의 계층 간 오류 전파와 같은 원리입니다.">오류 전파</span></b> — 한 번 잘못 고른 액션은 <b>영원히 되돌릴 수 없고</b>, 이후 모든 결정을 오염시킨다</li>
+  <li><b>장거리 의존에 약함</b> — 지금 스택 위에 있는 몇 단어만 보고 결정하기 때문</li>
+  <li><b>보완 ① <span class="term" tabindex="0" data-tip="beam search. 매 단계 최선 하나만 남기지 않고 상위 k개 후보 상태를 동시에 끌고 가며 탐색하는 방법. k를 키울수록 정확하지만 느려집니다.">빔 서치</span></b> — 상위 <span class="tex">k</span>개 경로를 동시에 유지해 &ldquo;되돌릴 수 없음&rdquo;을 완화</li>
+  <li><b>보완 ② <span class="term" tabindex="0" data-tip="dynamic oracle. 이미 틀린 상태에 빠졌을 때도 '지금부터 가능한 최선의 액션'을 가르쳐 주는 오라클. 학습 때 정답 경로만 보던 모델이 실전에서 틀린 상태를 만나면 무너지는 문제를 줄입니다.">동적 오라클</span></b> — 잘못된 상태에 빠졌을 때 <b>그 상황에서의 최선</b>을 학습시킨다</li>
+  <li><b>보완 ③ 사전학습 인코더</b> — BERT로 <b>문장 전체를 먼저 표현</b>한 뒤 액션을 고르면, 지역적 결정이라도 전역 정보를 참고하게 된다</li>
+  <li><b>보완이 아닌 것</b> — <b>Chu-Liu/Edmonds</b>는 <b>그래프 기반</b> 파싱에서 최대 신장 트리를 찾는 알고리즘이다. 전이 기반의 보완책 목록에 끼워 넣으면 틀린다</li>
+</ul></div>
+<div class="pit"><b>전이 기반 vs 그래프 기반 — 한눈에</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>전이 기반</th><th>그래프 기반</th></tr></thead>
+  <tbody>
+    <tr><td>비유</td><td><b>왼쪽부터 한 수씩</b> 두는 바둑</td><td><b>판 전체를 보고</b> 최적 배치를 계산</td></tr>
+    <tr><td>절차</td><td>스택·버퍼 + 액션 분류</td><td>모든 단어 쌍에 점수 → <b>MST</b>(Chu-Liu/Edmonds)</td></tr>
+    <tr><td>복잡도</td><td><span class="tex">O(n)</span> — 매우 빠름</td><td><span class="tex">O(n^2)\sim O(n^3)</span></td></tr>
+    <tr><td>최적성</td><td>지역 최적 (탐욕적)</td><td><b>전역 최적</b></td></tr>
+    <tr><td>장거리 의존</td><td>약함</td><td><b>강함</b></td></tr>
+    <tr><td>대표</td><td>Nivre의 arc-standard/eager, Stack-LSTM</td><td><b>Biaffine attention</b> 파서 (Dozat &amp; Manning, 2017)</td></tr>
+  </tbody>
+</table>
+</div>
+<b>의존 트리가 반드시 지켜야 하는 세 조건</b> — ① <b>단일 지배소</b>(루트 빼고 모든 노드의 지배소는 정확히 하나) ② <b>비순환</b> ③ <b>연결성</b>(루트에서 모든 노드에 도달). <b>사영성(projectivity)</b>은 이 셋에 <b>포함되지 않는 별도의 성질</b>로, 에지가 서로 교차하지 않는 것을 말한다 — 어순 도치가 일어나면 깨진다.</div>
 </section>
 
 <!-- ===================== 4.4.1 ===================== -->
@@ -811,6 +1542,33 @@ S
 </table>
 </div>
 <div class="tip"><b>실습에서 확인하는 한계</b> — <code>nltk.wsd.lesk</code>로 &ldquo;spring&rdquo;(계절/샘)을 분류하면 winter, water 같은 결정적 단서가 짧은 정의문과 잘 겹치지 않아 <b>틀리는 경우가 흔하다</b>. 이것이 지식 기반 WSD의 한계이고, 다음 절의 문맥 임베딩이 해결책이다.</div>
+<div class="pit"><b>중의성 3종 — 어느 절의 이야기인지로 구분하면 틀리지 않는다</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>중의성</th><th>무엇이 갈리나</th><th>대표 예</th><th>다루는 절</th></tr></thead>
+  <tbody>
+    <tr><td><b>어휘적</b></td><td><b>단어 하나</b>의 뜻</td><td>&lsquo;배&rsquo; 신체/과일/선박 · bank 은행/강둑</td><td><b>4.4</b> (WSD)</td></tr>
+    <tr><td><b>구조적</b></td><td><b>묶이는 방식</b> — 부착·등위·명사구 경계</td><td>&ldquo;나는 울면서 떠나는 그녀를 배웅했다&rdquo; · I saw the man with a telescope</td><td><b>4.3</b>(구문) = 4.4의 구조적 중의성과 <b>같은 현상</b></td></tr>
+    <tr><td><b>화용적</b></td><td><b>화자의 의도</b>와 상황</td><td>&ldquo;창문 좀 열어 줄 수 있어?&rdquo; 능력 질문인가 요청인가 · &ldquo;그것 좀 줘&rdquo;의 지시 대상</td><td>4.4 (상호참조 해결 포함)</td></tr>
+  </tbody>
+</table>
+</div>
+<b>가장 흔한 함정</b> — 구문 중의성의 유형을 묻는 자리에 <b>&lsquo;어휘적 중의성&rsquo;</b>(&lsquo;배&rsquo;가 무엇인가)을 끼워 넣는 것. 구문 중의성의 세 유형은 <b>부착 · 등위 접속 · 명사구 경계</b>뿐이다.
+<b>WSD 기법 세 갈래를 뒤섞지 말 것</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>기법</th><th>정확한 동작</th><th>필요한 것</th></tr></thead>
+  <tbody>
+    <tr><td><b>Lesk</b> (지식 기반)</td><td>각 의미의 <b>사전 정의문(gloss)</b>과 주변 문맥 단어의 <b>중복 개수</b>를 세어 가장 많이 겹치는 의미 선택</td><td>사전만 — <b>레이블 불필요</b></td></tr>
+    <tr><td><b>지도학습</b></td><td>의미가 레이블된 데이터로 <b>분류기 학습</b>(Naive Bayes·SVM). 자질은 주변 단어·품사·연어·의존 관계</td><td><b>단어마다</b> 별도 학습 데이터</td></tr>
+    <tr><td><b>Yarowsky</b> (준지도)</td><td>&lsquo;<b>한 담화에 한 의미</b>&rsquo;·&lsquo;<b>한 연어에 한 의미</b>&rsquo; 가정으로 <b>소량 시드에서 레이블을 확장</b></td><td>시드 몇 개 + 대량 원문</td></tr>
+    <tr><td>의미 유도 (비지도)</td><td>문맥 벡터를 <b>군집화</b>해 의미를 자동 발견</td><td>레이블 없음</td></tr>
+  </tbody>
+</table>
+</div>
+&ldquo;Lesk가 분류기를 학습한다&rdquo;, &ldquo;Yarowsky가 정의문 겹침을 센다&rdquo;처럼 <b>설명을 맞바꾼</b> 선택지가 자주 나온다. <b>Lesk = 정의문 겹침 세기 · Yarowsky = 시드 확장</b>으로 붙여 외운다.
+<b>정적 임베딩의 한계와 해결</b> — Word2Vec·GloVe는 <b>한 단어에 벡터 하나</b>라 다의어를 구분하지 못한다. 해결은 <b>문맥 임베딩</b>(ELMo·BERT)이 <b>문맥마다 다른 벡터</b>를 만드는 것이다. &ldquo;차원이 커서 계산 불가&rdquo;나 &ldquo;정적 임베딩으로 되돌려 해결&rdquo;은 전부 틀린 서술이다.
+<b>의미 표현의 한계</b> — 1차 술어 논리 기반 표현은 <b>추론이 가능하고 정확하지만 자연어 전체를 포괄하기 어렵다</b>. &ldquo;빠짐없이 포괄할 수 있다&rdquo;는 정반대 진술이다.</div>
 </section>
 
 <!-- ===================== 4.4.2 ===================== -->
@@ -845,10 +1603,71 @@ SRL이 답하는 질문: <b>Who did What to Whom, Where, When, How, Why</b> — 
 <ul class="ul">
   <li><b>지도학습</b>: CRFs, SVM + 자질(형태소·구문 정보, 술어 어휘, 논항 핵심어, 술어-논항 구문 경로, 격조사, 위치). <b>구문 분석 결과가 입력</b>이므로 4.3의 품질이 SRL 성능을 좌우</li>
   <li><b>딥러닝</b>: Bi-LSTM 계열 레이블링으로 구문 분석 없이도 고성능(He et al., 2017), BERT에 문장과 술어를 함께 넣어 BIO 태그 예측</li>
-  <li><b>자원</b>: PropBank(술어 중심, ARG0~ARG5) · FrameNet(프레임 의미론) · 한국어 PropBank · 세종 의미역 말뭉치</li>
+  <li><b>자원</b>: <span class="term" tabindex="0" data-tip="Proposition Bank. Penn Treebank 위에 술어-논항 관계를 덧붙인 자원. 동사마다 ARG0~ARG5의 뜻을 따로 정의하며 커버리지가 넓어 실무 표준입니다.">PropBank</span>(술어 중심, ARG0~ARG5) · <span class="term" tabindex="0" data-tip="필모어의 프레임 의미론 기반 자원. 상황(프레임)을 먼저 정의하고 그 안의 배역(Buyer·Seller·Goods)에 이름을 붙여, buy와 sell을 같은 사건으로 묶습니다.">FrameNet</span>(프레임 의미론) · 한국어 PropBank · 세종 의미역 말뭉치</li>
 </ul>
 <pre class="code">철수가/B-ARG0  영희에게/B-ARG2  책을/B-ARG1  주었다/B-V
 <span class="cm"># ARG0 행동주 · ARG1 피동주 · ARG2 수령자(도달점) · V 술어</span></pre></div>
+<div class="deep"><b>SRL 방법론 — 약어부터 전부 풀어 쓰기</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>약어</th><th>원말</th><th>우리말 · 뜻</th></tr></thead>
+  <tbody>
+    <tr><td><b>SRL</b></td><td>Semantic Role Labeling</td><td><b>의미역 결정(레이블링)</b> — 서술어의 각 논항이 어떤 역할을 하는지 이름표를 붙이는 일</td></tr>
+    <tr><td><b>ARG</b></td><td>ARGument</td><td><b>논항</b> — 서술어가 요구하는 성분. <code>ARG0</code>~<code>ARG5</code>로 번호를 매긴다</td></tr>
+    <tr><td><b>ARGM</b></td><td>ARGument Modifier</td><td><b>수식 논항</b>(수의적). <code>ARGM-TMP</code> 시간 · <code>ARGM-LOC</code> 장소 · <code>ARGM-MNR</code> 방법 · <code>ARGM-CAU</code> 이유 · <code>ARGM-PRP</code> 목적 · <code>ARGM-NEG</code> 부정</td></tr>
+    <tr><td><b>BIO</b></td><td><b>B</b>egin · <b>I</b>nside · <b>O</b>utside</td><td>여러 단어로 된 논항의 <b>경계 표시법</b>. B=시작, I=이어짐, O=논항 아님</td></tr>
+    <tr><td><b>V</b></td><td>Verb / predicate</td><td><b>술어</b> 자리 표시</td></tr>
+    <tr><td><b>FE</b></td><td>Frame Element</td><td>FrameNet에서 <b>프레임의 구성 요소</b>(Buyer, Seller, Goods …)</td></tr>
+    <tr><td><b>LU</b></td><td>Lexical Unit</td><td>FrameNet에서 특정 프레임을 <b>불러내는 어휘</b>(buy, purchase …)</td></tr>
+  </tbody>
+</table>
+</div>
+<b>3단계 — 순서가 곧 정답이다</b>
+<div class="flow">
+  <div class="fl"><div class="fl-n">1</div><div><h4>술어 식별 (Predicate Identification)</h4><p>문장에서 <b>사건을 이끄는 서술어</b>를 찾는다. &ldquo;주었다&rdquo;. 술어가 여러 개면 <b>술어마다 따로</b> 2~3을 돌린다</p></div></div>
+  <div class="fl"><div class="fl-n">2</div><div><h4>논항 식별 (Argument Identification)</h4><p>그 술어에 딸린 <b>성분들의 범위</b>를 찾는다. 구문 분석 트리의 구성소가 후보가 된다</p></div></div>
+  <div class="fl"><div class="fl-n">3</div><div><h4>의미역 분류 (Role Classification)</h4><p>각 논항에 <b>ARG0/ARG1/ARGM-TMP</b> 같은 <b>이름표</b>를 붙인다</p></div></div>
+</div>
+<b>왜 이 순서인가</b> — 술어가 정해져야 &ldquo;누구에게 딸린 논항인가&rdquo;를 물을 수 있고, 범위가 정해져야 이름을 붙일 수 있다. <b>논항 식별이 먼저 온다는 선택지는 틀린 것</b>이다. 또 <b>구문 분석 결과가 2단계의 입력</b>이므로 <b>4.3절의 품질이 4.4절 성능을 그대로 좌우</b>한다(오류 전파).
+<pre class="code">어제/B-ARGM-TMP  철수가/B-ARG0  도서관에서/B-ARGM-LOC  영희에게/B-ARG2  책을/B-ARG1  주었다/B-V
+
+<span class="cm"># 논항이 두 어절 이상이면 I- 로 이어 붙인다</span>
+[빨간/B-ARG1  사과를/I-ARG1]  먹었다/B-V</pre>
+<b>접근법의 변천</b>
+<ul class="ul">
+  <li><b>지도학습(전통)</b> — <b>CRF · SVM</b> + 사람이 설계한 자질: 술어 어휘, 논항 핵심어, <b>술어–논항 구문 경로</b>, 격조사, 상대 위치, 품사. <b>구문 분석이 반드시 선행</b>되어야 했다</li>
+  <li><b>딥러닝</b> — He et al.(2017)이 <b>Bi-LSTM만으로 구문 분석 없이</b> 당시 최고 성능을 냈다. 구문 트리를 명시적으로 만들지 않고 <b>BIO 순차 레이블링</b>으로 푼 것 — 4.1.3·4.2.2에서 본 그 틀이 여기서 또 쓰인다</li>
+  <li><b>사전학습 모델</b> — BERT에 <b>문장 + 술어 위치</b>를 함께 넣고 BIO 태그를 예측한다. 현재 표준</li>
+</ul></div>
+<div class="deep"><b>SRL 자원 — PropBank · FrameNet · VerbNet은 무엇이 다른가</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>자원</th><th>이름의 뜻</th><th>역 체계</th><th>철학 · 특징</th></tr></thead>
+  <tbody>
+    <tr><td><span class="term" tabindex="0" data-tip="Proposition Bank. 펜 트리뱅크(구문 트리 말뭉치) 위에 술어-논항 관계를 덧붙여 만든 자원. 동사마다 ARG0~ARG5의 의미를 따로 정의한 '프레임 파일'을 가집니다.">PropBank</span></td><td>Proposition Bank<br>&lsquo;명제 은행&rsquo;</td><td><b>ARG0~ARG5</b> + ARGM-*</td><td><b>술어(동사) 중심.</b> 동사마다 번호의 뜻을 따로 정의한다. 대체로 <b>ARG0 ≈ 행동주</b>, <b>ARG1 ≈ 피동주</b>. Penn Treebank 위에 얹혀 있어 <b>구문과 의미가 정렬</b>되어 있고 <b>커버리지가 넓다</b> — 실무 SRL의 사실상 표준</td></tr>
+    <tr><td><span class="term" tabindex="0" data-tip="찰스 필모어의 프레임 의미론에 기반한 자원. '상거래'처럼 상황(프레임)을 먼저 정의하고, 그 안의 배역(구매자·판매자·상품·대금)에 이름을 붙입니다.">FrameNet</span></td><td>Frame + Net<br>&lsquo;프레임 의미망&rsquo;</td><td><b>프레임별 FE</b><br>(Buyer, Seller, Goods, Money)</td><td><b>상황(프레임) 중심.</b> <code>buy</code>와 <code>sell</code>이 <b>같은 Commerce 프레임</b>을 공유해 &ldquo;철수가 영희에게서 책을 샀다&rdquo;와 &ldquo;영희가 철수에게 책을 팔았다&rdquo;를 <b>같은 사건</b>으로 묶는다. 의미적으로 정교하지만 <b>커버리지가 좁다</b></td></tr>
+    <tr><td><span class="term" tabindex="0" data-tip="베스 레빈의 동사 분류에 기반해, 비슷하게 행동하는 동사들을 부류로 묶고 각 부류의 구문 프레임과 의미역을 기술한 자원입니다.">VerbNet</span></td><td>Verb + Net</td><td>Agent · Theme · Destination 등 <b>일반 이름</b></td><td><b>동사 부류 중심.</b> 구문 프레임과 의미역을 함께 기술. <b>SemLink</b>가 PropBank·FrameNet·WordNet을 서로 연결해 준다</td></tr>
+    <tr><td>NomBank</td><td>Nominal Bank</td><td>ARG 번호</td><td><b>명사 술어</b>의 논항 — &ldquo;철수의 <b>공격</b>&rdquo;처럼 사건을 나타내는 명사</td></tr>
+    <tr><td>AMR</td><td>Abstract Meaning Representation</td><td>PropBank 역을 재사용</td><td>문장 <b>전체 의미를 하나의 방향 그래프</b>로. 개별 논항이 아니라 문장 단위 표현</td></tr>
+  </tbody>
+</table>
+</div>
+<pre class="code"><span class="cm"># 같은 문장, 두 자원의 표기 차이</span>
+"철수가 영희에게 책을 주었다"
+
+PropBank  : 주다.01  ARG0=철수  ARG2=영희  ARG1=책
+            <span class="cm"># 번호의 의미는 '주다'라는 동사의 프레임 파일에 정의되어 있다</span>
+
+FrameNet  : Giving 프레임   Donor=철수  Recipient=영희  Theme=책
+            <span class="cm"># 역 이름 자체가 의미를 말해 주고, 'give/hand/donate'가 이 프레임을 공유한다</span></pre>
+<b>한국어 자원</b> — <b>한국어 PropBank</b>(ETRI) · <b>세종 의미역 부착 말뭉치</b> · KorFrameNet · 국립국어원 모두의 말뭉치. 영어에 비해 규모가 작아, 실무에서는 <b>다국어 사전학습 모델 + 소량 미세조정</b>으로 보완하는 경우가 많다.</div>
+<div class="pit"><b>의미역에서 반드시 구분해야 할 세 가지</b>
+<ul class="ul">
+  <li><b>① 문법적 격 ≠ 의미역</b> — &ldquo;철수가/열쇠가/문이 열었다·열렸다&rdquo;는 <b>셋 다 주어</b>지만 의미역은 <b>행동주 · 도구 · 피동주</b>로 전부 다르다. &ldquo;주어는 항상 행동주&rdquo;는 틀린 말이다</li>
+  <li><b>② 도달점(Goal) vs 수혜자(Beneficiary)</b> — &lsquo;주다&rsquo;의 <b>&ldquo;영희에게&rdquo;는 소유권이 옮겨 가는 도착점</b>이므로 <b>도달점·수령자(Recipient)</b>다. 도구(Instrument)도, 단순 수혜자도 아니다. 수혜자는 &ldquo;철수<b>를 위해</b> 케이크를 구웠다&rdquo;처럼 <b>이익을 보는 제3자</b>다</li>
+  <li><b>③ 필수 vs 수의는 &lsquo;의미역의 종류&rsquo;가 정하지 않는다</b> — <b>서술어가 요구하느냐</b>로 정해진다. &lsquo;놓다&rsquo;는 장소가 <b>필수</b>(&ldquo;책을 놓았다&rdquo;만으로는 어색)지만, &lsquo;먹다&rsquo;에서 장소는 <b>수의적</b>이다. 그래서 &ldquo;장소는 언제나 수의적&rdquo;은 틀린 일반화다</li>
+</ul>
+<b><span class="term" tabindex="0" data-tip="theta-criterion. 생성문법의 원칙으로, 하나의 논항(명사구)은 정확히 하나의 의미역을 받고 하나의 의미역은 정확히 하나의 논항에 할당된다는 일대일 대응 제약입니다.">의미역 기준(theta-criterion)</span></b> — 하나의 명사구는 <b>오직 하나의 의미역</b>만 갖는다. 사영성 조건(구문), 단일 지배소 조건(의존 트리), 분포 가설(의미 표현)과 <b>이름이 비슷해 헷갈리지만 전혀 다른 원칙</b>이다.</div>
 
 <h3 class="sub-title">의미 표현 — 기계가 계산할 수 있는 형태로</h3>
 <div class="tbl-wrap">
@@ -910,6 +1729,19 @@ SRL이 답하는 질문: <b>Who did What to Whom, Where, When, How, Why</b> — 
     <tr><td>AMR</td><td>Abstract Meaning Representation 추상 의미 표현 — 문장 의미를 방향 그래프로</td></tr>
     <tr><td>RAG</td><td>Retrieval-Augmented Generation 검색 증강 생성</td></tr>
     <tr><td>ARG0 / ARG1 / ARG2</td><td>PropBank 논항 번호 — 대체로 행동주 / 피동주 / 수령자(도달점)</td></tr>
+    <tr><td>휴리스틱 (heuristic)</td><td>최적해를 보장하지 않지만 경험적으로 충분히 좋은 답을 빠르게 주는 어림규칙 — 규칙 기반 방법의 뼈대</td></tr>
+    <tr><td>마르코프 과정 · 가정</td><td>다음 상태가 직전 상태에만 의존한다는 확률 과정 · 그 근사를 쓰는 것. 전이 확률이 성립하는 근거</td></tr>
+    <tr><td>DP (동적 계획법)</td><td>Dynamic Programming — 부분 문제의 답을 표에 저장해 재계산을 없애는 기법. 편집 거리 · 비터비 · CYK가 모두 여기에 속한다</td></tr>
+    <tr><td>PSR</td><td>Phrase Structure Rules 구구조 규칙 — <code>S → NP VP</code> 처럼 좌변 범주를 우변 요소로 펼치는 재작성 규칙</td></tr>
+    <tr><td>head · 핵어</td><td>구의 문법적 성격을 결정하는 필수 요소. NP의 핵어는 N, VP의 핵어는 V. 의존 문법의 &lsquo;지배소&rsquo;도 같은 말</td></tr>
+    <tr><td>카탈란 수</td><td>1, 1, 2, 5, 14, 42, 132, 429, 1430 … 단어 <span class="tex">n</span>개 문장의 이진 트리 수 <span class="tex">C_{n-1}</span></td></tr>
+    <tr><td>WordPiece · SentencePiece · Unigram LM</td><td>우도 기준 병합(BERT) · 공백을 <code>▁</code>로 다루는 구현 도구 · 큰 어휘에서 가지치기하는 확률 모형</td></tr>
+    <tr><td>OSA</td><td>Optimal String Alignment — 라이브러리가 흔히 &ldquo;Damerau&rdquo;라 부르는 제한판 편집 거리. 같은 구간을 두 번 편집하지 못한다</td></tr>
+    <tr><td>Lexicalized PCFG</td><td>비단말 기호에 핵어 단어를 얹어 어휘 정보를 반영한 PCFG — Collins · Charniak 파서</td></tr>
+    <tr><td>arc-standard · 오라클</td><td>전이 기반 파싱의 액션 체계(SHIFT/LEFT-ARC/RIGHT-ARC) · 정답 트리에서 정답 액션을 유도해 주는 기준</td></tr>
+    <tr><td>BIO</td><td>Begin-Inside-Outside — 여러 단어로 된 논항·개체명의 경계를 표시하는 태깅 방식</td></tr>
+    <tr><td>PropBank · FrameNet · VerbNet</td><td>술어 중심 ARG 번호 체계 · 프레임 의미론 기반 FE 체계 · 동사 부류 기반 체계</td></tr>
+    <tr><td>theta-criterion</td><td>의미역 기준 — 하나의 명사구는 오직 하나의 의미역만 갖는다</td></tr>
   </tbody>
 </table>
 </div>
@@ -1009,7 +1841,7 @@ lesk("I went to the bank to deposit my money .".split(), "bank")</pre>
 </section>
 
 <p class="src">자연어처리 4주차 (CHAPTER 4) 강의자료 정리 · 2026학년도 2학기<br>
-원본 교안 69페이지와 4주차 실습 문제/정답 노트북의 내용을 절 단위로 정리했습니다.</p>
+원본 교안 69페이지와 4주차 실습 문제/정답 노트북의 내용을 절 단위로 정리하고, 100문제(중급 48 · 심화 22)에서 갈리는 지점을 <b>🔎 한 걸음 더</b>(19편)와 <b>⚠ 여기서 갈린다</b>(14편)로 보강했습니다.<br>본문의 파란 형광펜 용어는 누르면 설명 말풍선이 뜹니다.</p>
 
 </div>
 
@@ -1035,6 +1867,55 @@ document.addEventListener('DOMContentLoaded', function () {
       }, 300);
     });
   });
+
+  /* ---- 개념 설명 말풍선 (형광펜 용어) ---- */
+  var terms = document.querySelectorAll('.term');
+  if (!terms.length) return;
+  var tip = document.createElement('div');
+  tip.id = 'tipbox';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  var current = null;
+
+  function hide() {
+    tip.classList.remove('on');
+    if (current) { current.classList.remove('on'); current = null; }
+  }
+  function show(el) {
+    tip.textContent = el.getAttribute('data-tip') || '';
+    tip.classList.add('on');
+    if (current && current !== el) current.classList.remove('on');
+    current = el;
+    el.classList.add('on');
+    var pad = 8;
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+    var top = r.top - t.height - 10;
+    if (top < pad) top = r.bottom + 10;
+    top = Math.min(top, window.innerHeight - t.height - pad);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+  terms.forEach(function (el) {
+    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+    el.addEventListener('mouseenter', function () { show(el); });
+    el.addEventListener('mouseleave', function () { if (current === el) hide(); });
+    el.addEventListener('focus', function () { show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (current === el && tip.classList.contains('on')) hide(); else show(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el); }
+      if (e.key === 'Escape') hide();
+    });
+  });
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide);
 });
 </script>
 <link rel="stylesheet" href="../vendor/katex/katex.min.css">
