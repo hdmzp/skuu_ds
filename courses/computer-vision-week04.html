@@ -371,6 +371,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <a href="#interp">07 보간</a>
   <a href="#bilinear">08 바이리니어·바이큐빅</a>
   <a href="#codes">09 Related Codes</a>
+  <a href="#pres">학생 발표</a>
   <a href="#hwlink">과제 #1 연결</a>
 </nav>
 
@@ -389,7 +390,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <p class="kicker">4주차 · 9.23 · 2026-2학기</p>
   <h1>04. Image Pyramids — Aliasing · Pyramid · Interpolation</h1>
   <p>이미지를 <b>줄일 때</b>는 왜 깨지는가(에일리어싱), 어떻게 하면 안 깨지는가(가우시안 → 서브샘플), 줄이며 잃은 정보를 어떻게 보관하는가(라플라시안 피라미드 · 웨이블릿), <b>키울 때</b>는 빈칸을 어떻게 채우는가(보간)까지를 교안 순서대로 정리했습니다.</p>
-  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 54p</span><span class="chip">교안 캡처 39장</span><span class="chip">과제 #1 3번과 직결</span><span class="chip">플립러닝 1 · 2부 필기 반영</span></div>
+  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 54p</span><span class="chip">교안 캡처 39장</span><span class="chip">과제 #1 3번과 직결</span><span class="chip">학생 발표 3건</span><span class="chip">플립러닝 1 · 2부 필기 반영</span></div>
 </section>
 
 <div class="legend">
@@ -412,6 +413,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <a href="#interp"><b>07 보간</b><span>재구성 필터 · 최근접 · 선형 · 가우시안</span></a>
   <a href="#bilinear"><b>08 바이리니어 · 바이큐빅</b><span>격자 예제 직접 계산 · 결과 비교</span></a>
   <a href="#codes"><b>09 Related Codes</b><span>OpenCV 피라미드 · 필터링 튜토리얼</span></a>
+  <a href="#pres"><b>학생 발표</b><span>FPN · Rethinking FPN · 안개 제거 — 논문 3편</span></a>
 </div>
 </section>
 
@@ -830,6 +832,270 @@ restored = cv2.add(up, L)                  <span class="cm"># 복원 x = F(G x) 
   <a href="https://youtu.be/HfM9s2ehErE" target="_blank" rel="noopener">Image Blending using Pyramids ↗<small>YouTube</small></a>
 </div>
 <div class="note-box"><b>피라미드 블렌딩이 하는 일</b> (튜토리얼 요약) — 두 이미지를 그냥 반씩 붙이면 이음새가 보인다. 두 이미지의 <b>라플라시안 피라미드를 층마다</b> 왼쪽 절반/오른쪽 절반으로 합치고, 그것을 복원하면 <b>저주파는 넓게, 고주파는 좁게 섞여</b> 이음새가 사라진다. 04절의 &lsquo;분해 → 복원&rsquo;을 그대로 응용한 것.</div>
+</section>
+
+<!-- ===================== 학생 발표 ===================== -->
+<section class="sec" id="pres">
+  <div class="sec-head"><span class="sec-badge">발표</span><h2 class="sec-title">학생 논문 발표<small>4주차 주제 = 이미지 피라미드 — 교안의 피라미드가 최신 논문에서 어떻게 쓰이는가</small></h2></div>
+
+<div class="tip"><b>세 발표를 관통하는 한 줄</b> — 교안에서 배운 <b>피라미드(줄이기 · 잔차 보관 · 되돌리기)</b>와 <b>보간</b>은 교과서 속 옛날 기법이 아니라, 지금도 <b>물체 검출기(①②)</b>와 <b>영상 복원(③)</b>의 뼈대로 그대로 쓰인다. ①은 피라미드를 <i>딥러닝 특징맵</i>으로 옮긴 고전 논문, ②는 그 피라미드가 가진 <i>부작용</i>을 다시 뜯어본 최신 논문, ③은 피라미드를 <i>영상 합성</i>에 쓴 안개 제거 논문이다.</div>
+
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📕</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-w04-pres-lee">① 이다영 — Image Pyramids에서 FPN까지: Multi-Scale Object Detection</a>
+      <p>Lin et al., <b>Feature Pyramid Networks for Object Detection</b> (CVPR 2017) · 13페이지</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week04-presentation-lee-fpn.pdf" download="컴퓨터비전_4주차_학생발표_이다영_FPN.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📊</span>PPTX</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week04-presentation-gong-slimneck.pptx" download="컴퓨터비전_4주차_학생발표_공태웅_Rethinking-FPN.pptx">② 공태웅 — Rethinking Features-Fused-Pyramid-Neck for Object Detection</a>
+      <p>Hulin Li, <b>Rethinking Features-Fused-Pyramid-Neck for Object Detection</b> (ECCV 2024) · 20장</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week04-presentation-gong-slimneck.pptx" download="컴퓨터비전_4주차_학생발표_공태웅_Rethinking-FPN.pptx">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📕</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-w04-pres-koo">③ 구윤호 — Single image defogging via multi-exposure image fusion and detail enhancement</a>
+      <p>Mao, Zheng, Chen &amp; Chen, <b>J. Safety Science and Resilience</b> 5(1) 37–46 (2024) · 15페이지</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week04-presentation-koo-defogging.pdf" download="컴퓨터비전_4주차_학생발표_구윤호_Defogging.pdf">⬇ 다운로드</a>
+  </div>
+</div>
+
+<!-- ---------- ① 이다영 ---------- -->
+<h3 class="sub-title">① 이다영 — Image Pyramids에서 FPN까지 (CVPR 2017)</h3>
+
+<div class="note-box"><b>논문 출처</b><br>
+T.-Y. Lin, P. Dollár, R. Girshick, K. He, B. Hariharan, S. Belongie,
+<b>&ldquo;Feature Pyramid Networks for Object Detection&rdquo;</b>, <b>CVPR 2017</b>.
+프리프린트 <a href="https://arxiv.org/abs/1612.03144" target="_blank" rel="noopener">arXiv:1612.03144</a> (2016.12) — 오픈 액세스로 전문을 볼 수 있다.
+Facebook AI Research + Cornell. 검출(detection) 분야에서 <b>지금도 표준 부품</b>으로 쓰이는 논문이다.</div>
+
+<div class="note-box"><b>풀려는 문제 — &ldquo;같은 물체인데 크기가 다르다&rdquo;</b><br>
+<b>물체 검출(object detection)</b>은 사진 속에서 <b>무엇이(분류)</b> <b>어디에(사각형 좌표)</b> 있는지 함께 맞히는 일이다.
+가장 소박한 방법은 <b>슬라이딩 윈도우(sliding window)</b> — 정해진 크기의 창을 이미지 위로 한 칸씩 밀면서 &ldquo;여기에 물체가 있나?&rdquo;를 계속 묻는 것이다.
+문제는 <b>창의 크기가 고정</b>이라는 점이다. 같은 사람이라도 가까이 있으면 400픽셀, 멀리 있으면 20픽셀이라 한 크기의 창으로는 둘 다 잡을 수 없다.
+<br><br>
+고전적 해법이 바로 이번 주 교안의 <a class="ext" href="#gpyr">03 가우시안 피라미드</a>다 — <b>창을 키우는 대신 이미지를 여러 배율로 줄여</b> 쌓아 놓고, 같은 크기의 창으로 모든 층을 훑는다.
+큰 물체는 위층(작아진 이미지)에서, 작은 물체는 아래층(원본)에서 창에 딱 맞게 걸린다. FPN은 <b>이 발상을 딥러닝 특징맵 위로 그대로 옮긴</b> 논문이다.</div>
+
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>구조</th><th>무엇을 하나</th><th>장점</th><th>약점</th></tr></thead>
+  <tbody>
+    <tr><td><b>(a) Featurized image pyramid</b><br><small>이미지 피라미드 + 특징 추출</small></td><td>이미지를 여러 배율로 만들어 <b>배율마다 CNN을 따로</b> 돌린다</td><td>모든 층이 똑같이 정확</td><td>배율 수만큼 CNN을 돌려 <b>매우 느림</b> — 실시간 불가</td></tr>
+    <tr><td><b>(b) Single feature map</b><br><small>마지막 특징맵 하나</small></td><td>CNN을 한 번만 돌리고 <b>가장 깊은 특징맵</b>에서만 예측 (원래의 Faster R-CNN)</td><td>빠름</td><td>깊은 층은 해상도가 1/32까지 줄어 <b>작은 물체가 사라짐</b></td></tr>
+    <tr><td><b>(c) Pyramidal feature hierarchy</b><br><small>중간 특징맵을 그대로 사용</small></td><td>CNN이 이미 만들어 둔 중간 특징맵들에서 <b>각각</b> 예측 (SSD)</td><td>추가 비용 없이 피라미드가 생김</td><td>얕은 층은 해상도는 높지만 <b>의미 정보가 약함</b> — &ldquo;선·모서리&rdquo;만 알고 &ldquo;개인지 고양이인지&rdquo;는 모름</td></tr>
+    <tr><td><b>(d) FPN</b><br><small>Feature Pyramid Network</small></td><td>(c)에 <b>위에서 아래로 되돌리는 길</b>을 더해, 깊은 층의 의미 정보를 얕은 층 해상도로 내려보내 합친다</td><td><b>모든 층이 &ldquo;고해상도 + 강한 의미&rdquo;</b>, 비용은 거의 그대로</td><td>층 간 연결이 늘어 구조가 복잡해짐 (→ ②번 발표가 이 지점을 다시 따짐)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="note-box"><b>FPN의 세 갈래 길 — 교안 용어로 풀면</b>
+<ul class="ul">
+  <li><b>Bottom-up pathway (상향식 경로)</b> — 그냥 평소의 CNN 순전파다. 단계를 지날수록 해상도는 절반씩 줄고(<b>stride</b> 4 → 8 → 16 → 32) 의미는 깊어진다. 각 단계의 마지막 특징맵을 <span class="tex">C_2, C_3, C_4, C_5</span>라 부른다. <b>= 교안의 가우시안 피라미드(줄이는 길)</b></li>
+  <li><b>Top-down pathway (하향식 경로)</b> — 가장 깊은 <span class="tex">C_5</span>부터 <b>2배 업샘플링</b>해 아래층 해상도로 되돌린다. 이때 쓰는 방법이 <b>최근접 이웃 보간(nearest neighbor)</b> — 바로 <a class="ext" href="#interp">07 보간</a>에서 배운 그 방법이다. 가장 싸고 단순해서 골랐다.</li>
+  <li><b>Lateral connection (측면 연결)</b> — 업샘플한 특징맵과, <b>같은 해상도의</b> 상향식 특징맵 <span class="tex">C_i</span>를 더한다. 채널 수가 달라 그냥 못 더하므로 <span class="tex">C_i</span>에 <b>1×1 합성곱</b>을 걸어 채널 수를 <span class="tex">d=256</span>으로 맞춘 뒤 <b>화소별 덧셈(element-wise addition)</b>.</li>
+  <li><b>합친 뒤 3×3 합성곱</b> — 업샘플링이 만든 <b>에일리어싱(계단 모양 인공물)</b>을 눌러 주려고 한 번 더 필터를 건다. <a class="ext" href="#alias">01</a>·<a class="ext" href="#nyquist">02</a>에서 &ldquo;크기를 바꿀 때는 블러로 다듬는다&rdquo;고 배운 것과 <b>같은 처방</b>이다.</li>
+  <li>이렇게 나온 결과가 <span class="tex">P_2, P_3, P_4, P_5</span> — 층마다 해상도는 다르지만 <b>채널 수는 256으로 통일</b>돼 있어 <b>같은 예측기(head)를 모든 층에 공유</b>할 수 있다.</li>
+</ul></div>
+
+<div class="qa"><b>교안 04와 FPN은 사실 같은 골격이다</b><br>
+<a class="ext" href="#lpyr">04 라플라시안 피라미드</a>를 떠올려 보자. 복원할 때 우리는 &ldquo;<b>위층을 확대(expand)</b> → <b>같은 해상도의 잔차를 더한다</b>&rdquo;를 반복했다.
+FPN도 똑같이 &ldquo;<b>위층 특징맵을 2배 확대</b> → <b>같은 해상도의 특징맵을 더한다</b>&rdquo;를 반복한다.
+다른 점은 더하는 대상이 <b>잔차(잃어버린 고주파)</b>냐 <b>얕은 층의 특징</b>이냐뿐이다.
+즉 라플라시안 피라미드는 <b>정보를 잃지 않고 되돌리는 법</b>을 알려준 설계도이고, FPN은 그 설계도를 <b>학습되는 특징</b>에 적용한 것이다.</div>
+
+<div class="warn"><b>발표 슬라이드의 한글 표기 정정</b> — 슬라이드에 &ldquo;Bottom-up pathway (하향식)&rdquo;, &ldquo;Top-down (상향식)&rdquo;으로 적혀 있는데 <b>뒤바뀐 표기</b>다.
+<b>bottom-up = 아래(원본 해상도)에서 위로 = 상향식</b>, <b>top-down = 위(깊은 층)에서 아래로 = 하향식</b>이다. 시험에서 방향을 묻는 문제가 나오면 <b>영어 단어 그대로</b> 생각하는 편이 안전하다.</div>
+
+<div class="note-box"><b>어디에 붙여 썼나 — 두 가지 실험</b>
+<ul class="ul">
+  <li><b>RPN(Region Proposal Network, 영역 후보 생성망)에 적용</b> — RPN은 &ldquo;물체가 있을 법한 사각형 후보&rdquo;를 대량으로 뽑아 주는 작은 네트워크다. 미리 정해 둔 기준 상자(<b>앵커, anchor</b>)마다 ⓐ 물체인지 아닌지(<b>objectness</b>) ⓑ 상자를 얼마나 밀고 늘릴지를 예측한다. 원래는 특징맵 한 장에 <b>여러 크기의 앵커</b>를 얹었지만, FPN에서는 <b>층마다 하나의 크기</b>만 맡기고(<span class="tex">P_2 \sim P_6</span>, 32²~512²) 층마다 <b>종횡비 3가지</b>만 둔다. 정답 판정은 <b>IoU</b> 기준 — <b>0.7 이상이면 물체(positive), 0.3 미만이면 배경(negative)</b>.</li>
+  <li><b>Fast R-CNN에 적용</b> — 후보 상자(<b>RoI</b>)마다 특징을 잘라내 <b>RoI pooling으로 7×7 고정 크기</b>로 맞추고, <b>완전연결층(fully-connected) 2개(1024차원)</b>를 거쳐 분류와 좌표 보정을 한다. 이때 <b>큰 RoI는 위층, 작은 RoI는 아래층</b>에서 특징을 꺼내 쓴다 — 피라미드의 원래 정신 그대로다.</li>
+</ul></div>
+
+<div class="good"><b>성능 — 숫자로 본 효과</b>
+<ul class="ul">
+  <li>Fast R-CNN 기준 <b>AP 28.8 → 33.9</b>, Faster R-CNN 기준 <b>31.6 → 33.9</b>, <b>AP@0.5 53.1 → 56.9</b></li>
+  <li>COCO test-std <b>AP 35.8 / AP@0.5 58.5</b> — 발표 당시 <b>SOTA</b>(최고 성능)</li>
+  <li>분할(segmentation) 후보 생성에서 <b>AR 39.8 → 48.1</b>, 특히 <b>작은 물체 AR 17.4 → 32.6</b>으로 거의 두 배. 처리 시간은 <b>0.15~0.25초</b>로 여전히 빠르다.</li>
+  <li>핵심은 &ldquo;<b>(a)처럼 정확한데 (b)처럼 빠르다</b>&rdquo; — CNN은 한 번만 돌리고 피라미드는 <b>특징맵 위에서</b> 만들기 때문이다.</li>
+</ul></div>
+
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>약어</th><th>풀네임</th><th>뜻</th></tr></thead>
+  <tbody>
+    <tr><td><b>FPN</b></td><td>Feature Pyramid Network</td><td>특징 피라미드 망 — 특징맵으로 만든 피라미드 + 하향식 연결</td></tr>
+    <tr><td><b>CNN</b></td><td>Convolutional Neural Network</td><td>합성곱 신경망 — 3주차의 선형 필터를 <b>학습</b>시키는 망</td></tr>
+    <tr><td><b>RPN</b></td><td>Region Proposal Network</td><td>물체가 있을 만한 후보 영역을 뽑는 망</td></tr>
+    <tr><td><b>RoI</b></td><td>Region of Interest</td><td>관심 영역 — 후보로 뽑힌 사각형 하나</td></tr>
+    <tr><td><b>IoU</b></td><td>Intersection over Union</td><td>두 상자의 <b>겹친 넓이 ÷ 합친 넓이</b>. 1에 가까울수록 정답과 일치</td></tr>
+    <tr><td><b>AP</b></td><td>Average Precision</td><td>평균 정밀도 — 검출 성능의 표준 점수(높을수록 좋음). <b>AP@0.5</b>는 IoU 0.5 이상을 정답으로 칠 때의 점수</td></tr>
+    <tr><td><b>AR</b></td><td>Average Recall</td><td>평균 재현율 — 실제 물체 중 몇 %를 놓치지 않았는가. <b>AR<sub>s</sub></b>는 작은(small) 물체만 따진 값</td></tr>
+    <tr><td><b>SOTA</b></td><td>State Of The Art</td><td>그 시점 최고 성능</td></tr>
+    <tr><td><b>SSD</b></td><td>Single Shot MultiBox Detector</td><td>(c) 구조를 쓴 대표 검출기 — 한 번에 후보와 분류를 동시에</td></tr>
+    <tr><td><b>COCO</b></td><td>Common Objects in Context</td><td>물체 검출의 표준 데이터셋(80종, 사진 33만 장)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ---------- ② 공태웅 ---------- -->
+<h3 class="sub-title">② 공태웅 — Rethinking Features-Fused-Pyramid-Neck (ECCV 2024)</h3>
+
+<div class="note-box"><b>논문 출처</b><br>
+Hulin Li, <b>&ldquo;Rethinking Features-Fused-Pyramid-Neck for Object Detection&rdquo;</b>, <b>ECCV 2024</b>
+(European Conference on Computer Vision, LNCS 15062, pp. 74–90) ·
+<a href="https://doi.org/10.1007/978-3-031-72855-6_5" target="_blank" rel="noopener">doi:10.1007/978-3-031-72855-6_5</a> ·
+프리프린트 <a href="https://arxiv.org/abs/2505.12820" target="_blank" rel="noopener">arXiv:2505.12820</a> ·
+코드 <a href="https://github.com/AlanLi1997/rethinking-fpn" target="_blank" rel="noopener">github.com/AlanLi1997/rethinking-fpn</a>.
+같은 저자의 선행 연구가 경량 넥 설계로 유명한 <b>slim-neck by GSConv</b>라서, 발표 자료 파일 이름도 slim-neck으로 되어 있다.</div>
+
+<div class="note-box"><b>먼저 알아둘 검출기 3단 구조</b> — 요즘 검출기는 <b>백본(backbone) → 넥(neck) → 헤드(head)</b>로 나뉜다.
+<b>백본</b>은 특징을 뽑고(=①의 bottom-up), <b>넥</b>은 여러 해상도의 특징을 섞어 정리하며(=①의 top-down + lateral), <b>헤드</b>는 실제로 상자와 분류를 예측한다.
+①의 FPN은 바로 이 <b>넥</b>에 해당한다. 이 논문의 제목이 말하는 &ldquo;features-<b>fused</b>-pyramid-neck&rdquo;은 <b>여러 층 특징을 섞는(fused) 넥</b>, 곧 FPN 계열 전부를 가리킨다.
+<br><br>
+또 하나의 필수 용어가 <b>수용 영역(receptive field)</b> — 출력 특징맵의 <b>한 점이 원본 이미지에서 실제로 보고 있는 영역의 크기</b>다.
+층이 깊을수록 수용 영역이 커져 <b>큰 물체</b>를 담당하고, 얕을수록 좁아 <b>작은 물체</b>를 담당한다. 그래서 층마다 담당 스케일이 다르다.</div>
+
+<div class="warn"><b>이 논문이 던지는 의심 — &ldquo;섞는 게 정말 좋은가?&rdquo;</b>
+<ul class="ul">
+  <li><b>표현 편향(representation bias)</b> — 넥에서 층을 섞으면, 작은 물체를 맡은 헤드에도 큰 물체용 정보가 흘러 들어온다. 각 헤드가 <b>자기 담당 스케일에 집중하지 못해</b> 특징이 흐려진다.</li>
+  <li><b>특징 불일치(feature misalignment)</b> — 해상도를 맞추려고 업샘플·다운샘플을 하면 <b>격자의 중심 위치가 미세하게 어긋난다</b>. 같은 물체의 같은 지점인데 층마다 조금씩 다른 자리에 찍히는 것이다. <a class="ext" href="#bilinear">08</a>에서 &ldquo;확대할 때 격자를 어디에 맞추느냐&rdquo;를 따졌던 문제가 <b>신경망 안에서 그대로 재현</b>된다.</li>
+</ul></div>
+
+<div class="note-box"><b>제안한 네 가지 부품 (약어가 전부 이니셜이라 풀어서 보면 쉽다)</b>
+<ul class="ul">
+  <li><b>IHP — Independent Hierarchy Pyramid(독립 계층 피라미드)</b> : 아예 <b>섞지 않는다</b>. 각 헤드에 자기 층 특징만 준다(features-<b>unfused</b>). 표현 편향을 원천 차단하는 극단적 처방.</li>
+  <li><b>SNI — Soft Nearest-neighbor Interpolation(소프트 최근접 이웃 보간)</b> : 섞긴 섞되 <b>약하게</b> 섞는다. 상위층 특징을 <b>최근접 이웃 보간</b>으로 키운 뒤 <b>가중치 <span class="tex">\alpha &lt; 1</span>을 곱해</b> 더한다. ①의 FPN이 그냥 1:1로 더했던 자리에 &ldquo;볼륨 조절 노브&rdquo;를 하나 단 셈이다. <b>교안 <a class="ext" href="#interp">07 최근접 이웃 보간</a>이 논문 제목 속 부품 이름으로 등장</b>하는 대목이다.</li>
+  <li><b>ESD — Extended Spatial-window Downsampling(확장 공간창 다운샘플링)</b> : 다운샘플링할 때 <a class="ext" href="#down">00</a>처럼 <b>한 칸 건너 버리면 정보가 날아가고 에일리어싱이 생긴다</b>. 대신 <b>넓은 창에서 최댓값 풀링과 평균 풀링을 함께</b> 취해 &ldquo;가장 튀는 값&rdquo;과 &ldquo;전체 분위기&rdquo;를 둘 다 남긴다. <b>ESD-I</b>은 둘을 그냥 더하고, <b>ESD-II</b>는 더하는 비율까지 학습한다. 교안이 &ldquo;<b>버리기 전에 블러</b>&rdquo;라고 처방한 것과 같은 정신이다.</li>
+  <li><b>GSConvE-I / II</b> : 표준 합성곱과 <b>깊이별 합성곱(depthwise convolution — 채널마다 따로 거는 가벼운 필터)</b>의 결과를 이어 붙인 뒤 <b>채널 섞기(feature shuffle)</b>로 정보를 교환하는 <b>경량 합성곱</b>. 저자의 선행 연구 <b>GSConv</b>의 확장(E = Extended)판으로, 계산량을 줄이면서 채널 간 정보를 유지한다.</li>
+  <li>넷을 합친 최종 넥이 <b>SA — Secondary (Features) Alignment, 2차 특징 정렬</b>이고, 이것을 YOLO에 얹은 것이 <b>SYOLO</b>(large / small / nano 세 크기)다.</li>
+</ul></div>
+
+<div class="qa"><b>&ldquo;Ablation study&rdquo;가 뭔가</b> — 발표 슬라이드에도 따로 정의가 나오는데, <b>제거 실험</b>이라는 뜻이다.
+제안한 부품을 <b>하나씩 빼거나 넣어 가며</b> 성능이 얼마나 오르내리는지 측정해, <b>어느 부품이 실제로 기여했는지</b>를 가려내는 실험이다.
+&ldquo;다 넣었더니 좋아졌다&rdquo;는 주장만으로는 어느 아이디어 덕분인지 알 수 없기 때문에, 요즘 논문에는 거의 필수로 들어간다.</div>
+
+<div class="good"><b>결과와, 발표에서 짚어 준 흥미로운 지점</b>
+<ul class="ul">
+  <li>실험 대상 — <b>YOLOv3 ~ v8</b>의 tiny/nano 계열, 데이터셋은 <b>Pascal VOC 07+12</b>와 <b>MS COCO</b>.</li>
+  <li><b>SNI는 거의 모든 모델에서 일관되게 성능을 올렸다</b> — &ldquo;약하게 섞기&rdquo;는 안전한 개선.</li>
+  <li>반면 <b>IHP(아예 안 섞기)는 YOLOv3·v4·v5·v7에서는 도움이 됐지만 v6·v8에서는 오히려 성능이 떨어졌다</b>. 최신 모델은 백본이 이미 충분히 강해 넥의 융합이 크게 해롭지 않기 때문으로 해석된다. <b>&ldquo;섞지 마라&rdquo;가 보편 법칙은 아니라는 뜻</b>이다.</li>
+  <li>최종 성능 — Pascal VOC <b>AP 69.6</b>, MS COCO에서 <b>SYolo-s가 AP 40.8</b>로 YOLOv5-s 대비 <b>+3.4</b>, 그러면서 <b>FLOPs와 지연시간은 오히려 더 낮다</b>.</li>
+</ul></div>
+
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>약어</th><th>풀네임</th><th>뜻</th></tr></thead>
+  <tbody>
+    <tr><td><b>IHP</b></td><td>Independent Hierarchy Pyramid</td><td>독립 계층 피라미드 — 층을 섞지 않는 넥</td></tr>
+    <tr><td><b>SNI</b></td><td>Soft Nearest-neighbor Interpolation</td><td>소프트 최근접 이웃 보간 — 올린 특징에 가중치를 곱해 약하게 더함</td></tr>
+    <tr><td><b>ESD</b></td><td>Extended Spatial-window Downsampling</td><td>확장 공간창 다운샘플링 — 넓은 창에서 max + avg 풀링</td></tr>
+    <tr><td><b>SA</b></td><td>Secondary (Features) Alignment</td><td>2차 특징 정렬 — 위 부품을 합친 최종 넥</td></tr>
+    <tr><td><b>GSConv(E)</b></td><td>저자의 경량 합성곱, E = Extended</td><td>표준 + 깊이별 합성곱 결합 후 채널 셔플</td></tr>
+    <tr><td><b>YOLO</b></td><td>You Only Look Once</td><td>이미지를 한 번만 보고 상자와 분류를 동시에 내놓는 실시간 검출기 계열</td></tr>
+    <tr><td><b>PANet</b></td><td>Path Aggregation Network</td><td>FPN에 <b>상향식 경로를 하나 더</b> 붙인 넥</td></tr>
+    <tr><td><b>ASFF</b></td><td>Adaptively Spatial Feature Fusion</td><td>층별 특징을 <b>위치마다 다른 가중치</b>로 섞는 방식</td></tr>
+    <tr><td><b>BiFPN</b></td><td>Bidirectional FPN</td><td>양방향 연결 + 학습되는 가중치를 쓴 넥(EfficientDet)</td></tr>
+    <tr><td><b>FLOPs</b></td><td>FLoating point OPerations</td><td>한 번 추론에 필요한 부동소수점 연산 횟수 — 계산량의 척도</td></tr>
+    <tr><td><b>VOC</b></td><td>(Pascal) Visual Object Classes</td><td>20종 물체의 고전 검출 데이터셋</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ---------- ③ 구윤호 ---------- -->
+<h3 class="sub-title">③ 구윤호 — 다중 노출 융합 + 디테일 강화로 안개 제거 (2024)</h3>
+
+<div class="note-box"><b>논문 출처</b><br>
+Q. Mao, X. Zheng, Y. Chen, M. Chen, <b>&ldquo;Single image defogging via multi-exposure image fusion and detail enhancement&rdquo;</b>,
+<b>Journal of Safety Science and Resilience</b>, 5(1), 37–46 (2024) ·
+<a href="https://doi.org/10.1016/j.jnlssr.2023.09.002" target="_blank" rel="noopener">doi:10.1016/j.jnlssr.2023.09.002</a> ·
+<a href="https://www.sciencedirect.com/science/article/pii/S2666449623000555" target="_blank" rel="noopener">ScienceDirect</a>에서 <b>오픈 액세스</b>로 전문 열람 가능.
+<b>세 발표 중 교안의 라플라시안 피라미드를 가장 직접적으로 쓰는 논문</b>이다.</div>
+
+<div class="note-box"><b>안개는 왜 사진을 망치나 — 대기 산란 모델</b><br>
+안개 낀 사진은 보통 다음 식으로 모형화한다.
+<div class="tex-d">I(x) = t(x)\,J(x) + \bigl(1 - t(x)\bigr) A</div>
+<ul class="ul">
+  <li><span class="tex">I(x)</span> : 우리가 실제로 찍은(뿌연) 영상</li>
+  <li><span class="tex">J(x)</span> : 안개가 없었다면 보였을 원래 장면 — <b>이걸 되찾는 것이 목표</b></li>
+  <li><span class="tex">t(x)</span> : <b>투과율(transmission)</b>. 물체에서 나온 빛 중 카메라까지 살아 남은 비율. 거리 <span class="tex">d</span>가 멀수록 <span class="tex">t = e^{-\beta d}</span>로 작아진다</li>
+  <li><span class="tex">A</span> : <b>대기광(atmospheric light)</b>. 안개 입자에 산란돼 들어오는 하얀 빛 — 멀리 있는 산이 하얗게 뜨는 이유</li>
+</ul>
+즉 <b>먼 곳일수록 원래 색은 옅어지고 흰 빛이 덧씌워져</b> 대비가 무너진다. 그래서 <b>거리에 따라 다른 세기로</b> 복원해야 하는데, 사진 한 장으로는 거리를 모른다는 게 이 분야의 근본 난점이다.</div>
+
+<div class="note-box"><b>기존 접근 세 갈래</b>
+<ul class="ul">
+  <li><b>물리 모델 복원</b> — <span class="tex">t</span>와 <span class="tex">A</span>를 추정해 식을 역으로 푼다. 대표가 <b>DCP(Dark Channel Prior, 어두운 채널 사전지식)</b> — &ldquo;맑은 야외 사진은 어느 국소 영역이든 RGB 중 <b>아주 어두운 채널이 하나쯤 있다</b>&rdquo;는 통계를 이용해 <span class="tex">t</span>를 추정한다. 하늘처럼 그 가정이 깨지는 곳에서 색이 이상해진다. 이 계열에 <b>FVR(Fast Visibility Restoration)</b>, Fattal의 방법 등이 있다.</li>
+  <li><b>대비 향상</b> — 물리는 잊고 <b>히스토그램</b>을 펴서 또렷하게 만든다. <b>AHE(Adaptive Histogram Equalization, 적응형 히스토그램 평활화)</b>, 잡음 증폭을 억제한 <b>CLAHE(Contrast Limited AHE)</b>, 감마 보정 등. 빠르지만 <b>노이즈까지 증폭</b>된다.</li>
+  <li><b>융합(fusion)</b> — 원본에서 <b>여러 버전</b>을 만들어 좋은 부분만 합친다. <b>AMEF(Artificial Multi-Exposure image Fusion, 인공 다중 노출 융합)</b>가 대표. 이 논문도 이 계열이다.</li>
+</ul></div>
+
+<div class="note-box"><b>제안 방법 — 한 장으로 &lsquo;노출 다른 사진 네 장&rsquo;을 만들어 피라미드로 합친다</b>
+<div class="flow">
+  <div class="fl"><b>① 적응적 노출 조정</b><span>영상을 <b>HSV</b>로 바꿔 <b>V(명도) 채널</b>로 장면이 얼마나 밝은지 보고, 그에 맞춰 톤을 조정한 <span class="tex">I_1</span>을 만든다</span></div>
+  <div class="fl"><b>② 가상 노출 네 장</b><span><span class="tex">I_1</span>, <span class="tex">I_2=I_1^2</span>, <span class="tex">I_3=I_1^3</span>(제곱·세제곱 → 점점 <b>어둡고 대비 강한</b> 버전), <span class="tex">I_4</span> = CLAHE 적용본. <b>노출 브라케팅을 소프트웨어로 흉내</b> 낸 것</span></div>
+  <div class="fl"><b>③ 화소별 품질 가중치</b><span><span class="tex">W = C \cdot S \cdot L</span> — <b>C</b>ontrast(대비, 라플라시안 크기), <b>S</b>aturation(채도), <b>L</b> well-exposedness(너무 밝지도 어둡지도 않은 정도). 네 장의 합이 1이 되도록 정규화</span></div>
+  <div class="fl"><b>④ 피라미드 융합 ← 이번 주 교안</b><span><b>영상은 라플라시안 피라미드</b>로, <b>가중치 맵은 가우시안 피라미드</b>로 분해한 뒤 층마다 <span class="tex">F_l = \sum_k G_l(w_k)\,L_l(I_k)</span>로 섞고, 라플라시안 복원 절차로 되돌린다</span></div>
+  <div class="fl"><b>⑤ 적응적 디테일 강화</b><span><span class="tex">R_{low}</span> = 3×3 평균 필터, <span class="tex">R_{high} = R - R_{low}</span>(고주파), <span class="tex">R_{out} = R + \delta R_{high}</span>. <span class="tex">\delta</span> = 평균 ÷ 국소 분산(최대 2.5)</span></div>
+</div></div>
+
+<div class="qa"><b>왜 굳이 피라미드로 섞나? — ④가 이 논문의 핵심이자 교안과 만나는 지점</b><br>
+네 장을 <b>원래 해상도에서 곧바로 가중평균</b>하면, 가중치가 급격히 바뀌는 경계에서 <b>이음매(seam)와 후광(halo)</b>이 생긴다. 사진 A에서 온 부분과 B에서 온 부분의 밝기가 갑자기 달라지기 때문이다.
+<a class="ext" href="#lpyr">04 라플라시안 피라미드</a>로 <b>주파수 대역을 나눠 놓고 층마다 따로 섞으면</b> — 낮은 층(전체 밝기 같은 <b>저주파</b>)은 <b>넓고 부드럽게</b>, 높은 층(경계·질감 같은 <b>고주파</b>)은 <b>좁고 날카롭게</b> 섞인다. 그래서 이음매가 눈에 띄지 않는다.
+<b>가중치 맵을 가우시안 피라미드로 만드는 이유</b>도 같다 — 가중치 자체를 층 해상도에 맞춰 부드럽게 줄여 놓아야, 그 층의 디테일과 크기가 맞는다.
+<a class="ext" href="#apps">05 응용</a>에서 &ldquo;피라미드 블렌딩&rdquo;으로 사과와 오렌지를 자연스럽게 이어 붙였던 그 기법이, 여기서는 <b>같은 장면의 노출만 다른 네 장</b>에 적용된 것이다.</div>
+
+<div class="qa"><b>⑤의 <span class="tex">\delta</span>는 왜 &lsquo;분산으로 나누&rsquo;나</b> — <span class="tex">R_{high}</span>는 교안 언어로 <b>라플라시안 성분(고주파)</b>이고, 그걸 <span class="tex">\delta</span>배 해서 도로 더하면 선명해진다(<b>언샤프 마스킹</b>과 같은 원리).
+그런데 이미 디테일이 많은 곳(국소 분산이 큰 곳)에서 세게 강화하면 <b>노이즈까지 커지고 경계에 링이 생긴다</b>. 그래서 분산이 큰 곳에서는 <span class="tex">\delta</span>가 작아지도록 <b>평균 ÷ 분산</b>으로 두고, 폭주를 막으려 <b>2.5로 상한</b>을 뒀다. &ldquo;<b>밋밋한 곳은 많이, 이미 복잡한 곳은 조금</b>&rdquo;이라는 적응 규칙이다.</div>
+
+<div class="good"><b>성능과 한계 (발표에서 솔직하게 짚어 준 부분)</b>
+<ul class="ul">
+  <li><b>SSIM 평균 0.5137</b>로 비교 기법 중 최고 — 다만 <b>Reindeer 영상에서는 DCP보다 낮았다</b>.</li>
+  <li><b>FADE 0.3363</b> — 안개가 얼마나 남았는지 재는 지표로, <b>낮을수록 좋다</b>.</li>
+  <li>처리 시간 <b>1.51초</b> (AMEF 1.46초) — 융합 기법치고 무겁지 않다.</li>
+  <li><b>한계</b> — ⓐ <b>색이 있는 안개</b>(황사·연기)에는 약하고, ⓑ <b>어두운 장면</b>에서는 노출 조정이 잘 듣지 않으며, ⓒ 비교 대상이 <b>고전 기법 위주</b>라 최신 딥러닝 안개 제거와의 비교가 빠져 있다.</li>
+</ul></div>
+
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>약어</th><th>풀네임</th><th>뜻</th></tr></thead>
+  <tbody>
+    <tr><td><b>DCP</b></td><td>Dark Channel Prior</td><td>어두운 채널 사전지식 — 안개 제거의 고전 기법</td></tr>
+    <tr><td><b>FVR</b></td><td>Fast Visibility Restoration</td><td>빠른 가시성 복원 — 물리 모델 계열</td></tr>
+    <tr><td><b>AHE / CLAHE</b></td><td>(Contrast Limited) Adaptive Histogram Equalization</td><td>국소 히스토그램 평활화 / 잡음 증폭을 제한한 개선판</td></tr>
+    <tr><td><b>MEF · AMEF</b></td><td>(Artificial) Multi-Exposure Fusion</td><td>노출이 다른 여러 장을 합치는 기법 / 그것을 한 장으로 흉내 낸 안개 제거법</td></tr>
+    <tr><td><b>HSV</b></td><td>Hue, Saturation, Value</td><td>색상·채도·명도 색공간 — <b>밝기만 따로 손대기</b> 좋다</td></tr>
+    <tr><td><b>SSIM</b></td><td>Structural SIMilarity index</td><td>구조적 유사도 — 정답 영상과 얼마나 닮았나(1에 가까울수록 좋음)</td></tr>
+    <tr><td><b>FADE</b></td><td>Fog Aware Density Evaluator</td><td>정답 영상 없이 <b>남은 안개 농도</b>를 추정하는 지표(낮을수록 좋음)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ---------- 정리 ---------- -->
+<h3 class="sub-title">세 발표 ↔ 4주차 교안 연결 지도</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>교안 절</th><th>① 이다영 · FPN</th><th>② 공태웅 · Rethinking FPN</th><th>③ 구윤호 · 안개 제거</th></tr></thead>
+  <tbody>
+    <tr><td><a class="ext" href="#down">00 다운샘플링</a>·<a class="ext" href="#alias">01 에일리어싱</a></td><td>업샘플 후 <b>3×3 conv</b>로 에일리어싱 완화</td><td><b>ESD</b> — 단순히 버리지 않고 max+avg 풀링으로 보존</td><td>—</td></tr>
+    <tr><td><a class="ext" href="#gpyr">03 가우시안 피라미드</a></td><td><b>bottom-up 경로</b> = 해상도를 절반씩 줄이는 길</td><td>백본의 계층 자체가 피라미드</td><td><b>가중치 맵</b>을 가우시안 피라미드로 분해</td></tr>
+    <tr><td><a class="ext" href="#lpyr">04 라플라시안 피라미드</a></td><td><b>&ldquo;확대 후 같은 해상도끼리 더하기&rdquo;</b> 골격이 동일</td><td>더할 때 <b>가중치 <span class="tex">\alpha</span></b>를 준 것이 SNI</td><td><b>영상 4장</b>을 라플라시안 피라미드로 분해·합성 (핵심)</td></tr>
+    <tr><td><a class="ext" href="#apps">05 정리·응용</a></td><td>다중 스케일 검출</td><td>다중 스케일 넥 설계 재검토</td><td><b>피라미드 블렌딩</b>으로 이음매 없는 합성</td></tr>
+    <tr><td><a class="ext" href="#interp">07 보간</a></td><td><b>최근접 이웃</b>으로 2배 업샘플</td><td><b>SNI</b> = 소프트 <b>최근접 이웃</b> 보간</td><td>—</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="tip"><b>정리</b> — ①은 <b>피라미드를 특징맵으로 옮기면 검출이 좋아진다</b>는 것을 보였고, ②는 <b>그 옮김 과정에서 생긴 부작용(편향·어긋남)</b>을 지적하며 보간과 다운샘플링을 다시 설계했고, ③은 피라미드를 검출이 아니라 <b>영상 합성</b>에 써서 안개를 걷어냈다.
+<b>같은 주 교안의 도구 하나가 세 갈래로 뻗어 나간 사례</b>로 묶어 기억해 두면 좋다.</div>
 </section>
 
 <section class="sec" id="hwlink">
