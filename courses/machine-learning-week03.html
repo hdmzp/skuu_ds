@@ -348,6 +348,9 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <a href="#multi">3.6 다중 선형 회귀</a>
   <a href="#plus">개정판 심화</a>
   <a href="#lab2">개정판 실습</a>
+  <a href="#nb-py">실습 · 파이썬 기초</a>
+  <a href="#nb-idea">실습 · 개념 정리</a>
+  <a href="#nb-cells">실습 · 코드 해부</a>
   <a href="#summary">핵심 정리</a>
   <a href="#terms">용어 · 기호</a>
   <a href="#lab">선형 회귀 실습</a>
@@ -370,7 +373,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <p class="kicker">3주차 · 9.14 ~ 9.20 · 2026-2학기</p>
   <h1>CHAPTER 1 — 선형 회귀 (Linear Regression)</h1>
   <p>입력과 출력 사이의 관계를 <b>직선(초평면)</b>으로 표현하고, <b>손실 함수</b>로 얼마나 틀렸는지 재고, <b>경사하강법</b>으로 손실을 줄여 가며 파라미터를 찾는 과정 — 기계학습 &lsquo;학습&rsquo;의 기본 틀을 처음으로 완성하는 주차입니다.</p>
-  <div class="chips"><span class="chip">회귀 vs 분류</span><span class="chip">단순 선형 회귀</span><span class="chip">MSE · MAE</span><span class="chip">경사하강법 · 학습률</span><span class="chip">다중 선형 회귀</span><span class="chip">sklearn · 직접 구현</span><span class="chip">실시간 복습 강의 필기 반영</span><span class="chip">개정판 62페이지</span><span class="chip">최적화 · 정규화 심화</span></div>
+  <div class="chips"><span class="chip">회귀 vs 분류</span><span class="chip">단순 선형 회귀</span><span class="chip">MSE · MAE</span><span class="chip">경사하강법 · 학습률</span><span class="chip">다중 선형 회귀</span><span class="chip">sklearn · 직접 구현</span><span class="chip">실시간 복습 강의 필기 반영</span><span class="chip">개정판 62페이지</span><span class="chip">최적화 · 정규화 심화</span><span class="chip">실습 코드 해부</span></div>
 </section>
 
 <div class="notes-legend">
@@ -399,6 +402,15 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
       <p>sklearn · NumPy · PyTorch TODO 12개 · Colab에 올려 실행 · <a class="ext" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week03-lab-solution.ipynb" download="3주차_linear_regression_실습_정답.ipynb">정답본 받기</a> · <a class="ext" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week03-Salary_Data.csv" download="Salary_Data.csv">Salary_Data.csv</a> — <a class="ext" href="#lab2">실습 정리 보기</a></p>
     </div>
     <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week03-lab-problem.ipynb" download="3주차_linear_regression_실습_문제.ipynb">⬇ 문제본</a>
+  </div>
+
+  <div class="doc">
+    <div class="doc-ico"><span>✅</span>IPYNB</div>
+    <div class="doc-main">
+      <a class="doc-open" href="#nb-cells">3주차 실습 — 내가 제출한 풀이본 (TODO 12개 + 선택 과제 3·4)</a>
+      <p>TODO 전부 채운 실행본 · 셀별 <b>추가학습 메모</b> · 선택 과제 3(컨포멀 예측)·4(비교표) 포함 — <a class="ext" href="#nb-py">파이썬 기초</a> · <a class="ext" href="#nb-idea">개념 정리</a> · <a class="ext" href="#nb-cells">셀별 코드 해부</a></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week03-lab-my-submission.ipynb" download="3주차_linear_regression_실습_제출본.ipynb">⬇ 내 풀이본</a>
   </div>
 
   <div class="doc">
@@ -1185,6 +1197,959 @@ opt.step()</pre>
 </div>
 <div class="warn"><b>자주 나오는 실수</b> ① 분할 전에 전체 X를 표준화(<b>누수</b>) ② 표준화 척도 계수를 그대로 &ldquo;연봉/년&rdquo;으로 해석 ③ 표준화 없이 <code>lr=0.1</code> → 발산 (원 척도 한계 0.0338) ④ <code>y − Xb@w</code> 부호 뒤집기, <code>2/N</code> 누락 ⑤ <code>zero_grad()</code> 누락 → 기울기 누적 ⑥ R²만 보고 &ldquo;경력이 연봉을 올린다&rdquo;고 인과 결론.</div>
 <div class="note-box"><b>제출</b> — TODO를 모두 채워 커널 재시작 후 끝까지 실행된 노트북 <code>3주차_linear_regression_학번_이름.ipynb</code> + TODO(9) 비교표(세 구현의 w0, w1, 테스트 RMSE) + 학습률 0.02 / 0.1 / 0.5 / 1.05 손실 곡선과 발산 이유 2~3줄.</div>
+<div class="link-list">
+  <a href="#nb-py">실습 코드를 읽기 위한 파이썬 최소 지식 →<small>import · 객체와 메서드 · shape · 브로드캐스팅 · f-string · 람다 — 노트북에 나온 문법만 10가지</small></a>
+  <a href="#nb-idea">실습 개념 정리 12가지 →<small>표준화 · 데이터 누수 · 척도 복원 · 정규방정식 · 기울기 유도 · 안정 조건 η&lt;2/L · autograd — TODO와 일대일 대응</small></a>
+  <a href="#nb-cells">셀별 코드 해부 →<small>정답본을 위에서 아래로 한 줄씩 · 출력값 해석 · 선택 과제 3·4 풀이와 점검까지</small></a>
+</div>
+</section>
+
+<!-- ===================== 실습 파이썬 기초 ===================== -->
+<section class="sec" id="nb-py">
+  <div class="sec-head"><span class="sec-badge">PY</span><h2 class="sec-title">실습 코드를 읽기 위한 파이썬 최소 지식<small>import · 객체 · shape · 브로드캐스팅 · f-string — 노트북에 실제로 나온 문법만</small></h2></div>
+<div class="note-box"><b>이 절을 먼저 두는 이유</b> — 실습 노트북에서 막히는 지점은 대부분 &ldquo;머신러닝을 몰라서&rdquo;가 아니라 <b>파이썬 문법 한 줄을 못 읽어서</b>입니다.
+아래 10가지는 이 노트북 안에 실제로 등장하는 문법만 골라, <b>노트북의 그 줄을 예시로</b> 설명한 것입니다. 이것만 알면 다음 절의 코드 해부가 전부 읽힙니다.</div>
+
+<h3 class="sub-title">① <code>import</code> 와 <code>from … import …</code> — 도구를 꺼내 오는 두 가지 방법</h3>
+<div class="note-box">파이썬은 &ldquo;기본으로 딸려 오는 것&rdquo;이 아주 적습니다. 필요한 기능은 <b>남이 만들어 둔 상자(라이브러리)</b>에서 꺼내 써야 하고, 그 &lsquo;꺼내는 행동&rsquo;이 <code>import</code> 입니다.
+<ul class="ul">
+  <li><code>import numpy as np</code> — <b>상자를 통째로</b> 가져오되 <code>np</code> 라는 <b>별명</b>을 붙인다. 이후 <code>np.array(...)</code> 처럼 &ldquo;상자이름.도구&rdquo; 로 쓴다</li>
+  <li><code>from sklearn.pipeline import make_pipeline</code> — 상자 안 <b>서랍(<code>sklearn.pipeline</code>)에서 도구 하나만</b> 꺼낸다. 이후 상자 이름 없이 <code>make_pipeline(...)</code> 으로 바로 쓴다</li>
+  <li>점(<code>.</code>)은 <b>&ldquo;안쪽으로 들어간다&rdquo;</b>는 뜻입니다. <code>sklearn.linear_model</code> = sklearn 상자 → linear_model 서랍</li>
+</ul></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>노트북의 import 줄</th><th>무엇을 꺼내 오나</th><th>노트북에서 쓰인 곳</th></tr></thead>
+  <tbody>
+    <tr><td><code>import numpy as np</code></td><td><b>수치 배열</b> 계산 라이브러리. 행렬 곱·평균·고유값 등</td><td>정규방정식, 경사하강법 전부</td></tr>
+    <tr><td><code>import pandas as pd</code></td><td><b>표(엑셀 같은) 데이터</b> 처리. <code>DataFrame</code> 객체</td><td>CSV 읽기, <code>describe()</code>, 마지막 비교표</td></tr>
+    <tr><td><code>import matplotlib.pyplot as plt</code></td><td><b>그림 그리기</b>. <code>pyplot</code> 은 matplotlib 안의 서랍</td><td>산점도, 손실 곡선</td></tr>
+    <tr><td><code>import os</code></td><td>파이썬 <b>기본 내장</b> — 파일·폴더 다루기</td><td><code>os.path.exists('Salary_Data.csv')</code></td></tr>
+    <tr><td><code>import sklearn, torch</code></td><td>버전 확인용으로 통째로</td><td><code>print(sklearn.__version__)</code></td></tr>
+    <tr><td><code>from sklearn.pipeline import make_pipeline</code></td><td>전처리+모델을 <b>하나로 묶는</b> 함수</td><td>TODO(1), TODO(4)</td></tr>
+    <tr><td><code>from sklearn.preprocessing import StandardScaler</code></td><td><b>표준화</b> 도구 (평균 0 · 표준편차 1)</td><td>TODO(1), TODO(4)</td></tr>
+    <tr><td><code>from sklearn.linear_model import LinearRegression, RidgeCV</code></td><td>쉼표로 <b>두 개를 한 줄에</b>. 선형회귀 · 릿지회귀</td><td>TODO(1), TODO(4)</td></tr>
+    <tr><td><code>from sklearn.metrics import root_mean_squared_error, …</code></td><td>성능 <b>채점 함수</b> 3종</td><td>모든 RMSE·MAE·R² 출력</td></tr>
+    <tr><td><code>from sklearn.model_selection import train_test_split, cross_val_score, KFold</code></td><td>데이터 <b>쪼개기</b>와 <b>교차검증</b></td><td>[0] 셀, TODO(3), 과제 3</td></tr>
+    <tr><td><code>import torch, torch.nn as nn</code></td><td>딥러닝 라이브러리와, 그 안의 <b>신경망 부품 서랍</b>(<code>nn</code>)</td><td>TODO(10), TODO(11), TODO(12)</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="tip"><b>왜 <code>np</code>, <code>pd</code>, <code>plt</code>, <code>nn</code> 이라는 별명을 쓰나</b> — 문법이 강제하는 것이 아니라 <b>전 세계가 쓰는 관습</b>입니다.
+남의 코드를 읽을 때 <code>np.</code> 만 봐도 &ldquo;아 NumPy 계산이구나&rdquo; 하고 바로 알아보려고 통일한 것이니, 여러분도 그대로 따라 쓰는 게 좋습니다.</div>
+
+<h3 class="sub-title">② 객체 · 메서드 · 속성 — <code>model.fit()</code> 과 <code>lr_.coef_</code> 의 차이</h3>
+<div class="note-box"><b>객체(object)</b>는 &ldquo;<b>데이터 + 그 데이터를 다루는 기능</b>&rdquo;을 한 덩어리로 묶은 것입니다. 붕어빵 틀(클래스)로 찍어낸 붕어빵 하나(객체)라고 생각하면 됩니다.
+<ul class="ul">
+  <li><code>LinearRegression()</code> — <b>괄호를 붙이면 &lsquo;하나 만들어라&rsquo;</b>. 아직 아무것도 학습하지 않은 빈 모델 객체가 만들어집니다</li>
+  <li><code>model.fit(X, y)</code> — <b>메서드</b>(객체가 할 줄 아는 <b>동작</b>). 괄호가 붙습니다</li>
+  <li><code>lr_.coef_</code> — <b>속성</b>(객체가 <b>가지고 있는 값</b>). <b>괄호가 없습니다</b></li>
+</ul></div>
+<div class="tip"><b>sklearn의 밑줄 규칙 — 시험에도 자주 나오는 포인트</b><br>
+· 이름 <b>뒤</b>에 밑줄이 붙은 <code>coef_</code>, <code>intercept_</code>, <code>mean_</code>, <code>scale_</code>, <code>alpha_</code> 는 &ldquo;<b><code>fit()</code> 을 해야 비로소 생기는 값</b>&rdquo;이라는 sklearn의 약속입니다. <code>fit</code> 전에 부르면 오류가 납니다.<br>
+· 반대로 노트북의 <code>lr_ = model[-1]</code> 에서 <b>변수 이름 뒤</b>의 밑줄은 sklearn과 무관합니다. 위에서 이미 <code>from … import LinearRegression</code> 으로 이름을 썼기 때문에, <b>이름이 겹치지 않게</b> 사람이 임의로 붙인 것뿐입니다.</div>
+<pre class="code">model = make_pipeline(StandardScaler(), LinearRegression())  <span class="cm"># 객체 2개를 만들어 하나로 묶음</span>
+model.fit(X_tr, y_tr)        <span class="cm"># 메서드 — 동작 (괄호 O)</span>
+sc, lr_ = model[0], model[-1]<span class="cm"># 파이프라인은 리스트처럼 [0]=첫 단계, [-1]=마지막 단계</span>
+lr_.coef_                    <span class="cm"># 속성 — 값 (괄호 X), fit 이후에만 존재</span>
+sc.mean_, sc.scale_          <span class="cm"># 스케일러가 훈련 데이터에서 기억해 둔 평균·표준편차</span></pre>
+<div class="note-box"><b><code>model[0]</code>, <code>model[-1]</code> 이 되는 이유</b> — 파이프라인은 내부적으로 단계들을 <b>순서가 있는 목록</b>으로 들고 있습니다.
+파이썬에서 <code>[0]</code> 은 <b>맨 앞</b>, <code>[-1]</code> 은 <b>맨 뒤</b>(마이너스는 뒤에서부터 셈)를 뜻하므로, <code>model[0]</code> 은 <code>StandardScaler</code>, <code>model[-1]</code> 은 <code>LinearRegression</code> 입니다.</div>
+
+<h3 class="sub-title">③ <code>def</code> — 함수를 직접 만들기</h3>
+<pre class="code">def batch_gd(Xb, y, lr=0.1, epochs=200, w0=None):
+    <span class="cm">"""배치 경사하강법. (w, hist) 를 반환한다."""</span>
+    w = np.zeros(Xb.shape[1]) if w0 is None else w0.copy()
+    ...
+    return w, np.array(hist)</pre>
+<div class="fnc">
+  <h4>한 줄씩 뜯어보기</h4>
+  <dl>
+    <dt><code>def 이름(…):</code></dt><dd>&ldquo;이런 이름의 기능을 이제부터 정의하겠다&rdquo;. 콜론(<code>:</code>) 뒤부터 <b>들여쓴 줄들이 전부 함수의 몸통</b>입니다. 파이썬은 중괄호 대신 <b>들여쓰기(보통 공백 4칸)로 범위를 표시</b>합니다</dd>
+    <dt><code>Xb, y</code></dt><dd><b>반드시 넣어야 하는</b> 입력(위치 인자)</dd>
+    <dt><code>lr=0.1</code></dt><dd><b>기본값이 있는</b> 입력. 안 넣으면 0.1이 쓰이고, <code>batch_gd(Xb, y, lr=0.5)</code> 처럼 이름으로 바꿔 넣을 수 있습니다</dd>
+    <dt><code>"""…"""</code></dt><dd><b>독스트링</b> — 함수 설명. 실행에는 영향이 없지만 <code>help(batch_gd)</code> 로 볼 수 있습니다</dd>
+    <dt><code>A if 조건 else B</code></dt><dd><b>조건부 표현식</b> — &ldquo;조건이 참이면 A, 아니면 B&rdquo;. 여기서는 &ldquo;<code>w0</code> 를 안 줬으면 0벡터에서 시작, 줬으면 그 값의 <b>복사본</b>에서 시작&rdquo;</dd>
+    <dt><code>return a, b</code></dt><dd>두 값을 <b>한꺼번에</b> 돌려줍니다(튜플). 받을 때도 <code>w_gd, hist = batch_gd(...)</code> 처럼 둘로 나눠 받습니다</dd>
+  </dl>
+</div>
+<div class="warn"><b><code>w0.copy()</code> 의 <code>.copy()</code> 가 왜 필요한가</b> — NumPy 배열을 그냥 <code>w = w0</code> 로 받으면 <b>같은 메모리를 가리키는 다른 이름</b>일 뿐입니다.
+함수 안에서 <code>w -= lr*grad</code> 로 바꾸면 <b>함수 밖의 <code>w0</code> 까지 같이 바뀝니다</b>. <code>.copy()</code> 는 값을 복제해 이 사고를 막습니다.</div>
+
+<h3 class="sub-title">④ shape — <code>(30,)</code> 와 <code>(30, 1)</code> 은 다르다</h3>
+<div class="note-box">NumPy 배열에는 <b>모양(shape)</b>이 있습니다. 이 실습에서 오류의 절반은 여기서 납니다.
+<ul class="ul">
+  <li><code>(30,)</code> — <b>1차원</b>, 숫자 30개가 한 줄로. 수학의 <b>벡터</b></li>
+  <li><code>(30, 1)</code> — <b>2차원</b>, 30행 1열짜리 <b>표</b>. 수학의 <b>열벡터/행렬</b></li>
+  <li><b>sklearn 규약</b> — 입력 <code>X</code> 는 <b>항상 2차원</b>(샘플 수 × 특징 수), 정답 <code>y</code> 는 <b>1차원</b></li>
+</ul></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>노트북의 표현</th><th>결과 shape</th><th>왜 이렇게 쓰나</th></tr></thead>
+  <tbody>
+    <tr><td><code>df[['YearsExperience']].values</code></td><td>(30, 1)</td><td>대괄호 <b>두 겹</b> = &ldquo;열 목록&rdquo;을 뽑으라 → DataFrame(2차원) 유지. <code>.values</code> 로 NumPy 배열 변환</td></tr>
+    <tr><td><code>df['Salary'].values</code></td><td>(30,)</td><td>대괄호 <b>한 겹</b> = 열 하나 → Series(1차원)</td></tr>
+    <tr><td><code>np.linspace(...).reshape(-1, 1)</code></td><td>(100, 1)</td><td><code>-1</code> 은 &ldquo;나머지는 알아서 계산&rdquo;. 100개를 100행 1열로 → <code>predict</code> 에 넣기 위해</td></tr>
+    <tr><td><code>torch.tensor(y_tr, …).unsqueeze(1)</code></td><td>(20, 1)</td><td>PyTorch는 <b>출력도 2차원</b>을 원함. <code>unsqueeze(1)</code> = 1번 자리에 축을 하나 끼워 넣기</td></tr>
+    <tr><td><code>… .detach().numpy().ravel()</code></td><td>(10,)</td><td><code>ravel()</code> = 납작하게 펴기 (2차원 → 1차원). sklearn 채점 함수에 넣으려고</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="tip"><b>막히면 무조건 <code>print(뭐든.shape)</code></b> — 이 실습에서 가장 쓸모 있는 디버깅 한 줄입니다.
+노트북도 <code>print('train', X_tr.shape, '| test', X_te.shape)</code> 로 확인하고 넘어갑니다.</div>
+
+<h3 class="sub-title">⑤ 브로드캐스팅과 <code>@</code> — for 루프 없이 계산하기</h3>
+<pre class="code">Xs_tr = (X_tr - mu) / sd          <span class="cm"># (20,1) 배열에서 숫자 하나를 빼고 나눔 → 20개 전부에 적용</span>
+err   = Xb @ w - y                <span class="cm"># @ = 행렬 곱 (20,2)@(2,) → (20,)</span>
+grad  = (2 / len(y)) * (Xb.T @ err)<span class="cm"># .T = 전치 (2,20)@(20,) → (2,)</span></pre>
+<div class="note-box">
+<ul class="ul">
+  <li><b>브로드캐스팅</b> — 크기가 다른 배열끼리 연산하면 NumPy가 <b>자동으로 늘려서</b> 맞춰 줍니다. <code>(X_tr - mu)</code> 는 20개 값에서 각각 평균을 빼라는 뜻이고, <b>for 루프가 필요 없습니다</b></li>
+  <li><b><code>@</code></b> — 행렬 곱 전용 기호(파이썬 3.5+). <code>*</code> 는 <b>원소끼리</b> 곱하기라서 완전히 다릅니다</li>
+  <li><b><code>.T</code></b> — 전치(transpose). 행과 열을 뒤집습니다. <code>(20,2)</code> → <code>(2,20)</code></li>
+  <li><b><code>np.c_[a, b]</code></b> — 두 배열을 <b>열 방향</b>으로 붙이기(column). <code>np.c_[np.ones(20), Xs_tr]</code> 이 절편용 1열을 앞에 붙인 설계행렬입니다</li>
+  <li><b><code>np.r_[a, b]</code></b> — <b>행 방향</b>으로 이어 붙이기(row). <code>np.r_[lr_.intercept_, lr_.coef_]</code> 로 <code>[w0, w1]</code> 을 만듭니다</li>
+</ul></div>
+<div class="good"><b>&lsquo;벡터화&rsquo;가 이 실습의 핵심 기술</b> — 기존 자료는 샘플 하나씩 도는 <code>for</code> 루프로 기울기를 구했습니다.
+이번 노트북은 그것을 <b>행렬 곱 두 번</b>으로 바꿉니다. 결과는 완전히 같지만, NumPy가 내부적으로 C로 계산하므로 수십~수백 배 빠릅니다.</div>
+
+<h3 class="sub-title">⑥ f-string 과 숫자 포맷 — 출력이 예쁘게 나오는 이유</h3>
+<pre class="code">print(f'원 척도    : w1={w1:.1f} (연봉/년), w0={w0:.1f}')
+print('CV R2 :', scores.round(3), '| mean %.3f ± %.3f' % (scores.mean(), scores.std()))
+print(f'{name:20s} w0={b:9.1f} w1={w:9.1f}  test RMSE={rmse:.1f}')</pre>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>표기</th><th>뜻</th><th>예 (값 4585.4231)</th></tr></thead>
+  <tbody>
+    <tr><td><code>f'…{변수}…'</code></td><td>따옴표 앞에 <code>f</code> — 중괄호 안 변수를 <b>값으로 바꿔서</b> 문자열에 끼워 넣기</td><td>—</td></tr>
+    <tr><td><code>{x:.1f}</code></td><td>소수점 <b>1자리</b>까지 (f = fixed point, 반올림)</td><td><code>4585.4</code></td></tr>
+    <tr><td><code>{x:9.1f}</code></td><td>전체 <b>9칸</b>을 차지하게 오른쪽 정렬 + 소수 1자리 → <b>표처럼 줄이 맞음</b></td><td><code>␣␣␣4585.4</code></td></tr>
+    <tr><td><code>{name:20s}</code></td><td>문자열을 <b>20칸</b>으로 (왼쪽 정렬)</td><td><code>SGD (lr=0.1)␣␣␣␣␣␣␣␣</code></td></tr>
+    <tr><td><code>'%.3f' % 값</code></td><td>파이썬의 <b>옛 방식</b> 포맷. 같은 일을 합니다(노트북에 둘 다 섞여 있음)</td><td><code>4585.423</code></td></tr>
+    <tr><td><code>배열.round(3)</code></td><td>포맷이 아니라 <b>배열 값 자체</b>를 3자리로 반올림</td><td><code>[0.988 0.926 …]</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 class="sub-title">⑦ 반복문 — <code>for</code>, <code>zip</code>, <code>.items()</code></h3>
+<pre class="code">for t in range(epochs):            <span class="cm"># 0,1,2,…,epochs-1 을 차례로</span>
+for lr in [0.02, 0.1, 0.5, 1.05]:  <span class="cm"># 리스트 원소를 차례로 (숫자가 아니어도 됨)</span>
+for i in rng.permutation(len(y_tr)):<span class="cm"># 0~19를 무작위로 섞은 순서로 → SGD 셔플</span>
+for name, (mdl, h) in runs.items(): <span class="cm"># 딕셔너리의 (키, 값) 쌍을 차례로 + 값을 다시 둘로 분해</span>
+for a, (Xd, yd, name, c) in zip(ax, [...]): <span class="cm"># 두 목록을 짝지어 동시에</span></pre>
+<div class="note-box">
+<ul class="ul">
+  <li><code>range(n)</code> — <b>0부터 n−1까지</b>. <code>range(200)</code> 이면 200번 반복(200 에폭)</li>
+  <li><code>zip(a, b)</code> — 두 목록을 <b>지퍼처럼 짝지어</b> 동시에 돕니다. 그림 2개를 한 번에 그릴 때 사용</li>
+  <li><code>딕셔너리.items()</code> — <code>{'이름': 값}</code> 형태에서 <b>이름과 값을 한꺼번에</b> 꺼냅니다</li>
+  <li><b>괄호로 묶인 변수</b> <code>(mdl, h)</code> — 값이 튜플이면 <b>받는 자리에서 바로 분해</b>할 수 있습니다(언패킹)</li>
+</ul></div>
+
+<h3 class="sub-title">⑧ 람다(<code>lambda</code>)와 딕셔너리로 고르기 — 노트북의 두 가지 트릭</h3>
+<pre class="code"><span class="cm"># 트릭 1 — 이름만 붙인 한 줄짜리 함수</span>
+kappa = lambda Xb: np.linalg.cond(2 / len(y_tr) * Xb.T @ Xb)
+<span class="cm"># 위는 아래와 완전히 같은 뜻</span>
+def kappa(Xb):
+    return np.linalg.cond(2 / len(y_tr) * Xb.T @ Xb)
+
+<span class="cm"># 트릭 2 — 문자열로 옵티마이저 고르기</span>
+opt = {'sgd':  lambda: torch.optim.SGD(model.parameters(), lr=lr, **kw),
+       'adam': lambda: torch.optim.Adam(model.parameters(), lr=lr, **kw),
+       'adamw':lambda: torch.optim.AdamW(model.parameters(), lr=lr, **kw)}[opt_name]()</pre>
+<div class="note-box"><b>트릭 2를 천천히 읽는 법</b> — ① 중괄호 <code>{…}</code> 는 <b>딕셔너리</b>(이름표 → 값). ② 그 뒤의 <code>[opt_name]</code> 은 <b>이름표로 값을 꺼내기</b>. ③ 마지막 <code>()</code> 는 <b>꺼낸 함수를 실제로 실행</b>.
+즉 <code>opt_name='adam'</code> 이면 &ldquo;adam 칸의 함수를 꺼내 실행&rdquo; → <code>torch.optim.Adam(...)</code> 객체가 만들어집니다.
+<b>왜 <code>lambda:</code> 로 감쌌나</b> — 감싸지 않으면 딕셔너리를 만드는 순간 <b>세 옵티마이저가 전부 생성</b>되어 버립니다. 람다로 싸 두면 <b>고른 것만</b> 실행됩니다.</div>
+<div class="tip"><b><code>**kw</code> 가 뭔가</b> — &ldquo;<b>이름=값 형태의 남는 인자를 전부 모아서</b> 그대로 넘겨라&rdquo;는 뜻입니다.
+<code>train('sgd', 0.1, momentum=0.9)</code> 라고 부르면 <code>momentum=0.9</code> 가 <code>kw</code> 에 담겼다가 <code>torch.optim.SGD(..., momentum=0.9)</code> 로 전달됩니다.</div>
+
+<h3 class="sub-title">⑨ <code>w -= lr * grad</code> — 제자리 갱신</h3>
+<div class="note-box"><code>w -= x</code> 는 <code>w = w - x</code> 의 줄임입니다. 다만 NumPy 배열에서는 <b>새 배열을 만들지 않고 기존 메모리를 고쳐 쓰는</b>(in-place) 차이가 있어 더 빠릅니다.
+경사하강법 갱신식 <span class="tex">\mathbf w \leftarrow \mathbf w-\eta\nabla L</span> 이 코드에서는 정확히 이 한 줄입니다.
+<b>부호가 마이너스</b>인 이유는 기울기가 &lsquo;가장 가파르게 <b>올라가는</b>&rsquo; 방향이라, 손실을 줄이려면 <b>반대 방향</b>으로 가야 하기 때문입니다.</div>
+
+<h3 class="sub-title">⑩ 난수 시드 — 매번 같은 결과가 나오게</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>코드</th><th>무엇의 난수를 고정하나</th></tr></thead>
+  <tbody>
+    <tr><td><code>np.random.seed(0)</code></td><td>NumPy의 <b>전역</b> 난수 (옛 방식)</td></tr>
+    <tr><td><code>rng = np.random.default_rng(0)</code></td><td>NumPy의 <b>독립된</b> 난수 생성기 (요즘 권장). <code>rng.permutation(20)</code> 처럼 사용</td></tr>
+    <tr><td><code>torch.manual_seed(0)</code></td><td>PyTorch의 난수 — <code>nn.Linear</code> 의 <b>가중치 초기값</b>이 매번 같아짐</td></tr>
+    <tr><td><code>random_state=0</code></td><td>sklearn 함수(<code>train_test_split</code>, <code>KFold</code>)의 <b>섞는 방식</b> 고정</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="tip"><b>왜 고정하나</b> — 실습·과제는 <b>재현성</b>이 생명입니다. 시드를 고정해야 &ldquo;제 화면에서는 RMSE 4585.4가 나왔습니다&rdquo;가 채점자 화면에서도 똑같이 재현됩니다.
+반대로 <b>모델 성능을 진짜로 평가</b>할 때는 시드를 여러 개 바꿔 가며 평균을 봐야 합니다.</div>
+</section>
+
+<!-- ===================== 실습 개념 정리 ===================== -->
+<section class="sec" id="nb-idea">
+  <div class="sec-head"><span class="sec-badge">IDEA</span><h2 class="sec-title">실습 개념 정리 — 코드를 치기 전에 알아야 할 12가지<small>표준화 · 누수 · 정규방정식 · 기울기 유도 · 안정 조건 · autograd — 왜 그렇게 하는가</small></h2></div>
+<div class="note-box"><b>이 절의 사용법</b> — 아래 12개 개념은 노트북의 TODO 12개와 <b>일대일로 대응</b>합니다.
+여기서 &ldquo;왜&rdquo;를 먼저 이해하고, 다음 절(<a class="ext" href="#nb-cells">셀별 코드 해부</a>)에서 &ldquo;어떻게&rdquo;를 보면 코드가 외울 것이 아니라 <b>읽히는 것</b>이 됩니다.</div>
+
+<h3 class="sub-title">개념 1 — 표준화(Standardization) : 단위를 지우는 일</h3>
+<div class="fx">
+  <p class="fx-lab">표준화 변환</p>
+  <div class="tex-d">x_s=\frac{x-\mu}{\sigma},\qquad \mu=\text{훈련 데이터의 평균},\ \ \sigma=\text{훈련 데이터의 표준편차}</div>
+  <p class="fx-note">변환 후 <span class="tex">x_s</span> 의 평균은 정확히 0, 표준편차는 정확히 1이 됩니다. 이 실습에서는 <span class="tex">\mu\approx4.73</span>년, <span class="tex">\sigma\approx2.53</span>년.</p>
+</div>
+<div class="note-box"><b>왜 하는가 — 세 가지 이유</b>
+<ul class="ul">
+  <li><b>① 경사하강법이 안정된다</b> — 뒤의 개념 7에서 보겠지만, 표준화하면 손실의 &lsquo;가파름&rsquo;이 모든 방향에서 같아져(<span class="tex">\kappa=1</span>) 학습률을 크게 잡아도 발산하지 않습니다. 이 실습에서 안정 한계가 <b>0.0338 → 1.000</b> 으로 <b>30배</b> 늘어납니다</li>
+  <li><b>② 특징들의 크기를 맞춘다</b> — 경력(1~10)과 연봉(4만~12만)처럼 단위가 다르면 큰 쪽이 학습을 지배합니다</li>
+  <li><b>③ 정규화(Ridge)와 짝이 맞는다</b> — Ridge는 &ldquo;계수 크기&rdquo;에 벌점을 주는데, 표준화를 안 하면 단위가 큰 특징만 억울하게 벌점을 받습니다</li>
+</ul></div>
+<div class="warn"><b>대가(代價)도 있다</b> — 표준화 척도에서 나온 계수는 <b>&ldquo;연봉/년&rdquo;이 아닙니다</b>. 이 실습의 <code>coef_=23651.1</code> 은 &ldquo;경력이 <b>1년</b> 늘 때&rdquo;가 아니라 &ldquo;경력이 <b>1 표준편차(≈2.53년)</b> 늘 때&rdquo;의 연봉 증가입니다.
+그래서 개념 3의 <b>복원</b>이 반드시 따라옵니다. <span class="tex">23651.1\div2.53\approx9346</span> 이 진짜 &ldquo;1년당&rdquo; 값입니다.</div>
+
+<h3 class="sub-title">개념 2 — 데이터 누수(Data leakage)와 <code>Pipeline</code></h3>
+<div class="note-box"><b>누수란</b> — 모델이 <b>시험 문제를 미리 엿본</b> 상태를 말합니다. 그러면 시험 점수가 실제 실력보다 좋게 나와서, 성능 평가 자체가 거짓말이 됩니다.
+<b>이 실습에서 누수가 생기는 가장 흔한 경로</b>는 이것입니다.</div>
+<pre class="code"><span class="cm"># ❌ 누수 — 전체 X로 평균·표준편차를 구한 뒤에 쪼갠다</span>
+X_all_scaled = StandardScaler().fit_transform(X)      <span class="cm"># 테스트 10개의 정보가 평균에 섞여 들어감</span>
+X_tr, X_te = train_test_split(X_all_scaled, ...)
+
+<span class="cm"># ⭕ 올바름 — 먼저 쪼개고, 스케일러는 훈련 데이터로만 fit</span>
+X_tr, X_te = train_test_split(X, ...)
+model = make_pipeline(StandardScaler(), LinearRegression())
+model.fit(X_tr, y_tr)                                 <span class="cm"># 스케일러가 X_tr로만 fit 됨</span>
+model.predict(X_te)                                   <span class="cm"># X_te는 '훈련 평균'으로 변환만 됨 (transform)</span></pre>
+<div class="good"><b><code>Pipeline</code> 이 해 주는 일 — 한 문장</b><br>
+<code>fit</code> 할 때는 <b>각 단계를 <code>fit</code>→<code>transform</code></b>, <code>predict</code> 할 때는 <b><code>transform</code>만</b> 하도록 자동으로 구분해 줍니다.
+사람이 손으로 하면 반드시 실수하는 이 구분을, 파이프라인은 <b>교차검증의 폴드마다</b>도 정확히 지켜 줍니다. TODO(3)에서 <code>cross_val_score</code> 에 모델이 아니라 <b>파이프라인 통째</b>를 넘기는 이유가 이것입니다.</div>
+
+<h3 class="sub-title">개념 3 — 척도 복원 : 표준화 계수를 원래 단위로 되돌리기</h3>
+<div class="fx">
+  <p class="fx-lab">유도 — 두 줄이면 끝난다</p>
+  <div class="tex-d">\hat y=b+a\,x_s=b+a\cdot\frac{x-\mu}{\sigma}=\underbrace{\left(b-\frac{a\mu}{\sigma}\right)}_{w_0}+\underbrace{\frac{a}{\sigma}}_{w_1}\,x</div>
+  <p class="fx-note">· <span class="tex">a=</span><code>lr_.coef_[0]</code>, <span class="tex">b=</span><code>lr_.intercept_</code> (표준화 척도)<br>
+  · 따라서 <span class="tex">w_1=a/\sigma</span>, <span class="tex">w_0=b-w_1\mu</span> — <b>순서가 중요</b>합니다. <span class="tex">w_1</span> 을 먼저 구해야 <span class="tex">w_0</span> 을 구할 수 있습니다<br>
+  · 실습 값: <span class="tex">w_1=23651.1/2.5306\approx9345.9</span>, <span class="tex">w_0=71022.5-9345.9\times4.7295\approx26816.2</span></p>
+</div>
+<div class="tip"><b>덤으로 알아 두면 좋은 사실</b> — 표준화 척도의 절편 <code>intercept_=71022.5</code> 는 사실 <b>훈련 데이터 연봉의 평균값</b>입니다.
+<span class="tex">x_s</span> 의 평균이 0이므로 &ldquo;평균적인 경력을 가진 사람의 예측 연봉 = 평균 연봉&rdquo;이 되기 때문입니다. 최소제곱 직선이 <b>항상 <span class="tex">(\bar x,\bar y)</span> 를 지난다</b>는 성질의 다른 표현입니다.</div>
+
+<h3 class="sub-title">개념 4 — 평가 지표 세 가지 : RMSE · MAE · R²</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>지표</th><th>식</th><th>단위</th><th>성격</th><th>실습 값</th></tr></thead>
+  <tbody>
+    <tr><td>RMSE</td><td><span class="tex">\sqrt{\frac1N\sum(y_i-\hat y_i)^2}</span></td><td>연봉과 <b>같은 단위</b></td><td>제곱 → <b>큰 오차에 민감</b>. 학습이 최소화하는 대상과 같은 계열</td><td>4585.4</td></tr>
+    <tr><td>MAE</td><td><span class="tex">\frac1N\sum\lvert y_i-\hat y_i\rvert</span></td><td>연봉과 같은 단위</td><td>절댓값 → <b>이상치에 둔감</b>. 보통 RMSE보다 작게 나옴</td><td>3426.4</td></tr>
+    <tr><td>R²</td><td><span class="tex">1-\dfrac{\sum(y_i-\hat y_i)^2}{\sum(y_i-\bar y)^2}</span></td><td><b>없음</b>(비율)</td><td>&ldquo;평균으로 찍기&rdquo; 대비 얼마나 나은가. 1이 완벽</td><td>0.9749</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note-box"><b>셋을 같이 보는 이유</b> — RMSE(4585)가 MAE(3426)보다 <b>1.34배</b> 큽니다. 이 비율이 크다는 것은 <b>유난히 크게 틀린 샘플이 몇 개 있다</b>는 신호입니다(제곱이 그 샘플을 증폭하므로).
+R²는 단위가 없어서 <b>다른 데이터셋끼리도 비교 가능</b>하지만, &ldquo;연봉을 평균 4,585 정도 틀린다&rdquo;는 실무적 감각은 RMSE에서만 나옵니다.
+<span class="prof">sklearn ≥ 1.4</span> <code>root_mean_squared_error</code> 는 이 버전부터 생긴 함수입니다. 예전 코드에서는 <code>mean_squared_error(..., squared=False)</code> 를 썼습니다.</div>
+
+<h3 class="sub-title">개념 5 — 교차검증(K-Fold) : 점수 하나를 믿지 않기</h3>
+<div class="note-box"><b>문제 상황</b> — 테스트 데이터가 10개뿐입니다. 어쩌다 쉬운 10개가 뽑히면 R²=0.98, 어려운 10개면 0.88이 나옵니다. <b>&ldquo;0.9749&rdquo;라는 숫자 하나는 운이 섞인 값</b>입니다.
+<b>K-겹 교차검증</b>은 데이터를 K조각으로 나눠, <b>돌아가며 한 조각씩 시험지로</b> 쓰고 나머지로 학습합니다. 점수가 K개 나오므로 <b>평균과 표준편차</b>를 함께 볼 수 있습니다.</div>
+<pre class="code">cv = KFold(n_splits=5, shuffle=True, random_state=0)
+scores = cross_val_score(model, X, y, cv=cv, scoring='r2')
+<span class="out"># [0.988 0.926 0.925 0.879 0.965]  → 평균 0.936 ± 0.038</span></pre>
+<div class="note-box"><b>결과를 읽는 법</b> — 평균 0.936, 표준편차 0.038. 즉 <b>&ldquo;대략 0.90~0.97 사이에서 왔다 갔다 하는 모델&rdquo;</b>이라는 뜻입니다.
+앞에서 본 단일 테스트 R²=0.975는 <b>다섯 폴드 중 가장 좋은 쪽에 가까운, 운이 좋았던 값</b>임을 알 수 있습니다. 30건짜리 소규모 데이터에서는 이 확인이 필수입니다.
+<ul class="ul">
+  <li><code>n_splits=5</code> — 30개를 6개씩 5조각</li>
+  <li><code>shuffle=True</code> — 원본이 경력 순으로 정렬돼 있어서, 섞지 않으면 <b>&ldquo;저연차만 학습하고 고연차로 시험&rdquo;</b> 같은 이상한 폴드가 생깁니다</li>
+  <li><code>scoring='r2'</code> — 채점 기준. <code>'neg_root_mean_squared_error'</code> 등으로 바꿀 수 있습니다(sklearn은 &ldquo;클수록 좋다&rdquo;로 통일하려고 오차에는 <b>음수</b>를 붙입니다)</li>
+  <li>여기서는 <code>X_tr</code> 이 아니라 <b>전체 <code>X, y</code></b> 를 넘깁니다 — 교차검증이 스스로 훈련/검증을 나누기 때문입니다</li>
+</ul></div>
+
+<h3 class="sub-title">개념 6 — 정규화와 Ridge : 계수가 커지지 못하게 묶어 두기</h3>
+<div class="fx">
+  <p class="fx-lab">Ridge(L2 정규화) 의 목적함수</p>
+  <div class="tex-d">L_{\text{ridge}}(\mathbf w)=\underbrace{\frac1N\lVert X\mathbf w-\mathbf y\rVert^2}_{\text{원래의 MSE}}+\underbrace{\alpha\lVert \mathbf w\rVert^2}_{\text{계수가 크면 벌점}}</div>
+  <p class="fx-note">· <span class="tex">\alpha</span>(=λ) 가 <b>0이면 그냥 최소제곱</b>, <b>클수록</b> 계수를 0쪽으로 강하게 눌러 <b>단순한 모델</b>이 됩니다<br>
+  · 닫힌 해도 있습니다: <span class="tex">\mathbf w=(X^\top X+\alpha I)^{-1}X^\top\mathbf y</span> — 대각선에 <span class="tex">\alpha</span> 를 더하므로 <b>역행렬이 항상 존재</b>하게 되는 부수 효과까지 있습니다</p>
+</div>
+<div class="note-box"><b><code>np.logspace(-3, 3, 13)</code> 이 뜻하는 것</b> — <span class="tex">10^{-3}</span> 부터 <span class="tex">10^{3}</span> 까지 <b>로그 간격으로 13개</b>: 0.001, 0.00316, 0.01, … , 1000.
+<b>왜 로그 간격인가</b> — 정규화 세기는 &ldquo;0.1과 0.2의 차이&rdquo;보다 <b>&ldquo;0.1과 10의 차이(자릿수)&rdquo;</b>가 훨씬 중요하기 때문입니다. 하이퍼파라미터 탐색의 표준 관습입니다.
+<b><code>RidgeCV</code> 의 CV</b> — 후보 13개를 <b>교차검증으로 자동 비교</b>해 가장 좋은 하나를 <code>alpha_</code> 에 저장합니다(여기서는 0.3162).</div>
+<div class="warn"><b>이 실습에서 Ridge가 이기지 못하는 이유</b> — 정규화는 <b>과적합을 줄이는 대신 편향을 더하는</b> 거래입니다.
+특징이 <b>1개</b>(<span class="tex">d=1</span>)이고 훈련 샘플이 20개면 애초에 과적합할 여지가 거의 없으므로, 얻는 것 없이 편향만 생겨 RMSE가 <b>4585.4 → 4662.4</b> 로 살짝 나빠집니다.
+정규화는 <b>특징 수가 샘플 수에 맞먹거나 더 많을 때</b>(<span class="tex">d\gtrsim N</span>) 진가를 발휘합니다.</div>
+
+<h3 class="sub-title">개념 7 — 정규방정식 : 한 방에 답을 구하는 길</h3>
+<div class="fx">
+  <p class="fx-lab">유도 — 미분해서 0으로 놓기</p>
+  <div class="tex-d">L(\mathbf w)=\frac1N\lVert X\mathbf w-\mathbf y\rVert^2\ \Longrightarrow\ \nabla L=\frac{2}{N}X^\top(X\mathbf w-\mathbf y)=0</div>
+  <div class="tex-d">\Longleftrightarrow\ X^\top X\mathbf w=X^\top\mathbf y\ \Longleftrightarrow\ \mathbf w^*=(X^\top X)^{-1}X^\top\mathbf y</div>
+  <p class="fx-note">· MSE는 <span class="tex">\mathbf w</span> 에 대해 <b>볼록(convex)</b>한 이차함수라, 기울기가 0인 점이 <b>유일한 전역 최소점</b>입니다<br>
+  · 여기서 <span class="tex">X</span> 는 <b>절편 열을 붙인 설계행렬</b> <span class="tex">X_b=[\mathbf 1,\ \mathbf x_s]</span> (shape (20, 2))</p>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>구현</th><th>코드</th><th>평가</th></tr></thead>
+  <tbody>
+    <tr><td>교과서식</td><td><code>np.linalg.inv(Xb.T@Xb) @ Xb.T @ y</code></td><td>식 그대로라 이해는 쉬움. <b>실무에서는 비권장</b> — 역행렬 계산은 수치적으로 불안정하고 느림</td></tr>
+    <tr><td>실무 표준</td><td><code>np.linalg.lstsq(Xb, y, rcond=None)[0]</code></td><td><b>SVD</b> 기반. 역행렬을 만들지 않고 최소제곱 문제를 직접 풀어 <b>안정적</b>. 특징이 겹쳐 역행렬이 없어도 답을 냄</td></tr>
+    <tr><td>중간</td><td><code>np.linalg.solve(Xb.T@Xb, Xb.T@y)</code></td><td>역행렬 없이 연립방정식을 풂. <code>inv</code>보다 낫고 <code>lstsq</code>보다 빠름</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="tip"><b><code>[0]</code> 이 왜 붙나</b> — <code>lstsq</code> 는 <b>네 가지를 한꺼번에</b> 돌려줍니다: (해, 잔차제곱합, 랭크, 특이값). 우리가 원하는 <b>해</b>는 맨 앞이라 <code>[0]</code> 으로 꺼냅니다.
+<code>rcond=None</code> 은 &ldquo;아주 작은 특이값을 자르는 기준을 최신 기본값으로 쓰라&rdquo;는 뜻으로, 넣지 않으면 경고가 뜹니다.</div>
+<div class="note-box"><b>그럼 왜 경사하강법을 배우나</b> — 정규방정식은 <span class="tex">X^\top X</span> 가 <span class="tex">(d{+}1)\times(d{+}1)</span> 이라 <b>특징 수 <span class="tex">d</span> 가 커지면 계산량이 <span class="tex">O(d^3)</span> 로 폭발</b>하고, 데이터가 메모리에 다 안 들어가면 아예 못 씁니다.
+또 로지스틱 회귀·신경망처럼 <b>닫힌 해가 아예 없는</b> 모델이 대부분입니다. 그래서 반복 해법(경사하강법)이 기계학습의 주력입니다.</div>
+
+<h3 class="sub-title">개념 8 — 기울기를 손으로 유도하기 (TODO 6·11의 핵심)</h3>
+<div class="ex">
+  <p class="ex-q"><em>유도</em> MSE <span class="tex">L(\mathbf w)=\frac1N\sum_{i=1}^{N}(\mathbf x_i^{\mathsf T}\mathbf w-y_i)^2</span> 의 기울기 <span class="tex">\nabla_{\mathbf w}L</span> 을 행렬로 쓰면?</p>
+  <div class="step"><i>1</i><div>잔차를 <span class="tex">e_i=\mathbf x_i^{\mathsf T}\mathbf w-y_i</span> 로 두면 <span class="tex">L=\frac1N\sum e_i^2</span></div></div>
+  <div class="step"><i>2</i><div>한 파라미터로 편미분: <span class="tex">\dfrac{\partial L}{\partial w_j}=\dfrac1N\sum 2e_i\cdot\dfrac{\partial e_i}{\partial w_j}=\dfrac{2}{N}\sum e_i\,x_{ij}</span> &nbsp;(연쇄법칙)</div></div>
+  <div class="step"><i>3</i><div><span class="tex">j=0,1</span> 을 모두 모아 벡터로 쓰면 <span class="tex">\nabla L=\dfrac2N X^{\mathsf T}\mathbf e</span></div></div>
+  <div class="step"><i>4</i><div><span class="tex">\mathbf e=X\mathbf w-\mathbf y</span> 를 대입 → <span class="tex">\boxed{\nabla_{\mathbf w}L=\frac{2}{N}X^{\mathsf T}(X\mathbf w-\mathbf y)}</span></div></div>
+  <p class="ex-ans"><b>코드로는 정확히 두 줄</b> — <code>err = Xb @ w - y</code> 와 <code>grad = (2/len(y)) * (Xb.T @ err)</code>.
+  2단계의 <span class="tex">\sum e_i x_{ij}</span> 가 바로 <code>Xb.T @ err</code> 이고, <span class="tex">2/N</span> 이 <code>2/len(y)</code> 입니다.</p>
+</div>
+<div class="warn"><b>여기서 틀리는 3대 실수</b><br>
+① <b>부호</b> — <code>y - Xb@w</code> 로 쓰면 기울기 부호가 뒤집혀 <b>손실이 커지는 쪽</b>으로 갑니다(발산).<br>
+② <b><span class="tex">2/N</span> 누락</b> — 방향은 맞아서 수렴은 하지만, <b>실효 학습률이 <span class="tex">2/N</span> 배만큼 달라져</b> 안정 조건 계산(TODO 7)과 어긋납니다.<br>
+③ <b>전치 위치</b> — <code>Xb @ err</code> 로 쓰면 shape가 안 맞아 오류. 항상 <code>(2,20)@(20,)→(2,)</code> 가 되도록 <code>Xb.T</code>.</div>
+
+<h3 class="sub-title">개념 9 — 학습률의 안정 조건 <span class="tex">\eta&lt;2/L</span> 과 조건수 <span class="tex">\kappa</span></h3>
+<div class="fx">
+  <p class="fx-lab">왜 하필 2/L 인가 — 1차원으로 보면 명백하다</p>
+  <div class="tex-d">L(w)=\tfrac{c}{2}w^2\ \Rightarrow\ \nabla L=cw\ \Rightarrow\ w_{t+1}=w_t-\eta cw_t=(1-\eta c)\,w_t</div>
+  <p class="fx-note">· 매 스텝 <span class="tex">w</span> 에 <span class="tex">(1-\eta c)</span> 가 곱해지므로, <b><span class="tex">\lvert 1-\eta c\rvert&lt;1</span> 일 때만 0으로 수렴</b>합니다 → <span class="tex">0&lt;\eta&lt;2/c</span><br>
+  · 여러 방향이 있으면 <b>가장 가파른 방향</b>(최대 곡률 <span class="tex">L</span>)이 발산을 결정합니다 → <span class="tex">\eta&lt;2/L</span><br>
+  · <span class="tex">\eta=1/L</span> 근처가 가장 빠르고, <span class="tex">\eta</span> 가 <span class="tex">2/L</span> 를 넘는 순간 <b>진동하며 폭발</b>합니다</p>
+</div>
+<div class="note-box"><b>이 실습에 대입</b> — MSE의 헤세 행렬(곡률)은 <span class="tex">H=\frac2N X^{\mathsf T}X</span> 이고, <span class="tex">L=\lambda_{\max}(H)</span> 입니다.
+<ul class="ul">
+  <li><b>표준화 후</b> — <span class="tex">\frac1N X_b^{\mathsf T}X_b=I</span> (1열은 평균 1, x열은 평균 0·분산 1, 두 열은 직교) → <span class="tex">H=2I</span> → <b><span class="tex">L=2.000</span>, 한계 <span class="tex">\eta&lt;1.000</span></b></li>
+  <li><b>원 척도</b> — <span class="tex">L=59.2</span> 수준 → <b>한계 <span class="tex">\eta&lt;0.0338</span></b>. 기존 자료가 <code>lr=0.0025</code> 같은 아주 작은 값을 쓸 수밖에 없었던 이유가 이것입니다</li>
+  <li>노트북의 실험값 0.02 / 0.1 / 0.5 는 전부 1.000 미만이라 수렴, <b>1.05만 한계를 넘어 발산</b>합니다 — 이론과 실험이 정확히 일치</li>
+</ul></div>
+<div class="fx">
+  <p class="fx-lab">조건수(condition number) <span class="tex">\kappa</span></p>
+  <div class="tex-d">\kappa=\frac{\lambda_{\max}(H)}{\lambda_{\min}(H)}\ \ \begin{cases}\kappa=1.0 & \text{표준화 후 — 손실이 완벽한 원}\\ \kappa=136.4 & \text{원 척도 — 손실이 길쭉한 계곡}\end{cases}</div>
+  <p class="fx-note">· <span class="tex">\kappa</span> 가 크면 손실 등고선이 <b>길고 좁은 협곡</b> 모양이 되어, 경사하강법이 <b>지그재그로 튕기며</b> 아주 느리게 내려갑니다<br>
+  · 수렴에 필요한 스텝 수가 대략 <span class="tex">\kappa</span> 에 비례합니다 → <span class="tex">\kappa=136</span> 이면 표준화했을 때보다 <b>100배 이상</b> 느립니다<br>
+  · <b>표준화 = 협곡을 원으로 펴는 작업</b> — 이것이 개념 1의 진짜 이유입니다</p>
+</div>
+<div class="tip"><b><code>eigvalsh</code> 의 <code>h</code> 는 Hermitian(대칭)</b> — <span class="tex">X^{\mathsf T}X</span> 는 항상 대칭이므로 대칭 전용 함수를 쓰면 더 빠르고, 고유값이 <b>실수로 정렬되어</b> 나옵니다. 일반 행렬용은 <code>np.linalg.eigvals</code>.</div>
+
+<h3 class="sub-title">개념 10 — 배치 GD vs SGD : 정확함 대 빠름</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>구분</th><th>한 번 갱신에 쓰는 데이터</th><th>기울기</th><th>수렴 모습</th><th>실습 결과</th></tr></thead>
+  <tbody>
+    <tr><td>배치 GD</td><td><b>전체 20개</b></td><td>정확한 <span class="tex">\nabla L</span></td><td>매끄럽게 <b>단조 감소</b></td><td>200에폭에 정답과 소수점까지 일치</td></tr>
+    <tr><td>SGD (B=1)</td><td><b>1개</b></td><td>잡음 섞인 추정치</td><td>출렁이며 <b>최소점 근처를 맴돔</b></td><td>50에폭에 [70986, 23795] — 정답 근처</td></tr>
+    <tr><td>미니배치</td><td>보통 32~256개</td><td>중간</td><td>중간 — <b>실무 표준</b></td><td>이 실습엔 없음</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note-box"><b>SGD가 정확히 멈추지 않는 이유</b> — 최소점에 도착해도 <b>샘플 하나의 기울기는 0이 아닙니다</b>. 전체 평균이 0일 뿐입니다.
+그래서 학습률이 고정이면 최소점 주변에서 <b>영원히 진동</b>합니다(노트북에서 SGD 계수가 lstsq와 소수점 아래에서 다른 이유). 실무에서는 학습률을 점점 줄여(스케줄러) 이 진동을 잠재웁니다.
+<b>그런데도 SGD를 쓰는 이유</b> — 데이터가 100만 건이면 배치 GD는 <b>한 번 갱신하려고 100만 건을 다 읽어야</b> 합니다. SGD는 그 사이에 100만 번 갱신합니다. 잡음은 오히려 지역 최소점을 빠져나오는 데 도움이 되기도 합니다.
+<b>셔플(<code>rng.permutation</code>)이 필요한 이유</b> — 매 에폭 같은 순서로 돌면 그 순서에 담긴 편향(여기서는 경력 오름차순)을 학습이 그대로 따라가기 때문입니다.</div>
+
+<h3 class="sub-title">개념 11 — autograd : 미분을 사람이 안 해도 되는 이유</h3>
+<div class="note-box">PyTorch의 텐서는 계산할 때마다 <b>&ldquo;누가 나를 만들었는지&rdquo;를 기록</b>해 둡니다(계산 그래프). <code>loss.backward()</code> 는 그 기록을 <b>거꾸로 따라가며 연쇄법칙</b>을 적용해 모든 파라미터의 기울기를 채워 넣습니다.</div>
+<div class="flow">
+  <div class="fl"><div class="fl-n">1</div><div><h4><code>opt.zero_grad()</code></h4><p><b>기울기 저장소를 0으로</b>. PyTorch는 <code>.grad</code> 에 <b>더하기(누적)</b>를 하도록 설계돼 있어, 지우지 않으면 지난 에폭 기울기가 계속 쌓입니다 — <b>가장 흔한 버그</b></p></div></div>
+  <div class="fl"><div class="fl-n">2</div><div><h4><code>loss = loss_fn(model(Xt), yt_s)</code></h4><p><b>순전파</b> — 예측을 만들고 손실을 계산. 이 과정에서 계산 그래프가 그려집니다</p></div></div>
+  <div class="fl"><div class="fl-n">3</div><div><h4><code>loss.backward()</code></h4><p><b>역전파</b> — 그래프를 거꾸로 훑으며 <code>model.weight.grad</code>, <code>model.bias.grad</code> 를 채웁니다. <b>값만 채울 뿐, 파라미터는 아직 안 바뀝니다</b></p></div></div>
+  <div class="fl"><div class="fl-n">4</div><div><h4><code>opt.step()</code></h4><p><b>갱신</b> — 채워진 <code>.grad</code> 를 보고 <span class="tex">\mathbf w\leftarrow\mathbf w-\eta\nabla L</span> 을 실제로 수행</p></div></div>
+</div>
+<div class="good"><b>TODO(11)이 노리는 것</b> — 개념 8에서 손으로 유도한 <span class="tex">\frac2N X^{\mathsf T}(X\mathbf w-\mathbf y)</span> 에 <span class="tex">\mathbf w=0</span> 을 넣은 값과,
+autograd가 자동으로 계산한 값이 <b>[0.000, −1.888] 로 완전히 같다</b>는 것을 눈으로 확인시키는 것입니다.
+&ldquo;프레임워크가 마법을 부리는 게 아니라 <b>내가 유도한 그 식을 그대로 계산</b>하고 있다&rdquo; — 이 확신이 이번 실습의 최종 목표입니다.</div>
+
+<h3 class="sub-title">개념 12 — 옵티마이저와 MLP, 그리고 &lsquo;기준선 대비 이득&rsquo;</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>옵티마이저</th><th>한 줄 설명</th><th>이 실습 결과</th></tr></thead>
+  <tbody>
+    <tr><td>SGD</td><td>기울기 방향으로 그냥 <span class="tex">\eta</span> 만큼</td><td>w0=71022.5 · RMSE 4585.4</td></tr>
+    <tr><td>SGD + momentum</td><td>이전 이동 방향을 <b>관성</b>처럼 90% 유지 → 협곡에서 지그재그 감소</td><td>거의 동일 (κ=1이라 이득 없음)</td></tr>
+    <tr><td>Adam</td><td>파라미터마다 <b>학습률을 자동 조절</b>. 스텝 크기가 기울기 크기와 <b>거의 무관</b>하게 ≈η</td><td>거의 동일</td></tr>
+    <tr><td>AdamW + cosine</td><td>가중치 감쇠(정규화)를 제대로 분리 + 학습률을 <b>코사인 곡선으로 감소</b></td><td>w1=23615.7 로 <b>약간 작음</b> — weight_decay가 계수를 살짝 눌렀기 때문</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="warn"><b>노트북이 <span class="tex">y</span> 까지 표준화한 이유 (<code>yt_s</code>)</b> — Adam 계열은 스텝 크기가 <b>대략 <span class="tex">\eta</span> 로 고정</b>됩니다.
+그런데 목표값이 연봉(~100000) 스케일이면, <span class="tex">\eta=0.1</span> 짜리 걸음으로 절편을 71022까지 옮기는 데 <b>수십만 스텝</b>이 필요합니다. 200에폭으로는 어림도 없습니다.
+<span class="tex">y</span> 를 표준화해 목표를 −2~2 범위로 줄이면 <b>같은 200에폭으로 충분히 수렴</b>합니다. 노트북 마지막 줄의 &ldquo;연습&rdquo; 질문이 정확히 이 이야기입니다.</div>
+<div class="note-box"><b>MLP로 바꾸기 — 딱 한 줄</b><br>
+<code>nn.Linear(1,1)</code> → <code>nn.Sequential(nn.Linear(1,32), nn.GELU(), nn.Linear(32,1))</code>
+<ul class="ul">
+  <li><code>nn.Sequential</code> — 층을 <b>순서대로 통과</b>시키는 상자. 입력 1개 → 은닉 32개 → 출력 1개</li>
+  <li><code>nn.GELU()</code> — <b>비선형 활성화 함수</b>. 이게 없으면 <b>선형×선형 = 여전히 선형</b>이라 층을 쌓는 의미가 사라집니다. 요즘 트랜스포머 계열의 기본 선택</li>
+  <li><b>학습 루프·손실·옵티마이저는 하나도 바꾸지 않습니다</b> — 이것이 PyTorch 방식의 힘입니다</li>
+</ul></div>
+<div class="good"><b>가장 중요한 교훈</b> — MLP의 test RMSE는 <b>4433</b> 으로 선형 모델의 <b>4585</b> 와 사실상 차이가 없습니다(테스트 10개에서 이 정도 차이는 운의 범위).
+데이터가 실제로 직선이면 <b>파라미터 97개짜리 신경망이 파라미터 2개짜리 직선을 이길 이유가 없습니다.</b>
+복잡한 모델은 언제나 <b>단순한 기준선(baseline) 대비 이득</b>을 숫자로 보여야 한다 — 이 실습이 6주차 MLP를 미리 꺼내 보여 주는 진짜 이유입니다.</div>
+</section>
+
+<!-- ===================== 셀별 코드 해부 ===================== -->
+<section class="sec" id="nb-cells">
+  <div class="sec-head"><span class="sec-badge">CODE</span><h2 class="sec-title">셀별 코드 해부 — 노트북을 위에서 아래로<small>정답본 기준 · 한 줄도 건너뛰지 않고 · 출력값 해석까지</small></h2></div>
+<div class="note-box"><b>읽는 방법</b> — 노트북을 옆에 띄워 놓고 이 절을 따라 내려가면 됩니다. 각 덩어리는 <b>① 코드 → ② 한 줄씩 풀이 → ③ 출력 해석</b> 순서입니다.
+<span class="nbc">주황색</span>은 노트북의 주석, <span style="color:#7c5c1e;font-weight:700">연두색</span>은 실행 결과입니다.</div>
+
+<h3 class="sub-title">[준비] 라이브러리 가져오기와 시드 고정</h3>
+<pre class="code"><span class="cm"># !pip install -q scikit-learn&gt;=1.4 torch pandas matplotlib</span>
+
+import numpy as np, pandas as pd, matplotlib.pyplot as plt
+import sklearn, torch
+print('sklearn', sklearn.__version__, '| torch', torch.__version__)
+np.random.seed(0); torch.manual_seed(0)
+plt.rcParams['figure.figsize'] = (6, 4)
+<span class="out"># sklearn 1.6.1 | torch 2.11.0+cpu</span></pre>
+<div class="fnc">
+  <h4>줄별 풀이</h4>
+  <dl>
+    <dt><code>#</code> 로 시작하는 첫 줄</dt><dd><b>주석 처리된 설치 명령</b>. 맨 앞의 <code>!</code> 는 &ldquo;이건 파이썬이 아니라 <b>터미널 명령</b>&rdquo;이라는 Colab 전용 표시입니다. Colab에는 이미 다 깔려 있어 주석으로 막아 뒀습니다. 필요하면 <code>#</code> 을 지우고 실행</dd>
+    <dt><code>import a, b, c</code></dt><dd>쉼표로 <b>한 줄에 여러 개</b>를 가져올 수 있습니다</dd>
+    <dt><code>sklearn.__version__</code></dt><dd>앞뒤로 밑줄 두 개가 붙은 이름은 파이썬의 <b>특별한 약속 이름</b>(던더, dunder)입니다. 버전 문자열이 들어 있습니다</dd>
+    <dt><code>세미콜론 ;</code></dt><dd>한 줄에 <b>두 문장</b>을 넣을 때. <code>np.random.seed(0); torch.manual_seed(0)</code> 은 두 줄로 써도 똑같습니다</dd>
+    <dt><code>plt.rcParams[...]</code></dt><dd>matplotlib의 <b>전역 설정</b>. 이후 모든 그림의 기본 크기를 가로 6 × 세로 4 인치로</dd>
+  </dl>
+</div>
+<div class="warn"><b>버전을 출력하는 습관</b> — <code>root_mean_squared_error</code> 는 <b>scikit-learn 1.4 이상</b>에서만 존재합니다.
+버전이 낮으면 이 노트북은 <code>ImportError</code> 로 멈춥니다. 출력의 <code>1.6.1</code> 은 &ldquo;조건 충족&rdquo; 확인입니다.</div>
+
+<h3 class="sub-title">[0-1] 데이터 불러오기 — 파일이 없으면 직접 만들기</h3>
+<pre class="code">import os
+if os.path.exists('Salary_Data.csv'):
+    df = pd.read_csv('Salary_Data.csv')
+else:
+    years  = [1.1, 1.3, ..., 10.5]      <span class="cm"># 30개</span>
+    salary = [39343, 46205, ..., 121872] <span class="cm"># 30개</span>
+    df = pd.DataFrame({'YearsExperience': years, 'Salary': salary})
+    df.to_csv('Salary_Data.csv', index=False)
+print(df.describe().round(1))
+X = df[['YearsExperience']].values      <span class="cm"># (N, 1) 2차원 — sklearn 규약</span>
+y = df['Salary'].values                 <span class="cm"># (N,)</span></pre>
+<div class="fnc">
+  <h4>줄별 풀이</h4>
+  <dl>
+    <dt><code>if … : / else :</code></dt><dd><b>조건 분기</b>. 콜론 뒤 <b>들여쓴 블록</b>이 각 경우에 실행됩니다</dd>
+    <dt><code>os.path.exists('…')</code></dt><dd>그 이름의 파일이 있으면 <code>True</code>. <b>Colab은 세션이 끊기면 파일이 사라지므로</b> 이런 안전장치를 넣어 둔 것입니다</dd>
+    <dt><code>pd.DataFrame({'열이름': 목록, …})</code></dt><dd>딕셔너리로 <b>표를 만든다</b>. 키가 열 이름, 값이 그 열의 데이터</dd>
+    <dt><code>to_csv(..., index=False)</code></dt><dd>CSV로 저장. <code>index=False</code> 를 빼면 <b>0,1,2…</b> 행 번호가 쓸데없이 첫 열로 저장됩니다</dd>
+    <dt><code>df.describe()</code></dt><dd>개수·평균·표준편차·최솟값·사분위수·최댓값을 <b>한 번에</b> 보여 주는 요약표</dd>
+    <dt><code>df[['…']]</code> vs <code>df['…']</code></dt><dd>앞서 본 대로 <b>2차원 (30,1)</b> vs <b>1차원 (30,)</b>. sklearn 규약에 맞추려는 의도적 구분입니다</dd>
+  </dl>
+</div>
+<div class="note-box"><b>출력 읽기</b> — 경력은 평균 5.3년(1.1~10.5), 연봉은 평균 76,003(37,731~122,391), 표준편차 27,414.
+연봉의 <b>표준편차가 크다</b>는 것은 &ldquo;평균으로만 찍으면 평균 2.7만쯤 틀린다&rdquo;는 뜻이고, 우리 모델의 RMSE 4,585는 <b>그보다 6배 정확</b>하다는 의미가 됩니다(이것이 R²=0.97의 정체입니다).</div>
+
+<h3 class="sub-title">[0-2] 훈련/테스트 분할과 산점도</h3>
+<pre class="code">from sklearn.model_selection import train_test_split
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=1/3, random_state=0)
+print('train', X_tr.shape, '| test', X_te.shape)
+<span class="out"># train (20, 1) | test (10, 1)</span>
+
+plt.scatter(X_tr, y_tr, c='tab:red', label='train')
+plt.scatter(X_te, y_te, c='tab:blue', label='test')
+plt.xlabel('Years of Experience'); plt.ylabel('Salary')
+plt.legend(); plt.title('Salary vs Experience'); plt.show()</pre>
+<div class="fnc">
+  <h4>줄별 풀이</h4>
+  <dl>
+    <dt><code>X_tr, X_te, y_tr, y_te = train_test_split(...)</code></dt><dd><b>반환값 4개를 한 번에</b> 받습니다. <b>순서가 고정</b>돼 있으니 절대 바꿔 쓰면 안 됩니다: X훈련, X테스트, y훈련, y테스트</dd>
+    <dt><code>test_size=1/3</code></dt><dd>30건 중 10건을 테스트로. <code>0.33</code> 처럼 소수로 써도 되고, <code>10</code> 처럼 개수로 써도 됩니다</dd>
+    <dt><code>random_state=0</code></dt><dd>섞는 방식 고정 → <b>몇 번을 돌려도 같은 20/10</b>. 이 값이 다르면 아래 모든 숫자가 조금씩 달라집니다</dd>
+    <dt><code>c='tab:red'</code></dt><dd>색 지정. <code>tab:</code> 접두사는 matplotlib 기본 10색 팔레트(Tableau 색)입니다</dd>
+    <dt><code>label=… / plt.legend()</code></dt><dd><code>label</code> 로 이름을 달아 두면 <code>legend()</code> 가 <b>범례 상자</b>를 자동으로 그립니다</dd>
+    <dt><code>plt.show()</code></dt><dd>&ldquo;지금까지 쌓은 그림을 <b>화면에 내보내고 캔버스를 비워라</b>&rdquo;. 빼먹으면 다음 그림이 <b>같은 그림에 겹쳐</b> 그려집니다</dd>
+  </dl>
+</div>
+
+<h3 class="sub-title">[1] TODO(1)(2) — 파이프라인 학습과 척도 복원</h3>
+<pre class="code">model = make_pipeline(StandardScaler(), LinearRegression())
+model.fit(X_tr, y_tr)                      <span class="cm"># ← TODO(1)</span>
+
+sc, lr_ = model[0], model[-1]
+w1 = lr_.coef_[0] / sc.scale_[0]           <span class="cm"># ← TODO(2)</span>
+w0 = lr_.intercept_ - w1 * sc.mean_[0]
+
+print(f'표준화 척도: coef={lr_.coef_[0]:.1f}, intercept={lr_.intercept_:.1f}')
+print(f'원 척도    : w1={w1:.1f} (연봉/년), w0={w0:.1f}')
+y_hat = model.predict(X_te)
+print(f'RMSE={root_mean_squared_error(y_te, y_hat):.1f}  '
+      f'MAE={mean_absolute_error(y_te, y_hat):.1f}  R2={r2_score(y_te, y_hat):.4f}')
+<span class="out"># 표준화 척도: coef=23651.1, intercept=71022.5</span>
+<span class="out"># 원 척도    : w1=9345.9 (연봉/년), w0=26816.2</span>
+<span class="out"># RMSE=4585.4  MAE=3426.4  R2=0.9749</span></pre>
+<div class="fnc">
+  <h4>줄별 풀이</h4>
+  <dl>
+    <dt><code>make_pipeline(A(), B())</code></dt><dd>A를 거친 결과를 B에 넣는 <b>한 덩어리 모델</b>. 이름은 자동으로 소문자화되어 붙습니다(<code>standardscaler</code>, <code>linearregression</code>)</dd>
+    <dt><code>model.fit(X_tr, y_tr)</code></dt><dd>내부에서 ① 스케일러를 <b><code>X_tr</code>로만</b> fit → transform, ② 변환된 값으로 선형회귀를 fit. <b>여기가 누수 방지의 핵심</b></dd>
+    <dt><code>lr_.coef_[0]</code></dt><dd><code>coef_</code> 는 <b>특징마다 하나씩</b> 들어 있는 배열 <code>[23651.1]</code>. <code>[0]</code> 로 첫 번째(유일한) 값을 꺼냅니다</dd>
+    <dt><code>sc.scale_[0]</code>, <code>sc.mean_[0]</code></dt><dd>스케일러가 <b>훈련 데이터에서 기억한</b> 표준편차(≈2.53)와 평균(≈4.73). 역시 특징별 배열이라 <code>[0]</code></dd>
+    <dt><code>w1 = coef/scale</code> → <code>w0 = intercept − w1·mean</code></dt><dd>개념 3의 공식. <b><code>w1</code> 을 먼저</b> 계산해야 <code>w0</code> 에 쓸 수 있습니다</dd>
+    <dt><code>model.predict(X_te)</code></dt><dd>원 척도 <code>X_te</code> 를 그대로 넣으면 파이프라인이 <b>알아서 표준화한 뒤</b> 예측합니다 — 사용자는 변환을 신경 쓸 필요가 없습니다</dd>
+  </dl>
+</div>
+<div class="good"><b>출력 해석</b> — 최종 모델은 <span class="tex">\widehat{\text{연봉}}\approx 26816+9346\times\text{경력(년)}</span>.
+경력 1년당 약 <b>9,346</b> 상승, 경력 0년의 기대 연봉 약 <b>26,816</b>. 테스트 RMSE 4,585는 <b>평균 연봉의 6%</b> 수준 오차입니다.
+<b>주의</b> — 표준화 척도의 <code>coef=23651.1</code> 을 &ldquo;1년당 23,651&rdquo;로 읽으면 <b>2.5배 과장</b>한 오답이 됩니다.</div>
+
+<h3 class="sub-title">[1] TODO(3) — 5-겹 교차검증</h3>
+<pre class="code">from sklearn.model_selection import cross_val_score, KFold
+cv = KFold(n_splits=5, shuffle=True, random_state=0)
+scores = cross_val_score(model, X, y, cv=cv, scoring='r2')   <span class="cm"># ← TODO(3)</span>
+print('CV R2 :', scores.round(3), '| mean %.3f ± %.3f' % (scores.mean(), scores.std()))
+<span class="out"># CV R2 : [0.988 0.926 0.925 0.879 0.965] | mean 0.936 ± 0.038</span></pre>
+<div class="fnc">
+  <h4>인자 풀이</h4>
+  <dl>
+    <dt><code>model</code></dt><dd><b>이미 fit된 모델을 넘겨도 무방</b>합니다 — <code>cross_val_score</code> 는 내부에서 <b>복제본을 만들어 폴드마다 처음부터 다시 학습</b>하기 때문입니다. 원래 <code>model</code> 은 건드리지 않습니다</dd>
+    <dt><code>X, y</code></dt><dd><b>전체 30건</b>. 교차검증이 스스로 나눕니다</dd>
+    <dt><code>cv=cv</code></dt><dd>나누는 방식. 숫자 <code>cv=5</code> 로도 되지만, <b><code>shuffle=True</code> 를 주려면</b> <code>KFold</code> 객체를 만들어 넘겨야 합니다</dd>
+    <dt><code>scoring='r2'</code></dt><dd>채점 기준. 반환은 <b>길이 5의 배열</b></dd>
+    <dt><code>.mean() / .std()</code></dt><dd>배열의 평균/표준편차 — <b>메서드라 괄호가 붙습니다</b></dd>
+  </dl>
+</div>
+<div class="note-box"><b>출력 해석</b> — 최고 0.988, 최저 0.879. <b>폴드에 따라 0.11이나 벌어집니다.</b>
+&ldquo;이 모델의 성능은 R² 0.94 ± 0.04&rdquo; 라고 보고하는 것이 &ldquo;0.9749&rdquo;라고 단정하는 것보다 <b>훨씬 정직한 보고</b>입니다. 30건짜리 데이터의 한계를 그대로 보여 주는 대목입니다.</div>
+
+<h3 class="sub-title">[1] TODO(4) — RidgeCV</h3>
+<pre class="code">ridge = make_pipeline(StandardScaler(), RidgeCV(alphas=np.logspace(-3, 3, 13)))  <span class="cm"># ← TODO(4)</span>
+ridge.fit(X_tr, y_tr)
+print('선택된 alpha =', ridge[-1].alpha_)
+print('Ridge  RMSE = %.1f' % root_mean_squared_error(y_te, ridge.predict(X_te)))
+<span class="out"># 선택된 alpha = 0.31622776601683794</span>
+<span class="out"># Ridge  RMSE = 4662.4</span></pre>
+<div class="fnc">
+  <h4>줄별 풀이</h4>
+  <dl>
+    <dt><code>np.logspace(-3, 3, 13)</code></dt><dd><span class="tex">10^{-3}</span>~<span class="tex">10^{3}</span> 을 <b>로그 간격 13개</b>로. 자릿수마다 2개씩 찍히는 셈입니다</dd>
+    <dt><code>RidgeCV(alphas=…)</code></dt><dd>후보들을 <b>내부 교차검증으로 비교</b>해 가장 좋은 것을 스스로 고릅니다. 별도의 <code>GridSearchCV</code> 가 필요 없습니다</dd>
+    <dt><code>ridge[-1].alpha_</code></dt><dd>파이프라인의 <b>마지막 단계</b>(RidgeCV)가 <b>선택한</b> alpha. 밑줄이 붙었으니 <b>fit 후에 생긴 값</b></dd>
+    <dt><code>0.3162…</code></dt><dd>정확히 <span class="tex">10^{-0.5}</span> — 후보 13개 중 <b>작은 쪽</b>이 뽑혔습니다</dd>
+  </dl>
+</div>
+<div class="note-box"><b>출력 해석 — &ldquo;졌는데 이게 정답&rdquo;</b> — RMSE가 4585.4 → <b>4662.4로 나빠졌습니다</b>. 실수가 아니라 <b>예상된 결과</b>입니다.
+특징 1개·샘플 20개에서는 과적합할 여지가 없으므로 정규화는 <b>편향만 더하는 손해</b>입니다. 그런데도 가장 작은 alpha가 뽑혔다는 것은 교차검증이 <b>&ldquo;정규화를 최대한 약하게 하라&rdquo;고 올바르게 판단</b>했다는 뜻입니다.
+<b>이 셀의 학습 포인트</b>는 &ldquo;Ridge가 항상 좋다&rdquo;가 아니라 <b>&ldquo;정규화는 상황에 따라 손해일 수 있고, 그 판단을 교차검증에 맡긴다&rdquo;</b>입니다.</div>
+
+<h3 class="sub-title">[1] 시각화 — 두 그림을 한 번에</h3>
+<pre class="code">xs = np.linspace(X.min(), X.max(), 100).reshape(-1, 1)
+fig, ax = plt.subplots(1, 2, figsize=(11, 4))
+for a, (Xd, yd, name, c) in zip(ax, [(X_tr, y_tr, 'Train', 'tab:red'),
+                                     (X_te, y_te, 'Test',  'tab:blue')]):
+    a.scatter(Xd, yd, c=c); a.plot(xs, model.predict(xs), 'k-')
+    a.set_title(f'Salary vs Experience ({name} set)')
+    a.set_xlabel('Years'); a.set_ylabel('Salary')
+plt.show()</pre>
+<div class="fnc">
+  <h4>줄별 풀이</h4>
+  <dl>
+    <dt><code>np.linspace(a, b, 100)</code></dt><dd>a와 b 사이를 <b>똑같은 간격 100개</b>로. 직선을 매끄럽게 그리기 위한 촘촘한 x값입니다</dd>
+    <dt><code>.reshape(-1, 1)</code></dt><dd><code>predict</code> 에 넣으려면 <b>2차원 (100,1)</b> 이어야 하므로</dd>
+    <dt><code>plt.subplots(1, 2)</code></dt><dd><b>1행 2열</b>의 그림판. <code>fig</code>(전체 도화지)와 <code>ax</code>(칸 2개 배열)를 돌려줍니다</dd>
+    <dt><code>zip(ax, [...])</code></dt><dd>칸 2개와 데이터 2묶음을 <b>짝지어</b> 한 번의 for로 처리. 같은 코드를 두 번 쓰지 않는 요령입니다</dd>
+    <dt><code>a.scatter</code> vs <code>plt.scatter</code></dt><dd>칸이 여러 개면 <b>칸 객체(<code>a</code>)의 메서드</b>를 씁니다. 제목도 <code>a.set_title</code> 처럼 <code>set_</code> 이 붙습니다</dd>
+    <dt><code>'k-'</code></dt><dd>matplotlib의 축약 서식 — <b>k</b>=검정(blacK), <b>-</b>=실선. <code>'r--'</code> 이면 빨간 점선</dd>
+  </dl>
+</div>
+
+<h3 class="sub-title">[2] 표준화와 설계행렬 만들기 + TODO(5) 정규방정식</h3>
+<pre class="code">mu, sd = X_tr.mean(0), X_tr.std(0)          <span class="cm"># 훈련 통계량만 사용!</span>
+Xs_tr, Xs_te = (X_tr - mu) / sd, (X_te - mu) / sd
+Xb_tr = np.c_[np.ones(len(Xs_tr)), Xs_tr]   <span class="cm"># 설계행렬 [1, x]  (20, 2)</span>
+Xb_te = np.c_[np.ones(len(Xs_te)), Xs_te]
+
+w_ne  = np.linalg.lstsq(Xb_tr, y_tr, rcond=None)[0]              <span class="cm"># ← TODO(5)</span>
+w_inv = np.linalg.inv(Xb_tr.T @ Xb_tr) @ Xb_tr.T @ y_tr
+
+print('lstsq :', w_ne.round(2), '| inv :', w_inv.round(2))
+print('sklearn(표준화 척도):', np.r_[lr_.intercept_, lr_.coef_].round(2))
+<span class="out"># lstsq : [71022.5  23651.14] | inv : [71022.5  23651.14]</span>
+<span class="out"># sklearn(표준화 척도): [71022.5  23651.14]</span></pre>
+<div class="fnc">
+  <h4>줄별 풀이</h4>
+  <dl>
+    <dt><code>X_tr.mean(0)</code></dt><dd>괄호 안 <code>0</code> 은 <b>&ldquo;0번 축(행 방향)으로 평균&rdquo;</b> — 즉 <b>열마다</b> 평균을 냅니다. 결과는 배열 <code>[4.73]</code></dd>
+    <dt><code>X_tr.std(0)</code></dt><dd>같은 방식의 표준편차 <code>[2.53]</code>. NumPy 기본은 <b><span class="tex">N</span>으로 나누는</b> 방식이고 <code>StandardScaler</code> 도 같아서 <b>결과가 정확히 일치</b>합니다(<code>pandas</code>의 <code>.std()</code> 는 기본이 <span class="tex">N{-}1</span>이라 다릅니다 — 자주 걸리는 함정)</dd>
+    <dt><code>(X_te - mu) / sd</code></dt><dd><b>테스트도 훈련의 μ, σ로</b> 변환합니다. 테스트 자신의 평균을 쓰면 그 순간 <b>누수</b>입니다</dd>
+    <dt><code>np.ones(20)</code></dt><dd>전부 1인 길이 20 배열 — <b>절편(<span class="tex">w_0</span>)을 위한 열</b>. <span class="tex">w_0\cdot1+w_1x</span> 로 만들어 절편도 행렬 곱 안에 넣는 표준 기법입니다(교안의 <span class="tex">x_{i0}=1</span>)</dd>
+    <dt><code>np.c_[a, b]</code></dt><dd>열 방향 결합 → <b>(20, 2)</b> 설계행렬. <b>1열이 앞</b>이므로 결과 벡터도 <code>[w0, w1]</code> 순서가 됩니다</dd>
+    <dt><code>lstsq(...)[0]</code></dt><dd>반환 4개 중 <b>해</b>만 꺼내기. <code>rcond=None</code> 은 경고 방지용 최신 기본값</dd>
+    <dt><code>np.r_[a, b]</code></dt><dd>행 방향 결합 — 스칼라 절편과 배열 계수를 <code>[w0, w1]</code> 하나로 합쳐 비교하기 위해</dd>
+  </dl>
+</div>
+<div class="good"><b>출력 해석 — 이 실습의 첫 번째 &lsquo;일치 확인&rsquo;</b><br>
+<code>lstsq</code> = <code>inv</code> = <b>sklearn</b> = <code>[71022.5, 23651.14]</code>. 소수점 둘째 자리까지 똑같습니다.
+즉 <b><code>LinearRegression().fit()</code> 안에서 벌어지는 일은 정확히 이 정규방정식 풀이</b>였다는 것이 증명된 셈입니다. &ldquo;라이브러리는 블랙박스&rdquo;라는 느낌을 걷어 내는 것이 이 셀의 목적입니다.</div>
+
+<h3 class="sub-title">[2] TODO(6) — 배치 경사하강법 (벡터화)</h3>
+<pre class="code">def batch_gd(Xb, y, lr=0.1, epochs=200, w0=None):
+    w = np.zeros(Xb.shape[1]) if w0 is None else w0.copy()
+    hist = []
+    for t in range(epochs):
+        err  = Xb @ w - y                    <span class="cm"># ← TODO(6) 잔차 (20,)</span>
+        grad = (2 / len(y)) * (Xb.T @ err)   <span class="cm"># 기울기 (2,)</span>
+        w   -= lr * grad                     <span class="cm"># 갱신</span>
+        hist.append(np.mean(err ** 2))       <span class="cm"># 이번 스텝의 MSE 기록</span>
+    return w, np.array(hist)
+
+w_gd, hist = batch_gd(Xb_tr, y_tr, lr=0.1, epochs=200)
+print('GD    :', w_gd.round(2), '| lstsq :', w_ne.round(2))
+<span class="out"># GD    : [71022.5  23651.14] | lstsq : [71022.5  23651.14]</span></pre>
+<div class="fnc">
+  <h4>줄별 풀이 — shape를 따라가며</h4>
+  <dl>
+    <dt><code>np.zeros(Xb.shape[1])</code></dt><dd><code>shape</code> 는 <code>(20, 2)</code> 이므로 <code>[1]</code> 은 <b>열 수 2</b>. 즉 <code>[0., 0.]</code> 에서 출발합니다 (교안의 &ldquo;Q1 초기값&rdquo;)</dd>
+    <dt><code>Xb @ w</code></dt><dd><b>(20,2) @ (2,) → (20,)</b> — 20명 각각의 <b>예측값</b>이 한 번에 나옵니다</dd>
+    <dt><code>- y</code></dt><dd>(20,) − (20,) → <b>잔차</b> <span class="tex">e_i=\hat y_i-y_i</span>. <b>예측 − 실제</b> 순서를 꼭 지킬 것</dd>
+    <dt><code>Xb.T @ err</code></dt><dd><b>(2,20) @ (20,) → (2,)</b> — 개념 8의 <span class="tex">\sum_i e_i x_{ij}</span> 가 여기 한 줄로 압축돼 있습니다</dd>
+    <dt><code>(2 / len(y))</code></dt><dd><span class="tex">2/N</span>. <code>len(y)</code> 는 20</dd>
+    <dt><code>w -= lr * grad</code></dt><dd>교안의 <span class="tex">w_j\leftarrow w_j-\alpha\,\partial L/\partial w_j</span> 를 <b>두 파라미터에 동시에</b> 적용</dd>
+    <dt><code>hist.append(np.mean(err**2))</code></dt><dd>손실 기록. 주의 — <code>err</code> 는 <b>갱신 전</b> 값이므로 기록되는 MSE는 <b>&ldquo;이번 스텝을 밟기 직전의 손실&rdquo;</b>입니다(곡선 해석에는 영향 없음)</dd>
+  </dl>
+</div>
+<div class="good"><b>출력 해석 — 두 번째 &lsquo;일치 확인&rsquo;</b> — 0에서 출발해 200번 걸어갔더니 <b>닫힌 해와 소수점 둘째 자리까지 동일</b>합니다.
+&ldquo;한 방에 푸는 길&rdquo;과 &ldquo;조금씩 내려가는 길&rdquo;이 <b>같은 곳에 도착</b>한다는 것이 이 셀의 메시지입니다. 손실 곡선을 <code>yscale('log')</code> 로 그리면 직선처럼 내려가는데, 이것이 <b>지수적으로(선형 수렴) 줄어든다</b>는 증거입니다.</div>
+
+<h3 class="sub-title">[2] TODO(7) — 학습률 실험과 안정 조건</h3>
+<pre class="code">for lr in [0.02, 0.1, 0.5, 1.05]:
+    _, h = batch_gd(Xb_tr, y_tr, lr=lr, epochs=60)
+    plt.plot(np.minimum(h, 1e11), label=f'lr={lr}')
+plt.yscale('log'); plt.legend()
+plt.xlabel('iteration'); plt.ylabel('MSE'); plt.title('Convergence vs learning rate')
+
+L = np.linalg.eigvalsh(2 / len(y_tr) * Xb_tr.T @ Xb_tr).max()   <span class="cm"># ← TODO(7)</span>
+print(f'L = {L:.3f}  →  안정 조건 η &lt; 2/L = {2/L:.3f}')
+<span class="out"># L = 2.000  →  안정 조건 η &lt; 2/L = 1.000</span></pre>
+<div class="fnc">
+  <h4>줄별 풀이</h4>
+  <dl>
+    <dt><code>_, h = …</code></dt><dd>밑줄 하나짜리 변수 <code>_</code> 는 <b>&ldquo;이 반환값은 안 쓴다&rdquo;</b>는 관습적 표시입니다. 여기서는 최종 <code>w</code> 는 버리고 <b>손실 기록만</b> 씁니다</dd>
+    <dt><code>np.minimum(h, 1e11)</code></dt><dd>값을 <b>1000억에서 잘라</b> 그립니다. lr=1.05가 발산해 <code>inf</code>/<code>nan</code> 까지 치솟으면 <b>그래프가 아예 안 그려지기</b> 때문에 넣은 안전장치입니다</dd>
+    <dt><code>plt.yscale('log')</code></dt><dd>세로축을 <b>로그 눈금</b>으로. MSE가 <span class="tex">10^{9}</span>에서 <span class="tex">10^{3}</span>까지 변하는 폭을 한 화면에 담으려면 필수입니다</dd>
+    <dt><code>eigvalsh(...)</code></dt><dd><b>대칭행렬의 고유값</b>들을 오름차순 배열로. <code>.max()</code> 로 가장 큰 것 = <b>가장 가파른 방향의 곡률</b> <span class="tex">L</span></dd>
+  </dl>
+</div>
+<div class="note-box"><b>출력 해석 — 이론과 실험의 만남</b>
+<ul class="ul">
+  <li><b>lr=0.02</b> — 안정하지만 <b>느리다</b>. 60번으로는 아직 덜 내려감</li>
+  <li><b>lr=0.1</b> — 적당. 부드럽게 수렴</li>
+  <li><b>lr=0.5</b> — <b>가장 빠름</b>. <span class="tex">1/L=0.5</span> 가 이론상 최적 지점이라 그렇습니다</li>
+  <li><b>lr=1.05</b> — <b>발산</b>. 한계 1.000을 넘겼기 때문. 매 스텝 <span class="tex">\lvert1-\eta L\rvert=\lvert1-2.1\rvert=1.1</span> 배씩 오차가 커져, 60스텝이면 <span class="tex">1.1^{60}\approx300</span>배로 폭발합니다</li>
+</ul>
+<b>제출용 2~3줄 설명은 이렇게</b> — &ldquo;손실의 최대 곡률이 <span class="tex">L=2.0</span> 이므로 이론적 안정 조건은 <span class="tex">\eta&lt;2/L=1.0</span> 이다. 0.02·0.1·0.5는 모두 이 조건을 만족해 수렴하며, 그중 <span class="tex">1/L=0.5</span> 가 가장 빠르다. 1.05는 한계를 넘어 갱신마다 오차가 <span class="tex">\lvert1-\eta L\rvert=1.1</span> 배로 증폭되어 발산한다.&rdquo;</div>
+<div class="warn"><b>노트북의 사소한 흠 하나</b> — 이 셀의 <code>plt.title(...)</code> 줄 끝 주석 안에 <code>plt.show()</code> 가 <b>같이 들어가 버려</b> 실행되지 않습니다.
+Colab은 셀이 끝나면 그림을 자동으로 내보내므로 결과는 같지만, 스크립트로 돌리면 그림이 안 뜹니다. 주석과 코드를 한 줄에 섞을 때 조심해야 할 대표적 사례입니다.</div>
+
+<h3 class="sub-title">[2] TODO(8) — SGD (B=1)</h3>
+<pre class="code">rng = np.random.default_rng(0)
+w_sgd, hist_sgd = np.zeros(2), []
+for epoch in range(50):
+    for i in rng.permutation(len(y_tr)):        <span class="cm"># 매 에폭 순서를 섞는다</span>
+        e      = Xb_tr[i] @ w_sgd - y_tr[i]     <span class="cm"># ← TODO(8) 샘플 하나의 오차 (스칼라)</span>
+        grad_i = 2 * e * Xb_tr[i]               <span class="cm"># 기울기 (2,)</span>
+        w_sgd -= 0.01 * grad_i
+    hist_sgd.append(np.mean((Xb_tr @ w_sgd - y_tr) ** 2))
+print('SGD   :', w_sgd.round(2), '| lstsq :', w_ne.round(2))
+<span class="out"># SGD   : [70986.45 23794.71] | lstsq : [71022.5  23651.14]</span></pre>
+<div class="fnc">
+  <h4>줄별 풀이 — 배치 GD와 무엇이 다른가</h4>
+  <dl>
+    <dt><code>rng.permutation(20)</code></dt><dd>0~19를 <b>무작위 순서</b>로 섞은 배열. 매 에폭 호출되므로 <b>매번 다른 순서</b>가 됩니다</dd>
+    <dt><code>Xb_tr[i]</code></dt><dd>i번째 <b>행 하나</b> → shape <b>(2,)</b>. 배치 GD의 <code>Xb</code>(20,2)와 대비되는 유일한 차이입니다</dd>
+    <dt><code>e = Xb_tr[i] @ w_sgd - y_tr[i]</code></dt><dd>(2,)@(2,) = <b>내적 → 숫자 하나</b>. 샘플 한 명의 오차</dd>
+    <dt><code>grad_i = 2 * e * Xb_tr[i]</code></dt><dd><b><span class="tex">2/N</span> 이 아니라 <span class="tex">2</span></b> — 샘플이 1개뿐이니 <span class="tex">N=1</span>. 개념 8의 식에 <span class="tex">N=1</span> 을 넣은 것과 같습니다</dd>
+    <dt>바깥 for / 안쪽 for</dt><dd><b>바깥=에폭</b>(전체를 한 바퀴), <b>안쪽=샘플</b>. 50에폭 × 20샘플 = <b>1000번 갱신</b> (배치 GD는 200번)</dd>
+    <dt><code>hist_sgd.append(...)</code></dt><dd>기록은 <b>에폭이 끝날 때 전체 20개로</b> 계산합니다 — 샘플별 손실은 너무 출렁여서 곡선을 읽을 수 없기 때문</dd>
+  </dl>
+</div>
+<div class="note-box"><b>출력 해석</b> — <code>[70986.45, 23794.71]</code> 로 정답 <code>[71022.50, 23651.14]</code>에 <b>가깝지만 정확히 같지는 않습니다</b>.
+개념 10에서 설명한 대로, 고정 학습률 SGD는 최소점 주변을 <b>영원히 맴돌기</b> 때문입니다. 손실 곡선도 배치 GD처럼 매끈하게 떨어지지 않고 <b>울퉁불퉁</b>합니다.
+재미있게도 이 &lsquo;틀린&rsquo; 계수의 테스트 RMSE는 <b>4557.8</b> 로 정답(4585.4)보다 <b>오히려 조금 낫습니다</b> — 훈련 데이터에 대한 최적해가 테스트에서도 최적일 필요는 없다는, 일반화의 본질을 보여 주는 우연입니다.</div>
+
+<h3 class="sub-title">[2] 표준화를 안 하면? — 조건수 비교</h3>
+<pre class="code">Xb_raw = np.c_[np.ones(len(X_tr)), X_tr]              <span class="cm"># 표준화 없이 설계행렬</span>
+L_raw  = np.linalg.eigvalsh(2 / len(y_tr) * Xb_raw.T @ Xb_raw).max()
+kappa  = lambda Xb: np.linalg.cond(2 / len(y_tr) * Xb.T @ Xb)
+print(f'원 척도: 안정 조건 η &lt; {2/L_raw:.4f}, 조건수 κ = {kappa(Xb_raw):.1f}')
+print(f'표준화 : 안정 조건 η &lt; {2/L:.4f}, 조건수 κ = {kappa(Xb_tr):.1f}')
+<span class="out"># 원 척도: 안정 조건 η &lt; 0.0338, 조건수 κ = 136.4</span>
+<span class="out"># 표준화 : 안정 조건 η &lt; 1.0000, 조건수 κ = 1.0</span></pre>
+<div class="good"><b>이 셀이 실습 전체에서 가장 중요할 수도 있습니다</b><br>
+표준화라는 <b>세 글자 처리 하나</b>가 ① 쓸 수 있는 학습률을 <b>30배</b> 넓히고 ② 손실 지형의 찌그러짐(<span class="tex">\kappa</span>)을 <b>136 → 1</b> 로 완전히 펴 버립니다.
+기존 실습에서 <code>lr=0.0025</code> 같은 이상하게 작은 값을 써야 했던 이유가 여기서 <b>숫자로 설명</b>됩니다. <code>np.linalg.cond</code> 는 최대/최소 고유값의 비, 즉 조건수를 바로 계산해 주는 함수입니다.</div>
+
+<h3 class="sub-title">[2] TODO(9) — 원 척도 복원과 비교표</h3>
+<pre class="code">def to_raw(w):
+    """표준화 척도 계수 [w0, w1] → 원 척도 [w0_raw, w1_raw]."""
+    w1_raw = w[1] / sd[0]                  <span class="cm"># ← TODO(9)</span>
+    w0_raw = w[0] - w1_raw * mu[0]
+    return np.array([w0_raw, w1_raw])
+
+tbl = pd.DataFrame({'lstsq': to_raw(w_ne), 'Batch GD': to_raw(w_gd), 'SGD': to_raw(w_sgd),
+                    'sklearn': [w0, w1]}, index=['w0 (절편)', 'w1 (기울기)']).T
+tbl['test RMSE'] = [root_mean_squared_error(y_te, Xb_te @ w) for w in (w_ne, w_gd, w_sgd)] + \
+                   [root_mean_squared_error(y_te, y_hat)]
+tbl.round(2)</pre>
+<div class="fnc">
+  <h4>줄별 풀이</h4>
+  <dl>
+    <dt><code>to_raw</code> 의 두 줄</dt><dd>개념 3과 <b>완전히 같은 공식</b>입니다. 다만 여기서는 sklearn의 <code>sc.scale_</code> 대신 직접 구한 <code>sd</code>, <code>mu</code> 를 씁니다(두 값은 일치)</dd>
+    <dt><code>pd.DataFrame({...}, index=[...])</code></dt><dd>딕셔너리의 <b>키가 열</b>이 되고, <code>index</code> 가 <b>행 이름</b>이 됩니다</dd>
+    <dt><code>.T</code></dt><dd>표를 <b>전치</b> — 방법이 행, 지표가 열로 오도록 뒤집습니다(읽기 편하라고)</dd>
+    <dt><code>[f(w) for w in (…)]</code></dt><dd><b>리스트 컴프리헨션</b> — &ldquo;괄호 안 각각에 대해 f를 계산한 목록을 만들어라&rdquo;. for 루프 3줄을 한 줄로 줄이는 파이썬 관용구입니다</dd>
+    <dt><code>Xb_te @ w</code></dt><dd>테스트 예측. <b><code>Xb_te</code> 는 이미 표준화된 설계행렬</b>이므로 <b>표준화 척도의 <code>w</code></b> 를 그대로 곱해야 맞습니다 (여기서 <code>to_raw(w)</code> 를 쓰면 틀립니다)</dd>
+    <dt>줄 끝의 <code>\</code></dt><dd><b>줄 이어짐</b> 표시 — 한 문장을 두 줄에 나눠 쓸 때</dd>
+    <dt><code>tbl.round(2)</code> (print 없이)</dt><dd>셀의 <b>마지막 줄에 놓인 값</b>은 Colab이 자동으로 예쁘게 표시해 줍니다. DataFrame은 이때 <b>표 형태로</b> 렌더링됩니다</dd>
+  </dl>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>방법</th><th>w0 (절편)</th><th>w1 (기울기)</th><th>test RMSE</th><th>해석</th></tr></thead>
+  <tbody>
+    <tr><td>lstsq</td><td>26816.19</td><td>9345.94</td><td>4585.42</td><td>기준 — 닫힌 해</td></tr>
+    <tr><td>Batch GD</td><td>26816.19</td><td>9345.94</td><td>4585.42</td><td><b>완전 일치</b> — 반복법이 닫힌 해에 도달</td></tr>
+    <tr><td>SGD</td><td>26511.80</td><td>9402.68</td><td>4557.79</td><td>근접 — 진동 때문에 살짝 다름</td></tr>
+    <tr><td>sklearn</td><td>26816.19</td><td>9345.94</td><td>4585.42</td><td><b>완전 일치</b> — 라이브러리도 같은 것을 풀고 있었다</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 class="sub-title">[3] PyTorch 준비 — 텐서 변환과 보조 함수</h3>
+<pre class="code">import torch, torch.nn as nn
+torch.manual_seed(0)
+Xt    = torch.tensor(Xs_tr, dtype=torch.float32)                  <span class="cm"># (20, 1)</span>
+yt    = torch.tensor(y_tr,  dtype=torch.float32).unsqueeze(1)     <span class="cm"># (20, 1)</span>
+Xt_te = torch.tensor(Xs_te, dtype=torch.float32)
+
+ymu, ysd = yt.mean(), yt.std()
+yt_s = (yt - ymu) / ysd                  <span class="cm"># 출력(연봉)도 표준화</span>
+
+def coef(model):
+    return model.bias.item() * ysd.item() + ymu.item(), model.weight.item() * ysd.item()
+def predict(model, Xq):
+    return (model(Xq) * ysd + ymu).detach().numpy().ravel()</pre>
+<div class="fnc">
+  <h4>줄별 풀이</h4>
+  <dl>
+    <dt><code>torch.tensor(…)</code></dt><dd>NumPy 배열을 <b>텐서</b>로. 텐서는 &ldquo;NumPy 배열 + <b>자동미분 기능</b> + GPU 사용 가능&rdquo; 이라고 보면 됩니다</dd>
+    <dt><code>dtype=torch.float32</code></dt><dd>PyTorch의 기본은 <b>32비트 실수</b>인데 NumPy 기본은 64비트라, 지정하지 않으면 <b>타입 불일치 오류</b>가 납니다 — 초보자가 가장 자주 만나는 PyTorch 에러</dd>
+    <dt><code>.unsqueeze(1)</code></dt><dd><code>(20,)</code> → <code>(20, 1)</code>. PyTorch의 <code>MSELoss</code> 는 <b>예측과 정답의 shape가 정확히 같아야</b> 합니다. 다르면 조용히 브로드캐스팅되어 <b>엉뚱한 손실</b>이 계산되는 무서운 버그가 생깁니다</dd>
+    <dt><code>yt.mean(), yt.std()</code></dt><dd>연봉의 평균·표준편차. <b>왜 y까지 표준화하나</b> → 개념 12 참고 (Adam의 스텝 크기가 ≈η로 고정이라, 목표가 10만 단위면 200에폭으로는 도달 불가)</dd>
+    <dt><code>.item()</code></dt><dd>원소가 <b>하나뿐인</b> 텐서를 <b>파이썬 숫자</b>로 꺼내기. <code>print</code> 나 포맷에 쓰려면 필요합니다</dd>
+    <dt><code>.detach()</code></dt><dd>&ldquo;이 값은 <b>학습과 무관</b>하니 계산 그래프에서 떼어 내라&rdquo;. 안 하면 &ldquo;grad가 필요한 텐서는 numpy로 못 바꾼다&rdquo;는 오류가 납니다</dd>
+    <dt><code>coef()</code> 가 하는 복원</dt><dd>y만 원 척도로 되돌립니다(<b>x는 여전히 표준화 상태</b>). 그래서 결과가 <code>[71022.5, 23651.14]</code> — <b>lstsq의 표준화 척도 값과 비교하기 위한</b> 설계입니다</dd>
+  </dl>
+</div>
+
+<h3 class="sub-title">[3] TODO(10) — 학습 루프 네 줄</h3>
+<pre class="code">def train(opt_name='sgd', lr=0.1, epochs=200, sched=False, **kw):
+    torch.manual_seed(0)
+    model   = nn.Linear(1, 1)
+    loss_fn = nn.MSELoss()
+    opt = {'sgd':   lambda: torch.optim.SGD(model.parameters(), lr=lr, **kw),
+           'adam':  lambda: torch.optim.Adam(model.parameters(), lr=lr, **kw),
+           'adamw': lambda: torch.optim.AdamW(model.parameters(), lr=lr, **kw)}[opt_name]()
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=epochs) if sched else None
+    hist = []
+    for epoch in range(epochs):
+        opt.zero_grad()                      <span class="cm"># ① 기울기 저장소 비우기  ← TODO(10)</span>
+        loss = loss_fn(model(Xt), yt_s)      <span class="cm"># ② 순전파 + 손실</span>
+        loss.backward()                      <span class="cm"># ③ 역전파 — .grad 채우기</span>
+        opt.step()                           <span class="cm"># ④ 파라미터 갱신</span>
+        if scheduler: scheduler.step()
+        hist.append(loss.item())
+    return model, np.array(hist)
+
+model_pt, hist_pt = train('sgd', lr=0.1)
+print('PyTorch SGD :', np.round(coef(model_pt), 2))
+<span class="out"># PyTorch SGD : [71022.5  23651.14]</span></pre>
+<div class="fnc">
+  <h4>줄별 풀이</h4>
+  <dl>
+    <dt><code>nn.Linear(1, 1)</code></dt><dd><b>입력 1개 → 출력 1개</b>인 층. 내부에 <code>weight</code>(=<span class="tex">w_1</span>)와 <code>bias</code>(=<span class="tex">w_0</span>) <b>파라미터 2개</b>가 자동으로 만들어지고 <b>무작위로 초기화</b>됩니다. 식으로는 정확히 <span class="tex">f(x)=w_1x+w_0</span></dd>
+    <dt><code>nn.MSELoss()</code></dt><dd>손실 <b>객체</b>를 만든 것. 이후 <code>loss_fn(예측, 정답)</code> 처럼 함수처럼 부릅니다</dd>
+    <dt><code>model.parameters()</code></dt><dd>&ldquo;<b>이 모델이 가진 학습 대상 전부</b>&rdquo;를 옵티마이저에게 넘깁니다. 옵티마이저는 이 목록만 갱신합니다</dd>
+    <dt><code>model(Xt)</code></dt><dd><b><code>model.forward(Xt)</code> 의 줄임</b>. 객체를 함수처럼 부르면 순전파가 실행되는 것이 PyTorch의 약속입니다</dd>
+    <dt><code>loss.backward()</code></dt><dd>스칼라 손실에서 출발해 <b>연쇄법칙으로 거슬러</b> <code>model.weight.grad</code>, <code>model.bias.grad</code> 를 채웁니다. <b>파라미터 자체는 아직 그대로</b></dd>
+    <dt><code>opt.step()</code></dt><dd>채워진 <code>.grad</code> 로 실제 갱신. <b>이 순서(①②③④)를 바꾸면 학습이 망가집니다</b></dd>
+    <dt><code>CosineAnnealingLR</code></dt><dd>학습률을 <b>코사인 곡선을 따라 서서히 0까지</b> 줄이는 스케줄러. 막판 미세 조정에 유리합니다. <code>T_max</code> 는 한 주기의 길이</dd>
+    <dt><code>if scheduler:</code></dt><dd>파이썬에서 <code>None</code> 은 거짓으로 취급되므로, &ldquo;스케줄러가 있으면&rdquo;이라는 뜻이 됩니다</dd>
+    <dt><code>loss.item()</code></dt><dd>텐서인 손실을 숫자로 꺼내 기록. <b><code>hist.append(loss)</code> 로 텐서째 쌓으면</b> 계산 그래프가 통째로 메모리에 남아 <b>메모리 누수</b>가 납니다 — 실무에서 유명한 함정</dd>
+  </dl>
+</div>
+<div class="warn"><b><code>zero_grad()</code> 를 빼먹으면?</b> — PyTorch는 <code>.grad</code> 에 <b>덮어쓰기가 아니라 더하기</b>를 합니다.
+지우지 않으면 t번째 에폭의 기울기가 <b>1~t번째 기울기의 누적합</b>이 되어, 실효 학습률이 계속 커지다 발산합니다.
+<b>왜 이렇게 설계했나</b> — RNN이나 큰 배치를 쪼개 학습할 때 <b>여러 번의 backward를 일부러 누적</b>하는 기법이 있기 때문입니다. 그 자유를 주는 대신 &ldquo;직접 비워라&rdquo;가 된 것입니다.</div>
+<div class="good"><b>출력 해석 — 세 번째 &lsquo;일치 확인&rsquo;</b> — <code>[71022.5, 23651.14]</code>. NumPy 손구현·sklearn과 <b>소수점 둘째 자리까지 동일</b>합니다.
+무작위 초기값에서 출발해 autograd로 200번 내려왔는데 정규방정식의 답에 정확히 도착했다 — <b>실습 전체가 목표로 한 &ldquo;세 수준의 일치&rdquo;가 여기서 완성</b>됩니다.</div>
+
+<h3 class="sub-title">[3] TODO(11) — 손유도 기울기 vs autograd</h3>
+<pre class="code">m = nn.Linear(1, 1)
+with torch.no_grad():
+    m.weight.fill_(0.0); m.bias.fill_(0.0)          <span class="cm"># w = 0 에서 출발</span>
+nn.MSELoss()(m(Xt), yt_s).backward()
+y_s = yt_s.numpy().ravel()
+
+manual = (2 / len(y_s)) * (Xb_tr.T @ (Xb_tr @ np.zeros(2) - y_s))   <span class="cm"># ← TODO(11)</span>
+
+print('manual  :', manual.round(3))
+print('autograd:', np.r_[m.bias.grad.item(), m.weight.grad.item()].round(3))
+<span class="out"># manual  : [-0.    -1.888]</span>
+<span class="out"># autograd: [ 0.    -1.888]</span></pre>
+<div class="fnc">
+  <h4>줄별 풀이</h4>
+  <dl>
+    <dt><code>with torch.no_grad():</code></dt><dd>&ldquo;이 블록 안에서는 <b>계산 그래프를 만들지 마라</b>&rdquo;. 파라미터를 <b>학습이 아니라 사람이 직접</b> 바꿀 때 반드시 필요합니다. 없으면 &ldquo;leaf 변수를 in-place로 못 바꾼다&rdquo;는 오류가 납니다</dd>
+    <dt><code>.fill_(0.0)</code></dt><dd>이름 <b>끝의 밑줄</b>은 PyTorch에서 <b>&ldquo;제자리에서(in-place) 바꾼다&rdquo;</b>는 표시입니다(<code>add_</code>, <code>zero_</code> 등). sklearn의 뒤 밑줄과는 뜻이 전혀 다릅니다</dd>
+    <dt><code>…MSELoss()(m(Xt), yt_s).backward()</code></dt><dd>손실 객체 생성 → 호출 → 역전파를 <b>한 줄에</b>. 결과를 변수에 담지 않아도 <code>.grad</code> 는 채워집니다</dd>
+    <dt><code>Xb_tr @ np.zeros(2)</code></dt><dd>일부러 <b><span class="tex">\mathbf w=0</span> 을 그대로 대입</b>한 것입니다. 사실 0이라 생략해도 되지만, 개념 8의 식 <span class="tex">\frac2NX^{\mathsf T}(X\mathbf w-\mathbf y)</span> 와 <b>모양을 맞춰 보이려고</b> 남겨 뒀습니다</dd>
+    <dt><code>np.r_[bias.grad, weight.grad]</code></dt><dd><b>절편을 앞</b>에 두어 <code>manual</code>(설계행렬이 <code>[1, x]</code> 순서)과 <b>비교 순서를 맞춥니다</b></dd>
+  </dl>
+</div>
+<div class="note-box"><b>두 숫자의 의미까지 읽어 보기</b>
+<ul class="ul">
+  <li><b>첫 성분 0</b> — <span class="tex">-\frac2N\sum y_{s,i}=-2\overline{y_s}</span> 인데 <span class="tex">y_s</span> 는 표준화되어 평균이 정확히 0이므로 <b>0</b>. (<code>manual</code>에 <code>-0.</code> 로 찍힌 것은 부동소수점의 <b>음의 0</b>일 뿐 값은 같습니다)</li>
+  <li><b>둘째 성분 −1.888</b> — <span class="tex">-\frac2N\sum x_{s,i}y_{s,i}</span>, 즉 <b>−2 × (경력과 연봉의 상관)</b>. 값이 −1.888이니 상관은 약 <b>0.94</b> — 두 변수가 <b>강한 양의 상관</b>이라는 사실이 기울기 한 숫자에 들어 있습니다</li>
+  <li><b>음수라는 것</b>은 &ldquo;<span class="tex">w_1</span> 을 <b>키우는 방향</b>으로 가야 손실이 준다&rdquo;는 뜻 — <span class="tex">w=0</span> 에서 출발해 23651까지 올라가는 여정의 첫걸음입니다</li>
+</ul></div>
+
+<h3 class="sub-title">[3] 옵티마이저 비교</h3>
+<pre class="code">runs = {'SGD (lr=0.1)':     train('sgd', 0.1),
+        'SGD+momentum 0.9': train('sgd', 0.1, momentum=0.9),
+        'Adam (lr=0.1)':    train('adam', 0.1),
+        'AdamW + cosine':   train('adamw', 0.1, sched=True, weight_decay=0.01)}
+for name, (mdl, h) in runs.items():
+    plt.plot(h[:60], label=name)
+plt.yscale('log'); plt.legend(); …
+for name, (mdl, h) in runs.items():
+    b, w = coef(mdl); rmse = root_mean_squared_error(y_te, predict(mdl, Xt_te))
+    print(f'{name:20s} w0={b:9.1f} w1={w:9.1f}  test RMSE={rmse:.1f}')
+<span class="out"># SGD (lr=0.1)         w0=  71022.5 w1=  23651.1  test RMSE=4585.4</span>
+<span class="out"># SGD+momentum 0.9     w0=  71022.3 w1=  23651.5  test RMSE=4585.3</span>
+<span class="out"># Adam (lr=0.1)        w0=  71022.8 w1=  23650.6  test RMSE=4585.6</span>
+<span class="out"># AdamW + cosine       w0=  71022.1 w1=  23615.7  test RMSE=4590.4</span></pre>
+<div class="fnc">
+  <h4>줄별 풀이</h4>
+  <dl>
+    <dt><code>runs = {이름: train(...)}</code></dt><dd>딕셔너리를 만드는 <b>그 순간 네 번의 학습이 전부 실행</b>됩니다. 각 값은 <code>(model, hist)</code> 튜플</dd>
+    <dt><code>momentum=0.9</code></dt><dd><code>**kw</code> 를 타고 <code>torch.optim.SGD</code> 로 전달됩니다. 이전 이동 방향을 90% 유지하는 <b>관성</b></dd>
+    <dt><code>weight_decay=0.01</code></dt><dd>가중치를 매 스텝 조금씩 0쪽으로 당기는 <b>정규화</b>. Ridge의 <span class="tex">\alpha</span> 와 같은 역할</dd>
+    <dt><code>h[:60]</code></dt><dd>슬라이싱 — <b>앞 60개만</b>. 200에폭 전체를 그리면 초반 변화가 안 보이기 때문</dd>
+  </dl>
+</div>
+<div class="note-box"><b>출력 해석 — 왜 넷이 거의 같은가</b>
+<ul class="ul">
+  <li>표준화 덕분에 <span class="tex">\kappa=1</span>, 즉 손실 지형이 <b>완벽한 원</b>입니다. momentum·Adam은 <b>찌그러진 협곡</b>을 빨리 빠져나오려고 만든 도구라, 원에서는 쓸모가 없습니다</li>
+  <li><b>AdamW만 <span class="tex">w_1</span>=23615.7</b> 로 약 35 작습니다. <code>weight_decay=0.01</code> 이 계수를 0쪽으로 살짝 눌렀기 때문이고, 그래서 RMSE도 4590.4로 <b>아주 조금 나쁩니다</b> — Ridge에서 본 것과 <b>똑같은 현상</b>입니다</li>
+  <li><b>교훈</b> — &ldquo;Adam이 무조건 좋다&rdquo;가 아니라 <b>&ldquo;문제의 지형에 따라 다르다&rdquo;</b>. 쉬운 문제에서는 차이가 안 납니다</li>
+</ul></div>
+
+<h3 class="sub-title">[4] TODO(12) — 한 줄로 MLP 만들기</h3>
+<pre class="code">torch.manual_seed(0)
+mlp = nn.Sequential(nn.Linear(1, 32), nn.GELU(), nn.Linear(32, 1))   <span class="cm"># ← TODO(12)</span>
+
+opt = torch.optim.AdamW(mlp.parameters(), lr=0.01, weight_decay=0.01)
+for epoch in range(500):
+    opt.zero_grad(); loss = nn.MSELoss()(mlp(Xt), yt_s); loss.backward(); opt.step()
+pred = predict(mlp, Xt_te)
+print('MLP test RMSE = %.1f  (선형 = %.1f)' % (root_mean_squared_error(y_te, pred),
+                                              root_mean_squared_error(y_te, y_hat)))
+<span class="out"># MLP test RMSE = 4433.4  (선형 = 4585.4)</span></pre>
+<div class="fnc">
+  <h4>줄별 풀이</h4>
+  <dl>
+    <dt><code>nn.Sequential(A, B, C)</code></dt><dd>입력을 <b>A → B → C 순서로 통과</b>시키는 상자. 여기서는 1 → 32 → (GELU) → 1</dd>
+    <dt><code>nn.Linear(1, 32)</code></dt><dd>입력 1개로 <b>서로 다른 직선 32개</b>를 만듭니다 (파라미터 32+32 = 64개)</dd>
+    <dt><code>nn.GELU()</code></dt><dd><b>비선형</b> 활성화. <b>이것이 없으면</b> 선형 뒤에 선형이라 <b>결국 직선 하나</b>와 똑같아집니다 — 층을 쌓는 의미가 사라짐</dd>
+    <dt><code>nn.Linear(32, 1)</code></dt><dd>32개를 <b>가중합해 하나</b>로 (파라미터 32+1 = 33개). <b>총 97개 파라미터</b> — 선형 모델의 2개와 비교됩니다</dd>
+    <dt>루프 한 줄</dt><dd><code>;</code> 로 네 단계를 한 줄에 붙였을 뿐, <b>TODO(10)과 완전히 같은 루프</b>입니다. 모델만 바뀌고 학습 코드는 그대로 — 이것이 요점</dd>
+    <dt><code>epochs=500</code>, <code>lr=0.01</code></dt><dd>파라미터가 많아졌으니 <b>더 천천히, 더 오래</b></dd>
+  </dl>
+</div>
+<div class="good"><b>출력 해석 — 실습 전체의 결론</b> — 4433 vs 4585. 약 3% 나아 보이지만 <b>테스트 샘플이 10개</b>뿐이라 이 정도는 <b>우연의 범위</b>입니다.
+파라미터를 <b>2개 → 97개로 48배</b> 늘리고 에폭을 2.5배 더 돌려 얻은 결과가 이것이라면, <b>이 데이터에 MLP는 정당화되지 않습니다.</b>
+&ldquo;복잡한 모델은 기준선 대비 이득을 <b>숫자로 증명</b>해야 한다&rdquo; — 노트북이 마지막 주석으로 남긴 이 문장이 3주차 실습의 진짜 마무리입니다.
+<span class="prof">참고</span> torch 버전에 따라 4433~4442 사이로 조금씩 달라질 수 있습니다(초기화 난수 구현 차이). 결론은 같습니다.</div>
+
+<h3 class="sub-title">[5] 선택 과제 3 — 스플릿 컨포멀 예측 (제출본에 직접 푼 부분)</h3>
+<div class="note-box"><b>문제가 요구한 것</b> — 점 예측 하나가 아니라 <b>구간</b> <span class="tex">[\hat y-q,\ \hat y+q]</span> 을 내고, 그 구간이 실제 정답을 <b>약 90% 담는지</b> 확인하라.</div>
+<pre class="code">X_fit, X_cal, y_fit, y_cal = train_test_split(X_tr, y_tr, test_size=0.3, random_state=0)
+cal_model = make_pipeline(StandardScaler(), LinearRegression()).fit(X_fit, y_fit)
+
+resid_cal = np.abs(y_cal - cal_model.predict(X_cal))   <span class="cm"># 보정셋의 |잔차|</span>
+q = np.quantile(resid_cal, 0.9)                        <span class="cm"># 90% 분위수</span>
+
+y_pred_te   = cal_model.predict(X_te)
+lower, upper = y_pred_te - q, y_pred_te + q
+coverage = np.mean((y_te &gt;= lower) &amp; (y_te &lt;= upper))
+print(f'q = {q:.1f}, 테스트셋 커버리지 = {coverage:.2%}')
+<span class="out"># q = 8603.2, 테스트셋 커버리지 = 80.00%</span></pre>
+<div class="fnc">
+  <h4>줄별 풀이</h4>
+  <dl>
+    <dt>훈련셋을 <b>또</b> 쪼개는 이유</dt><dd>구간 폭 <span class="tex">q</span> 를 정하는 데 쓰는 <b>보정(calibration) 셋</b>은 <b>모델 학습에 쓰이지 않은</b> 데이터여야 합니다. 학습에 쓴 데이터의 잔차는 <b>실제보다 작게</b> 나오기 때문입니다(그러면 구간이 너무 좁아짐)</dd>
+    <dt><code>.fit(...)</code> 을 <b>이어 붙인</b> 형태</dt><dd><code>make_pipeline(...).fit(...)</code> — <code>fit</code> 은 <b>자기 자신을 반환</b>하므로 이렇게 한 줄로 쓸 수 있습니다(메서드 체이닝)</dd>
+    <dt><code>np.quantile(resid, 0.9)</code></dt><dd>잔차 절댓값들을 크기순으로 세웠을 때 <b>90% 지점의 값</b>. &ldquo;보정셋에서는 이 폭이면 90%를 담았다&rdquo;는 경험적 기준</dd>
+    <dt><code>(A) &amp; (B)</code></dt><dd>NumPy 배열의 <b>원소별 AND</b>. 파이썬의 <code>and</code> 가 아니라 <b><code>&amp;</code></b> 를 써야 하고, <b>각 조건을 괄호로 감싸야</b> 합니다(연산자 우선순위 때문)</dd>
+    <dt><code>np.mean(불리언 배열)</code></dt><dd><code>True</code>=1, <code>False</code>=0 이므로 평균이 곧 <b>비율</b>이 됩니다 — 자주 쓰는 관용구</dd>
+    <dt><code>{coverage:.2%}</code></dt><dd><b>퍼센트 포맷</b> — 0.8 을 <code>80.00%</code> 로. 100을 곱하고 % 를 붙이는 일을 대신해 줍니다</dd>
+  </dl>
+</div>
+<div class="good"><b>제출본의 해석이 맞습니다</b> — 커버리지 80%가 나온 것은 방법이 틀려서가 아닙니다.
+<ul class="ul">
+  <li>테스트가 <b>10개</b>뿐이라 커버리지는 <b>0%, 10%, …, 100%</b> 중 하나만 나올 수 있습니다 — <b>10%p 단위로만 움직이는</b> 눈금입니다</li>
+  <li>보정셋은 <b>6개</b>(20×0.3)뿐이라 <span class="tex">q</span> 자체의 추정도 매우 거칠고, 이 정도 크기에서는 <b>컨포멀 이론이 보장하는 것도 &lsquo;평균적으로 90% 이상&rsquo;</b>이지 &lsquo;이번 한 번에 정확히 90%&rsquo;가 아닙니다</li>
+  <li>즉 <b>&ldquo;표본이 작아서&rdquo;라는 제출본의 결론이 정확</b>합니다. 한 줄 덧붙인다면 — <b>여러 random_state로 반복해 커버리지의 평균을 보면 90%에 수렴</b>합니다</li>
+</ul></div>
+
+<h3 class="sub-title">[5] 선택 과제 4 — 비교표에 PyTorch 추가 <span class="prof">점검 필요</span></h3>
+<pre class="code">b, w     = coef(model_pt)
+pt_rmse  = root_mean_squared_error(y_te, predict(model_pt, Xt_te))
+tbl.loc['PyTorch'] = [b, w, pt_rmse]
+tbl.round(2)</pre>
+<div class="warn"><b>여기에 단위(척도)가 섞이는 문제가 있습니다</b><br>
+표의 나머지 네 행은 <code>to_raw()</code> 로 <b>원 척도</b>(&ldquo;경력 1년당&rdquo;)로 변환된 값입니다. 그런데 <code>coef(model_pt)</code> 는 <b>y만</b> 원 척도로 되돌리고 <b>x는 표준화 상태 그대로</b>인 값을 돌려줍니다.
+그래서 PyTorch 행만 <code>w0=71022.50, w1=23651.14</code> — <b>&ldquo;경력 1 표준편차(≈2.53년)당&rdquo;</b> 값이 되어, 같은 열에 <b>단위가 다른 숫자</b>가 들어갔습니다.
+<b>RMSE(4585.42)는 문제없습니다</b> — <code>predict()</code> 가 표준화된 <code>Xt_te</code> 를 받아 제대로 예측하기 때문입니다. 틀린 것은 <b>계수 두 칸</b>뿐입니다.</div>
+<pre class="code"><span class="cm"># 고치는 법 — to_raw 를 한 번 더 통과시키면 끝</span>
+b, w    = coef(model_pt)                       <span class="cm"># (71022.50, 23651.14) — x는 아직 표준화 척도</span>
+pt_raw  = to_raw(np.array([b, w]))             <span class="cm"># → [26816.19, 9345.94]  원 척도</span>
+pt_rmse = root_mean_squared_error(y_te, predict(model_pt, Xt_te))
+tbl.loc['PyTorch'] = [pt_raw[0], pt_raw[1], pt_rmse]
+tbl.round(2)</pre>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>방법</th><th>w0 (절편)</th><th>w1 (기울기)</th><th>test RMSE</th></tr></thead>
+  <tbody>
+    <tr><td>lstsq</td><td>26816.19</td><td>9345.94</td><td>4585.42</td></tr>
+    <tr><td>Batch GD</td><td>26816.19</td><td>9345.94</td><td>4585.42</td></tr>
+    <tr><td>SGD</td><td>26511.80</td><td>9402.68</td><td>4557.79</td></tr>
+    <tr><td>sklearn</td><td>26816.19</td><td>9345.94</td><td>4585.42</td></tr>
+    <tr><td><b>PyTorch (수정본)</b></td><td><b>26816.19</b></td><td><b>9345.94</b></td><td><b>4585.42</b></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="good"><b>고치고 나면 오히려 결론이 더 선명해집니다</b> — 다섯 방법 중 <b>넷이 소수점 둘째 자리까지 완전히 같은 값</b>이 되고, SGD만 진동 때문에 근처에 있습니다.
+&ldquo;sklearn · NumPy · PyTorch 세 구현의 계수가 일치함을 확인한다&rdquo;는 <b>실습의 학습 목표 첫 줄이 표 하나로 증명</b>되는 모습입니다.</div>
+
+<h3 class="sub-title">제출 전 자가 점검</h3>
+<div class="note-box"><ul class="ul">
+  <li><b>커널 재시작 후 처음부터 끝까지</b> 오류 없이 실행되는가 (Colab: 런타임 → 런타임 다시 시작 후 모두 실행)</li>
+  <li>TODO 12개에 <code>raise NotImplementedError</code> 가 <b>하나도 남아 있지 않은가</b></li>
+  <li>TODO(9) <b>비교표가 출력되어 있는가</b> — 그리고 <b>모든 행이 같은 척도</b>인가 (위의 PyTorch 행 점검)</li>
+  <li>학습률 <b>4개 손실 곡선 그림</b>과, 1.05가 발산하는 이유 <b>2~3줄 설명</b>이 들어 있는가</li>
+  <li>표준화 척도 계수를 &ldquo;연봉/년&rdquo;으로 <b>잘못 해석한 문장</b>이 없는가</li>
+  <li>파일 이름이 <code>3주차_linear_regression_학번_이름.ipynb</code> 형식인가</li>
+</ul></div>
+<div class="tip"><b>한 문장으로 요약하는 3주차 실습</b><br>
+<b>정규방정식</b>은 답을 한 번에 주고, <b>경사하강법</b>은 같은 답으로 걸어가며, <b>autograd</b>는 그 걸음에 필요한 미분을 대신해 준다.
+세 길이 <code>[26816.19, 9345.94]</code> 라는 <b>같은 지점</b>에서 만나는 것을 눈으로 확인하는 것 — 그것이 이 노트북의 전부입니다.</div>
 </section>
 
 <!-- ===================== 핵심 정리 ===================== -->
@@ -1513,7 +2478,7 @@ print(r2_score(y_test, predict))         <span class="out"># 0.9784483372537969 
 </div>
 </section>
 
-<p class="src">출처 — 기계학습특론 3주차 강의자료(CHAPTER 1 선형 회귀 40페이지 · 개정판 62페이지) · 개정판 실습 문제/정답 노트북 · 로지스틱 회귀 1(18페이지) · 3주차_linear_regression_실습 노트북<br>
+<p class="src">출처 — 기계학습특론 3주차 강의자료(CHAPTER 1 선형 회귀 40페이지 · 개정판 62페이지) · 개정판 실습 문제/정답 노트북 · 내 제출 풀이본(TODO 12개 + 선택 과제 3·4) · 로지스틱 회귀 1(18페이지) · 3주차_linear_regression_실습 노트북<br>
 &lsquo;수업시간 도식&rsquo;과 &lsquo;보충&rsquo; 표시 내용은 교안의 식과 데이터로 직접 계산해 채웠습니다.</p>
 
 </div>

@@ -2,7 +2,10 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main, "claude/masters-course-summary-site-4vp2sc"]
+    # github-pages 환경의 '배포 허용 브랜치'에 main 이 없어서 main 푸시는
+    # 잡 실행 전에 거부된다(로그 없이 즉시 실패). 설정을 바꾸기 전까지는
+    # 이 브랜치가 유일한 배포 경로다.
+    branches: ["claude/masters-course-summary-site-4vp2sc"]
   workflow_dispatch:
 
 permissions:
