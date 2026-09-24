@@ -243,6 +243,102 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .fnc dd{color:#4b5563}
 @media(max-width:440px){.fnc dl{grid-template-columns:1fr;gap:2px}.fnc dd{margin-bottom:6px}}
 /* 개념 하이라이트 + 툴팁 */
+
+/* ===== 4주차 개편: 슬라이드 모아보기 · 출처 뱃지 ===== */
+/* ===== 출처 뱃지 ===== */
+.bdg{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.02em;padding:3px 9px;border-radius:999px;white-space:nowrap;line-height:1.5}
+.bdg-gyo{background:#eef2fb;color:#1b3f8b;border:1px solid #c4d2ee}
+.bdg-flip{background:#fff7ed;color:#b45309;border:1px solid #f0c48a}
+.bdg-live{background:#fdf0f5;color:#9d174d;border:1px solid #f3bcd2}
+.bdg-plus{background:#f0fdfa;color:#0f766e;border:1px solid #99e0d6}
+.bdg-pres{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
+
+/* ===== 개념 카드 ===== */
+.pt{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin:11px 0}
+.pt-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;font-weight:700;line-height:1.45;margin-bottom:7px}
+.pt > p{font-size:13.5px;color:#3f4854;line-height:1.85}
+.pt > p + p{margin-top:9px}
+.pt > p b{color:var(--ink)}
+.pt.gyo{border-left-color:#1b3f8b}
+.pt.flip{border-left-color:#b45309}
+.pt.live{border-left-color:#9d174d}
+.pt.plus{border-left-color:#0f766e}
+.pt pre.code{margin:9px 0}
+
+/* 본문 속 짧은 보충 설명 상자 */
+.qa{background:#f0fdfa;border:1px solid #99e0d6;border-left:4px solid #0f766e;
+  border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:11px 0;
+  font-size:13px;line-height:1.85;color:#134e4a}
+.qa::before{content:'보충설명';display:table;font-size:10.5px;font-weight:800;letter-spacing:.02em;
+  padding:3px 9px;border-radius:999px;margin-bottom:7px;background:#e3f7f3;color:#0f766e;border:1px solid #99e0d6}
+.qa b{color:#0f3d3a}
+.qa .ul li{color:#134e4a}
+.qa .ul li::before{background:#0f766e;opacity:.8}
+
+/* ===== 슬라이드 모아보기 ===== */
+.deck{background:#efeeea;border:1px solid var(--border);border-radius:var(--radius);padding:12px 12px 14px;margin-bottom:20px}
+.deck-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.deck-h span{font-size:11px;font-weight:400;color:var(--muted)}
+.deck-t{font-size:12px;font-weight:700;color:var(--accent);margin:13px 0 7px;padding-left:8px;border-left:3px solid var(--accent)}
+.deck-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.sld{background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px;margin:0;cursor:zoom-in;transition:box-shadow .15s,transform .15s}
+.sld:hover{box-shadow:0 6px 16px rgba(18,34,80,.13);transform:translateY(-2px)}
+.sld img{display:block;width:100%;height:auto;border-radius:4px;background:#fff}
+.sld figcaption{font-size:11px;color:var(--muted);line-height:1.5;margin-top:6px;text-align:center}
+.sld figcaption b{color:var(--accent)}
+
+/* ===== 한 줄 요약 ===== */
+.oneline{background:#16233f;color:#e7edf9;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+.oneline > p{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--lime)}
+.oneline .ul li{color:#c5d0e8;font-size:13px}
+.oneline .ul li b{color:#fff}
+.oneline .ul li::before{background:var(--lime);opacity:.9}
+
+/* ===== 슬라이드 확대 보기 ===== */
+#lb{position:fixed;inset:0;background:rgba(9,15,31,.94);display:none;align-items:center;justify-content:center;
+  z-index:400;padding:52px 60px 64px;cursor:zoom-out;-webkit-user-select:none;user-select:none}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:80vh;border-radius:8px;background:#fff;box-shadow:0 18px 50px rgba(0,0,0,.45);cursor:default}
+#lb .cap{position:absolute;left:0;right:0;bottom:18px;text-align:center;color:#d9e1f3;font-size:12.5px;line-height:1.6;padding:0 20px;cursor:default}
+#lb .cap b{color:#fff}
+#lb .cap .num{display:block;font-size:11px;color:#9fb0d4;margin-top:4px;letter-spacing:.04em}
+#lb button{
+  position:absolute;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;
+  border-radius:50%;width:44px;height:44px;font-size:20px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .15s;
+  font-family:inherit;padding:0;
+}
+#lb button:hover{background:rgba(255,255,255,.22)}
+#lb button:disabled{opacity:.25;cursor:default}
+#lb .prev{left:12px;top:50%;transform:translateY(-50%)}
+#lb .next{right:12px;top:50%;transform:translateY(-50%)}
+#lb .x{right:12px;top:12px;width:38px;height:38px;font-size:17px}
+@media(max-width:560px){
+  #lb{padding:48px 10px 92px}
+  #lb .prev{left:50%;top:auto;bottom:16px;transform:translateX(-64px)}
+  #lb .next{right:50%;top:auto;bottom:16px;transform:translateX(64px)}
+  #lb .cap{bottom:70px}
+}
+
+.kg{display:block;width:108px;height:42px;margin:0 auto}
+.mapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px;margin-top:10px}
+.mapgrid a{
+  display:block;text-decoration:none;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:9px;padding:10px 13px;transition:.15s;
+}
+.mapgrid a:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(18,34,80,.1)}
+.mapgrid b{display:block;font-size:12.5px;color:var(--ink)}
+.mapgrid span{font-size:11.5px;color:var(--muted);line-height:1.55}
+.legend{
+  display:flex;flex-wrap:wrap;gap:9px 16px;align-items:center;
+  background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius);
+  padding:13px 15px;margin:0 0 24px;font-size:12px;color:var(--muted);line-height:1.6;
+}
+.legend i{font-style:normal;display:flex;align-items:center;gap:7px}
+.legend .legend-t{flex:0 0 100%;font-size:12.5px;font-weight:700;color:var(--ink)}
+.legend .legend-t2{flex:0 0 100%;font-size:11.5px;color:var(--muted);border-top:1px dashed var(--border);padding-top:10px;margin-top:1px}
+
 .term{
   color:var(--accent);font-weight:700;cursor:help;
   background:#eef6ff;border-bottom:2px dotted var(--accent);border-radius:3px;padding:0 2px;
@@ -316,13 +412,14 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <body id="top">
 
 <nav class="tab-bar" id="tabbar">
+  <a href="#map">한눈에 보기</a>
   <a href="#docs">강의자료</a>
   <a href="#goal">학습 목표</a>
   <a href="#review">4.1 복습 · 분류</a>
   <a href="#feature">4.2 특징 공간</a>
   <a href="#rule">4.3 분류 규칙</a>
   <a href="#disc">4.4 선형 판별</a>
-  <a href="#logit">4.5 로지스틱 · 로그 오드</a>
+  <a href="#logit">4.5 로지스틱 · 오드</a>
   <a href="#train">4.6 모델과 학습</a>
   <a href="#summary">핵심 정리</a>
   <a href="#terms">용어 · 기호</a>
@@ -336,19 +433,51 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <div class="weeknav">
   <a href="machine-learning.html" class="plan">← 강의계획서</a>
   <a href="machine-learning-week01.html">1주차 · 인공지능 기본 개념</a>
-  <a href="machine-learning-week02.html">2주차 · 인공지능 기초 수학</a>
+  <a href="machine-learning-week02.html">2주차 · 선형대수 · 확률</a>
   <a href="machine-learning-week03.html">3주차 · 선형 회귀</a>
   <span class="cur">4주차 · 로지스틱 회귀</span>
 </div>
 
 <section class="hero">
-  <p class="kicker">4주차 · 9.21 ~ 9.27 · 2026-2학기</p>
-  <h1>로지스틱 회귀 — 분류를 확률로 풀기</h1>
-  <p>선형 판별 함수 <span class="tex">g(\mathbf x)=\mathbf w^{\mathsf T}\mathbf x</span> 의 값을 <b>로지스틱 함수</b>로 0~1 사이 <b>확률</b>로 바꾸고, <b>우도를 최대화(= 크로스 엔트로피를 최소화)</b>하는 방향으로 경사하강법을 돌린다. 3주차 선형 회귀의 &lsquo;모델 → 손실 → 경사하강&rsquo; 틀이 분류에서 어떻게 바뀌는지 보는 주차입니다.</p>
-  <div class="chips"><span class="chip">분류 · 특징 공간</span><span class="chip">선형 판별 함수</span><span class="chip">시그모이드 · 로그 오드</span><span class="chip">베르누이 · 우도</span><span class="chip">바이너리 크로스 엔트로피</span><span class="chip">로지스틱 1부 18p + 2부 16p</span></div>
+  <p class="kicker">4주차 · 2026-2학기</p>
+  <h1>04. 로지스틱 회귀 — 확률로 분류하기</h1>
+  <p>선형 회귀는 <b>값</b>을 맞혔다면, 로지스틱 회귀는 <b>0이냐 1이냐</b>를 맞힌다. 로그 오드를 선형식으로 놓는 아이디어에서 시작해 <b>시그모이드 · 베르누이 · 우도 · 크로스 엔트로피 · 경사하강법</b>까지 한 줄로 이어집니다.</p>
+  <div class="chips"><span class="chip">최승호 교수</span><span class="chip">로지스틱 1부 18p · 2부 16p</span><span class="chip">슬라이드 28장</span><span class="chip">플립러닝 필기 반영</span><span class="chip">100문제 4.1~4.6</span></div>
 </section>
 
-<!-- ===================== 강의자료 ===================== -->
+<div class="legend">
+  <p class="legend-t">내용이 어디에서 왔는지 <b>뱃지</b>로 구분했습니다</p>
+  <i><span class="bdg bdg-gyo">교안</span><span>교수님 슬라이드에 있는 내용</span></i>
+  <i><span class="bdg bdg-flip">플립러닝</span><span>사전 강의에서 말로 짚어 준 내용</span></i>
+  <i><span class="bdg bdg-plus">보충설명</span><span>교안에 없지만 이해 · 시험을 위해 따로 찾아 정리한 내용</span></i>
+  <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고(← → 로 넘기기), <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선 단어</span>는 누르면 뜻이 뜹니다. 절 제목 옆 <b>문제</b> 버튼으로 그 절의 100문제를 바로 풀 수 있습니다.</p>
+</div>
+
+<section class="sec" id="map">
+  <div class="sec-head"><span class="sec-badge">MAP</span><h2 class="sec-title">한눈에 보기<small>선형 판별 → 확률 → 학습, 세 덩어리로 보면 됩니다</small></h2></div>
+
+<div class="oneline">
+  <p><b>이번 주 한 줄 요약</b></p>
+  <ul class="ul">
+    <li><b>분류</b>는 개체를 특징 공간의 점으로 놓고 <b>어느 클래스인지</b> 맞히는 일이다 (4.1~4.3)</li>
+    <li><b>선형 판별</b> <span class="tex">g(\mathbf x)=\mathbf w^{\mathsf T}\mathbf x</span> 의 부호로 갈랐지만, 부호만으로는 &lsquo;얼마나 확실한지&rsquo;를 모른다 (4.4)</li>
+    <li>그래서 <b>로그 오드를 선형식으로</b> 놓으면 <span class="tex">P(C_1\mid\mathbf x)=\sigma(\mathbf w^{\mathsf T}\mathbf x)</span> 라는 <b>확률 모델</b>이 나온다 (4.5)</li>
+    <li>학습은 <b>우도를 최대로</b>(= 크로스 엔트로피를 최소로) 만드는 <span class="tex">\mathbf w</span> 를 <b>경사하강법</b>으로 찾는 일이다 (4.6)</li>
+  </ul>
+</div>
+
+<div class="mapgrid">
+  <a href="#review"><b>4.1 복습 · 분류의 정의</b><span>선형 회귀 요약 · 분류란 무엇인가</span></a>
+  <a href="#feature"><b>4.2 특징 벡터와 특징 공간</b><span>개체 하나 = 공간의 점 하나</span></a>
+  <a href="#rule"><b>4.3 분류 규칙</b><span>구분선 · 사후 확률 · 베이즈 규칙</span></a>
+  <a href="#disc"><b>4.4 선형 판별 함수</b><span>부호로 분류 · 선형 구분 가능성</span></a>
+  <a href="#logit"><b>4.5 로지스틱 함수와 오드</b><span>시그모이드 · 오드 · 오드비 · 로짓 변환</span></a>
+  <a href="#train"><b>4.6 모델과 학습</b><span>베르누이 · 우도 · BCE · 편미분 · 경사하강</span></a>
+  <a href="#lab"><b>실습 ① ②</b><span>sklearn · NumPy 직접 구현</span></a>
+  <a href="#summary"><b>핵심 정리 · 용어</b><span>시험 전에 이것만은</span></a>
+</div>
+</section>
+
 <section class="sec" id="docs">
   <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">4주차 강의자료<small>제목을 누르면 앱 실행 없이 화면에서 바로 열리고, 오른쪽 버튼으로 내려받을 수 있습니다</small></h2></div>
 <div class="docs">
@@ -387,7 +516,6 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </div>
 </section>
 
-<!-- ===================== 학습 목표 ===================== -->
 <section class="sec" id="goal">
   <div class="sec-head"><span class="sec-badge">GOAL</span><h2 class="sec-title">학습 목표<small>4주차를 마치면 설명할 수 있어야 하는 것들</small></h2></div>
 <div class="note-box"><ul class="ul">
@@ -410,87 +538,191 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 
 <!-- ===================== 4.1 ===================== -->
 <section class="sec" id="review">
-  <div class="sec-head"><span class="sec-badge">4.1</span><h2 class="sec-title">선형회귀 복습과 분류의 정의<small>로지스틱 1부 앞부분 — 모델 · 손실 · 경사하강 → 분류로</small></h2></div>
-<div class="fx">
-  <p class="fx-lab">선형회귀 핵심 복습</p>
-  <div class="tex-d">\hat y_i=w_0+w_1x_i,\qquad L(\mathbf w)=\frac1N\sum_{i=1}^{N}(\hat y_i-y_i)^2,\qquad w_0\leftarrow w_0-\alpha\frac{\partial L(\mathbf w)}{\partial w_0},\qquad \hat y_i=\mathbf w^{\mathsf T}\mathbf x_i</div>
-  <p class="fx-note"><span class="tex">\mathbf w^*=\operatorname{argmin}L(\mathbf w)</span> 를 <b>반복 갱신으로 찾는 방법</b>이 경사하강법. <span class="tex">\hat y_i=\mathbf w^{\mathsf T}\mathbf x_i</span> 로 간결하게 쓸 수 있는 것은 <b>바이어스 성분을 1</b>로 둔 <span class="tex">\mathbf x_i=[1\;x_{i1}\cdots x_{id}]^{\mathsf T}</span> 표기 덕분 → <a class="ext" href="machine-learning-week03.html#multi">3주차 3.6</a></p>
+  <div class="sec-head"><span class="sec-badge">4.1</span><h2 class="sec-title">선형회귀 복습과 분류의 정의<small>로지스틱 1부 3 · 4p · 2부 3p</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>1부 3 · 4p · 2부 3p (3장)</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4a-03-linreg-review.jpg" alt="로지스틱1 3p — 선형회귀 복습"><figcaption><b>1부 3p</b> 선형회귀 복습</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4a-04-classification.jpg" alt="로지스틱1 4p — 분류의 정의"><figcaption><b>1부 4p</b> 분류의 정의</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4b-03-review.jpg" alt="로지스틱2 3p — 1부 전체 복습"><figcaption><b>2부 3p</b> 1부 전체 복습</figcaption></figure>
+  </div>
 </div>
-<div class="note-box"><b>분류(Classification)</b> — 특성 값의 집합으로 설명되는 개체의 <b>소속 클래스 / 카테고리를 예측</b>하는 작업.
-<ul class="ul">
-  <li>클래스는 사전에 식별되어 있고, 모든 개체는 어느 한 클래스에 속한다고 가정</li>
-  <li>학습 데이터 <span class="tex">\mathcal D=\{(\mathbf x_i,y_i)\}_{i=1}^N,\;y_i\in\{C_1,\dots,C_K\}</span> — 회귀와 달리 <span class="tex">y_i</span>는 <b>실수 전체가 아니라 정해진 레이블 중 하나</b></li>
-  <li>2클래스면 <span class="tex">C_1=1,\;C_2=0</span> — 예) &ldquo;스팸메일&rdquo; = 1, &ldquo;스팸 아닌 메일&rdquo; = 0. 숫자로 쓰는 이유는 <b>데이터를 표기·관리하기 편하기 때문</b>(크기에 의미가 있는 것은 아님)</li>
-</ul></div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>3주차에서 가져오는 것</h3>
+  <div class="fx" style="margin-top:0">
+    <p class="fx-lab">선형회귀 핵심 복습</p>
+    <div class="tex-d">\hat y_i=w_0+w_1x_i,\qquad L(\mathbf w)=\frac1N\sum_{i=1}^{N}(\hat y_i-y_i)^2,\qquad w_0\leftarrow w_0-\alpha\frac{\partial L(\mathbf w)}{\partial w_0},\qquad \hat y_i=\mathbf w^{\mathsf T}\mathbf x_i</div>
+    <p class="fx-note"><span class="tex">\mathbf w^*=\operatorname{argmin}L(\mathbf w)</span> 를 <b>반복 갱신으로 찾는 방법</b>이 경사하강법이다. <span class="tex">\hat y_i=\mathbf w^{\mathsf T}\mathbf x_i</span> 처럼 간결하게 쓸 수 있는 것은 <b>바이어스 자리를 1</b>로 둔 <span class="tex">\mathbf x_i=[1\;x_{i1}\cdots x_{id}]^{\mathsf T}</span> 표기 덕분이다 → <a class="ext" href="machine-learning-week03.html#multi">3주차 3.6</a></p>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>분류(Classification)란</h3>
+  <p>특성 값의 집합으로 설명되는 개체의 <b>소속 클래스 / 카테고리를 예측</b>하는 작업이다. 클래스는 미리 정해져 있고, 모든 개체는 그중 하나에 속한다고 본다.</p>
+  <ul class="ul">
+    <li>학습 데이터 <span class="tex">\mathcal D=\{(\mathbf x_i,y_i)\}_{i=1}^N,\;y_i\in\{C_1,\dots,C_K\}</span> — 회귀와 달리 <span class="tex">y_i</span> 는 실수 전체가 아니라 <b>정해진 레이블 중 하나</b></li>
+    <li>2클래스면 <span class="tex">C_1=1,\;C_2=0</span> 으로 적는다. 숫자로 쓰는 이유는 <b>데이터를 다루기 편해서</b>일 뿐, 크기에 의미가 있는 것은 아니다</li>
+  </ul>
+</div>
+
+<div class="pt flip">
+  <h3 class="pt-h"><span class="bdg bdg-flip">플립러닝</span>이번 주 내내 다루는 것은 &lsquo;이진(바이너리) 분류&rsquo;</h3>
+  <p>모든 개체가 <b><span class="tex">C_1</span> 아니면 <span class="tex">C_2</span></b> 둘 중 하나에 속하는 상황만 다룬다. 스팸메일 여부, 대학생 여부, 구매 여부처럼 <b>예 / 아니오</b>로 답이 갈리는 문제다. 레이블은 <span class="tex">\{C_1=1,\;C_2=0\}</span> 으로 적는다.</p>
+  <p>그래서 확률 하나만 구하면 끝난다. <span class="tex">P(C_1\mid\mathbf x)</span> 를 알면 나머지는 <span class="tex">P(C_2\mid\mathbf x)=1-P(C_1\mid\mathbf x)</span> 로 자동으로 정해지기 때문이다. <b>0.5보다 크면 <span class="tex">C_1</span></b> 이 기본 결정 규칙이 된다.</p>
+</div>
 </section>
 
 <!-- ===================== 4.2 ===================== -->
 <section class="sec" id="feature">
-  <div class="sec-head"><span class="sec-badge">4.2</span><h2 class="sec-title">특징 벡터와 특징 공간<small>개체 하나 = 공간의 점 하나</small></h2></div>
-<div class="figs">
-  <div class="note-box"><ul class="ul">
-    <li><b>특징 벡터</b> — 모든 개체를 동일한 특징으로 설명할 때 개별 관측 값을 표현하는 벡터</li>
-    <li>학과를 숫자로 부호화(인공지능학과 1, 기계공학과 2, 수학과 3, 물리학과 4) — <b>컴퓨터의 동작 편의</b>를 위한 것</li>
-    <li>홍길동(인공지능학과, 평점 3.8) = <span class="tex">[1\;\;3.8]^{\mathsf T}</span> · 성춘향(수학과, 4.0) = <span class="tex">[3\;\;4.0]^{\mathsf T}</span></li>
-    <li><b>특징 공간</b> — 성분이 <span class="tex">d</span>개면 <span class="tex">d</span>차원 공간의 <b>한 점</b>. 학년까지 관측하면 3차원이 된다</li>
-  </ul></div>
-  <figure class="fig"><img width="550" height="484" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-21-feature-space.png" alt="로지스틱1 6p — 학과-학점 평면의 홍길동과 성춘향"><figcaption>로지스틱1 6p — 성분 값이 다르니 다른 위치의 점</figcaption></figure>
+  <div class="sec-head"><span class="sec-badge">4.2</span><h2 class="sec-title">특징 벡터와 특징 공간<small>로지스틱 1부 5 · 6p · 개체 하나 = 공간의 점 하나</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>1부 5 · 6p (2장)</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4a-05-feature1.jpg" alt="로지스틱1 5p — 특징 벡터와 특징 공간 1/2"><figcaption><b>1부 5p</b> 특징 벡터 (1/2)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4a-06-feature2.jpg" alt="로지스틱1 6p — 학과-학점 평면 위의 두 학생"><figcaption><b>1부 6p</b> 특징 공간 (2/2)</figcaption></figure>
+  </div>
 </div>
-<div class="warn"><b>주의 — 숫자로 바꾼 범주</b> — 학과 1·2·3·4는 <b>이름표를 숫자로 적은 것</b>이지 &ldquo;수학과(3)가 인공지능학과(1)의 3배&rdquo;라는 뜻이 아니다. 교안은 편의상 이렇게 쓰지만, 실무에서는 이런 범주형 특징을 <b>원-핫 인코딩</b>으로 바꿔 거리·크기 관계가 생기지 않게 하는 경우가 많다 (보충).</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>개체 하나를 숫자 벡터로</h3>
+  <ul class="ul">
+    <li><b>특징 벡터</b> — 모든 개체를 같은 특징으로 설명할 때, 개별 관측값을 늘어놓은 벡터</li>
+    <li>학과를 숫자로 부호화(인공지능학과 1, 기계공학과 2, 수학과 3, 물리학과 4)한 뒤, 홍길동(인공지능학과, 평점 3.8) = <span class="tex">[1\;\;3.8]^{\mathsf T}</span>, 성춘향(수학과, 4.0) = <span class="tex">[3\;\;4.0]^{\mathsf T}</span></li>
+    <li><b>특징 공간</b> — 성분이 <span class="tex">d</span> 개면 <span class="tex">d</span> 차원 공간이고, 개체 하나는 그 공간의 <b>점 하나</b>다. 학년까지 관측하면 3차원이 된다</li>
+  </ul>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>범주를 숫자로 바꿀 때의 함정</h3>
+  <p>학과 1 · 2 · 3 · 4는 <b>이름표를 숫자로 적은 것</b>이지 &ldquo;수학과(3)가 인공지능학과(1)의 3배&rdquo;라는 뜻이 아니다. 교안은 설명 편의로 이렇게 쓰지만, 이대로 모델에 넣으면 <b>학과 사이에 없던 거리와 순서가 생긴다</b>. 실무에서는 이런 범주형 특징을 <b>원-핫 인코딩</b>(학과마다 0/1 칸을 따로 두는 방식)으로 바꿔 그 문제를 없앤다.</p>
+</div>
 </section>
 
 <!-- ===================== 4.3 ===================== -->
 <section class="sec" id="rule">
-  <div class="sec-head"><span class="sec-badge">4.3</span><h2 class="sec-title">분류 규칙과 확률 분포 기반 분류<small>구분선 · 사후 확률 · 베이즈 규칙</small></h2></div>
-<figure class="fig"><img width="1100" height="524" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-22-class-rule.jpg" alt="로지스틱1 7p — 정수론 수강 여부 예제와 구분선 1, 2"><figcaption>로지스틱1 7p — 인공지능학과 3명 <span class="tex">[1\;2.2],[1\;3.8],[1\;3.9]</span> 은 미수강(<b>0</b>), 수학과 3명 <span class="tex">[3\;2.2],[3\;4.0],[3\;3.2]</span> 는 수강(<b>1</b>). <b>구분선이 하나로 유일하지 않다</b>(1도 2도 된다)</figcaption></figure>
-<div class="note-box"><b>확률 분포로 분류하기</b> — 체조 동아리 회원(<span class="tex">C_1</span>)과 비회원(<span class="tex">C_2</span>)의 몸무게 분포를 알 때, 52kg 학생은 어느 쪽인가?
-<b>사후 확률</b> <span class="tex">P(C_1\mid x)</span> = <span class="tex">x</span>를 관찰했을 때 소속이 <span class="tex">C_1</span>일 가능성을 수치로 표현한 조건부 확률.</div>
-<figure class="fig"><img width="982" height="445" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-23-histogram.png" alt="로지스틱1 8p — 체조부 소속·미소속 몸무게 비율 히스토그램"><figcaption>로지스틱1 8p — 몸무게별 두 집단의 비율</figcaption></figure>
-<div class="fx">
-  <p class="fx-lab">베이즈 규칙 (2주차 확률 복습)</p>
-  <div class="tex-d">P(C_1\mid x)=\frac{P(C_1,x)}{P(x)}=\frac{P(x\mid C_1)P(C_1)}{P(x\mid C_1)P(C_1)+P(x\mid C_2)P(C_2)},\qquad P(x)=P(C_1,x)+P(C_2,x)</div>
-  <p class="fx-note"><b>분류 규칙</b> — <span class="tex">P(C_1\mid x)&gt;P(C_2\mid x)</span> 이면 <span class="tex">C_1</span>. 두 확률의 합이 1이므로 이것은 <b><span class="tex">P(C_1\mid x)&gt;0.5</span></b> 와 같은 조건이다.
-  계산에 필요한 정보는 <span class="tex">P(C_1),P(C_2),P(x\mid C_1),P(x\mid C_2)</span> (학습률 같은 것은 필요 없다).</p>
+  <div class="sec-head"><span class="sec-badge">4.3</span><h2 class="sec-title">분류 규칙과 확률 분포 기반 분류<small>로지스틱 1부 7~9p · 구분선 · 사후 확률 · 베이즈 규칙</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>1부 7 · 8 · 9p (3장)</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4a-07-rule1.jpg" alt="로지스틱1 7p — 정수론 수강 여부 예제와 구분선"><figcaption><b>1부 7p</b> 구분선은 하나가 아니다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4a-08-rule2.jpg" alt="로지스틱1 8p — 체조부 몸무게 히스토그램과 사후 확률"><figcaption><b>1부 8p</b> 확률 분포로 분류하기</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4a-09-rule3.jpg" alt="로지스틱1 9p — 베이즈 규칙과 분류 규칙"><figcaption><b>1부 9p</b> 베이즈 규칙 · 분류 규칙</figcaption></figure>
+  </div>
 </div>
-<div class="tip"><b>로지스틱 회귀로 가는 다리</b> — 위 식은 각 클래스의 분포 <span class="tex">P(x\mid C_k)</span> 를 먼저 알아야 쓸 수 있다. 로지스틱 회귀는 이 분포를 추정하지 않고 <b>사후 확률 <span class="tex">P(C_1\mid\mathbf x)</span> 자체를 바로 모델링</b>한다(4.6).</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>구분선은 하나로 정해지지 않는다</h3>
+  <p>&lsquo;정수론&rsquo; 수강 여부 예제에서 인공지능학과 3명 <span class="tex">[1\;2.2],[1\;3.8],[1\;3.9]</span> 은 미수강(<b>0</b>), 수학과 3명 <span class="tex">[3\;2.2],[3\;4.0],[3\;3.2]</span> 는 수강(<b>1</b>)이다. 이 여섯 점을 가르는 선은 <b>하나가 아니라 여러 개</b>가 가능하다(교안의 구분선 1, 2). 그래서 &ldquo;어떤 선이 더 나은가&rdquo;를 정하는 기준이 필요해진다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>확률로 분류하기 — 사후 확률과 베이즈 규칙</h3>
+  <p>체조 동아리 회원(<span class="tex">C_1</span>)과 비회원(<span class="tex">C_2</span>)의 몸무게 분포를 안다면, 52kg인 학생은 어느 쪽일까? 이때 쓰는 것이 <b>사후 확률</b> <span class="tex">P(C_1\mid x)</span> — <span class="tex">x</span> 를 관찰한 <b>뒤</b> 소속이 <span class="tex">C_1</span> 일 가능성을 나타내는 조건부 확률이다.</p>
+  <div class="fx">
+    <p class="fx-lab">베이즈 규칙 (2주차 확률 복습)</p>
+    <div class="tex-d">P(C_1\mid x)=\frac{P(C_1,x)}{P(x)}=\frac{P(x\mid C_1)P(C_1)}{P(x\mid C_1)P(C_1)+P(x\mid C_2)P(C_2)}</div>
+    <p class="fx-note"><b>분류 규칙</b> — <span class="tex">P(C_1\mid x)&gt;P(C_2\mid x)</span> 이면 <span class="tex">C_1</span>. 두 확률의 합이 1이므로 이것은 <b><span class="tex">P(C_1\mid x)&gt;0.5</span></b> 와 같은 조건이다. 계산에 필요한 것은 <span class="tex">P(C_1),P(C_2),P(x\mid C_1),P(x\mid C_2)</span> 네 가지뿐이다.</p>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>로지스틱 회귀로 가는 다리</h3>
+  <p>베이즈 규칙을 쓰려면 <b>각 클래스의 분포 <span class="tex">P(x\mid C_k)</span> 를 먼저 알아야</b> 한다. 현실에서는 그 분포를 모르는 경우가 대부분이다. 그래서 로지스틱 회귀는 분포를 추정하는 대신 <b>사후 확률 <span class="tex">P(C_1\mid\mathbf x)</span> 자체를 바로 모델링</b>한다. 이것이 4.5 · 4.6에서 할 일이다.</p>
+</div>
 </section>
 
 <!-- ===================== 4.4 ===================== -->
 <section class="sec" id="disc">
-  <div class="sec-head"><span class="sec-badge">4.4</span><h2 class="sec-title">선형 판별 함수와 선형 구분 가능성<small>g(x) = wᵀx 의 부호로 분류</small></h2></div>
-<div class="fx">
-  <p class="fx-lab">선형 판별 함수 (Linear discriminant function)</p>
-  <div class="tex-d">g(\mathbf x)=\mathbf w\cdot\mathbf x=\mathbf w^{\mathsf T}\mathbf x=w_0+w_1x_1+\cdots+w_dx_d\qquad(x_0=1)</div>
-  <p class="fx-note"><span class="tex">\mathbf x</span> 와 <span class="tex">\mathbf w</span> 는 <b>둘 다 <span class="tex">d+1</span>개 성분</b>. 식 모양은 다중 선형 회귀와 똑같고, 쓰임이 다르다 — 회귀는 값 자체가 예측, 판별은 <b>부호</b>가 예측.<br>
-  <b>결정 규칙</b>: <span class="tex">g(\mathbf x)&gt;0</span> 이면 <span class="tex">C_1</span>, 그 외에는 <span class="tex">C_2</span>. <b>학습이 결정하는 것은 가중치 벡터 <span class="tex">\mathbf w</span></b></p>
+  <div class="sec-head"><span class="sec-badge">4.4</span><h2 class="sec-title">선형 판별 함수와 선형 구분 가능성<small>로지스틱 1부 10~15p · g(x)의 부호로 분류</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>1부 10 · 11 · 12 · 13 · 14 · 15p (6장)</span></div>
+
+  <p class="deck-t">① 정의와 내적</p>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4a-10-disc1.jpg" alt="로지스틱1 10p — 선형 판별 함수의 정의와 이진 분류"><figcaption><b>1부 10p</b> 정의 · 부호로 결정</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4a-11-disc-ref.jpg" alt="로지스틱1 11p — 내적 연산의 활용"><figcaption><b>1부 11p</b> 참고 — 내적으로 펼치면</figcaption></figure>
+  </div>
+
+  <p class="deck-t">② 공간 분할과 예제</p>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4a-12-disc2.jpg" alt="로지스틱1 12p — 차원별 구분점·구분선·평면·초평면"><figcaption><b>1부 12p</b> 점 · 선 · 평면 · 초평면</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4a-13-disc3.jpg" alt="로지스틱1 13p — g(x)=20x1+3x2-36 예제"><figcaption><b>1부 13p</b> 정수론 예제로 계산</figcaption></figure>
+  </div>
+
+  <p class="deck-t">③ 예측 절차와 선형 구분 가능성</p>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4a-14-predict.jpg" alt="로지스틱1 14p — 선형 판별 함수를 사용한 소속 클래스 예측"><figcaption><b>1부 14p</b> 학습 → 예측 두 단계</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4a-15-separable.jpg" alt="로지스틱1 15p — 선형 구분 가능성과 분류"><figcaption><b>1부 15p</b> 선형 구분 가능성</figcaption></figure>
+  </div>
 </div>
-<div class="figs">
-  <figure class="fig"><img width="1100" height="252" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-24-split-point-line.png" alt="로지스틱1 12p — 1차원 구분점, 2차원 구분선"><figcaption>로지스틱1 12p — 1차원: 점 · 2차원: 선 · 3차원: <b>평면</b> · 4차원 이상: <b>초평면</b></figcaption></figure>
-  <figure class="fig"><img width="1100" height="544" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml3-25-discriminant-example.jpg" alt="로지스틱1 13p — g(x)=20x1+3x2-36 예제"><figcaption>로지스틱1 13p — 정수론 예제의 구분선</figcaption></figure>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>선형 판별 함수 — 값이 아니라 부호를 본다</h3>
+  <div class="fx" style="margin-top:0">
+    <p class="fx-lab">Linear discriminant function</p>
+    <div class="tex-d">g(\mathbf x)=\mathbf w\cdot\mathbf x=\mathbf w^{\mathsf T}\mathbf x=w_0+w_1x_1+\cdots+w_dx_d\qquad(x_0=1)</div>
+    <p class="fx-note"><span class="tex">\mathbf x</span> 와 <span class="tex">\mathbf w</span> 는 <b>둘 다 <span class="tex">d+1</span> 개 성분</b>이다. 식 모양은 다중 선형 회귀와 똑같고 <b>쓰임만 다르다</b> — 회귀는 값 자체가 예측이고, 판별은 <b>부호</b>가 예측이다.<br>
+    <b>결정 규칙</b>: <span class="tex">g(\mathbf x)&gt;0</span> 이면 <span class="tex">C_1</span>, 그 외에는 <span class="tex">C_2</span>. 학습이 정하는 것은 <b>가중치 벡터 <span class="tex">\mathbf w</span></b> 하나뿐이다.</p>
+  </div>
+  <p><b>경계가 생기는 모양</b>은 차원에 따라 달라진다 — 1차원이면 <b>점</b>, 2차원이면 <b>선</b>, 3차원이면 <b>평면</b>, 4차원 이상이면 <b>초평면</b>이 특징 공간을 둘로 나눈다.</p>
 </div>
-<div class="ex">
-  <p class="ex-q"><em>교안 예제</em> <span class="tex">g(\mathbf x)=20x_1+3x_2-36</span>, 즉 <span class="tex">\mathbf w=[-36\;\;20\;\;3]^{\mathsf T}</span> (<span class="tex">x_1</span> 학과, <span class="tex">x_2</span> 학점)</p>
-  <div class="step"><i>①</i><div><span class="tex">\mathbf x_2=[1\;\;3.8]^{\mathsf T}</span>: <span class="tex">20+11.4-36=-4.6&lt;0</span> → 미수강</div></div>
-  <div class="step"><i>②</i><div><span class="tex">\mathbf x_4=[3\;\;2.2]^{\mathsf T}</span>: <span class="tex">60+6.6-36=30.6&gt;0</span> → 수강</div></div>
-  <div class="step"><i>③</i><div>나머지도 확인: <span class="tex">[1\;2.2]\to-9.4,\;[1\;3.9]\to-4.3,\;[3\;4.0]\to36,\;[3\;3.2]\to33.6</span> — 6명 모두 맞게 갈린다</div></div>
-  <div class="ex-ans"><b>정리</b> — <span class="tex">g(\mathbf x)=0</span> 이 경계선이고, 이 데이터는 <b>선형 구분 가능</b>하다: 한 클래스는 모두 <span class="tex">g&gt;0</span>, 다른 클래스는 모두 <span class="tex">g&lt;0</span></div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>예제로 확인 — 정수론 수강생</h3>
+  <div class="ex" style="margin-top:0">
+    <p class="ex-q"><em>교안 13p</em> <span class="tex">g(\mathbf x)=20x_1+3x_2-36</span>, 즉 <span class="tex">\mathbf w=[-36\;\;20\;\;3]^{\mathsf T}</span> (<span class="tex">x_1</span> 학과, <span class="tex">x_2</span> 학점)</p>
+    <div class="step"><i>①</i><div><span class="tex">\mathbf x_2=[1\;\;3.8]^{\mathsf T}</span>: <span class="tex">20+11.4-36=-4.6&lt;0</span> → 미수강</div></div>
+    <div class="step"><i>②</i><div><span class="tex">\mathbf x_4=[3\;\;2.2]^{\mathsf T}</span>: <span class="tex">60+6.6-36=30.6&gt;0</span> → 수강</div></div>
+    <div class="step"><i>③</i><div>나머지도 같은 방법으로: <span class="tex">[1\;2.2]\to-9.4,\;[1\;3.9]\to-4.3,\;[3\;4.0]\to36,\;[3\;3.2]\to33.6</span> — 6명 모두 맞게 갈린다</div></div>
+    <div class="ex-ans"><b>정리</b> — <span class="tex">g(\mathbf x)=0</span> 이 경계선이고, 이 데이터는 <b>선형 구분 가능</b>하다. 한 클래스는 모두 <span class="tex">g&gt;0</span>, 다른 클래스는 모두 <span class="tex">g&lt;0</span> 이기 때문이다</div>
+  </div>
+  <p><b>쓰는 순서</b>는 두 단계다. ① 학습 — 학습 데이터로 <span class="tex">\mathbf w^*</span> 를 정한다. ② 예측 — 레이블을 모르는 <span class="tex">\mathbf x'</span> 에 대해 <span class="tex">g(\mathbf x')</span> 의 <b>부호</b>로 클래스를 정한다.</p>
 </div>
-<div class="flow">
-  <div class="fl"><div class="fl-n">1</div><div><h4>절차 1 — 학습</h4><p>학습 데이터로 <span class="tex">g(\mathbf x)=\mathbf w^{\mathsf T}\mathbf x</span> 의 인자 <span class="tex">\mathbf w^*</span> 를 결정</p></div></div>
-  <div class="fl"><div class="fl-n">2</div><div><h4>절차 2 — 예측</h4><p>레이블을 모르는 <span class="tex">\mathbf x'</span> 에 대해 <span class="tex">g(\mathbf x')</span> 의 <b>부호</b>로 클래스 결정</p></div></div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>부호만으로는 부족하다 — 다음 절로 가는 이유</h3>
+  <p><span class="tex">g(\mathbf x)=0.1</span> 도 <span class="tex">C_1</span>, <span class="tex">g(\mathbf x)=50</span> 도 <span class="tex">C_1</span> 이다. 부호만 보면 <b>간신히 맞힌 것과 확실한 것을 구별할 수 없고</b>, 구분선도 여러 개가 가능하다. 그래서 <span class="tex">g(\mathbf x)</span> 를 <b>0~1 사이 확률로 바꿔 주는 함수</b>가 필요하다. 그 함수가 4.5의 <b>로지스틱 함수</b>다.</p>
 </div>
-<div class="warn"><b>남은 문제</b> — 부호만 보면 &ldquo;얼마나 확실한가&rdquo;를 알 수 없고, 구분선도 여러 개가 가능하다. 그래서 <span class="tex">g(\mathbf x)</span> 를 <b>확률로 바꿔 주는 함수</b>가 필요하다 → 4.5</div>
 </section>
 
 <!-- ===================== 4.5 ===================== -->
 <section class="sec" id="logit">
-  <div class="sec-head"><span class="sec-badge">4.5</span><h2 class="sec-title">로지스틱 함수와 로그 오드<small>σ(x) · 미분 형태 · Odds · Log-odds(logit)</small></h2></div>
-<div class="fx">
-  <p class="fx-lab">로지스틱(시그모이드) 함수와 미분</p>
-  <div class="tex-d">\sigma(x)=\frac{1}{1+e^{-x}}=\frac{e^x}{1+e^x},\qquad \frac{d}{dx}\sigma(x)=\frac{e^x}{(1+e^x)^2}=\frac{e^x}{1+e^x}\cdot\frac{1}{1+e^x}=\sigma(x)\bigl(1-\sigma(x)\bigr)</div>
-  <p class="fx-note">(1) 정의역 전체를 <b>0과 1 사이</b>로 사상하고 (2) <b>미분 가능</b>. <span class="tex">\sigma(0)=0.5</span>. 미분이 <b>자기 자신만으로</b> 표현되는 점이 4.6의 기울기 계산을 간단하게 만든다.<br>
-  <b>활용 1</b> — 특정 사건·카테고리가 발생할 <b>확률</b> 표현(로지스틱 회귀) · <b>활용 2</b> — 인공신경망의 <b>활성화 함수</b></p>
+  <div class="sec-head"><span class="sec-badge">4.5</span><h2 class="sec-title">로지스틱 함수와 오드 · 로그 오드<small>로지스틱 1부 16 · 17p · 2부 4p</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>1부 16 · 17p · 2부 4p (3장)</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4a-16-logistic1.jpg" alt="로지스틱1 16p — 로지스틱 함수 1/2"><figcaption><b>1부 16p</b> 로지스틱 함수 (1/2)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4a-17-logistic2.jpg" alt="로지스틱1 17p — 로지스틱 함수 2/2, 미분"><figcaption><b>1부 17p</b> 미분 · 활용 (2/2)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4b-04-log-odds.jpg" alt="로지스틱2 4p — 오드와 로그 오드"><figcaption><b>2부 4p</b> 오드 · 로그 오드</figcaption></figure>
+  </div>
 </div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>로지스틱(시그모이드) 함수</h3>
+  <div class="fx" style="margin-top:0">
+    <p class="fx-lab">정의와 미분</p>
+    <div class="tex-d">\sigma(x)=\frac{1}{1+e^{-x}}=\frac{e^x}{1+e^x},\qquad \frac{d}{dx}\sigma(x)=\sigma(x)\bigl(1-\sigma(x)\bigr)</div>
+    <p class="fx-note">① 정의역 전체(−∞~∞)를 <b>0과 1 사이</b>로 눌러 담고 ② <b>어디서나 미분 가능</b>하며 ③ <span class="tex">\sigma(0)=0.5</span> 다. 미분이 <b>자기 자신만으로</b> 표현된다는 점이 4.6의 기울기 계산을 아주 간단하게 만든다.<br>
+    <b>활용 1</b> — 사건이 일어날 <b>확률</b>을 표현(로지스틱 회귀) · <b>활용 2</b> — 인공신경망의 <b>활성화 함수</b>(5주차 퍼셉트론)</p>
+  </div>
+</div>
+
 <figure class="fig svgfig"><div class="svg-scroll"><svg viewBox="0 0 680 280" role="img" aria-label="시그모이드: 선형 점수 z를 0과 1 사이 확률로 바꾸고 z=0에서 0.5" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar-sigmoid" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arG-sigmoid" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#166534"/></marker></defs>
 <line x1="60" y1="220" x2="628" y2="220" stroke="#6b7280" stroke-width="1.4" marker-end="url(#ar-sigmoid)"/>
@@ -515,58 +747,162 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <text x="340" y="262" font-size="12.5" fill="#1a1a2e" text-anchor="middle" font-weight="700">g(x) = wᵀx > 0  ⇔  σ(wᵀx) > 0.5  — 1부의 선형 판별 규칙과 같은 결정</text>
 </svg></div><figcaption>선형 점수 <span class="tex">z=\mathbf w^{\mathsf T}\mathbf x</span> 가 양수면 확률이 0.5보다 크고, 음수면 작다 — 4.4의 부호 규칙이 그대로 확률 규칙이 된다</figcaption></figure>
 
-<h3 class="sub-title">오드와 로그 오드</h3>
-<div class="figs">
-  <div class="fx" style="margin:0">
-    <p class="fx-lab">오드(Odds)와 로그 오드(Log-odds, logit)</p>
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>오드(Odds)와 로그 오드(Log-odds)</h3>
+  <div class="fx" style="margin-top:0">
     <div class="tex-d">\text{odds}=\frac{p}{1-p},\qquad \text{logit}(p)=\ln\frac{p}{1-p}</div>
-    <p class="fx-note">· 공정한 주사위에서 3의 배수가 <b>아닌</b> 눈: <span class="tex">p=2/3</span> → 오드 <span class="tex">\frac{2/3}{1/3}=2</span> (&ldquo;일어날 확률이 안 일어날 확률의 2배&rdquo;)<br>
-    · <span class="tex">p=0.5</span> 이면 오드 1, 로그 오드 <b>0</b><br>
-    · 로그 오드의 <b>정의역은 확률 (0, 1)</b>, 치역은 실수 전체 (−∞, ∞)</p>
+    <p class="fx-note">· 공정한 주사위에서 3의 배수가 <b>아닌</b> 눈이 나올 확률은 <span class="tex">p=2/3</span> → 오드는 <span class="tex">\frac{2/3}{1/3}=2</span>. &ldquo;일어날 가능성이 안 일어날 가능성의 <b>2배</b>&rdquo;라는 뜻이다<br>
+    · <span class="tex">p=0.5</span> 면 오드 1, 로그 오드 <b>0</b> · 로그 오드의 <b>정의역은 확률 (0, 1)</b>, 치역은 실수 전체다</p>
   </div>
-  <figure class="fig"><img width="491" height="373" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4-01-logit.png" alt="로지스틱2 4p — 로그 오드 함수 그래프"><figcaption>로지스틱2 4p — <span class="tex">\ln\frac{x}{1-x}</span>. 확률 0~1을 실수 전체로 편다</figcaption></figure>
+  <p><b>왜 로그 오드인가</b> — 확률은 0~1에 갇혀 있어 선형식 <span class="tex">\mathbf w^{\mathsf T}\mathbf x</span>(−∞~∞)로 바로 근사할 수 없다. 로그 오드는 치역이 실수 전체라서 <b>선형 함수로 근사하기에 딱 맞다</b>. 그래서 로지스틱 회귀는 &ldquo;<b>로그 오드를 선형 함수로 표현</b>&rdquo;한다.</p>
 </div>
-<div class="good"><b>왜 로그 오드인가</b> — 확률은 0~1에 갇혀 있어 선형식 <span class="tex">\mathbf w^{\mathsf T}\mathbf x</span>(−∞~∞)로 바로 근사할 수 없다. 로그 오드는 치역이 실수 전체라 <b>선형 함수로 근사하기에 딱 맞다</b>. 그래서 로지스틱 회귀는 &ldquo;<b>로그 오드를 선형 함수 표현으로 근사</b>&rdquo;한다. 그리고 <b>로지스틱 함수는 로그 오드의 역함수</b>다: <span class="tex">\text{logit}(\sigma(z))=z</span>.</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>로짓 변환이란 — 확률 축을 실수 축으로 펴는 일</h3>
+  <p><b>로짓 변환</b>은 확률 <span class="tex">p</span> 를 <span class="tex">\ln\frac{p}{1-p}</span> 로 바꾸는 것이다. 0과 1 사이에 눌려 있던 값이 <b>−∞부터 ∞까지 쭉 펴진다</b>. <span class="tex">p=0.5</span> 가 0, <span class="tex">p</span> 가 1에 가까우면 +∞, 0에 가까우면 −∞로 간다.</p>
+  <ul class="ul">
+    <li><b>시그모이드와 정확히 반대</b>다 — 로짓은 확률 → 실수, 시그모이드는 실수 → 확률. 즉 <span class="tex">\text{logit}(\sigma(z))=z</span> 로 <b>서로 역함수</b>다</li>
+    <li><b>왜 하필 로그를 씌우나</b> — 오드만 쓰면 범위가 <span class="tex">(0,\infty)</span> 라 <b>음수 쪽이 비어</b> 있고, 1을 기준으로 위아래가 비대칭이다(2배는 2, 절반은 0.5). 로그를 씌우면 0을 기준으로 <b>대칭</b>이 되고(+0.69와 −0.69) 음수까지 쓸 수 있다</li>
+  </ul>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>오드비(Odds ratio)와 해석하는 법</h3>
+  <p><b>오드비</b>는 두 상황의 오드를 나눈 값이다 — <span class="tex">\text{OR}=\dfrac{\text{odds}_A}{\text{odds}_B}</span>. &ldquo;A 쪽이 B 쪽보다 그 일이 일어날 오드가 <b>몇 배</b>인가&rdquo;를 하나의 숫자로 말해 준다.</p>
+  <div class="ex" style="margin-top:2px">
+    <p class="ex-q"><em>구해 보고 해석까지</em> 흡연자는 60%, 비흡연자는 20%가 어떤 증상을 보인다면?</p>
+    <div class="step"><i>①</i><div>흡연자 오드 <span class="tex">=\dfrac{0.6}{0.4}=1.5</span> · 비흡연자 오드 <span class="tex">=\dfrac{0.2}{0.8}=0.25</span></div></div>
+    <div class="step"><i>②</i><div>오드비 <span class="tex">=\dfrac{1.5}{0.25}=6</span></div></div>
+    <div class="ex-ans"><b>해석</b> — &ldquo;흡연자에서 증상이 나타날 <b>오드가 비흡연자의 6배</b>&rdquo;다. <b>확률이 6배</b>라는 뜻이 아니다(실제 확률은 3배). <span class="tex">\text{OR}=1</span> 이면 차이 없음, <span class="tex">&gt;1</span> 이면 그쪽에서 더 잘 일어남, <span class="tex">&lt;1</span> 이면 덜 일어남으로 읽는다</div>
+  </div>
+  <p><b>로지스틱 회귀 계수가 바로 오드비다</b> — <span class="tex">\ln(\text{odds})=w_0+w_1x</span> 에서 <span class="tex">x</span> 가 1 늘면 로그 오드가 <span class="tex">w_1</span> 만큼 커지므로, 오드는 <span class="tex">e^{w_1}</span> <b>배</b>가 된다. 예를 들어 <span class="tex">w_1=0.7</span> 이면 <span class="tex">e^{0.7}\approx2</span> — &ldquo;그 특징이 1 늘 때마다 오드가 약 2배&rdquo;. 이래서 의학 · 사회과학 논문이 로지스틱 회귀 결과를 <b>오드비 표</b>로 싣는다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>헷갈리는 기호 — σ · Σ · Π</h3>
+  <div class="tbl-wrap" style="margin-top:2px">
+  <table>
+    <tbody>
+      <tr><td><span class="tex">\sigma(\cdot)</span> 소문자 시그마</td><td><b>로지스틱(시그모이드) 함수</b>. <span class="tex">\sigma(z)=\frac1{1+e^{-z}}</span> — 실수를 확률로 바꾼다. (통계에서 표준편차 기호로도 쓰이니 문맥으로 구분)</td></tr>
+      <tr><td><span class="tex">\sum_{i=1}^{N}</span> 대문자 시그마</td><td><b>합</b>. <span class="tex">\sum_{i=1}^{N}a_i=a_1+a_2+\cdots+a_N</span> — &ldquo;i를 1부터 N까지 바꿔 가며 전부 더해라&rdquo;. 손실함수와 기울기의 <span class="tex">\frac1N\sum</span> 은 <b>데이터 N개에 대한 평균</b>이라는 뜻</td></tr>
+      <tr><td><span class="tex">\prod_{i=1}^{N}</span> 대문자 파이</td><td><b>곱</b>. 우도가 &ldquo;각 데이터 확률의 곱&rdquo;이라 4.6에서 등장한다. 로그를 씌우면 <span class="tex">\ln\prod=\sum\ln</span> 으로 <b>곱이 합으로</b> 바뀐다</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
 </section>
 
 <!-- ===================== 4.6 ===================== -->
 <section class="sec" id="train">
-  <div class="sec-head"><span class="sec-badge">4.6</span><h2 class="sec-title">로지스틱 회귀 모델과 학습<small>모델 유도 · 베르누이 · 우도 · 크로스 엔트로피 · 경사하강법 I / II</small></h2></div>
-<div class="note-box"><b>이진 분류의 두 접근</b> — 접근법 1: 두 클래스를 구분하도록 <b>특징 공간을 분할</b>(4.4) · 접근법 2: <span class="tex">P(C_1\mid\mathbf x)</span> 와 <span class="tex">P(C_2\mid\mathbf x)=1-P(C_1\mid\mathbf x)</span> 를 <b>비교</b>해 레이블 결정. 로지스틱 회귀는 <b>접근법 2</b>다. 예) &ldquo;스팸메일 여부&rdquo;, &ldquo;대학생 여부&rdquo;</div>
+  <div class="sec-head"><span class="sec-badge">4.6</span><h2 class="sec-title">로지스틱 회귀 모델과 학습<small>로지스틱 2부 5~15p · 베르누이 · 우도 · 크로스 엔트로피 · 경사하강법</small></h2></div>
 
-<h3 class="sub-title">모델 유도 — 로그 오드 = 선형 함수</h3>
-<div class="ex">
-  <p class="ex-q"><em>교안 전개</em> <span class="tex">\ln\dfrac{P(C_1\mid\mathbf x)}{1-P(C_1\mid\mathbf x)}=\mathbf w^{\mathsf T}\mathbf x</span> 를 <span class="tex">P(C_1\mid\mathbf x)</span> 에 대해 풀면?</p>
-  <div class="step"><i>①</i><div>양변에 지수: <span class="tex">\dfrac{P}{1-P}=e^{\mathbf w^{\mathsf T}\mathbf x}</span></div></div>
-  <div class="step"><i>②</i><div><span class="tex">P=e^{\mathbf w^{\mathsf T}\mathbf x}(1-P)\;\Rightarrow\;P(1+e^{\mathbf w^{\mathsf T}\mathbf x})=e^{\mathbf w^{\mathsf T}\mathbf x}</span></div></div>
-  <div class="step"><i>③</i><div><span class="tex">P(C_1\mid\mathbf x)=\dfrac{e^{\mathbf w^{\mathsf T}\mathbf x}}{1+e^{\mathbf w^{\mathsf T}\mathbf x}}=\dfrac{1}{1+e^{-\mathbf w^{\mathsf T}\mathbf x}}=\sigma(\mathbf w^{\mathsf T}\mathbf x)</span></div></div>
-  <div class="ex-ans"><b>결과</b> — <span class="tex">P(C_1\mid\mathbf x)=\sigma(\mathbf w^{\mathsf T}\mathbf x),\quad P(C_2\mid\mathbf x)=1-\sigma(\mathbf w^{\mathsf T}\mathbf x)=\dfrac{e^{-\mathbf w^{\mathsf T}\mathbf x}}{1+e^{-\mathbf w^{\mathsf T}\mathbf x}}</span>. 특징 벡터는 바이어스를 포함한 <span class="tex">[1\;x_1\cdots x_d]^{\mathsf T}</span></div>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>2부 5 · 6 · 7 · 8 · 9 · 10 · 11 · 12 · 13 · 14 · 15p (11장)</span></div>
+
+  <p class="deck-t">① 이진 분류에서의 접근과 모델</p>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4b-05-binary.jpg" alt="로지스틱2 5p — 이진 분류에서의 접근"><figcaption><b>2부 5p</b> 사후 확률 비교로 결정</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4b-06-model.jpg" alt="로지스틱2 6p — 로지스틱 회귀 모델 유도"><figcaption><b>2부 6p</b> 로그 오드 = wᵀx → σ</figcaption></figure>
+  </div>
+
+  <p class="deck-t">② 베르누이 분포와 우도</p>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4b-07-bernoulli.jpg" alt="로지스틱2 7p — 이진 분류와 베르누이 분포"><figcaption><b>2부 7p</b> 레이블 확률을 한 식으로</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4b-08-likelihood.jpg" alt="로지스틱2 8p — 우도와 negative log likelihood"><figcaption><b>2부 8p</b> 우도 · NLL의 해석</figcaption></figure>
+  </div>
+
+  <p class="deck-t">③ 손실함수와 학습 목표</p>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4b-09-loss.jpg" alt="로지스틱2 9p — 로지스틱 회귀의 손실함수"><figcaption><b>2부 9p</b> 손실함수 L(w₀, w₁)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4b-11-summary1.jpg" alt="로지스틱2 11p — 모델 학습 요약 1/2, argmin"><figcaption><b>2부 11p</b> 학습 목표 = argmin</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4b-12-summary2.jpg" alt="로지스틱2 12p — 바이너리 크로스 엔트로피"><figcaption><b>2부 12p</b> 바이너리 크로스 엔트로피</figcaption></figure>
+  </div>
+
+  <p class="deck-t">④ 편미분과 경사하강법</p>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4b-10-update.jpg" alt="로지스틱2 10p — 편미분과 인자 갱신"><figcaption><b>2부 10p</b> 편미분 · 인자 갱신</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4b-13-gd1a.jpg" alt="로지스틱2 13p — 경사하강법의 적용 I 1/2"><figcaption><b>2부 13p</b> 경사하강 I (1/2) 편미분</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4b-14-gd1b.jpg" alt="로지스틱2 14p — 경사하강법의 적용 I 2/2"><figcaption><b>2부 14p</b> 경사하강 I (2/2) 갱신</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml4b-15-gd2.jpg" alt="로지스틱2 15p — 경사하강법의 적용 II"><figcaption><b>2부 15p</b> 경사하강 II (개별 관측값)</figcaption></figure>
+  </div>
 </div>
 
-<h3 class="sub-title">베르누이 분포로 레이블 확률을 한 줄에</h3>
-<div class="fx">
-  <p class="fx-lab">베르누이 분포 → 레이블의 조건부 확률</p>
-  <div class="tex-d">P(X=x)=p^{x}(1-p)^{1-x},\;x\in\{0,1\}\qquad\Longrightarrow\qquad P(y_i\mid\mathbf x_i)=\sigma(\mathbf w^{\mathsf T}\mathbf x_i)^{y_i}\bigl(1-\sigma(\mathbf w^{\mathsf T}\mathbf x_i)\bigr)^{1-y_i}</div>
-  <p class="fx-note"><b>지수 트릭</b> — <span class="tex">y_i=1</span> 이면 뒤 항이 <span class="tex">(\cdot)^0=1</span> 이 되어 <span class="tex">\sigma(\cdot)</span> 만 남고, <span class="tex">y_i=0</span> 이면 앞 항이 사라져 <span class="tex">1-\sigma(\cdot)</span> 만 남는다. <b>두 경우를 if문 없이 한 식</b>으로 쓴 것.</p>
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>모델 유도 — 로그 오드를 선형으로 놓으면 시그모이드가 나온다</h3>
+  <p>이진 분류에는 두 갈래가 있다. <b>접근법 1</b>은 두 클래스를 구분하도록 특징 공간을 자르는 것(4.4), <b>접근법 2</b>는 <span class="tex">P(C_1\mid\mathbf x)</span> 와 <span class="tex">P(C_2\mid\mathbf x)</span> 를 비교해 레이블을 정하는 것이다. 로지스틱 회귀는 <b>접근법 2</b>를 쓰되, 그 확률을 직접 만들어 낸다.</p>
+  <div class="ex" style="margin-top:2px">
+    <p class="ex-q"><em>교안 6p 전개</em> <span class="tex">\ln\dfrac{P(C_1\mid\mathbf x)}{1-P(C_1\mid\mathbf x)}=\mathbf w^{\mathsf T}\mathbf x</span> 를 <span class="tex">P(C_1\mid\mathbf x)</span> 에 대해 풀면?</p>
+    <div class="step"><i>①</i><div>양변에 지수를 취한다: <span class="tex">\dfrac{P}{1-P}=e^{\mathbf w^{\mathsf T}\mathbf x}</span></div></div>
+    <div class="step"><i>②</i><div>정리하면 <span class="tex">P(1+e^{\mathbf w^{\mathsf T}\mathbf x})=e^{\mathbf w^{\mathsf T}\mathbf x}</span></div></div>
+    <div class="step"><i>③</i><div><span class="tex">P(C_1\mid\mathbf x)=\dfrac{e^{\mathbf w^{\mathsf T}\mathbf x}}{1+e^{\mathbf w^{\mathsf T}\mathbf x}}=\dfrac{1}{1+e^{-\mathbf w^{\mathsf T}\mathbf x}}=\sigma(\mathbf w^{\mathsf T}\mathbf x)</span></div></div>
+    <div class="ex-ans"><b>결과</b> — <span class="tex">P(C_1\mid\mathbf x)=\sigma(\mathbf w^{\mathsf T}\mathbf x),\quad P(C_2\mid\mathbf x)=1-\sigma(\mathbf w^{\mathsf T}\mathbf x)</span>. 4.4의 선형 판별 <span class="tex">\mathbf w^{\mathsf T}\mathbf x</span> 가 <b>그대로 확률</b>이 된 셈이다</div>
+  </div>
 </div>
 
-<h3 class="sub-title">우도 → 음의 로그 우도 → 손실함수</h3>
-<div class="fx">
-  <p class="fx-lab">학습 데이터의 우도 (단순 로지스틱, <span class="tex">x_i</span>는 실수 하나)</p>
-  <div class="tex-d">\ell(w_0,w_1)=\prod_{i=1}^{N}P(y_i\mid x_i)=\prod_{i=1}^{N}\sigma(w_0+w_1x_i)^{y_i}\bigl(1-\sigma(w_0+w_1x_i)\bigr)^{1-y_i}</div>
-  <p class="fx-note">① <span class="tex">P(y_i\mid x_i)</span> = 현재 인자 <span class="tex">w_0,w_1</span> 로 계산한 사후 확률로 <span class="tex">x_i</span>의 클래스를 <b>정확하게 추정할 확률</b> ② 우도는 그 곱이므로 <b>클수록</b> 좋다 ③ <span class="tex">-\ln\ell</span> 은 <b>작을수록</b> 좋다 — &ldquo;우도 최대화&rdquo;와 &ldquo;<span class="tex">-\ln\ell</span> 최소화&rdquo;는 같은 뜻</p>
-</div>
-<div class="fx">
-  <p class="fx-lab">손실함수 <span class="tex">L=-\frac1N\ln\ell</span></p>
-  <div class="tex-d">L(w_0,w_1)=-\frac1N\sum_{i=1}^{N}\Bigl\{y_i\ln\sigma(w_0+w_1x_i)+(1-y_i)\ln\bigl(1-\sigma(w_0+w_1x_i)\bigr)\Bigr\}</div>
-  <p class="fx-note"><b>왜 곱이 아니라 로그를 쓰나</b> (보충) — 0~1 사이 확률을 수백 번 곱하면 컴퓨터에서 0으로 뭉개진다(underflow). 로그를 취하면 <b>곱이 합</b>이 되어 계산도 안정되고 미분도 쉬워진다. 로그는 증가함수라 최대화하는 위치는 그대로다.</p>
+<div class="pt flip">
+  <h3 class="pt-h"><span class="bdg bdg-flip">플립러닝</span>&ldquo;로지스틱 회귀에서는 로그 오드를 선형 함수로 표현한다&rdquo;</h3>
+  <p>이 한 문장이 모델 전체다. 확률을 바로 선형식으로 쓰려 하면 0~1을 벗어나 버리니까, <b>확률 → 로그 오드로 한 번 바꿔서</b> 선형식과 크기를 맞춘 것이다. 그리고 그 식을 확률로 되돌리면 자동으로 <b>시그모이드</b>가 튀어나온다.</p>
+  <p>정리하면 <b>로그 오드 = <span class="tex">\mathbf w^{\mathsf T}\mathbf x</span> ⟺ 확률 = <span class="tex">\sigma(\mathbf w^{\mathsf T}\mathbf x)</span></b> 로, 같은 말을 두 방향으로 쓴 것뿐이다.</p>
 </div>
 
-<h3 class="sub-title">바이너리 크로스 엔트로피 (Binary cross-entropy)</h3>
-<div class="fx">
-  <div class="tex-d">CE(y_i,\hat y_i)=-y_i\ln P(C_1\mid\mathbf x_i)-(1-y_i)\ln\bigl(1-P(C_1\mid\mathbf x_i)\bigr),\qquad \mathbf w^*=\underset{\mathbf w}{\operatorname{argmin}}\frac1N\sum_{i=1}^{N}CE(y_i,\hat y_i)</div>
-  <p class="fx-note">위 손실함수를 <b>한 개 데이터 단위</b>로 쓴 것이 CE이고, 그 평균이 곧 <span class="tex">L(\mathbf w)=-\frac1N\ln\ell(\mathbf w)</span>. 일반화된 표기에서 <span class="tex">\mathbf x_i=[1\;x_{i1}\cdots x_{id}]^{\mathsf T},\;P(C_1\mid\mathbf x_i)=\sigma(\mathbf w^{\mathsf T}\mathbf x_i)</span></p>
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>베르누이 분포로 레이블 확률을 한 줄에</h3>
+  <div class="fx" style="margin-top:0">
+    <p class="fx-lab">베르누이 분포 → 레이블의 조건부 확률</p>
+    <div class="tex-d">P(X=x)=p^{x}(1-p)^{1-x},\;x\in\{0,1\}\qquad\Longrightarrow\qquad P(y_i\mid\mathbf x_i)=\sigma(\mathbf w^{\mathsf T}\mathbf x_i)^{y_i}\bigl(1-\sigma(\mathbf w^{\mathsf T}\mathbf x_i)\bigr)^{1-y_i}</div>
+    <p class="fx-note"><b>지수 트릭</b> — <span class="tex">y_i=1</span> 이면 뒤 항이 <span class="tex">(\cdot)^0=1</span> 이 되어 <span class="tex">\sigma(\cdot)</span> 만 남고, <span class="tex">y_i=0</span> 이면 앞 항이 사라져 <span class="tex">1-\sigma(\cdot)</span> 만 남는다. <b>두 경우를 if문 없이 한 식으로</b> 쓴 것이다.</p>
+  </div>
 </div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>베르누이 분포는 어떤 상황에서 쓰나</h3>
+  <p><b>결과가 두 가지뿐인 시행을 한 번</b> 했을 때의 분포다. 앞/뒤(동전), 합격/불합격, 클릭/비클릭, 스팸/정상, 구매/비구매 — <b>예 · 아니오로 답이 갈리는 모든 관측</b>이 여기에 해당한다. 값이 1일 확률 <span class="tex">p</span> 하나로 분포가 완전히 정해진다.</p>
+  <ul class="ul">
+    <li><b>이진 분류와 맞닿는 지점</b> — 개체 <span class="tex">\mathbf x_i</span> 의 정답 <span class="tex">y_i</span> 를 &ldquo;성공 확률이 <span class="tex">\sigma(\mathbf w^{\mathsf T}\mathbf x_i)</span> 인 베르누이 시행의 결과&rdquo;로 본다. 개체마다 <b>확률 <span class="tex">p</span> 가 다른</b> 베르누이라는 점이 핵심이다</li>
+    <li><b>이항 분포와의 관계</b> — 같은 베르누이 시행을 <span class="tex">n</span> 번 독립으로 반복해 성공 횟수를 세면 이항 분포가 된다. 베르누이는 그 <span class="tex">n=1</span> 짜리다</li>
+    <li>이 가정 덕분에 뒤의 <b>우도가 곱</b>으로 쓰이고, 로그를 씌우면 <b>크로스 엔트로피</b>가 나온다</li>
+  </ul>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>우도(Likelihood)와 음의 로그 우도</h3>
+  <div class="fx" style="margin-top:0">
+    <p class="fx-lab">학습 데이터 전체의 우도 (단순 로지스틱 — <span class="tex">x_i</span> 가 실수 하나인 경우)</p>
+    <div class="tex-d">\ell(w_0,w_1)=\prod_{i=1}^{N}P(y_i\mid x_i)=\prod_{i=1}^{N}\sigma(w_0+w_1x_i)^{y_i}\bigl(1-\sigma(w_0+w_1x_i)\bigr)^{1-y_i}</div>
+    <p class="fx-note"><span class="tex">P(y_i\mid x_i)</span> 는 &ldquo;지금의 <span class="tex">w_0,w_1</span> 로 계산한 확률로 <span class="tex">x_i</span> 의 클래스를 <b>정확히 맞힐 확률</b>&rdquo;이다. 우도는 그것들을 <b>전부 곱한 값</b>이다.</p>
+  </div>
+</div>
+
+<div class="pt flip">
+  <h3 class="pt-h"><span class="bdg bdg-flip">플립러닝</span>클수록 좋은 것과 작을수록 좋은 것</h3>
+  <ul class="ul">
+    <li><b>우도는 각 조건부 확률의 곱</b>이므로, <b>값이 클수록</b> 데이터를 잘 설명하는 모델이다 → 선호</li>
+    <li><b>Negative log likelihood</b> <span class="tex">-\ln\ell(w_0,w_1)</span> 는 우도 로그값의 음수이므로, <b>작을수록</b> 좋다 → 선호</li>
+    <li>즉 <b>우도의 최대화</b>와 <b>NLL의 최소화</b>는 완전히 같은 말이고, 그렇게 되는 <span class="tex">w_0,w_1</span> 을 찾아 가는 것이 <b>모델 학습의 목표</b>다</li>
+  </ul>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>왜 곱을 그대로 두지 않고 로그를 씌우나</h3>
+  <p>0~1 사이 확률을 수백 번 곱하면 값이 <b>0에 가깝게 뭉개져</b> 컴퓨터가 구분하지 못한다(언더플로). 로그를 취하면 <b>곱이 합으로</b> 바뀌어(<span class="tex">\ln\prod=\sum\ln</span>) 계산이 안정되고 미분도 훨씬 쉬워진다. 로그는 증가함수라서 <b>최대가 되는 위치는 바뀌지 않는다</b> — 그래서 마음 놓고 씌울 수 있다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>손실함수 — 평균 NLL이 곧 크로스 엔트로피</h3>
+  <div class="fx" style="margin-top:0">
+    <p class="fx-lab">손실함수 <span class="tex">L=-\frac1N\ln\ell</span> (교안 9p)</p>
+    <div class="tex-d">L(w_0,w_1)=-\frac1N\sum_{i=1}^{N}\Bigl\{y_i\ln\sigma(w_0+w_1x_i)+(1-y_i)\ln\bigl(1-\sigma(w_0+w_1x_i)\bigr)\Bigr\}</div>
+    <p class="fx-note">관측값이 <span class="tex">N</span> 개이므로 NLL을 <span class="tex">N</span> 으로 나눠 <b>한 개당 평균</b>으로 쓴다. 곱이 로그를 만나 <b>합</b>이 되었고, 지수 <span class="tex">y_i</span> 는 앞으로 내려와 곱셈이 되었다.</p>
+  </div>
+  <div class="fx">
+    <p class="fx-lab">바이너리 크로스 엔트로피 (교안 12p)</p>
+    <div class="tex-d">CE(y_i,\hat y_i)=-y_i\ln P(C_1\mid\mathbf x_i)-(1-y_i)\ln\bigl(1-P(C_1\mid\mathbf x_i)\bigr),\qquad \mathbf w^*=\underset{\mathbf w}{\operatorname{argmin}}\frac1N\sum_{i=1}^{N}CE(y_i,\hat y_i)</div>
+    <p class="fx-note">위 손실함수를 <b>데이터 한 개 단위</b>로 쓴 것이 CE이고, 그 평균이 곧 <span class="tex">L(\mathbf w)=-\frac1N\ln\ell(\mathbf w)</span> 다. 이름이 <b>바이너리</b>인 것은 정답이 0 아니면 1인 이진 분류용이기 때문이다.</p>
+  </div>
+</div>
+
 <figure class="fig svgfig"><div class="svg-scroll"><svg viewBox="0 0 680 280" role="img" aria-label="정답이 1일 때 손실 −ln p, 정답이 0일 때 −ln(1−p): 자신 있게 틀릴수록 손실이 폭증" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ar-bce" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arG-bce" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#166534"/></marker></defs>
 <line x1="60" y1="220" x2="628" y2="220" stroke="#6b7280" stroke-width="1.4" marker-end="url(#ar-bce)"/>
@@ -591,29 +927,79 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <text x="340" y="262" font-size="12.5" fill="#1a1a2e" text-anchor="middle" font-weight="700">정답 쪽 확률이 1에 가까우면 손실 ≈ 0, 반대쪽으로 확신하면 손실 → ∞</text>
 </svg></div><figcaption>정답이 1인데 모델이 0.9라고 하면 손실 0.105, 0.5면 0.693, 0.1이라고 <b>자신 있게 틀리면</b> 2.303 — 틀린 확신에 큰 벌점을 주는 것이 CE의 성격</figcaption></figure>
 
-<h3 class="sub-title">인자 갱신 — 기울기 유도</h3>
-<div class="ex">
-  <p class="ex-q"><em>보충 유도</em> 한 데이터의 CE를 <span class="tex">w_k</span> 로 미분하면 왜 <span class="tex">-(y_i-\sigma)x_{ik}</span> 가 되나? (<span class="tex">z=\mathbf w^{\mathsf T}\mathbf x_i,\;\sigma=\sigma(z)</span>)</p>
-  <div class="step"><i>①</i><div><span class="tex">\dfrac{\partial CE}{\partial\sigma}=-\dfrac{y_i}{\sigma}+\dfrac{1-y_i}{1-\sigma}=\dfrac{\sigma-y_i}{\sigma(1-\sigma)}</span></div></div>
-  <div class="step"><i>②</i><div><span class="tex">\dfrac{\partial\sigma}{\partial z}=\sigma(1-\sigma)</span> (4.5의 미분 형태), <span class="tex">\dfrac{\partial z}{\partial w_k}=x_{ik}</span></div></div>
-  <div class="step"><i>③</i><div>연쇄법칙으로 곱하면 <span class="tex">\sigma(1-\sigma)</span> 가 <b>깔끔하게 약분</b>: <span class="tex">\dfrac{\partial CE}{\partial w_k}=(\sigma-y_i)\,x_{ik}=-(y_i-\sigma(\mathbf w^{\mathsf T}\mathbf x_i))\,x_{ik}</span></div></div>
-  <div class="ex-ans"><b>결과</b> — <span class="tex">\dfrac{\partial}{\partial w_k}\dfrac1N\sum_i CE=-\dfrac1N\sum_{i=1}^{N}\bigl(y_i-\sigma(\mathbf w^{\mathsf T}\mathbf x_i)\bigr)x_{ik}</span>, <span class="tex">x_{i0}=1</span>. 시그모이드와 CE를 짝지으면 기울기가 <b>(정답 − 예측) × 입력</b>이라는 선형 회귀와 같은 모양이 된다</div>
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>argmin이 무슨 뜻인가 — 값이 아니라 &lsquo;자리&rsquo;</h3>
+  <p><span class="tex">\min_{\mathbf w}L(\mathbf w)</span> 는 손실의 <b>가장 작은 값</b>이고, <span class="tex">\operatorname*{argmin}_{\mathbf w}L(\mathbf w)</span> 는 그 값을 만드는 <b><span class="tex">\mathbf w</span> 자체</b>다. 산에서 가장 낮은 지점의 <b>높이</b>가 min이라면, 그 지점의 <b>좌표</b>가 argmin이다.</p>
+  <ul class="ul">
+    <li><b>왜 쓰나</b> — 우리가 원하는 것은 손실 수치가 아니라 <b>그 손실을 내는 가중치</b>다. 그래서 학습 목표를 <span class="tex">\mathbf w^*=\operatorname*{argmin}_{\mathbf w}L(\mathbf w)</span> 한 줄로 적는다</li>
+    <li><b>언제 나오나</b> — 목표를 <b>정의</b>할 때 쓰고, 실제로 그 자리를 <b>찾아가는 방법</b>이 경사하강법이다. 식은 목표, 경사하강법은 수단이다</li>
+    <li><b>argmax와의 관계</b> — 우도는 최대화이므로 <span class="tex">\mathbf w^*=\operatorname*{argmax}\ell(\mathbf w)=\operatorname*{argmin}\bigl(-\ln\ell(\mathbf w)\bigr)</span>. 부호만 뒤집으면 서로 오간다</li>
+  </ul>
 </div>
-<div class="tbl-wrap">
-<table>
-  <thead><tr><th></th><th>경사하강법의 적용 I (배치)</th><th>경사하강법의 적용 II (개별 관측값)</th></tr></thead>
-  <tbody>
-    <tr><td>갱신식</td><td><span class="tex">w_k\leftarrow w_k+\frac{\alpha}{N}\sum_{i=1}^{N}\bigl(y_i-\sigma(\mathbf w^{\mathsf T}\mathbf x_i)\bigr)x_{ik}</span></td><td><span class="tex">w_k\leftarrow w_k+\alpha\bigl(y_i-\sigma(\mathbf w^{\mathsf T}\mathbf x_i)\bigr)x_{ik}</span></td></tr>
-    <tr><td>무엇을 쓰나</td><td>모든 관측값의 <b>CE 평균</b></td><td><b>관측값 하나</b>의 CE</td></tr>
-    <tr><td>동작</td><td>(1) <span class="tex">\mathbf w</span> 임의 초기화 (2) 모든 성분 <span class="tex">w_k</span> 갱신</td><td>(1) 초기화 (2) 종료조건까지 반복 — (2-1) 관측값 하나씩 <span class="tex">\mathbf x_i</span> 로 가중치 갱신</td></tr>
-    <tr><td>다른 이름 (보충)</td><td>배치 경사하강법</td><td>확률적 경사하강법(SGD) — <a class="ext" href="machine-learning-week03.html#lab-gd">3주차 직접 구현</a>과 같은 방식</td></tr>
-  </tbody>
-</table>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>편미분이 무엇이고, 왜 · 언제 쓰나</h3>
+  <p><b>편미분</b>은 변수가 여러 개인 함수에서 <b>나머지는 상수로 붙잡아 두고 한 변수로만</b> 미분하는 것이다. 기호는 <span class="tex">\partial</span>(라운드 디)를 쓴다. 뜻은 &ldquo;<b>그 변수만 아주 조금 늘렸을 때 함수값이 얼마나 변하는가</b>&rdquo;, 즉 그 방향의 기울기다.</p>
+  <ul class="ul">
+    <li><b>왜 하나</b> — 손실 <span class="tex">L(w_0,w_1,\dots)</span> 은 여러 인자에 <b>동시에</b> 달려 있다. 각 인자를 <b>어느 쪽으로 얼마나</b> 움직여야 손실이 줄어드는지 알려면 인자별로 따로 봐야 한다</li>
+    <li><b>언제 쓰나</b> — 경사하강법의 매 걸음마다. 편미분을 모두 모아 벡터로 쓴 것이 <b>그래디언트</b> <span class="tex">\nabla L=\bigl[\frac{\partial L}{\partial w_0},\dots,\frac{\partial L}{\partial w_d}\bigr]^{\mathsf T}</span> 이고, 그 <b>반대 방향</b>이 손실이 가장 빨리 줄어드는 쪽이다</li>
+    <li><b>연습</b> — <span class="tex">f(w_0,w_1)=w_0^2+3w_0w_1</span> 이면 <span class="tex">\frac{\partial f}{\partial w_0}=2w_0+3w_1</span>(<span class="tex">w_1</span> 은 상수 취급), <span class="tex">\frac{\partial f}{\partial w_1}=3w_0</span></li>
+  </ul>
 </div>
-<div class="warn"><b>부호가 + 로 바뀐 이유</b> — 기울기에 이미 마이너스가 붙어 있으므로 <span class="tex">w_k-\alpha\cdot(-\cdots)=w_k+\alpha\cdot(\cdots)</span>. 방향은 여전히 <b>손실이 줄어드는 쪽</b>이다. 실습 코드의 <code>w += lr*dw</code> 가 바로 이 형태다.</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>외워 둘 수식꼴 — 편미분 결과와 갱신식</h3>
+  <div class="fx" style="margin-top:0">
+    <p class="fx-lab">교안 10p — 단순 로지스틱의 편미분과 갱신</p>
+    <div class="tex-d">\frac{\partial L}{\partial w_0}=-\frac1N\sum_{i=1}^{N}\bigl\{y_i-\sigma(w_0+w_1x_i)\bigr\},\qquad \frac{\partial L}{\partial w_1}=-\frac1N\sum_{i=1}^{N}x_i\bigl(y_i-\sigma(w_0+w_1x_i)\bigr)</div>
+    <div class="tex-d">w_0\leftarrow w_0-\alpha\frac{\partial L}{\partial w_0},\qquad w_1\leftarrow w_1-\alpha\frac{\partial L}{\partial w_1}</div>
+    <p class="fx-note"><b>모양을 외우는 요령</b> — 괄호 안은 언제나 <b>(정답 − 예측)</b>, 그 앞에 붙는 것은 <b>그 인자에 곱해져 있던 입력</b>이다. <span class="tex">w_0</span> 의 입력은 1이라 아무것도 안 붙고, <span class="tex">w_1</span> 의 입력은 <span class="tex">x_i</span> 라 <span class="tex">x_i</span> 가 붙는다. 전체 앞에 <span class="tex">-\frac1N</span>.</p>
+  </div>
+  <div class="fx">
+    <p class="fx-lab">교안 13p — 일반형 (특징이 여러 개일 때)</p>
+    <div class="tex-d">\frac{\partial}{\partial w_k}\frac1N\sum_{i=1}^{N}CE(y_i,\hat y_i)=-\frac1N\sum_{i=1}^{N}\bigl(y_i-\sigma(\mathbf w^{\mathsf T}\mathbf x_i)\bigr)x_{ik},\qquad x_{i0}=1</div>
+    <p class="fx-note"><span class="tex">x_{ik}</span> 는 <span class="tex">i</span> 번째 개체의 <span class="tex">k</span> 번째 성분이다. 위의 두 식이 이 한 줄에 모두 들어 있다 — <span class="tex">k=0</span> 이면 <span class="tex">x_{i0}=1</span> 이므로 첫 번째 식이 된다.</p>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>왜 저런 모양이 나오는가 — 한 줄씩 유도</h3>
+  <div class="ex" style="margin-top:2px">
+    <p class="ex-q"><em>연쇄법칙</em> 한 데이터의 CE를 <span class="tex">w_k</span> 로 미분하면 왜 <span class="tex">-(y_i-\sigma)x_{ik}</span> 인가? (<span class="tex">z=\mathbf w^{\mathsf T}\mathbf x_i,\;\sigma=\sigma(z)</span>)</p>
+    <div class="step"><i>①</i><div><span class="tex">\dfrac{\partial CE}{\partial\sigma}=-\dfrac{y_i}{\sigma}+\dfrac{1-y_i}{1-\sigma}=\dfrac{\sigma-y_i}{\sigma(1-\sigma)}</span></div></div>
+    <div class="step"><i>②</i><div><span class="tex">\dfrac{\partial\sigma}{\partial z}=\sigma(1-\sigma)</span> (4.5의 미분), <span class="tex">\dfrac{\partial z}{\partial w_k}=x_{ik}</span></div></div>
+    <div class="step"><i>③</i><div>셋을 곱하면 <span class="tex">\sigma(1-\sigma)</span> 가 <b>깔끔하게 약분</b>된다: <span class="tex">\dfrac{\partial CE}{\partial w_k}=(\sigma-y_i)\,x_{ik}=-(y_i-\sigma)\,x_{ik}</span></div></div>
+    <div class="ex-ans"><b>왜 중요한가</b> — 시그모이드와 크로스 엔트로피를 짝지으면 기울기가 <b>(정답 − 예측) × 입력</b>이라는 <b>선형 회귀와 똑같은 모양</b>이 된다. 손실을 다른 것으로 골랐다면 이렇게 깔끔하게 약분되지 않는다</div>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>경사하강법의 적용 I과 II</h3>
+  <div class="tbl-wrap" style="margin-top:2px">
+  <table>
+    <thead><tr><th></th><th>적용 I — 배치 (교안 13 · 14p)</th><th>적용 II — 개별 관측값 (교안 15p)</th></tr></thead>
+    <tbody>
+      <tr><td>갱신식</td><td><span class="tex">w_k\leftarrow w_k+\frac{\alpha}{N}\sum_{i=1}^{N}\bigl(y_i-\sigma(\mathbf w^{\mathsf T}\mathbf x_i)\bigr)x_{ik}</span></td><td><span class="tex">w_k\leftarrow w_k+\alpha\bigl(y_i-\sigma(\mathbf w^{\mathsf T}\mathbf x_i)\bigr)x_{ik}</span></td></tr>
+      <tr><td>무엇을 쓰나</td><td>모든 관측값의 <b>CE 평균</b></td><td><b>관측값 하나</b>의 CE</td></tr>
+      <tr><td>동작</td><td>(1) <span class="tex">\mathbf w</span> 임의 초기화 (2) 모든 성분 <span class="tex">w_k</span> 를 위 식으로 갱신</td><td>(1) 초기화 (2) 종료조건까지 반복 — (2-1) 관측값을 하나씩 꺼내 <span class="tex">\mathbf x_i</span> 로 갱신</td></tr>
+      <tr><td>흔히 부르는 이름</td><td>배치 경사하강법</td><td>확률적 경사하강법(SGD) — <a class="ext" href="machine-learning-week03.html#lab-gd">3주차 직접 구현</a>과 같은 방식</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="warn"><b>부호가 + 로 바뀐 이유</b> — 기울기에 이미 마이너스가 들어 있으므로 <span class="tex">w_k-\alpha\cdot(-\cdots)=w_k+\alpha\cdot(\cdots)</span> 가 된다. 방향은 여전히 <b>손실이 줄어드는 쪽</b>이다. 실습 코드의 <code>w += lr*dw</code> 가 바로 이 형태다.</div>
+</div>
+
+<div class="pt flip">
+  <h3 class="pt-h"><span class="bdg bdg-flip">플립러닝</span>학습은 결국 이 네 걸음의 반복</h3>
+  <div class="flow" style="margin-top:2px">
+    <div class="fl"><div class="fl-n">1</div><div><h4>목표를 세운다</h4><p><span class="tex">\mathbf w^*=\operatorname*{argmin}_{\mathbf w}L(\mathbf w)</span> — 크로스 엔트로피를 가장 작게 만드는 가중치를 찾는다</p></div></div>
+    <div class="fl"><div class="fl-n">2</div><div><h4>편미분을 수행한다</h4><p>인자마다 <span class="tex">\frac{\partial L}{\partial w_k}</span> 를 구한다 — 그 인자를 조금 움직였을 때 손실이 어느 쪽으로 얼마나 변하는지</p></div></div>
+    <div class="fl"><div class="fl-n">3</div><div><h4>그래디언트를 얻는다</h4><p>편미분을 모두 모은 것이 그래디언트다. 지금 위치에서 <b>손실이 가장 가파르게 늘어나는 방향</b>을 가리킨다</p></div></div>
+    <div class="fl"><div class="fl-n">4</div><div><h4><span class="tex">w_k</span> 를 갱신한다 — 계속해서</h4><p>그래디언트의 <b>반대쪽</b>으로 학습률 <span class="tex">\alpha</span> 만큼 이동한다. 종료조건(정해진 반복 수, 손실이 거의 안 줄어듦)까지 2~4를 반복한다</p></div></div>
+  </div>
+</div>
 </section>
 
-<!-- ===================== 핵심 정리 ===================== -->
 <section class="sec" id="summary">
   <div class="sec-head"><span class="sec-badge">SUM</span><h2 class="sec-title">핵심 정리<small>시험 전에 이것만은</small></h2></div>
 <div class="flow">
@@ -624,7 +1010,6 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </div>
 </section>
 
-<!-- ===================== 용어 ===================== -->
 <section class="sec" id="terms">
   <div class="sec-head"><span class="sec-badge">TERM</span><h2 class="sec-title">용어 · 기호 풀이<small>교안과 실습에 나오는 약어 · 기호</small></h2></div>
 <div class="tbl-wrap">
@@ -645,7 +1030,6 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </div>
 </section>
 
-<!-- ===================== 실습 ===================== -->
 <section class="sec" id="lab">
   <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">실습 ① — sklearn LogisticRegression<small>4주차_logistic_regression.ipynb · 나이 · 급여 → 상품 구매 여부</small></h2></div>
 <div class="note-box"><b>데이터</b> — <code>Social_Network_Ads.csv</code>: <code>User ID</code>, <code>Gender</code>, <code>Age</code>, <code>EstimatedSalary</code>, <code>Purchased</code> 5개 열, 400행. 특징은 <b>Age와 EstimatedSalary 2개</b>(<code>iloc[:, [2, 3]]</code>), 정답은 <b>Purchased</b>(구매 1 / 비구매 0, <code>iloc[:, 4]</code>).
@@ -752,7 +1136,6 @@ w, l, train_acc, test_acc = train(X_train, y_train, bs=100, epochs=100, lr=0.1/l
 <div class="warn"><b>제출</b> — 매주 <b>실습 실행 화면 캡쳐</b>와 <b>100문제 풀이 증명 캡쳐</b> 2건을 제출합니다. (1주차 OT 안내 기준, 100문제 정답률 50% 이상)</div>
 </section>
 
-<!-- ===================== 다음 주 ===================== -->
 <section class="sec" id="next">
   <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>5주차 — 퍼셉트론</small></h2></div>
 <div class="note-box"><ul class="ul">
@@ -761,8 +1144,8 @@ w, l, train_acc, test_acc = train(X_train, y_train, bs=100, epochs=100, lr=0.1/l
 </ul></div>
 </section>
 
-<p class="src">출처 — 기계학습특론 4주차 강의자료(로지스틱 회귀 2, 16페이지) · 로지스틱 회귀 1(18페이지) · 4주차_logistic_regression 실습 노트북<br>
-&lsquo;보충&rsquo; 표시 내용과 시그모이드 · 크로스 엔트로피 도식은 교안의 식으로 직접 계산해 채웠습니다.</p>
+<p class="src">출처 — 기계학습특론 4주차 강의자료(로지스틱 회귀 1 · 18페이지, 로지스틱 회귀 2 · 16페이지) · 4주차_logistic_regression 실습 노트북<br>
+교안 슬라이드 28장을 절별로 묶어 싣고, 그 아래에 플립러닝 필기와 보충 공부 내용을 합쳐 정리했습니다. 오드비 · 로짓 변환 · 편미분 · argmin 설명과 시그모이드 · 크로스 엔트로피 도식은 교안 범위 밖이라 따로 찾아 채운 것입니다.</p>
 
 </div>
 
@@ -790,6 +1173,160 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 </script>
+<script>
+/* 슬라이드 확대 보기 — 좌우 이동 · 닫으면 보던 자리로 */
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.sld'));
+  if (!slides.length) return;
+
+  var lb = document.createElement('div');
+  lb.id = 'lb';
+  lb.innerHTML =
+    '<button class="prev" type="button" aria-label="이전 슬라이드">&#10094;</button>' +
+    '<img alt="">' +
+    '<button class="next" type="button" aria-label="다음 슬라이드">&#10095;</button>' +
+    '<button class="x" type="button" aria-label="닫기">&#10005;</button>' +
+    '<p class="cap"></p>';
+  document.body.appendChild(lb);
+
+  var big = lb.querySelector('img'),
+      cap = lb.querySelector('.cap'),
+      bPrev = lb.querySelector('.prev'),
+      bNext = lb.querySelector('.next'),
+      bX = lb.querySelector('.x');
+
+  var idx = -1, openedIdx = -1, savedY = 0, pushed = false, prevRestore = null;
+
+  function lock() {
+    savedY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    document.body.style.position = 'fixed';
+    document.body.style.top = (-savedY) + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  /* html{scroll-behavior:smooth} 때문에 되돌아갈 때 화면이 흘러가지 않도록 잠깐 끈다 */
+  function instantly(fn) {
+    var de = document.documentElement, prev = de.style.scrollBehavior;
+    de.style.scrollBehavior = 'auto';
+    fn();
+    void de.offsetHeight;
+    de.style.scrollBehavior = prev;
+  }
+  function unlock() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    var target = (idx >= 0 && idx !== openedIdx) ? slides[idx] : null;
+    function place() {
+      instantly(function () {
+        window.scrollTo(0, savedY);
+        /* 넘겨 본 슬라이드가 있으면 그 슬라이드 자리로, 아니면 보던 자리 그대로 */
+        if (target) target.scrollIntoView({ block: 'center' });
+      });
+    }
+    place();
+    /* 기기 뒤로가기로 닫을 때 브라우저가 옛 스크롤을 덮어쓰므로 한 프레임 뒤 한 번 더 */
+    if (window.requestAnimationFrame) window.requestAnimationFrame(place);
+    setTimeout(place, 0);
+  }
+
+  function preload(i) {
+    if (i < 0 || i >= slides.length) return;
+    var im = slides[i].querySelector('img');
+    if (im) { var p = new Image(); p.src = im.currentSrc || im.src; }
+  }
+
+  function render(i) {
+    idx = i;
+    var f = slides[i], im = f.querySelector('img'), fc = f.querySelector('figcaption');
+    big.src = im.currentSrc || im.src;
+    big.alt = im.alt || '';
+    cap.innerHTML = '';
+    cap.appendChild(document.createTextNode(fc ? fc.textContent : ''));
+    var num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = (i + 1) + ' / ' + slides.length + ' · ← → 로 넘기기';
+    cap.appendChild(num);
+    bPrev.disabled = (i === 0);
+    bNext.disabled = (i === slides.length - 1);
+    preload(i + 1); preload(i - 1);
+  }
+
+  function open(i) {
+    openedIdx = i;
+    lock();
+    render(i);
+    lb.classList.add('on');
+    if (!pushed && window.history && window.history.pushState) {
+      try {
+        if ('scrollRestoration' in window.history && prevRestore === null) {
+          prevRestore = window.history.scrollRestoration;
+          window.history.scrollRestoration = 'manual';
+        }
+        window.history.pushState({ lb: 1 }, '');
+        pushed = true;
+      } catch (e) { pushed = false; }
+    }
+  }
+  function closeNow() {
+    if (!lb.classList.contains('on')) return;
+    lb.classList.remove('on');
+    unlock();
+    idx = openedIdx = -1;
+    if (prevRestore !== null) {
+      try { window.history.scrollRestoration = prevRestore; } catch (e) {}
+      prevRestore = null;
+    }
+  }
+  function closeByUser() {
+    if (pushed) { pushed = false; window.history.back(); }  /* popstate 가 닫는다 */
+    else { closeNow(); }
+  }
+  function go(step) {
+    var n = idx + step;
+    if (n < 0 || n >= slides.length) return;
+    render(n);
+  }
+
+  slides.forEach(function (f, i) {
+    f.addEventListener('click', function () { open(i); });
+  });
+
+  bPrev.addEventListener('click', function (e) { e.stopPropagation(); go(-1); });
+  bNext.addEventListener('click', function (e) { e.stopPropagation(); go(1); });
+  bX.addEventListener('click', function (e) { e.stopPropagation(); closeByUser(); });
+  big.addEventListener('click', function (e) { e.stopPropagation(); });
+  cap.addEventListener('click', function (e) { e.stopPropagation(); });
+  lb.addEventListener('click', closeByUser);
+
+  window.addEventListener('popstate', function () {
+    if (lb.classList.contains('on')) { pushed = false; closeNow(); }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('on')) return;
+    if (e.key === 'Escape') { e.preventDefault(); closeByUser(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+  });
+
+  /* 모바일 — 좌우로 쓸어 넘기기 */
+  var tx = 0, ty = 0;
+  lb.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) return;
+    tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+  }, { passive: true });
+  lb.addEventListener('touchend', function (e) {
+    if (!e.changedTouches.length) return;
+    var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
+</script>
+
 <link rel="stylesheet" href="../vendor/katex/katex.min.css">
 <script src="../vendor/katex/katex.min.js"></script>
 <script>

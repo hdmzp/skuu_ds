@@ -218,7 +218,8 @@
     // 하이라이트 대상은 본문 텍스트 블록으로 한정한다.
     var scopes = document.querySelectorAll(
       'section.sec .note-box, section.sec .tip, section.sec .good, section.sec .warn, ' +
-      'section.sec .card2 p, section.sec table td'
+      'section.sec .card2 p, section.sec table td, ' +
+      'section.sec .pt > p, section.sec .pt > .ul li'
     );
     var termRe = new RegExp(
       terms.map(function (t) {
