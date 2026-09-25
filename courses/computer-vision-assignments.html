@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>컴퓨터비전 | 과제와 논문 발표</title>
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0c1a3a">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+
+/* 주차 내비 */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* ===== 필기 표기 ===== */
+.hw{color:#b45309;font-weight:700;background:#fff7ed;border-radius:3px;padding:0 3px}
+.legend{
+  display:flex;flex-wrap:wrap;gap:9px 16px;align-items:center;
+  background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius);
+  padding:13px 15px;margin:0 0 24px;font-size:12px;color:var(--muted);line-height:1.6;
+}
+.legend i{font-style:normal;display:flex;align-items:center;gap:7px}
+.legend .legend-t{flex:0 0 100%;font-size:12.5px;font-weight:700;color:var(--ink)}
+.legend .legend-t2{flex:0 0 100%;font-size:11.5px;color:var(--muted);border-top:1px dashed var(--border);padding-top:10px;margin-top:1px}
+
+/* ===== 주차 내비 ===== */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* ===== 자료별 구분 ===== */
+.matbar{
+  background:linear-gradient(135deg,#122250,#24407f);color:#fff;border-radius:14px;
+  padding:16px 18px;margin:34px 0 18px;box-shadow:0 6px 18px rgba(18,34,80,.15);
+}
+.matbar .tagline{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--lime)}
+.matbar h2{font-size:clamp(16px,3.6vw,20px);font-weight:700;line-height:1.3;margin:5px 0 4px}
+.matbar p{font-size:12.5px;color:#c9d3ee;line-height:1.65}
+.matbar .acts{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.matbar .acts a{
+  font-size:12px;font-weight:700;text-decoration:none;border-radius:8px;padding:6px 12px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;
+}
+.matbar .acts a.primary{background:var(--lime);border-color:var(--lime);color:#16233f}
+.partbar{
+  display:flex;align-items:center;gap:10px;margin:26px 0 14px;
+  font-size:13px;font-weight:700;color:var(--accent);
+}
+.partbar::after{content:'';flex:1;height:1px;background:var(--border)}
+.partbar b{background:var(--accent-light);border:1px solid #c4d2ee;border-radius:999px;padding:4px 11px;font-size:11.5px}
+
+/* ===== 한눈에 보기 ===== */
+.mapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px;margin-top:10px}
+.mapgrid a{
+  display:block;text-decoration:none;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:9px;padding:10px 13px;transition:.15s;
+}
+.mapgrid a:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(18,34,80,.1)}
+.mapgrid b{display:block;font-size:12.5px;color:var(--ink)}
+.mapgrid span{font-size:11.5px;color:var(--muted);line-height:1.55}
+
+/* ===== 개념 하이라이트 + 툴팁 ===== */
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);
+  border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;
+  left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+
+/* ===== 행렬 ===== */
+.mtx{display:inline-flex;align-items:center;gap:4px;vertical-align:middle;margin:0 2px}
+.mtx .br{display:inline-block;width:7px;align-self:stretch;border:2px solid var(--ink);border-right:none;border-radius:3px 0 0 3px}
+.mtx .br.r{border:2px solid var(--ink);border-left:none;border-radius:0 3px 3px 0}
+.mtx .cells{display:grid;gap:2px 12px;padding:5px 2px;font-size:12.5px;text-align:center}
+.mtx .cells span{min-width:26px;line-height:1.5}
+.eq{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;justify-content:center;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 14px;margin:10px 0;
+}
+.eq .op{font-size:14px;font-weight:700;color:var(--muted)}
+/* ===== 변환 카드 ===== */
+.xf{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px}
+.xf-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:4px}
+.xf-head h4{font-size:14.5px;font-weight:700}
+.xf-head .en{font-size:11.5px;color:var(--muted)}
+.xf-dof{margin-left:auto;background:var(--accent);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.xf p{font-size:13px;color:#4b5563;line-height:1.78}
+.xf-keep{font-size:12.5px;color:#166534;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.65}
+.xf-sol{font-size:12.5px;color:#1b3f8b;background:#eef6ff;border:1px solid #c4d2ee;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.7}
+
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .st{color:#c9f24b}
+pre.code .fn{color:#7ec8ff}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 함수 카드 */
+.fnc{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:var(--radius);padding:13px 15px;margin:11px 0}
+.fnc h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fnc .sig{
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;color:#1b3f8b;
+  background:#eef2fb;border:1px solid #dbe3f5;border-radius:6px;padding:7px 10px;margin:7px 0 9px;
+  overflow-x:auto;white-space:pre;
+}
+.fnc dl{display:grid;grid-template-columns:minmax(88px,auto) 1fr;gap:5px 12px;font-size:12.5px;line-height:1.65}
+.fnc dt{font-weight:700;color:var(--ink)}
+.fnc dd{color:#4b5563}
+@media(max-width:440px){.fnc dl{grid-template-columns:1fr;gap:2px}.fnc dd{margin-bottom:6px}}
+
+/* 수식 카드 · 풀이 예제 (기계학습특론 페이지와 같은 규칙) */
+.fx{background:#f8faff;border:1px solid #cfdcf5;border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:10px 0}
+.fx-lab{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.fx-note{font-size:12px;color:#4b5563;line-height:1.7;margin-top:7px}
+.fx-note b{color:var(--ink)}
+.tex-d{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:9px 2px 5px;text-align:center}
+.tex-d .katex{font-size:1.08em}
+.ex{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin:10px 0}
+.ex-q{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.65;background:#f1f0ec;border-radius:7px;padding:9px 12px;margin-bottom:4px}
+.ex-q em{font-style:normal;color:var(--red);font-size:11px;font-weight:700;display:block;margin-bottom:3px}
+.step{display:grid;grid-template-columns:20px 1fr;gap:9px;align-items:baseline;font-size:12.5px;color:#4b5563;line-height:1.75;padding:5px 0}
+.step i{font-style:normal;font-weight:700;color:var(--accent);font-size:11.5px}
+.ex-ans{margin-top:8px;background:#f0fdf4;border:1px solid #22c55e;border-radius:8px;padding:9px 12px;font-size:12.5px;color:#14532d;line-height:1.7}
+.ex-ans b{color:var(--green)}
+.figs > .note-box{margin:0}
+/* 편집 거리 DP 표 */
+.lev table{min-width:0;width:auto;margin:0 auto;font-family:'Consolas','D2Coding',ui-monospace,monospace}
+.lev th,.lev td{text-align:center;padding:6px 10px;white-space:nowrap}
+.lev td.on{background:#fde68a;font-weight:700;color:#7c2d12}
+
+/* ===== 출처 뱃지 ===== */
+.bdg{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.02em;padding:3px 9px;border-radius:999px;white-space:nowrap;line-height:1.5}
+.bdg-gyo{background:#eef2fb;color:#1b3f8b;border:1px solid #c4d2ee}
+.bdg-flip{background:#fff7ed;color:#b45309;border:1px solid #f0c48a}
+.bdg-live{background:#fdf0f5;color:#9d174d;border:1px solid #f3bcd2}
+.bdg-plus{background:#f0fdfa;color:#0f766e;border:1px solid #99e0d6}
+.bdg-pres{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
+
+/* ===== 개념 카드 ===== */
+.pt{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin:11px 0}
+.pt-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;font-weight:700;line-height:1.45;margin-bottom:7px}
+.pt > p{font-size:13.5px;color:#3f4854;line-height:1.85}
+.pt > p + p{margin-top:9px}
+.pt > p b{color:var(--ink)}
+.pt.gyo{border-left-color:#1b3f8b}
+.pt.flip{border-left-color:#b45309}
+.pt.live{border-left-color:#9d174d}
+.pt.plus{border-left-color:#0f766e}
+.pt pre.code{margin:9px 0}
+
+/* 본문 속 짧은 보충 설명 상자 */
+.qa{background:#f0fdfa;border:1px solid #99e0d6;border-left:4px solid #0f766e;
+  border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:11px 0;
+  font-size:13px;line-height:1.85;color:#134e4a}
+.qa::before{content:'보충설명';display:table;font-size:10.5px;font-weight:800;letter-spacing:.02em;
+  padding:3px 9px;border-radius:999px;margin-bottom:7px;background:#e3f7f3;color:#0f766e;border:1px solid #99e0d6}
+.qa b{color:#0f3d3a}
+.qa .ul li{color:#134e4a}
+.qa .ul li::before{background:#0f766e;opacity:.8}
+
+/* ===== 슬라이드 모아보기 ===== */
+.deck{background:#efeeea;border:1px solid var(--border);border-radius:var(--radius);padding:12px 12px 14px;margin-bottom:20px}
+.deck-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.deck-h span{font-size:11px;font-weight:400;color:var(--muted)}
+.deck-t{font-size:12px;font-weight:700;color:var(--accent);margin:13px 0 7px;padding-left:8px;border-left:3px solid var(--accent)}
+.deck-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.sld{background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px;margin:0;cursor:zoom-in;transition:box-shadow .15s,transform .15s}
+.sld:hover{box-shadow:0 6px 16px rgba(18,34,80,.13);transform:translateY(-2px)}
+.sld img{display:block;width:100%;height:auto;border-radius:4px;background:#fff}
+.sld figcaption{font-size:11px;color:var(--muted);line-height:1.5;margin-top:6px;text-align:center}
+.sld figcaption b{color:var(--accent)}
+
+/* ===== 한 줄 요약 ===== */
+.oneline{background:#16233f;color:#e7edf9;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+.oneline > p{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--lime)}
+.oneline .ul li{color:#c5d0e8;font-size:13px}
+.oneline .ul li b{color:#fff}
+.oneline .ul li::before{background:var(--lime);opacity:.9}
+
+/* ===== 슬라이드 확대 보기 ===== */
+#lb{position:fixed;inset:0;background:rgba(9,15,31,.94);display:none;align-items:center;justify-content:center;
+  z-index:400;padding:52px 60px 64px;cursor:zoom-out;-webkit-user-select:none;user-select:none}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:80vh;border-radius:8px;background:#fff;box-shadow:0 18px 50px rgba(0,0,0,.45);cursor:default}
+#lb .cap{position:absolute;left:0;right:0;bottom:18px;text-align:center;color:#d9e1f3;font-size:12.5px;line-height:1.6;padding:0 20px;cursor:default}
+#lb .cap b{color:#fff}
+#lb .cap .num{display:block;font-size:11px;color:#9fb0d4;margin-top:4px;letter-spacing:.04em}
+#lb button{
+  position:absolute;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;
+  border-radius:50%;width:44px;height:44px;font-size:20px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .15s;
+  font-family:inherit;padding:0;
+}
+#lb button:hover{background:rgba(255,255,255,.22)}
+#lb button:disabled{opacity:.25;cursor:default}
+#lb .prev{left:12px;top:50%;transform:translateY(-50%)}
+#lb .next{right:12px;top:50%;transform:translateY(-50%)}
+#lb .x{right:12px;top:12px;width:38px;height:38px;font-size:17px}
+@media(max-width:560px){
+  #lb{padding:48px 10px 92px}
+  #lb .prev{left:50%;top:auto;bottom:16px;transform:translateX(-64px)}
+  #lb .next{right:50%;top:auto;bottom:16px;transform:translateX(64px)}
+  #lb .cap{bottom:70px}
+}
+
+.kg{display:block;width:108px;height:42px;margin:0 auto}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:640px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#map">한눈에 보기</a>
+  <a href="#hw1">과제 #1</a>
+  <a href="#hw2">과제 #2</a>
+  <a href="#hw3">과제 #3</a>
+  <a href="#present">논문 발표</a>
+  <a href="#eval">제출 · 평가</a>
+</nav>
+
+<div class="wrap">
+
+<div class="weeknav">
+  <a href="computer-vision.html" class="plan">← 강의계획서</a>
+  <a href="computer-vision-week03.html">3주차 · Linear Filters</a>
+  <a href="computer-vision-week04.html">4주차 · Image Pyramids</a>
+  <span class="cur">과제 · 논문 발표</span>
+</div>
+
+<section class="hero">
+  <p class="kicker">컴퓨터비전 · 2026-2학기</p>
+  <h1>과제와 논문 발표</h1>
+  <p>학기 중에 <b>내가 직접 제출해야 하는 것</b>만 모았습니다. 프로그래밍 과제 <b>3회(25%)</b>와 <b>논문 발표 1회(15%)</b> — 합쳐서 성적의 <b>40%</b>입니다. 각 과제의 문제지 · 템플릿 · 근거가 되는 수업내용 페이지를 한곳에서 오갈 수 있게 했습니다.</p>
+  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">과제 3회 · 25%</span><span class="chip">논문 발표 · 15%</span><span class="chip">제출: i-Campus</span></div>
+</section>
+
+<div class="legend">
+  <p class="legend-t">각 항목의 <b>상태</b>를 뱃지로 표시했습니다</p>
+  <i><span class="bdg bdg-flip">진행 중</span><span>문제지가 나왔고 마감 전</span></i>
+  <i><span class="bdg bdg-gyo">예정</span><span>아직 부여 전 — 강의계획서 기준 정보만</span></i>
+  <i><span class="bdg bdg-pres">발표 준비</span><span>논문 스터디 발표</span></i>
+</div>
+
+<section class="sec" id="map">
+  <div class="sec-head"><span class="sec-badge">MAP</span><h2 class="sec-title">한눈에 보기<small>부여 시점 · 마감 · 범위 · 배점</small></h2></div>
+
+<div class="oneline">
+  <p><b>지금 해야 하는 것</b></p>
+  <ul class="ul">
+    <li><b>과제 #1</b> — 마감 <b>10월 7일(수) 19:00</b>. 이미지 변환 · 필터 · 피라미드 · 미디언 직접 구현 4문제</li>
+    <li><b>논문 발표</b> — 배정된 주차에 <b>12분 발표 + Q&amp;A 3~5분</b>. 발표 시간은 절대 준수</li>
+    <li>과제 #2 · #3은 각각 <b>7주차 · 11주차</b>에 부여됩니다 — 그때 문제지를 여기에 올리면 됩니다</li>
+  </ul>
+</div>
+
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>항목</th><th>부여</th><th>마감</th><th>다루는 범위</th><th>배점</th><th>상태</th></tr></thead>
+  <tbody>
+    <tr><td><a class="ext" href="#hw1">과제 #1</a></td><td>3주차 (9/16)</td><td><b>10월 7일(수) 19:00</b></td><td>2~3주차 — Python · OpenCV, 선형 필터, 이미지 피라미드</td><td>5%</td><td><span class="bdg bdg-flip">진행 중</span></td></tr>
+    <tr><td><a class="ext" href="#hw2">과제 #2</a></td><td>7주차</td><td>11월 4일</td><td>5~7주차 — 특징점 검출 · 기술자 · 매칭</td><td>8%</td><td><span class="bdg bdg-gyo">예정</span></td></tr>
+    <tr><td><a class="ext" href="#hw3">과제 #3</a></td><td>11주차</td><td>12월 2일</td><td>11~13주차 — BoW · SVM · CNN</td><td>12%</td><td><span class="bdg bdg-gyo">예정</span></td></tr>
+    <tr><td><a class="ext" href="#present">논문 발표</a></td><td>3주차부터 조별 배정</td><td>배정된 주차</td><td>그 주차 온라인 콘텐츠 관련 주제 또는 CV 관련 업무 · 연구</td><td>15%</td><td><span class="bdg bdg-pres">발표 준비</span></td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
+<!-- ===================== HW1 ===================== -->
+<section class="sec" id="hw1">
+  <div class="sec-head"><span class="sec-badge">HW1</span><h2 class="sec-title">과제 #1 — 변환 · 필터 · 피라미드<small>3주차 부여 · 마감 10월 7일(수) 19:00 · 100점 만점, 성적 5%</small></h2></div>
+
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📕</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-hw1">과제 #1 문제지</a>
+      <p>4문제 · 요구 사항과 배점, 제출 형식이 적혀 있습니다</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week03-hw1.pdf" download="컴퓨터비전_과제1_문제지.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>🐍</span>PY</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week03-hw1-template.py" target="_blank" rel="noopener">코드 템플릿 ↗</a>
+      <p>함수 뼈대만 있는 예시 — 이름과 구조는 바꿔도 됩니다</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week03-hw1-template.py" download="컴퓨터비전_과제1_템플릿.py">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>🖼</span>PNG</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week03-lenna.png" target="_blank" rel="noopener">실습 이미지 lenna.png ↗</a>
+      <p>모든 문제가 이 이미지를 씁니다</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week03-lenna.png" download="lenna.png">⬇ 다운로드</a>
+  </div>
+</div>
+
+<div class="warn"><b>제출 형식</b> — PDF 보고서(<code>report.pdf</code>)와 코드 · 실행에 필요한 파일을 <code>code</code> 폴더에 담아 <b><code>HW1_학번_이름.zip</code></b>으로 압축해 i-Campus에 제출합니다.
+보고서는 자유 형식이지만 문제마다 <b>① 중요 코드 설명 ② 결과(이미지 · 수치 · 표) ③ 결과 분석</b>이 들어가야 하고, <b>채점은 보고서 위주</b>입니다. 표절과 <b>LLM 사용이 강하게 의심되면 감점</b>입니다.</div>
+
+<h3 class="sub-title">문제별 요구 사항과 근거</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>문제</th><th>요구 사항</th><th>수업내용에서 볼 곳</th></tr></thead>
+  <tbody>
+    <tr><td><b>1. 이미지 변환</b><br>20점</td><td>Translation · Rotation · Affine · Perspective 변환 행렬을 직접 만들어 <code>lenna.png</code>에 적용. 변환 행렬은 <b>float32</b>여야 오류가 나지 않습니다</td><td><a class="ext" href="computer-vision-week02-1.html">2주차-1 Python &amp; OpenCV</a> — <code>warpAffine</code> · <code>warpPerspective</code></td></tr>
+    <tr><td><b>2. 필터</b><br>30점</td><td>2-1 Gaussian · Sobel · Laplacian 적용 · 2-2 Salt &amp; Pepper 노이즈(0.0~0.2) 후 Gaussian · 2-3 같은 이미지에 <code>medianBlur</code> 후 2-2와 비교</td><td><a class="ext" href="computer-vision-week03.html#nonlinear">3주차 09 비선형 필터</a> — <b>임펄스 노이즈엔 가우시안이 무력, 미디언이 효과적</b>이라는 결론이 나와야 합니다</td></tr>
+    <tr><td><b>3. 이미지 피라미드</b><br>30점</td><td>3-1 <code>cv2.resize</code> 업 · 다운샘플링에 <b>보간 3가지 이상</b> 비교 · 3-2 <code>pyrDown</code> · <code>pyrUp</code>으로 가우시안 피라미드 · 3-3 라플라시안 피라미드로 복원 후 비교</td><td><a class="ext" href="computer-vision-week04.html#interp">4주차 06 보간</a> · <a class="ext" href="computer-vision-week04.html#gpyr">03 가우시안</a> · <a class="ext" href="computer-vision-week04.html#lpyr">04 라플라시안</a></td></tr>
+    <tr><td><b>4. 미디언 블러 직접 구현</b><br>20점</td><td><code>cv2.medianBlur</code>를 쓰지 않고 NumPy로 구현한 뒤 OpenCV 결과와 비교 · 검증 (패딩은 고려하지 않아도 됨)</td><td><a class="ext" href="computer-vision-week03.html#nonlinear">3주차 09</a> — 창을 잘라 <code>np.median</code>, 비교는 두 결과의 <b>최대 절대 차이</b>로</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="tip"><b>보고서를 쓸 때</b> — 결과 이미지는 <b>원본과 처리 후를 나란히</b> 놓고, 2-2 · 2-3처럼 비교가 목적인 문제는 <b>같은 노이즈 이미지</b>에 두 필터를 적용한 결과를 한 화면에 배치하면 분석이 쉬워집니다. 수치가 필요하면 PSNR이나 잔차의 평균 · 표준편차를 곁들이면 됩니다.</div>
+
+<div class="good"><b>진행 확인</b> — ① 문제지 요구 사항을 표로 옮겨 적었는가 ② 네 문제 코드가 모두 돌아가는가 ③ 문제마다 결과 이미지와 <b>분석 문장</b>이 있는가 ④ <code>HW1_학번_이름.zip</code> 구조로 압축했는가 ⑤ 마감 <b>10/7 19:00</b> 전에 i-Campus 업로드까지 마쳤는가</div>
+
+<div class="link-list">
+  <a href="computer-vision-week03.html#hw1">3주차 페이지의 과제 #1 상세 정리 →<small>문제별 함수 · 짚어야 할 점까지 자세히</small></a>
+  <a href="computer-vision-week04.html#codes">4주차 실습 코드 · 과제 연결 →<small>pyrDown · pyrUp · 보간 비교 코드</small></a>
+</div>
+</section>
+
+<!-- ===================== HW2 ===================== -->
+<section class="sec" id="hw2">
+  <div class="sec-head"><span class="sec-badge">HW2</span><h2 class="sec-title">과제 #2<small>7주차 부여 예정 · 마감 11월 4일 · 성적 8%</small></h2></div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">예정</span>아직 문제지가 나오지 않았습니다</h3>
+  <p>강의계획서 기준으로 <b>5~7주차 범위</b>에서 출제됩니다. 부여 시점에 실시간 수업에서 설명이 있고, 마감 후 Review를 합니다.</p>
+  <ul class="ul">
+    <li><b>5주차</b> — Local Features · 특징 검출기(Edge · Line · Corner · Blob)</li>
+    <li><b>6주차</b> — 특징 기술자(SIFT · SURF · HOG · BRIEF · ORB)</li>
+    <li><b>7주차</b> — 특징 매칭(Fitting · RANSAC) · 영상 정합(Homography · Rectification · Stitching)</li>
+  </ul>
+  <p>문제지가 나오면 이 절에 문제지 · 템플릿을 올리고, 과제 #1처럼 <b>문제별 근거가 되는 수업내용 링크</b>를 붙이겠습니다.</p>
+</div>
+</section>
+
+<!-- ===================== HW3 ===================== -->
+<section class="sec" id="hw3">
+  <div class="sec-head"><span class="sec-badge">HW3</span><h2 class="sec-title">과제 #3<small>11주차 부여 예정 · 마감 12월 2일 · 성적 12%</small></h2></div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">예정</span>배점이 가장 큰 마지막 과제</h3>
+  <p>강의계획서 기준 <b>11~13주차 범위</b> — <b>Bag of Words · 분류기(KNN · SVM) · CNN(AlexNet · ResNet)</b> 쪽입니다. 11주차 실시간 수업이 PyTorch · Colab Python Review와 겹치므로, 그 실습 코드가 그대로 과제의 출발점이 될 가능성이 큽니다.</p>
+</div>
+</section>
+
+<!-- ===================== 논문 발표 ===================== -->
+<section class="sec" id="present">
+  <div class="sec-head"><span class="sec-badge">발표</span><h2 class="sec-title">논문 스터디 발표<small>성적 15% · 발표 12분 + Q&amp;A 3~5분</small></h2></div>
+
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-pres">발표 준비</span>운영 방식과 규정</h3>
+  <ul class="ul">
+    <li><b>시작 · 편성</b> — 3주차(9/16)부터 총 11주 내외, 주당 3~4명이 발표합니다</li>
+    <li><b>시간</b> — 발표 <b>12분</b> + Q&amp;A 3~5분. 교수님이 <b>시간 절대 준수</b>를 강조했습니다</li>
+    <li><b>주제</b> — 그 주차 온라인 콘텐츠와 관련된 주제, 또는 컴퓨터 비전 관련 회사 업무 · 연구</li>
+    <li><b>배점</b> — 15%. 과제 3회 합계(25%)에 이어 두 번째로 큰 비중입니다</li>
+  </ul>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">준비 체크리스트</span>12분에 맞추려면</h3>
+  <ul class="ul">
+    <li><b>그 주차 교안과 이어 붙이기</b> — 4주차 발표들이 좋은 예입니다. &lsquo;교안의 피라미드 → 논문의 FPN&rsquo;처럼 <b>수업에서 배운 것이 논문에서 어떻게 쓰이는지</b>를 축으로 잡으면 청중이 따라옵니다</li>
+    <li><b>약어는 처음 나올 때 풀어 쓰기</b> — FPN · RPN · IoU · AP처럼 줄임말이 많은 분야라, 한 장짜리 약어 표를 넣으면 Q&amp;A가 편해집니다</li>
+    <li><b>12분 = 슬라이드 12~15장</b>이 현실적인 분량입니다. 문제 정의 → 기존 방법의 한계 → 제안 방법 → 실험 → 한계와 의의 순서가 무난합니다</li>
+    <li>발표 하루 전 <b>소리 내어 한 번</b> 돌려 보고 시간을 재 보세요</li>
+  </ul>
+</div>
+
+<div class="note-box" style="border-left:3px solid var(--accent)"><b>내 발표 자료</b> — 발표 자료(HTML · PDF · PPTX)를 저장소에 올리면 이 자리에서 바로 열리도록 연결합니다.
+<code>materials/컴퓨터비전/</code> 아래에 두고 파일명을 알려 주시면 됩니다(예: <code>week0N-presentation-내이름-주제.html</code>).
+HTML 자료는 <b>새 창으로 열리는 링크</b>로, PDF는 앱 실행 없이 화면에서 열리는 <b>뷰어 링크</b>로 붙여 두겠습니다.</div>
+
+<h3 class="sub-title">같은 수업 발표 사례</h3>
+<div class="link-list">
+  <a href="computer-vision-week04.html#pres">4주차 학생 논문 발표 3편 정리 →<small>FPN(CVPR 2017) · Rethinking FPN neck(ECCV 2024) · 다중 노출 융합 안개 제거(2024) — 발표 구성과 약어 정리 방식 참고</small></a>
+  <a href="computer-vision-week03.html">3주차 페이지 →<small>학생 발표 2건이 실시간 수업 정리에 들어 있습니다</small></a>
+</div>
+</section>
+
+<!-- ===================== 평가 ===================== -->
+<section class="sec" id="eval">
+  <div class="sec-head"><span class="sec-badge">EVAL</span><h2 class="sec-title">제출과 평가<small>내가 관리해야 하는 40%</small></h2></div>
+
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>항목</th><th>비중</th><th>내가 제출하는 것</th></tr></thead>
+  <tbody>
+    <tr><td>과제 (HW1 · 2 · 3)</td><td><b>25%</b> (5 + 8 + 12)</td><td><code>HW#_학번_이름.zip</code> — 보고서 PDF + code 폴더, i-Campus 업로드</td></tr>
+    <tr><td>논문 발표</td><td><b>15%</b></td><td>발표 자료 + 12분 발표 · Q&amp;A</td></tr>
+    <tr><td>출석 및 참여</td><td>10%</td><td>플립러닝 콘텐츠 수강 · 실시간 수업 참여</td></tr>
+    <tr><td>중간 · 기말고사</td><td>각 25%</td><td>오프라인 시험 (퇴계인문관 31705호)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="link-list">
+  <a href="https://icampus.skku.edu/" target="_blank" rel="noopener">i-Campus — 과제 제출 · 공지 ↗<small>강의노트 · 과제 · 시험일정이 모두 여기에 게시됩니다</small></a>
+  <a href="computer-vision.html#eval">강의계획서의 과제 · 평가 절 →<small>배점 기준 원문</small></a>
+</div>
+</section>
+
+<p class="src">출처 — 컴퓨터비전 강의계획서(2026-2학기) · 과제 #1 문제지와 템플릿 코드<br>
+과제 #2 · #3의 범위는 강의계획서의 주차별 일정을 근거로 적은 것이라, 실제 문제지가 나오면 그 내용으로 바꿔야 합니다.</p>
+
+</div>
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive() {
+    var cur = '';
+    sections.forEach(function (s) { if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function (t) { t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      setTimeout(function () {
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+
+  /* ---- 개념 설명 말풍선 ---- */
+  var terms = document.querySelectorAll('.term');
+  if (!terms.length) return;
+  var tip = document.createElement('div');
+  tip.id = 'tipbox';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  var current = null;
+
+  function hide() {
+    tip.classList.remove('on');
+    if (current) { current.classList.remove('on'); current = null; }
+  }
+  function show(el) {
+    tip.textContent = el.getAttribute('data-tip') || '';
+    tip.classList.add('on');
+    if (current && current !== el) current.classList.remove('on');
+    current = el;
+    el.classList.add('on');
+    var pad = 8;
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+    var top = r.top - t.height - 10;
+    if (top < pad) top = r.bottom + 10;
+    top = Math.min(top, window.innerHeight - t.height - pad);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+  terms.forEach(function (el) {
+    el.addEventListener('mouseenter', function () { show(el); });
+    el.addEventListener('mouseleave', function () { if (current === el) hide(); });
+    el.addEventListener('focus', function () { show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (current === el && tip.classList.contains('on')) hide(); else show(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el); }
+      if (e.key === 'Escape') hide();
+    });
+  });
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide);
+});
+</script>
+
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script src="../vendor/katex/katex.min.js"></script>
+<script>
+// .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.
+// KaTeX를 못 불러온 경우에는 원문이 그대로 남아 최소한 읽을 수는 있게 둔다.
+(function () {
+  if (typeof katex === 'undefined') { return; }
+  document.querySelectorAll('.tex, .tex-d').forEach(function (el) {
+    try {
+      katex.render(el.textContent.trim(), el, {
+        displayMode: el.classList.contains('tex-d'),
+        throwOnError: false,
+        strict: false
+      });
+    } catch (e) { if (window.console) { console.error('KaTeX', e, el.textContent); } }
+  });
+})();
+</script>
+
+</body>
+</html>
