@@ -394,6 +394,12 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
 .wk-go:hover{background:var(--navy-700)}
 .wk-go:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
 .wk-none{font-size:.78rem;color:var(--muted);background:#f1f3f7;border-radius:10px;padding:8px 12px}
+.wk-subj.hw{border-color:#e6d5b8;background:#fffaf2}
+.wk-subj.hw.has{border-color:#dcb87f;background:#fff7ea}
+.wk-subj.hw .s-name{color:#8a5a12}
+.wk-subj.hw .wk-go{border-color:#e3c894;background:#fffdf8;color:#8a5a12}
+.wk-subj.hw .wk-go:hover{background:#fdf1dd;border-color:#d0a75f}
+#wk-tbl td.hw-col{background:#fffaf2}
 .wk-plan{align-self:flex-start;font-size:.72rem;color:var(--muted);background:none;border:0;padding:0;cursor:pointer;font-family:inherit;text-decoration:underline;text-underline-offset:2px}
 .wk-plan:hover{color:var(--navy-700)}
 .wk-all{margin-top:14px}
@@ -944,6 +950,19 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
      새 주차 페이지를 올리면 해당 과목 · 주차에 p:[[버튼 이름, 경로]]만 추가하면 된다. */
   var WEEK_START = new Date(2026, 7, 31);   // 1주차 월요일 (2026-08-31)
   var WK_TOTAL = 16;
+  /* ----- 주차별 과제 · 발표 (요약표 맨 앞 섹션) -----
+     마감이나 발표가 있는 주차에만 항목을 넣는다. [표시할 이름, 링크] */
+  var WK_HW_PAGE = 'courses/computer-vision-assignments.html';
+  var WK_HW = {
+    3:  [['CV 과제 #1 부여', WK_HW_PAGE + '#hw1']],
+    6:  [['CV 과제 #1 마감 · 10/7(수) 19:00', WK_HW_PAGE + '#hw1'],
+         ['내 논문 발표 · A Tale of Two Features', WK_HW_PAGE + '#mypres']],
+    7:  [['CV 과제 #2 부여', WK_HW_PAGE + '#hw2']],
+    10: [['CV 과제 #2 마감 · 11/4', WK_HW_PAGE + '#hw2']],
+    11: [['CV 과제 #3 부여', WK_HW_PAGE + '#hw3']],
+    14: [['CV 과제 #3 마감 · 12/2', WK_HW_PAGE + '#hw3']]
+  };
+
   var WK_SUBJECTS = [
     { name:'자연어처리', day:'월', offset:0, plan:'courses/nlp.html', weeks:{
       1:{t:'자연어처리 개요', p:[['1주차 수업내용','courses/nlp-week01.html']]},
@@ -1033,12 +1052,30 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
     }
     wkStrip.innerHTML = chips;
 
+    var hwCard = function(w){
+      var items = WK_HW[w], body;
+      if(items){
+        body = '<p class="s-topic">이번 주 마감 · 발표</p><div class="s-btns">' + items.map(function(p){
+          return '<button type="button" class="wk-go" data-src="' + p[1] + '" data-title="' + wkEsc('컴퓨터비전 — 과제 · 논문 발표') + '">' + wkEsc(p[0]) + '</button>';
+        }).join('') + '</div>';
+      } else {
+        var nx = 0;
+        for(var k = w + 1; k <= WK_TOTAL; k++){ if(WK_HW[k]){ nx = k; break; } }
+        body = '<p class="s-topic">이번 주 제출할 것 없음</p>' + (nx ?
+          '<div class="s-btns"><button type="button" class="wk-go" data-src="' + WK_HW[nx][0][1] + '" data-title="컴퓨터비전 — 과제 · 논문 발표">다음 · ' + nx + '주차 ' + wkEsc(WK_HW[nx][0][0]) + '</button></div>' :
+          '<div class="wk-none">남은 마감 없음</div>');
+      }
+      return '<div class="wk-subj hw' + (items ? ' has' : '') + '"><div class="s-head"><span class="s-name">과제 · 발표</span>' +
+        '<span class="s-date">성적 40%</span></div>' + body +
+        '<button type="button" class="wk-plan" data-src="' + WK_HW_PAGE + '" data-title="컴퓨터비전 — 과제 · 논문 발표">과제 페이지 전체 보기</button></div>';
+    };
+
     var renderWeek = function(w){
       selected = w;
       wkStrip.querySelectorAll('.wk-chip').forEach(function(c){
         c.setAttribute('aria-selected', String(+c.dataset.week === w));
       });
-      wkPanel.innerHTML = WK_SUBJECTS.map(function(s){
+      wkPanel.innerHTML = hwCard(w) + WK_SUBJECTS.map(function(s){
         var info = s.weeks[w], body;
         if(!info){ body = '<p class="s-topic">해당 주차 수업 없음</p>'; }
         else if(info.p){
@@ -1069,9 +1106,14 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
     if(selChip) wkStrip.scrollLeft = Math.max(0, selChip.offsetLeft - wkStrip.clientWidth / 2);
 
     if(wkTbl){
-      var rows = '<thead><tr><th>주차</th>' + WK_SUBJECTS.map(function(s){ return '<th>' + s.name + ' (' + s.day + ')</th>'; }).join('') + '</tr></thead><tbody>';
+      var rows = '<thead><tr><th>주차</th><th>과제 · 발표</th>' + WK_SUBJECTS.map(function(s){ return '<th>' + s.name + ' (' + s.day + ')</th>'; }).join('') + '</tr></thead><tbody>';
       for(var r = 1; r <= WK_TOTAL; r++){
-        rows += '<tr' + (inTerm && r === nowWeek ? ' class="now"' : '') + '><td>' + r + '주차</td>' + WK_SUBJECTS.map(function(s){
+        var hw = WK_HW[r];
+        rows += '<tr' + (inTerm && r === nowWeek ? ' class="now"' : '') + '><td>' + r + '주차</td>' +
+          (hw ? '<td class="hw-col">' + hw.map(function(p){
+            return '<button type="button" data-src="' + p[1] + '" data-title="컴퓨터비전 — 과제 · 논문 발표">' + wkEsc(p[0]) + '</button>';
+          }).join('<br>') + '</td>' : '<td class="muted hw-col">—</td>') +
+          WK_SUBJECTS.map(function(s){
           var info = s.weeks[r];
           if(!info) return '<td class="muted">—</td>';
           if(info.p) return '<td>' + info.p.map(function(p){

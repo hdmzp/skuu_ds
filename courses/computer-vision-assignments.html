@@ -425,6 +425,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <a href="#hw2">과제 #2</a>
   <a href="#hw3">과제 #3</a>
   <a href="#present">논문 발표</a>
+  <a href="#mypres">내 논문 발표</a>
   <a href="#eval">제출 · 평가</a>
 </nav>
 
@@ -458,7 +459,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <p><b>지금 해야 하는 것</b></p>
   <ul class="ul">
     <li><b>과제 #1</b> — 마감 <b>10월 7일(수) 19:00</b>. 이미지 변환 · 필터 · 피라미드 · 미디언 직접 구현 4문제</li>
-    <li><b>논문 발표</b> — 배정된 주차에 <b>12분 발표 + Q&amp;A 3~5분</b>. 발표 시간은 절대 준수</li>
+    <li><b>논문 발표</b> — <b>6주차 Feature Descriptors</b> 주차에 발표. <b>12분 + Q&amp;A 3~5분</b>, 시간 절대 준수 — 자료는 <a class="ext" href="#mypres">내 논문 발표</a>에 모아 두었습니다</li>
     <li>과제 #2 · #3은 각각 <b>7주차 · 11주차</b>에 부여됩니다 — 그때 문제지를 여기에 올리면 됩니다</li>
   </ul>
 </div>
@@ -470,7 +471,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
     <tr><td><a class="ext" href="#hw1">과제 #1</a></td><td>3주차 (9/16)</td><td><b>10월 7일(수) 19:00</b></td><td>2~3주차 — Python · OpenCV, 선형 필터, 이미지 피라미드</td><td>5%</td><td><span class="bdg bdg-flip">진행 중</span></td></tr>
     <tr><td><a class="ext" href="#hw2">과제 #2</a></td><td>7주차</td><td>11월 4일</td><td>5~7주차 — 특징점 검출 · 기술자 · 매칭</td><td>8%</td><td><span class="bdg bdg-gyo">예정</span></td></tr>
     <tr><td><a class="ext" href="#hw3">과제 #3</a></td><td>11주차</td><td>12월 2일</td><td>11~13주차 — BoW · SVM · CNN</td><td>12%</td><td><span class="bdg bdg-gyo">예정</span></td></tr>
-    <tr><td><a class="ext" href="#present">논문 발표</a></td><td>3주차부터 조별 배정</td><td>배정된 주차</td><td>그 주차 온라인 콘텐츠 관련 주제 또는 CV 관련 업무 · 연구</td><td>15%</td><td><span class="bdg bdg-pres">발표 준비</span></td></tr>
+    <tr><td><a class="ext" href="#present">논문 발표</a> <small>(<a class="ext" href="#mypres">내 발표</a>)</small></td><td>3주차부터 조별 배정</td><td><b>6주차 Feature Descriptors</b></td><td>그 주차 온라인 콘텐츠 관련 주제 또는 CV 관련 업무 · 연구</td><td>15%</td><td><span class="bdg bdg-pres">발표 준비</span></td></tr>
   </tbody>
 </table>
 </div>
@@ -583,15 +584,103 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   </ul>
 </div>
 
-<div class="note-box" style="border-left:3px solid var(--accent)"><b>내 발표 자료</b> — 발표 자료(HTML · PDF · PPTX)를 저장소에 올리면 이 자리에서 바로 열리도록 연결합니다.
-<code>materials/컴퓨터비전/</code> 아래에 두고 파일명을 알려 주시면 됩니다(예: <code>week0N-presentation-내이름-주제.html</code>).
-HTML 자료는 <b>새 창으로 열리는 링크</b>로, PDF는 앱 실행 없이 화면에서 열리는 <b>뷰어 링크</b>로 붙여 두겠습니다.</div>
+<div class="note-box" style="border-left:3px solid var(--accent)"><b>내 발표 자료</b> — 논문 원문 · 한글 번역 정리본(HTML) · 슬라이드 · 구성안을 모두 올려 두었습니다. <a class="ext" href="#mypres">내 논문 발표 절에서 바로 열기 →</a></div>
 
 <h3 class="sub-title">같은 수업 발표 사례</h3>
 <div class="link-list">
   <a href="computer-vision-week04.html#pres">4주차 학생 논문 발표 3편 정리 →<small>FPN(CVPR 2017) · Rethinking FPN neck(ECCV 2024) · 다중 노출 융합 안개 제거(2024) — 발표 구성과 약어 정리 방식 참고</small></a>
   <a href="computer-vision-week03.html">3주차 페이지 →<small>학생 발표 2건이 실시간 수업 정리에 들어 있습니다</small></a>
 </div>
+</section>
+
+<!-- ===================== 내 논문 발표 ===================== -->
+<section class="sec" id="mypres">
+  <div class="sec-head"><span class="sec-badge">MY</span><h2 class="sec-title">내 논문 발표 — A Tale of Two Features<small>Feature Descriptors 주차 · NeurIPS 2023 논문 케이스 스터디</small></h2></div>
+
+<div class="oneline">
+  <p><b>지금 준비 중인 발표</b></p>
+  <ul class="ul">
+    <li><b>논문</b> — Zhang et al., <b>&ldquo;A Tale of Two Features: Stable Diffusion Complements DINO for Zero-Shot Semantic Correspondence&rdquo;</b>, NeurIPS 2023</li>
+    <li><b>발표 주차</b> — <b>6주차 Feature Descriptors</b>(강의 흐름: Local Feature Detection → <b>Feature Descriptors</b> → Feature Matching &amp; Homography)</li>
+    <li><b>분량 계획</b> — 본편 22장 + 부록 3장, <b>12분</b>. 논문 60% · 배경 개념 40%, 약어는 첫 등장에서 풀네임 병기</li>
+  </ul>
+</div>
+
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📄</span>HTML</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/hw-paper-two-features-ko.html">논문 한글 번역 정리본 — 페이지로 열기 ↗</a>
+      <p>초록 · 서론 · 관련 연구 · 방법 · 실험 · 논의 · 결론 전문 번역 + 그림 11장. 웹 페이지로 바로 열리고, 상단 막대로 이 과제 페이지로 돌아옵니다</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/hw-paper-two-features-ko.html">▶ 열기</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📕</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-paper-two-features">논문 원문 (NeurIPS 2023)</a>
+      <p>Advances in Neural Information Processing Systems 36, pp. 45533–45547</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/hw-paper-two-features.pdf" download="A_Tale_of_Two_Features_NeurIPS2023.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📕</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-paper-two-features-ko">번역 정리본 PDF (인쇄용)</a>
+      <p>위 HTML과 같은 내용의 인쇄용 판본</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/hw-paper-two-features-ko.pdf" download="A_Tale_of_Two_Features_한글번역.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📊</span>PPTX</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/hw-paper-slides.pptx" download="논문발표_A_Tale_of_Two_Features.pptx">발표 슬라이드</a>
+      <p>본편 22장 + 부록 3장 구성</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/hw-paper-slides.pptx" download="논문발표_A_Tale_of_Two_Features.pptx">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📝</span>DOCX</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/hw-paper-ppt-outline.docx" download="논문발표_PPT구성안.docx">발표 구성안</a>
+      <p>슬라이드별 메시지 · 제작 규칙(약어 풀네임, 슬라이드당 3~4줄, 출처 표기)</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/hw-paper-ppt-outline.docx" download="논문발표_PPT구성안.docx">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📝</span>DOCX</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/hw-paper-study-notes.docx" download="논문파헤치기_개념흐름공부.docx">개념 흐름 공부 노트</a>
+      <p>Feature → Detector / Descriptor → ViT · Diffusion 순으로 짚어 둔 배경 정리</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/hw-paper-study-notes.docx" download="논문파헤치기_개념흐름공부.docx">⬇ 다운로드</a>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">논문 요지</span>한 문단으로</h3>
+  <p><b>시맨틱 대응(semantic correspondence)</b>은 서로 다른 두 사진에서 <b>의미가 같은 지점</b>을 짝지어 주는 문제다 — 고양이 사진 A의 왼쪽 눈과, 자세도 품종도 다른 고양이 사진 B의 왼쪽 눈을 잇는 식이다.
+  이 논문은 <b>Stable Diffusion</b>(이미지 생성 확산 모델)의 내부 특징과 <b>DINO</b>(자기지도 학습 Vision Transformer)의 특징이 서로 <b>다른 성질의 오류</b>를 낸다는 점에 주목한다.
+  DINO는 <b>정확하지만 듬성듬성</b>(sparse)하고, Stable Diffusion은 <b>부드럽지만 가끔 엉뚱한 곳</b>을 짚는다. 두 특징을 정규화해 <b>이어 붙이기만 해도</b> 학습 없이(zero-shot) 기존 방법을 넘어선다는 것이 핵심 결과다.</p>
+  <p>수업과의 연결 — <b>3주차 선형 필터 → 5주차 특징점 검출 → 6주차 기술자(descriptor)</b>로 이어지는 흐름에서, SIFT 같은 <b>손으로 설계한 기술자</b> 자리에 <b>대규모 사전학습 모델의 내부 특징</b>을 꽂아 넣은 사례로 읽으면 된다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">발표 준비 상태</span>남은 일</h3>
+  <ul class="ul">
+    <li>✅ 논문 정독 · 한글 번역 정리본 작성 (위 HTML)</li>
+    <li>✅ 배경 개념 정리 (Feature / Detector / Descriptor / ViT / Diffusion)</li>
+    <li>✅ 슬라이드 구성안 확정 — 본편 22장 + 부록 3장</li>
+    <li>⬜ 슬라이드 마무리 후 <b>소리 내어 리허설</b> — 12분 초과 여부 확인 (교수님이 시간 준수를 강조)</li>
+    <li>⬜ 예상 질문 정리 — &ldquo;왜 하필 두 특징을 이어 붙이나&rdquo;, &ldquo;Diffusion 특징은 어느 층에서 뽑나&rdquo;</li>
+  </ul>
+</div>
+
+<div class="note-box"><b>인용 정보(BibTeX)</b> — Zhang, J., Herrmann, C., Hur, J., Polania Cabrera, L., Jampani, V., Sun, D., Yang, M.-H.,
+<i>A Tale of Two Features: Stable Diffusion Complements DINO for Zero-Shot Semantic Correspondence</i>,
+Advances in Neural Information Processing Systems <b>36</b>, 45533–45547 (2023) ·
+<a href="https://proceedings.neurips.cc/paper_files/paper/2023/file/8e9bdc23f169a05ea9b72ccef4574551-Paper-Conference.pdf" target="_blank" rel="noopener">NeurIPS 공식 PDF</a> ·
+<a href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/hw-paper-two-features.bib" download="a-tale-of-two-features.bib">.bib 내려받기</a></div>
 </section>
 
 <!-- ===================== 평가 ===================== -->
