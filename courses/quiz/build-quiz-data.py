@@ -57,6 +57,21 @@ TERMS = {
    'SRL','술어','논항','PropBank','FrameNet','ARG0','BIO',
    '논리식','AMR','분산 표현','Sentence-BERT','RAG','의미 검색',
  ],
+ 'nlp-w05': [
+   '단어 표현','임베딩','수치화','어휘 사전','벡터','희소','조밀','차원의 저주','직교','원-핫','One-hot','인덱스',
+   'Bag of Words','BoW','DTM','문서 단어 행렬','빈도','순서','CountVectorizer','fit_transform','transform','데이터 누수',
+   'N-gram','유니그램','바이그램','트라이그램','ngram_range','min_df','max_features','과적합',
+   'TF','DF','IDF','TF-IDF','smooth_idf','로그','L2 정규화','sublinear_tf','TfidfVectorizer','불용어','max_df','OOV',
+   '분산 표현','분포 가설','Word2Vec','CBOW','Skip-gram','GloVe','FastText','BERT','조밀 벡터',
+   '텍스트 분류','이진 분류','다중 범주','다중 레이블','스팸','감정 분류','뉴스','품사','개체명',
+   '지도 학습','비지도 학습','군집화','K-means','DBSCAN','LDA','실루엣','라벨','레이블링',
+   'EDA','탐색적 자료 분석','정제','토큰화','정규화','패딩','벡터 표상화','train_test_split','stratify','층화',
+   '나이브 베이즈','베이즈','독립 가정','스무딩','로지스틱 회귀','시그모이드','가중치','해석력','랜덤 포레스트','의사결정 트리','배깅','부스팅','SVM','신경망',
+   '혼동 행렬','TP','TN','FP','FN','정확도','정밀도','재현율','F1','조화 평균','클래스 불균형','교차 검증','K-겹','규제',
+   '워드 팝콘','IMDB','캐글','교착어','형태소 분석기','KoNLPy','Okt','Mecab','Kiwi','어간 추출',
+   '텍스트 유사도','자카드','교집합','합집합','코사인','내적','각도','유클리디언','맨해튼','거리','L1 정규화',
+   'Quora','중복 질문','XGBoost','앙상블','검색 엔진','추천','표절','임계값','Sentence-BERT','하이브리드',
+ ],
  'ml-w04': [
    '분류','클래스','레이블','카테고리','스팸','특징 벡터','특징 공간','홍길동','성춘향','학과','평점',
    '정수론','구분선','사후 확률','베이즈','분류 규칙','체조',
@@ -142,6 +157,8 @@ build('nlp-w03', 'materials/자연어처리/week03-quiz100.html', 'courses/quiz/
       {'title': '3주차 · 토큰화, 품사 태깅, 불용어 제거, 텍스트 정규화', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week03-quiz100.html'})
 build('nlp-w04', 'materials/자연어처리/week04-quiz100.html', 'courses/quiz/nlp-w04.js',
       {'title': '4주차 · 텍스트의 전처리, 어휘, 구문 그리고 의미 분석', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week04-quiz100.html'})
+build('nlp-w05', 'materials/자연어처리/week05-quiz100.html', 'courses/quiz/nlp-w05.js',
+      {'title': '5주차 · 단어 표현, 텍스트 분류, 그리고 텍스트 유사도', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week05-quiz100.html'})
 build('ml-w01', 'materials/기계학습특론/week01-quiz100.html', 'courses/quiz/ml-w01.js',
       {'title': '1주차 · 강의소개와 생성형 AI(이미지)', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week01-quiz100.html'})
 build('ml-w02', 'materials/기계학습특론/week02-quiz100.html', 'courses/quiz/ml-w02.js',

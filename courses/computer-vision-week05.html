@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>컴퓨터비전 | 5주차 수업내용 · Local Feature Detection</title>
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0c1a3a">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+
+/* 주차 내비 */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* ===== 필기 표기 ===== */
+.hw{color:#b45309;font-weight:700;background:#fff7ed;border-radius:3px;padding:0 3px}
+.legend{
+  display:flex;flex-wrap:wrap;gap:9px 16px;align-items:center;
+  background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius);
+  padding:13px 15px;margin:0 0 24px;font-size:12px;color:var(--muted);line-height:1.6;
+}
+.legend i{font-style:normal;display:flex;align-items:center;gap:7px}
+.legend .legend-t{flex:0 0 100%;font-size:12.5px;font-weight:700;color:var(--ink)}
+.legend .legend-t2{flex:0 0 100%;font-size:11.5px;color:var(--muted);border-top:1px dashed var(--border);padding-top:10px;margin-top:1px}
+
+/* ===== 주차 내비 ===== */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* ===== 자료별 구분 ===== */
+.matbar{
+  background:linear-gradient(135deg,#122250,#24407f);color:#fff;border-radius:14px;
+  padding:16px 18px;margin:34px 0 18px;box-shadow:0 6px 18px rgba(18,34,80,.15);
+}
+.matbar .tagline{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--lime)}
+.matbar h2{font-size:clamp(16px,3.6vw,20px);font-weight:700;line-height:1.3;margin:5px 0 4px}
+.matbar p{font-size:12.5px;color:#c9d3ee;line-height:1.65}
+.matbar .acts{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.matbar .acts a{
+  font-size:12px;font-weight:700;text-decoration:none;border-radius:8px;padding:6px 12px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;
+}
+.matbar .acts a.primary{background:var(--lime);border-color:var(--lime);color:#16233f}
+.partbar{
+  display:flex;align-items:center;gap:10px;margin:26px 0 14px;
+  font-size:13px;font-weight:700;color:var(--accent);
+}
+.partbar::after{content:'';flex:1;height:1px;background:var(--border)}
+.partbar b{background:var(--accent-light);border:1px solid #c4d2ee;border-radius:999px;padding:4px 11px;font-size:11.5px}
+
+/* ===== 한눈에 보기 ===== */
+.mapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px;margin-top:10px}
+.mapgrid a{
+  display:block;text-decoration:none;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:9px;padding:10px 13px;transition:.15s;
+}
+.mapgrid a:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(18,34,80,.1)}
+.mapgrid b{display:block;font-size:12.5px;color:var(--ink)}
+.mapgrid span{font-size:11.5px;color:var(--muted);line-height:1.55}
+
+/* ===== 개념 하이라이트 + 툴팁 ===== */
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);
+  border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;
+  left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+
+/* ===== 행렬 ===== */
+.mtx{display:inline-flex;align-items:center;gap:4px;vertical-align:middle;margin:0 2px}
+.mtx .br{display:inline-block;width:7px;align-self:stretch;border:2px solid var(--ink);border-right:none;border-radius:3px 0 0 3px}
+.mtx .br.r{border:2px solid var(--ink);border-left:none;border-radius:0 3px 3px 0}
+.mtx .cells{display:grid;gap:2px 12px;padding:5px 2px;font-size:12.5px;text-align:center}
+.mtx .cells span{min-width:26px;line-height:1.5}
+.eq{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;justify-content:center;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 14px;margin:10px 0;
+}
+.eq .op{font-size:14px;font-weight:700;color:var(--muted)}
+/* ===== 변환 카드 ===== */
+.xf{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px}
+.xf-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:4px}
+.xf-head h4{font-size:14.5px;font-weight:700}
+.xf-head .en{font-size:11.5px;color:var(--muted)}
+.xf-dof{margin-left:auto;background:var(--accent);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.xf p{font-size:13px;color:#4b5563;line-height:1.78}
+.xf-keep{font-size:12.5px;color:#166534;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.65}
+.xf-sol{font-size:12.5px;color:#1b3f8b;background:#eef6ff;border:1px solid #c4d2ee;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.7}
+
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .st{color:#c9f24b}
+pre.code .fn{color:#7ec8ff}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 함수 카드 */
+.fnc{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:var(--radius);padding:13px 15px;margin:11px 0}
+.fnc h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fnc .sig{
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;color:#1b3f8b;
+  background:#eef2fb;border:1px solid #dbe3f5;border-radius:6px;padding:7px 10px;margin:7px 0 9px;
+  overflow-x:auto;white-space:pre;
+}
+.fnc dl{display:grid;grid-template-columns:minmax(88px,auto) 1fr;gap:5px 12px;font-size:12.5px;line-height:1.65}
+.fnc dt{font-weight:700;color:var(--ink)}
+.fnc dd{color:#4b5563}
+@media(max-width:440px){.fnc dl{grid-template-columns:1fr;gap:2px}.fnc dd{margin-bottom:6px}}
+
+/* 수식 카드 · 풀이 예제 (기계학습특론 페이지와 같은 규칙) */
+.fx{background:#f8faff;border:1px solid #cfdcf5;border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:10px 0}
+.fx-lab{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.fx-note{font-size:12px;color:#4b5563;line-height:1.7;margin-top:7px}
+.fx-note b{color:var(--ink)}
+.tex-d{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:9px 2px 5px;text-align:center}
+.tex-d .katex{font-size:1.08em}
+.ex{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin:10px 0}
+.ex-q{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.65;background:#f1f0ec;border-radius:7px;padding:9px 12px;margin-bottom:4px}
+.ex-q em{font-style:normal;color:var(--red);font-size:11px;font-weight:700;display:block;margin-bottom:3px}
+.step{display:grid;grid-template-columns:20px 1fr;gap:9px;align-items:baseline;font-size:12.5px;color:#4b5563;line-height:1.75;padding:5px 0}
+.step i{font-style:normal;font-weight:700;color:var(--accent);font-size:11.5px}
+.ex-ans{margin-top:8px;background:#f0fdf4;border:1px solid #22c55e;border-radius:8px;padding:9px 12px;font-size:12.5px;color:#14532d;line-height:1.7}
+.ex-ans b{color:var(--green)}
+.figs > .note-box{margin:0}
+/* 편집 거리 DP 표 */
+.lev table{min-width:0;width:auto;margin:0 auto;font-family:'Consolas','D2Coding',ui-monospace,monospace}
+.lev th,.lev td{text-align:center;padding:6px 10px;white-space:nowrap}
+.lev td.on{background:#fde68a;font-weight:700;color:#7c2d12}
+
+/* ===== 출처 뱃지 ===== */
+.bdg{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.02em;padding:3px 9px;border-radius:999px;white-space:nowrap;line-height:1.5}
+.bdg-gyo{background:#eef2fb;color:#1b3f8b;border:1px solid #c4d2ee}
+.bdg-flip{background:#fff7ed;color:#b45309;border:1px solid #f0c48a}
+.bdg-live{background:#fdf0f5;color:#9d174d;border:1px solid #f3bcd2}
+.bdg-plus{background:#f0fdfa;color:#0f766e;border:1px solid #99e0d6}
+.bdg-pres{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
+
+/* ===== 개념 카드 ===== */
+.pt{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin:11px 0}
+.pt-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;font-weight:700;line-height:1.45;margin-bottom:7px}
+.pt > p{font-size:13.5px;color:#3f4854;line-height:1.85}
+.pt > p + p{margin-top:9px}
+.pt > p b{color:var(--ink)}
+.pt.gyo{border-left-color:#1b3f8b}
+.pt.flip{border-left-color:#b45309}
+.pt.live{border-left-color:#9d174d}
+.pt.plus{border-left-color:#0f766e}
+.pt pre.code{margin:9px 0}
+
+/* 본문 속 짧은 보충 설명 상자 */
+.qa{background:#f0fdfa;border:1px solid #99e0d6;border-left:4px solid #0f766e;
+  border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:11px 0;
+  font-size:13px;line-height:1.85;color:#134e4a}
+.qa::before{content:'보충설명';display:table;font-size:10.5px;font-weight:800;letter-spacing:.02em;
+  padding:3px 9px;border-radius:999px;margin-bottom:7px;background:#e3f7f3;color:#0f766e;border:1px solid #99e0d6}
+.qa b{color:#0f3d3a}
+.qa .ul li{color:#134e4a}
+.qa .ul li::before{background:#0f766e;opacity:.8}
+
+/* ===== 슬라이드 모아보기 ===== */
+.deck{background:#efeeea;border:1px solid var(--border);border-radius:var(--radius);padding:12px 12px 14px;margin-bottom:20px}
+.deck-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.deck-h span{font-size:11px;font-weight:400;color:var(--muted)}
+.deck-t{font-size:12px;font-weight:700;color:var(--accent);margin:13px 0 7px;padding-left:8px;border-left:3px solid var(--accent)}
+.deck-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.sld{background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px;margin:0;cursor:zoom-in;transition:box-shadow .15s,transform .15s}
+.sld:hover{box-shadow:0 6px 16px rgba(18,34,80,.13);transform:translateY(-2px)}
+.sld img{display:block;width:100%;height:auto;border-radius:4px;background:#fff}
+.sld figcaption{font-size:11px;color:var(--muted);line-height:1.5;margin-top:6px;text-align:center}
+.sld figcaption b{color:var(--accent)}
+
+/* ===== 한 줄 요약 ===== */
+.oneline{background:#16233f;color:#e7edf9;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+.oneline > p{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--lime)}
+.oneline .ul li{color:#c5d0e8;font-size:13px}
+.oneline .ul li b{color:#fff}
+.oneline .ul li::before{background:var(--lime);opacity:.9}
+
+/* ===== 슬라이드 확대 보기 ===== */
+#lb{position:fixed;inset:0;background:rgba(9,15,31,.94);display:none;align-items:center;justify-content:center;
+  z-index:400;padding:52px 60px 64px;cursor:zoom-out;-webkit-user-select:none;user-select:none}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:80vh;border-radius:8px;background:#fff;box-shadow:0 18px 50px rgba(0,0,0,.45);cursor:default}
+#lb .cap{position:absolute;left:0;right:0;bottom:18px;text-align:center;color:#d9e1f3;font-size:12.5px;line-height:1.6;padding:0 20px;cursor:default}
+#lb .cap b{color:#fff}
+#lb .cap .num{display:block;font-size:11px;color:#9fb0d4;margin-top:4px;letter-spacing:.04em}
+#lb button{
+  position:absolute;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;
+  border-radius:50%;width:44px;height:44px;font-size:20px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .15s;
+  font-family:inherit;padding:0;
+}
+#lb button:hover{background:rgba(255,255,255,.22)}
+#lb button:disabled{opacity:.25;cursor:default}
+#lb .prev{left:12px;top:50%;transform:translateY(-50%)}
+#lb .next{right:12px;top:50%;transform:translateY(-50%)}
+#lb .x{right:12px;top:12px;width:38px;height:38px;font-size:17px}
+@media(max-width:560px){
+  #lb{padding:48px 10px 92px}
+  #lb .prev{left:50%;top:auto;bottom:16px;transform:translateX(-64px)}
+  #lb .next{right:50%;top:auto;bottom:16px;transform:translateX(64px)}
+  #lb .cap{bottom:70px}
+}
+
+.kg{display:block;width:108px;height:42px;margin:0 auto}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:640px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#map">한눈에 보기</a>
+  <a href="#local">01 로컬 특징이란</a>
+  <a href="#edge">02 엣지 검출</a>
+  <a href="#canny">03 Canny 엣지</a>
+  <a href="#hough">04 허프 변환 (직선)</a>
+  <a href="#corner">05 코너란 무엇인가</a>
+  <a href="#harris">06 Harris 코너 검출</a>
+  <a href="#invariance">07 불변성과 스케일</a>
+  <a href="#blob">08 블롭 검출 (LoG · DoG)</a>
+  <a href="#covariant">09 공변 · 불변과 아핀 적응</a>
+  <a href="#codes">10 실습 · 과제 연결</a>
+</nav>
+
+<div class="wrap">
+
+<div class="weeknav">
+  <a href="computer-vision.html" class="plan">← 강의계획서</a>
+  <a href="computer-vision-week02-1.html">2주차-1 · Python &amp; OpenCV</a>
+  <a href="computer-vision-week02-2.html">2주차-2 · Camera Models</a>
+  <a href="computer-vision-week03.html">3주차 · Linear Filters</a>
+  <a href="computer-vision-week04.html">4주차 · Image Pyramids</a>
+  <span class="cur">5주차 · Local Feature Detection</span>
+  <a href="computer-vision-assignments.html">과제 · 논문 발표</a>
+</div>
+
+<section class="hero">
+  <p class="kicker">5주차 · 9.30 · 2026-2학기</p>
+  <h1>05. 로컬 특징 검출 — 엣지 · 직선 · 코너 · 블롭</h1>
+  <p>3주차의 <b>선형 필터</b>와 4주차의 <b>이미지 피라미드</b>가 여기서 합쳐집니다. 미분 필터로 <b>엣지</b>를 찾고, 그 엣지를 모아 <b>직선</b>을 세고(허프 변환), 한 점에서 <b>모든 방향으로 변하는 지점</b>을 찾아 <b>코너</b>를 잡고(Harris), 마지막으로 피라미드의 여러 스케일을 훑어 <b>덩어리(블롭)와 그 크기</b>까지 찾아냅니다.</p>
+  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 92p</span><span class="chip">슬라이드 59장</span><span class="chip">Sobel · Canny</span><span class="chip">Hough</span><span class="chip">Harris</span><span class="chip">LoG · DoG</span></div>
+</section>
+
+<div class="legend">
+  <p class="legend-t">내용이 어디에서 왔는지 <b>뱃지</b>로 구분했습니다</p>
+  <i><span class="bdg bdg-gyo">교안</span><span>교수님 슬라이드에 있는 내용</span></i>
+  <i><span class="bdg bdg-plus">보충설명</span><span>교안에 없지만 이해 · 시험을 위해 따로 찾아 정리한 내용</span></i>
+  <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선</span>이 있는 말은 누르면 뜻이 뜹니다.</p>
+</div>
+
+<section class="sec" id="map">
+  <div class="sec-head"><span class="sec-badge">MAP</span><h2 class="sec-title">한눈에 보기<small>엣지 → 직선 → 코너 → 블롭, 점점 &lsquo;좋은 특징&rsquo;을 향해 간다</small></h2></div>
+
+<div class="oneline">
+  <p><b>이번 주 한 줄 요약</b></p>
+  <ul class="ul">
+    <li><b>엣지</b>는 밝기가 급격히 변하는 곳 — <b>1차 미분의 극값</b>으로 찾는다</li>
+    <li><b>직선</b>은 엣지 점들을 <b>파라미터 공간에 투표</b>시켜 찾는다 (허프 변환)</li>
+    <li><b>코너</b>는 창을 <b>어느 방향으로 밀어도</b> 밝기가 크게 변하는 곳 — 그래서 매칭에 유리하다 (Harris)</li>
+    <li><b>블롭</b>은 덩어리다. <b>여러 스케일의 LoG 응답이 최대가 되는 σ</b>가 그 덩어리의 크기를 알려 준다</li>
+    <li>관통하는 질문은 하나다 — <b>&ldquo;다른 사진에서도 똑같이 다시 찾을 수 있는 지점은 어디인가?&rdquo;</b></li>
+  </ul>
+</div>
+
+<div class="mapgrid">
+  <a href="#local"><b>01 로컬 특징이란</b><span>왜 필요한가 · 검출/기술/매칭 3단계 · 장점 4가지</span></a>
+  <a href="#edge"><b>02 엣지 검출</b><span>미분 · 그래디언트 크기와 방향 · Prewitt · Sobel · Roberts</span></a>
+  <a href="#canny"><b>03 Canny 엣지</b><span>가우시안 미분 · 비최대 억제 · 이력 임계값</span></a>
+  <a href="#hough"><b>04 허프 변환</b><span>(a, b) vs (ρ, θ) · 누적 배열에 투표</span></a>
+  <a href="#corner"><b>05 코너란 무엇인가</b><span>평탄 · 엣지 · 코너 · 창을 밀어 보기</span></a>
+  <a href="#harris"><b>06 Harris 코너 검출</b><span>SSD · 2차 모멘트 행렬 · 고윳값 · R 점수</span></a>
+  <a href="#invariance"><b>07 불변성과 스케일</b><span>밝기 · 이동 · 회전에는 강하고 스케일에는 약하다</span></a>
+  <a href="#blob"><b>08 블롭 검출</b><span>LoG · 스케일 정규화 · 특성 스케일 · DoG</span></a>
+  <a href="#covariant"><b>09 공변 · 불변</b><span>용어 구분 · 아핀 적응 · 정규화</span></a>
+  <a href="#codes"><b>10 실습 · 과제 연결</b><span>OpenCV 함수 정리 · 4주차 · 과제와의 연결</span></a>
+</div>
+</section>
+
+<div class="matbar">
+  <p class="tagline">5주차 강의 · Local Features Detection</p>
+  <h2>05. Local Features Detection</h2>
+  <p>92페이지 · Local Features → Edge → Line(Hough) → Corner(Harris) → Blob(LoG · DoG) 순서입니다.</p>
+  <div class="acts">
+    <a class="primary" href="pdf-viewer.html?doc=cv-w05-local-features">뷰어로 보기</a>
+    <a href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week05-local-features.pdf" download="컴퓨터비전_5주차_Local_Feature_Detection.pdf">⬇ 다운로드</a>
+  </div>
+</div>
+
+<!-- ===================== 01 ===================== -->
+<section class="sec" id="local">
+  <div class="sec-head"><span class="sec-badge">01</span><h2 class="sec-title">로컬 특징이란 무엇이고 왜 필요한가<small>교안 3~10p · 이번 학기 5~7주차를 관통하는 뼈대</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>4 · 5 · 9 · 10p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-04-why-match.jpg" alt="교안 4p — 특징 추출 → 매칭 → 정렬의 3단계"><figcaption><b>4p</b> 특징 추출 → 매칭 → 정렬의 3단계</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-05-mars-sift.jpg" alt="교안 5p — 화성 탐사선 사진의 SIFT 매칭"><figcaption><b>5p</b> 화성 탐사선 사진의 SIFT 매칭</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-09-components.jpg" alt="교안 9p — 검출 · 기술 · 매칭"><figcaption><b>9p</b> 검출 · 기술 · 매칭</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-10-taxonomy.jpg" alt="교안 10p — 엣지 · 직선 · 코너 · 블롭 — 이번 주차의 지도"><figcaption><b>10p</b> 엣지 · 직선 · 코너 · 블롭 — 이번 주차의 지도</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>왜 특징을 뽑는가 — 두 사진을 이어 붙이려면</h3>
+  <p>파노라마를 만들 때를 생각해 보자. 두 사진을 겹치려면 <b>같은 지점을 가리키는 짝</b>을 찾아야 한다. 픽셀 전체를 하나하나 비교하면 느리고, 밝기가 조금만 달라져도 실패한다.
+  그래서 <b>① 사진마다 눈에 띄는 지점을 뽑고(추출) → ② 두 사진의 지점끼리 짝을 짓고(매칭) → ③ 그 짝으로 사진을 정렬</b>한다(교안 4p). 화성 탐사선 사진에서 SIFT로 찾은 매칭(5p)이 바로 그 예다.</p>
+  <p>응용은 여기서 끝나지 않는다 — <b>이미지 매칭 · 파노라마 정합 · 3차원 복원 · 모션 추적(AR) · 물체 인식 · 이미지 검색 · 로봇 내비게이션</b>이 모두 같은 도구 위에 서 있다(교안 7p).</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>로컬 특징의 장점 네 가지 (8p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>장점</th><th>무슨 뜻인가</th></tr></thead>
+    <tbody>
+      <tr><td><b>Locality</b><br><small>국소성</small></td><td>특징이 <b>작은 영역</b>에만 의존하므로, 물체가 일부 <span class="term" tabindex="0" data-tip="occlusion. 다른 물체에 가려져 보이지 않는 것.">가려지거나(occlusion)</span> 배경이 지저분해도(clutter) 나머지 특징은 살아남는다</td></tr>
+      <tr><td><b>Quantity</b><br><small>다량</small></td><td>사진 한 장에서 <b>수백~수천 개</b>가 나온다 — 몇 개가 틀려도 전체 결과는 버틴다</td></tr>
+      <tr><td><b>Distinctiveness</b><br><small>변별력</small></td><td>각 특징이 충분히 구별되어 <b>대규모 데이터베이스</b>에서도 물체를 식별할 수 있다</td></tr>
+      <tr><td><b>Efficiency</b><br><small>효율</small></td><td>계산이 가벼워 <b>실시간</b> 처리가 가능하다</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>세 단계 — 이번 주차는 그중 &lsquo;검출&rsquo;만 한다 (9p)</h3>
+  <div class="flow">
+    <div class="fl"><b>① 검출 Detection</b><span>관심점(interest point)이 <b>어디</b>에 있는지 찾는다 — <b>5주차</b></span></div>
+    <div class="fl"><b>② 기술 Description</b><span>각 관심점 <b>주변을 숫자 벡터</b>로 요약한다 <span class="tex">\mathbf{x}_1=[x_1^{(1)},\dots,x_d^{(1)}]</span> — <b>6주차</b></span></div>
+    <div class="fl"><b>③ 매칭 Matching</b><span>두 사진의 기술자를 비교해 <b>같은 지점끼리 짝</b>짓는다 — <b>7주차</b></span></div>
+  </div>
+  <p>즉 이번 주는 &ldquo;<b>어디를 볼 것인가</b>&rdquo;만 정하고, &ldquo;그곳이 어떻게 생겼는가&rdquo;(기술자)와 &ldquo;어느 것과 같은가&rdquo;(매칭)는 다음 두 주차의 몫이다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>네 종류의 로컬 특징 (10p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>특징</th><th>정의</th><th>찾는 방법</th><th>이 페이지</th></tr></thead>
+    <tbody>
+      <tr><td><b>엣지</b> Edge</td><td>밝기가 <b>급격히 변하는 경계</b></td><td>미분(이미지 그래디언트) → 차분 연산자</td><td><a class="ext" href="#edge">02</a> · <a class="ext" href="#canny">03</a></td></tr>
+      <tr><td><b>직선</b> Line</td><td>엣지 점들이 <b>일직선</b>으로 늘어선 것</td><td>허프 변환</td><td><a class="ext" href="#hough">04</a></td></tr>
+      <tr><td><b>코너</b> Corner</td><td><b>어느 방향으로 움직여도</b> 밝기가 크게 변하는 점</td><td>Harris 검출기</td><td><a class="ext" href="#corner">05</a> · <a class="ext" href="#harris">06</a></td></tr>
+      <tr><td><b>블롭</b> Blob</td><td>주변과 구별되는 <b>덩어리 영역</b></td><td>특성 스케일 찾기 (LoG · DoG)</td><td><a class="ext" href="#blob">08</a></td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>&ldquo;좋은 특징&rdquo;의 조건 — 이 절의 숨은 기준</h3>
+  <p>앞으로 나올 모든 검출기는 결국 두 가지를 잘하려고 애쓴다.</p>
+  <p><b>① 반복성(repeatability)</b> — 같은 장면을 <b>다른 각도 · 다른 밝기 · 다른 거리</b>에서 찍어도 <b>같은 지점</b>이 다시 검출되어야 한다. 이것이 <a class="ext" href="#invariance">07 불변성</a>에서 따지는 성질이다.</p>
+  <p><b>② 변별력(distinctiveness)</b> — 검출된 지점의 주변 모습이 <b>다른 지점과 충분히 달라야</b> 매칭에서 헷갈리지 않는다. 하늘 한가운데 점은 반복성은 좋아도 변별력이 없다.</p>
+  <p>이 기준으로 보면 &ldquo;왜 평탄한 곳이나 엣지 위의 점이 아니라 <b>코너</b>인가&rdquo;가 자연스럽게 설명된다 — <a class="ext" href="#corner">05</a>에서 바로 이어진다.</p>
+</div>
+</section>
+
+<!-- ===================== 02 ===================== -->
+<section class="sec" id="edge">
+  <div class="sec-head"><span class="sec-badge">02</span><h2 class="sec-title">엣지 검출 — 미분으로 경계를 찾는다<small>교안 11~20p · 3주차 선형 필터가 그대로 쓰인다</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>12 · 13 · 14 · 15 · 16 · 17 · 18 · 19 · 20p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-12-edge-derivative.jpg" alt="교안 12p — 엣지 = 밝기 함수의 급변 → 1차 미분의 극값"><figcaption><b>12p</b> 엣지 = 밝기 함수의 급변 → 1차 미분의 극값</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-13-finite-diff.jpg" alt="교안 13p — 디지털 영상의 미분 = 유한 차분 = 선형 필터"><figcaption><b>13p</b> 디지털 영상의 미분 = 유한 차분 = 선형 필터</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-14-partial.jpg" alt="교안 14p — x · y 방향 편미분 마스크"><figcaption><b>14p</b> x · y 방향 편미분 마스크</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-15-gradient.jpg" alt="교안 15p — 그래디언트의 크기와 방향"><figcaption><b>15p</b> 그래디언트의 크기와 방향</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-16-compass.jpg" alt="교안 16p — 8방향 컴퍼스 마스크"><figcaption><b>16p</b> 8방향 컴퍼스 마스크</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-17-edge-steps.jpg" alt="교안 17p — 필터링 → 강조 → 검출 3단계"><figcaption><b>17p</b> 필터링 → 강조 → 검출 3단계</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-18-prewitt.jpg" alt="교안 18p — Prewitt 연산자 (임계값 130)"><figcaption><b>18p</b> Prewitt 연산자 (임계값 130)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-19-sobel.jpg" alt="교안 19p — Sobel 연산자 (임계값 130)"><figcaption><b>19p</b> Sobel 연산자 (임계값 130)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-20-roberts.jpg" alt="교안 20p — Robert's cross 연산자 (임계값 40)"><figcaption><b>20p</b> Robert's cross 연산자 (임계값 40)</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>엣지의 정의 — &ldquo;밝기가 빠르게 변하는 자리&rdquo;</h3>
+  <p>사진 한 줄(수평 스캔라인)의 밝기를 그래프로 그려 보면, 물체의 경계에서 값이 <b>계단처럼 뚝 떨어지거나 올라간다</b>. 이 급변 지점이 엣지다.
+  그 줄을 <b>미분</b>하면 급변하는 곳에서 값이 크게 튀므로, <b>엣지는 1차 미분의 극값(extrema)에 대응</b>한다(12p).</p>
+  <div class="fx">
+    <p class="fx-lab">디지털 영상은 어떻게 미분하나 (13p)</p>
+    <div class="tex-d">\frac{\partial f}{\partial x} \;\approx\; f(x+1,\,y) - f(x,\,y)</div>
+    <p class="fx-note">연속 함수를 복원해 미분하는 방법(Option 1)도 있지만, 실제로는 <b>이웃 픽셀의 차이(유한 차분, finite difference)</b>를 쓴다(Option 2).
+    그리고 이 차분은 <b><span class="tex">[-1\;\;1]</span> 커널을 씌우는 선형 필터</b>와 똑같다 — <a class="ext" href="computer-vision-week03.html">3주차의 합성곱</a>이 여기서 그대로 재활용된다. 세로 방향 미분은 같은 커널을 세로로 세운 것이다(14p).</p>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>이미지 그래디언트 — 크기와 방향 (15p)</h3>
+  <div class="fx">
+    <p class="fx-lab">두 방향의 편미분을 묶은 벡터</p>
+    <div class="tex-d">\nabla f=\left[\frac{\partial f}{\partial x},\;\frac{\partial f}{\partial y}\right], \qquad
+\lVert\nabla f\rVert=\sqrt{\left(\tfrac{\partial f}{\partial x}\right)^{2}+\left(\tfrac{\partial f}{\partial y}\right)^{2}}, \qquad
+\theta=\tan^{-1}\!\left(\frac{\partial f/\partial y}{\partial f/\partial x}\right)</div>
+    <p class="fx-note"><b>그래디언트는 밝기가 가장 빠르게 증가하는 방향</b>을 가리킨다. 그 <b>크기(magnitude)</b>가 엣지의 세기이고, <b>방향</b>은 <span class="tex">\theta</span>로 주어진다.</p>
+  </div>
+  <p><b>주의</b> — 그래디언트 방향은 <b>엣지 선과 나란한 방향이 아니라 엣지를 가로지르는 방향</b>이다. 세로 엣지(왼쪽은 어둡고 오른쪽은 밝은 경계)에서 그래디언트는 <b>가로 방향</b>을 향한다. <a class="ext" href="#canny">03 비최대 억제</a>가 이 성질 위에 서 있다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>컴퍼스 마스크와 엣지 검출의 3단계 (16 · 17p)</h3>
+  <p><b>컴퍼스 그래디언트 마스크</b>는 나침반의 8방향에 맞춘 마스크 8개를 모두 걸어 보고, <b>가장 큰 응답</b>을 그 픽셀의 엣지 세기로, <b>그 마스크의 방향</b>을 엣지 방향으로 삼는 방법이다.</p>
+  <div class="flow">
+    <div class="fl"><b>① 필터링 Filtering</b><span>잡음에 강해지도록 먼저 <b>부드럽게</b> 만든다 — 다만 <b>엣지 세기와 잡음 감소는 맞바꾸는 관계</b>다(블러를 세게 할수록 엣지도 약해진다)</span></div>
+    <div class="fl"><b>② 강조 Enhancement</b><span>국소 밝기 변화가 큰 픽셀을 <b>도드라지게</b> 만든다 (미분 연산)</span></div>
+    <div class="fl"><b>③ 검출 Detection</b><span>임계값을 넘는 <b>강한 엣지만</b> 남긴다</span></div>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>세 가지 차분 연산자 (18~20p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>연산자</th><th>커널 (x 방향)</th><th>특징</th><th>교안 예시 임계값</th></tr></thead>
+    <tbody>
+      <tr><td><b>Prewitt</b></td><td><code>[-1 0 1; -1 0 1; -1 0 1]</code></td><td>세 줄을 <b>같은 무게</b>로 평균 — 단순하고 빠름</td><td>130</td></tr>
+      <tr><td><b>Sobel</b></td><td><code>[-1 0 1; -2 0 2; -1 0 1]</code></td><td>가운데 줄에 <b>가중치 2</b> — 약한 가우시안 블러가 섞여 잡음에 더 강함. <b>가장 널리 쓰인다</b></td><td>130</td></tr>
+      <tr><td><b>Roberts cross</b></td><td><code>[1 0; 0 -1]</code> / <code>[0 1; -1 0]</code></td><td><b>2×2 대각선</b> 차분 — 가장 가볍고 반응이 빠르지만 잡음에 취약</td><td>40</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Roberts의 임계값만 40으로 낮은 이유는 커널이 작아 <b>응답 자체가 작게</b> 나오기 때문이다. 즉 <b>임계값은 연산자마다 다시 정해야 하는 값</b>이지 고정 상수가 아니다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>왜 미분 전에 블러를 하나 — 미분은 잡음을 키운다</h3>
+  <p>미분은 <b>이웃 값의 차이</b>다. 잡음은 이웃끼리 값이 제멋대로 튀는 성분이므로, 차이를 구하면 <b>잡음이 오히려 증폭</b>된다. 그래서 엣지 검출의 1단계가 항상 <b>스무딩</b>이다.</p>
+  <p>그런데 &ldquo;블러 → 미분&rdquo;은 합성곱의 성질 덕분에 <b>한 번에</b> 할 수 있다.</p>
+  <div class="fx">
+    <div class="tex-d">\frac{\partial}{\partial x}\bigl(G_\sigma * I\bigr)=\left(\frac{\partial G_\sigma}{\partial x}\right) * I</div>
+    <p class="fx-note">미분을 이미지가 아니라 <b>가우시안 커널에 미리</b> 적용해 두면, 필터 한 번으로 &lsquo;부드럽게 + 미분&rsquo;이 끝난다. 이것이 <b>가우시안의 미분(Derivative of Gaussian, DoG 필터)</b>이고 <a class="ext" href="#canny">Canny</a>의 1단계가 바로 이것이다.</p>
+  </div>
+  <p><span class="tex">\sigma</span>를 키우면 잡음에는 강해지지만 <b>가는 엣지가 뭉개지고 위치가 부정확</b>해진다. 4주차에서 본 &ldquo;<b>스케일마다 보이는 것이 다르다</b>&rdquo;는 이야기가 엣지에서도 똑같이 나타난다.</p>
+</div>
+</section>
+
+<!-- ===================== 03 ===================== -->
+<section class="sec" id="canny">
+  <div class="sec-head"><span class="sec-badge">03</span><h2 class="sec-title">Canny 엣지 검출기<small>교안 22~29p · 지금도 표준으로 쓰이는 4단계 절차</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>24 · 25 · 26 · 27 · 28 · 29p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-24-canny-magnitude.jpg" alt="교안 24p — 그래디언트 크기 — 임계값만 쓰면 능선이 두껍다"><figcaption><b>24p</b> 그래디언트 크기 — 임계값만 쓰면 능선이 두껍다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-25-canny-nms.jpg" alt="교안 25p — 비최대 억제 — 그래디언트 방향으로 p · q · r 비교"><figcaption><b>25p</b> 비최대 억제 — 그래디언트 방향으로 p · q · r 비교</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-26-canny-tangent.jpg" alt="교안 26p — 엣지 접선으로 다음 점 예측"><figcaption><b>26p</b> 엣지 접선으로 다음 점 예측</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-27-canny-broken.jpg" alt="교안 27p — 임계값 하나면 엣지가 끊긴다"><figcaption><b>27p</b> 임계값 하나면 엣지가 끊긴다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-28-canny-hysteresis.jpg" alt="교안 28p — 이력 임계값 — 높은 값으로 시작, 낮은 값으로 연결"><figcaption><b>28p</b> 이력 임계값 — 높은 값으로 시작, 낮은 값으로 연결</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-29-canny-result.jpg" alt="교안 29p — strong · weak · hysteresis 결과 비교"><figcaption><b>29p</b> strong · weak · hysteresis 결과 비교</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>Canny가 풀려는 세 가지 문제 (22p)</h3>
+  <ul class="ul">
+    <li>① <b>스케일마다 그래디언트 크기가 다르다</b> — 어느 스케일(σ)을 골라야 하나?</li>
+    <li>② <b>그래디언트가 큰 영역이 두꺼운 띠</b>로 나온다 — 그중 어느 점이 진짜 엣지인가?</li>
+    <li>③ 남은 점들을 <b>어떻게 이어서 곡선</b>으로 만드나?</li>
+  </ul>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>네 단계 (23p)</h3>
+  <div class="flow">
+    <div class="fl"><b>① 가우시안 미분으로 필터링</b><span>스무딩과 미분을 한 번에 — 위 02의 <span class="tex">\partial G_\sigma/\partial x</span></span></div>
+    <div class="fl"><b>② 크기와 방향 계산</b><span>각 픽셀의 그래디언트 크기 <span class="tex">\lVert\nabla f\rVert</span>와 방향 <span class="tex">\theta</span></span></div>
+    <div class="fl"><b>③ 비최대 억제 (Non-maximum suppression)</b><span>두꺼운 능선을 <b>한 픽셀 폭</b>으로 깎는다</span></div>
+    <div class="fl"><b>④ 이력 임계값 (Hysteresis thresholding)</b><span>두 개의 임계값으로 <b>시작하고 이어 붙인다</b></span></div>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>③ 비최대 억제 — 능선의 꼭대기만 남긴다 (25~27p)</h3>
+  <p>어떤 픽셀 <span class="tex">q</span>가 엣지인지 판정할 때, <b>그래디언트 방향으로 앞뒤에 있는 두 픽셀</b> <span class="tex">p</span>와 <span class="tex">r</span>의 값과 비교한다.
+  <span class="tex">q</span>가 <b>둘 다보다 크면</b> 국소 최대이므로 남기고, 아니면 0으로 지운다. 이렇게 하면 두껍게 번진 엣지 띠가 <b>한 픽셀 두께의 선</b>이 된다.</p>
+  <p>교안은 이어서 <b>엣지 접선(tangent)을 세워 다음 점을 예측</b>하는 그림(26p)과, 임계값 때문에 <b>중간이 끊긴 엣지</b>(27p)를 보여 준다 — 그 끊김을 메우는 것이 다음 단계다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>④ 이력 임계값 — 임계값을 둘 쓰는 이유 (28 · 29p)</h3>
+  <p><b>높은 임계값</b>을 넘는 픽셀만 엣지의 <b>시작점</b>으로 삼고, 거기서 이어지는 픽셀은 <b>낮은 임계값</b>만 넘으면 계속 엣지로 인정한다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>방식</th><th>결과 (29p)</th></tr></thead>
+    <tbody>
+      <tr><td>높은 임계값만</td><td><b>강한 엣지</b>만 남지만 곳곳이 <b>끊긴다</b></td></tr>
+      <tr><td>낮은 임계값만</td><td>끊기지는 않지만 <b>잡음까지</b> 잔뜩 살아난다</td></tr>
+      <tr><td><b>이력 임계값</b></td><td>강한 점에서 시작해 약한 점으로 <b>이어 붙여</b> — 둘의 장점만 취한다</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>hysteresis라는 말과 OpenCV에서의 사용</h3>
+  <p><b>이력(hysteresis)</b>은 원래 물리 용어로 &ldquo;<b>지금 상태가 과거 이력에 따라 달라지는</b> 현상&rdquo;을 뜻한다. 같은 밝기의 픽셀이라도 <b>강한 엣지에 이어져 있느냐</b>에 따라 엣지가 되기도 하고 버려지기도 하므로 이 이름이 붙었다.</p>
+  <pre class="code">edges = cv2.Canny(img, threshold1=<span class="cm">100</span>, threshold2=<span class="cm">200</span>)   <span class="cm"># low, high</span>
+<span class="cm"># 권장 비율 high : low = 2:1 ~ 3:1  (Canny 논문의 경험칙)</span>
+<span class="cm"># apertureSize = Sobel 커널 크기(기본 3), L2gradient=True 면 √(Gx²+Gy²) 정확히 계산</span></pre>
+  <p>임계값을 <b>둘 다 올리면</b> 엣지가 줄고, <b>둘 다 내리면</b> 잡음이 는다. 비율은 유지한 채 함께 조정하는 것이 보통이다.</p>
+</div>
+</section>
+
+<!-- ===================== 04 ===================== -->
+<section class="sec" id="hough">
+  <div class="sec-head"><span class="sec-badge">04</span><h2 class="sec-title">허프 변환 — 엣지 점들을 모아 직선으로<small>교안 30~36p · 잡음과 가림에 강한 &lsquo;투표&rsquo; 방식</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>31 · 32 · 33 · 34 · 35 · 36p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-31-hough-ab.jpg" alt="교안 31p — (a, b) 표현 — 한 점을 지나는 직선은 무수히 많다"><figcaption><b>31p</b> (a, b) 표현 — 한 점을 지나는 직선은 무수히 많다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-32-hough-ab-dual.jpg" alt="교안 32p — 이미지 공간의 점 ↔ 파라미터 공간의 직선"><figcaption><b>32p</b> 이미지 공간의 점 ↔ 파라미터 공간의 직선</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-33-hough-polar.jpg" alt="교안 33p — (ρ, θ) 극좌표 표현"><figcaption><b>33p</b> (ρ, θ) 극좌표 표현</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-34-hough-sinusoid.jpg" alt="교안 34p — 한 점 → ρθ 평면의 사인 곡선"><figcaption><b>34p</b> 한 점 → ρθ 평면의 사인 곡선</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-35-hough-accum.jpg" alt="교안 35p — 여러 곡선이 만나는 곳이 직선의 파라미터"><figcaption><b>35p</b> 여러 곡선이 만나는 곳이 직선의 파라미터</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-36-hough-result.jpg" alt="교안 36p — 누적 배열과 가장 뚜렷한 직선 20개"><figcaption><b>36p</b> 누적 배열과 가장 뚜렷한 직선 20개</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>무엇인가 (30p)</h3>
+  <p><b>허프 변환(Hough Transform)</b>은 이미지 안에서 <b>특정 모양</b>을 분리해 내는 기법이다. 여기서는 <b>직선의 위치</b>를 찾는 데 쓰지만 <b>원이나 다른 파라미터 곡선</b>에도 쓸 수 있다.
+  가장 큰 장점은 <b>잡음과 부분 가림(partial occlusion)에도 강하다</b>는 점이다 — 선의 일부가 지워져도 나머지 점들의 투표로 찾아낸다.</p>
+  <p>전제는 <b>이미 엣지 검출과 임계값 처리를 마쳤다</b>는 것이다. 즉 &ldquo;어떤 물체의 경계일 수 있는 <b>n개의 점</b>&rdquo;이 주어져 있고, 그중 <b>일직선 위에 놓인 집합</b>을 찾는 문제다(31p).</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>(a, b) 표현 — 점과 직선이 뒤바뀐다 (31 · 32p)</h3>
+  <p>한 점 <span class="tex">(x_i, y_i)</span>를 지나는 직선 <span class="tex">y=ax+b</span>는 <b>무수히 많다</b>. 그런데 식을 <span class="tex">a, b</span>에 대해 다시 쓰면</p>
+  <div class="fx">
+    <div class="tex-d">y_i = a x_i + b \quad\Longleftrightarrow\quad b = -x_i\,a + y_i</div>
+    <p class="fx-note"><b>이미지 공간의 한 점</b>이 <b>파라미터(a, b) 공간에서는 하나의 직선</b>이 된다. 반대로 이미지 공간에서 <b>같은 직선 위에 놓인 점들</b>은, 파라미터 공간에서 <b>한 점에서 모두 만나는 직선들</b>이 된다. 그 교점 <span class="tex">(a^*, b^*)</span>가 곧 찾는 직선이다.</p>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>(ρ, θ) 극좌표 표현 — 실제로 쓰는 것은 이쪽 (33~36p)</h3>
+  <div class="fx">
+    <div class="tex-d">x\cos\theta + y\sin\theta = \rho</div>
+    <p class="fx-note"><span class="tex">\rho</span>는 원점에서 직선까지의 <b>수직 거리</b>, <span class="tex">\theta</span>는 그 수선이 x축과 이루는 <b>각도</b>다.
+    이미지의 점 <span class="tex">(x_i,y_i)</span> 하나는 <span class="tex">\rho\theta</span> 평면에서 <b>사인 곡선</b>이 되고, 한 직선 위의 <b>M개의 점은 M개의 곡선</b>이 되어 <span class="tex">(\rho_i,\theta_j)</span> 한 점에서 만난다.</p>
+  </div>
+  <p><b>누적 배열(accumulator)</b>은 <span class="tex">\rho\theta</span> 평면을 격자로 나눈 <b>투표함</b>이다. 엣지 점마다 자기 곡선이 지나는 칸에 <b>+1</b>씩 투표하고, 마지막에 <b>표를 많이 받은 칸</b>을 고르면 그것이 직선의 파라미터다. 교안 36p는 복도 사진에서 Sobel 엣지 → 누적 배열 → <b>가장 뚜렷한 직선 20개</b>를 뽑는 과정을 보여 준다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>왜 (a, b)를 버리고 (ρ, θ)를 쓰나 — 수직선 문제</h3>
+  <p><span class="tex">y=ax+b</span>에서 <b>수직선</b>은 기울기 <span class="tex">a=\infty</span>다. 파라미터 공간이 무한히 커져 <b>격자로 나눌 수가 없다</b>.
+  반면 <span class="tex">(\rho,\theta)</span>에서는 <span class="tex">\theta \in [0,\pi)</span>, <span class="tex">\rho \in [-D, D]</span>(D는 이미지 대각선 길이)로 <b>범위가 유한</b>하다. 그래서 실제 구현은 모두 극좌표를 쓴다.</p>
+  <pre class="code">edges = cv2.Canny(img, 50, 150)
+lines = cv2.HoughLines(edges, rho=<span class="cm">1</span>, theta=np.pi/<span class="cm">180</span>, threshold=<span class="cm">150</span>)
+<span class="cm"># rho, theta = 누적 배열의 칸 크기(해상도). 잘게 나눌수록 정밀하지만 표가 분산된다</span>
+<span class="cm"># threshold = 직선으로 인정할 최소 득표수 → 높이면 확실한 직선만</span>
+
+linesP = cv2.HoughLinesP(edges, 1, np.pi/180, 80,
+                         minLineLength=<span class="cm">50</span>, maxLineGap=<span class="cm">10</span>)   <span class="cm"># 선분의 끝점까지 반환</span></pre>
+  <p><b>칸 크기의 딜레마</b> — 격자를 너무 <b>잘게</b> 나누면 같은 직선의 표가 이웃 칸으로 흩어져 아무 칸도 임계값을 못 넘고, 너무 <b>굵게</b> 나누면 서로 다른 직선이 한 칸에 뭉친다. 허프 변환에서 실패의 대부분은 이 해상도 설정 문제다.</p>
+</div>
+</section>
+
+<!-- ===================== 05 ===================== -->
+<section class="sec" id="corner">
+  <div class="sec-head"><span class="sec-badge">05</span><h2 class="sec-title">코너란 무엇인가<small>교안 37~40p · 창을 밀어 보면 안다</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>39p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-39-flat-edge-corner.jpg" alt="교안 39p — 평탄 · 엣지 · 코너 — 창을 밀었을 때의 변화"><figcaption><b>39p</b> 평탄 · 엣지 · 코너 — 창을 밀었을 때의 변화</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>기본 아이디어 — &ldquo;흔하지 않은 곳&rdquo;을 찾아라 (38 · 39p)</h3>
+  <p>좋은 특징은 <b>다른 사진에서도 헷갈리지 않고 짝을 찾을 수 있는(unambiguous) 지점</b>이다. 그런 곳을 어떻게 알아볼까? 교안의 답은 <b>작은 창(window)을 얹고 이리저리 밀어 보는 것</b>이다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>유형</th><th>창을 밀면</th><th>매칭에 쓸 수 있나</th></tr></thead>
+    <tbody>
+      <tr><td><b>평탄 (flat)</b></td><td><b>어느 방향으로 밀어도</b> 변화가 없다</td><td>✕ — 어디에 갖다 놔도 똑같아 위치를 특정할 수 없다</td></tr>
+      <tr><td><b>엣지 (edge)</b></td><td><b>엣지 방향으로는</b> 변화가 없고, 가로지르는 방향으로만 변한다</td><td>△ — 선을 따라 미끄러지므로 <b>한 방향의 위치가 불확실</b>하다</td></tr>
+      <tr><td><b>코너 (corner)</b></td><td><b>모든 방향으로</b> 크게 변한다</td><td>◎ — 위치가 한 점으로 <b>고정</b>된다</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>코너를 찾는 네 단계 (40p)</h3>
+  <div class="flow">
+    <div class="fl"><b>① 그래디언트 계산</b><span>모든 픽셀에서 <span class="tex">I_x, I_y</span>를 구한다 (02에서 한 그 미분)</span></div>
+    <div class="fl"><b>② H 행렬 구성</b><span>그래디언트 성분들로 <b>2×2 행렬</b>을 만든다</span></div>
+    <div class="fl"><b>③ 고유벡터 · 고윳값 계산</b><span>그 행렬의 <span class="tex">\lambda_1, \lambda_2</span>를 구한다</span></div>
+    <div class="fl"><b>④ 임계값 적용</b><span>고윳값 조건을 만족하는 점을 <b>코너</b>로 판정한다</span></div>
+  </div>
+  <p>이 네 단계를 구체적인 식으로 채운 것이 다음 절의 <b>Harris 코너 검출기</b>다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>엣지 위의 점이 왜 나쁜가 — &lsquo;구멍 문제&rsquo;</h3>
+  <p>빨대를 통해 긴 선 하나를 본다고 해 보자. 선이 <b>길이 방향으로 미끄러져도</b> 구멍 속 그림은 똑같아 보인다. 그래서 선 위의 한 점만 보고는 <b>그 점이 선의 어디쯤인지</b> 알 수 없다.
+  이것이 <span class="term" tabindex="0" data-tip="aperture problem. 좁은 창으로 볼 때 엣지를 따라가는 방향의 이동을 알 수 없는 현상. 모션 추적에서 특히 문제가 된다.">구멍 문제(aperture problem)</span>이고, 모션 추적에서 &ldquo;코너를 추적하라&rdquo;는 규칙이 나오는 이유다.
+  코너는 서로 다른 방향의 엣지 <b>두 개가 만나는 곳</b>이라 두 방향 모두에서 위치가 결정된다.</p>
+</div>
+</section>
+
+<!-- ===================== 06 ===================== -->
+<section class="sec" id="harris">
+  <div class="sec-head"><span class="sec-badge">06</span><h2 class="sec-title">Harris 코너 검출<small>교안 41~59p · SSD → 2차 모멘트 행렬 → 고윳값</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>42 · 43 · 46 · 47 · 48 · 49 · 52 · 54 · 56 · 57 · 58 · 59p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-42-window-ssd.jpg" alt="교안 42p — 창을 (u, v)만큼 밀었을 때의 SSD 오차 E(u,v)"><figcaption><b>42p</b> 창을 (u, v)만큼 밀었을 때의 SSD 오차 E(u,v)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-43-taylor.jpg" alt="교안 43p — 작은 이동 가정 — 테일러 1차 근사"><figcaption><b>43p</b> 작은 이동 가정 — 테일러 1차 근사</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-46-h-matrix.jpg" alt="교안 46p — 2차 모멘트 행렬 H"><figcaption><b>46p</b> 2차 모멘트 행렬 H</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-47-quadratic.jpg" alt="교안 47p — E(u,v)를 2차 형식으로 근사"><figcaption><b>47p</b> E(u,v)를 2차 형식으로 근사</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-48-edge-surface.jpg" alt="교안 48p — 가로 엣지 · 세로 엣지일 때의 오차 표면"><figcaption><b>48p</b> 가로 엣지 · 세로 엣지일 때의 오차 표면</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-49-svd-ellipse.jpg" alt="교안 49p — 고유벡터 · 고윳값과 타원"><figcaption><b>49p</b> 고유벡터 · 고윳값과 타원</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-52-ellipse.jpg" alt="교안 52p — H를 타원으로 시각화"><figcaption><b>52p</b> H를 타원으로 시각화</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-54-eigen-classify.jpg" alt="교안 54p — 고윳값으로 평탄 · 엣지 · 코너 분류"><figcaption><b>54p</b> 고윳값으로 평탄 · 엣지 · 코너 분류</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-56-harris-response.jpg" alt="교안 56p — Harris R 점수와 Shi-Tomasi"><figcaption><b>56p</b> Harris R 점수와 Shi-Tomasi</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-57-harris-example1.jpg" alt="교안 57p — 코너 응답 맵 (빨강이 높음)"><figcaption><b>57p</b> 코너 응답 맵 (빨강이 높음)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-58-harris-example2.jpg" alt="교안 58p — 임계값 통과 후 국소 최대만 남기기"><figcaption><b>58p</b> 임계값 통과 후 국소 최대만 남기기</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-59-harris-result.jpg" alt="교안 59p — 최종 검출된 코너"><figcaption><b>59p</b> 최종 검출된 코너</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>① 창을 밀었을 때의 변화량을 식으로 (41 · 42p)</h3>
+  <div class="fx">
+    <p class="fx-lab">SSD(Sum of Squared Differences) 오차</p>
+    <div class="tex-d">E(u,v)=\sum_{(x,y)\in W} \bigl[\,I(x+u,\;y+v) - I(x,\;y)\,\bigr]^{2}</div>
+    <p class="fx-note">창 <span class="tex">W</span> 안의 모든 픽셀에 대해 <b>민 뒤와 밀기 전의 차이를 제곱해 더한 값</b>이다. 우리는 이 값이 <b>모든 (u, v)에서 크기를</b> 바란다 — 그래야 코너다.
+    문제는 모든 픽셀마다 모든 이동량 <span class="tex">(u,v)</span>에 대해 이 값을 <b>정확히 계산하기엔 너무 느리다</b>는 것(42p).</p>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>② 작은 이동 가정과 2차 모멘트 행렬 (43~47p)</h3>
+  <p>이동 <span class="tex">(u,v)</span>가 <b>작다면</b> 테일러 1차 근사를 쓸 수 있다.</p>
+  <div class="fx">
+    <div class="tex-d">I(x+u,\,y+v)\;\approx\; I(x,y) + I_x u + I_y v</div>
+    <p class="fx-note">여기서 <span class="tex">I_x=\partial I/\partial x</span>, <span class="tex">I_y=\partial I/\partial y</span>. 이것을 SSD에 넣으면 <span class="tex">I(x,y)</span>가 상쇄되어</p>
+    <div class="tex-d">E(u,v)\;\approx\;\sum_W (I_x u + I_y v)^2 \;=\; \begin{bmatrix}u & v\end{bmatrix} H \begin{bmatrix}u \\ v\end{bmatrix}, \qquad
+H=\sum_W \begin{bmatrix} I_x^2 & I_x I_y \\ I_x I_y & I_y^2 \end{bmatrix}</div>
+    <p class="fx-note">이 <span class="tex">H</span>가 <b>2차 모멘트 행렬(second moment matrix)</b>이다. 즉 <b>창 안 그래디언트들의 공분산 행렬</b>을 구해 오차 표면에 <b>2차 곡면을 맞춘</b> 셈이다(47p).
+    중요한 것은 <b>단 한 번의 필터링으로 <span class="tex">I_x^2,\;I_y^2,\;I_xI_y</span>를 구해 두면 모든 (u, v)를 다시 계산할 필요가 없다</b>는 점이다 — 42p의 속도 문제가 여기서 풀린다.</p>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>③ 고윳값으로 읽는 법 — 타원 그림의 의미 (48~54p)</h3>
+  <p><span class="tex">H</span>는 대칭 행렬이므로 회전 <span class="tex">R</span>로 대각화된다.</p>
+  <div class="fx">
+    <div class="tex-d">H = R^{\top}\begin{bmatrix}\lambda_1 & 0 \\ 0 & \lambda_2\end{bmatrix}R</div>
+    <p class="fx-note"><span class="tex">E(u,v)=\text{const}</span>인 자리를 그리면 <b>타원</b>이 된다. 타원의 <b>축 방향은 고유벡터</b>, <b>축 길이는 고윳값</b>으로 정해진다(52p).
+    고윳값이 크다는 것은 <b>그 방향으로 밀었을 때 오차가 빠르게 커진다</b>, 즉 <b>그 방향으로 무늬가 뚜렷하다</b>는 뜻이다.</p>
+  </div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>고윳값 조건</th><th>오차 표면의 모양</th><th>판정</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tex">\lambda_1,\lambda_2</span> 둘 다 <b>작다</b></td><td>거의 평평 — 어느 방향으로도 변화 없음</td><td><b>평탄 영역</b></td></tr>
+      <tr><td><span class="tex">\lambda_2 \gg \lambda_1</span> (또는 반대)</td><td>한 방향으로만 깊은 골짜기</td><td><b>엣지</b></td></tr>
+      <tr><td>둘 다 <b>크고</b> <span class="tex">\lambda_1 \approx \lambda_2</span></td><td>모든 방향으로 급히 솟음</td><td><b>코너</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>그래서 <b>점수 함수는 &ldquo;작은 쪽 고윳값&rdquo;</b>이어야 한다 — 모든 방향에서 크려면 <b>가장 약한 방향</b>이 커야 하기 때문이다(53p).</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>④ 응답 함수와 임계값 (55 · 56p)</h3>
+  <div class="fx">
+    <p class="fx-lab">Harris &amp; Stephens (1988)</p>
+    <div class="tex-d">R = \det(H) - k\,\bigl(\mathrm{trace}\,H\bigr)^{2} = \lambda_1\lambda_2 - k(\lambda_1+\lambda_2)^2, \qquad k \approx 0.04 \sim 0.06</div>
+    <p class="fx-lab">Shi &amp; Tomasi (1994)</p>
+    <div class="tex-d">R = \min(\lambda_1,\;\lambda_2)</div>
+    <p class="fx-note"><span class="tex">R>0</span>이고 큰 값이면 <b>코너</b>, <span class="tex">R<0</span>이면 <b>엣지</b>, <span class="tex">\lvert R\rvert</span>가 작으면 <b>평탄</b>이다(56p).
+    마지막으로 <b>임계값을 넘는 점 중 국소 최대(local maximum)</b>인 것만 특징점으로 남긴다 — 한 코너에서 여러 점이 중복 검출되는 것을 막기 위해서다(55 · 58p).</p>
+  </div>
+  <p>교안 57~59p는 그 과정을 그림으로 보여 준다 — <b>코너 응답 맵</b>(빨강 = 높음) → <b>임계값 통과 점</b> → <b>국소 최대만 남긴 최종 코너</b>.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>왜 det와 trace로 바꿔 쓰나 — 고윳값을 직접 구하지 않으려고</h3>
+  <p>2×2 행렬의 고윳값은 이차방정식을 풀면 나오지만, <b>픽셀마다 제곱근을 계산</b>하는 것은 1988년 기준으로 비쌌다. 그런데</p>
+  <div class="fx">
+    <div class="tex-d">\det(H)=\lambda_1\lambda_2 = I_x^2 I_y^2 - (I_xI_y)^2, \qquad \mathrm{trace}(H)=\lambda_1+\lambda_2 = I_x^2 + I_y^2</div>
+    <p class="fx-note">둘 다 <b>행렬 성분만으로 바로</b> 구해진다. 그래서 Harris는 고윳값을 <b>구하지 않고도</b> 두 고윳값이 모두 큰지를 판정할 수 있게 <span class="tex">R=\det - k\,(\mathrm{trace})^2</span>를 설계했다.
+    <span class="tex">k</span>는 &ldquo;엣지를 얼마나 엄격히 걸러낼지&rdquo;를 정하는 상수로, 크면 코너가 적게 잡힌다.</p>
+  </div>
+  <pre class="code">gray = np.float32(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY))
+dst = cv2.cornerHarris(gray, blockSize=<span class="cm">2</span>, ksize=<span class="cm">3</span>, k=<span class="cm">0.04</span>)
+<span class="cm"># blockSize = 창 W 의 크기 / ksize = Sobel 커널 크기 / k = 위 식의 k</span>
+img[dst &gt; <span class="cm">0.01</span> * dst.max()] = [<span class="cm">0</span>, <span class="cm">0</span>, <span class="cm">255</span>]   <span class="cm"># 임계값 넘는 곳을 빨갛게</span>
+
+<span class="cm"># Shi-Tomasi — 좋은 코너 N개를 바로 뽑아 준다 (추적에 많이 쓴다)</span>
+pts = cv2.goodFeaturesToTrack(gray, maxCorners=<span class="cm">100</span>, qualityLevel=<span class="cm">0.01</span>, minDistance=<span class="cm">10</span>)</pre>
+</div>
+</section>
+
+<!-- ===================== 07 ===================== -->
+<section class="sec" id="invariance">
+  <div class="sec-head"><span class="sec-badge">07</span><h2 class="sec-title">Harris의 불변성 — 무엇에 강하고 무엇에 약한가<small>교안 60~64p · 스케일에서 무너진다, 그래서 블롭으로</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>60 · 62 · 63 · 64p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-60-invar-intensity.jpg" alt="교안 60p — 밝기 변화 — 덧셈에는 완전, 곱셈에는 부분적"><figcaption><b>60p</b> 밝기 변화 — 덧셈에는 완전, 곱셈에는 부분적</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-62-invar-rotation.jpg" alt="교안 62p — 회전 — 타원은 돌지만 고윳값은 그대로"><figcaption><b>62p</b> 회전 — 타원은 돌지만 고윳값은 그대로</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-63-invar-scale.jpg" alt="교안 63p — 확대하면 코너가 엣지로 보인다"><figcaption><b>63p</b> 확대하면 코너가 엣지로 보인다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-64-scale-idea.jpg" alt="교안 64p — 스케일 불변 검출의 아이디어"><figcaption><b>64p</b> 스케일 불변 검출의 아이디어</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>밝기 변화 (60p)</h3>
+  <p>밝기가 <span class="tex">I \rightarrow aI+b</span>로 바뀌는 경우를 생각하자.</p>
+  <ul class="ul">
+    <li><b>덧셈 <span class="tex">I+b</span></b>(전체가 밝아짐) — Harris는 <b>미분만</b> 쓰므로 상수는 미분에서 사라진다 → <b>완전히 불변</b></li>
+    <li><b>곱셈 <span class="tex">aI</span></b>(대비가 커짐) — 그래디언트도 <span class="tex">a</span>배가 되어 <b>R 값이 <span class="tex">a^4</span>배로 커진다</b>. 값 자체는 변하지만 <b>어느 점이 더 큰가</b>의 순서는 유지된다 → <b>부분적으로만 불변</b></li>
+  </ul>
+  <p>그래서 교안은 &ldquo;<b>partially invariant to affine intensity change</b>&rdquo;라고 적는다. <b>고정 임계값을 쓰면</b> 대비가 달라졌을 때 검출 개수가 확 바뀌므로, 실무에서는 <code>0.01 * dst.max()</code>처럼 <b>상대 임계값</b>을 쓴다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>이동과 회전 (61 · 62p)</h3>
+  <p><b>이동(translation)</b> — 창이 같이 움직이므로 코너의 위치도 <b>같이 따라 움직인다</b>. 즉 <b>공변(covariant)</b>이다.</p>
+  <p><b>회전(rotation)</b> — <span class="tex">H</span>의 타원은 이미지와 함께 <b>돌지만 모양(고윳값)은 그대로</b>다. 고윳값이 그대로이므로 <b>R 점수도 그대로</b>이고, 같은 코너가 다시 검출된다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>그런데 스케일에서 무너진다 (63p)</h3>
+  <p>같은 물체를 <b>확대</b>해서 찍으면 어떻게 될까? 원래 사진에서 <b>코너</b>로 보이던 뾰족한 모서리가, 확대된 사진에서는 <b>창 안에서 완만한 곡선</b>으로 보인다.
+  창 크기는 그대로인데 무늬만 커졌기 때문에 <b>&ldquo;모든 점이 엣지로 분류&rdquo;</b>되어 버린다. 즉 <b>Harris는 스케일 불변이 아니다</b>.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>해결의 방향 (64p)</h3>
+  <p>교안의 핵심 문장은 이것이다 — <b>&ldquo;위치와 스케일 <u>양쪽</u>에서 응답 함수 f가 국소 최대가 되는 스케일을 찾아라.&rdquo;</b>
+  창을 점점 키워 가며 매번 f를 계산하는 대신, <b>이미지를 줄여 가며(= <a class="ext" href="computer-vision-week04.html#gpyr">4주차의 가우시안 피라미드</a>) 같은 창으로</b> 훑으면 같은 효과를 훨씬 싸게 얻는다.</p>
+  <p>&ldquo;<b>그 물체에 맞는 스케일</b>&rdquo;을 자동으로 고르는 이 발상이 다음 절 <b>블롭 검출</b>의 출발점이다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>불변성 요약표 — 시험에 자주 나오는 정리</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>변환</th><th>Harris 코너</th><th>비고</th></tr></thead>
+    <tbody>
+      <tr><td>밝기 덧셈 <span class="tex">I+b</span></td><td>◎ 불변</td><td>미분이 상수를 지운다</td></tr>
+      <tr><td>밝기 곱셈 <span class="tex">aI</span></td><td>△ 부분적</td><td>R 값이 변해 임계값 판정이 흔들린다</td></tr>
+      <tr><td>이동</td><td>◎ 공변</td><td>위치가 함께 이동</td></tr>
+      <tr><td>회전</td><td>◎ 공변</td><td>고윳값이 보존된다</td></tr>
+      <tr><td><b>스케일</b></td><td><b>✕</b></td><td>확대하면 코너가 엣지로 분류된다 → <a class="ext" href="#blob">블롭 검출</a>로</td></tr>
+      <tr><td>아핀(시점 변화)</td><td>✕</td><td><a class="ext" href="#covariant">09 아핀 적응</a>이 필요하다</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+</section>
+
+<!-- ===================== 08 ===================== -->
+<section class="sec" id="blob">
+  <div class="sec-head"><span class="sec-badge">08</span><h2 class="sec-title">블롭 검출 — 크기까지 찾아내는 검출기<small>교안 65~88p · LoG · 스케일 정규화 · 특성 스케일 · DoG</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 (1) — LoG란 무엇인가 <span>66 · 67 · 68 · 70p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-66-blob-idea.jpg" alt="교안 66p — 블롭 필터를 여러 스케일로 걸어 극값을 찾는다"><figcaption><b>66p</b> 블롭 필터를 여러 스케일로 걸어 극값을 찾는다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-67-log-2d.jpg" alt="교안 67p — 가우시안의 라플라시안 — 원형 대칭 연산자"><figcaption><b>67p</b> 가우시안의 라플라시안 — 원형 대칭 연산자</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-68-log-shape.jpg" alt="교안 68p — LoG 의 단면 모양"><figcaption><b>68p</b> LoG 의 단면 모양</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-70-edge-to-blob.jpg" alt="교안 70p — 엣지 = 잔물결 하나, 블롭 = 두 잔물결의 중첩"><figcaption><b>70p</b> 엣지 = 잔물결 하나, 블롭 = 두 잔물결의 중첩</figcaption></figure>
+  </div>
+</div>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 (2) — 스케일을 고른다 <span>74 · 75 · 78 · 79 · 80 · 82 · 83 · 84 · 86 · 87 · 88p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-74-blob-peak1.jpg" alt="교안 74p — σ = 6 에서 원본 크기가 최대 응답"><figcaption><b>74p</b> σ = 6 에서 원본 크기가 최대 응답</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-75-blob-peak2.jpg" alt="교안 75p — σ = 9.8 에서 3/4 크기가 최대 응답"><figcaption><b>75p</b> σ = 9.8 에서 3/4 크기가 최대 응답</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-78-blob-maxresp.jpg" alt="교안 78p — 크기가 다르면 최대 응답 σ도 달라진다"><figcaption><b>78p</b> 크기가 다르면 최대 응답 σ도 달라진다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-79-scale-decay.jpg" alt="교안 79p — σ가 커지면 라플라시안 응답이 줄어든다"><figcaption><b>79p</b> σ가 커지면 라플라시안 응답이 줄어든다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-80-scale-norm.jpg" alt="교안 80p — 스케일 정규화 — σ²을 곱한다"><figcaption><b>80p</b> 스케일 정규화 — σ²을 곱한다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-82-blob-2d.jpg" alt="교안 82p — 스케일 정규화된 2차원 LoG"><figcaption><b>82p</b> 스케일 정규화된 2차원 LoG</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-83-blob-radius.jpg" alt="교안 83p — 반지름 r 인 원에 최대 응답을 주는 σ"><figcaption><b>83p</b> 반지름 r 인 원에 최대 응답을 주는 σ</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-84-char-scale.jpg" alt="교안 84p — 특성 스케일 — 응답의 피크"><figcaption><b>84p</b> 특성 스케일 — 응답의 피크</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-86-blob-example.jpg" alt="교안 86p — 스케일 공간 블롭 검출 결과"><figcaption><b>86p</b> 스케일 공간 블롭 검출 결과</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-87-dog1.jpg" alt="교안 87p — DoG 근사 ①"><figcaption><b>87p</b> DoG 근사 ①</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-88-dog2.jpg" alt="교안 88p — DoG 근사 ②"><figcaption><b>88p</b> DoG 근사 ②</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>블롭이란, 그리고 왜 LoG인가 (66~70p)</h3>
+  <p><b>블롭(blob)</b>은 주변과 밝기가 다른 <b>덩어리 영역</b>이다(점, 얼룩, 구멍, 동그란 물체).
+  교안의 질문은 &ldquo;<b>엣지 검출기로 블롭을 찾을 수 있을까?</b>&rdquo;이고, 답은 <b>&ldquo;블롭 모양의 필터를 여러 스케일로 걸고, 그 응답이 극값이 되는 곳을 찾으면 된다&rdquo;</b>이다.</p>
+  <div class="fx">
+    <p class="fx-lab">가우시안의 라플라시안 (Laplacian of Gaussian, LoG)</p>
+    <div class="tex-d">\nabla^{2}G_\sigma = \frac{\partial^{2}G_\sigma}{\partial x^{2}} + \frac{\partial^{2}G_\sigma}{\partial y^{2}}</div>
+    <p class="fx-note">가우시안으로 부드럽게 만든 뒤 <b>2차 미분</b>을 하는 연산자다. 단면이 가운데가 움푹 들어가고 주변이 솟은 <b>멕시코 모자</b> 모양이라, <b>딱 블롭처럼 생겼다</b>(67 · 68p). 원형 대칭이므로 방향에 무관하다.</p>
+  </div>
+  <p><b>엣지에서 블롭으로</b>(70p) — 엣지 하나에 라플라시안을 걸면 <b>잔물결(ripple)</b> 하나가 나온다. 블롭은 <b>가까이 붙은 엣지 두 개</b>이므로 <b>잔물결 두 개가 겹쳐</b> 가운데에서 <b>하나의 큰 극값</b>을 만든다.
+  단, 이 일이 일어나려면 <b>라플라시안의 스케일이 블롭의 크기와 맞아야(matched)</b> 한다 — 여기서 &lsquo;스케일 선택&rsquo; 문제가 나온다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>스케일 선택 — σ를 바꿔 가며 최대를 찾는다 (71~78p)</h3>
+  <p>교안은 같은 그림을 <b>원본 크기</b>와 <b>3/4 크기</b>로 두고 σ를 2.1 → 4.2 → 6 → 9.8 → 15.5 → 17로 키우며 응답을 비교한다.
+  결과는 명확하다 — <b>원본 크기는 σ = 6에서, 3/4 크기는 σ = 9.8에서</b> 각각 최대 응답을 보인다(74 · 75p).</p>
+  <p>즉 <b>블롭이 클수록 최대 응답을 주는 σ도 크다</b>. 그러므로 <b>최대 응답을 주는 σ를 찾으면 그것이 곧 블롭의 크기</b>다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>스케일 정규화 — σ²을 곱해야 공정한 비교가 된다 (79~82p)</h3>
+  <p>문제가 하나 있다. <b>σ가 커질수록 라플라시안의 응답 자체가 작아진다</b>(79p). 가우시안이 넓게 퍼지면서 값이 평평해지기 때문이다. 이대로 여러 σ의 응답을 비교하면 <b>항상 작은 σ가 이긴다</b>.</p>
+  <div class="fx">
+    <p class="fx-lab">스케일 정규화 (scale normalization)</p>
+    <div class="tex-d">\nabla^{2}_{\mathrm{norm}} = \sigma^{2}\,\nabla^{2}G_\sigma</div>
+    <p class="fx-note">가우시안의 <b>1차</b> 미분은 <span class="tex">\sigma</span>를, <b>2차</b> 미분(라플라시안)은 <span class="tex">\sigma^{2}</span>를 곱해야 스케일이 달라져도 <b>같은 세기</b>의 응답이 나온다(80p). 이렇게 보정해야 서로 다른 σ의 응답을 <b>나란히 놓고 최대를 고를 수</b> 있다.</p>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>특성 스케일과 반지름 공식 (83~86p)</h3>
+  <div class="fx">
+    <p class="fx-lab">반지름 r 인 원에 최대 응답을 주는 σ (83p)</p>
+    <div class="tex-d">\sigma = \frac{r}{\sqrt{2}} \qquad\Longleftrightarrow\qquad r = \sqrt{2}\,\sigma</div>
+    <p class="fx-note">최대 응답이 나오려면 <b>라플라시안의 영점(zero crossing)이 원의 경계와 맞아야</b> 한다. 그 조건을 풀면 위 관계가 나온다. 그래서 검출된 블롭을 그릴 때 원의 반지름을 <span class="tex">\sqrt{2}\sigma</span>로 그린다.</p>
+  </div>
+  <p><b>특성 스케일(characteristic scale)</b>은 <b>라플라시안 응답이 피크가 되는 스케일</b>로 정의된다(84p). 검출 절차는 두 줄이다 —
+  <b>① 여러 σ로 스케일 정규화 라플라시안을 컨볼루션하고 ② 스케일 공간에서 응답 제곱의 극값을 찾는다</b>(85p). 86p의 예시는 σ ≈ 11.99에서 잡힌 블롭들을 보여 준다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>효율적 구현 — DoG 근사 (87 · 88p)</h3>
+  <div class="fx">
+    <p class="fx-lab">가우시안 차이 (Difference of Gaussians)</p>
+    <div class="tex-d">\mathrm{DoG} = G_{k\sigma} - G_{\sigma} \;\approx\; (k-1)\,\sigma^{2}\,\nabla^{2}G_\sigma</div>
+    <p class="fx-note"><b>σ가 조금 다른 두 가우시안 블러의 차</b>가 스케일 정규화된 LoG와 거의 같다. 곧 <b>뺄셈 한 번</b>으로 LoG를 얻는 셈이다.
+    <a class="ext" href="computer-vision-week04.html#lpyr">4주차 라플라시안 피라미드</a>에서 &ldquo;층과 층의 차이&rdquo;를 저장했던 것과 정확히 같은 구조이고, <b>SIFT</b>가 바로 이 DoG 피라미드 위에서 극값을 찾는다.</p>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>코너 검출과 블롭 검출의 차이를 한 문장으로</h3>
+  <p><b>Harris는 &ldquo;어디(where)&rdquo;만 답한다. 블롭 검출은 &ldquo;어디(where) + 얼마나 큰지(scale)&rdquo;를 함께 답한다.</b></p>
+  <p>그래서 다음 주차의 기술자(descriptor)는 블롭 검출이 알려 준 <b>σ에 비례하는 크기의 패치</b>를 잘라 쓴다. 사진이 2배로 커지면 검출된 σ도 2배가 되어 <b>같은 내용의 패치</b>가 잘리고, 결국 <b>같은 기술자</b>가 나온다 — 이것이 SIFT가 스케일 변화에 강한 이유다.</p>
+  <pre class="code"><span class="cm"># OpenCV 에서 SIFT (내부적으로 DoG 피라미드의 극값을 찾는다)</span>
+sift = cv2.SIFT_create()
+kp, des = sift.detectAndCompute(gray, None)
+print(kp[0].pt, kp[0].size, kp[0].angle)   <span class="cm"># 위치 · 크기(스케일) · 방향까지 나온다</span>
+
+<span class="cm"># 단순 블롭 검출기 (LoG/DoG 기반은 아니지만 실습에 자주 쓰인다)</span>
+detector = cv2.SimpleBlobDetector_create()
+keypoints = detector.detect(gray)</pre>
+</div>
+</section>
+
+<!-- ===================== 09 ===================== -->
+<section class="sec" id="covariant">
+  <div class="sec-head"><span class="sec-badge">09</span><h2 class="sec-title">공변과 불변, 그리고 아핀 적응<small>교안 89~91p · 두 단어를 구분하면 시험이 쉬워진다</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>90 · 91p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-90-affine-ellipse.jpg" alt="교안 90p — 2차 모멘트 행렬로 본 창의 특성 모양"><figcaption><b>90p</b> 2차 모멘트 행렬로 본 창의 특성 모양</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv5-91-normalization.jpg" alt="교안 91p — 정규화 — 같은 크기의 원으로 펴서 비교"><figcaption><b>91p</b> 정규화 — 같은 크기의 원으로 펴서 비교</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>공변(covariant) vs 불변(invariant) (89p)</h3>
+  <div class="fx">
+    <div class="tex-d">\text{공변 : } f\bigl(T(I)\bigr) = T\bigl(f(I)\bigr), \qquad \text{불변 : } f\bigl(T(I)\bigr) = f(I)</div>
+    <p class="fx-note"><b>공변</b>은 &ldquo;이미지를 변환하면 결과도 <b>같이 변환된다</b>&rdquo;, <b>불변</b>은 &ldquo;이미지를 변환해도 결과가 <b>그대로다</b>&rdquo;라는 뜻이다.</p>
+  </div>
+  <ul class="ul">
+    <li><b>블롭의 위치와 스케일</b>은 회전 · 확대에 대해 <b>공변</b>이다 — 이미지를 2배 키우면 검출된 위치도 2배, σ도 2배가 된다</li>
+    <li><b>라플라시안 응답값</b>은 회전 · 확대에 대해 <b>불변</b>이다 — 값 자체는 변하지 않는다</li>
+  </ul>
+  <p><b>검출기는 공변이어야 하고, 기술자는 불변이어야 한다</b> — 위치는 따라 움직여야 하지만, 그 지점을 설명하는 숫자는 같아야 짝을 지을 수 있기 때문이다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>아핀 변환과 정규화 (90 · 91p)</h3>
+  <p>평면에 가까운 물체를 멀리서 볼 때, <b>시점 변화는 아핀 변환으로 근사</b>할 수 있다. 이때 블롭을 담은 창의 <b>2차 모멘트 행렬</b>을 타원으로 그리면 그 창의 <b>특성 모양(characteristic shape)</b>이 보인다.</p>
+  <p>같은 지점을 다른 시점에서 본 두 영역은 <b>서로 아핀 변환 관계</b>에 있다. 그대로 비교하면 모양이 달라 매칭이 안 되므로, 각 영역을 <b>같은 크기의 원으로 펴서(normalization)</b> 비교한다(91p).
+  이것이 <b>공변 검출 → 불변 기술</b>로 넘어가는 마지막 다리이고, 6주차 기술자(SIFT 등)의 전제다.</p>
+</div>
+</section>
+
+<!-- ===================== 10 ===================== -->
+<section class="sec" id="codes">
+  <div class="sec-head"><span class="sec-badge">10</span><h2 class="sec-title">실습 · 과제와의 연결<small>OpenCV 함수 한 장 정리 · 앞뒤 주차와의 연결</small></h2></div>
+
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>이번 주 개념</th><th>OpenCV 함수</th><th>핵심 인자</th></tr></thead>
+  <tbody>
+    <tr><td>미분 · 그래디언트 (<a class="ext" href="#edge">02</a>)</td><td><code>cv2.Sobel(src, ddepth, dx, dy, ksize)</code></td><td><code>dx=1, dy=0</code>이면 x방향 미분 · <code>ddepth=cv2.CV_64F</code>로 음수 보존</td></tr>
+    <tr><td>라플라시안</td><td><code>cv2.Laplacian(src, ddepth, ksize)</code></td><td>2차 미분 — 블롭 · 엣지 강조</td></tr>
+    <tr><td>Canny 엣지 (<a class="ext" href="#canny">03</a>)</td><td><code>cv2.Canny(img, t1, t2)</code></td><td><b>t1 : t2 = 1 : 2~3</b> · <code>L2gradient</code></td></tr>
+    <tr><td>허프 직선 (<a class="ext" href="#hough">04</a>)</td><td><code>cv2.HoughLines</code> · <code>cv2.HoughLinesP</code></td><td><code>rho, theta</code> = 누적 배열 해상도 · <code>threshold</code> = 최소 득표</td></tr>
+    <tr><td>Harris 코너 (<a class="ext" href="#harris">06</a>)</td><td><code>cv2.cornerHarris(gray, blockSize, ksize, k)</code></td><td><code>blockSize</code> = 창 크기 · <code>k ≈ 0.04</code></td></tr>
+    <tr><td>Shi-Tomasi</td><td><code>cv2.goodFeaturesToTrack(...)</code></td><td><code>qualityLevel</code>(최대 응답 대비 비율) · <code>minDistance</code></td></tr>
+    <tr><td>스케일 불변 검출 (<a class="ext" href="#blob">08</a>)</td><td><code>cv2.SIFT_create()</code></td><td>내부적으로 <b>DoG 피라미드</b>의 극값을 찾는다</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="link-list">
+  <a href="computer-vision-week03.html">3주차 · Linear Filters →<small>이번 주 미분 마스크(Prewitt · Sobel)는 3주차 합성곱의 직접적인 응용입니다</small></a>
+  <a href="computer-vision-week04.html#gpyr">4주차 · 가우시안 피라미드 →<small>07의 &lsquo;스케일을 바꿔 가며 찾기&rsquo;와 08의 스케일 공간이 여기서 나옵니다</small></a>
+  <a href="computer-vision-week04.html#lpyr">4주차 · 라플라시안 피라미드 →<small>08의 DoG 근사가 &lsquo;층과 층의 차이&rsquo;와 같은 구조입니다</small></a>
+  <a href="computer-vision-assignments.html">과제 · 논문 발표 →<small>과제 #1(마감 10월 7일)과 내 논문 발표 자료를 모아 둔 페이지</small></a>
+</div>
+
+<div class="warn"><b>6주차 논문 발표와의 연결</b> — 이번 주가 <b>검출(detection)</b>이라면 6주차는 <b>기술(description)</b>이다.
+내 발표 논문 <a class="ext" href="computer-vision-assignments.html#mypres">&ldquo;A Tale of Two Features&rdquo;</a>는 바로 그 기술자 자리에 <b>사전학습 모델(Stable Diffusion · DINO)의 내부 특징</b>을 넣는 이야기이므로, 이번 주의 &ldquo;검출 → 기술 → 매칭&rdquo; 3단계(<a class="ext" href="#local">01</a>)를 발표 도입부로 쓰면 자연스럽게 이어진다.</div>
+</section>
+
+<p class="src">출처 — 컴퓨터비전 05. Local Features Detection (2026-2학기, 92페이지)<br>
+교안 내용을 절 단위로 정리하고 도식 · 예시 슬라이드 <b>59장</b>을 캡처해 실었습니다. 식과 OpenCV 함수 설명, &lsquo;보충설명&rsquo; 뱃지가 붙은 내용은 교안에 없는 부분을 따로 찾아 정리한 것입니다.</p>
+
+</div>
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive() {
+    var cur = '';
+    sections.forEach(function (s) { if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function (t) { t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      setTimeout(function () {
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+
+  /* ---- 개념 설명 말풍선 ---- */
+  var terms = document.querySelectorAll('.term');
+  if (!terms.length) return;
+  var tip = document.createElement('div');
+  tip.id = 'tipbox';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  var current = null;
+
+  function hide() {
+    tip.classList.remove('on');
+    if (current) { current.classList.remove('on'); current = null; }
+  }
+  function show(el) {
+    tip.textContent = el.getAttribute('data-tip') || '';
+    tip.classList.add('on');
+    if (current && current !== el) current.classList.remove('on');
+    current = el;
+    el.classList.add('on');
+    var pad = 8;
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+    var top = r.top - t.height - 10;
+    if (top < pad) top = r.bottom + 10;
+    top = Math.min(top, window.innerHeight - t.height - pad);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+  terms.forEach(function (el) {
+    el.addEventListener('mouseenter', function () { show(el); });
+    el.addEventListener('mouseleave', function () { if (current === el) hide(); });
+    el.addEventListener('focus', function () { show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (current === el && tip.classList.contains('on')) hide(); else show(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el); }
+      if (e.key === 'Escape') hide();
+    });
+  });
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide);
+});
+</script>
+
+<script>
+/* 슬라이드 확대 보기 — 좌우 이동 · 닫으면 보던 자리로 */
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.sld'));
+  if (!slides.length) return;
+
+  var lb = document.createElement('div');
+  lb.id = 'lb';
+  lb.innerHTML =
+    '<button class="prev" type="button" aria-label="이전 슬라이드">&#10094;</button>' +
+    '<img alt="">' +
+    '<button class="next" type="button" aria-label="다음 슬라이드">&#10095;</button>' +
+    '<button class="x" type="button" aria-label="닫기">&#10005;</button>' +
+    '<p class="cap"></p>';
+  document.body.appendChild(lb);
+
+  var big = lb.querySelector('img'),
+      cap = lb.querySelector('.cap'),
+      bPrev = lb.querySelector('.prev'),
+      bNext = lb.querySelector('.next'),
+      bX = lb.querySelector('.x');
+
+  var idx = -1, openedIdx = -1, savedY = 0, pushed = false, prevRestore = null;
+
+  function lock() {
+    savedY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    document.body.style.position = 'fixed';
+    document.body.style.top = (-savedY) + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  /* html{scroll-behavior:smooth} 때문에 되돌아갈 때 화면이 흘러가지 않도록 잠깐 끈다 */
+  function instantly(fn) {
+    var de = document.documentElement, prev = de.style.scrollBehavior;
+    de.style.scrollBehavior = 'auto';
+    fn();
+    void de.offsetHeight;
+    de.style.scrollBehavior = prev;
+  }
+  function unlock() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    var target = (idx >= 0 && idx !== openedIdx) ? slides[idx] : null;
+    function place() {
+      instantly(function () {
+        window.scrollTo(0, savedY);
+        /* 넘겨 본 슬라이드가 있으면 그 슬라이드 자리로, 아니면 보던 자리 그대로 */
+        if (target) target.scrollIntoView({ block: 'center' });
+      });
+    }
+    place();
+    /* 기기 뒤로가기로 닫을 때 브라우저가 옛 스크롤을 덮어쓰므로 한 프레임 뒤 한 번 더 */
+    if (window.requestAnimationFrame) window.requestAnimationFrame(place);
+    setTimeout(place, 0);
+  }
+
+  function preload(i) {
+    if (i < 0 || i >= slides.length) return;
+    var im = slides[i].querySelector('img');
+    if (im) { var p = new Image(); p.src = im.currentSrc || im.src; }
+  }
+
+  function render(i) {
+    idx = i;
+    var f = slides[i], im = f.querySelector('img'), fc = f.querySelector('figcaption');
+    big.src = im.currentSrc || im.src;
+    big.alt = im.alt || '';
+    cap.innerHTML = '';
+    cap.appendChild(document.createTextNode(fc ? fc.textContent : ''));
+    var num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = (i + 1) + ' / ' + slides.length + ' · ← → 로 넘기기';
+    cap.appendChild(num);
+    bPrev.disabled = (i === 0);
+    bNext.disabled = (i === slides.length - 1);
+    preload(i + 1); preload(i - 1);
+  }
+
+  function open(i) {
+    openedIdx = i;
+    lock();
+    render(i);
+    lb.classList.add('on');
+    if (!pushed && window.history && window.history.pushState) {
+      try {
+        if ('scrollRestoration' in window.history && prevRestore === null) {
+          prevRestore = window.history.scrollRestoration;
+          window.history.scrollRestoration = 'manual';
+        }
+        window.history.pushState({ lb: 1 }, '');
+        pushed = true;
+      } catch (e) { pushed = false; }
+    }
+  }
+  function closeNow() {
+    if (!lb.classList.contains('on')) return;
+    lb.classList.remove('on');
+    unlock();
+    idx = openedIdx = -1;
+    if (prevRestore !== null) {
+      try { window.history.scrollRestoration = prevRestore; } catch (e) {}
+      prevRestore = null;
+    }
+  }
+  function closeByUser() {
+    if (pushed) { pushed = false; window.history.back(); }  /* popstate 가 닫는다 */
+    else { closeNow(); }
+  }
+  function go(step) {
+    var n = idx + step;
+    if (n < 0 || n >= slides.length) return;
+    render(n);
+  }
+
+  slides.forEach(function (f, i) {
+    f.addEventListener('click', function () { open(i); });
+  });
+
+  bPrev.addEventListener('click', function (e) { e.stopPropagation(); go(-1); });
+  bNext.addEventListener('click', function (e) { e.stopPropagation(); go(1); });
+  bX.addEventListener('click', function (e) { e.stopPropagation(); closeByUser(); });
+  big.addEventListener('click', function (e) { e.stopPropagation(); });
+  cap.addEventListener('click', function (e) { e.stopPropagation(); });
+  lb.addEventListener('click', closeByUser);
+
+  window.addEventListener('popstate', function () {
+    if (lb.classList.contains('on')) { pushed = false; closeNow(); }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('on')) return;
+    if (e.key === 'Escape') { e.preventDefault(); closeByUser(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+  });
+
+  /* 모바일 — 좌우로 쓸어 넘기기 */
+  var tx = 0, ty = 0;
+  lb.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) return;
+    tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+  }, { passive: true });
+  lb.addEventListener('touchend', function (e) {
+    if (!e.changedTouches.length) return;
+    var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
+</script>
+
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script src="../vendor/katex/katex.min.js"></script>
+<script>
+// .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.
+// KaTeX를 못 불러온 경우에는 원문이 그대로 남아 최소한 읽을 수는 있게 둔다.
+(function () {
+  if (typeof katex === 'undefined') { return; }
+  document.querySelectorAll('.tex, .tex-d').forEach(function (el) {
+    try {
+      katex.render(el.textContent.trim(), el, {
+        displayMode: el.classList.contains('tex-d'),
+        throwOnError: false,
+        strict: false
+      });
+    } catch (e) { if (window.console) { console.error('KaTeX', e, el.textContent); } }
+  });
+})();
+</script>
+
+</body>
+</html>
