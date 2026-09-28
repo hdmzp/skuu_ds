@@ -300,6 +300,67 @@ td .term,th .term{font-weight:700}
 .pit .ul li::before{background:#b45309;opacity:.8}
 .pit table{min-width:0}
 .pit .tbl-wrap{margin:8px 0 4px;background:#fff}
+
+/* ===== 필기 구분 — 실시간 강의 강조 / 내 복습 필기 ===== */
+.live{
+  background:#fffaf3;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#7c2d12;
+}
+.live::before{
+  content:'🎙 실시간 강의 강조';display:table;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.live b{color:#7c2d12}
+.live .ul li{color:#7c2d12}
+.live .ul li::before{background:#b45309;opacity:.75}
+.mynote{
+  background:#f5f3ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.mynote::before{
+  content:'📝 내 복습 필기 · 추가 개념';display:table;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.mynote b{color:#2e1065}
+.mynote .ul li{color:#3b2a6b}
+.mynote .ul li::before{background:#6d28d9;opacity:.75}
+.mynote table{min-width:0}
+.mynote .tbl-wrap{margin:8px 0 4px;background:#fff}
+.mynote pre.code{margin:9px 0}
+.mynote .fx{background:#fff;border-color:#d8cdf7;border-left-color:#6d28d9;margin:9px 0}
+/* 분류 알고리즘 바로가기 카드 */
+.algo{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:9px;margin:12px 0}
+.algo a{display:block;background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:11px 13px;text-decoration:none;color:inherit;transition:border-color .12s,transform .12s}
+.algo a:hover{border-color:var(--accent);transform:translateY(-1px)}
+.algo a b{display:block;font-size:13.5px;color:var(--ink)}
+.algo a small{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}
+.algo a span{display:block;font-size:12px;color:#4b5563;line-height:1.65}
+.algo a em{display:block;font-style:normal;font-size:11px;color:var(--accent);font-weight:700;margin-top:6px}
+/* 재현율 점 그림 */
+.dots{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0 4px}
+.dots i{width:15px;height:15px;border-radius:50%;display:inline-block}
+.dots i.tp{background:#16a34a}
+.dots i.fn{background:#fff;border:2px solid #dc2626}
+.dots i.fp{background:#f59e0b}
+.dots-lab{font-size:11.5px;color:#4b5563}
+/* 시그모이드 그림 */
+.sig{display:block;width:100%;max-width:420px;height:auto;margin:8px auto 2px;background:#fff;border:1px solid #d8cdf7;border-radius:8px}
+/* ===== 복습하기 ===== */
+.rv{background:var(--surface);border:1px solid var(--border);border-left:4px solid #0f766e;border-radius:var(--radius);margin:10px 0;overflow:hidden}
+.rv summary{cursor:pointer;list-style:none;padding:12px 15px;font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.6;display:flex;gap:9px;align-items:baseline}
+.rv summary::-webkit-details-marker{display:none}
+.rv summary i{font-style:normal;flex:none;font-size:11px;font-weight:800;color:#fff;background:#0f766e;border-radius:999px;padding:1px 8px}
+.rv summary::after{content:'답 보기 ▾';margin-left:auto;flex:none;font-size:11px;font-weight:700;color:#0f766e}
+.rv[open] summary::after{content:'접기 ▴'}
+.rv .ans{border-top:1px dashed #99e0d6;background:#f0fdfa;padding:12px 15px;font-size:13px;line-height:1.85;color:#134e4a}
+.rv .ans b{color:#0f3d3a}
+.rv .ans .ul li{color:#134e4a}
+.rv .ans .tbl-wrap{background:#fff;margin:8px 0}
+.rv .ans table{min-width:0}
+.rv .ans pre.code{margin:8px 0}
+.rv .one{display:block;background:#fff;border:1px solid #99e0d6;border-radius:7px;padding:7px 11px;margin-bottom:8px;font-weight:700;color:#0f3d3a}
 /* 범례 */
 .mark-legend{display:flex;flex-wrap:wrap;gap:8px 18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px 14px;margin:-14px 0 26px;font-size:12.5px;color:#4b5563;line-height:1.6}
 .mark-legend span{display:inline-flex;align-items:center;gap:6px}
@@ -326,6 +387,7 @@ td .term,th .term{font-weight:700}
   <a href="#euclid">5.3.3 유클리디언·맨해튼</a>
   <a href="#simapp">5.3.4 응용과 발전</a>
   <a href="#summary">핵심 정리</a>
+  <a href="#review">복습하기</a>
   <a href="#terms">용어 · 약어</a>
   <a href="#lab">실습 노트북</a>
   <a href="#hw">과제</a>
@@ -685,6 +747,33 @@ scikit-learn 기본식은 뒤에 <b>+1</b>이 있어 IDF의 하한이 <b>1</b>�
 <div class="deep"><b>왜 &lsquo;희소 → 조밀&rsquo;이 그렇게 큰 변화인가</b> — 희소 표현에서는 각 차원이 <b>특정 단어 하나</b>를 뜻한다(322번째 칸 = &lsquo;영화&rsquo;). 그래서 단어가 늘면 차원도 함께 늘고, 두 단어 사이에는 아무 관계도 없다.
 조밀 표현에서는 하나의 차원이 특정 단어가 아니라 <b>여러 단어가 나눠 쓰는 어떤 성질</b>(예: &lsquo;감정가&rsquo;, &lsquo;구체성&rsquo;)에 가까워진다. 의미가 <b>여러 차원에 나뉘어 분산되어</b> 있다고 해서 &lsquo;분산 표현&rsquo;이다.
 덕분에 300차원이면 단어가 10만 개여도 충분하고, 비슷한 단어는 비슷한 좌표를 갖는다 — <a class="ext" href="#onehot">5.1.1의 조건 ①과 ②</a>가 동시에 해결된다.</div>
+
+<div class="mynote"><b>&lsquo;희소 → 조밀&rsquo;을 아주 쉽게 — 같은 단어를 두 방식으로 적어 보면</b>
+<b>희소(sparse)</b>는 &ldquo;<b>칸은 엄청 많은데 대부분 비어(0) 있다</b>&rdquo;, <b>조밀(dense, 밀집)</b>은 &ldquo;<b>칸 수는 적은데 모든 칸에 값이 차 있다</b>&rdquo;는 뜻이다. 실습 어휘 사전(V = 322)으로 &lsquo;영화&rsquo;와 &lsquo;작품&rsquo;을 적어 보자.
+<pre class="code"><span class="cm"># 희소 표현 (원-핫) — 322칸 중 딱 1칸만 1, 나머지 321칸은 0</span>
+영화 = [0, 0, 0, … , <span class="out">1</span>, … , 0, 0]      <span class="cm"># 0 비율 99.689%</span>
+작품 = [0, <span class="out">1</span>, 0, … , 0, … , 0, 0]      <span class="cm"># 1이 켜진 자리가 달라서 내적 = 0 → "관계 없음"</span>
+
+<span class="cm"># 조밀 표현 (Word2Vec 같은 임베딩) — 4칸짜리 예시, 모든 칸이 실수</span>
+영화 = [ 0.81, -0.12,  0.55,  0.30]
+작품 = [ 0.77, -0.08,  0.61,  0.25]      <span class="cm"># 숫자 모양이 비슷 → 코사인 ≈ 0.99 → "비슷한 단어"</span>
+지루 = [-0.40,  0.90, -0.10,  0.05]      <span class="cm"># 모양이 전혀 다름 → 코사인이 낮다</span></pre>
+<small>※ 조밀 벡터의 숫자는 설명용으로 만든 값이다. 실제 Word2Vec은 50~300칸이고 값은 학습으로 정해진다.</small>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>비교</th><th>희소 (원-핫 · BoW · TF-IDF)</th><th>조밀 (Word2Vec · GloVe · BERT)</th></tr></thead>
+  <tbody>
+    <tr><td>길이(차원)</td><td>어휘 사전 크기 V — 수만~수십만</td><td>사람이 정한 크기 — 50~300 정도</td></tr>
+    <tr><td>0의 비율</td><td>거의 전부 0</td><td>0이 거의 없음</td></tr>
+    <tr><td>한 칸의 의미</td><td>&ldquo;이 칸 = 단어 &lsquo;영화&rsquo;&rdquo; (사람이 읽을 수 있음)</td><td>여러 단어가 나눠 쓰는 <b>숨은 성질</b> (칸 하나만 보고는 해석 불가)</td></tr>
+    <tr><td>값을 정하는 방법</td><td><b>세어서</b> 정한다 (등장 여부 · 횟수 · 가중치)</td><td><b>학습해서</b> 정한다 (주변 단어 예측 과제)</td></tr>
+    <tr><td>단어끼리 비슷함</td><td>표현 못 함 (서로 다른 단어는 항상 직교)</td><td>표현됨 (비슷한 단어 = 비슷한 좌표)</td></tr>
+  </tbody>
+</table>
+</div>
+<b>비유</b> — 희소 표현은 <b>출석부</b>다. 학생이 322명이면 322칸짜리 명단에서 한 명 이름 옆에만 동그라미를 친다. 명단만 봐서는 누가 누구와 친한지 알 수 없다.
+조밀 표현은 <b>성격 검사 결과표</b>다. &lsquo;외향성 0.8, 성실성 0.3 …&rsquo;처럼 몇 개 항목의 점수로 사람을 적으니 칸은 적어도 <b>점수가 비슷한 사람 = 비슷한 사람</b>이 바로 보인다.
+즉 &lsquo;희소 → 조밀&rsquo;은 <b>&ldquo;단어에 번호표를 붙이던 방식&rdquo;에서 &ldquo;단어의 특징 점수를 매기는 방식&rdquo;으로 바뀐 것</b>이고, 그래서 차원이 줄고(322 → 수백) 유사도가 생긴다.</div>
 </section>
 
 <!-- ===================== 5.2.1 ===================== -->
@@ -744,6 +833,17 @@ scikit-learn 기본식은 뒤에 <b>+1</b>이 있어 IDF의 하한이 <b>1</b>�
 </div>
 <div class="deep"><b>&ldquo;평가가 명확하다&rdquo;는 말의 무게</b> — 지도 학습은 정답이 있으니 <b>맞았다 / 틀렸다</b>를 셀 수 있다. 비지도 학습에는 정답이 없어서 &ldquo;잘 묶였는가&rdquo;를 <b>군집이 얼마나 촘촘하고 서로 떨어져 있는가</b>(실루엣 계수) 같은 간접 지표로 볼 수밖에 없다.
 그래서 현업에서는 <b>라벨이 조금이라도 있으면 지도 학습</b>을 쓰고, 비지도 학습은 &lsquo;라벨을 만들기 전에 데이터를 훑어보는 단계&rsquo;나 &lsquo;토픽을 발견하는 단계&rsquo;로 쓰는 경우가 많다.</div>
+
+<h3 class="sub-title">지도 학습 기반 문장 분류 알고리즘 — 한눈에 (교안 34p)</h3>
+<p>라벨이 있는 문장으로 분류기를 학습시킬 때 쓰는 대표 알고리즘은 다섯 가지다. 카드를 누르면 <a class="ext" href="#models">5.2.4</a>의 자세한 설명으로 바로 내려간다.</p>
+<div class="algo">
+  <a href="#m-nb"><small>Naive Bayes</small><b>① 나이브 베이즈</b><span>단어마다 &ldquo;이 단어가 스팸에 얼마나 자주 나오나&rdquo; 확률을 세어 곱한다. 단어끼리 독립이라고 가정 → <b>매우 빠르고 적은 데이터에 강함</b></span><em>↓ 자세히</em></a>
+  <a href="#m-lr"><small>Logistic Regression</small><b>② 로지스틱 회귀</b><span>단어마다 가중치를 곱해 더한 점수를 <b>시그모이드</b>로 0~1 확률로 바꾼다. 가중치로 <b>이유를 설명할 수 있어</b> 기준 모델로 쓴다</span><em>↓ 자세히</em></a>
+  <a href="#m-svm"><small>Support Vector Machine</small><b>③ 서포트 벡터 머신</b><span>두 범주 사이에 <b>가장 넓은 여백(마진)</b>을 두는 경계선을 긋는다. <b>차원이 큰 희소 벡터</b>(TF-IDF)에 특히 강함</span><em>↓ 자세히</em></a>
+  <a href="#m-rf"><small>Random Forest</small><b>④ 랜덤 포레스트</b><span>질문을 이어 가는 <b>의사결정 트리</b>를 여러 개 만들어 <b>다수결</b>. 과적합에 강하지만 희소 텍스트에선 선형 모델보다 약할 때가 많다</span><em>↓ 자세히</em></a>
+  <a href="#m-nn"><small>Neural Network · Deep Learning</small><b>⑤ 신경망 · 딥러닝</b><span>여러 층을 쌓아 <b>단어 순서 · 문맥</b>까지 학습(RNN · CNN · Transformer). 표현력 최고, 대신 <b>데이터와 연산이 많이</b> 필요</span><em>↓ 자세히</em></a>
+</div>
+<div class="tip"><b>고르는 순서</b> — 데이터가 적거나 빨리 기준선을 잡고 싶으면 <b>나이브 베이즈 · 로지스틱 회귀</b> → 성능을 더 짜내려면 <b>SVM · 랜덤 포레스트</b> → 데이터가 수만 건 이상이고 문맥이 중요하면 <b>신경망</b>. 실습(200건)에서는 로지스틱 회귀가 가장 좋았다.</div>
 </section>
 
 <!-- ===================== 5.2.3 ===================== -->
@@ -811,7 +911,7 @@ X_te = vect.transform(X_te_txt)       <span class="cm"># 검증은 같은 사전
 
 <!-- ===================== 5.2.4 ===================== -->
 <section class="sec" id="models">
-  <div class="sec-head"><span class="sec-badge">5.2.4</span><h2 class="sec-title">분류 모델 — 나이브 베이즈 · 로지스틱 회귀 · 랜덤 포레스트<small>교안 34 · 42~44p · 실습에서 셋을 직접 비교한다</small></h2></div>
+  <div class="sec-head"><span class="sec-badge">5.2.4</span><h2 class="sec-title">분류 모델 — 지도 학습 기반 문장 분류 알고리즘 5가지<small>교안 34 · 42~44p · 나이브 베이즈 · 로지스틱 회귀 · SVM · 랜덤 포레스트 · 신경망</small></h2></div>
 
 <div class="tbl-wrap">
 <table>
@@ -826,16 +926,59 @@ X_te = vect.transform(X_te_txt)       <span class="cm"># 검증은 같은 사전
 </table>
 </div>
 
-<h3 class="sub-title">① 나이브 베이즈 (Naive Bayes)</h3>
+<h3 class="sub-title" id="m-nb">① 나이브 베이즈 (Naive Bayes)</h3>
 <div class="note-box">베이즈 정리로 <b>문서가 각 범주에 속할 확률</b>을 계산하는 확률 모델. 모든 단어가 서로 <b>독립</b>이라고 &ldquo;순진하게(naive)&rdquo; 가정해 계산을 단순화한다.
 <div class="tex-d">P(c \mid d) \propto P(c)\prod_{w \in d} P(w \mid c)</div>
 <span class="tex">P(c)</span>는 범주의 사전 확률, <span class="tex">P(w \mid c)</span>는 범주 <span class="tex">c</span>에서 단어 <span class="tex">w</span>가 나올 확률이다. 가장 높은 확률의 범주를 답으로 고른다.</div>
 <div class="deep"><b>&ldquo;독립 가정&rdquo;은 사실 틀렸는데 왜 잘 되나</b> — &ldquo;재미&rdquo;와 &ldquo;있다&rdquo;가 독립일 리 없다. 그런데 분류는 <b>확률의 정확한 값</b>이 아니라 <b>어느 범주가 더 큰가</b>만 맞히면 된다. 독립 가정이 확률값을 왜곡해도 <b>순위는 잘 보존</b>되는 경우가 많아, 실제로는 기대보다 잘 작동한다.
 또 하나 — 학습에서 한 번도 못 본 단어가 있으면 <span class="tex">P(w \mid c)=0</span>이 되어 곱 전체가 0이 된다. 그래서 모든 빈도에 <span class="tex">\alpha</span>를 더하는 <b>라플라스 스무딩</b>을 쓴다. 실습 과제 5가 바로 이 <span class="tex">\alpha</span>를 탐색하는 문제다.</div>
 
-<h3 class="sub-title">② 로지스틱 회귀 (Logistic Regression)</h3>
+<h3 class="sub-title" id="m-lr">② 로지스틱 회귀 (Logistic Regression)</h3>
 <div class="note-box">입력 자질의 <b>선형 결합</b>에 <b>로지스틱(시그모이드) 함수</b>를 씌워 0~1 값을 얻고 이를 확률로 해석한다. 1에 가까우면 1로, 0에 가까우면 0으로 예측.
 <b>학습된 가중치를 보면 어떤 단어가 긍정 · 부정에 기여했는지 직접 확인</b>할 수 있어 해석력이 매우 높고, <b>고차원 희소 벡터(TF-IDF)와 궁합</b>이 좋아 텍스트 분류의 표준 기준 모델로 쓰인다.</div>
+<div class="mynote"><b>&ldquo;선형 결합에 시그모이드를 씌운다&rdquo;는 게 정확히 무슨 작업인가</b>
+두 단계로 나눠 보면 간단하다. <b>① 점수를 매기고 → ② 그 점수를 확률로 바꾼다.</b>
+<div class="fx">
+  <p class="fx-lab">① 선형 결합 — 단어별 (TF-IDF 값 × 가중치)를 모두 더한 &lsquo;점수&rsquo;</p>
+  <div class="tex-d">z = w_1x_1 + w_2x_2 + \cdots + w_nx_n + b</div>
+  <p class="fx-note"><span class="tex">x_i</span>는 리뷰 안 단어 <span class="tex">i</span>의 TF-IDF 값, <span class="tex">w_i</span>는 그 단어의 가중치(긍정이면 +, 부정이면 −), <span class="tex">b</span>는 기본 점수. 문제는 <b><span class="tex">z</span>가 −∞ ~ +∞ 아무 값이나 나온다</b>는 것 — 1.86점, −3.38점은 &ldquo;긍정일 확률&rdquo;로 읽을 수 없다.</p>
+</div>
+<div class="fx">
+  <p class="fx-lab">② 시그모이드 함수에 통과시키기 — 어떤 점수든 0과 1 사이로 눌러 담는다</p>
+  <div class="tex-d">\sigma(z) = \frac{1}{1+e^{-z}}</div>
+  <p class="fx-note">&lsquo;씌운다&rsquo; = <b>계산된 <span class="tex">z</span>를 이 함수의 입력으로 넣어 나온 값을 쓴다</b>는 뜻이다. <span class="tex">z</span>가 크면 <span class="tex">e^{-z}</span>가 0에 가까워져 결과가 1에, <span class="tex">z</span>가 매우 작으면 <span class="tex">e^{-z}</span>가 커져 결과가 0에 가까워진다. <span class="tex">z=0</span>이면 정확히 0.5.</p>
+</div>
+<svg class="sig" viewBox="0 0 340 160" role="img" aria-label="시그모이드 곡선: z가 음수로 갈수록 0, 양수로 갈수록 1에 가까워지는 S자 곡선">
+  <line x1="20" y1="130" x2="320" y2="130" stroke="#9ca3af" stroke-width="1"/>
+  <line x1="170" y1="12" x2="170" y2="140" stroke="#9ca3af" stroke-width="1"/>
+  <line x1="20" y1="20" x2="320" y2="20" stroke="#d1d5db" stroke-dasharray="4 4"/>
+  <line x1="20" y1="75" x2="320" y2="75" stroke="#d1d5db" stroke-dasharray="4 4"/>
+  <path d="M20,129.7 L40,129.4 L60,128.7 L80,127.1 L100,123.7 L110,120.9 L120,116.9 L130,111.5 L140,104.5 L150,95.9 L160,85.9 L170,75.0 L180,64.1 L190,54.1 L200,45.5 L210,38.5 L220,33.1 L230,29.1 L240,26.3 L260,22.9 L280,21.3 L300,20.6 L320,20.3" fill="none" stroke="#6d28d9" stroke-width="2.5"/>
+  <circle cx="170" cy="75" r="3.5" fill="#6d28d9"/>
+  <circle cx="216.5" cy="34.8" r="3.5" fill="#16a34a"/>
+  <text x="222" y="48" font-size="10" fill="#16a34a">z=1.86 → 0.865</text>
+  <text x="4" y="24" font-size="10" fill="#6b7280">1</text>
+  <text x="0" y="79" font-size="10" fill="#6b7280">0.5</text>
+  <text x="4" y="134" font-size="10" fill="#6b7280">0</text>
+  <text x="22" y="150" font-size="10" fill="#6b7280">z = −6</text>
+  <text x="163" y="150" font-size="10" fill="#6b7280">0</text>
+  <text x="290" y="150" font-size="10" fill="#6b7280">z = 6</text>
+</svg>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>점수 z</th><th>−5</th><th>−2</th><th>−1</th><th>0</th><th>1</th><th>2</th><th>5</th></tr></thead>
+  <tbody><tr><td>σ(z)</td><td>0.007</td><td>0.119</td><td>0.269</td><td><b>0.500</b></td><td>0.731</td><td>0.881</td><td>0.993</td></tr></tbody>
+</table>
+</div>
+<b>실습 가중치로 한 번 계산해 보기</b> (TF-IDF 값은 설명용으로 정한 수, <span class="tex">b=0</span>)
+<pre class="code">리뷰 A : "훌륭"(TF-IDF 0.6), "지루"(TF-IDF 0.3)
+  ① z = 5.356×0.6 + (−4.509)×0.3 = 3.214 − 1.353 = <span class="out">1.861</span>
+  ② σ(1.861) = 1 / (1 + e^−1.861) = 1 / (1 + 0.156) = <span class="out">0.865</span>   <span class="cm"># 긍정일 확률 86.5% → 0.5보다 크니 "긍정"</span>
+
+리뷰 B : "훌륭"(0.1), "실망"(0.7)
+  ① z = 5.356×0.1 + (−5.598)×0.7 = 0.536 − 3.919 = <span class="out">−3.383</span>
+  ② σ(−3.383) = <span class="out">0.033</span>                            <span class="cm"># 긍정일 확률 3.3% → "부정"</span></pre>
+정리하면 <b>선형 결합 = 단어들의 찬반 투표를 합산한 점수</b>, <b>시그모이드 = 그 점수를 &ldquo;몇 %의 확률로 긍정인가&rdquo;로 바꿔 주는 변환기</b>다. 이름이 &lsquo;회귀&rsquo;인데 분류에 쓰는 이유도 여기 있다 — 속으로는 점수(연속값)를 회귀하고, 마지막에 0.5를 기준으로 잘라 분류한다.</div>
 <pre class="code"><span class="cm"># 실습 — 학습된 가중치 상위/하위 단어 (경사하강법 + L2 규제, 1000 iter)</span>
 [긍정(1)에 기여] 훌륭 +5.356 · 좋다 +5.121 · 인상적 +4.524 · 뛰어나 +3.808 · 만족 +3.727
 [부정(0)에 기여] 실망 −5.598 · 지루 −4.509 · 형편없 −4.343 · 산만 −4.169 · 촌 −4.093
@@ -844,9 +987,32 @@ iter    0  loss 0.6931   <span class="cm"># log 2 = 0.693 — 아무것도 모�
 iter 1000  loss 0.0840</pre>
 <div class="tip"><b>손실 0.6931의 의미</b> — 이진 교차 엔트로피에서 모든 예측이 0.5면 손실은 <span class="tex">-\log 0.5 = 0.693</span>이다. 학습 시작점이 정확히 이 값이라는 건 <b>가중치를 0으로 초기화했다</b>는 뜻이고, 여기서 줄어들면 학습이 되고 있다는 신호다. (<a class="ext" href="machine-learning-week04.html">기계학습특론 4주차 로지스틱 회귀</a>와 같은 식이다.)</div>
 
-<h3 class="sub-title">③ 랜덤 포레스트 (Random Forest)</h3>
+<h3 class="sub-title" id="m-rf">④ 랜덤 포레스트 (Random Forest)</h3>
 <div class="note-box"><b>의사결정 트리</b>는 각 노드가 하나의 질문이고, 답에 따라 다음 노드로 내려가 최종 범주에 도달하는 구조다.
 <b>랜덤 포레스트</b>는 이런 트리를 여러 개 만든다 — <b>데이터와 자질을 무작위로 뽑아</b> 서로 다른 트리를 여럿 만들고, 각 트리의 결과를 <b>다수결 · 평균</b>으로 종합한다. 이것이 <b>배깅(Bagging)</b>이다.</div>
+
+<h3 class="sub-title" id="m-svm">③ 서포트 벡터 머신 (SVM, Support Vector Machine)</h3>
+<div class="note-box">교안 요약 — <b>마진 최대화</b>, <b>고차원 희소 데이터에 강함</b>.</div>
+<div class="mynote"><b>마진 최대화가 무슨 뜻인가</b>
+긍정 리뷰(●)와 부정 리뷰(○)를 가르는 선은 여러 개 그을 수 있다. SVM은 그중 <b>양쪽에서 가장 가까운 점까지의 거리(마진, margin)가 가장 넓은 선</b>을 고른다.
+그 가장 가까운 점들이 경계선을 &lsquo;떠받친다&rsquo;고 해서 <b>서포트 벡터(support vector)</b>라 부른다 — 나머지 점은 아무리 많아도 경계선에 영향을 주지 않는다.
+<ul class="ul">
+  <li><b>왜 넓은 여백이 좋은가</b> — 경계가 양쪽 데이터에서 멀리 떨어져 있으면 새 데이터가 조금 흔들려도 잘못 넘어가지 않는다 → <b>일반화 성능</b>이 좋다</li>
+  <li><b>왜 텍스트(희소 · 고차원)에 강한가</b> — 차원이 수만 개면 데이터가 공간에 드문드문 흩어져 있어 <b>직선(초평면) 하나로 나뉘는 경우가 많다</b>. 선형 SVM이 TF-IDF와 궁합이 좋은 이유다</li>
+  <li><b>커널(kernel)</b> — 직선으로 안 나뉘면 데이터를 더 높은 차원으로 옮겨 나눈다(RBF 커널 등). 텍스트에서는 보통 <b>선형 커널</b>로 충분하다</li>
+  <li>scikit-learn — <code>from sklearn.svm import LinearSVC</code> · <code>LinearSVC(C=1.0).fit(X_train, y_train)</code>. 로지스틱 회귀와 달리 기본 출력이 <b>확률이 아니라 경계로부터의 거리</b>다</li>
+</ul></div>
+
+<h3 class="sub-title" id="m-nn">⑤ 신경망 · 딥러닝 (Neural Network · Deep Learning)</h3>
+<div class="note-box">교안 요약 — <b>표현력이 크지만 많은 데이터와 연산량</b>이 필요.</div>
+<div class="mynote"><b>앞의 네 모델과 무엇이 다른가</b>
+<ul class="ul">
+  <li><b>구조</b> — 로지스틱 회귀(선형 결합 + 시그모이드)를 <b>한 층</b>이라고 보면, 신경망은 이런 층을 <b>여러 겹 쌓은 것</b>이다. 층을 쌓을수록 복잡한(비선형) 경계를 그릴 수 있다</li>
+  <li><b>입력</b> — 앞의 모델은 사람이 만든 자질(TF-IDF)을 받는다. 신경망은 보통 <b>조밀한 단어 임베딩</b>(<a class="ext" href="#dist">5.1.4</a>)을 입력으로 받고, 자질까지 스스로 학습한다</li>
+  <li><b>순서 반영</b> — BoW · TF-IDF가 버린 <b>단어 순서</b>를 RNN · LSTM · CNN · <b>Transformer(BERT)</b>가 다시 살린다. &ldquo;재미<b>없</b>다&rdquo; 같은 부정 표현을 잡을 수 있는 것도 이 덕분이다</li>
+  <li><b>비용</b> — 파라미터가 수백만~수억 개라 <b>데이터가 적으면 과적합</b>하고 GPU가 필요하다. 200건짜리 실습 데이터라면 로지스틱 회귀가 더 낫다</li>
+</ul>
+대표 모델 흐름 : <b>MLP</b>(다층 퍼셉트론) → <b>TextCNN · RNN/LSTM</b> → <b>BERT 등 사전학습 Transformer</b>(현재 표준 — 사전학습된 모델을 소량 데이터로 미세 조정). 이후 주차에서 다룬다.</div>
 
 <h3 class="sub-title">세 모델의 실제 성능 (실습 노트북 실행 결과)</h3>
 <div class="tbl-wrap">
@@ -896,6 +1062,29 @@ iter 1000  loss 0.0840</pre>
 </table>
 </div>
 <p><b>오탐(FP)이 치명적이면 정밀도</b>를, <b>놓침(FN)이 치명적이면 재현율</b>을 중시한다.</p>
+<div class="mynote"><b>&ldquo;재현율 = 실제 긍정 중 찾아낸 비율&rdquo; — 한 문장씩 풀면</b>
+<ul class="ul">
+  <li><b>&ldquo;실제 긍정&rdquo;</b> = 정답 라벨이 긍정인 리뷰 전부. 모델이 뭐라고 했든 상관없이 <b>진짜로 긍정인 것</b>만 모은다 → 혼동 행렬 <b>첫 번째 줄</b> = TP + FN = 22 + 3 = <b>25개</b></li>
+  <li><b>&ldquo;찾아낸&rdquo;</b> = 그 25개 중 모델이 &ldquo;긍정&rdquo;이라고 <b>맞게 짚은 것</b> = TP = <b>22개</b></li>
+  <li><b>재현율</b> = 22 ÷ 25 = <b>0.88</b> → &ldquo;<b>진짜 긍정 리뷰 100개가 있으면 88개는 잡아내고 12개는 놓친다</b>&rdquo;</li>
+</ul>
+<div class="dots" aria-label="실제 긍정 25개 중 22개 찾음, 3개 놓침">
+  <i class="tp"></i><i class="tp"></i><i class="tp"></i><i class="tp"></i><i class="tp"></i><i class="tp"></i><i class="tp"></i><i class="tp"></i><i class="tp"></i><i class="tp"></i><i class="tp"></i><i class="tp"></i><i class="tp"></i><i class="tp"></i><i class="tp"></i><i class="tp"></i><i class="tp"></i><i class="tp"></i><i class="tp"></i><i class="tp"></i><i class="tp"></i><i class="tp"></i><i class="fn"></i><i class="fn"></i><i class="fn"></i>
+</div>
+<p class="dots-lab">실제 긍정 25개 — <span style="color:#16a34a;font-weight:700">● 찾아냄(TP) 22</span> · <span style="color:#dc2626;font-weight:700">○ 놓침(FN) 3</span> → 재현율 22/25 = 0.88</p>
+<b>비유 — 그물로 물고기 잡기</b>: 호수에 물고기(실제 긍정)가 25마리 있다. 그물을 던져 22마리를 건졌다면 재현율 88%. <b>그물에 같이 딸려 온 쓰레기(FP)는 재현율 계산에 아예 들어가지 않는다</b> — 그건 정밀도의 몫이다.
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>재현율 (Recall)</th><th>정밀도 (Precision)</th></tr></thead>
+  <tbody>
+    <tr><td>분모 (기준 집단)</td><td><b>실제 긍정</b> 전체 (TP + FN = 25)</td><td><b>모델이 긍정이라 한 것</b> 전체 (TP + FP = 26)</td></tr>
+    <tr><td>묻는 질문</td><td>&ldquo;진짜들을 <b>얼마나 빠짐없이</b> 잡았나?&rdquo;</td><td>&ldquo;긍정이라고 한 것이 <b>얼마나 믿을 만한가</b>?&rdquo;</td></tr>
+    <tr><td>깎는 실수</td><td>놓침 <b>FN</b></td><td>헛다리 <b>FP</b></td></tr>
+    <tr><td>중요한 상황</td><td>암 검진 · 사기 거래 탐지 — <b>놓치면 큰일</b></td><td>스팸 필터 — <b>정상 메일을 스팸함에 넣으면 큰일</b></td></tr>
+  </tbody>
+</table>
+</div>
+이름이 &lsquo;재현(再現, recall = 다시 불러오기)&rsquo;인 이유 — 원래 정보 검색에서 나온 말로, &ldquo;<b>관련 있는 문서들을 검색 결과로 얼마나 많이 불러왔나</b>&rdquo;를 뜻했다.</div>
 <div class="deep"><b>왜 하필 &lsquo;조화&rsquo; 평균인가</b> — 산술 평균을 쓰면 한쪽이 1.0, 다른 쪽이 0.0일 때도 0.5가 나와 &ldquo;절반은 한다&rdquo;처럼 보인다. 조화 평균은 <b>작은 쪽에 끌려간다</b> — 0과 1의 조화 평균은 0이다.
 즉 F1은 <b>정밀도와 재현율이 둘 다 높아야만 높아지는</b> 지표라서, 한쪽을 희생해 다른 쪽을 올리는 꼼수를 막아 준다.
 예를 들어 전부 &lsquo;긍정&rsquo;이라고 답하면 재현율은 1.0이 되지만 정밀도가 0.5로 떨어져 F1은 0.667에 그친다.</div>
@@ -980,6 +1169,22 @@ B = {폭염, 을, 피해서, 휴일, 에, 놀러왔다가, 갑작스런, 비, �
 교안 56p는 <b>0.20</b>, 교안 63p 표와 실습 노트북은 <b>0.167</b>(공통 4개 / 전체 24개)이다. 틀린 것이 아니라 <b>토큰화 기준이 다르기 때문</b>이다.
 실습의 간이 토크나이저는 어간 추출을 하고 조사를 다르게 잘라서 집합 자체가 달라진다(&ldquo;있습니다&rdquo; → &ldquo;있&rdquo;, &ldquo;놀러왔다가&rdquo; → &ldquo;놀러왔&rdquo; 등).
 <b>교훈 — 토크나이저가 바뀌면 유사도 값도 바뀐다.</b> 그래서 유사도의 절대값을 비교할 때는 반드시 <b>같은 전처리</b>를 거쳤는지 확인해야 한다.</div>
+<div class="live"><b>자카드 유사도는 언제 쓰나</b>
+<ul class="ul">
+  <li><b>세부 비교보다는 전체적으로 크게 비교할 때 용이</b>하다</li>
+  <li><b>계산이 매우 빠르다</b></li>
+</ul></div>
+<div class="mynote"><b>왜 &lsquo;크게&rsquo; 비교하는 데 맞고, 왜 빠른가</b>
+<ul class="ul">
+  <li><b>크게 비교한다</b> = &ldquo;<b>어떤 단어가 있었나 없었나</b>&rdquo;만 본다는 뜻. 몇 번 나왔는지(빈도), 그 단어가 얼마나 중요한지(가중치), 순서는 전부 무시한다. 그래서 &ldquo;두 문서가 대체로 같은 재료로 이루어졌나&rdquo;를 대략 가늠하는 데는 좋지만, &ldquo;어느 쪽이 더 비슷한가&rdquo;를 섬세하게 가리기엔 정보가 부족하다</li>
+  <li><b>빠르다</b> — ① TF-IDF처럼 <b>전체 말뭉치로 사전을 만들고 벡터화하는 단계가 없다</b>(두 문장만 있으면 바로 계산) ② 계산이 곱셈 · 제곱근 없이 <b>집합의 교집합 · 합집합 크기 세기</b>뿐이다 ③ 파이썬 <code>set</code>은 해시 기반이라 원소 확인이 거의 즉시 끝난다</li>
+  <li><b>실전 활용 — &ldquo;1차 거르기&rdquo;</b> : 웹 문서 · 학습 데이터 수백만 건에서 <b>거의 같은 문서(중복)</b>를 찾을 때, 자카드를 근사하는 <b>MinHash</b>로 먼저 후보를 빠르게 추리고, 추려진 후보만 코사인 등으로 정밀 비교하는 <b>2단계 방식</b>이 표준이다. &ldquo;크게 먼저, 세부는 나중에&rdquo;의 전형이다</li>
+</ul>
+<pre class="code">def jaccard(a, b):
+    A, B = set(a), set(b)           <span class="cm"># 토큰 리스트 → 집합 (중복 · 순서가 여기서 사라진다)</span>
+    return len(A &amp; B) / len(A | B)  <span class="cm"># &amp; = 교집합, | = 합집합 — 이게 전부</span>
+
+jaccard(["영화","재미"], ["영화","영화","영화","재미"])   <span class="cm"># → 1.0  빈도 차이는 못 본다</span></pre></div>
 
 <h3 class="sub-title">코사인 유사도 (Cosine Similarity)</h3>
 <div class="fx">
@@ -993,6 +1198,23 @@ D2 : "영화 영화 재미 재미"  → [2, 2]     <span class="cm"># 사실상 
 
 코사인          = <span class="out">1.000</span>   ← 방향이 같으므로 완전히 같다고 판정
 유클리디언 거리  = <span class="out">1.414</span>   ← 길이가 다르다는 이유로 "멀다"고 판정</pre></div>
+<div class="mynote"><b>그런데 &ldquo;길이에 영향을 받지 않는 것&rdquo;이 왜 그렇게 중요한가?</b>
+현실의 문서는 <b>길이가 제각각</b>이기 때문이다. 한 줄 리뷰와 A4 세 장짜리 리뷰, 3단어짜리 검색어와 1,000단어짜리 문서를 비교해야 한다.
+그런데 BoW · TF-IDF 벡터의 값은 <b>단어를 셀수록 커진다</b> — 긴 문서는 <b>내용이 같아도</b> 벡터 크기(길이)가 커진다. 길이에 흔들리는 척도를 쓰면 &ldquo;<b>무슨 내용인가</b>&rdquo;가 아니라 &ldquo;<b>얼마나 길게 썼나</b>&rdquo;를 비교하게 된다.
+<pre class="code"><span class="cm"># 어휘 [영화, 재미, 지루] · 검색어 Q = "영화 재미"</span>
+Q        = [1, 1, 0]
+B (긴 칭찬 리뷰)  = [5, 5, 1]    <span class="cm"># 같은 이야기를 길게 — 주제가 Q와 같다</span>
+C (짧은 혹평)     = [1, 0, 1]    <span class="cm"># 짧지만 주제가 다르다</span>
+
+             유클리디언 거리      코사인 유사도
+Q ↔ B        <span class="out">5.745</span> (멀다?!)      <span class="out">0.990</span> (거의 같다)
+Q ↔ C        <span class="out">1.414</span> (가깝다?!)    <span class="out">0.500</span></pre>
+유클리디언은 <b>짧은 혹평 C가 더 가깝다</b>고 판정한다 — 단지 길이가 비슷하다는 이유로. 코사인은 <b>단어 구성 비율(방향)</b>만 보므로 B가 주제상 같다는 것을 제대로 잡아낸다.
+<ul class="ul">
+  <li><b>검색</b> — 질의는 짧고 문서는 길다. 길이에 흔들리면 긴 문서가 부당하게 불리(거리)하거나 유리(내적)해진다</li>
+  <li><b>공정성</b> — 같은 내용을 길게 쓴 문서와 짧게 쓴 문서를 &lsquo;같다&rsquo;고 봐야 문서끼리 공정하게 순위를 매길 수 있다</li>
+  <li><b>정보 검색 교과서의 표현</b> — 코사인은 &ldquo;<b>비교 과정에서 문서 길이를 정규화하는 방법</b>&rdquo;이다. 벡터를 길이 1로 맞춘 뒤(<a class="ext" href="#tfidf">5.1.3의 L2 정규화</a>) 내적하면 그게 곧 코사인이다</li>
+</ul></div>
 <div class="warn"><b>코사인의 두 가지 주의점</b>
 ① <b>단어가 하나도 겹치지 않으면</b> 의미가 아무리 비슷해도 유사도는 <b>0</b>이다 (→ <a class="ext" href="#simapp">5.3.4</a>에서 실제 사례).
 ② 반대로 <b>단어만 겹치면 뜻이 정반대여도 높게</b> 나온다 — 실습에서 &ldquo;이 영화는 재미있다&rdquo; vs &ldquo;이 영화는 재미없다&rdquo;의 코사인이 <b>0.603</b>이었다.</div>
@@ -1016,6 +1238,46 @@ D2 : "영화 영화 재미 재미"  → [2, 2]     <span class="cm"># 사실상 
 
 <div class="note-box"><b>정규화가 필요한 이유</b> — 두 거리 모두 <b>값의 범위에 제한이 없어</b> 1보다 큰 값이 얼마든지 나온다. 제한이 없는 값은 다른 척도와 비교하기 어렵다.
 그래서 각 문장 벡터를 <b>L1 정규화</b>(모든 성분의 합이 1이 되도록)한 뒤 거리를 계산한다. 성분이 0 이상이므로 정규화 후 <b>유클리디언은 0~√2, 맨해튼은 0~2</b> 범위가 된다.</div>
+<div class="mynote"><b>L1 정규화와 L2 정규화 — 같은 벡터로 비교</b>
+&lsquo;정규화(normalization)&rsquo;는 벡터의 <b>방향(비율)은 그대로 두고 크기만 1로 맞추는 것</b>이다. &ldquo;크기&rdquo;를 무엇으로 재느냐에 따라 L1과 L2로 나뉜다.
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>L1 정규화</th><th>L2 정규화</th></tr></thead>
+  <tbody>
+    <tr><td>크기를 재는 법</td><td>성분 <b>절댓값의 합</b> <span class="tex">\lVert v\rVert_1=\sum_i \lvert v_i\rvert</span></td><td>성분 <b>제곱합의 제곱근</b> <span class="tex">\lVert v\rVert_2=\sqrt{\sum_i v_i^2}</span> (화살표의 실제 길이)</td></tr>
+    <tr><td>정규화 후 조건</td><td><b>모든 성분의 합이 1</b></td><td><b>제곱합이 1</b> (길이가 1)</td></tr>
+    <tr><td>v = [3, 4] 예시</td><td>합 = 3 + 4 = 7 → <b>[3/7, 4/7] = [0.429, 0.571]</b></td><td>길이 = √(9+16) = 5 → <b>[0.6, 0.8]</b></td></tr>
+    <tr><td>해석</td><td>&ldquo;전체 중 몇 %&rdquo; — <b>비율 · 확률 분포</b>처럼 읽힌다</td><td>&ldquo;방향만 남긴 화살표&rdquo; — 원 위의 점</td></tr>
+    <tr><td>주로 쓰는 곳</td><td>교안의 유클리디언 · 맨해튼 계산 전처리</td><td><code>TfidfVectorizer</code> 기본값(<code>norm='l2'</code>) · 코사인</td></tr>
+  </tbody>
+</table>
+</div>
+<b>L2 정규화와 코사인의 관계</b> — 두 벡터를 L2 정규화하면 <span class="tex">d_{L2}^2 = 2(1-\cos\theta)</span>가 성립한다. 즉 L2 정규화 뒤의 유클리디언 거리는 <b>코사인과 순위가 완전히 같아진다</b> — 길이 문제를 정규화로 없앴기 때문이다.</div>
+
+<div class="mynote"><b>맨해튼 유사도 — 손으로 한 번 계산</b>
+A = [0.5, 0.3, 0.2], B = [0.2, 0.3, 0.5] (둘 다 L1 정규화된 상태)
+<pre class="code">차이        : |0.5−0.2| = 0.3,  |0.3−0.3| = 0,  |0.2−0.5| = 0.3
+맨해튼 (L1) : 0.3 + 0 + 0.3            = <span class="out">0.600</span>   <span class="cm"># 차이를 그냥 더한다</span>
+유클리디언  : √(0.3² + 0² + 0.3²) = √0.18 = <span class="out">0.424</span>   <span class="cm"># 제곱해 더하고 루트</span>
+유사도 변환 : 1/(1+0.600) = 0.625,  1/(1+0.424) = 0.702</pre>
+<ul class="ul">
+  <li><b>차이</b> — 유클리디언은 차이를 <b>제곱</b>하므로 한 성분의 큰 차이를 더 크게 벌한다. 맨해튼은 모든 차이를 <b>똑같이 더한다</b> → 튀는 값(이상치)에 덜 민감하다</li>
+  <li><b>항상 맨해튼 ≥ 유클리디언</b> (0.600 ≥ 0.424) — 블록을 따라 도는 길이 직선보다 짧을 수 없다</li>
+  <li><b>이름의 &lsquo;유사도&rsquo;</b> — 교안은 &ldquo;맨해튼 유사도&rdquo;라 부르지만 계산한 값 자체는 <b>거리</b>다. 작을수록 비슷하다</li>
+</ul></div>
+
+<div class="pit"><b>L1 · L2 &lsquo;정규화&rsquo; vs L1 · L2 &lsquo;규제&rsquo; — 이름이 같아 헷갈린다</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>정규화 (normalization)</th><th>규제 (regularization)</th></tr></thead>
+  <tbody>
+    <tr><td>대상</td><td><b>데이터 벡터</b> (문서 벡터)</td><td><b>모델의 가중치</b></td></tr>
+    <tr><td>하는 일</td><td>크기를 1로 나눠 맞춤</td><td>손실에 <span class="tex">\lambda\sum\lvert w\rvert</span>(L1) 또는 <span class="tex">\lambda\sum w^2</span>(L2)를 더해 가중치가 커지지 못하게 벌점</td></tr>
+    <tr><td>이 페이지에서</td><td>5.1.3 TF-IDF 행 정규화 · 5.3.3 거리 계산 전처리</td><td><a class="ext" href="#eval">5.2.5 과적합 대응</a> · 로지스틱 회귀 실습의 &ldquo;L2 규제&rdquo;</td></tr>
+  </tbody>
+</table>
+</div>
+공통점은 &lsquo;L1 = 절댓값 합, L2 = 제곱합&rsquo;이라는 <b>크기 재는 방식</b>뿐이다.</div>
 <pre class="code">import numpy as np
 from sklearn.metrics.pairwise import euclidean_distances
 
@@ -1145,19 +1407,92 @@ XGBoost는 여러 의사결정 트리를 쓰되 결과를 단순 평균하지 �
   </div>
 </div>
 
-<h3 class="sub-title">교안 74p — 스스로 점검하기</h3>
-<div class="tbl-wrap">
-<table>
-  <thead><tr><th>질문</th><th>한 줄 답</th></tr></thead>
-  <tbody>
-    <tr><td>원-핫 인코딩과 TF-IDF의 가장 큰 차이는?</td><td>원-핫은 <b>단어 하나</b>를 0/1로만 표시해 빈도 · 중요도가 없고 모든 단어가 직교한다. TF-IDF는 <b>문서</b>를 표현하며 &lsquo;이 문서에서 얼마나 중요한가&rsquo;를 실수 가중치로 담는다</td></tr>
-    <tr><td>BoW가 &ldquo;개가 사람을 물었다&rdquo;와 &ldquo;사람이 개를 물었다&rdquo;를 구분 못 하는 이유는?</td><td><b>순서를 버리고 빈도만</b> 세기 때문이다. 두 문장의 단어 구성이 같아 벡터가 완전히 동일해진다 (실습에서 <code>True</code> 확인)</td></tr>
-    <tr><td>IDF에 로그를 취하는 이유는?</td><td>문서 수 N이 커질 때 <span class="tex">N/\mathrm{DF}</span>가 <b>지나치게 커지는 것을 억제</b>하기 위해. 로그를 씌우면 희귀 단어의 가중치가 폭주하지 않고 완만하게 증가한다</td></tr>
-    <tr><td>클래스가 불균형할 때 정확도 대신 볼 지표는?</td><td><b>정밀도 · 재현율 · F1</b>과 <b>혼동 행렬</b>. 소수 클래스를 실제로 잡아내는지는 <b>재현율</b>이 알려 준다</td></tr>
-    <tr><td>문서 길이가 다를 때 코사인 유사도가 유리한 이유는?</td><td>벡터의 <b>크기가 아니라 방향(각도)</b>만 보기 때문이다. [1,1]과 [2,2]를 1.000으로 판정하지만 유클리디언은 1.414로 &ldquo;멀다&rdquo;고 본다</td></tr>
-  </tbody>
-</table>
-</div>
+<div class="tip"><b>교안 74p 자가 점검 질문</b>은 바로 아래 <a class="ext" href="#review">복습하기</a>에 답과 함께 정리했다.</div>
+</section>
+
+<!-- ===================== 복습하기 ===================== -->
+<section class="sec" id="review">
+  <div class="sec-head"><span class="sec-badge">REVIEW</span><h2 class="sec-title">복습하기<small>교안 74p 자가 점검 질문 — 먼저 스스로 답해 보고 &lsquo;답 보기&rsquo;를 누른다</small></h2></div>
+
+<details class="rv">
+  <summary><i>Q1</i>원-핫 인코딩과 TF-IDF의 가장 큰 차이는 무엇인가?</summary>
+  <div class="ans">
+    <span class="one">원-핫은 &ldquo;있다 / 없다(0·1)&rdquo;만 표시하고, TF-IDF는 &ldquo;이 문서에서 이 단어가 얼마나 중요한가&rdquo;를 실수 가중치로 담는다.</span>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th></th><th>원-핫 인코딩</th><th>TF-IDF</th></tr></thead>
+      <tbody>
+        <tr><td>표현 대상</td><td><b>단어 하나</b></td><td><b>문서 하나</b> (문서 안 단어들의 가중치)</td></tr>
+        <tr><td>값</td><td>0 또는 1</td><td>0 이상의 실수 (TF × IDF)</td></tr>
+        <tr><td>빈도 정보</td><td>없음</td><td>TF — 문서 안에서 몇 번 나왔나</td></tr>
+        <tr><td>중요도 정보</td><td>없음 (모든 단어가 같은 무게)</td><td>IDF — 여러 문서에 흔한 단어는 낮게, 드문 단어는 높게</td></tr>
+        <tr><td>공통점</td><td colspan="2">둘 다 <b>차원 = 어휘 사전 크기 V</b>인 <b>희소</b> 벡터이고, <b>단어 순서</b>는 반영하지 못한다</td></tr>
+      </tbody>
+    </table></div>
+    그래서 원-핫으로는 &ldquo;영화&rdquo;와 &ldquo;실망&rdquo;이 리뷰에서 얼마나 중요한지 구분할 수 없지만, TF-IDF에서는 모든 리뷰에 나오는 &ldquo;영화&rdquo;는 낮고 드문 &ldquo;실망&rdquo;은 높은 값을 받는다. → <a class="ext" href="#onehot">5.1.1</a> · <a class="ext" href="#tfidf">5.1.3</a>
+  </div>
+</details>
+
+<details class="rv">
+  <summary><i>Q2</i>BoW가 &ldquo;개가 사람을 물었다&rdquo;와 &ldquo;사람이 개를 물었다&rdquo;를 구분하지 못하는 이유는?</summary>
+  <div class="ans">
+    <span class="one">BoW는 단어를 가방(bag)에 넣고 &ldquo;몇 개씩 들었나&rdquo;만 세서, 단어의 순서(= 누가 누구를)를 버리기 때문이다.</span>
+<pre class="code">어휘 : [개, 사람, 물었다]          <span class="cm"># 조사 &lsquo;가 · 이 · 을 · 를&rsquo;은 정제 단계에서 떨어진다</span>
+"개가 사람을 물었다"  → [1, 1, 1]
+"사람이 개를 물었다"  → [1, 1, 1]     <span class="cm"># 완전히 같은 벡터 → 실습에서도 True</span></pre>
+    의미를 결정하는 것은 <b>&ldquo;누가 주어이고 누가 목적어인가&rdquo;</b>, 즉 순서와 문법 관계인데 BoW는 그 정보를 담을 칸이 없다.
+    <b>보완책</b> — <b>N-gram</b>(&ldquo;개 사람&rdquo; vs &ldquo;사람 개&rdquo;처럼 인접 쌍을 자질로 → 국소적 순서 복원), 더 나아가 순서를 입력으로 받는 <b>RNN · Transformer</b>. → <a class="ext" href="#bow">5.1.2</a>
+  </div>
+</details>
+
+<details class="rv">
+  <summary><i>Q3</i>IDF에 로그를 취하는 이유는 무엇인가?</summary>
+  <div class="ans">
+    <span class="one">N/DF 값이 문서 수에 따라 폭발적으로 커지는 것을 눌러, 희귀 단어의 가중치가 지나치게 커지지 않게 하려고.</span>
+    문서가 100만 개인 말뭉치를 생각해 보자.
+<pre class="code">                  N/DF            log(N/DF)   (자연로그)
+DF = 1  (희귀)    1,000,000       <span class="out">13.8</span>
+DF = 10           100,000         <span class="out">11.5</span>
+DF = 1,000        1,000           <span class="out"> 6.9</span>
+DF = 100,000      10              <span class="out"> 2.3</span></pre>
+    <ul class="ul">
+      <li><b>로그가 없으면</b> — 한 번 나온 단어가 1,000,000, 흔한 단어가 10 → 10만 배 차이. 오타 하나가 문서 벡터 전체를 지배해 버린다</li>
+      <li><b>로그를 씌우면</b> — 13.8 vs 2.3 → 6배 차이. &ldquo;드문 단어일수록 중요&rdquo;라는 <b>순서는 유지</b>하면서 <b>격차만 완만하게</b> 줄인다</li>
+      <li>직관적으로도 &ldquo;DF가 10배 드물다&rdquo;가 &ldquo;중요도 10배&rdquo;가 아니라 &ldquo;<b>한 단계 더 중요</b>&rdquo; 정도로 느끼는 것이 자연스럽다 — 로그는 &lsquo;곱셈 차이&rsquo;를 &lsquo;덧셈 차이&rsquo;로 바꾼다</li>
+      <li>덤으로 DF에 1을 더하는(스무딩) 변형은 <b>분모가 0이 되는 것</b>을 막는다</li>
+    </ul> → <a class="ext" href="#tfidf">5.1.3</a>
+  </div>
+</details>
+
+<details class="rv">
+  <summary><i>Q4</i>클래스가 불균형할 때 정확도 대신 어떤 지표를 봐야 하는가?</summary>
+  <div class="ans">
+    <span class="one">정밀도 · 재현율 · F1 점수, 그리고 혼동 행렬을 함께 본다. 특히 소수 클래스를 실제로 잡아내는지는 재현율이 보여 준다.</span>
+    <b>왜 정확도는 안 되나</b> — 스팸 1% · 정상 99% 데이터에서 &ldquo;전부 정상&rdquo;이라고만 답하는 엉터리 모델도 <b>정확도 99%</b>다. 그런데 스팸은 한 건도 못 잡았다.
+<pre class="code">메일 1,000통 (스팸 10 · 정상 990) — "전부 정상"이라고 답하는 모델
+TP = 0 · FN = 10 · FP = 0 · TN = 990
+정확도 = (0 + 990) / 1000 = <span class="out">0.99</span>     <span class="cm"># 좋아 보인다</span>
+재현율 = 0 / (0 + 10)      = <span class="out">0.00</span>     <span class="cm"># 스팸을 하나도 못 잡았다는 게 드러난다</span>
+F1     = <span class="out">0.00</span></pre>
+    <ul class="ul">
+      <li><b>놓치면 큰일</b>(질병 · 사기) → <b>재현율</b> 중시</li>
+      <li><b>잘못 잡으면 큰일</b>(정상 메일을 스팸으로) → <b>정밀도</b> 중시</li>
+      <li>둘 다 챙기려면 → <b>F1</b> (조화 평균이라 한쪽이 0이면 0)</li>
+    </ul> → <a class="ext" href="#eval">5.2.5</a>
+  </div>
+</details>
+
+<details class="rv">
+  <summary><i>Q5</i>문서 길이가 서로 다를 때 코사인 유사도가 유리한 이유는?</summary>
+  <div class="ans">
+    <span class="one">코사인은 벡터의 크기(길이)가 아니라 방향(각도) — 즉 단어 구성 &lsquo;비율&rsquo;만 비교하기 때문에, 길게 쓴 문서와 짧게 쓴 문서도 내용이 같으면 같다고 판정한다.</span>
+<pre class="code">D1 "영화 재미"          → [1, 1]
+D2 "영화 영화 재미 재미" → [2, 2]     <span class="cm"># 내용은 같고 길이만 2배</span>
+코사인 = (1·2 + 1·2) / (√2 · √8) = 4 / 4 = <span class="out">1.000</span>   <span class="cm"># 같다</span>
+유클리디언 = √((2−1)² + (2−1)²)   = <span class="out">1.414</span>   <span class="cm"># 길이 차이 때문에 멀다고 판정</span></pre>
+    코사인 식 <span class="tex">\frac{\mathbf{A}\cdot\mathbf{B}}{\lVert\mathbf{A}\rVert\lVert\mathbf{B}\rVert}</span>의 분모가 <b>각 벡터를 자기 길이로 나눠</b> 길이를 1로 맞추는 역할을 한다. 그래서 짧은 검색어와 긴 문서, 한 줄 리뷰와 긴 리뷰를 <b>공정하게</b> 비교할 수 있다.
+    유클리디언 · 맨해튼도 쓰려면 먼저 <b>L1/L2 정규화</b>로 길이를 맞춰야 한다. → <a class="ext" href="#jacos">5.3.2</a> · <a class="ext" href="#euclid">5.3.3</a>
+  </div>
+</details>
 </section>
 
 <!-- ===================== 용어 ===================== -->
