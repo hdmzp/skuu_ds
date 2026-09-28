@@ -357,6 +357,36 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .pt.plus{border-left-color:#0f766e}
 .pt pre.code{margin:9px 0}
 
+/* 커널(마스크) 격자 */
+.kmat{display:inline-grid;grid-template-columns:repeat(3,26px);border:1.5px solid #1f2937;border-radius:3px;overflow:hidden;background:#fff;font:700 12px/24px Consolas,'D2Coding',ui-monospace,monospace;text-align:center;vertical-align:middle}
+.kmat.k2{grid-template-columns:repeat(2,26px)}
+.kmat.k1{grid-template-columns:26px}
+.kmat span{border:1px solid #d6dbe3;height:24px}
+.kmat .p{background:#dbeafe;color:#1e3a8a}
+.kmat .n{background:#fee2e2;color:#991b1b}
+.kmat .z{color:#9ca3af}
+.kmat.hl{box-shadow:0 0 0 3px #f59e0b}
+.kpair{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
+.kbox{display:inline-flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--muted);line-height:1.4}
+.kbox b{font-size:11.5px;color:var(--ink)}
+.kbox em{font-style:normal;font-weight:700;color:#4b5563}
+.kbox.win em{color:#b45309}
+.ktbl td{vertical-align:middle}
+.ktbl td .kpair{justify-content:flex-start}
+.cmp{display:grid;grid-template-columns:repeat(3,auto);gap:12px 16px;justify-content:center;align-items:center;margin:12px 0}
+.cmp .mid{display:flex;align-items:center;justify-content:center}
+.dia{display:block;width:100%;max-width:580px;height:auto;margin:10px auto 4px;background:#fff;border:1px solid var(--border);border-radius:8px}
+.dia-cap{font-size:11.5px;color:var(--muted);text-align:center;line-height:1.6;margin-bottom:8px}
+.patch{display:inline-grid;grid-template-columns:repeat(3,30px);border:1.5px solid #1f2937;font:700 11px/30px Consolas,monospace;text-align:center}
+.patch span{height:30px}
+.chain{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}
+.chain span{min-width:44px;text-align:center;border-radius:6px;padding:4px 2px;font:700 12px/1.3 Consolas,monospace}
+.chain small{display:block;font:600 10px/1.3 'Pretendard',sans-serif}
+.chain .s{background:#1f2937;color:#fff}
+.chain .wk{background:#dcfce7;color:#14532d;border:1px solid #22c55e}
+.chain .wd{background:#fee2e2;color:#991b1b;border:1px dashed #ef4444}
+.chain .d{background:#f3f4f6;color:#9ca3af;border:1px dashed #d1d5db}
+
 /* 본문 속 짧은 보충 설명 상자 */
 .qa{background:#f0fdfa;border:1px solid #99e0d6;border-left:4px solid #0f766e;
   border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:11px 0;
@@ -449,12 +479,13 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <p class="kicker">5주차 · 9.30 · 2026-2학기</p>
   <h1>05. 로컬 특징 검출 — 엣지 · 직선 · 코너 · 블롭</h1>
   <p>3주차의 <b>선형 필터</b>와 4주차의 <b>이미지 피라미드</b>가 여기서 합쳐집니다. 미분 필터로 <b>엣지</b>를 찾고, 그 엣지를 모아 <b>직선</b>을 세고(허프 변환), 한 점에서 <b>모든 방향으로 변하는 지점</b>을 찾아 <b>코너</b>를 잡고(Harris), 마지막으로 피라미드의 여러 스케일을 훑어 <b>덩어리(블롭)와 그 크기</b>까지 찾아냅니다.</p>
-  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 92p</span><span class="chip">슬라이드 59장</span><span class="chip">Sobel · Canny</span><span class="chip">Hough</span><span class="chip">Harris</span><span class="chip">LoG · DoG</span></div>
+  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 92p</span><span class="chip">슬라이드 59장</span><span class="chip">플립러닝 1부</span><span class="chip">Sobel · Canny</span><span class="chip">Hough</span><span class="chip">Harris</span><span class="chip">LoG · DoG</span></div>
 </section>
 
 <div class="legend">
   <p class="legend-t">내용이 어디에서 왔는지 <b>뱃지</b>로 구분했습니다</p>
   <i><span class="bdg bdg-gyo">교안</span><span>교수님 슬라이드에 있는 내용</span></i>
+  <i><span class="bdg bdg-flip">플립러닝</span><span>사전 강의(1부)에서 말로 설명한 내용 — 제목에 교안 뱃지와 함께 붙은 곳은 둘을 하나로 이어 풀어 쓴 것</span></i>
   <i><span class="bdg bdg-plus">보충설명</span><span>교안에 없지만 이해 · 시험을 위해 따로 찾아 정리한 내용</span></i>
   <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선</span>이 있는 말은 누르면 뜻이 뜹니다.</p>
 </div>
@@ -517,7 +548,24 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>왜 특징을 뽑는가 — 두 사진을 이어 붙이려면</h3>
   <p>파노라마를 만들 때를 생각해 보자. 두 사진을 겹치려면 <b>같은 지점을 가리키는 짝</b>을 찾아야 한다. 픽셀 전체를 하나하나 비교하면 느리고, 밝기가 조금만 달라져도 실패한다.
   그래서 <b>① 사진마다 눈에 띄는 지점을 뽑고(추출) → ② 두 사진의 지점끼리 짝을 짓고(매칭) → ③ 그 짝으로 사진을 정렬</b>한다(교안 4p). 화성 탐사선 사진에서 SIFT로 찾은 매칭(5p)이 바로 그 예다.</p>
-  <p>응용은 여기서 끝나지 않는다 — <b>이미지 매칭 · 파노라마 정합 · 3차원 복원 · 모션 추적(AR) · 물체 인식 · 이미지 검색 · 로봇 내비게이션</b>이 모두 같은 도구 위에 서 있다(교안 7p).</p>
+  <p>응용은 여기서 끝나지 않는다 — <b>이미지 매칭 · 파노라마 정합 · 3차원 복원 · 모션 추적(AR) · 물체 인식 · <span class="term" tabindex="0" data-tip="retrieval. 질의로 준 이미지와 비슷한 이미지를 큰 데이터베이스에서 찾아 비슷한 순서대로 돌려주는 일. 아래 플립러닝 상자에서 자세히.">이미지 검색(retrieval)</span> · 로봇 내비게이션</b>이 모두 같은 도구 위에 서 있다(교안 7p).</p>
+</div>
+
+<div class="pt flip">
+  <h3 class="pt-h"><span class="bdg bdg-flip">플립러닝</span>retrieval — 인공지능에서 말하는 &lsquo;검색&rsquo;</h3>
+  <p>우리가 보통 쓰는 검색은 <b>글자를 넣으면 그 글자가 들어간 문서</b>를 찾아 준다. 인공지능 · 컴퓨터 비전에서 말하는 <b>retrieval(검색, 회수)</b>은 한 걸음 더 나간다 — <b>&ldquo;이것과 비슷한 것&rdquo;을 큰 저장소에서 찾아, 비슷한 순서대로 꺼내 오는 일</b>이다. retrieve가 &lsquo;되찾아 오다&rsquo;라는 뜻이라 붙은 이름이다.</p>
+  <p>이미지 검색이라면 <b>질의(query)가 글자가 아니라 사진</b>이다. 에펠탑 사진을 한 장 주면, 수백만 장의 데이터베이스에서 <b>같은 건물이 찍힌 사진</b>을 찾아 가장 닮은 것부터 늘어놓는다. 스마트폰의 &lsquo;이미지로 검색&rsquo;(구글 렌즈), 쇼핑몰의 &lsquo;비슷한 상품 찾기&rsquo;가 모두 retrieval이다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>과제</th><th>질문</th><th>출력</th></tr></thead>
+    <tbody>
+      <tr><td>분류 classification</td><td>이 사진은 <b>무엇</b>인가?</td><td>라벨 하나 (&ldquo;에펠탑&rdquo;)</td></tr>
+      <tr><td>검출 detection</td><td>사진 <b>어디에</b> 무엇이 있나?</td><td>위치(상자 · 점)</td></tr>
+      <tr><td><b>검색 retrieval</b></td><td>저장소에서 <b>이것과 닮은 것</b>은?</td><td>비슷한 순서로 정렬된 <b>목록</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>이번 주와의 연결</b> — 사진 두 장이 &lsquo;닮았는지&rsquo;를 판단하려면 결국 <b>같은 지점(특징)이 얼마나 많이 짝지어지는가</b>를 세야 한다. 그래서 retrieval도 아래의 <b>검출 → 기술 → 매칭</b> 세 단계 위에 서 있다. 사진마다 로컬 특징을 뽑아 숫자 벡터로 바꿔 두고(색인), 질의 사진의 특징과 가장 가까운 것을 빨리 찾는 것이 핵심이다.</p>
 </div>
 
 <div class="pt gyo">
@@ -536,11 +584,11 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>세 단계 — 이번 주차는 그중 &lsquo;검출&rsquo;만 한다 (9p)</h3>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-flip">플립러닝</span>세 단계 — 이번 주차는 그중 &lsquo;검출&rsquo;만 한다 (9p)</h3>
   <div class="flow">
-    <div class="fl"><b>① 검출 Detection</b><span>관심점(interest point)이 <b>어디</b>에 있는지 찾는다 — <b>5주차</b></span></div>
-    <div class="fl"><b>② 기술 Description</b><span>각 관심점 <b>주변을 숫자 벡터</b>로 요약한다 <span class="tex">\mathbf{x}_1=[x_1^{(1)},\dots,x_d^{(1)}]</span> — <b>6주차</b></span></div>
-    <div class="fl"><b>③ 매칭 Matching</b><span>두 사진의 기술자를 비교해 <b>같은 지점끼리 짝</b>짓는다 — <b>7주차</b></span></div>
+    <div class="fl"><b>① 검출 Detection</b><span><b>&ldquo;어디를 볼 것인가&rdquo; — Find feature!</b> 관심점(interest point)이 <b>어디</b>에 있는지 찾는다 — <b>5주차</b></span></div>
+    <div class="fl"><b>② 기술 Description</b><span><b>&ldquo;어떻게 생겼는가&rdquo; — Represent feature!</b> 각 관심점 <b>주변을 숫자 벡터</b>로 요약한다 <span class="tex">\mathbf{x}_1=[x_1^{(1)},\dots,x_d^{(1)}]</span> — <b>6주차</b></span></div>
+    <div class="fl"><b>③ 매칭 Matching</b><span><b>&ldquo;어느 것과 같은가&rdquo; — Match feature!</b> 두 사진의 기술자를 비교해 <b>같은 지점끼리 짝</b>짓는다 — <b>7주차</b></span></div>
   </div>
   <p>즉 이번 주는 &ldquo;<b>어디를 볼 것인가</b>&rdquo;만 정하고, &ldquo;그곳이 어떻게 생겼는가&rdquo;(기술자)와 &ldquo;어느 것과 같은가&rdquo;(매칭)는 다음 두 주차의 몫이다.</p>
 </div>
@@ -555,6 +603,25 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
       <tr><td><b>직선</b> Line</td><td>엣지 점들이 <b>일직선</b>으로 늘어선 것</td><td>허프 변환</td><td><a class="ext" href="#hough">04</a></td></tr>
       <tr><td><b>코너</b> Corner</td><td><b>어느 방향으로 움직여도</b> 밝기가 크게 변하는 점</td><td>Harris 검출기</td><td><a class="ext" href="#corner">05</a> · <a class="ext" href="#harris">06</a></td></tr>
       <tr><td><b>블롭</b> Blob</td><td>주변과 구별되는 <b>덩어리 영역</b></td><td>특성 스케일 찾기 (LoG · DoG)</td><td><a class="ext" href="#blob">08</a></td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="pt flip">
+  <h3 class="pt-h"><span class="bdg bdg-flip">플립러닝</span>네 가지를 한 줄로 잇기 — 점 → 선 → 모서리 → 덩어리</h3>
+  <p><b>엣지</b> — 이웃한 두 점 사이에서 <b>밝기가 크게 변하는 곳</b>이다. &lsquo;변화량&rsquo;을 재는 수학 도구가 미분이므로 <b>미분값(그래디언트)</b>으로 찾고, 디지털 영상에서는 그 미분을 <b>차분 연산자</b>(이웃 픽셀끼리 빼기)로 계산한다. 자세한 흐름은 <a class="ext" href="#edge">02</a>.</p>
+  <p><b>직선</b> — 엣지 검출 결과는 점들이 <b>여기저기 끊긴 파편</b>으로 나온다. 이 파편들을 <b>이어 붙여 하나의 선</b>으로 만드는 것이 직선(line) 검출이다. 대표로 두 가지를 본다 — 엣지를 <b>가늘게 깎고 끊긴 곳을 이어 주는</b> <a class="ext" href="#canny">Canny</a>, 흩어진 점들이 <b>어느 직선 위에 놓여 있는지 투표로 찾는</b> <a class="ext" href="#hough">허프 변환</a>. (교안 10p가 Canny를 Line detection 쪽에 적은 이유가 이 &lsquo;잇기&rsquo; 역할 때문이다.)</p>
+  <p><b>코너</b> — 코너 자체는 <b>하나의 점</b>이지만, 그 점이 코너인지는 <b>점 하나만 봐서는 알 수 없다</b>. 그래서 점 주변에 작은 <b>창(window, 영역)</b>을 씌우고, 그 창을 사방으로 조금씩 밀어 봤을 때 <b>어느 방향으로 밀어도 안의 모습이 크게 바뀌면</b> 코너로 판정한다. &ldquo;zone · window 개념&rdquo;이라고 느낀 것이 바로 이 <b>판정 방식</b>이다 — 결과는 점, 판단 근거는 영역. 대표 방법이 <a class="ext" href="#harris">Harris 검출기</a>(Harris <b>detector</b>)다.</p>
+  <p><b>블롭</b> — 주변과 구별되는 <b>덩어리 영역</b>(점박이 무늬 하나, 해바라기 씨앗 하나)이다. 여기서는 위치뿐 아니라 <b>덩어리의 크기</b>까지 찾아야 하므로 진짜 <b>영역(region) 검출</b>이다. 가우시안으로 부드럽게 한 뒤 라플라시안(2차 미분)을 거는 <b>LoG(Laplacian of Gaussian)</b>를 쓴다 — <a class="ext" href="#blob">08</a>.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>특징</th><th>결과물의 모양</th><th>판단할 때 보는 범위</th><th>대표 방법</th></tr></thead>
+    <tbody>
+      <tr><td>엣지</td><td>점들 (끊겨 있음)</td><td>바로 옆 픽셀</td><td>Prewitt · Sobel · Roberts</td></tr>
+      <tr><td>직선</td><td>이어진 선</td><td>엣지 점들 전체</td><td>Canny · Hough</td></tr>
+      <tr><td>코너</td><td>점</td><td>점 주변의 <b>창(window)</b></td><td>Harris</td></tr>
+      <tr><td>블롭</td><td><b>영역</b> (중심 + 크기)</td><td>여러 크기의 원형 영역</td><td>LoG · DoG</td></tr>
     </tbody>
   </table>
   </div>
@@ -591,52 +658,207 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>엣지의 정의 — &ldquo;밝기가 빠르게 변하는 자리&rdquo;</h3>
-  <p>사진 한 줄(수평 스캔라인)의 밝기를 그래프로 그려 보면, 물체의 경계에서 값이 <b>계단처럼 뚝 떨어지거나 올라간다</b>. 이 급변 지점이 엣지다.
-  그 줄을 <b>미분</b>하면 급변하는 곳에서 값이 크게 튀므로, <b>엣지는 1차 미분의 극값(extrema)에 대응</b>한다(12p).</p>
-  <div class="fx">
-    <p class="fx-lab">디지털 영상은 어떻게 미분하나 (13p)</p>
-    <div class="tex-d">\frac{\partial f}{\partial x} \;\approx\; f(x+1,\,y) - f(x,\,y)</div>
-    <p class="fx-note">연속 함수를 복원해 미분하는 방법(Option 1)도 있지만, 실제로는 <b>이웃 픽셀의 차이(유한 차분, finite difference)</b>를 쓴다(Option 2).
-    그리고 이 차분은 <b><span class="tex">[-1\;\;1]</span> 커널을 씌우는 선형 필터</b>와 똑같다 — <a class="ext" href="computer-vision-week03.html">3주차의 합성곱</a>이 여기서 그대로 재활용된다. 세로 방향 미분은 같은 커널을 세로로 세운 것이다(14p).</p>
-  </div>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-flip">플립러닝</span>엣지란 — 이웃한 두 점 사이의 &lsquo;밝기 변화량&rsquo;이 큰 곳</h3>
+  <p>흑백 사진은 결국 <b>픽셀마다 밝기 숫자(0~255)가 적힌 표</b>다. 물체와 배경이 만나는 경계에서는 바로 옆 픽셀로 넘어가는 순간 숫자가 20에서 200처럼 <b>확 바뀐다</b>. 반대로 벽 한가운데처럼 평평한 곳은 옆으로 가도 숫자가 거의 그대로다. 그래서 엣지는 한마디로 <b>&ldquo;두 점 사이의 밝기 변화량이 큰 자리&rdquo;</b>다.</p>
+  <p>그런데 &lsquo;변화량&rsquo;, 즉 &ldquo;조금 움직였을 때 값이 얼마나 바뀌나&rdquo;를 재는 수학 도구가 바로 <b>미분</b>이다. 그래서 엣지를 찾는 일은 <b>밝기를 미분해서 값이 크게 튀는 곳을 찾는 일</b>이 된다. 사진 한 줄의 밝기를 그래프로 그리면 경계에서 계단처럼 올라가고, 그걸 미분하면 바로 그 자리에 <b>봉우리(극값)</b>가 선다(12p).</p>
+  <svg class="dia" viewBox="0 0 580 170" role="img" aria-label="왼쪽: 어두운 곳에서 밝은 곳으로 올라가는 밝기 곡선. 오른쪽: 그 미분은 경계 위치에서 봉우리가 된다.">
+  <text x="20" y="16" font-size="12" font-weight="700" fill="#1f2937">① 한 줄의 밝기 f(x)</text>
+  <text x="310" y="16" font-size="12" font-weight="700" fill="#1f2937">② 미분 f′(x) = 변화량</text>
+  <line x1="20" y1="130" x2="265" y2="130" stroke="#9ca3af"/><line x1="20" y1="25" x2="20" y2="130" stroke="#9ca3af"/>
+  <line x1="310" y1="130" x2="555" y2="130" stroke="#9ca3af"/><line x1="310" y1="25" x2="310" y2="130" stroke="#9ca3af"/>
+  <rect x="20" y="138" width="120" height="14" fill="#374151"/><rect x="140" y="138" width="125" height="14" fill="#e5e7eb" stroke="#d1d5db"/>
+  <path d="M20.0,130.0 L22.4,130.0 L24.8,130.0 L27.2,130.0 L29.6,130.0 L32.0,130.0 L34.4,130.0 L36.8,130.0 L39.2,130.0 L41.6,130.0 L44.0,130.0 L46.4,130.0 L48.8,130.0 L51.2,130.0 L53.6,130.0 L56.0,130.0 L58.4,129.9 L60.8,129.9 L63.2,129.9 L65.6,129.9 L68.0,129.9 L70.4,129.8 L72.8,129.8 L75.2,129.7 L77.6,129.7 L80.0,129.6 L82.4,129.5 L84.8,129.4 L87.2,129.2 L89.6,129.0 L92.0,128.8 L94.4,128.5 L96.8,128.1 L99.2,127.7 L101.6,127.1 L104.0,126.4 L106.4,125.6 L108.8,124.6 L111.2,123.3 L113.6,121.8 L116.0,120.0 L118.4,117.9 L120.8,115.3 L123.2,112.3 L125.6,108.9 L128.0,105.0 L130.4,100.7 L132.8,95.9 L135.2,90.8 L137.6,85.5 L140.0,80.0 L142.4,74.5 L144.8,69.2 L147.2,64.1 L149.6,59.3 L152.0,55.0 L154.4,51.1 L156.8,47.7 L159.2,44.7 L161.6,42.1 L164.0,40.0 L166.4,38.2 L168.8,36.7 L171.2,35.4 L173.6,34.4 L176.0,33.6 L178.4,32.9 L180.8,32.3 L183.2,31.9 L185.6,31.5 L188.0,31.2 L190.4,31.0 L192.8,30.8 L195.2,30.6 L197.6,30.5 L200.0,30.4 L202.4,30.3 L204.8,30.3 L207.2,30.2 L209.6,30.2 L212.0,30.1 L214.4,30.1 L216.8,30.1 L219.2,30.1 L221.6,30.1 L224.0,30.0 L226.4,30.0 L228.8,30.0 L231.2,30.0 L233.6,30.0 L236.0,30.0 L238.4,30.0 L240.8,30.0 L243.2,30.0 L245.6,30.0 L248.0,30.0 L250.4,30.0 L252.8,30.0 L255.2,30.0 L257.6,30.0 L260.0,30.0" fill="none" stroke="#1b3f8b" stroke-width="2.5"/>
+  <path d="M310.0,130.0 L312.4,130.0 L314.8,130.0 L317.2,130.0 L319.6,130.0 L322.0,130.0 L324.4,130.0 L326.8,130.0 L329.2,130.0 L331.6,130.0 L334.0,129.9 L336.4,129.9 L338.8,129.9 L341.2,129.9 L343.6,129.9 L346.0,129.8 L348.4,129.8 L350.8,129.7 L353.2,129.7 L355.6,129.6 L358.0,129.5 L360.4,129.3 L362.8,129.2 L365.2,129.0 L367.6,128.7 L370.0,128.4 L372.4,128.0 L374.8,127.5 L377.2,126.9 L379.6,126.1 L382.0,125.2 L384.4,124.1 L386.8,122.7 L389.2,120.9 L391.6,118.8 L394.0,116.3 L396.4,113.2 L398.8,109.5 L401.2,105.1 L403.6,100.0 L406.0,94.1 L408.4,87.4 L410.8,79.9 L413.2,71.9 L415.6,63.5 L418.0,55.1 L420.4,47.1 L422.8,40.1 L425.2,34.7 L427.6,31.2 L430.0,30.0 L432.4,31.2 L434.8,34.7 L437.2,40.1 L439.6,47.1 L442.0,55.1 L444.4,63.5 L446.8,71.9 L449.2,79.9 L451.6,87.4 L454.0,94.1 L456.4,100.0 L458.8,105.1 L461.2,109.5 L463.6,113.2 L466.0,116.3 L468.4,118.8 L470.8,120.9 L473.2,122.7 L475.6,124.1 L478.0,125.2 L480.4,126.1 L482.8,126.9 L485.2,127.5 L487.6,128.0 L490.0,128.4 L492.4,128.7 L494.8,129.0 L497.2,129.2 L499.6,129.3 L502.0,129.5 L504.4,129.6 L506.8,129.7 L509.2,129.7 L511.6,129.8 L514.0,129.8 L516.4,129.9 L518.8,129.9 L521.2,129.9 L523.6,129.9 L526.0,129.9 L528.4,130.0 L530.8,130.0 L533.2,130.0 L535.6,130.0 L538.0,130.0 L540.4,130.0 L542.8,130.0 L545.2,130.0 L547.6,130.0 L550.0,130.0" fill="none" stroke="#b45309" stroke-width="2.5"/>
+  <line x1="140" y1="25" x2="140" y2="130" stroke="#b45309" stroke-dasharray="4 4"/><line x1="430" y1="25" x2="430" y2="130" stroke="#b45309" stroke-dasharray="4 4"/>
+  <text x="146" y="112" font-size="10.5" fill="#b45309">← 경계 = 급하게 오르는 곳</text>
+  <text x="462" y="52" font-size="10.5" fill="#b45309">← 봉우리(극값) = 엣지</text>
+  <text x="26" y="122" font-size="10" fill="#6b7280">어두움</text><text x="222" y="62" font-size="10" fill="#6b7280">밝음</text>
+  <text x="316" y="122" font-size="10" fill="#6b7280">평탄 → 0</text><text x="500" y="122" font-size="10" fill="#6b7280">평탄 → 0</text>
+  <text x="270" y="134" font-size="10" fill="#6b7280">x</text><text x="560" y="134" font-size="10" fill="#6b7280">x</text>
+</svg>
+<p class="dia-cap">밝기가 평평한 곳은 변화량이 0, 경계에서만 크게 튄다 — 그래서 &ldquo;엣지 = 1차 미분의 극값&rdquo;이다 (교안 12p를 단순화한 그림)</p>
+  <p>여기까지가 <b>&ldquo;엣지 = 1차 미분의 극값&rdquo;</b>이라는 교안 한 줄의 뜻이다. 남은 질문은 &ldquo;<b>사진은 연속 함수가 아니라 띄엄띄엄한 픽셀인데, 어떻게 미분하나?</b>&rdquo;다.</p>
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>이미지 그래디언트 — 크기와 방향 (15p)</h3>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-flip">플립러닝</span>연속에서 디지털로 — 미분이 &lsquo;옆 픽셀 빼기&rsquo;가 되는 과정 (13p)</h3>
+  <p><b>① 연속 함수라면</b> — 교과서의 미분은 &ldquo;<b>아주아주 조금</b>(<span class="tex">h \to 0</span>) 옮겼을 때 값이 얼마나 변하나&rdquo;다. 매끄러운 곡선에서는 얼마든지 작게 옮길 수 있으니 이렇게 정의할 수 있다.</p>
+  <div class="fx">
+    <p class="fx-lab">연속(continuous) — 한없이 작게 옮긴다</p>
+    <div class="tex-d">\frac{\partial f}{\partial x}=\lim_{h\to 0}\frac{f(x+h,\,y)-f(x,\,y)}{h}</div>
+  </div>
+  <p><b>② 디지털 영상에서는</b> — 픽셀은 x = 0, 1, 2, 3 … <b>정수 자리에만</b> 있다(discrete). 0.001칸 옆이라는 건 존재하지 않으니, 옮길 수 있는 <b>가장 작은 거리는 한 칸(h = 1)</b>이다. 위 식에 h = 1을 넣으면 분모가 1이 되어 사라지고, <b>&ldquo;바로 옆 픽셀 값 − 지금 픽셀 값&rdquo;</b>만 남는다. 이렇게 극한 대신 <b>유한한 거리(한 칸)의 차이</b>로 미분을 흉내 내는 것을 <b>유한 차분(finite difference)</b>이라 한다.</p>
+  <div class="fx">
+    <p class="fx-lab">디지털(discrete) — 한 칸 옆과의 차이</p>
+    <div class="tex-d">\frac{\partial f}{\partial x}\;\approx\;f(x+1,\,y)-f(x,\,y)</div>
+  </div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>x</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+    <tbody>
+      <tr><td>밝기 f(x)</td><td>20</td><td>20</td><td>20</td><td>200</td><td>200</td><td>200</td></tr>
+      <tr><td>차분 f(x+1) − f(x)</td><td>0</td><td>0</td><td><b style="color:#b45309">180</b></td><td>0</td><td>0</td><td>—</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>평평한 곳은 0, 경계(x = 2 → 3)에서만 180이 튄다 — 위 그래프의 봉우리가 숫자로 나타난 것이다.</p>
+  <p><b>③ 이 &lsquo;빼기&rsquo;가 곧 커널(마스크)이다</b> — &ldquo;옆 칸에는 +1, 내 칸에는 −1을 곱해 더한다&rdquo;는 규칙을 작은 표로 적으면 <span class="kpair" style="display:inline-flex"><span class="kmat k2"><span class="n">−1</span><span class="p">1</span></span></span> 이 되고, 이것을 사진 위에서 한 칸씩 <b>밀며(슬라이딩)</b> 계산하는 것이 <a class="ext" href="computer-vision-week03.html">3주차의 선형 필터(합성곱)</a> 그대로다. 교안이 말하는 <b>&ldquo;커널 마스크를 이용한다&rdquo;</b>는 바로 이 뜻이다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-flip">플립러닝</span>x로도, y로도 미분한다 — 편미분 두 개 (14p)</h3>
+  <p>사진은 가로(x)와 세로(y) <b>두 방향</b>이 있는 2차원 함수 <span class="tex">f(x,y)</span>다. 그래서 변화량도 두 방향으로 따로 잰다. 한 방향만 움직이고 다른 쪽은 <b>고정</b>한 채 미분하는 것을 <b>편미분</b>이라 한다.</p>
+  <ul class="ul">
+    <li><b><span class="tex">\partial f/\partial x</span> (가로 방향)</b> — y는 그대로 두고 <b>오른쪽 한 칸</b>과 뺀다. 커널 <span class="kmat k2"><span class="n">−1</span><span class="p">1</span></span> 를 가로로 눕혀 민다. <b>세로로 선 경계</b>(왼쪽 어둡고 오른쪽 밝은 곳)에서 크게 반응한다. 교안 14p 호랑이 사진에서 <b>세로 줄무늬</b>가 도드라지는 쪽이 이것이다</li>
+    <li><b><span class="tex">\partial f/\partial y</span> (세로 방향)</b> — x는 그대로 두고 <b>아래쪽 한 칸</b>과 뺀다. 같은 커널을 세로로 세운 <span class="kmat k1"><span class="n">−1</span><span class="p">1</span></span> 를 민다. <b>가로로 누운 경계</b>(위 어둡고 아래 밝은 곳)에서 크게 반응한다</li>
+  </ul>
+  <svg class="dia" viewBox="0 0 580 250" role="img" aria-label="왼쪽: 세로 경계가 있는 격자에서 한 칸 오른쪽 픽셀과 빼는 x 편미분. 오른쪽: 가로 경계가 있는 격자에서 한 칸 아래 픽셀과 빼는 y 편미분.">
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#b45309"/></marker></defs>
+  <text x="40" y="20" font-size="12.5" font-weight="700" fill="#1f2937">∂f/∂x — 가로로 한 칸 옆과 비교</text>
+  <text x="40" y="36" font-size="10.5" fill="#6b7280">f(x+1, y) − f(x, y)</text>
+  <text x="330" y="20" font-size="12.5" font-weight="700" fill="#1f2937">∂f/∂y — 세로로 한 칸 아래와 비교</text>
+  <text x="330" y="36" font-size="10.5" fill="#6b7280">f(x, y+1) − f(x, y)</text>
+  <rect x="40" y="44" width="26" height="26" fill="#4b5563" stroke="#d1d5db"/>
+  <rect x="66" y="44" width="26" height="26" fill="#4b5563" stroke="#d1d5db"/>
+  <rect x="92" y="44" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="118" y="44" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="144" y="44" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="40" y="70" width="26" height="26" fill="#4b5563" stroke="#d1d5db"/>
+  <rect x="66" y="70" width="26" height="26" fill="#4b5563" stroke="#d1d5db"/>
+  <rect x="92" y="70" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="118" y="70" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="144" y="70" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="40" y="96" width="26" height="26" fill="#4b5563" stroke="#d1d5db"/>
+  <rect x="66" y="96" width="26" height="26" fill="#4b5563" stroke="#d1d5db"/>
+  <rect x="92" y="96" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="118" y="96" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="144" y="96" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="40" y="122" width="26" height="26" fill="#4b5563" stroke="#d1d5db"/>
+  <rect x="66" y="122" width="26" height="26" fill="#4b5563" stroke="#d1d5db"/>
+  <rect x="92" y="122" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="118" y="122" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="144" y="122" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="40" y="148" width="26" height="26" fill="#4b5563" stroke="#d1d5db"/>
+  <rect x="66" y="148" width="26" height="26" fill="#4b5563" stroke="#d1d5db"/>
+  <rect x="92" y="148" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="118" y="148" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="144" y="148" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="67.5" y="97.5" width="23" height="23" fill="none" stroke="#f59e0b" stroke-width="3"/>
+  <text x="79" y="113" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">20</text>
+  <rect x="93.5" y="97.5" width="23" height="23" fill="none" stroke="#f59e0b" stroke-width="3"/>
+  <text x="105" y="113" font-size="10" font-weight="700" text-anchor="middle" fill="#111827">200</text>
+  <rect x="330" y="44" width="26" height="26" fill="#4b5563" stroke="#d1d5db"/>
+  <rect x="356" y="44" width="26" height="26" fill="#4b5563" stroke="#d1d5db"/>
+  <rect x="382" y="44" width="26" height="26" fill="#4b5563" stroke="#d1d5db"/>
+  <rect x="408" y="44" width="26" height="26" fill="#4b5563" stroke="#d1d5db"/>
+  <rect x="434" y="44" width="26" height="26" fill="#4b5563" stroke="#d1d5db"/>
+  <rect x="330" y="70" width="26" height="26" fill="#4b5563" stroke="#d1d5db"/>
+  <rect x="356" y="70" width="26" height="26" fill="#4b5563" stroke="#d1d5db"/>
+  <rect x="382" y="70" width="26" height="26" fill="#4b5563" stroke="#d1d5db"/>
+  <rect x="408" y="70" width="26" height="26" fill="#4b5563" stroke="#d1d5db"/>
+  <rect x="434" y="70" width="26" height="26" fill="#4b5563" stroke="#d1d5db"/>
+  <rect x="330" y="96" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="356" y="96" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="382" y="96" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="408" y="96" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="434" y="96" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="330" y="122" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="356" y="122" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="382" y="122" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="408" y="122" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="434" y="122" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="330" y="148" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="356" y="148" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="382" y="148" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="408" y="148" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="434" y="148" width="26" height="26" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="383.5" y="71.5" width="23" height="23" fill="none" stroke="#f59e0b" stroke-width="3"/>
+  <text x="395" y="87" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">20</text>
+  <rect x="383.5" y="97.5" width="23" height="23" fill="none" stroke="#f59e0b" stroke-width="3"/>
+  <text x="395" y="113" font-size="10" font-weight="700" text-anchor="middle" fill="#111827">200</text>
+  <line x1="40" y1="184" x2="170" y2="184" stroke="#6b7280" marker-end="url(#ah)"/><text x="174" y="188" font-size="10.5" fill="#6b7280">x (오른쪽 +)</text>
+  <line x1="316" y1="44" x2="316" y2="174" stroke="#6b7280" marker-end="url(#ah)"/><text x="296" y="190" font-size="10.5" fill="#6b7280">y (아래 +)</text>
+  <text x="40" y="208" font-size="11" fill="#1f2937">200 − 20 = <tspan font-weight="700" fill="#b45309">180</tspan> → <tspan font-weight="700">세로 엣지</tspan>에서 크게 반응</text>
+  <text x="330" y="208" font-size="11" fill="#1f2937">200 − 20 = <tspan font-weight="700" fill="#b45309">180</tspan> → <tspan font-weight="700">가로 엣지</tspan>에서 크게 반응</text>
+  <text x="40" y="228" font-size="10.5" fill="#6b7280">커널 [−1 | 1] 을 가로로 눕혀 민다</text>
+  <text x="330" y="228" font-size="10.5" fill="#6b7280">같은 커널을 세로로 세워 민다</text>
+</svg>
+<p class="dia-cap">주황 테두리 두 칸을 빼는 것이 곧 편미분이다. 이미지 좌표는 <b>y가 아래로 갈수록 커진다</b>는 점에 주의</p>
+  <div class="tip"><b>헷갈리기 쉬운 점</b> — &ldquo;x 방향 미분&rdquo;이 찾는 것은 <b>세로 엣지</b>다. 가로로 움직이며 변화를 재니까, 가로로 가다 부딪히는 경계(= 세로로 선 선)를 잡는 것이다. 방향의 이름(미분 방향)과 찾아지는 선의 방향은 <b>90° 어긋나</b> 있다.</div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>두 편미분을 하나로 — 그래디언트의 크기와 방향 (15p)</h3>
+  <p>실제 경계는 가로 · 세로로만 나 있지 않고 비스듬하기도 하다. 그래서 두 편미분을 <b>한 벡터로 묶어</b> 방향까지 함께 본다. 이것이 <b>이미지 그래디언트</b>다.</p>
   <div class="fx">
     <p class="fx-lab">두 방향의 편미분을 묶은 벡터</p>
     <div class="tex-d">\nabla f=\left[\frac{\partial f}{\partial x},\;\frac{\partial f}{\partial y}\right], \qquad
 \lVert\nabla f\rVert=\sqrt{\left(\tfrac{\partial f}{\partial x}\right)^{2}+\left(\tfrac{\partial f}{\partial y}\right)^{2}}, \qquad
 \theta=\tan^{-1}\!\left(\frac{\partial f/\partial y}{\partial f/\partial x}\right)</div>
-    <p class="fx-note"><b>그래디언트는 밝기가 가장 빠르게 증가하는 방향</b>을 가리킨다. 그 <b>크기(magnitude)</b>가 엣지의 세기이고, <b>방향</b>은 <span class="tex">\theta</span>로 주어진다.</p>
+    <p class="fx-note"><b>그래디언트는 밝기가 가장 빠르게 증가하는 방향</b>을 가리킨다. 그 <b>크기(magnitude)</b>가 엣지의 세기이고, <b>방향</b>은 <span class="tex">\theta</span>로 주어진다. 크기 · 방향을 숫자로 직접 계산해 보는 풀이는 <a class="ext" href="#canny-mag">03 Canny ②</a>에 있다.</p>
   </div>
-  <p><b>주의</b> — 그래디언트 방향은 <b>엣지 선과 나란한 방향이 아니라 엣지를 가로지르는 방향</b>이다. 세로 엣지(왼쪽은 어둡고 오른쪽은 밝은 경계)에서 그래디언트는 <b>가로 방향</b>을 향한다. <a class="ext" href="#canny">03 비최대 억제</a>가 이 성질 위에 서 있다.</p>
+  <p><b>주의</b> — 그래디언트 방향은 <b>엣지 선과 나란한 방향이 아니라 엣지를 가로지르는 방향</b>이다. 세로 엣지(왼쪽은 어둡고 오른쪽은 밝은 경계)에서 그래디언트는 <b>가로 방향</b>을 향한다. 바로 위 &lsquo;90° 어긋남&rsquo;과 같은 이야기이고, <a class="ext" href="#canny">03 비최대 억제</a>가 이 성질 위에 서 있다.</p>
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>컴퍼스 마스크와 엣지 검출의 3단계 (16 · 17p)</h3>
-  <p><b>컴퍼스 그래디언트 마스크</b>는 나침반의 8방향에 맞춘 마스크 8개를 모두 걸어 보고, <b>가장 큰 응답</b>을 그 픽셀의 엣지 세기로, <b>그 마스크의 방향</b>을 엣지 방향으로 삼는 방법이다.</p>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-flip">플립러닝</span>컴퍼스 그래디언트 마스크 — 8방향을 다 대 보고 가장 센 쪽을 고른다 (16p)</h3>
+  <p>그래디언트를 &ldquo;x 한 번, y 한 번 미분해 계산&rdquo;하는 대신, <b>나침반의 8방향(N · NE · E · SE · S · SW · W · NW)에 맞춘 마스크 8개</b>를 미리 만들어 두고 <b>한 픽셀에 8개를 모두 걸어 보는</b> 방법도 있다. 그리고</p>
+  <ul class="ul">
+    <li><b>크기(magnitude)</b> = 8개 응답 중 <b>가장 큰 값(maximum response)</b></li>
+    <li><b>방향(direction)</b> = 그 최대 응답을 낸 <b>마스크의 나침반 방향</b></li>
+  </ul>
+  <div class="cmp">
+  <div class="kbox"><b>NW · 북서</b><span class="kmat "><span class="p">2</span><span class="p">1</span><span class="z">0</span><span class="p">1</span><span class="z">0</span><span class="n">−1</span><span class="z">0</span><span class="n">−1</span><span class="n">−2</span></span><em>응답 −240</em></div><div class="kbox"><b>N · 북</b><span class="kmat "><span class="p">1</span><span class="p">2</span><span class="p">1</span><span class="z">0</span><span class="z">0</span><span class="z">0</span><span class="n">−1</span><span class="n">−2</span><span class="n">−1</span></span><em>응답 −320</em></div><div class="kbox"><b>NE · 북동</b><span class="kmat "><span class="z">0</span><span class="p">1</span><span class="p">2</span><span class="n">−1</span><span class="z">0</span><span class="p">1</span><span class="n">−2</span><span class="n">−1</span><span class="z">0</span></span><em>응답 −240</em></div>
+  <div class="kbox"><b>W · 서</b><span class="kmat "><span class="p">1</span><span class="z">0</span><span class="n">−1</span><span class="p">2</span><span class="z">0</span><span class="n">−2</span><span class="p">1</span><span class="z">0</span><span class="n">−1</span></span><em>응답 0</em></div><div class="mid"><svg viewBox="0 0 110 110" width="110" height="110" role="img" aria-label="8방향 나침반"><defs><marker id="ah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1f2937"/></marker></defs>
+  <g stroke="#1f2937" stroke-width="1.6" marker-end="url(#ah2)"><line x1="55" y1="55" x2="55" y2="14"/><line x1="55" y1="55" x2="84" y2="26"/><line x1="55" y1="55" x2="96" y2="55"/><line x1="55" y1="55" x2="84" y2="84"/><line x1="55" y1="55" x2="55" y2="96" stroke="#b45309" stroke-width="3"/><line x1="55" y1="55" x2="26" y2="84"/><line x1="55" y1="55" x2="14" y2="55"/><line x1="55" y1="55" x2="26" y2="26"/></g>
+  <text x="55" y="10" font-size="9" text-anchor="middle">N</text><text x="55" y="108" font-size="9" text-anchor="middle" fill="#b45309" font-weight="700">S</text><text x="104" y="58" font-size="9" text-anchor="middle">E</text><text x="6" y="58" font-size="9" text-anchor="middle">W</text></svg></div><div class="kbox"><b>E · 동</b><span class="kmat "><span class="n">−1</span><span class="z">0</span><span class="p">1</span><span class="n">−2</span><span class="z">0</span><span class="p">2</span><span class="n">−1</span><span class="z">0</span><span class="p">1</span></span><em>응답 0</em></div>
+  <div class="kbox"><b>SW · 남서</b><span class="kmat "><span class="z">0</span><span class="n">−1</span><span class="n">−2</span><span class="p">1</span><span class="z">0</span><span class="n">−1</span><span class="p">2</span><span class="p">1</span><span class="z">0</span></span><em>응답 240</em></div><div class="kbox win"><b>S · 남</b><span class="kmat  hl"><span class="n">−1</span><span class="n">−2</span><span class="n">−1</span><span class="z">0</span><span class="z">0</span><span class="z">0</span><span class="p">1</span><span class="p">2</span><span class="p">1</span></span><em>응답 320</em></div><div class="kbox"><b>SE · 남동</b><span class="kmat "><span class="n">−2</span><span class="n">−1</span><span class="z">0</span><span class="n">−1</span><span class="z">0</span><span class="p">1</span><span class="z">0</span><span class="p">1</span><span class="p">2</span></span><em>응답 240</em></div>
+</div>
+<p class="dia-cap">교안 16p의 8개 마스크 — 파랑(+) 쪽이 밝고 빨강(−) 쪽이 어두울수록 응답이 커진다. 각 마스크의 이름은 <b>&lsquo;밝아지는 쪽&rsquo;</b>이다.<br>아래 예시 조각에 8개를 모두 걸었을 때의 응답을 마스크 밑에 적었다 — 주황 테두리가 최대 응답</p>
+  <div class="ex">
+    <p class="ex-q"><em>예시</em>위는 어둡고(10) 아래는 밝은(90) 3×3 조각 — 가로로 누운 경계</p>
+    <div class="kpair" style="justify-content:flex-start;margin:6px 0"><div class="patch"><span style="background:#e5e7eb;color:#111">10</span><span style="background:#e5e7eb;color:#111">10</span><span style="background:#e5e7eb;color:#111">10</span><span style="background:#e5e7eb;color:#111">10</span><span style="background:#e5e7eb;color:#111">10</span><span style="background:#e5e7eb;color:#111">10</span><span style="background:#374151;color:#fff">90</span><span style="background:#374151;color:#fff">90</span><span style="background:#374151;color:#fff">90</span></div><span style="font-size:12.5px;color:#4b5563">조각의 각 칸과 마스크의 같은 칸을 곱해 모두 더한 값이 &lsquo;응답&rsquo;이다</span></div>
+    <div class="step"><i>S</i><span>아래 줄(+1 +2 +1) × 90 = 360, 위 줄(−1 −2 −1) × 10 = −40 → <b>320</b> (최대)</span></div>
+    <div class="step"><i>N</i><span>부호가 정반대 → <b>−320</b> (최소)</span></div>
+    <div class="step"><i>E·W</i><span>좌우가 같은 값이라 +와 −가 상쇄 → <b>0</b> — 이 조각에는 좌우 변화가 없다</span></div>
+    <div class="ex-ans">최대 응답은 <b>S(남) 마스크의 320</b> → 엣지 세기 = 320, 방향 = <b>남쪽</b>(아래로 갈수록 밝아진다). 경계선 자체는 가로로 누워 있고, 방향은 그 선을 <b>가로지르는</b> 남쪽이다.</div>
+  </div>
+  <p>장점은 <b>곱셈 · 제곱근 없이 &lsquo;최댓값 고르기&rsquo;만으로</b> 크기와 방향이 나온다는 것, 단점은 방향이 <b>45° 단위 8개로만</b> 나온다는 것이다. 8개 마스크는 사실 아래 Sobel 마스크를 45°씩 돌린 것이다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-flip">플립러닝</span>엣지 검출의 3단계 — 왜 필터링부터 하나 (17p)</h3>
+  <p>위에서 본 &lsquo;옆 픽셀 빼기&rsquo;에는 약점이 있다. 실제 사진에는 <b>잡음(노이즈)</b>이 섞여 있어서, 평평한 벽에서도 옆 픽셀끼리 값이 조금씩 제멋대로 튄다. 빼기는 이 작은 튐까지 그대로 잡아내므로, 그냥 미분하면 <b>진짜 경계와 잡음이 뒤섞인 가시투성이</b>가 된다. 그래서 순서가 이렇게 정해진다.</p>
   <div class="flow">
-    <div class="fl"><b>① 필터링 Filtering</b><span>잡음에 강해지도록 먼저 <b>부드럽게</b> 만든다 — 다만 <b>엣지 세기와 잡음 감소는 맞바꾸는 관계</b>다(블러를 세게 할수록 엣지도 약해진다)</span></div>
-    <div class="fl"><b>② 강조 Enhancement</b><span>국소 밝기 변화가 큰 픽셀을 <b>도드라지게</b> 만든다 (미분 연산)</span></div>
+    <div class="fl"><b>① 필터링 Filtering</b><span>먼저 <b>스무딩 · 블러링</b>으로 잡음을 누른다 (가우시안 등)</span></div>
+    <div class="fl"><b>② 강조 Enhancement</b><span>미분(차분 연산자)으로 <b>밝기 변화가 큰 픽셀을 도드라지게</b> 한다</span></div>
     <div class="fl"><b>③ 검출 Detection</b><span>임계값을 넘는 <b>강한 엣지만</b> 남긴다</span></div>
   </div>
+  <svg class="dia" viewBox="0 0 660 120" role="img" aria-label="잡음 섞인 계단 신호, 그대로 미분하면 가시가 잔뜩 생기고, 블러 후 미분하면 봉우리 하나만 남는다">
+  <g transform="translate(0,22)"><text x="10" y="-8" font-size="11" font-weight="700" fill="#1f2937">① 잡음 섞인 밝기 한 줄</text><rect x="8" y="8" width="200" height="66" fill="none" stroke="#e5e7eb"/><path d="M10.0,61.8 L13.3,64.4 L16.6,56.8 L19.9,65.6 L23.2,58.5 L26.5,61.1 L29.8,65.8 L33.1,59.0 L36.4,66.2 L39.7,60.1 L43.0,65.7 L46.3,65.3 L49.6,60.2 L52.9,54.1 L56.2,64.8 L59.5,63.3 L62.8,57.1 L66.1,52.3 L69.4,57.9 L72.7,60.7 L76.0,51.8 L79.3,66.0 L82.6,53.6 L85.9,62.3 L89.2,64.5 L92.5,64.9 L95.8,62.0 L99.1,54.3 L102.4,64.0 L105.7,57.8 L109.0,18.8 L112.3,22.9 L115.6,20.2 L118.9,27.6 L122.2,27.6 L125.5,25.4 L128.8,18.2 L132.1,22.0 L135.4,23.7 L138.7,19.6 L142.0,21.6 L145.3,24.0 L148.6,16.4 L151.9,17.9 L155.2,24.8 L158.5,19.8 L161.8,20.5 L165.1,15.2 L168.4,17.4 L171.7,24.1 L175.0,13.6 L178.3,26.7 L181.6,22.2 L184.9,17.0 L188.2,26.2 L191.5,21.1 L194.8,27.9 L198.1,18.3 L201.4,16.9 L204.7,19.8" fill="none" stroke="#1b3f8b" stroke-width="1.6"/></g>
+  <g transform="translate(222,22)"><text x="10" y="-8" font-size="11" font-weight="700" fill="#991b1b">② 그대로 미분 → 가시투성이</text><rect x="8" y="8" width="200" height="66" fill="none" stroke="#e5e7eb"/><line x1="8" y1="44.3" x2="208" y2="44.3" stroke="#d1d5db" stroke-dasharray="3 3"/><path d="M10.0,46.4 L13.3,38.3 L16.6,51.2 L19.9,38.7 L23.2,46.3 L26.5,48.0 L29.8,38.9 L33.1,49.9 L36.4,39.5 L39.7,48.7 L43.0,44.0 L46.3,40.3 L49.6,39.5 L52.9,52.7 L56.2,43.1 L59.5,39.4 L62.8,40.4 L66.1,48.7 L69.4,46.5 L72.7,37.3 L76.0,55.4 L79.3,34.5 L82.6,51.1 L85.9,46.0 L89.2,44.6 L92.5,42.0 L95.8,38.2 L99.1,51.9 L102.4,39.5 L105.7,13.6 L109.0,47.5 L112.3,42.2 L115.6,50.1 L118.9,44.3 L122.2,42.5 L125.5,38.6 L128.8,47.3 L132.1,45.6 L135.4,41.0 L138.7,45.9 L142.0,46.1 L145.3,38.4 L148.6,45.4 L151.9,49.7 L155.2,40.3 L158.5,44.9 L161.8,40.1 L165.1,46.0 L168.4,49.6 L171.7,36.0 L175.0,54.6 L178.3,40.7 L181.6,40.2 L184.9,51.5 L188.2,40.2 L191.5,49.7 L194.8,36.7 L198.1,43.1 L201.4,46.6" fill="none" stroke="#dc2626" stroke-width="1.4"/></g>
+  <g transform="translate(444,22)"><text x="10" y="-8" font-size="11" font-weight="700" fill="#14532d">③ 블러 후 미분 → 봉우리 하나</text><rect x="8" y="8" width="200" height="66" fill="none" stroke="#e5e7eb"/><line x1="8" y1="56.7" x2="208" y2="56.7" stroke="#d1d5db" stroke-dasharray="3 3"/><path d="M10.0,56.4 L13.3,56.4 L16.6,56.8 L19.9,57.4 L23.2,57.9 L26.5,58.2 L29.8,58.1 L33.1,57.6 L36.4,56.6 L39.7,55.3 L43.0,54.0 L46.3,53.2 L49.6,52.6 L52.9,52.4 L56.2,52.3 L59.5,52.6 L62.8,53.7 L66.1,55.4 L69.4,57.4 L72.7,59.3 L76.0,60.7 L79.3,61.1 L82.6,59.9 L85.9,57.2 L89.2,52.1 L92.5,44.9 L95.8,36.1 L99.1,27.5 L102.4,21.3 L105.7,20.4 L109.0,24.8 L112.3,32.8 L115.6,41.0 L118.9,47.1 L122.2,50.4 L125.5,51.9 L128.8,52.9 L132.1,53.8 L135.4,54.2 L138.7,54.5 L142.0,54.6 L145.3,55.0 L148.6,55.1 L151.9,55.3 L155.2,55.2 L158.5,55.2 L161.8,56.0 L165.1,57.2 L168.4,58.6 L171.7,59.6 L175.0,59.9 L178.3,59.6 L181.6,58.9 L184.9,57.7 L188.2,56.2 L191.5,54.6 L194.8,53.5 L198.1,53.5 L201.4,54.1" fill="none" stroke="#16a34a" stroke-width="2"/></g>
+</svg>
+<p class="dia-cap">②에서는 진짜 경계의 봉우리와 잡음 가시가 섞여 임계값 하나로 가르기 어렵다. ③은 잡음이 사라졌지만 <b>봉우리 높이 자체도 약 70 → 11로 낮아지고 폭이 넓어졌다</b> — 이것이 &ldquo;엣지 세기와 잡음 제거의 맞바꿈&rdquo;이다 (③은 세로축을 확대해 그림)</p>
+  <p><b>맞바꿈(trade-off)</b> — 블러를 세게 할수록 잡음은 잘 지워지지만, <b>경계의 계단도 함께 무뎌져</b> 엣지 세기가 약해지고 위치도 흐려진다. 블러를 약하게 하면 엣지는 날카롭지만 잡음이 살아남는다. 교안의 &ldquo;tradeoff between edge strength and noise reduction&rdquo;이 이것이다.</p>
+  <p><b>임계값은 상황에 따라 조정한다</b> — 마지막 ③에서 &ldquo;얼마 이상이면 엣지&rdquo;의 기준은 정답이 없다. 사진의 대비, 잡음 양, 쓰는 연산자에 따라 응답의 크기 자체가 다르기 때문이다. 바로 아래 표에서 Roberts만 임계값이 40인 것이 그 예다.</p>
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>세 가지 차분 연산자 (18~20p)</h3>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>차분 연산자의 종류 — Prewitt · Sobel · Roberts (18~20p)</h3>
+  <p>셋 다 <b>x 방향 마스크(Gx)와 y 방향 마스크(Gy) 두 개</b>를 각각 걸고, 두 결과를 합쳐 크기 <span class="tex">G</span>를 만든 뒤 <b><span class="tex">G &gt;</span> 임계값</b>인 곳만 엣지로 남긴다(슬라이드의 <span class="tex">G &gt; \text{threshold}</span>). 파랑은 +, 빨강은 −다.</p>
   <div class="tbl-wrap">
-  <table>
-    <thead><tr><th>연산자</th><th>커널 (x 방향)</th><th>특징</th><th>교안 예시 임계값</th></tr></thead>
+  <table class="ktbl">
+    <thead><tr><th>연산자</th><th>Gx — 세로 엣지</th><th>Gy — 가로 엣지</th><th>특징</th><th>교안 임계값</th></tr></thead>
     <tbody>
-      <tr><td><b>Prewitt</b></td><td><code>[-1 0 1; -1 0 1; -1 0 1]</code></td><td>세 줄을 <b>같은 무게</b>로 평균 — 단순하고 빠름</td><td>130</td></tr>
-      <tr><td><b>Sobel</b></td><td><code>[-1 0 1; -2 0 2; -1 0 1]</code></td><td>가운데 줄에 <b>가중치 2</b> — 약한 가우시안 블러가 섞여 잡음에 더 강함. <b>가장 널리 쓰인다</b></td><td>130</td></tr>
-      <tr><td><b>Roberts cross</b></td><td><code>[1 0; 0 -1]</code> / <code>[0 1; -1 0]</code></td><td><b>2×2 대각선</b> 차분 — 가장 가볍고 반응이 빠르지만 잡음에 취약</td><td>40</td></tr>
+      <tr><td><b>Prewitt</b><br><small>18p</small></td><td><span class="kmat "><span class="n">−1</span><span class="z">0</span><span class="p">1</span><span class="n">−1</span><span class="z">0</span><span class="p">1</span><span class="n">−1</span><span class="z">0</span><span class="p">1</span></span></td><td><span class="kmat "><span class="p">1</span><span class="p">1</span><span class="p">1</span><span class="z">0</span><span class="z">0</span><span class="z">0</span><span class="n">−1</span><span class="n">−1</span><span class="n">−1</span></span></td><td>차분을 <b>세 줄에서 같은 무게로</b> 구해 평균 — 단순하고 빠름</td><td>130</td></tr>
+      <tr><td><b>Sobel</b><br><small>19p</small></td><td><span class="kmat "><span class="n">−1</span><span class="z">0</span><span class="p">1</span><span class="n">−2</span><span class="z">0</span><span class="p">2</span><span class="n">−1</span><span class="z">0</span><span class="p">1</span></span></td><td><span class="kmat "><span class="p">1</span><span class="p">2</span><span class="p">1</span><span class="z">0</span><span class="z">0</span><span class="z">0</span><span class="n">−1</span><span class="n">−2</span><span class="n">−1</span></span></td><td>가운데 줄에 <b>가중치 2</b> — 가까운 줄을 더 믿는 약한 가우시안 블러가 섞여 <b>잡음에 더 강함</b>. 가장 널리 쓰인다</td><td>130</td></tr>
+      <tr><td><b>Roberts cross</b><br><small>20p</small></td><td><span class="kmat k2"><span class="p">1</span><span class="z">0</span><span class="z">0</span><span class="n">−1</span></span></td><td><span class="kmat k2"><span class="z">0</span><span class="n">−1</span><span class="p">1</span><span class="z">0</span></span></td><td><b>2×2 대각선</b> 차분 — 가장 작고 빠르지만 평균이 없어 <b>잡음에 취약</b></td><td>40</td></tr>
     </tbody>
   </table>
   </div>
-  <p>Roberts의 임계값만 40으로 낮은 이유는 커널이 작아 <b>응답 자체가 작게</b> 나오기 때문이다. 즉 <b>임계값은 연산자마다 다시 정해야 하는 값</b>이지 고정 상수가 아니다.</p>
+  <p><b>읽는 법</b> — Prewitt의 Gx는 &ldquo;<b>오른쪽 세로줄 합 − 왼쪽 세로줄 합</b>&rdquo;이다. 앞에서 본 <span class="kpair" style="display:inline-flex"><span class="kmat k2"><span class="n">−1</span><span class="p">1</span></span></span> 한 줄짜리 차분을 <b>위아래 세 줄에서 해서 더한 것</b>이라, 한 줄만 볼 때보다 잡음이 평균으로 눌린다. 결국 차분 연산자 = <b>①필터링(평균)과 ②강조(차분)를 한 마스크에 합친 것</b>이다.</p>
+  <p>Roberts의 임계값만 40으로 낮은 이유는 커널이 작아(더하는 칸이 적어) <b>응답 자체가 작게</b> 나오기 때문이다. 즉 <b>임계값은 연산자마다 다시 정해야 하는 값</b>이지 고정 상수가 아니다.</p>
 </div>
 
 <div class="pt plus">
@@ -688,11 +910,120 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   </div>
 </div>
 
+<div class="pt flip" id="canny-mag">
+  <h3 class="pt-h"><span class="bdg bdg-flip">플립러닝</span><span class="bdg bdg-plus">보충설명</span>② 크기와 방향 — &ldquo;크기는 편미분의 절댓값? 방향은 θ?&rdquo;</h3>
+  <p><b>짧은 답</b> — 방향은 <b>θ가 맞다</b>. 크기는 &ldquo;편미분 <b>하나</b>의 절댓값&rdquo;이 아니라, <b>두 편미분을 함께 써서 만든 화살표의 길이</b>다.</p>
+  <p>한 픽셀에서 x 방향 변화량 <span class="tex">G_x=\partial f/\partial x</span>와 y 방향 변화량 <span class="tex">G_y=\partial f/\partial y</span>를 구했다고 하자. 이 둘을 <b>가로 몇 칸, 세로 몇 칸</b>으로 보고 화살표를 그리면, 그 화살표가 그래디언트다.</p>
+  <svg class="dia" viewBox="0 0 420 210" style="max-width:420px" role="img" aria-label="가로 3, 세로 4인 화살표. 길이는 5, 가로축과 이루는 각도는 53.1도">
+    <defs><marker id="ah3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#b45309"/></marker></defs>
+    <line x1="40" y1="180" x2="250" y2="180" stroke="#9ca3af"/><line x1="40" y1="180" x2="40" y2="20" stroke="#9ca3af"/>
+    <line x1="40" y1="180" x2="130" y2="180" stroke="#1b3f8b" stroke-width="4"/>
+    <line x1="130" y1="180" x2="130" y2="60" stroke="#0f766e" stroke-width="4"/>
+    <line x1="40" y1="180" x2="128" y2="63" stroke="#b45309" stroke-width="3.5" marker-end="url(#ah3)"/>
+    <path d="M75,180 A35,35 0 0 0 61,152" fill="none" stroke="#6b7280" stroke-width="1.5"/>
+    <text x="80" y="168" font-size="12" fill="#374151">θ</text>
+    <text x="68" y="199" font-size="12" fill="#1b3f8b" font-weight="700">Gx = 3</text>
+    <text x="137" y="125" font-size="12" fill="#0f766e" font-weight="700">Gy = 4</text>
+    <text x="30" y="110" font-size="12" fill="#b45309" font-weight="700" transform="rotate(-53 70 110)">크기 = 5</text>
+    <text x="190" y="60" font-size="11.5" fill="#1f2937">크기 = √(3² + 4²) = <tspan font-weight="700" fill="#b45309">5</tspan></text>
+    <text x="190" y="82" font-size="11.5" fill="#1f2937">방향 θ = tan⁻¹(4/3) ≈ <tspan font-weight="700">53.1°</tspan></text>
+    <text x="190" y="110" font-size="10.5" fill="#6b7280">가로로 3, 세로로 4만큼 밝아진다 →</text>
+    <text x="190" y="126" font-size="10.5" fill="#6b7280">가장 빨리 밝아지는 쪽은 그 사이 대각선,</text>
+    <text x="190" y="142" font-size="10.5" fill="#6b7280">그쪽으로의 변화량은 5</text>
+  </svg>
+  <p class="dia-cap">피타고라스 정리 그대로다 — 가로 3, 세로 4인 직각삼각형의 빗변이 5 (그림은 수학 좌표로 그렸다)</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>식</th><th>무슨 뜻인가</th></tr></thead>
+    <tbody>
+      <tr><td><b>크기</b> magnitude</td><td><span class="tex">\lVert\nabla f\rVert=\sqrt{G_x^2+G_y^2}</span></td><td>이 픽셀에서 밝기가 <b>얼마나 세게</b> 변하나 = <b>엣지의 세기</b>. 항상 0 이상</td></tr>
+      <tr><td><b>방향</b> direction</td><td><span class="tex">\theta=\tan^{-1}(G_y/G_x)</span></td><td>밝기가 <b>어느 쪽으로</b> 가장 빨리 커지나. 엣지 선에 <b>수직</b>인 방향</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <ul class="ul">
+    <li><b>&ldquo;절댓값&rdquo;이 맞는 경우</b> — 경계가 딱 세로라서 <span class="tex">G_y=0</span>이면 크기 = <span class="tex">\sqrt{G_x^2}=\lvert G_x\rvert</span>가 된다. 한쪽 편미분만 있을 때는 그 절댓값이 곧 크기다. 비스듬한 경계에서는 둘을 합쳐야 한다</li>
+    <li><b>근사식</b> — 제곱근 계산을 아끼려고 <span class="tex">\lvert G_x\rvert+\lvert G_y\rvert</span>로 대신하기도 한다. OpenCV <code>cv2.Canny</code>가 기본값으로 쓰는 방식이고, <code>L2gradient=True</code>를 주면 정확한 <span class="tex">\sqrt{G_x^2+G_y^2}</span>를 쓴다. 위 예에서는 근사 7, 정확 5</li>
+    <li><b>부호는 크기가 아니라 방향이 가져간다</b> — 어두움→밝음이면 +, 밝음→어두움이면 − 이지만 제곱하면 똑같다. 그래서 크기는 &ldquo;얼마나 센 경계인가&rdquo;만, 방향은 &ldquo;어느 쪽이 밝은가&rdquo;를 담는다</li>
+    <li><b>방향이 왜 필요한가</b> — 바로 다음 ③ 비최대 억제가 <b>&ldquo;이 방향으로 앞뒤 픽셀과 비교&rdquo;</b>하기 때문이다. Canny에서 방향은 그 비교 상대를 고르는 데 쓰인다</li>
+  </ul>
+</div>
+
 <div class="pt gyo">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>③ 비최대 억제 — 능선의 꼭대기만 남긴다 (25~27p)</h3>
   <p>어떤 픽셀 <span class="tex">q</span>가 엣지인지 판정할 때, <b>그래디언트 방향으로 앞뒤에 있는 두 픽셀</b> <span class="tex">p</span>와 <span class="tex">r</span>의 값과 비교한다.
   <span class="tex">q</span>가 <b>둘 다보다 크면</b> 국소 최대이므로 남기고, 아니면 0으로 지운다. 이렇게 하면 두껍게 번진 엣지 띠가 <b>한 픽셀 두께의 선</b>이 된다.</p>
   <p>교안은 이어서 <b>엣지 접선(tangent)을 세워 다음 점을 예측</b>하는 그림(26p)과, 임계값 때문에 <b>중간이 끊긴 엣지</b>(27p)를 보여 준다 — 그 끊김을 메우는 것이 다음 단계다.</p>
+</div>
+
+<div class="pt flip">
+  <h3 class="pt-h"><span class="bdg bdg-flip">플립러닝</span><span class="bdg bdg-plus">보충설명</span>③ 비최대 억제(NMS)를 천천히 — p, q, r은 무엇이고 왜 비교하나</h3>
+  <p><b>왜 필요한가</b> — ②까지 하면 각 픽셀에 &lsquo;엣지 세기&rsquo;가 적힌다. 그런데 경계는 칼로 자른 듯 한 픽셀에서 끝나지 않고 <b>몇 픽셀에 걸쳐 완만하게</b> 바뀌므로, 세기가 큰 픽셀도 경계를 가로질러 <b>여러 개가 나란히</b> 나온다(24p의 두꺼운 능선). 여기에 임계값만 걸면 선이 <b>3~5픽셀 두께의 띠</b>가 된다. 우리가 원하는 건 &ldquo;경계는 정확히 <b>여기 한 줄</b>&rdquo;이다.</p>
+  <p><b>아이디어</b> — 산등성이를 가로질러 걸어가면 오르막 → <b>꼭대기</b> → 내리막이다. 그 <b>꼭대기 한 점만</b> 남기고 나머지 비탈은 지우자. 이것이 비최대 억제(Non-Maximum Suppression)다 — &ldquo;<b>최대가 아닌 것은 억누른다(0으로 만든다)</b>&rdquo;.</p>
+  <svg class="dia" viewBox="0 0 500 205" style="max-width:500px" role="img" aria-label="왼쪽: 경계를 가로지르는 다섯 픽셀의 세기 막대 10, 40, 90, 60, 20 중 90만 남긴다. 오른쪽: 3x3 격자에서 가운데 q=90을 그래디언트 방향의 앞뒤 p=35, r=50과 비교한다.">
+    <defs><marker id="ah4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#b45309"/></marker></defs>
+    <text x="10" y="18" font-size="11.5" font-weight="700" fill="#1f2937">경계를 가로지르는 한 줄의 세기</text>
+    <line x1="10" y1="150" x2="210" y2="150" stroke="#9ca3af"/>
+    <rect x="20" y="140" width="28" height="10" fill="#d1d5db"/><rect x="58" y="110" width="28" height="40" fill="#d1d5db"/><rect x="96" y="60" width="28" height="90" fill="#b45309"/><rect x="134" y="90" width="28" height="60" fill="#d1d5db"/><rect x="172" y="130" width="28" height="20" fill="#d1d5db"/>
+    <text x="34" y="135" font-size="10" text-anchor="middle">10</text><text x="72" y="105" font-size="10" text-anchor="middle">40</text><text x="110" y="55" font-size="11" font-weight="700" text-anchor="middle" fill="#b45309">90</text><text x="148" y="85" font-size="10" text-anchor="middle">60</text><text x="186" y="125" font-size="10" text-anchor="middle">20</text>
+    <text x="34" y="166" font-size="10" text-anchor="middle" fill="#9ca3af">0</text><text x="72" y="166" font-size="10" text-anchor="middle" fill="#9ca3af">0</text><text x="110" y="166" font-size="10.5" text-anchor="middle" fill="#b45309" font-weight="700">90</text><text x="148" y="166" font-size="10" text-anchor="middle" fill="#9ca3af">0</text><text x="186" y="166" font-size="10" text-anchor="middle" fill="#9ca3af">0</text>
+    <text x="10" y="178" font-size="9.5" fill="#6b7280">NMS 후 → 꼭대기 하나만 남는다</text>
+    <text x="250" y="18" font-size="11.5" font-weight="700" fill="#1f2937">격자에서: q를 p · r과 비교</text>
+    <rect x="250" y="30" width="46" height="46" fill="#f9fafb" stroke="#9ca3af"/>
+    <text x="273.0" y="58.0" font-size="14" font-weight="700" text-anchor="middle" fill="#111827">30</text>
+    <rect x="296" y="30" width="46" height="46" fill="#f9fafb" stroke="#9ca3af"/>
+    <text x="319.0" y="58.0" font-size="14" font-weight="700" text-anchor="middle" fill="#111827">85</text>
+    <rect x="342" y="30" width="46" height="46" fill="#f9fafb" stroke="#9ca3af"/>
+    <text x="365.0" y="58.0" font-size="14" font-weight="700" text-anchor="middle" fill="#111827">45</text>
+    <rect x="250" y="76" width="46" height="46" fill="#dbeafe" stroke="#9ca3af"/>
+    <text x="273.0" y="104.0" font-size="14" font-weight="700" text-anchor="middle" fill="#111827">35</text>
+    <rect x="296" y="76" width="46" height="46" fill="#fde68a" stroke="#9ca3af"/>
+    <text x="319.0" y="104.0" font-size="14" font-weight="700" text-anchor="middle" fill="#111827">90</text>
+    <rect x="342" y="76" width="46" height="46" fill="#dbeafe" stroke="#9ca3af"/>
+    <text x="365.0" y="104.0" font-size="14" font-weight="700" text-anchor="middle" fill="#111827">50</text>
+    <rect x="250" y="122" width="46" height="46" fill="#f9fafb" stroke="#9ca3af"/>
+    <text x="273.0" y="150.0" font-size="14" font-weight="700" text-anchor="middle" fill="#111827">28</text>
+    <rect x="296" y="122" width="46" height="46" fill="#f9fafb" stroke="#9ca3af"/>
+    <text x="319.0" y="150.0" font-size="14" font-weight="700" text-anchor="middle" fill="#111827">88</text>
+    <rect x="342" y="122" width="46" height="46" fill="#f9fafb" stroke="#9ca3af"/>
+    <text x="365.0" y="150.0" font-size="14" font-weight="700" text-anchor="middle" fill="#111827">42</text>
+    <text x="288" y="89" font-size="11" font-weight="800" fill="#b45309" text-anchor="middle">p</text>
+    <text x="334" y="89" font-size="11" font-weight="800" fill="#b45309" text-anchor="middle">q</text>
+    <text x="380" y="89" font-size="11" font-weight="800" fill="#b45309" text-anchor="middle">r</text>
+    <line x1="262" y1="186" x2="372" y2="186" stroke="#b45309" stroke-width="2.5" marker-end="url(#ah4)"/><text x="250" y="200" font-size="10" fill="#b45309">p → q → r : 그래디언트 방향</text>
+    <text x="398" y="60" font-size="10" fill="#1b3f8b">↕ 엣지 선</text>
+    <text x="398" y="74" font-size="10" fill="#1b3f8b">(비교 안 함)</text>
+    <text x="398" y="104" font-size="10" fill="#b45309">→ 그래디언트</text>
+    <text x="398" y="118" font-size="10" fill="#b45309">(여기서 비교)</text>
+  </svg>
+  <p class="dia-cap">왼쪽: 한 줄로 보면 봉우리 하나만 살아남는다. 오른쪽: 세로 엣지라 그래디언트는 가로(→)이고, q는 좌우의 p · r과만 비교한다</p>
+  <p><b>p, q, r의 뜻</b> — 교안 25p 오른쪽 그림의 점들은 픽셀이다.</p>
+  <ul class="ul">
+    <li><b>q</b> = 지금 &ldquo;엣지로 남길까 말까&rdquo;를 판정하는 <b>현재 픽셀</b></li>
+    <li><b>r</b> = q에서 <b>그래디언트 방향으로 한 칸 앞</b>에 있는 점, <b>p</b> = 그 <b>반대 방향으로 한 칸 뒤</b>에 있는 점</li>
+    <li>즉 p · q · r은 <b>경계를 가로지르는 한 줄</b> 위에 나란히 놓인 세 점이다 — 왼쪽 막대그래프의 &lsquo;봉우리와 양옆&rsquo;을 격자 위에서 고른 것</li>
+    <li><b>규칙</b>: <span class="tex">q \ge p</span> 그리고 <span class="tex">q \ge r</span> 이면 q가 꼭대기 → <b>남긴다</b>. 하나라도 더 크면 q는 비탈 → <b>0으로 지운다</b></li>
+  </ul>
+  <div class="ex">
+    <p class="ex-q"><em>예시</em>위 3×3 격자 (세로 엣지, 그래디언트는 → 방향)</p>
+    <div class="step"><i>①</i><span>q = 90 판정: p = 35, r = 50 → 90이 둘 다보다 크다 → <b>남김</b></span></div>
+    <div class="step"><i>②</i><span>이번엔 50을 판정: 왼쪽 이웃이 90 → 50 &lt; 90 → <b>지움</b> (꼭대기 옆 비탈)</span></div>
+    <div class="step"><i>③</i><span>85 판정: q 바로 위의 85는 <b>위아래(90)가 아니라 자기 좌우(30, 45)</b>와 비교한다 → 남김. 그래서 85 · 90 · 88이 <b>세로로 이어진 한 줄</b>로 살아남는다</span></div>
+    <div class="ex-ans">핵심 — 비교는 <b>엣지를 따라서가 아니라 엣지를 가로질러서</b> 한다. 엣지를 따라 비교하면 같은 선 위의 이웃끼리 서로 지워 선이 끊어진다.</div>
+  </div>
+  <p><b>방향을 4개로 뭉뚱그린다</b> — 격자에서 &lsquo;한 칸 앞&rsquo;은 8개 이웃 중 하나일 수밖에 없으므로, 보통 θ를 가장 가까운 <b>0° · 45° · 90° · 135°</b> 중 하나로 반올림해 비교 상대를 고른다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>θ (그래디언트 방향)</th><th>엣지 선의 모양</th><th>p · r로 비교하는 이웃</th></tr></thead>
+    <tbody>
+      <tr><td>≈ 0° (가로)</td><td>세로 선 │</td><td>왼쪽 · 오른쪽</td></tr>
+      <tr><td>≈ 45°</td><td>대각선 ╲</td><td>오른쪽 위 · 왼쪽 아래</td></tr>
+      <tr><td>≈ 90° (세로)</td><td>가로 선 ─</td><td>위 · 아래</td></tr>
+      <tr><td>≈ 135°</td><td>대각선 ╱</td><td>왼쪽 위 · 오른쪽 아래</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>교안 25p 그림에서 p와 r이 <b>격자점 사이의 회색 점</b>으로 그려진 이유는 반올림하지 않고 <b>정확한 θ 방향으로 한 칸</b> 간 자리를 쓰기 때문이다. 그 자리에는 픽셀이 없으므로 주변 두 픽셀 값을 <b>보간</b>(<a class="ext" href="computer-vision-week04.html#interp">4주차 06</a>)해 p · r의 값을 만든다. 더 정확하지만 계산이 조금 더 든다.</p>
 </div>
 
 <div class="pt gyo">
@@ -708,6 +1039,62 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
     </tbody>
   </table>
   </div>
+</div>
+
+<div class="pt flip">
+  <h3 class="pt-h"><span class="bdg bdg-flip">플립러닝</span><span class="bdg bdg-plus">보충설명</span>④ 이력 임계값을 그래프로 — high · low 두 줄, 세 구간</h3>
+  <p><b>먼저 오해 하나</b> — &ldquo;임계값이 양수인지 보는 것&rdquo;이 아니다. ②에서 본 그래디언트 <b>크기</b>는 제곱해 더한 값이라 <b>원래 항상 0 이상</b>이다. 교안 28p의 &ldquo;Check that maximum value of gradient value is sufficiently large&rdquo;는 &ldquo;<b>③ NMS 뒤에 남은 꼭대기 값들이 &lsquo;진짜 엣지&rsquo;라고 부를 만큼 충분히 큰가</b>&rdquo;를 확인하라는 뜻이다. 즉 &ldquo;<b>세기가 기준보다 큰가</b>&rdquo;를 본다.</p>
+  <p><b>임계값을 하나만 쓰면 생기는 문제</b> — 기준을 높게 잡으면 잡음은 사라지지만, 그림자가 진 부분처럼 <b>진짜 경계인데 잠깐 약해진 곳</b>에서 선이 <b>끊어진다</b>(27p). 기준을 낮게 잡으면 끊기지는 않지만 <b>잡음 점들까지 전부</b> 엣지가 된다. 어느 쪽이든 손해다.</p>
+  <p><b>해결 — 기준선을 두 개(high · low) 긋고 세 구간으로 나눈다</b>:</p>
+  <svg class="dia" viewBox="0 0 580 250" role="img" aria-label="가로축은 엣지 곡선을 따라간 위치, 세로축은 비최대 억제 후 남은 그래디언트 크기. high와 low 두 수평선이 있다. high 위는 강한 엣지로 채택, low 아래는 버림, 사이의 약한 엣지는 강한 엣지와 이어진 부분만 채택된다.">
+    <rect x="40" y="20" width="510" height="57.5" fill="#f3f4f6"/>
+    <rect x="40" y="77.5" width="510" height="67.5" fill="#f0fdf4"/>
+    <line x1="40" y1="190" x2="552" y2="190" stroke="#6b7280"/><line x1="40" y1="20" x2="40" y2="190" stroke="#6b7280"/>
+    <line x1="40" y1="77.5" x2="552" y2="77.5" stroke="#111827" stroke-width="1.5" stroke-dasharray="7 4"/>
+    <line x1="40" y1="145.0" x2="552" y2="145.0" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="7 4"/>
+    <text x="4" y="81.5" font-size="11" font-weight="700" fill="#111827">high</text>
+    <text x="8" y="149.0" font-size="11" font-weight="700" fill="#16a34a">low</text>
+    <text x="4" y="30" font-size="10" fill="#6b7280">세기</text>
+    <text x="470" y="204" font-size="10" fill="#6b7280">곡선을 따라간 위치 →</text>
+    <path d="M40.0,51.2 L42.9,51.1 L45.8,50.8 L48.6,50.3 L51.5,49.6 L54.4,48.8 L57.2,47.8 L60.1,46.7 L63.0,45.6 L65.9,44.5 L68.8,43.5 L71.6,42.5 L74.5,41.6 L77.4,40.9 L80.2,40.4 L83.1,40.1 L86.0,40.0 L88.9,40.2 L91.8,40.6 L94.6,41.4 L97.5,42.4 L100.4,43.7 L103.2,45.1 L106.1,46.6 L109.0,48.2 L111.9,49.9 L114.8,51.4 L117.6,52.8 L120.5,54.1 L123.4,55.1 L126.2,55.9 L129.1,56.3 L132.0,56.5 L134.9,57.0 L137.8,58.6 L140.6,61.1 L143.5,64.5 L146.4,68.7 L149.2,73.4 L152.1,78.5" fill="none" stroke="#111827" stroke-width="5" stroke-linecap="round"/>
+    <path d="M152.1,78.5 L155.0,83.9 L157.9,89.2 L160.8,94.4 L163.6,99.1 L166.5,103.2 L169.4,106.6 L172.2,109.2 L175.1,110.7 L178.0,111.2 L180.9,111.4 L183.8,111.8 L186.6,112.3 L189.5,113.1 L192.4,114.0 L195.2,115.0 L198.1,116.0 L201.0,116.9 L203.9,117.7 L206.8,118.2 L209.6,118.6 L212.5,118.8 L215.4,117.9 L218.2,115.2 L221.1,111.1 L224.0,105.6 L226.9,99.3 L229.8,92.5 L232.6,85.7 L235.5,79.4 L238.4,73.9" fill="none" stroke="#16a34a" stroke-width="4" stroke-linecap="round"/>
+    <path d="M238.4,73.9 L241.2,69.8 L244.1,67.1 L247.0,66.2 L249.9,66.1 L252.8,65.7 L255.6,65.2 L258.5,64.4 L261.4,63.5 L264.2,62.5 L267.1,61.5 L270.0,60.6 L272.9,59.8 L275.8,59.3 L278.6,58.9 L281.5,58.8 L284.4,59.5 L287.2,61.5 L290.1,64.8 L293.0,69.1 L295.9,74.0 L298.8,79.4" fill="none" stroke="#111827" stroke-width="5" stroke-linecap="round"/>
+    <path d="M298.8,79.4 L301.6,84.7 L304.5,89.7 L307.4,94.0 L310.2,97.2 L313.1,99.3 L316.0,100.0 L318.9,101.0 L321.8,104.0 L324.6,108.8 L327.5,115.0 L330.4,122.2 L333.2,130.0 L336.1,137.8 L339.0,145.0 L341.9,151.2" fill="none" stroke="#16a34a" stroke-width="4" stroke-linecap="round"/>
+    <path d="M341.9,151.2 L344.8,156.0 L347.6,159.0 L350.5,160.0 L353.4,160.1 L356.2,160.3 L359.1,160.5 L362.0,160.9 L364.9,161.4 L367.8,161.9 L370.6,162.4 L373.5,162.8 L376.4,163.2 L379.2,163.5 L382.1,163.7 L385.0,163.8 L387.9,162.9 L390.8,160.5 L393.6,156.6 L396.5,151.6 L399.4,145.7 L402.2,139.4" fill="none" stroke="#9ca3af" stroke-width="2" stroke-dasharray="3 4" stroke-linecap="round"/>
+    <path d="M402.2,139.4 L405.1,133.1 L408.0,127.2 L410.9,122.1 L413.8,118.3 L416.6,115.8 L419.5,115.0 L422.4,114.8 L425.2,114.1 L428.1,113.1 L431.0,112.0 L433.9,110.9 L436.8,109.9 L439.6,109.2 L442.5,109.0 L445.4,109.4 L448.2,110.4 L451.1,112.0 L454.0,113.9 L456.9,115.7 L459.8,117.3 L462.6,118.4 L465.5,118.8 L468.4,119.5 L471.2,121.8 L474.1,125.3 L477.0,130.0 L479.9,135.4 L482.8,141.2 L485.6,147.1" fill="none" stroke="#dc2626" stroke-width="3" stroke-dasharray="5 4" stroke-linecap="round"/>
+    <path d="M485.6,147.1 L488.5,152.5 L491.4,157.2 L494.2,160.7 L497.1,163.0 L500.0,163.8 L502.9,163.8 L505.8,163.9 L508.6,164.1 L511.5,164.3 L514.4,164.6 L517.2,164.9 L520.1,165.3 L523.0,165.6 L525.9,166.0 L528.8,166.3 L531.6,166.7 L534.5,167.0 L537.4,167.2 L540.2,167.4 L543.1,167.5 L546.0,167.5" fill="none" stroke="#9ca3af" stroke-width="2" stroke-dasharray="3 4" stroke-linecap="round"/>
+    <text x="50" y="34" font-size="10.5" fill="#111827" font-weight="700">강한 엣지 — 무조건 채택 (시작점)</text>
+    <text x="46" y="92.5" font-size="10.5" fill="#14532d" font-weight="700">약한 엣지 구간</text>
+    <text x="330" y="186" font-size="10.5" fill="#6b7280">low 아래 → 버림</text>
+    <text x="420" y="69.5" font-size="10" fill="#dc2626" font-weight="700">고립된 약한 엣지 → 버림 ↓</text>
+    <text x="150" y="160.0" font-size="10" fill="#16a34a" font-weight="700">↑ 이어진 약한 엣지 → 살림</text>
+    <text x="40" y="240" font-size="10.5" fill="#1f2937" font-weight="700">최종 결과 ↑ (교안 28p처럼 굵은 곳 = 강한 엣지, 얇은 곳 = 이어 붙인 약한 엣지)</text>
+    <line x1="40.0" y1="222" x2="152.1" y2="222" stroke="#111827" stroke-width="5" stroke-linecap="round"/>
+    <line x1="152.1" y1="222" x2="238.4" y2="222" stroke="#111827" stroke-width="3" stroke-linecap="round"/>
+    <line x1="238.4" y1="222" x2="298.8" y2="222" stroke="#111827" stroke-width="5" stroke-linecap="round"/>
+    <line x1="298.8" y1="222" x2="341.9" y2="222" stroke="#111827" stroke-width="3" stroke-linecap="round"/>
+</svg>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>구간</th><th>이름</th><th>처리</th></tr></thead>
+    <tbody>
+      <tr><td>세기 ≥ <b>high</b></td><td><b>강한 엣지</b> strong</td><td>무조건 엣지. 여기서 곡선을 <b>시작</b>한다 (use a high threshold to <b>start</b>)</td></tr>
+      <tr><td><b>low</b> ≤ 세기 &lt; <b>high</b></td><td><b>약한 엣지</b> weak</td><td><b>보류</b>. 강한 엣지와 (이웃 픽셀을 통해) <b>이어져 있으면 살리고</b>, 따로 떨어져 있으면 버린다 (a low threshold to <b>continue</b>)</td></tr>
+      <tr><td>세기 &lt; <b>low</b></td><td>—</td><td>무조건 버림</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>&ldquo;high 아래라서 놓칠 뻔한 low 구간의 친구들(weak edges)도 챙긴다&rdquo;는 말이 정확히 이것이다. 단, <b>아무 약한 엣지나 챙기는 게 아니라 &lsquo;강한 엣지에 붙어 있는&rsquo; 약한 엣지만</b> 챙긴다. 진짜 경계는 길게 이어지는 반면 잡음은 뚝 떨어진 점으로 나타나기 때문에, <b>&ldquo;연결되어 있는가&rdquo;가 진짜와 잡음을 가르는 기준</b>이 된다.</p>
+  <div class="ex">
+    <p class="ex-q"><em>예시</em>한 곡선을 따라 늘어선 픽셀 10개의 세기 (high = 150, low = 60)</p>
+    <div class="chain"><span class="s">210<small>강함</small></span><span class="s">170<small>강함</small></span><span class="wk">120<small>약함→살림</small></span><span class="wk">95<small>약함→살림</small></span><span class="wk">130<small>약함→살림</small></span><span class="s">180<small>강함</small></span><span class="wk">70<small>약함→살림</small></span><span class="d">40<small>버림</small></span><span class="wd">90<small>약함→버림</small></span><span class="wd">85<small>약함→버림</small></span></div>
+    <div class="step"><i>1</i><span>210 · 170 · 180은 high 이상 → <b>강한 엣지</b>, 바로 채택</span></div>
+    <div class="step"><i>2</i><span>120 · 95 · 130은 약하지만 양옆이 강한 엣지(170, 180)와 붙어 있다 → <b>살림</b>. 70도 180에 붙어 있어 살림</span></div>
+    <div class="step"><i>3</i><span>40은 low 미만 → 버림. 여기서 연결이 끊긴다</span></div>
+    <div class="step"><i>4</i><span>90 · 85는 약한 구간이지만 강한 엣지까지 <b>low 이상으로 이어지는 길이 없다</b>(40에서 끊김) → <b>버림</b></span></div>
+    <div class="ex-ans">결과: 앞의 7개가 하나의 끊기지 않은 엣지로 남는다. 임계값 150 하나만 썼다면 210 · 170 · 180만 남아 <b>세 조각으로 끊겼을 것</b>이고, 60 하나만 썼다면 90 · 85 같은 잡음까지 남았을 것이다.</div>
+  </div>
+  <p><b>29p 결과 읽기</b> — strong edges만 쓴 그림은 깨끗하지만 선이 군데군데 끊겨 있고, weak edges까지 다 쓴 그림은 잡동사니가 많다. hysteresis 결과는 <b>strong의 깨끗함 + weak의 연결성</b>을 함께 가진다.</p>
 </div>
 
 <div class="pt plus">
