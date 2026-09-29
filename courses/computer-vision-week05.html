@@ -356,6 +356,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .pt.flip{border-left-color:#b45309}
 .pt.live{border-left-color:#9d174d}
 .pt.plus{border-left-color:#0f766e}
+.pt.pres{border-left-color:#6d28d9}
 .pt pre.code{margin:9px 0}
 
 /* 커널(마스크) 격자 */
@@ -467,6 +468,7 @@ table.acc{min-width:0}
   <a href="#invariance">07 불변성과 스케일</a>
   <a href="#blob">08 블롭 검출 (LoG · DoG)</a>
   <a href="#covariant">09 공변 · 불변과 아핀 적응</a>
+  <a href="#pres">학생 발표 (SuperPoint)</a>
   <a href="#codes">10 실습 · 과제 연결</a>
 </nav>
 
@@ -479,6 +481,7 @@ table.acc{min-width:0}
   <a href="computer-vision-week03.html">3주차 · Linear Filters</a>
   <a href="computer-vision-week04.html">4주차 · Image Pyramids</a>
   <span class="cur">5주차 · Local Feature Detection</span>
+  <a href="computer-vision-week06.html">6주차 · Feature Descriptors</a>
   <a href="computer-vision-assignments.html">과제 · 논문 발표</a>
 </div>
 
@@ -486,7 +489,7 @@ table.acc{min-width:0}
   <p class="kicker">5주차 · 9.30 · 2026-2학기</p>
   <h1>05. 로컬 특징 검출 — 엣지 · 직선 · 코너 · 블롭</h1>
   <p>3주차의 <b>선형 필터</b>와 4주차의 <b>이미지 피라미드</b>가 여기서 합쳐집니다. 미분 필터로 <b>엣지</b>를 찾고, 그 엣지를 모아 <b>직선</b>을 세고(허프 변환), 한 점에서 <b>모든 방향으로 변하는 지점</b>을 찾아 <b>코너</b>를 잡고(Harris), 마지막으로 피라미드의 여러 스케일을 훑어 <b>덩어리(블롭)와 그 크기</b>까지 찾아냅니다.</p>
-  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 92p</span><span class="chip">슬라이드 59장</span><span class="chip">플립러닝 1 · 2부</span><span class="chip">Sobel · Canny</span><span class="chip">Hough</span><span class="chip">Harris</span><span class="chip">LoG · DoG</span></div>
+  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 92p</span><span class="chip">슬라이드 59장</span><span class="chip">플립러닝 1 · 2부</span><span class="chip">Sobel · Canny</span><span class="chip">Hough</span><span class="chip">Harris</span><span class="chip">LoG · DoG</span><span class="chip">학생 발표 1건</span></div>
 </section>
 
 <div class="legend">
@@ -521,6 +524,7 @@ table.acc{min-width:0}
   <a href="#invariance"><b>07 불변성과 스케일</b><span>밝기 · 이동 · 회전에는 강하고 스케일에는 약하다</span></a>
   <a href="#blob"><b>08 블롭 검출</b><span>LoG · 스케일 정규화 · 특성 스케일 · DoG</span></a>
   <a href="#covariant"><b>09 공변 · 불변</b><span>용어 구분 · 아핀 적응 · 정규화</span></a>
+  <a href="#pres"><b>학생 발표 · SuperPoint</b><span>정답 없는 검출을 스스로 배우기 — 자기 지도 학습</span></a>
   <a href="#codes"><b>10 실습 · 과제 연결</b><span>OpenCV 함수 정리 · 4주차 · 과제와의 연결</span></a>
 </div>
 </section>
@@ -1686,6 +1690,121 @@ keypoints = detector.detect(gray)</pre>
   <p>평면에 가까운 물체를 멀리서 볼 때, <b>시점 변화는 아핀 변환으로 근사</b>할 수 있다. 이때 블롭을 담은 창의 <b>2차 모멘트 행렬</b>을 타원으로 그리면 그 창의 <b>특성 모양(characteristic shape)</b>이 보인다.</p>
   <p>같은 지점을 다른 시점에서 본 두 영역은 <b>서로 아핀 변환 관계</b>에 있다. 그대로 비교하면 모양이 달라 매칭이 안 되므로, 각 영역을 <b>같은 크기의 원으로 펴서(normalization)</b> 비교한다(91p).
   이것이 <b>공변 검출 → 불변 기술</b>로 넘어가는 마지막 다리이고, 6주차 기술자(SIFT 등)의 전제다.</p>
+</div>
+</section>
+
+<!-- ===================== 학생 발표 ===================== -->
+<section class="sec" id="pres">
+  <div class="sec-head"><span class="sec-badge">발표</span><h2 class="sec-title">학생 논문 발표 — SuperPoint<small>5주차 주제 = 특징점 검출 · 사람이 설계한 검출기에서 스스로 배우는 검출기로</small></h2></div>
+
+<div class="oneline">
+  <p><b>한 줄로 말하면</b></p>
+  <ul class="ul">
+    <li>이번 주에 배운 Harris · LoG는 <b>사람이 &ldquo;좋은 점&rdquo;의 기준을 수식으로 직접 설계</b>한 검출기다</li>
+    <li>SuperPoint는 그 기준을 <b>데이터에서 학습</b>하려 한다. 문제는 <b>&ldquo;여기가 특징점&rdquo;이라는 정답(ground truth)이 세상에 없다</b>는 것</li>
+    <li>해결책은 <b>정답을 스스로 만들어 쓰는 것</b> — 도형만 있는 합성 영상으로 1차 검출기를 만들고, 그것을 실제 사진에 <b>수십 번 변형해 적용</b>해 얻은 합의를 정답으로 삼는다</li>
+  </ul>
+</div>
+
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📕</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-w05-pres-kim">김태연 — SuperPoint: Self-Supervised Interest Point Detection and Description</a>
+      <p>DeTone, Malisiewicz &amp; Rabinovich (Magic Leap), <b>CVPR 2018 Workshop (Deep Learning for Visual SLAM)</b> · 발표자료 20장</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week05-presentation-kim-superpoint.pdf" download="컴퓨터비전_5주차_학생발표_김태연_SuperPoint.pdf">⬇ 다운로드</a>
+  </div>
+</div>
+
+<div class="note-box"><b>논문 출처</b> — Daniel DeTone, Tomasz Malisiewicz, Andrew Rabinovich,
+<b>&ldquo;SuperPoint: Self-Supervised Interest Point Detection and Description&rdquo;</b>,
+CVPR 2018 Workshop on Deep Learning for Visual SLAM ·
+<a class="ext" href="https://arxiv.org/abs/1712.07629" target="_blank" rel="noopener">arXiv:1712.07629</a> ·
+코드 <a class="ext" href="https://github.com/magicleap/SuperPointPretrainedNetwork" target="_blank" rel="noopener">magicleap/SuperPointPretrainedNetwork</a></div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>문제 제기 — 학습을 시키고 싶은데 정답이 없다</h3>
+  <p>고양이 사진에 &ldquo;고양이&rdquo;라는 라벨을 붙이는 일은 사람이 할 수 있다. 그런데 <b>&ldquo;이 픽셀이 특징점입니다&rdquo;</b>라는 라벨은 사람도 자신 있게 찍지 못한다. 코너의 정확한 중심이 어디인지, 어느 정도 뚜렷해야 특징점인지에 <b>객관적인 정답이 없기 때문</b>이다.</p>
+  <p>그래서 발표는 문제를 이렇게 정리한다 — <b>&ldquo;<a class="ext" href="#local">반복성(repeatability)</a>이 높은 점을, 정답 데이터 없이, 어떻게 학습으로 만들어 낼 것인가?&rdquo;</b> 이것은 모델 구조의 문제가 아니라 <b>데이터(라벨)를 만드는 문제</b>다.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>해법 3단계 — 스스로 라벨을 만들어 스스로 배운다</h3>
+  <div class="flow">
+    <div class="fl"><b>① 합성 데이터로 1차 학습</b><span>선 · 삼각형 · 체커보드 같은 <b>단순 도형만 있는 영상(Synthetic Shapes)</b>을 컴퓨터로 생성한다. 도형은 <b>꼭짓점 좌표를 정확히 알고 있으므로</b> 정답 라벨이 공짜로 나온다. 이렇게 학습한 1차 검출기가 <b>MagicPoint</b></span></div>
+    <div class="fl"><b>② Homographic Adaptation 으로 실제 사진에 라벨 생성</b><span>MagicPoint를 실제 사진에 그냥 쓰면 성능이 떨어진다. 그래서 같은 사진을 <b>수십 가지로 변형(호모그래피)</b>해 각각 검출한 뒤, 결과를 <b>원래 좌표로 되돌려 모두 합친다</b>. 여러 시점에서 <b>공통으로 잡힌 점</b>만 살아남아 <b>가짜 정답(pseudo-label)</b>이 된다</span></div>
+    <div class="fl"><b>③ 그 라벨로 본 학습</b><span>이렇게 만든 라벨로 <b>검출과 기술을 한 신경망에서 동시에</b> 학습시킨 것이 <b>SuperPoint</b></span></div>
+  </div>
+  <p>발표자료의 표현을 빌리면 <b>&ldquo;객체 탐지 같은 일반적인 supervised learning이 불가능하다&rdquo;</b>는 인식에서 출발해, <b>자기 지도 학습(self-supervised learning)</b>으로 우회한 것이다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>호모그래피(homography)가 무엇이길래</h3>
+  <p><b>호모그래피는 평면을 다른 시점에서 본 모습으로 바꿔 주는 3×3 변환 행렬</b>이다. 이동 · 회전 · 확대 · 기울임(전단) · 원근 왜곡을 모두 담을 수 있어, <b>&ldquo;같은 평면 장면을 다른 각도에서 찍은 것&rdquo;</b>을 컴퓨터로 흉내 낼 수 있다. 7주차 <b>Feature Matching &amp; Homography</b>에서 정식으로 배운다.</p>
+  <p>여기서 중요한 성질은 <b>변환을 알고 있으면 되돌릴 수도 있다</b>는 점이다. 변형한 사진에서 찾은 점을 <b>역변환으로 원래 좌표에 되돌려</b> 겹치면, <b>&ldquo;어느 시점에서 봐도 잡히는 점&rdquo;</b>에만 표가 쌓인다. 이것이 <a class="ext" href="#hough">04 허프 변환의 투표</a>와 같은 발상이고, 발표에서 <b>&ldquo;일종의 앙상블 + Augmentation 효과&rdquo;</b>라고 정리한 부분이다.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>구조 — 인코더 하나, 머리 둘</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>부분</th><th>입력 → 출력</th><th>하는 일</th></tr></thead>
+    <tbody>
+      <tr><td><b>공유 인코더</b><br><small>VGG 계열</small></td><td>640×480×1 → <b>80×60×128</b></td><td>가로 · 세로를 <b>1/8로 줄인다</b>. 줄어든 텐서의 <b>1픽셀이 원본 8×8 = 64픽셀</b>을 담당한다. 입력이 <b>흑백</b>인 이유는 코너 · 블롭 같은 기하학적 특징이 <b>밝기 변화에서 나오기 때문</b>(색 정보는 쓰지 않는다)</td></tr>
+      <tr><td><b>검출 머리</b><br><small>Interest Point Decoder</small></td><td>80×60×128 → <b>80×60×65</b></td><td>채널 65 = <b>8×8 = 64칸</b> + <b>&ldquo;이 안에 특징점 없음&rdquo;을 뜻하는 1채널</b>. <b>소프트맥스</b>로 합이 1인 확률로 만든 뒤 원본 해상도로 <b>재배열(reshape)</b>해 <b>특징점 확률 지도</b>를 만든다</td></tr>
+      <tr><td><b>기술 머리</b><br><small>Descriptor Decoder</small></td><td>80×60×128 → <b>80×60×D</b> (D = 256)</td><td>각 점을 <b>256차원 벡터</b>로 표현한다. 1/8 해상도이므로 <b>바이큐빅 보간</b>으로 원본 위치의 값을 만들고(<a class="ext" href="computer-vision-week04.html#interp">4주차 보간</a>), 마지막에 <b>L2 정규화</b>로 길이를 1로 맞춰 <b>크기가 아니라 패턴만</b> 비교되게 한다</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>이 구조가 이번 주와 다음 주를 한 번에 잇는다</b> — 왼쪽 머리가 <a class="ext" href="#local">검출(detection)</a>, 오른쪽 머리가 <b>기술(description)</b>이다. 교안 9p의 3단계 중 <b>앞의 두 단계를 하나의 망이 동시에</b> 수행한다.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>성능 — 숫자를 읽는 법</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th rowspan="2">방법</th><th colspan="3">호모그래피 추정 정확도</th><th colspan="2">검출 성능</th><th colspan="2">기술(매칭) 성능</th></tr>
+    <tr><th>ε=1</th><th>ε=3</th><th>ε=5</th><th>Rep.</th><th>MLE</th><th>NN mAP</th><th>M. Score</th></tr></thead>
+    <tbody>
+      <tr><td><b>SuperPoint</b></td><td>.310</td><td><b>.684</b></td><td><b>.829</b></td><td>.581</td><td>1.158</td><td><b>.821</b></td><td><b>.470</b></td></tr>
+      <tr><td>LIFT</td><td>.284</td><td>.598</td><td>.717</td><td>.449</td><td>1.102</td><td>.664</td><td>.315</td></tr>
+      <tr><td>SIFT</td><td><b>.424</b></td><td>.676</td><td>.759</td><td>.495</td><td><b>0.833</b></td><td>.694</td><td>.313</td></tr>
+      <tr><td>ORB</td><td>.150</td><td>.395</td><td>.538</td><td><b>.641</b></td><td>1.157</td><td>.735</td><td>.266</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <ul class="ul">
+    <li><b>ε</b> — 정답으로 인정하는 오차 기준(픽셀). ε=1이 가장 엄격하다</li>
+    <li><b>Rep. (repeatability)</b> — 변형된 영상에서 <b>같은 점을 다시 찾아낸 비율</b></li>
+    <li><b>MLE (Mean Localization Error)</b> — 찾은 점이 정답 위치에서 <b>평균 몇 픽셀 벗어났는가</b>(작을수록 좋다)</li>
+    <li><b>NN mAP</b> — 가장 가까운 기술자끼리 <b>올바른 짝</b>을 얼마나 잘 찾는가</li>
+    <li><b>M. Score (Matching Score)</b> — 전체 중 <b>올바르게 매칭된 비율</b></li>
+  </ul>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>표를 자세히 보면 &ldquo;SuperPoint가 전부 이겼다&rdquo;는 아니다</h3>
+  <p>발표 마지막 줄은 &ldquo;SuperPoint는 repeatability를 끌어올렸다&rdquo;로 정리되어 있지만, <b>표의 Rep. 열만 보면 ORB가 .641로 가장 높고 SuperPoint는 .581</b>이다. 위치 정확도(MLE)도 <b>SIFT가 0.833으로 가장 좋다</b>. 발표자료에 실린 논문 그림의 설명도 같은 이야기를 한다 — <b>ORB는 평균 반복성이 가장 높지만 검출점이 한곳에 몰려(cluster) 있어 호모그래피 추정은 오히려 부정확</b>하다는 것이다.</p>
+  <p>그러니 이 표에서 읽어야 할 결론은 <b>&ldquo;검출 지표 하나만으로는 좋은 특징을 판정할 수 없다&rdquo;</b>에 가깝다. SuperPoint가 확실히 앞선 곳은 <b>기술자 성능(NN mAP .821, M.Score .470)</b>과 <b>실제로 쓸모 있는 결과인 호모그래피 추정(ε=3, 5)</b>이다. 시험에서 &ldquo;어느 지표가 무엇을 재는가&rdquo;를 구분하는 것이 이 표의 핵심이다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>이번 주 교안과 나란히 놓고 보기</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>질문</th><th>Harris · LoG (교안)</th><th>SuperPoint (발표)</th></tr></thead>
+    <tbody>
+      <tr><td>&ldquo;좋은 점&rdquo;의 기준은 누가 정하나</td><td><b>사람이 수식으로</b> — 모든 방향으로 변하는 점(<a class="ext" href="#harris">R 점수</a>), 응답이 최대가 되는 스케일</td><td><b>데이터가</b> — 여러 시점에서 공통으로 잡힌 점</td></tr>
+      <tr><td>스케일은 어떻게 다루나</td><td><a class="ext" href="#blob">스케일 공간</a>을 만들어 탐색</td><td>합성곱 신경망이 <b>변형된 데이터로 학습</b>하며 흡수</td></tr>
+      <tr><td>검출과 기술의 관계</td><td><b>따로</b> — 검출(5주차) 뒤에 기술(6주차)</td><td><b>한 망에서 동시에</b> (인코더 공유)</td></tr>
+      <tr><td>약점</td><td>설계한 가정이 깨지면 무너짐</td><td>학습 데이터의 분포를 벗어나면 무너짐 · 계산량이 큼</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>발표의 마무리도 이 맥락이다 — <b>&ldquo;정답이 없는 검출 문제를 self-supervised로 풀었고, SuperPoint는 특징점을 어떻게 추출하는지를 학습으로 풀어낸 keypoint detector&rdquo;</b>이며, 후속 연구인 <b>SuperGlue</b>는 그렇게 뽑은 점들을 <b>어떻게 짝지을 것인가</b>(매칭)로 한 걸음 더 나아간다 — 그것이 <b>7주차</b>의 주제다.</p>
 </div>
 </section>
 
