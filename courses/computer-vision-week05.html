@@ -1696,7 +1696,7 @@ keypoints = detector.detect(gray)</pre>
 
 <!-- ===================== 학생 발표 ===================== -->
 <section class="sec" id="pres">
-  <div class="sec-head"><span class="sec-badge">발표</span><h2 class="sec-title">학생 논문 발표 4편 — 검출기의 계보<small>사람이 설계하던 자리를 학습이 어디까지, 어떤 순서로 가져갔는가</small></h2></div>
+  <div class="sec-head"><span class="sec-badge">발표</span><h2 class="sec-title">학생 논문 발표 4편 — 검출기의 계보<small>3 · 4주차 발표까지 한 장에 · 사람이 설계하던 자리를 학습이 어디까지, 어떤 순서로 가져갔는가</small></h2></div>
 
 <div class="oneline">
   <p><b>네 발표를 한 줄로 꿰면</b></p>
@@ -1709,189 +1709,368 @@ keypoints = detector.detect(gray)</pre>
 </div>
 
 <h3 class="sub-title">전체 도식 — 어느 시점에, 어느 단계를, 무엇으로 바꿨나</h3>
+<p style="font-size:12.5px;color:#3f4854;line-height:1.8;margin:6px 0 10px"><b>3 · 4 · 5주차 학생 발표 논문 전부와 교안의 고전 방법을 한 장에</b> 놓았습니다.
+세로는 <b>최초 공개 시점</b>(arXiv 프리프린트와 학회 발표 중 <b>빠른 쪽</b>) 순서이고, 가로는 <b>필터 → 스케일 · 피라미드 → 검출 → 기술 → 매칭</b>으로 이어지는 파이프라인입니다.
+왼쪽 이름표의 색 배지가 <b>몇 주차 발표</b>인지를 나타냅니다.</p>
 <div class="svg-scroll" style="border:1px solid var(--border);border-radius:12px;background:#fff;padding:8px;margin:12px 0">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 805" role="img" aria-label="로컬 특징 파이프라인 계보 — 연도별로 검출·기술·매칭 중 어느 단계를 사람이 설계했고 어느 단계를 학습으로 바꿨는지 보여 주는 도식">
-<rect width="1180" height="805" fill="#ffffff"/>
-<text x="16" y="30" font-size="19" font-weight="700" fill="#0f172a">로컬 특징 파이프라인의 계보 — 어느 단계를, 언제, 무엇으로 바꿨나</text>
-<text x="16" y="52" font-size="12.5" fill="#64748b">회색 = 사람이 수식으로 설계 · 보라 = 학습 · 청록 = 둘을 섞음 · 주황 테두리 = 그 단계를 아예 없앰</text>
-<rect x="279.0" y="66" width="217.0" height="30" rx="6" fill="#94a3b8" opacity="0.10"/>
-<text x="387.5" y="80" font-size="11" font-weight="700" fill="#94a3b8" text-anchor="middle">전부 사람이 설계</text>
-<text x="387.5" y="92" font-size="10" fill="#64748b" text-anchor="middle">1988–2011</text>
-<rect x="502.0" y="66" width="217.0" height="30" rx="6" fill="#7c3aed" opacity="0.10"/>
-<text x="610.5" y="80" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="middle">검출 · 기술을 학습으로</text>
-<text x="610.5" y="92" font-size="10" fill="#64748b" text-anchor="middle">2015–2019</text>
-<rect x="725.0" y="66" width="217.0" height="30" rx="6" fill="#0f766e" opacity="0.10"/>
-<text x="833.5" y="80" font-size="11" font-weight="700" fill="#0f766e" text-anchor="middle">매칭까지 학습 · 검출 생략</text>
-<text x="833.5" y="92" font-size="10" fill="#64748b" text-anchor="middle">2020–2021</text>
-<rect x="948.0" y="66" width="217.0" height="30" rx="6" fill="#b45309" opacity="0.10"/>
-<text x="1056.5" y="80" font-size="11" font-weight="700" fill="#b45309" text-anchor="middle">단순화 · 대형 사전학습 모델</text>
-<text x="1056.5" y="92" font-size="10" fill="#64748b" text-anchor="middle">2023</text>
-<text x="20" y="132" font-size="12.5" font-weight="700" fill="#475569">연도 · 방법</text>
-<rect x="276" y="110" width="292" height="30" rx="7" fill="#0f172a"/>
-<text x="422" y="130" font-size="12.5" font-weight="700" fill="#ffffff" text-anchor="middle">검출 Detection</text>
-<rect x="576" y="110" width="292" height="30" rx="7" fill="#0f172a"/>
-<text x="722" y="130" font-size="12.5" font-weight="700" fill="#ffffff" text-anchor="middle">기술 Description</text>
-<rect x="876" y="110" width="292" height="30" rx="7" fill="#0f172a"/>
-<text x="1022" y="130" font-size="12.5" font-weight="700" fill="#ffffff" text-anchor="middle">매칭 Matching</text>
-<path d="M 569 125 L 575 125" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ar)"/>
-<path d="M 869 125 L 875 125" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ar)"/>
-<defs><marker id="ar" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 8 4 L 0 8 z" fill="#94a3b8"/></marker></defs>
-<rect x="16" y="152" width="250" height="46" rx="8" fill="#f8fafc" stroke="#e2e8f0" opacity="1"/>
-<text x="28" y="171" font-size="11" font-weight="700" fill="#64748b" opacity="1">1988</text>
-<text x="62" y="172" font-size="13" font-weight="700" fill="#0f172a" opacity="1">Harris</text>
-<text x="28" y="188" font-size="10.5" fill="#64748b" opacity="1">코너 검출기</text>
-<rect x="276" y="152" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
-<text x="289" y="170" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
-<text x="289" y="186" font-size="11.5" fill="#334155" opacity="1">미분 · 2차 모멘트</text>
-<rect x="576" y="152" width="292" height="46" rx="8" fill="#ffffff" stroke="#e8edf4" stroke-dasharray="3 4"/>
-<text x="722" y="180" font-size="11" fill="#cbd5e1" text-anchor="middle">해당 없음</text>
-<rect x="876" y="152" width="292" height="46" rx="8" fill="#ffffff" stroke="#e8edf4" stroke-dasharray="3 4"/>
-<text x="1022" y="180" font-size="11" fill="#cbd5e1" text-anchor="middle">해당 없음</text>
-<rect x="16" y="205" width="250" height="46" rx="8" fill="#f8fafc" stroke="#e2e8f0" opacity="1"/>
-<text x="28" y="224" font-size="11" font-weight="700" fill="#64748b" opacity="1">2004</text>
-<text x="62" y="225" font-size="13" font-weight="700" fill="#0f172a" opacity="1">SIFT</text>
-<text x="28" y="241" font-size="10.5" fill="#64748b" opacity="1">Lowe, IJCV</text>
-<rect x="276" y="205" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
-<text x="289" y="223" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
-<text x="289" y="239" font-size="11.5" fill="#334155" opacity="1">DoG 극값</text>
-<rect x="576" y="205" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
-<text x="589" y="223" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
-<text x="589" y="239" font-size="11.5" fill="#334155" opacity="1">128차원 히스토그램</text>
-<rect x="876" y="205" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
-<text x="889" y="223" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
-<text x="889" y="239" font-size="11.5" fill="#334155" opacity="1">최근접 + 비율 검사</text>
-<rect x="16" y="258" width="250" height="46" rx="8" fill="#f8fafc" stroke="#e2e8f0" opacity="1"/>
-<text x="28" y="277" font-size="11" font-weight="700" fill="#64748b" opacity="1">2006</text>
-<text x="62" y="278" font-size="13" font-weight="700" fill="#0f172a" opacity="1">SURF · FAST</text>
-<text x="28" y="294" font-size="10.5" fill="#64748b" opacity="1">ECCV</text>
-<rect x="276" y="258" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
-<text x="289" y="276" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
-<text x="289" y="292" font-size="11.5" fill="#334155" opacity="1">헤시안 · 세그먼트</text>
-<rect x="576" y="258" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
-<text x="589" y="276" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
-<text x="589" y="292" font-size="11.5" fill="#334155" opacity="1">64차원 Haar</text>
-<rect x="876" y="258" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
-<text x="889" y="276" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
-<text x="889" y="292" font-size="11.5" fill="#334155" opacity="1">최근접</text>
-<rect x="16" y="311" width="250" height="46" rx="8" fill="#f8fafc" stroke="#e2e8f0" opacity="1"/>
-<text x="28" y="330" font-size="11" font-weight="700" fill="#64748b" opacity="1">2011</text>
-<text x="62" y="331" font-size="13" font-weight="700" fill="#0f172a" opacity="1">ORB</text>
-<text x="28" y="347" font-size="10.5" fill="#64748b" opacity="1">ICCV</text>
-<rect x="276" y="311" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
-<text x="289" y="329" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
-<text x="289" y="345" font-size="11.5" fill="#334155" opacity="1">FAST + 방향</text>
-<rect x="576" y="311" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
-<text x="589" y="329" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
-<text x="589" y="345" font-size="11.5" fill="#334155" opacity="1">256비트 이진</text>
-<rect x="876" y="311" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
-<text x="889" y="329" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
-<text x="889" y="345" font-size="11.5" fill="#334155" opacity="1">해밍 거리</text>
-<rect x="16" y="364" width="250" height="46" rx="8" fill="#f8fafc" stroke="#e2e8f0" opacity="0.55"/>
-<text x="28" y="383" font-size="11" font-weight="700" fill="#64748b" opacity="0.55">2015</text>
-<text x="62" y="384" font-size="13" font-weight="700" fill="#0f172a" opacity="0.55">TILDE · LIFT</text>
-<text x="28" y="400" font-size="10.5" fill="#64748b" opacity="0.55">CVPR 15 · ECCV 16</text>
-<rect x="276" y="364" width="292" height="46" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.5" opacity="0.55"/>
-<text x="289" y="382" font-size="10" font-weight="700" fill="#7c3aed" opacity="0.55">학습</text>
-<text x="289" y="398" font-size="11.5" fill="#4c1d95" opacity="0.55">검출을 학습</text>
-<rect x="576" y="364" width="292" height="46" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.5" opacity="0.55"/>
-<text x="589" y="382" font-size="10" font-weight="700" fill="#7c3aed" opacity="0.55">학습</text>
-<text x="589" y="398" font-size="11.5" fill="#4c1d95" opacity="0.55">기술도 학습</text>
-<rect x="876" y="364" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="0.55"/>
-<text x="889" y="382" font-size="10" font-weight="700" fill="#94a3b8" opacity="0.55">사람이 설계</text>
-<text x="889" y="398" font-size="11.5" fill="#334155" opacity="0.55">최근접</text>
-<rect x="16" y="417" width="250" height="46" rx="8" fill="#f5f0fd" stroke="#7c3aed" stroke-width="1.4"/>
-<text x="28" y="436" font-size="11" font-weight="700" fill="#64748b" opacity="1">2018</text>
-<text x="62" y="437" font-size="13" font-weight="700" fill="#0f172a" opacity="1">★ SuperPoint</text>
-<text x="28" y="453" font-size="10.5" fill="#64748b" opacity="1">김태연 발표 · CVPRW</text>
-<rect x="276" y="417" width="292" height="46" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.5" opacity="1"/>
-<text x="289" y="435" font-size="10" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
-<text x="289" y="451" font-size="11.5" fill="#4c1d95" opacity="1">자기지도 · 호모그래피 적응</text>
-<rect x="576" y="417" width="292" height="46" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.5" opacity="1"/>
-<text x="589" y="435" font-size="10" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
-<text x="589" y="451" font-size="11.5" fill="#4c1d95" opacity="1">256차원 · 같은 인코더</text>
-<rect x="876" y="417" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
-<text x="889" y="435" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
-<text x="889" y="451" font-size="11.5" fill="#334155" opacity="1">최근접</text>
-<rect x="16" y="470" width="250" height="46" rx="8" fill="#f5f0fd" stroke="#7c3aed" stroke-width="1.4"/>
-<text x="28" y="489" font-size="11" font-weight="700" fill="#64748b" opacity="1">2019</text>
-<text x="62" y="490" font-size="13" font-weight="700" fill="#0f172a" opacity="1">★ Key.Net</text>
-<text x="28" y="506" font-size="10.5" fill="#64748b" opacity="1">김아영 발표 · ICCV</text>
-<rect x="276" y="470" width="292" height="46" rx="8" fill="#eef2f7" opacity="1"/>
-<path d="M 422 470 h 138 v 46 h -138 a 8 8 0 0 0 -8 8 z" fill="#eaf7f4" opacity="1"/>
-<rect x="276" y="470" width="292" height="46" rx="8" fill="none" stroke="#0f766e" stroke-width="1.5" opacity="1"/>
-<text x="289" y="488" font-size="10" font-weight="700" fill="#0f766e" opacity="1">손설계 + 학습</text>
-<text x="289" y="504" font-size="11.5" fill="#134e4a" opacity="1">고정 미분 필터 + 학습 필터</text>
-<rect x="576" y="470" width="292" height="46" rx="8" fill="#ffffff" stroke="#e8edf4" stroke-dasharray="3 4"/>
-<text x="722" y="498" font-size="11" fill="#cbd5e1" text-anchor="middle">해당 없음</text>
-<rect x="876" y="470" width="292" height="46" rx="8" fill="#ffffff" stroke="#e8edf4" stroke-dasharray="3 4"/>
-<text x="1022" y="498" font-size="11" fill="#cbd5e1" text-anchor="middle">해당 없음</text>
-<rect x="16" y="523" width="250" height="46" rx="8" fill="#f8fafc" stroke="#e2e8f0" opacity="0.55"/>
-<text x="28" y="542" font-size="11" font-weight="700" fill="#64748b" opacity="0.55">2020</text>
-<text x="62" y="543" font-size="13" font-weight="700" fill="#0f172a" opacity="0.55">SuperGlue</text>
-<text x="28" y="559" font-size="10.5" fill="#64748b" opacity="0.55">CVPR · SuperPoint 위에</text>
-<rect x="276" y="523" width="292" height="46" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" opacity="0.55"/>
-<text x="289" y="541" font-size="10" font-weight="700" fill="#cbd5e1" opacity="0.55">앞 모델 재사용</text>
-<text x="289" y="557" font-size="11.5" fill="#64748b" opacity="0.55">SuperPoint 그대로</text>
-<rect x="576" y="523" width="292" height="46" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" opacity="0.55"/>
-<text x="589" y="541" font-size="10" font-weight="700" fill="#cbd5e1" opacity="0.55">앞 모델 재사용</text>
-<text x="589" y="557" font-size="11.5" fill="#64748b" opacity="0.55">SuperPoint 그대로</text>
-<rect x="876" y="523" width="292" height="46" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.5" opacity="0.55"/>
-<text x="889" y="541" font-size="10" font-weight="700" fill="#7c3aed" opacity="0.55">학습</text>
-<text x="889" y="557" font-size="11.5" fill="#4c1d95" opacity="0.55">그래프 신경망 매칭</text>
-<rect x="16" y="576" width="250" height="46" rx="8" fill="#f5f0fd" stroke="#7c3aed" stroke-width="1.4"/>
-<text x="28" y="595" font-size="11" font-weight="700" fill="#64748b" opacity="1">2021</text>
-<text x="62" y="596" font-size="13" font-weight="700" fill="#0f172a" opacity="1">★ LoFTR</text>
-<text x="28" y="612" font-size="10.5" fill="#64748b" opacity="1">조환희 발표 · CVPR</text>
-<rect x="276" y="576" width="292" height="46" rx="8" fill="#fff7ed" stroke="#d9a441" stroke-width="1.5" stroke-dasharray="5 4" opacity="1"/>
-<text x="289" y="594" font-size="10" font-weight="700" fill="#d9a441" opacity="1">없앰</text>
-<text x="289" y="610" font-size="11.5" fill="#92400e" opacity="1">검출 단계 생략</text>
-<rect x="576" y="576" width="292" height="46" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.5" opacity="1"/>
-<text x="589" y="594" font-size="10" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
-<text x="589" y="610" font-size="11.5" fill="#4c1d95" opacity="1">트랜스포머 · 밀집</text>
-<rect x="876" y="576" width="292" height="46" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.5" opacity="1"/>
-<text x="889" y="594" font-size="10" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
-<text x="889" y="610" font-size="11.5" fill="#4c1d95" opacity="1">coarse → fine</text>
-<rect x="16" y="629" width="250" height="46" rx="8" fill="#f5f0fd" stroke="#7c3aed" stroke-width="1.4"/>
-<text x="28" y="648" font-size="11" font-weight="700" fill="#64748b" opacity="1">2023</text>
-<text x="62" y="649" font-size="13" font-weight="700" fill="#0f172a" opacity="1">★ SiLK</text>
-<text x="28" y="665" font-size="10.5" fill="#64748b" opacity="1">안희철 발표 · ICCV</text>
-<rect x="276" y="629" width="292" height="46" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.5" opacity="1"/>
-<text x="289" y="647" font-size="10" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
-<text x="289" y="663" font-size="11.5" fill="#4c1d95" opacity="1">매칭 성공 = 키포인트</text>
-<rect x="576" y="629" width="292" height="46" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.5" opacity="1"/>
-<text x="589" y="647" font-size="10" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
-<text x="589" y="663" font-size="11.5" fill="#4c1d95" opacity="1">128차원 · 왕복 매칭</text>
-<rect x="876" y="629" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
-<text x="889" y="647" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
-<text x="889" y="663" font-size="11.5" fill="#334155" opacity="1">코사인 + 상호 최근접</text>
-<rect x="16" y="682" width="250" height="46" rx="8" fill="#fff7ed" stroke="#b45309" stroke-width="1.4"/>
-<text x="28" y="701" font-size="11" font-weight="700" fill="#64748b" opacity="1">2023</text>
-<text x="62" y="702" font-size="13" font-weight="700" fill="#0f172a" opacity="1">◆ A Tale of Two Features</text>
-<text x="28" y="718" font-size="10.5" fill="#64748b" opacity="1">내 6주차 발표 · NeurIPS</text>
-<rect x="276" y="682" width="292" height="46" rx="8" fill="#fff7ed" stroke="#d9a441" stroke-width="1.5" stroke-dasharray="5 4" opacity="1"/>
-<text x="289" y="700" font-size="10" font-weight="700" fill="#d9a441" opacity="1">없앰</text>
-<text x="289" y="716" font-size="11.5" fill="#92400e" opacity="1">검출 없이 모든 픽셀</text>
-<rect x="576" y="682" width="292" height="46" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.5" opacity="1"/>
-<text x="589" y="700" font-size="10" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
-<text x="589" y="716" font-size="11.5" fill="#4c1d95" opacity="1">SD + DINO 사전학습 특징</text>
-<rect x="876" y="682" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
-<text x="889" y="700" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
-<text x="889" y="716" font-size="11.5" fill="#334155" opacity="1">최근접</text>
-<rect x="16" y="751" width="22" height="14" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.3"/>
-<text x="45" y="763" font-size="11.5" fill="#334155">사람이 수식으로 설계</text>
-<rect x="182" y="751" width="22" height="14" rx="4" fill="#eaf7f4" stroke="#0f766e" stroke-width="1.3"/>
-<text x="211" y="763" font-size="11.5" fill="#334155">손설계 필터 + 학습 조합</text>
-<rect x="384" y="751" width="22" height="14" rx="4" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.3"/>
-<text x="413" y="763" font-size="11.5" fill="#334155">데이터로 학습</text>
-<rect x="502" y="751" width="22" height="14" rx="4" fill="#fff7ed" stroke="#d9a441" stroke-width="1.3"/>
-<text x="531" y="763" font-size="11.5" fill="#334155">그 단계를 없앰</text>
-<text x="16" y="785" font-size="11.5" fill="#7c3aed" font-weight="700">★ 5주차 학생 발표 4편</text>
-<text x="206" y="785" font-size="11.5" fill="#b45309" font-weight="700">◆ 내 6주차 발표 논문</text>
-<text x="396" y="785" font-size="11" fill="#94a3b8">흐리게 표시한 줄(TILDE · LIFT · SuperGlue)은 발표에서 비교 대상으로만 언급된 모델입니다</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 1074" role="img" aria-label="컴퓨터비전 학생 발표 논문과 교안의 고전 방법을 최초 공개 시점 순으로 늘어놓고, 필터·스케일·검출·기술·매칭 다섯 단계 중 어디를 무엇으로 채웠는지 보여 주는 도식">
+<rect width="1240" height="1074" fill="#ffffff"/>
+<defs><marker id="ar2" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 8 4 L 0 8 z" fill="#94a3b8"/></marker></defs>
+<text x="16" y="30" font-size="19" font-weight="700" fill="#0f172a">컴퓨터비전 학생 발표 계보 — 어느 시점에, 어느 단계를, 무엇으로 바꿨나</text>
+<text x="16" y="51" font-size="12" fill="#64748b">세로 = <tspan font-weight="700">최초 공개 시점</tspan>(arXiv와 학회 중 빠른 쪽) 순서 · 회색 = 사람이 설계 · 보라 = 학습 · 청록 = 둘을 섞음 · 주황 점선 = 그 단계를 없앰</text>
+<rect x="259.0" y="64" width="230.0" height="30" rx="6" fill="#94a3b8" opacity="0.10"/>
+<text x="374.0" y="78" font-size="11" font-weight="700" fill="#94a3b8" text-anchor="middle">사람이 전부 설계</text>
+<text x="374.0" y="90" font-size="10" fill="#64748b" text-anchor="middle">1988–2011</text>
+<rect x="495.0" y="64" width="230.0" height="30" rx="6" fill="#7c3aed" opacity="0.10"/>
+<text x="610.0" y="78" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="middle">학습이 검출 · 기술로</text>
+<text x="610.0" y="90" font-size="10" fill="#64748b" text-anchor="middle">2015–2019</text>
+<rect x="731.0" y="64" width="230.0" height="30" rx="6" fill="#0f766e" opacity="0.10"/>
+<text x="846.0" y="78" font-size="11" font-weight="700" fill="#0f766e" text-anchor="middle">매칭까지 · 검출 생략</text>
+<text x="846.0" y="90" font-size="10" fill="#64748b" text-anchor="middle">2019–2021</text>
+<rect x="967.0" y="64" width="230.0" height="30" rx="6" fill="#b45309" opacity="0.10"/>
+<text x="1082.0" y="78" font-size="11" font-weight="700" fill="#b45309" text-anchor="middle">대형 모델 · 재해석</text>
+<text x="1082.0" y="90" font-size="10" fill="#64748b" text-anchor="middle">2023–2025</text>
+<text x="20" y="128" font-size="12" font-weight="700" fill="#475569">공개 시점 · 방법</text>
+<rect x="256" y="108" width="184" height="28" rx="7" fill="#0f172a"/>
+<text x="348" y="127" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">필터 Filter</text>
+<rect x="446" y="108" width="184" height="28" rx="7" fill="#0f172a"/>
+<text x="538" y="127" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">스케일 · 피라미드</text>
+<rect x="636" y="108" width="184" height="28" rx="7" fill="#0f172a"/>
+<text x="728" y="127" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">검출 Detection</text>
+<rect x="826" y="108" width="184" height="28" rx="7" fill="#0f172a"/>
+<text x="918" y="127" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">기술 Description</text>
+<rect x="1016" y="108" width="184" height="28" rx="7" fill="#0f172a"/>
+<text x="1108" y="127" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">매칭 Matching</text>
+<path d="M 441 122 L 445 122" stroke="#94a3b8" stroke-width="1.4" marker-end="url(#ar2)"/>
+<path d="M 631 122 L 635 122" stroke="#94a3b8" stroke-width="1.4" marker-end="url(#ar2)"/>
+<path d="M 821 122 L 825 122" stroke="#94a3b8" stroke-width="1.4" marker-end="url(#ar2)"/>
+<path d="M 1011 122 L 1015 122" stroke="#94a3b8" stroke-width="1.4" marker-end="url(#ar2)"/>
+<rect x="16" y="148" width="232" height="44" rx="8" fill="#f8fafc" stroke="#e2e8f0" opacity="1"/>
+<text x="27" y="165" font-size="10" font-weight="700" fill="#64748b" opacity="1">1988</text>
+<text x="27" y="179" font-size="12" font-weight="700" fill="#0f172a" opacity="1">Harris</text>
+<text x="27" y="189" font-size="9.5" fill="#94a3b8" opacity="1">Alvey Vision Conf.</text>
+<rect x="256" y="148" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="446" y="148" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="636" y="148" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="647" y="165" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="647" y="180" font-size="10.5" fill="#334155" opacity="1">2차 모멘트 · 고윳값</text>
+<rect x="826" y="148" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="1016" y="148" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="16" y="198" width="232" height="44" rx="8" fill="#f8fafc" stroke="#e2e8f0" opacity="1"/>
+<text x="27" y="215" font-size="10" font-weight="700" fill="#64748b" opacity="1">1999</text>
+<text x="27" y="229" font-size="12" font-weight="700" fill="#0f172a" opacity="1">SIFT</text>
+<text x="27" y="239" font-size="9.5" fill="#94a3b8" opacity="1">ICCV 1999 · IJCV 2004</text>
+<rect x="256" y="198" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="267" y="215" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="267" y="230" font-size="10.5" fill="#334155" opacity="1">DoG</text>
+<rect x="446" y="198" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="457" y="215" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="457" y="230" font-size="10.5" fill="#334155" opacity="1">스케일 공간</text>
+<rect x="636" y="198" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="647" y="215" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="647" y="230" font-size="10.5" fill="#334155" opacity="1">DoG 극값</text>
+<rect x="826" y="198" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="837" y="215" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="837" y="230" font-size="10.5" fill="#334155" opacity="1">128차원</text>
+<rect x="1016" y="198" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="1027" y="215" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="1027" y="230" font-size="10.5" fill="#334155" opacity="1">최근접 + 비율</text>
+<rect x="16" y="248" width="232" height="44" rx="8" fill="#f8fafc" stroke="#e2e8f0" opacity="1"/>
+<text x="27" y="265" font-size="10" font-weight="700" fill="#64748b" opacity="1">2005</text>
+<text x="27" y="279" font-size="12" font-weight="700" fill="#0f172a" opacity="1">HOG</text>
+<text x="27" y="289" font-size="9.5" fill="#94a3b8" opacity="1">CVPR 2005</text>
+<rect x="256" y="248" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="267" y="265" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="267" y="280" font-size="10.5" fill="#334155" opacity="1">그래디언트</text>
+<rect x="446" y="248" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="636" y="248" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="826" y="248" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="837" y="265" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="837" y="280" font-size="10.5" fill="#334155" opacity="1">3780차원</text>
+<rect x="1016" y="248" width="184" height="44" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.4" opacity="1"/>
+<text x="1027" y="265" font-size="9" font-weight="700" fill="#cbd5e1" opacity="1">그대로 씀</text>
+<text x="1027" y="280" font-size="10.5" fill="#64748b" opacity="1">SVM 분류</text>
+<rect x="16" y="298" width="232" height="44" rx="8" fill="#f8fafc" stroke="#e2e8f0" opacity="1"/>
+<text x="27" y="315" font-size="10" font-weight="700" fill="#64748b" opacity="1">2006</text>
+<text x="27" y="329" font-size="12" font-weight="700" fill="#0f172a" opacity="1">SURF · FAST</text>
+<text x="27" y="339" font-size="9.5" fill="#94a3b8" opacity="1">ECCV 2006</text>
+<rect x="256" y="298" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="267" y="315" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="267" y="330" font-size="10.5" fill="#334155" opacity="1">박스 필터</text>
+<rect x="446" y="298" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="457" y="315" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="457" y="330" font-size="10.5" fill="#334155" opacity="1">필터를 키움</text>
+<rect x="636" y="298" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="647" y="315" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="647" y="330" font-size="10.5" fill="#334155" opacity="1">헤시안 · 세그먼트</text>
+<rect x="826" y="298" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="837" y="315" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="837" y="330" font-size="10.5" fill="#334155" opacity="1">64차원 Haar</text>
+<rect x="1016" y="298" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="1027" y="315" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="1027" y="330" font-size="10.5" fill="#334155" opacity="1">최근접</text>
+<rect x="16" y="348" width="232" height="44" rx="8" fill="#f8fafc" stroke="#e2e8f0" opacity="1"/>
+<text x="27" y="365" font-size="10" font-weight="700" fill="#64748b" opacity="1">2010–11</text>
+<text x="27" y="379" font-size="12" font-weight="700" fill="#0f172a" opacity="1">BRIEF · ORB</text>
+<text x="27" y="389" font-size="9.5" fill="#94a3b8" opacity="1">ECCV 10 · ICCV 11</text>
+<rect x="256" y="348" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="446" y="348" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="636" y="348" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="647" y="365" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="647" y="380" font-size="10.5" fill="#334155" opacity="1">FAST + 방향</text>
+<rect x="826" y="348" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="837" y="365" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="837" y="380" font-size="10.5" fill="#334155" opacity="1">256비트 이진</text>
+<rect x="1016" y="348" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="1027" y="365" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="1027" y="380" font-size="10.5" fill="#334155" opacity="1">해밍 거리</text>
+<rect x="16" y="398" width="232" height="44" rx="8" fill="#f8fafc" stroke="#e2e8f0" opacity="0.5"/>
+<text x="27" y="415" font-size="10" font-weight="700" fill="#64748b" opacity="0.5">2015–16</text>
+<text x="27" y="429" font-size="12" font-weight="700" fill="#0f172a" opacity="0.5">TILDE · LIFT</text>
+<text x="27" y="439" font-size="9.5" fill="#94a3b8" opacity="0.5">CVPR 15 · ECCV 16</text>
+<rect x="256" y="398" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="446" y="398" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="636" y="398" width="184" height="44" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.4" opacity="0.5"/>
+<text x="647" y="415" font-size="9" font-weight="700" fill="#7c3aed" opacity="0.5">학습</text>
+<text x="647" y="430" font-size="10.5" fill="#4c1d95" opacity="0.5">검출을 학습</text>
+<rect x="826" y="398" width="184" height="44" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.4" opacity="0.5"/>
+<text x="837" y="415" font-size="9" font-weight="700" fill="#7c3aed" opacity="0.5">학습</text>
+<text x="837" y="430" font-size="10.5" fill="#4c1d95" opacity="0.5">기술도 학습</text>
+<rect x="1016" y="398" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="0.5"/>
+<text x="1027" y="415" font-size="9" font-weight="700" fill="#94a3b8" opacity="0.5">사람이 설계</text>
+<text x="1027" y="430" font-size="10.5" fill="#334155" opacity="0.5">최근접</text>
+<rect x="16" y="448" width="232" height="44" rx="8" fill="#fbfaff" stroke="#b45309" stroke-width="1.5"/>
+<text x="27" y="465" font-size="10" font-weight="700" fill="#64748b" opacity="1">2016.12</text>
+<rect x="199" y="454" width="40" height="15" rx="7" fill="#b45309" opacity="0.13"/>
+<text x="219" y="465" font-size="9.5" font-weight="700" fill="#b45309" text-anchor="middle">4주차</text>
+<text x="27" y="479" font-size="12" font-weight="700" fill="#0f172a" opacity="1">★ FPN</text>
+<text x="27" y="489" font-size="9.5" fill="#94a3b8" opacity="1">arXiv · CVPR 2017</text>
+<rect x="256" y="448" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="446" y="448" width="184" height="44" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.4" opacity="1"/>
+<text x="457" y="465" font-size="9" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="457" y="480" font-size="10.5" fill="#4c1d95" opacity="1">특징맵 피라미드 + 하향식</text>
+<rect x="636" y="448" width="184" height="44" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.4" opacity="1"/>
+<text x="647" y="465" font-size="9" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="647" y="480" font-size="10.5" fill="#4c1d95" opacity="1">층마다 검출</text>
+<rect x="826" y="448" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="1016" y="448" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="16" y="498" width="232" height="44" rx="8" fill="#fbfaff" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="27" y="515" font-size="10" font-weight="700" fill="#64748b" opacity="1">2017.12</text>
+<rect x="199" y="504" width="40" height="15" rx="7" fill="#7c3aed" opacity="0.13"/>
+<text x="219" y="515" font-size="9.5" font-weight="700" fill="#7c3aed" text-anchor="middle">5주차</text>
+<text x="27" y="529" font-size="12" font-weight="700" fill="#0f172a" opacity="1">★ SuperPoint</text>
+<text x="27" y="539" font-size="9.5" fill="#94a3b8" opacity="1">arXiv · CVPRW 2018</text>
+<rect x="256" y="498" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="446" y="498" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="636" y="498" width="184" height="44" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.4" opacity="1"/>
+<text x="647" y="515" font-size="9" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="647" y="530" font-size="10.5" fill="#4c1d95" opacity="1">자기지도 · 호모그래피 적응</text>
+<rect x="826" y="498" width="184" height="44" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.4" opacity="1"/>
+<text x="837" y="515" font-size="9" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="837" y="530" font-size="10.5" fill="#4c1d95" opacity="1">256차원 · 같은 인코더</text>
+<rect x="1016" y="498" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="1027" y="515" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="1027" y="530" font-size="10.5" fill="#334155" opacity="1">최근접</text>
+<rect x="16" y="548" width="232" height="44" rx="8" fill="#fbfaff" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="27" y="565" font-size="10" font-weight="700" fill="#64748b" opacity="1">2019.04</text>
+<rect x="199" y="554" width="40" height="15" rx="7" fill="#7c3aed" opacity="0.13"/>
+<text x="219" y="565" font-size="9.5" font-weight="700" fill="#7c3aed" text-anchor="middle">5주차</text>
+<text x="27" y="579" font-size="12" font-weight="700" fill="#0f172a" opacity="1">★ Key.Net</text>
+<text x="27" y="589" font-size="9.5" fill="#94a3b8" opacity="1">arXiv · ICCV 2019</text>
+<rect x="256" y="548" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="267" y="565" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="267" y="580" font-size="10.5" fill="#334155" opacity="1">고정 미분 필터 10개</text>
+<rect x="446" y="548" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="457" y="565" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="457" y="580" font-size="10.5" fill="#334155" opacity="1">3단 입력 피라미드</text>
+<rect x="636" y="548" width="184" height="44" rx="8" fill="#eef2f7" opacity="1"/>
+<path d="M 728 548 h 84 v 44 h -84 a 8 8 0 0 0 -8 8 z" fill="#eaf7f4" opacity="1"/>
+<rect x="636" y="548" width="184" height="44" rx="8" fill="none" stroke="#0f766e" stroke-width="1.4" opacity="1"/>
+<text x="647" y="565" font-size="9" font-weight="700" fill="#0f766e" opacity="1">손설계 + 학습</text>
+<text x="647" y="580" font-size="10.5" fill="#134e4a" opacity="1">조합만 학습 · 5.9k</text>
+<rect x="826" y="548" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="1016" y="548" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="16" y="598" width="232" height="44" rx="8" fill="#f8fafc" stroke="#e2e8f0" opacity="0.5"/>
+<text x="27" y="615" font-size="10" font-weight="700" fill="#64748b" opacity="0.5">2019.11</text>
+<text x="27" y="629" font-size="12" font-weight="700" fill="#0f172a" opacity="0.5">SuperGlue</text>
+<text x="27" y="639" font-size="9.5" fill="#94a3b8" opacity="0.5">arXiv · CVPR 2020</text>
+<rect x="256" y="598" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="446" y="598" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="636" y="598" width="184" height="44" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.4" opacity="0.5"/>
+<text x="647" y="615" font-size="9" font-weight="700" fill="#cbd5e1" opacity="0.5">그대로 씀</text>
+<text x="647" y="630" font-size="10.5" fill="#64748b" opacity="0.5">SuperPoint 재사용</text>
+<rect x="826" y="598" width="184" height="44" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.4" opacity="0.5"/>
+<text x="837" y="615" font-size="9" font-weight="700" fill="#cbd5e1" opacity="0.5">그대로 씀</text>
+<text x="837" y="630" font-size="10.5" fill="#64748b" opacity="0.5">SuperPoint 재사용</text>
+<rect x="1016" y="598" width="184" height="44" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.4" opacity="0.5"/>
+<text x="1027" y="615" font-size="9" font-weight="700" fill="#7c3aed" opacity="0.5">학습</text>
+<text x="1027" y="630" font-size="10.5" fill="#4c1d95" opacity="0.5">그래프 신경망</text>
+<rect x="16" y="648" width="232" height="44" rx="8" fill="#fbfaff" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="27" y="665" font-size="10" font-weight="700" fill="#64748b" opacity="1">2021.04</text>
+<rect x="199" y="654" width="40" height="15" rx="7" fill="#7c3aed" opacity="0.13"/>
+<text x="219" y="665" font-size="9.5" font-weight="700" fill="#7c3aed" text-anchor="middle">5주차</text>
+<text x="27" y="679" font-size="12" font-weight="700" fill="#0f172a" opacity="1">★ LoFTR</text>
+<text x="27" y="689" font-size="9.5" fill="#94a3b8" opacity="1">arXiv · CVPR 2021</text>
+<rect x="256" y="648" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="446" y="648" width="184" height="44" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.4" opacity="1"/>
+<text x="457" y="665" font-size="9" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="457" y="680" font-size="10.5" fill="#4c1d95" opacity="1">1/8 · 1/2 두 해상도</text>
+<rect x="636" y="648" width="184" height="44" rx="8" fill="#fff7ed" stroke="#d9a441" stroke-width="1.4" stroke-dasharray="5 4" opacity="1"/>
+<text x="647" y="665" font-size="9" font-weight="700" fill="#d9a441" opacity="1">없앰</text>
+<text x="647" y="680" font-size="10.5" fill="#92400e" opacity="1">검출 단계 생략</text>
+<rect x="826" y="648" width="184" height="44" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.4" opacity="1"/>
+<text x="837" y="665" font-size="9" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="837" y="680" font-size="10.5" fill="#4c1d95" opacity="1">트랜스포머 · 밀집</text>
+<rect x="1016" y="648" width="184" height="44" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.4" opacity="1"/>
+<text x="1027" y="665" font-size="9" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="1027" y="680" font-size="10.5" fill="#4c1d95" opacity="1">coarse → fine</text>
+<rect x="16" y="698" width="232" height="44" rx="8" fill="#fbfaff" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="27" y="715" font-size="10" font-weight="700" fill="#64748b" opacity="1">2023.04</text>
+<rect x="199" y="704" width="40" height="15" rx="7" fill="#7c3aed" opacity="0.13"/>
+<text x="219" y="715" font-size="9.5" font-weight="700" fill="#7c3aed" text-anchor="middle">5주차</text>
+<text x="27" y="729" font-size="12" font-weight="700" fill="#0f172a" opacity="1">★ SiLK</text>
+<text x="27" y="739" font-size="9.5" fill="#94a3b8" opacity="1">arXiv · ICCV 2023</text>
+<rect x="256" y="698" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="446" y="698" width="184" height="44" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.4" opacity="1"/>
+<text x="457" y="715" font-size="9" font-weight="700" fill="#cbd5e1" opacity="1">그대로 씀</text>
+<text x="457" y="730" font-size="10.5" fill="#64748b" opacity="1">해상도 유지</text>
+<rect x="636" y="698" width="184" height="44" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.4" opacity="1"/>
+<text x="647" y="715" font-size="9" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="647" y="730" font-size="10.5" fill="#4c1d95" opacity="1">매칭 성공 = 키포인트</text>
+<rect x="826" y="698" width="184" height="44" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.4" opacity="1"/>
+<text x="837" y="715" font-size="9" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="837" y="730" font-size="10.5" fill="#4c1d95" opacity="1">128차원 · 왕복</text>
+<rect x="1016" y="698" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="1027" y="715" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="1027" y="730" font-size="10.5" fill="#334155" opacity="1">코사인 + 상호 최근접</text>
+<rect x="16" y="748" width="232" height="44" rx="8" fill="#fbfaff" stroke="#be123c" stroke-width="1.5"/>
+<text x="27" y="765" font-size="10" font-weight="700" fill="#64748b" opacity="1">2023.05</text>
+<rect x="199" y="754" width="40" height="15" rx="7" fill="#be123c" opacity="0.13"/>
+<text x="219" y="765" font-size="9.5" font-weight="700" fill="#be123c" text-anchor="middle">6주차</text>
+<text x="27" y="779" font-size="12" font-weight="700" fill="#0f172a" opacity="1">◆ A Tale of Two Features</text>
+<text x="27" y="789" font-size="9.5" fill="#94a3b8" opacity="1">arXiv · NeurIPS 2023</text>
+<rect x="256" y="748" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="446" y="748" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="636" y="748" width="184" height="44" rx="8" fill="#fff7ed" stroke="#d9a441" stroke-width="1.4" stroke-dasharray="5 4" opacity="1"/>
+<text x="647" y="765" font-size="9" font-weight="700" fill="#d9a441" opacity="1">없앰</text>
+<text x="647" y="780" font-size="10.5" fill="#92400e" opacity="1">검출 없이 모든 픽셀</text>
+<rect x="826" y="748" width="184" height="44" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.4" opacity="1"/>
+<text x="837" y="765" font-size="9" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="837" y="780" font-size="10.5" fill="#4c1d95" opacity="1">SD + DINO 사전학습</text>
+<rect x="1016" y="748" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="1027" y="765" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="1027" y="780" font-size="10.5" fill="#334155" opacity="1">최근접</text>
+<rect x="16" y="798" width="232" height="44" rx="8" fill="#fbfaff" stroke="#b45309" stroke-width="1.5"/>
+<text x="27" y="815" font-size="10" font-weight="700" fill="#64748b" opacity="1">2024</text>
+<rect x="199" y="804" width="40" height="15" rx="7" fill="#b45309" opacity="0.13"/>
+<text x="219" y="815" font-size="9.5" font-weight="700" fill="#b45309" text-anchor="middle">4주차</text>
+<text x="27" y="829" font-size="12" font-weight="700" fill="#0f172a" opacity="1">★ 다중 노출 융합 안개 제거</text>
+<text x="27" y="839" font-size="9.5" fill="#94a3b8" opacity="1">J. Safety Sci. Resil.</text>
+<rect x="256" y="798" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="267" y="815" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="267" y="830" font-size="10.5" fill="#334155" opacity="1">평균 · 고주파 강화</text>
+<rect x="446" y="798" width="184" height="44" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.4" opacity="1"/>
+<text x="457" y="815" font-size="9" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="457" y="827" font-size="10" fill="#334155" opacity="1">라플라시안 · 가우시안</text>
+<text x="457" y="837" font-size="10" fill="#334155" opacity="1">피라미드</text>
+<rect x="636" y="798" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="826" y="798" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="1016" y="798" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="16" y="848" width="232" height="44" rx="8" fill="#fbfaff" stroke="#b45309" stroke-width="1.5"/>
+<text x="27" y="865" font-size="10" font-weight="700" fill="#64748b" opacity="1">2024.09</text>
+<rect x="199" y="854" width="40" height="15" rx="7" fill="#b45309" opacity="0.13"/>
+<text x="219" y="865" font-size="9.5" font-weight="700" fill="#b45309" text-anchor="middle">4주차</text>
+<text x="27" y="879" font-size="12" font-weight="700" fill="#0f172a" opacity="1">★ Rethinking FPN neck</text>
+<text x="27" y="889" font-size="9.5" fill="#94a3b8" opacity="1">ECCV 2024</text>
+<rect x="256" y="848" width="184" height="44" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.4" opacity="1"/>
+<text x="267" y="865" font-size="9" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="267" y="880" font-size="10.5" fill="#4c1d95" opacity="1">GSConvE</text>
+<rect x="446" y="848" width="184" height="44" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.4" opacity="1"/>
+<text x="457" y="865" font-size="9" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="457" y="877" font-size="10" fill="#4c1d95" opacity="1">SNI 보간 · ESD</text>
+<text x="457" y="887" font-size="10" fill="#4c1d95" opacity="1">다운샘플</text>
+<rect x="636" y="848" width="184" height="44" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.4" opacity="1"/>
+<text x="647" y="865" font-size="9" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="647" y="880" font-size="10.5" fill="#4c1d95" opacity="1">헤드별 스케일 분리</text>
+<rect x="826" y="848" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="1016" y="848" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="16" y="898" width="232" height="44" rx="8" fill="#fbfaff" stroke="#0f766e" stroke-width="1.5"/>
+<text x="27" y="915" font-size="10" font-weight="700" fill="#64748b" opacity="1">2025</text>
+<rect x="199" y="904" width="40" height="15" rx="7" fill="#0f766e" opacity="0.13"/>
+<text x="219" y="915" font-size="9.5" font-weight="700" fill="#0f766e" text-anchor="middle">3주차</text>
+<text x="27" y="929" font-size="12" font-weight="700" fill="#0f172a" opacity="1">★ IDF</text>
+<text x="27" y="939" font-size="9.5" fill="#94a3b8" opacity="1">ICCV 2025</text>
+<rect x="256" y="898" width="184" height="44" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.4" opacity="1"/>
+<text x="267" y="915" font-size="9" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="267" y="930" font-size="10.5" fill="#4c1d95" opacity="1">입력마다 필터를 예측</text>
+<rect x="446" y="898" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="636" y="898" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="826" y="898" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="1016" y="898" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="16" y="948" width="232" height="44" rx="8" fill="#fbfaff" stroke="#0f766e" stroke-width="1.5"/>
+<text x="27" y="965" font-size="10" font-weight="700" fill="#64748b" opacity="1">2025</text>
+<rect x="199" y="954" width="40" height="15" rx="7" fill="#0f766e" opacity="0.13"/>
+<text x="219" y="965" font-size="9.5" font-weight="700" fill="#0f766e" text-anchor="middle">3주차</text>
+<text x="27" y="979" font-size="12" font-weight="700" fill="#0f172a" opacity="1">★ Ocean's 8</text>
+<text x="27" y="989" font-size="9.5" fill="#94a3b8" opacity="1">NeurIPS 2025</text>
+<rect x="256" y="948" width="184" height="44" rx="8" fill="#eef2f7" opacity="1"/>
+<path d="M 348 948 h 84 v 44 h -84 a 8 8 0 0 0 -8 8 z" fill="#eaf7f4" opacity="1"/>
+<rect x="256" y="948" width="184" height="44" rx="8" fill="none" stroke="#0f766e" stroke-width="1.4" opacity="1"/>
+<text x="267" y="965" font-size="9" font-weight="700" fill="#0f766e" opacity="1">손설계 + 학습</text>
+<text x="267" y="977" font-size="10" fill="#134e4a" opacity="1">학습된 필터 = 고전 필터</text>
+<text x="267" y="987" font-size="10" fill="#134e4a" opacity="1">8종</text>
+<rect x="446" y="948" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="636" y="948" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="826" y="948" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="1016" y="948" width="184" height="44" rx="8" fill="#ffffff" stroke="#eef2f7" stroke-dasharray="3 4"/>
+<rect x="16" y="1014" width="20" height="13" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.2"/>
+<text x="42" y="1025" font-size="11" fill="#334155">사람이 수식으로 설계</text>
+<rect x="174" y="1014" width="20" height="13" rx="4" fill="#eaf7f4" stroke="#0f766e" stroke-width="1.2"/>
+<text x="200" y="1025" font-size="11" fill="#334155">손설계 + 학습 조합</text>
+<rect x="333" y="1014" width="20" height="13" rx="4" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.2"/>
+<text x="359" y="1025" font-size="11" fill="#334155">데이터로 학습</text>
+<rect x="445" y="1014" width="20" height="13" rx="4" fill="#fff7ed" stroke="#d9a441" stroke-width="1.2"/>
+<text x="471" y="1025" font-size="11" fill="#334155">그 단계를 없앰</text>
+<text x="16" y="1046" font-size="11" fill="#475569">★ 학생 발표 논문(주차 배지) · ◆ 내 6주차 발표 · 흐린 줄은 비교 대상으로만 언급된 모델</text>
+<text x="16" y="1064" font-size="10.5" fill="#94a3b8">SIFT는 ICCV 1999가 최초 발표이고 IJCV 2004는 확장판 · Rethinking FPN neck 은 ECCV 2024 발표가 arXiv 공개(2025.05)보다 빠른 예외</text>
 </svg>
 </div>
-<p style="font-size:11.5px;color:var(--muted);line-height:1.7;margin:-4px 0 14px">가로축은 <b>파이프라인 단계</b>(검출 → 기술 → 매칭), 세로축은 <b>연도</b>입니다. 한 줄이 한 모델이고, 그 모델이 <b>어느 단계를 무엇으로 채웠는지</b>를 칸 색으로 표시했습니다.
-★ 표시가 이번 주 발표 4편, ◆ 표시가 제 6주차 발표 논문입니다.</p>
+
+<div class="warn"><b>&ldquo;학회 연도&rdquo;와 &ldquo;실제로 세상에 나온 시점&rdquo;은 다르다</b> &mdash; 그래서 이 도식은 <b>학회 연도가 아니라 최초 공개 시점</b>으로 정렬했습니다.
+<ul class="ul">
+  <li><b>SIFT</b> &mdash; 흔히 IJCV <b>2004</b>로 적지만 최초 발표는 <b>ICCV 1999</b>다. 2004년 논문은 확장된 저널 판본</li>
+  <li><b>SuperPoint</b> &mdash; 학회는 CVPRW 2018이지만 arXiv 공개는 <b>2017년 12월 20일</b>. 사실상 2017년 모델이다</li>
+  <li><b>Key.Net</b>(2019.04.01)과 <b>SuperGlue</b>(2019.11.26)는 <b>같은 해</b>에 7개월 간격으로 나왔다 &mdash; Key.Net은 SuperGlue를 보고 만들 수 없었다</li>
+  <li><b>SiLK</b>(2023.04.12)와 <b>A Tale of Two Features</b>(2023.05.24)는 <b>6주 차이</b>다. 사실상 동시대 연구로, 서로를 참고했다고 보기는 어렵다</li>
+  <li><b>Rethinking FPN neck</b>은 예외다 &mdash; <b>ECCV 2024 발표가 먼저</b>이고 arXiv 공개(2025.05)가 나중이라, 프리프린트 날짜로 줄을 세우면 순서가 틀어진다</li>
+</ul></div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>시간 순서와 &lsquo;영향 관계&rsquo;는 다르다</h3>
+  <p>도식의 세로 순서는 <b>&ldquo;누가 먼저 나왔나&rdquo;</b>일 뿐, <b>&ldquo;누가 누구를 보고 만들었나&rdquo;</b>는 아니다. 실제 인용 관계로 보면 이렇다.</p>
+  <ul class="ul">
+    <li><b>Key.Net → SuperPoint</b> &mdash; Key.Net은 SuperPoint를 <b>비교 대상으로 인용</b>한다(1년 반 차이). 교수님 말씀대로 &ldquo;비슷한 시기라 가장 가까운 비교 대상&rdquo;이 된 경우</li>
+    <li><b>SuperGlue → SuperPoint</b> &mdash; SuperGlue는 SuperPoint가 뽑은 점을 <b>입력으로 그대로 받는다</b>. 명확한 후속 연구</li>
+    <li><b>SiLK ← SuperPoint · LoFTR</b> &mdash; 둘보다 뒤이므로 교수님이 말한 <b>&ldquo;두 방법이 추구하던 목표가 섞인 논문&rdquo;</b>이 시간상으로도 성립한다</li>
+    <li><b>FPN → 4주차 피라미드</b> &mdash; FPN(2016.12)은 오히려 <b>SuperPoint보다 1년 빠르다</b>. 검출 계열이 아니라 <b>물체 검출의 스케일 문제</b>에서 나온 갈래라 계보가 다르다</li>
+    <li><b>Ocean&rsquo;s 8</b>(2025)은 새 모델이 아니라 <b>이미 학습된 필터들을 분석</b>한 논문이다. 그래서 도식에서도 &lsquo;필터&rsquo; 열에 <b>손설계 + 학습이 섞인 색</b>으로 표시했다</li>
+  </ul>
+</div>
+
+<h3 class="sub-title">이전 주차 발표는 이 도식의 어디에 있나</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>주차 · 발표</th><th>논문</th><th>도식에서의 위치</th><th>그 주차 교안과의 연결</th></tr></thead>
+  <tbody>
+    <tr><td><b>3주차</b> 김학성</td><td>IDF · ICCV 2025</td><td><b>필터</b> 열, 맨 아래 (학습)</td><td>고정 필터 대신 <b>입력마다 가중치를 예측</b>하는 필터 &mdash; <a class="ext" href="computer-vision-week03.html#pres">3주차 선형 필터</a></td></tr>
+    <tr><td><b>3주차</b> 조민한</td><td>Ocean&rsquo;s 8 · NeurIPS 2025</td><td><b>필터</b> 열 (손설계 + 학습)</td><td>학습된 depthwise 필터가 사실은 <b>엣지 · 가우시안 미분 · DoG 등 8종</b>이더라는 분석</td></tr>
+    <tr><td><b>4주차</b> 이다영</td><td>FPN · CVPR 2017</td><td><b>스케일 · 피라미드</b> + 검출 (학습)</td><td>가우시안 피라미드를 <b>특징맵 위로</b> 옮긴 구조 &mdash; <a class="ext" href="computer-vision-week04.html#pres">4주차 피라미드</a></td></tr>
+    <tr><td><b>4주차</b> 공태웅</td><td>Rethinking FPN neck · ECCV 2024</td><td><b>스케일 · 피라미드</b> (학습)</td><td>FPN의 <b>보간과 다운샘플링</b>을 다시 설계 &mdash; 4주차 07 보간, 00 다운샘플링</td></tr>
+    <tr><td><b>4주차</b> 구윤호</td><td>다중 노출 융합 안개 제거 · 2024</td><td><b>필터 · 피라미드</b> (사람이 설계)</td><td>라플라시안 · 가우시안 피라미드로 <b>영상을 합성</b> &mdash; 학습이 아닌 고전 기법의 응용</td></tr>
+    <tr><td><b>6주차</b> 박민지 <small>(내 발표)</small></td><td>A Tale of Two Features · NeurIPS 2023</td><td><b>기술</b> 열 (사전학습 모델)</td><td>손설계 기술자 자리에 <b>SD · DINO 특징</b>을 꽂는다 &mdash; <a class="ext" href="computer-vision-week06.html#mypres">6주차 08절</a></td></tr>
+  </tbody>
+</table>
+</div>
 
 <div class="tbl-wrap">
 <table>
