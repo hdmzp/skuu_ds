@@ -357,6 +357,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .pt.live{border-left-color:#9d174d}
 .pt.plus{border-left-color:#0f766e}
 .pt.pres{border-left-color:#6d28d9}
+.hi{background:linear-gradient(transparent 58%,#ffe9a8 58%);font-weight:700;color:var(--ink);padding:0 1px}
 .pt pre.code{margin:9px 0}
 
 /* 커널(마스크) 격자 */
@@ -468,7 +469,7 @@ table.acc{min-width:0}
   <a href="#invariance">07 불변성과 스케일</a>
   <a href="#blob">08 블롭 검출 (LoG · DoG)</a>
   <a href="#covariant">09 공변 · 불변과 아핀 적응</a>
-  <a href="#pres">학생 발표 (SuperPoint)</a>
+  <a href="#pres">학생 발표 4편</a>
   <a href="#codes">10 실습 · 과제 연결</a>
 </nav>
 
@@ -489,7 +490,7 @@ table.acc{min-width:0}
   <p class="kicker">5주차 · 9.30 · 2026-2학기</p>
   <h1>05. 로컬 특징 검출 — 엣지 · 직선 · 코너 · 블롭</h1>
   <p>3주차의 <b>선형 필터</b>와 4주차의 <b>이미지 피라미드</b>가 여기서 합쳐집니다. 미분 필터로 <b>엣지</b>를 찾고, 그 엣지를 모아 <b>직선</b>을 세고(허프 변환), 한 점에서 <b>모든 방향으로 변하는 지점</b>을 찾아 <b>코너</b>를 잡고(Harris), 마지막으로 피라미드의 여러 스케일을 훑어 <b>덩어리(블롭)와 그 크기</b>까지 찾아냅니다.</p>
-  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 92p</span><span class="chip">슬라이드 59장</span><span class="chip">플립러닝 1 · 2부</span><span class="chip">Sobel · Canny</span><span class="chip">Hough</span><span class="chip">Harris</span><span class="chip">LoG · DoG</span><span class="chip">학생 발표 1건</span></div>
+  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 92p</span><span class="chip">슬라이드 59장</span><span class="chip">플립러닝 1 · 2부</span><span class="chip">Sobel · Canny</span><span class="chip">Hough</span><span class="chip">Harris</span><span class="chip">LoG · DoG</span><span class="chip">학생 발표 4편</span></div>
 </section>
 
 <div class="legend">
@@ -524,7 +525,7 @@ table.acc{min-width:0}
   <a href="#invariance"><b>07 불변성과 스케일</b><span>밝기 · 이동 · 회전에는 강하고 스케일에는 약하다</span></a>
   <a href="#blob"><b>08 블롭 검출</b><span>LoG · 스케일 정규화 · 특성 스케일 · DoG</span></a>
   <a href="#covariant"><b>09 공변 · 불변</b><span>용어 구분 · 아핀 적응 · 정규화</span></a>
-  <a href="#pres"><b>학생 발표 · SuperPoint</b><span>정답 없는 검출을 스스로 배우기 — 자기 지도 학습</span></a>
+  <a href="#pres"><b>학생 발표 4편 · 계보</b><span>SuperPoint · Key.Net · LoFTR · SiLK — 어느 단계를 학습이 가져갔나</span></a>
   <a href="#codes"><b>10 실습 · 과제 연결</b><span>OpenCV 함수 정리 · 4주차 · 과제와의 연결</span></a>
 </div>
 </section>
@@ -1695,56 +1696,274 @@ keypoints = detector.detect(gray)</pre>
 
 <!-- ===================== 학생 발표 ===================== -->
 <section class="sec" id="pres">
-  <div class="sec-head"><span class="sec-badge">발표</span><h2 class="sec-title">학생 논문 발표 — SuperPoint<small>5주차 주제 = 특징점 검출 · 사람이 설계한 검출기에서 스스로 배우는 검출기로</small></h2></div>
+  <div class="sec-head"><span class="sec-badge">발표</span><h2 class="sec-title">학생 논문 발표 4편 — 검출기의 계보<small>사람이 설계하던 자리를 학습이 어디까지, 어떤 순서로 가져갔는가</small></h2></div>
 
 <div class="oneline">
-  <p><b>한 줄로 말하면</b></p>
+  <p><b>네 발표를 한 줄로 꿰면</b></p>
   <ul class="ul">
-    <li>이번 주에 배운 Harris · LoG는 <b>사람이 &ldquo;좋은 점&rdquo;의 기준을 수식으로 직접 설계</b>한 검출기다</li>
-    <li>SuperPoint는 그 기준을 <b>데이터에서 학습</b>하려 한다. 문제는 <b>&ldquo;여기가 특징점&rdquo;이라는 정답(ground truth)이 세상에 없다</b>는 것</li>
-    <li>해결책은 <b>정답을 스스로 만들어 쓰는 것</b> — 도형만 있는 합성 영상으로 1차 검출기를 만들고, 그것을 실제 사진에 <b>수십 번 변형해 적용</b>해 얻은 합의를 정답으로 삼는다</li>
+    <li>교안의 Harris · LoG는 <b>&ldquo;좋은 점&rdquo;의 기준을 사람이 수식으로 설계</b>한 검출기다. 네 논문은 모두 <b>그 기준을 데이터에서 얻으려는 시도</b>다</li>
+    <li><b>SuperPoint(2018)</b>는 검출과 기술을 <b>한 망에서 자기지도로</b>, <b>Key.Net(2019)</b>은 <b>미분 필터는 그대로 두고 조합만</b> 학습한다</li>
+    <li><b>LoFTR(2021)</b>은 아예 <b>검출 단계를 없애고</b> 밀집 매칭으로 가고, <b>SiLK(2023)</b>는 다시 돌아와 <b>가장 단순한 조합</b>으로 같은 성능을 낸다</li>
+    <li>교수님 정리 &mdash; <b>&ldquo;세 주 동안 검출 → 기술 → 매칭을 한다&rdquo;</b>는 계획에서 이번 주 발표는 대부분 <b>검출 쪽에 초점</b>이 맞춰져 있고, 기술 · 매칭은 <a class="ext" href="computer-vision-week06.html">6주차</a>로 이어진다</li>
   </ul>
+</div>
+
+<h3 class="sub-title">전체 도식 — 어느 시점에, 어느 단계를, 무엇으로 바꿨나</h3>
+<div class="svg-scroll" style="border:1px solid var(--border);border-radius:12px;background:#fff;padding:8px;margin:12px 0">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 805" role="img" aria-label="로컬 특징 파이프라인 계보 — 연도별로 검출·기술·매칭 중 어느 단계를 사람이 설계했고 어느 단계를 학습으로 바꿨는지 보여 주는 도식">
+<rect width="1180" height="805" fill="#ffffff"/>
+<text x="16" y="30" font-size="19" font-weight="700" fill="#0f172a">로컬 특징 파이프라인의 계보 — 어느 단계를, 언제, 무엇으로 바꿨나</text>
+<text x="16" y="52" font-size="12.5" fill="#64748b">회색 = 사람이 수식으로 설계 · 보라 = 학습 · 청록 = 둘을 섞음 · 주황 테두리 = 그 단계를 아예 없앰</text>
+<rect x="279.0" y="66" width="217.0" height="30" rx="6" fill="#94a3b8" opacity="0.10"/>
+<text x="387.5" y="80" font-size="11" font-weight="700" fill="#94a3b8" text-anchor="middle">전부 사람이 설계</text>
+<text x="387.5" y="92" font-size="10" fill="#64748b" text-anchor="middle">1988–2011</text>
+<rect x="502.0" y="66" width="217.0" height="30" rx="6" fill="#7c3aed" opacity="0.10"/>
+<text x="610.5" y="80" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="middle">검출 · 기술을 학습으로</text>
+<text x="610.5" y="92" font-size="10" fill="#64748b" text-anchor="middle">2015–2019</text>
+<rect x="725.0" y="66" width="217.0" height="30" rx="6" fill="#0f766e" opacity="0.10"/>
+<text x="833.5" y="80" font-size="11" font-weight="700" fill="#0f766e" text-anchor="middle">매칭까지 학습 · 검출 생략</text>
+<text x="833.5" y="92" font-size="10" fill="#64748b" text-anchor="middle">2020–2021</text>
+<rect x="948.0" y="66" width="217.0" height="30" rx="6" fill="#b45309" opacity="0.10"/>
+<text x="1056.5" y="80" font-size="11" font-weight="700" fill="#b45309" text-anchor="middle">단순화 · 대형 사전학습 모델</text>
+<text x="1056.5" y="92" font-size="10" fill="#64748b" text-anchor="middle">2023</text>
+<text x="20" y="132" font-size="12.5" font-weight="700" fill="#475569">연도 · 방법</text>
+<rect x="276" y="110" width="292" height="30" rx="7" fill="#0f172a"/>
+<text x="422" y="130" font-size="12.5" font-weight="700" fill="#ffffff" text-anchor="middle">검출 Detection</text>
+<rect x="576" y="110" width="292" height="30" rx="7" fill="#0f172a"/>
+<text x="722" y="130" font-size="12.5" font-weight="700" fill="#ffffff" text-anchor="middle">기술 Description</text>
+<rect x="876" y="110" width="292" height="30" rx="7" fill="#0f172a"/>
+<text x="1022" y="130" font-size="12.5" font-weight="700" fill="#ffffff" text-anchor="middle">매칭 Matching</text>
+<path d="M 569 125 L 575 125" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ar)"/>
+<path d="M 869 125 L 875 125" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ar)"/>
+<defs><marker id="ar" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 8 4 L 0 8 z" fill="#94a3b8"/></marker></defs>
+<rect x="16" y="152" width="250" height="46" rx="8" fill="#f8fafc" stroke="#e2e8f0" opacity="1"/>
+<text x="28" y="171" font-size="11" font-weight="700" fill="#64748b" opacity="1">1988</text>
+<text x="62" y="172" font-size="13" font-weight="700" fill="#0f172a" opacity="1">Harris</text>
+<text x="28" y="188" font-size="10.5" fill="#64748b" opacity="1">코너 검출기</text>
+<rect x="276" y="152" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
+<text x="289" y="170" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="289" y="186" font-size="11.5" fill="#334155" opacity="1">미분 · 2차 모멘트</text>
+<rect x="576" y="152" width="292" height="46" rx="8" fill="#ffffff" stroke="#e8edf4" stroke-dasharray="3 4"/>
+<text x="722" y="180" font-size="11" fill="#cbd5e1" text-anchor="middle">해당 없음</text>
+<rect x="876" y="152" width="292" height="46" rx="8" fill="#ffffff" stroke="#e8edf4" stroke-dasharray="3 4"/>
+<text x="1022" y="180" font-size="11" fill="#cbd5e1" text-anchor="middle">해당 없음</text>
+<rect x="16" y="205" width="250" height="46" rx="8" fill="#f8fafc" stroke="#e2e8f0" opacity="1"/>
+<text x="28" y="224" font-size="11" font-weight="700" fill="#64748b" opacity="1">2004</text>
+<text x="62" y="225" font-size="13" font-weight="700" fill="#0f172a" opacity="1">SIFT</text>
+<text x="28" y="241" font-size="10.5" fill="#64748b" opacity="1">Lowe, IJCV</text>
+<rect x="276" y="205" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
+<text x="289" y="223" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="289" y="239" font-size="11.5" fill="#334155" opacity="1">DoG 극값</text>
+<rect x="576" y="205" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
+<text x="589" y="223" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="589" y="239" font-size="11.5" fill="#334155" opacity="1">128차원 히스토그램</text>
+<rect x="876" y="205" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
+<text x="889" y="223" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="889" y="239" font-size="11.5" fill="#334155" opacity="1">최근접 + 비율 검사</text>
+<rect x="16" y="258" width="250" height="46" rx="8" fill="#f8fafc" stroke="#e2e8f0" opacity="1"/>
+<text x="28" y="277" font-size="11" font-weight="700" fill="#64748b" opacity="1">2006</text>
+<text x="62" y="278" font-size="13" font-weight="700" fill="#0f172a" opacity="1">SURF · FAST</text>
+<text x="28" y="294" font-size="10.5" fill="#64748b" opacity="1">ECCV</text>
+<rect x="276" y="258" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
+<text x="289" y="276" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="289" y="292" font-size="11.5" fill="#334155" opacity="1">헤시안 · 세그먼트</text>
+<rect x="576" y="258" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
+<text x="589" y="276" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="589" y="292" font-size="11.5" fill="#334155" opacity="1">64차원 Haar</text>
+<rect x="876" y="258" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
+<text x="889" y="276" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="889" y="292" font-size="11.5" fill="#334155" opacity="1">최근접</text>
+<rect x="16" y="311" width="250" height="46" rx="8" fill="#f8fafc" stroke="#e2e8f0" opacity="1"/>
+<text x="28" y="330" font-size="11" font-weight="700" fill="#64748b" opacity="1">2011</text>
+<text x="62" y="331" font-size="13" font-weight="700" fill="#0f172a" opacity="1">ORB</text>
+<text x="28" y="347" font-size="10.5" fill="#64748b" opacity="1">ICCV</text>
+<rect x="276" y="311" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
+<text x="289" y="329" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="289" y="345" font-size="11.5" fill="#334155" opacity="1">FAST + 방향</text>
+<rect x="576" y="311" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
+<text x="589" y="329" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="589" y="345" font-size="11.5" fill="#334155" opacity="1">256비트 이진</text>
+<rect x="876" y="311" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
+<text x="889" y="329" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="889" y="345" font-size="11.5" fill="#334155" opacity="1">해밍 거리</text>
+<rect x="16" y="364" width="250" height="46" rx="8" fill="#f8fafc" stroke="#e2e8f0" opacity="0.55"/>
+<text x="28" y="383" font-size="11" font-weight="700" fill="#64748b" opacity="0.55">2015</text>
+<text x="62" y="384" font-size="13" font-weight="700" fill="#0f172a" opacity="0.55">TILDE · LIFT</text>
+<text x="28" y="400" font-size="10.5" fill="#64748b" opacity="0.55">CVPR 15 · ECCV 16</text>
+<rect x="276" y="364" width="292" height="46" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.5" opacity="0.55"/>
+<text x="289" y="382" font-size="10" font-weight="700" fill="#7c3aed" opacity="0.55">학습</text>
+<text x="289" y="398" font-size="11.5" fill="#4c1d95" opacity="0.55">검출을 학습</text>
+<rect x="576" y="364" width="292" height="46" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.5" opacity="0.55"/>
+<text x="589" y="382" font-size="10" font-weight="700" fill="#7c3aed" opacity="0.55">학습</text>
+<text x="589" y="398" font-size="11.5" fill="#4c1d95" opacity="0.55">기술도 학습</text>
+<rect x="876" y="364" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="0.55"/>
+<text x="889" y="382" font-size="10" font-weight="700" fill="#94a3b8" opacity="0.55">사람이 설계</text>
+<text x="889" y="398" font-size="11.5" fill="#334155" opacity="0.55">최근접</text>
+<rect x="16" y="417" width="250" height="46" rx="8" fill="#f5f0fd" stroke="#7c3aed" stroke-width="1.4"/>
+<text x="28" y="436" font-size="11" font-weight="700" fill="#64748b" opacity="1">2018</text>
+<text x="62" y="437" font-size="13" font-weight="700" fill="#0f172a" opacity="1">★ SuperPoint</text>
+<text x="28" y="453" font-size="10.5" fill="#64748b" opacity="1">김태연 발표 · CVPRW</text>
+<rect x="276" y="417" width="292" height="46" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.5" opacity="1"/>
+<text x="289" y="435" font-size="10" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="289" y="451" font-size="11.5" fill="#4c1d95" opacity="1">자기지도 · 호모그래피 적응</text>
+<rect x="576" y="417" width="292" height="46" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.5" opacity="1"/>
+<text x="589" y="435" font-size="10" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="589" y="451" font-size="11.5" fill="#4c1d95" opacity="1">256차원 · 같은 인코더</text>
+<rect x="876" y="417" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
+<text x="889" y="435" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="889" y="451" font-size="11.5" fill="#334155" opacity="1">최근접</text>
+<rect x="16" y="470" width="250" height="46" rx="8" fill="#f5f0fd" stroke="#7c3aed" stroke-width="1.4"/>
+<text x="28" y="489" font-size="11" font-weight="700" fill="#64748b" opacity="1">2019</text>
+<text x="62" y="490" font-size="13" font-weight="700" fill="#0f172a" opacity="1">★ Key.Net</text>
+<text x="28" y="506" font-size="10.5" fill="#64748b" opacity="1">김아영 발표 · ICCV</text>
+<rect x="276" y="470" width="292" height="46" rx="8" fill="#eef2f7" opacity="1"/>
+<path d="M 422 470 h 138 v 46 h -138 a 8 8 0 0 0 -8 8 z" fill="#eaf7f4" opacity="1"/>
+<rect x="276" y="470" width="292" height="46" rx="8" fill="none" stroke="#0f766e" stroke-width="1.5" opacity="1"/>
+<text x="289" y="488" font-size="10" font-weight="700" fill="#0f766e" opacity="1">손설계 + 학습</text>
+<text x="289" y="504" font-size="11.5" fill="#134e4a" opacity="1">고정 미분 필터 + 학습 필터</text>
+<rect x="576" y="470" width="292" height="46" rx="8" fill="#ffffff" stroke="#e8edf4" stroke-dasharray="3 4"/>
+<text x="722" y="498" font-size="11" fill="#cbd5e1" text-anchor="middle">해당 없음</text>
+<rect x="876" y="470" width="292" height="46" rx="8" fill="#ffffff" stroke="#e8edf4" stroke-dasharray="3 4"/>
+<text x="1022" y="498" font-size="11" fill="#cbd5e1" text-anchor="middle">해당 없음</text>
+<rect x="16" y="523" width="250" height="46" rx="8" fill="#f8fafc" stroke="#e2e8f0" opacity="0.55"/>
+<text x="28" y="542" font-size="11" font-weight="700" fill="#64748b" opacity="0.55">2020</text>
+<text x="62" y="543" font-size="13" font-weight="700" fill="#0f172a" opacity="0.55">SuperGlue</text>
+<text x="28" y="559" font-size="10.5" fill="#64748b" opacity="0.55">CVPR · SuperPoint 위에</text>
+<rect x="276" y="523" width="292" height="46" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" opacity="0.55"/>
+<text x="289" y="541" font-size="10" font-weight="700" fill="#cbd5e1" opacity="0.55">앞 모델 재사용</text>
+<text x="289" y="557" font-size="11.5" fill="#64748b" opacity="0.55">SuperPoint 그대로</text>
+<rect x="576" y="523" width="292" height="46" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" opacity="0.55"/>
+<text x="589" y="541" font-size="10" font-weight="700" fill="#cbd5e1" opacity="0.55">앞 모델 재사용</text>
+<text x="589" y="557" font-size="11.5" fill="#64748b" opacity="0.55">SuperPoint 그대로</text>
+<rect x="876" y="523" width="292" height="46" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.5" opacity="0.55"/>
+<text x="889" y="541" font-size="10" font-weight="700" fill="#7c3aed" opacity="0.55">학습</text>
+<text x="889" y="557" font-size="11.5" fill="#4c1d95" opacity="0.55">그래프 신경망 매칭</text>
+<rect x="16" y="576" width="250" height="46" rx="8" fill="#f5f0fd" stroke="#7c3aed" stroke-width="1.4"/>
+<text x="28" y="595" font-size="11" font-weight="700" fill="#64748b" opacity="1">2021</text>
+<text x="62" y="596" font-size="13" font-weight="700" fill="#0f172a" opacity="1">★ LoFTR</text>
+<text x="28" y="612" font-size="10.5" fill="#64748b" opacity="1">조환희 발표 · CVPR</text>
+<rect x="276" y="576" width="292" height="46" rx="8" fill="#fff7ed" stroke="#d9a441" stroke-width="1.5" stroke-dasharray="5 4" opacity="1"/>
+<text x="289" y="594" font-size="10" font-weight="700" fill="#d9a441" opacity="1">없앰</text>
+<text x="289" y="610" font-size="11.5" fill="#92400e" opacity="1">검출 단계 생략</text>
+<rect x="576" y="576" width="292" height="46" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.5" opacity="1"/>
+<text x="589" y="594" font-size="10" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="589" y="610" font-size="11.5" fill="#4c1d95" opacity="1">트랜스포머 · 밀집</text>
+<rect x="876" y="576" width="292" height="46" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.5" opacity="1"/>
+<text x="889" y="594" font-size="10" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="889" y="610" font-size="11.5" fill="#4c1d95" opacity="1">coarse → fine</text>
+<rect x="16" y="629" width="250" height="46" rx="8" fill="#f5f0fd" stroke="#7c3aed" stroke-width="1.4"/>
+<text x="28" y="648" font-size="11" font-weight="700" fill="#64748b" opacity="1">2023</text>
+<text x="62" y="649" font-size="13" font-weight="700" fill="#0f172a" opacity="1">★ SiLK</text>
+<text x="28" y="665" font-size="10.5" fill="#64748b" opacity="1">안희철 발표 · ICCV</text>
+<rect x="276" y="629" width="292" height="46" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.5" opacity="1"/>
+<text x="289" y="647" font-size="10" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="289" y="663" font-size="11.5" fill="#4c1d95" opacity="1">매칭 성공 = 키포인트</text>
+<rect x="576" y="629" width="292" height="46" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.5" opacity="1"/>
+<text x="589" y="647" font-size="10" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="589" y="663" font-size="11.5" fill="#4c1d95" opacity="1">128차원 · 왕복 매칭</text>
+<rect x="876" y="629" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
+<text x="889" y="647" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="889" y="663" font-size="11.5" fill="#334155" opacity="1">코사인 + 상호 최근접</text>
+<rect x="16" y="682" width="250" height="46" rx="8" fill="#fff7ed" stroke="#b45309" stroke-width="1.4"/>
+<text x="28" y="701" font-size="11" font-weight="700" fill="#64748b" opacity="1">2023</text>
+<text x="62" y="702" font-size="13" font-weight="700" fill="#0f172a" opacity="1">◆ A Tale of Two Features</text>
+<text x="28" y="718" font-size="10.5" fill="#64748b" opacity="1">내 6주차 발표 · NeurIPS</text>
+<rect x="276" y="682" width="292" height="46" rx="8" fill="#fff7ed" stroke="#d9a441" stroke-width="1.5" stroke-dasharray="5 4" opacity="1"/>
+<text x="289" y="700" font-size="10" font-weight="700" fill="#d9a441" opacity="1">없앰</text>
+<text x="289" y="716" font-size="11.5" fill="#92400e" opacity="1">검출 없이 모든 픽셀</text>
+<rect x="576" y="682" width="292" height="46" rx="8" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.5" opacity="1"/>
+<text x="589" y="700" font-size="10" font-weight="700" fill="#7c3aed" opacity="1">학습</text>
+<text x="589" y="716" font-size="11.5" fill="#4c1d95" opacity="1">SD + DINO 사전학습 특징</text>
+<rect x="876" y="682" width="292" height="46" rx="8" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.5" opacity="1"/>
+<text x="889" y="700" font-size="10" font-weight="700" fill="#94a3b8" opacity="1">사람이 설계</text>
+<text x="889" y="716" font-size="11.5" fill="#334155" opacity="1">최근접</text>
+<rect x="16" y="751" width="22" height="14" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="1.3"/>
+<text x="45" y="763" font-size="11.5" fill="#334155">사람이 수식으로 설계</text>
+<rect x="182" y="751" width="22" height="14" rx="4" fill="#eaf7f4" stroke="#0f766e" stroke-width="1.3"/>
+<text x="211" y="763" font-size="11.5" fill="#334155">손설계 필터 + 학습 조합</text>
+<rect x="384" y="751" width="22" height="14" rx="4" fill="#f3ecff" stroke="#7c3aed" stroke-width="1.3"/>
+<text x="413" y="763" font-size="11.5" fill="#334155">데이터로 학습</text>
+<rect x="502" y="751" width="22" height="14" rx="4" fill="#fff7ed" stroke="#d9a441" stroke-width="1.3"/>
+<text x="531" y="763" font-size="11.5" fill="#334155">그 단계를 없앰</text>
+<text x="16" y="785" font-size="11.5" fill="#7c3aed" font-weight="700">★ 5주차 학생 발표 4편</text>
+<text x="206" y="785" font-size="11.5" fill="#b45309" font-weight="700">◆ 내 6주차 발표 논문</text>
+<text x="396" y="785" font-size="11" fill="#94a3b8">흐리게 표시한 줄(TILDE · LIFT · SuperGlue)은 발표에서 비교 대상으로만 언급된 모델입니다</text>
+</svg>
+</div>
+<p style="font-size:11.5px;color:var(--muted);line-height:1.7;margin:-4px 0 14px">가로축은 <b>파이프라인 단계</b>(검출 → 기술 → 매칭), 세로축은 <b>연도</b>입니다. 한 줄이 한 모델이고, 그 모델이 <b>어느 단계를 무엇으로 채웠는지</b>를 칸 색으로 표시했습니다.
+★ 표시가 이번 주 발표 4편, ◆ 표시가 제 6주차 발표 논문입니다.</p>
+
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>발표</th><th>논문 · 연도</th><th>바꾼 단계</th><th>한 문장 요약</th></tr></thead>
+  <tbody>
+    <tr><td>① 김태연</td><td><b>SuperPoint</b> · CVPRW 2018</td><td><b>검출 + 기술</b></td><td>정답이 없는 검출 문제를 <b>스스로 만든 라벨</b>로 학습한다</td></tr>
+    <tr><td>② 김아영</td><td><b>Key.Net</b> · ICCV 2019</td><td><b>검출</b> (손설계 + 학습)</td><td>미분 필터는 고정해 두고 <b>그 조합만</b> 학습해 파라미터를 1/160로 줄인다</td></tr>
+    <tr><td>③ 조환희</td><td><b>LoFTR</b> · CVPR 2021</td><td><b>기술 + 매칭</b> (검출 없앰)</td><td>특징점을 찾지 않고 <b>트랜스포머로 전체를 보며</b> 픽셀 단위로 매칭한다</td></tr>
+    <tr><td>④ 안희철</td><td><b>SiLK</b> · ICCV 2023</td><td><b>검출 + 기술</b> (단순화)</td><td><b>&ldquo;매칭이 잘 되는 점이 좋은 키포인트&rdquo;</b>라는 정의 하나로 전부 정리한다</td></tr>
+  </tbody>
+</table>
 </div>
 
 <div class="docs">
   <div class="doc">
     <div class="doc-ico"><span>📕</span>PDF</div>
     <div class="doc-main">
-      <a class="doc-open" href="pdf-viewer.html?doc=cv-w05-pres-kim">김태연 — SuperPoint: Self-Supervised Interest Point Detection and Description</a>
-      <p>DeTone, Malisiewicz &amp; Rabinovich (Magic Leap), <b>CVPR 2018 Workshop (Deep Learning for Visual SLAM)</b> · 발표자료 20장</p>
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-w05-pres-kim">① 김태연 — SuperPoint: Self-Supervised Interest Point Detection and Description</a>
+      <p>DeTone, Malisiewicz &amp; Rabinovich (Magic Leap), <b>CVPR 2018 Workshop</b> · <a class="ext" href="https://arxiv.org/abs/1712.07629" target="_blank" rel="noopener">arXiv:1712.07629</a></p>
     </div>
     <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week05-presentation-kim-superpoint.pdf" download="컴퓨터비전_5주차_학생발표_김태연_SuperPoint.pdf">⬇ 다운로드</a>
   </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📕</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-w05-pres-key">② 김아영 — Key.Net: Keypoint Detection by Handcrafted and Learned CNN Filters</a>
+      <p>Barroso-Laguna, Riba, Ponsa &amp; Mikolajczyk, <b>ICCV 2019</b> · <a class="ext" href="https://arxiv.org/abs/1904.00889" target="_blank" rel="noopener">arXiv:1904.00889</a></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week05-presentation-kim-keynet.pdf" download="컴퓨터비전_5주차_학생발표_김아영_KeyNet.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📕</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-w05-pres-loftr">③ 조환희 — LoFTR: Detector-Free Local Feature Matching with Transformers</a>
+      <p>Sun, Shen, Wang, Bao &amp; Zhou, <b>CVPR 2021</b> · <a class="ext" href="https://arxiv.org/abs/2104.00680" target="_blank" rel="noopener">arXiv:2104.00680</a> · 읽을 때는 <b>&ldquo;로프터&rdquo;</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week05-presentation-cho-loftr.pdf" download="컴퓨터비전_5주차_학생발표_조환희_LoFTR.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📕</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-w05-pres-silk">④ 안희철 — SiLK: Simple Learned Keypoints</a>
+      <p>Gleize, Wang &amp; Feiszli (Meta AI), <b>ICCV 2023</b> · <a class="ext" href="https://arxiv.org/abs/2304.06194" target="_blank" rel="noopener">arXiv:2304.06194</a> · 코드 <a class="ext" href="https://github.com/facebookresearch/silk" target="_blank" rel="noopener">facebookresearch/silk</a></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week05-presentation-ahn-silk.pdf" download="컴퓨터비전_5주차_학생발표_안희철_SiLK.pdf">⬇ 다운로드</a>
+  </div>
 </div>
 
-<div class="note-box"><b>논문 출처</b> — Daniel DeTone, Tomasz Malisiewicz, Andrew Rabinovich,
-<b>&ldquo;SuperPoint: Self-Supervised Interest Point Detection and Description&rdquo;</b>,
-CVPR 2018 Workshop on Deep Learning for Visual SLAM ·
-<a class="ext" href="https://arxiv.org/abs/1712.07629" target="_blank" rel="noopener">arXiv:1712.07629</a> ·
-코드 <a class="ext" href="https://github.com/magicleap/SuperPointPretrainedNetwork" target="_blank" rel="noopener">magicleap/SuperPointPretrainedNetwork</a></div>
-
-<h3 class="sub-title">개념 정리</h3>
+<!-- ---------- ① SuperPoint ---------- -->
+<h3 class="sub-title">① 김태연 — SuperPoint (2018) · 정답이 없는 문제를 스스로 푸는 법</h3>
 
 <div class="pt pres">
   <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>문제 제기 — 학습을 시키고 싶은데 정답이 없다</h3>
-  <p>고양이 사진에 &ldquo;고양이&rdquo;라는 라벨을 붙이는 일은 사람이 할 수 있다. 그런데 <b>&ldquo;이 픽셀이 특징점입니다&rdquo;</b>라는 라벨은 사람도 자신 있게 찍지 못한다. 코너의 정확한 중심이 어디인지, 어느 정도 뚜렷해야 특징점인지에 <b>객관적인 정답이 없기 때문</b>이다.</p>
-  <p>그래서 발표는 문제를 이렇게 정리한다 — <b>&ldquo;<a class="ext" href="#local">반복성(repeatability)</a>이 높은 점을, 정답 데이터 없이, 어떻게 학습으로 만들어 낼 것인가?&rdquo;</b> 이것은 모델 구조의 문제가 아니라 <b>데이터(라벨)를 만드는 문제</b>다.</p>
+  <p>고양이 사진에 &ldquo;고양이&rdquo;라는 라벨을 붙이는 일은 사람이 할 수 있다. 그런데 <b>&ldquo;이 픽셀이 특징점입니다&rdquo;</b>라는 라벨은 사람도 자신 있게 찍지 못한다. 발표자의 말대로 <b>좋은 인터레스트 포인트의 정의 자체가 모호</b>하기 때문이다.</p>
+  <p>기존 방법은 그 기준을 사람이 정했다 &mdash; <b>Harris</b>는 미분으로 급격한 변화를, <b>SUSAN</b>은 면적 비교로, <b>SURF</b>는 헤시안 기반 블롭으로, <b>FAST</b>는 결정 트리로 코너를 정의했다. 발표는 여기서 질문을 바꾼다 &mdash; <span class="hi">&ldquo;반복성이 높은 점을, 정답 데이터 없이, 어떻게 학습으로 만들 것인가?&rdquo;</span> 이것은 <b>모델 구조의 문제가 아니라 데이터(라벨)를 만드는 문제</b>다.</p>
 </div>
 
 <div class="pt pres">
   <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>해법 3단계 — 스스로 라벨을 만들어 스스로 배운다</h3>
   <div class="flow">
-    <div class="fl"><b>① 합성 데이터로 1차 학습</b><span>선 · 삼각형 · 체커보드 같은 <b>단순 도형만 있는 영상(Synthetic Shapes)</b>을 컴퓨터로 생성한다. 도형은 <b>꼭짓점 좌표를 정확히 알고 있으므로</b> 정답 라벨이 공짜로 나온다. 이렇게 학습한 1차 검출기가 <b>MagicPoint</b></span></div>
-    <div class="fl"><b>② Homographic Adaptation 으로 실제 사진에 라벨 생성</b><span>MagicPoint를 실제 사진에 그냥 쓰면 성능이 떨어진다. 그래서 같은 사진을 <b>수십 가지로 변형(호모그래피)</b>해 각각 검출한 뒤, 결과를 <b>원래 좌표로 되돌려 모두 합친다</b>. 여러 시점에서 <b>공통으로 잡힌 점</b>만 살아남아 <b>가짜 정답(pseudo-label)</b>이 된다</span></div>
-    <div class="fl"><b>③ 그 라벨로 본 학습</b><span>이렇게 만든 라벨로 <b>검출과 기술을 한 신경망에서 동시에</b> 학습시킨 것이 <b>SuperPoint</b></span></div>
+    <div class="fl"><b>① 합성 데이터로 1차 학습</b><span>선 · 삼각형 · 타원 · 체커보드처럼 <b>단순 도형만 있는 영상</b>을 생성한다. 도형은 <b>꼭짓점 좌표를 정확히 알기 때문에</b> 정답이 공짜로 나온다. 이렇게 학습한 검출기가 <b>MagicPoint</b></span></div>
+    <div class="fl"><b>② Homographic Adaptation 으로 실제 사진에 라벨 생성</b><span>같은 사진을 <b>여러 호모그래피로 변형</b>해 각각 검출한 뒤 <b>원래 좌표로 되돌려 모두 합친다</b>. 여러 시점에서 <b>공통으로 잡힌 점</b>만 살아남아 <b>가짜 정답(pseudo-label)</b>이 된다</span></div>
+    <div class="fl"><b>③ 그 라벨로 본 학습</b><span>검출과 기술을 <b>한 망에서 동시에</b> 학습시킨 것이 <b>SuperPoint</b></span></div>
   </div>
-  <p>발표자료의 표현을 빌리면 <b>&ldquo;객체 탐지 같은 일반적인 supervised learning이 불가능하다&rdquo;</b>는 인식에서 출발해, <b>자기 지도 학습(self-supervised learning)</b>으로 우회한 것이다.</p>
+  <p>발표자는 이 과정을 <b>&ldquo;일종의 앙상블 혹은 데이터 증강 효과&rdquo;</b>라고 정리했다.</p>
 </div>
 
-<div class="pt plus">
-  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>호모그래피(homography)가 무엇이길래</h3>
-  <p><b>호모그래피는 평면을 다른 시점에서 본 모습으로 바꿔 주는 3×3 변환 행렬</b>이다. 이동 · 회전 · 확대 · 기울임(전단) · 원근 왜곡을 모두 담을 수 있어, <b>&ldquo;같은 평면 장면을 다른 각도에서 찍은 것&rdquo;</b>을 컴퓨터로 흉내 낼 수 있다. 7주차 <b>Feature Matching &amp; Homography</b>에서 정식으로 배운다.</p>
-  <p>여기서 중요한 성질은 <b>변환을 알고 있으면 되돌릴 수도 있다</b>는 점이다. 변형한 사진에서 찾은 점을 <b>역변환으로 원래 좌표에 되돌려</b> 겹치면, <b>&ldquo;어느 시점에서 봐도 잡히는 점&rdquo;</b>에만 표가 쌓인다. 이것이 <a class="ext" href="#hough">04 허프 변환의 투표</a>와 같은 발상이고, 발표에서 <b>&ldquo;일종의 앙상블 + Augmentation 효과&rdquo;</b>라고 정리한 부분이다.</p>
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-live">교수님 코멘트</span>호모그래피를 몇 번이나 적용해야 하나</h3>
+  <p>&ldquo;영상을 임의로 변형시켰다가 <b>원본과 비교</b>하는 겁니다. 원본의 정답을 이미 알고 있으니, 변형된 위치의 특징이 사실은 이 점과 같은 것이라고 계속 학습시키는 거죠.
+  그런데 <b>N개가 많다고 좋은 건 아니에요</b> &mdash; 영상 하나를 가지고 하는 거라 어느 순간 <b>평균값이 이미 나와 버리거든요</b>. 일정 숫자만큼 변환한 것을 되돌렸을 때 찾아지는 <b>평균값</b>으로 학습하는 방법입니다.&rdquo;</p>
+  <p>이어서 위치도 짚어 주셨다 &mdash; <b>&ldquo;맨 뒤에서 소개된 것(SiLK)의 전 단계&rdquo;</b>이고, <b>&ldquo;일단 검출 쪽에 초점이 맞춰져 있다&rdquo;</b>. 16페이지의 <b>NMS</b>는 오늘 배운 <a class="ext" href="#canny">Canny의 비최대 억제</a>와 같은 개념으로, <b>중복된 후보 중 최적의 하나만 고르는 것</b>이다.</p>
 </div>
 
 <div class="pt pres">
@@ -1753,13 +1972,12 @@ CVPR 2018 Workshop on Deep Learning for Visual SLAM ·
   <table>
     <thead><tr><th>부분</th><th>입력 → 출력</th><th>하는 일</th></tr></thead>
     <tbody>
-      <tr><td><b>공유 인코더</b><br><small>VGG 계열</small></td><td>640×480×1 → <b>80×60×128</b></td><td>가로 · 세로를 <b>1/8로 줄인다</b>. 줄어든 텐서의 <b>1픽셀이 원본 8×8 = 64픽셀</b>을 담당한다. 입력이 <b>흑백</b>인 이유는 코너 · 블롭 같은 기하학적 특징이 <b>밝기 변화에서 나오기 때문</b>(색 정보는 쓰지 않는다)</td></tr>
-      <tr><td><b>검출 머리</b><br><small>Interest Point Decoder</small></td><td>80×60×128 → <b>80×60×65</b></td><td>채널 65 = <b>8×8 = 64칸</b> + <b>&ldquo;이 안에 특징점 없음&rdquo;을 뜻하는 1채널</b>. <b>소프트맥스</b>로 합이 1인 확률로 만든 뒤 원본 해상도로 <b>재배열(reshape)</b>해 <b>특징점 확률 지도</b>를 만든다</td></tr>
-      <tr><td><b>기술 머리</b><br><small>Descriptor Decoder</small></td><td>80×60×128 → <b>80×60×D</b> (D = 256)</td><td>각 점을 <b>256차원 벡터</b>로 표현한다. 1/8 해상도이므로 <b>바이큐빅 보간</b>으로 원본 위치의 값을 만들고(<a class="ext" href="computer-vision-week04.html#interp">4주차 보간</a>), 마지막에 <b>L2 정규화</b>로 길이를 1로 맞춰 <b>크기가 아니라 패턴만</b> 비교되게 한다</td></tr>
+      <tr><td><b>공유 인코더</b><br><small>VGG 계열</small></td><td>640×480×1 → <b>80×60×128</b></td><td>가로 · 세로를 <b>1/8로 줄인다</b>. 줄어든 텐서의 <b>1픽셀이 원본 8×8 = 64픽셀</b>을 담당한다. 입력이 <b>흑백</b>인 이유는 코너 · 블롭 같은 기하학적 특징이 <b>색이 아니라 밝기에서 나오기 때문</b></td></tr>
+      <tr><td><b>검출 머리</b></td><td>→ <b>80×60×65</b></td><td>채널 65 = <b>8×8 = 64칸</b> + <b>&ldquo;이 안에 특징점 없음&rdquo;을 뜻하는 1채널</b>. 소프트맥스로 합이 1인 확률을 만든 뒤 원본 해상도로 재배열해 <b>특징점 확률 지도</b>를 만든다</td></tr>
+      <tr><td><b>기술 머리</b></td><td>→ <b>80×60×256</b></td><td>각 점을 <b>256차원 벡터</b>로 표현한다. 1/8 해상도이므로 <b>바이큐빅 보간</b>으로 원본 위치 값을 만들고(<a class="ext" href="computer-vision-week04.html#interp">4주차 보간</a>), <b>L2 정규화</b>로 길이를 1로 맞춰 <b>크기가 아니라 패턴만</b> 비교되게 한다</td></tr>
     </tbody>
   </table>
   </div>
-  <p><b>이 구조가 이번 주와 다음 주를 한 번에 잇는다</b> — 왼쪽 머리가 <a class="ext" href="#local">검출(detection)</a>, 오른쪽 머리가 <b>기술(description)</b>이다. 교안 9p의 3단계 중 <b>앞의 두 단계를 하나의 망이 동시에</b> 수행한다.</p>
 </div>
 
 <div class="pt pres">
@@ -1777,34 +1995,171 @@ CVPR 2018 Workshop on Deep Learning for Visual SLAM ·
   </table>
   </div>
   <ul class="ul">
-    <li><b>ε</b> — 정답으로 인정하는 오차 기준(픽셀). ε=1이 가장 엄격하다</li>
-    <li><b>Rep. (repeatability)</b> — 변형된 영상에서 <b>같은 점을 다시 찾아낸 비율</b></li>
-    <li><b>MLE (Mean Localization Error)</b> — 찾은 점이 정답 위치에서 <b>평균 몇 픽셀 벗어났는가</b>(작을수록 좋다)</li>
-    <li><b>NN mAP</b> — 가장 가까운 기술자끼리 <b>올바른 짝</b>을 얼마나 잘 찾는가</li>
-    <li><b>M. Score (Matching Score)</b> — 전체 중 <b>올바르게 매칭된 비율</b></li>
+    <li><b>ε</b> &mdash; 정답으로 인정하는 오차 기준(픽셀). ε=1이 가장 엄격하다</li>
+    <li><b>Rep.</b> 반복성 · <b>MLE</b> 평균 위치 오차(작을수록 좋음) · <b>NN mAP</b> 최근접 기술자끼리 올바른 짝을 찾는 정도 · <b>M. Score</b> 올바르게 매칭된 비율</li>
   </ul>
+  <p>발표자의 정리도 정확하다 &mdash; <b>&ldquo;완전히 엄격하게 보면 전통적 방법보다 조금 떨어지지만, 조금의 여유를 두면 가장 좋다&rdquo;</b>. 표의 <b>Rep.만 보면 ORB가 .641로 가장 높고</b> 위치 정확도(MLE)는 <b>SIFT가 0.833으로 가장 좋다</b> &mdash; ORB는 검출점이 한곳에 몰려 있어 <b>반복성은 높아도 호모그래피 추정은 부정확</b>하다는 것이 논문의 설명이다.</p>
 </div>
 
-<div class="pt plus">
-  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>표를 자세히 보면 &ldquo;SuperPoint가 전부 이겼다&rdquo;는 아니다</h3>
-  <p>발표 마지막 줄은 &ldquo;SuperPoint는 repeatability를 끌어올렸다&rdquo;로 정리되어 있지만, <b>표의 Rep. 열만 보면 ORB가 .641로 가장 높고 SuperPoint는 .581</b>이다. 위치 정확도(MLE)도 <b>SIFT가 0.833으로 가장 좋다</b>. 발표자료에 실린 논문 그림의 설명도 같은 이야기를 한다 — <b>ORB는 평균 반복성이 가장 높지만 검출점이 한곳에 몰려(cluster) 있어 호모그래피 추정은 오히려 부정확</b>하다는 것이다.</p>
-  <p>그러니 이 표에서 읽어야 할 결론은 <b>&ldquo;검출 지표 하나만으로는 좋은 특징을 판정할 수 없다&rdquo;</b>에 가깝다. SuperPoint가 확실히 앞선 곳은 <b>기술자 성능(NN mAP .821, M.Score .470)</b>과 <b>실제로 쓸모 있는 결과인 호모그래피 추정(ε=3, 5)</b>이다. 시험에서 &ldquo;어느 지표가 무엇을 재는가&rdquo;를 구분하는 것이 이 표의 핵심이다.</p>
+<!-- ---------- ② Key.Net ---------- -->
+<h3 class="sub-title">② 김아영 — Key.Net (2019) · 미분 필터는 두고 조합만 배운다</h3>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>문제 제기 — 전부 학습시킬 필요가 있을까</h3>
+  <p>발표자는 업무 맥락에서 출발했다 &mdash; 여러 나라의 매장 사진을 반복해서 다루는데, <b>촬영 조건이 달라도 같은 제품 · 같은 위치를 안정적으로 찾는 문제</b>가 곧 이번 주차의 로컬 특징 검출이다.</p>
+  <p>Key.Net의 판단은 이렇다. 학습 기반 검출기는 <b>반복성과 스케일 대응에서 한계</b>가 있었고, 그렇다면 <b>이미 잘 알려진 미분 정보</b>(Harris · Hessian의 재료)를 <b>망의 앞단에 고정해 두고</b> 나머지만 학습하면 된다. <span class="hi">CNN이 미분 필터를 못 배우는 것이 아니라, 미리 넣어 주면 훨씬 작은 망으로도 같은 일을 할 수 있다는 것이 핵심 주장이다.</span></p>
 </div>
 
-<div class="pt plus">
-  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>이번 주 교안과 나란히 놓고 보기</h3>
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>구조 — 고정 10개 + 학습 블록 3개, 그리고 3단 피라미드</h3>
+  <div class="flow">
+    <div class="fl"><b>① 입력 피라미드</b><span>이미지를 <b>1.2배씩 줄여 3개의 스케일</b>을 만든다. 세 스케일은 <b>같은 필터를 공유</b>한다 &mdash; <a class="ext" href="computer-vision-week04.html#gpyr">4주차 가우시안 피라미드</a>를 망 안에 넣은 구조</span></div>
+    <div class="fl"><b>② 고정 미분 필터 10개</b><span><b>1차 미분 5개</b>(<span class="tex">I_x, I_y, I_x^2, I_y^2, I_xI_y</span> &mdash; <a class="ext" href="#harris">Harris 행렬의 재료</a>)와 <b>2차 미분 5개</b>(<span class="tex">I_{xx}, I_{yy}, I_{xy}</span> 등 &mdash; <b>헤시안 행렬식의 항</b>)</span></div>
+    <div class="fl"><b>③ 학습 필터 블록 ×3</b><span><b>5×5 합성곱 8채널 + 배치 정규화 + ReLU</b>를 세 번. <b>전체 학습 파라미터 5,900개</b></span></div>
+    <div class="fl"><b>④ 점수 지도</b><span>세 스케일의 특징맵을 원래 크기로 키워 붙이고 필터 하나로 <b>픽셀별 키포인트 점수</b>를 낸다</span></div>
+  </div>
+  <p>피라미드 단계 수 실험도 함께 보여 줬다 &mdash; <b>1단계 72.5% → 3단계 79.1%</b>로 오르고 그 뒤로는 거의 늘지 않아(79.4 · 79.5 · 78.6) <b>계산 비용을 고려해 3단계</b>를 택했다.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>핵심 연산 두 가지 &mdash; 미분 가능한 최대점 찾기</h3>
+  <p><b>① Index Proposal</b> &mdash; <a class="ext" href="#canny">비최대 억제</a>는 최대점의 <b>위치를 바로 고르기</b> 때문에 미분할 수 없어 학습에 쓸 수 없다. 그래서 점수에 <b>지수를 취해 가중치로 바꾼 뒤 좌표를 가중평균</b>한다. 최대점에 가까운 위치를 <b>부드럽게</b> 구하면서 <b>역전파가 가능</b>해진다(지수의 밑 2에서 반복성 79.1%로 최고).</p>
+  <p><b>② M-SIP 손실</b> &mdash; 사진 A의 좌표와, 사진 B의 대응점을 <b>호모그래피로 옮긴 좌표</b>가 가까워지도록 학습한다. 이때 <b>여러 크기의 창에서 손실을 함께</b> 계산하는 것이 <b>다중 스케일 인덱스 제안(M-SIP)</b>이다. 창이 커질수록 불안정한 점이 걸러지고, <b>여러 크기에서 모두 살아남는 점</b>만 강한 특징점으로 남는다.</p>
+  <div class="warn"><b>헷갈리기 쉬운 구분</b> &mdash; <b>입력 피라미드</b>는 <b>이미지 크기</b>를 바꾸는 것이고, <b>M-SIP</b>은 <b>손실을 계산하는 창의 크기</b>를 바꾸는 것이다.</div>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>결과 — 작지만 시점 변화에 강하다</h3>
   <div class="tbl-wrap">
   <table>
-    <thead><tr><th>질문</th><th>Harris · LoG (교안)</th><th>SuperPoint (발표)</th></tr></thead>
+    <thead><tr><th>모델</th><th>학습 파라미터</th><th>600×600 처리 시간</th></tr></thead>
     <tbody>
-      <tr><td>&ldquo;좋은 점&rdquo;의 기준은 누가 정하나</td><td><b>사람이 수식으로</b> — 모든 방향으로 변하는 점(<a class="ext" href="#harris">R 점수</a>), 응답이 최대가 되는 스케일</td><td><b>데이터가</b> — 여러 시점에서 공통으로 잡힌 점</td></tr>
-      <tr><td>스케일은 어떻게 다루나</td><td><a class="ext" href="#blob">스케일 공간</a>을 만들어 탐색</td><td>합성곱 신경망이 <b>변형된 데이터로 학습</b>하며 흡수</td></tr>
-      <tr><td>검출과 기술의 관계</td><td><b>따로</b> — 검출(5주차) 뒤에 기술(6주차)</td><td><b>한 망에서 동시에</b> (인코더 공유)</td></tr>
-      <tr><td>약점</td><td>설계한 가정이 깨지면 무너짐</td><td>학습 데이터의 분포를 벗어나면 무너짐 · 계산량이 큼</td></tr>
+      <tr><td>SuperPoint</td><td>940,000</td><td>&mdash;</td></tr>
+      <tr><td>LF-Net</td><td>39,000</td><td>&mdash;</td></tr>
+      <tr><td><b>Key.Net</b></td><td><b>5,900</b> <small>(SuperPoint의 약 1/160)</small></td><td><b>31 ms</b></td></tr>
+      <tr><td>Tiny-Key.Net</td><td><b>280</b></td><td><b>5.7 ms</b></td></tr>
     </tbody>
   </table>
   </div>
-  <p>발표의 마무리도 이 맥락이다 — <b>&ldquo;정답이 없는 검출 문제를 self-supervised로 풀었고, SuperPoint는 특징점을 어떻게 추출하는지를 학습으로 풀어낸 keypoint detector&rdquo;</b>이며, 후속 연구인 <b>SuperGlue</b>는 그렇게 뽑은 점들을 <b>어떻게 짝지을 것인가</b>(매칭)로 한 걸음 더 나아간다 — 그것이 <b>7주차</b>의 주제다.</p>
+  <ul class="ul">
+    <li>평가는 <b>HPatches</b> &mdash; 116개 영상 묶음 중 <b>시점 변화 59개 · 조명 변화 57개</b>. 핵심 지표는 <b>반복성</b>(두 사진에서 대응된 점 수 ÷ 적게 찾은 쪽의 점 수, 겹침 60% 이상이면 대응으로 인정)</li>
+    <li><b>시점 변화 반복성 60.5%로 1위</b> &mdash; SIFT보다 <b>+17.4%p</b>. 같은 기술자를 붙여 비교한 매칭 성능도 시점 변화에서 <b>38.4%로 1위</b></li>
+    <li><b>조명 변화는 61.3%로 SuperPoint · LF-Net보다 낮다</b>. 저자들의 해석은 &mdash; 크기 변화가 거의 없는 조명 데이터에서는 <b>Key.Net이 불필요하게 스케일까지 추정하면서 생기는 오차</b>가 결과에 영향을 준다는 것</li>
+    <li><b>위치 정확도</b>(평균 겹침 오차)는 오히려 <b>수작업 검출기가 더 정확</b>했다</li>
+    <li>학습층이 적을 때는 미분 필터를 넣은 모델의 반복성이 뚜렷이 높지만, <b>학습층이 많아질수록 완전 학습형과 차이가 줄어든다</b></li>
+  </ul>
+</div>
+
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-live">교수님 코멘트</span>이 논문의 킬러 포인트를 어떻게 보여 줄 것인가</h3>
+  <p>&ldquo;SIFT는 10년 전 알고리즘인데도 비교군에 넣었고, 그럼에도 성능 차이가 크게 안 났어요. SuperPoint와는 <b>비슷한 시기에 발표되어 가장 가까운 비교 대상</b>이 된 거고요. 위쪽 표는 비등비등합니다.
+  <b>그런데 아래가 이 논문의 진짜 키포인트예요</b> &mdash; 1차 · 2차 미분, 헤시안 행렬로 <b>특징이라 할 만한 것을 사전에 넣어 뒀기 때문에</b> 필터링을 처음부터 다시 학습할 필요가 없고, <b>최소한의 학습 필터만으로</b> 된다는 주장이죠.&rdquo;</p>
+  <p>그리고 발표 자체에 대한 조언 &mdash; <b>&ldquo;단순히 파라미터가 적대요가 아니라, 왜 적어졌는지를 앞의 내용과 연결해서 설명해야 한다&rdquo;</b>, <b>&ldquo;논문을 쓸 때도 내 킬러 아이템을 어떻게 도드라지게 보일지, 비교군과 대조군을 어떻게 설계할지의 고민이 이런 표로 나타난다&rdquo;</b>.</p>
+</div>
+
+<!-- ---------- ③ LoFTR ---------- -->
+<h3 class="sub-title">③ 조환희 — LoFTR (2021) · 특징점을 아예 찾지 않는다</h3>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>문제 제기 — 특징점이 없으면 매칭도 없다</h3>
+  <p>기존 방식은 <b>검출 → 기술 → 매칭</b> 순서를 따른다. 여기에는 <b>근본적인 한계</b>가 있다 &mdash; <span class="hi">특징점이 뽑히지 않으면 매칭 자체가 불가능하다.</span></p>
+  <ul class="ul">
+    <li><b>저조도 환경</b> &mdash; 뚜렷한 코너가 없다</li>
+    <li><b>텍스처가 부족한 영역</b>(흰 벽, 맨바닥) &mdash; 반복성 있는 점을 뽑지 못한다</li>
+    <li><b>반복 패턴</b>(타일, 창문) &mdash; 좁은 시야로는 어느 것이 짝인지 구분되지 않아 오매칭이 난다</li>
+  </ul>
+  <p>발표자가 든 예가 <b>바닥 사진을 찍어 이어 붙이는 작업</b>이었다. 사람은 이런 곳에서도 <b>주변 모서리와 전체 맥락</b>을 보고 위치를 짐작한다 &mdash; 그래서 저자들은 <b>전체를 볼 수 있는 트랜스포머의 셀프 어텐션과 크로스 어텐션</b>을 가져왔다.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>구조 네 단계</h3>
+  <div class="flow">
+    <div class="fl"><b>① CNN 백본</b><span>이미지에서 <b>1/8 해상도(거친 단계)</b>와 <b>1/2 해상도(정밀 단계)</b> 두 종류의 특징맵을 뽑는다</span></div>
+    <div class="fl"><b>② LoFTR 트랜스포머</b><span>1/8 특징맵을 <b>1차원으로 펼치고 위치 정보를 더한 뒤</b>, 셀프 어텐션(같은 이미지 안)과 크로스 어텐션(두 이미지 사이)을 <b>번갈아</b> 통과시킨다. 그 결과 <b>똑같이 생긴 하얀 벽의 픽셀도 저마다 다른 위치 정보를 갖게</b> 된다</span></div>
+    <div class="fl"><b>③ 매칭 모듈</b><span>변환된 특징끼리 <b>유사도 행렬</b>을 만들어 서로 가장 가까운 짝을 고른다 (미분 가능한 매칭 층)</span></div>
+    <div class="fl"><b>④ Coarse-to-Fine 정밀화</b><span>1/8에서 잡은 매칭점 주변을 <b>1/2 특징맵에서 작은 창으로 잘라내</b> 상관 히트맵을 만들고, <b>기댓값</b>으로 <b>서브픽셀</b> 좌표를 얻는다</span></div>
+  </div>
+  <p><b>연산량 문제와 해법</b> &mdash; 어텐션은 토큰 수에 대해 <span class="tex">O(N^2)</span>이라 고해상도 입력에서 메모리와 연산이 폭발한다. LoFTR은 <b>선형 트랜스포머</b>를 써서 <b>커널 함수로 행렬곱 순서를 바꿔</b> <span class="tex">O(N)</span>으로 낮췄다.</p>
+  <p><b>결과</b> &mdash; 실내(ScanNet) · 실외(MegaDepth) 모두 당시 최고 성능이고, <b>텍스처가 부족한 실내</b>에서 기존 방법이 전혀 찾지 못하는 대응까지 촘촘하게 이어 붙인다.</p>
+</div>
+
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-live">교수님 코멘트</span>SfM · SLAM, 그리고 &ldquo;굵직하게 잘라서 본다&rdquo;는 감각</h3>
+  <p>&ldquo;<b>SfM(Structure from Motion)</b>의 대표적인 예가 콜로세움이에요. 관광객들이 사방에서 찍은 사진을 구글이 모아서 엮었더니 <b>콜로세움 전체가 3차원으로 복원</b>된 거죠. <b>SLAM</b>은 자율주행에서 쓰는 방식이고요 &mdash; 주변 특징점으로 <b>자기 위치를 계속 갱신</b>하며 갑니다. 어느 쪽이든 <b>특징점이 우선</b>이라는 이야기입니다.&rdquo;</p>
+  <p>&ldquo;기존 방법은 &lsquo;엣지면 됐지, 기준점을 넘으면 특징일 거야&rsquo;라고 찾습니다. 그런데 방바닥처럼 <b>고만고만한 것뿐</b>이면 그중 하나를 특징이라 해도 다른 영상에서 같은 점이라 확신할 수 없어요.
+  그래서 LoFTR은 <b>굵직굵직하게 잘라 토큰으로 넣고</b>(ViT의 발상 &mdash; 12주차에 배웁니다) <b>비교해 가며 그 안에서 특징이 무엇인지 찾아내는</b> 기법이라고 이해하면 됩니다.&rdquo;</p>
+  <p>표기에 대한 지적도 있었다 &mdash; <b><span class="tex">O(N^2)</span>의 O는 &ldquo;오&rdquo;가 아니라 &ldquo;빅 오(Big-O)&rdquo;</b>로 읽고, 논문 첫 장에 <b>링크를 달아 두라</b>는 것.</p>
+</div>
+
+<!-- ---------- ④ SiLK ---------- -->
+<h3 class="sub-title">④ 안희철 — SiLK (2023) · 가장 단순한 선택만 모았다</h3>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>문제 제기 — 무엇이 성능을 만들었는지 알 수가 없다</h3>
+  <p>학습 기반 검출기가 늘어나면서 <b>백본 · 평가 프로토콜 · 데이터셋 · 지도 방식이 방법마다 제각각</b>이 되었다. 여러 요소가 서로 영향을 주니 <b>어떤 선택이 성능을 만들었는지 해석할 수 없다.</b></p>
+  <p>그래서 SiLK는 질문을 원점으로 돌린다 &mdash; <b>&ldquo;좋은 키포인트 검출기의 조건은 무엇인가?&rdquo;</b> 그리고 기존 설계를 <b>구성 요소로 분해한 뒤 각각을 가장 단순한 선택으로 다시 조립</b>한다. 보조 네트워크도, 복잡한 다단계 학습도, 별도의 변환 단계도 없앤다.</p>
+  <p>핵심 정의가 이 논문의 전부다 &mdash; <span class="hi">코너처럼 &lsquo;모양&rsquo;으로 키포인트를 정의하지 않고, <b>실제로 매칭에 성공하는 점</b>을 키포인트로 본다.</span></p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>구조와 학습 — 백본 1개 + 헤드 2개 + 손실 2개</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>구성</th><th>선택</th><th>왜 그렇게</th></tr></thead>
+    <tbody>
+      <tr><td>백본</td><td>VGG에서 <b>맥스 풀링을 제거</b></td><td>해상도를 줄이지 않아 <b>픽셀 단위로 정확한 위치</b>를 잡는다 (백본은 자유롭게 교체 가능)</td></tr>
+      <tr><td>키포인트 머리</td><td>픽셀마다 <b>시그모이드 1채널</b></td><td>영역을 새로 나누지 않고 <b>독립적으로 확률</b>을 낸다 → <b>NMS 없이</b> 상위 k개만 고른다</td></tr>
+      <tr><td>기술자 머리</td><td>픽셀마다 <b>128차원 벡터</b></td><td>매칭은 <b>코사인 유사도 + 상호 최근접</b>만 쓴다</td></tr>
+      <tr><td>정답 만들기</td><td>이미지 1장 + <b>랜덤 호모그래피</b></td><td><span class="tex">H</span>로 대응을 만들고 <span class="tex">H^{-1}</span>로 되돌려 <b>양방향이 일치하는 대응만</b> 사용. 밝기 · 노이즈 · 블러 증강을 더한다 → <b>라벨 없는 아무 이미지로나</b> 학습 가능</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>기술자 손실 — 왕복 매칭(cycle consistency)</b>. 두 이미지의 모든 픽셀 쌍에 대해 코사인 유사도 행렬을 만들고, <b>행 방향 소프트맥스</b>는 <span class="tex">i \to i'</span>로 갈 확률, <b>열 방향 소프트맥스</b>는 <span class="tex">i' \to i</span>로 돌아올 확률로 본다. 두 확률의 곱이 최대가 되도록 학습한다.
+  발표자의 비유가 좋다 &mdash; <b>&ldquo;한국어를 영어로 번역했다가 다시 한국어로 돌렸을 때 원문이 그대로 나오면 좋은 번역&rdquo;</b>.</p>
+  <p><b>키포인트 손실 — 분류 문제로 바꾼다.</b> 현재 기술자로 상호 최근접 매칭을 해 보고 <b>성공하면 1, 실패하면 0</b>을 정답으로 삼아 <b>이진 교차 엔트로피</b>로 학습한다. 즉 키포인트 머리는 <b>&ldquo;이 픽셀이 매칭에 성공할까?&rdquo;를 맞히는 분류기</b>다. 두 손실을 <b>동시에</b> 학습한다.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>결과 — 단순한데 성능이 나온다</h3>
+  <ul class="ul">
+    <li><b>HPatches 반복성 0.625</b> &mdash; 기존 방법들의 0.3대보다 크게 높다. <b>호모그래피 추정도 1픽셀 기준(가장 엄격)에서 가장 좋다</b> &mdash; 위치를 픽셀 단위로 정확히 잡는다는 뜻</li>
+    <li>다만 <b>3픽셀까지 허용하는 느슨한 기준의 매칭 정확도는 DISK보다 조금 낮다</b></li>
+    <li>실외 카메라 포즈 추정(IMC)에서 <b>단일 모델 중 최고</b>이고 <b>SuperGlue를 붙인 조합보다도 높다</b>. 실내(ScanNet)에서도 엄격한 기준에서 우수하지만 <b>두 이미지를 함께 보는 LoFTR보다는 낮다</b></li>
+    <li><b>초경량 모델이 76,000 파라미터로 반복성 0.64를 유지</b>하고 <b>초당 36.5장</b>을 처리한다. 학습 이미지를 82×82로 줄여도 성능이 거의 같고 <b>학습이 1.7시간</b>이면 끝난다</li>
+    <li><b>한계</b> &mdash; 느슨한 기준의 매칭 정확도, 그리고 <b>평면 변환(호모그래피)만으로 학습</b>한다는 점</li>
+  </ul>
+</div>
+
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-live">교수님 코멘트</span>SuperPoint와 LoFTR이 추구한 것을 섞은 논문</h3>
+  <p>&ldquo;아이디어가 <b>오늘 발표한 것들의 조합</b>이라고 생각하면 됩니다. LoFTR처럼 방바닥에서는 특징을 잘 찾아도 <b>다른 영상과 비교했을 때 매칭이 안 되면 좋은 특징이라 볼 수 없다</b>는 거죠. 그래서 여러 후보 중 <b>항상 잘 매칭되는 놈이 결국 특징일 것</b>이라고 보고 그것을 건져내는 방법입니다.
+  그리고 그렇게 학습하는 방법은 <b>SuperPoint처럼 호모그래피로 강제 변형</b>시키는 자기지도예요. <b>두 방법이 추구하던 목표가 짬뽕된 느낌</b>의 논문이라고 보시면 됩니다.&rdquo;</p>
+</div>
+
+<!-- ---------- 마무리 ---------- -->
+<h3 class="sub-title">네 발표를 교안과 나란히 놓고 보기</h3>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>같은 질문에 대한 네 가지 대답</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>질문</th><th>교안 (Harris · LoG)</th><th>SuperPoint</th><th>Key.Net</th><th>LoFTR</th><th>SiLK</th></tr></thead>
+    <tbody>
+      <tr><td>&ldquo;좋은 점&rdquo;을 누가 정하나</td><td>사람이 수식으로</td><td>여러 시점에서 <b>공통으로 잡힌 점</b></td><td>사람이 준 미분 정보 + <b>학습된 조합</b></td><td><b>정하지 않는다</b> (모든 픽셀)</td><td><b>매칭에 성공한 점</b></td></tr>
+      <tr><td>학습 라벨은 어디서</td><td>없음</td><td>합성 도형 → <b>호모그래피 적응</b></td><td>호모그래피로 만든 <b>이미지 쌍</b></td><td>3D 데이터의 <b>깊이 · 포즈</b></td><td>호모그래피 <b>한 쌍</b> + 증강</td></tr>
+      <tr><td>스케일 대응</td><td>스케일 공간 탐색</td><td>학습으로 흡수</td><td><b>3단 입력 피라미드</b></td><td>1/8 · 1/2 두 해상도</td><td>해상도를 줄이지 않음</td></tr>
+      <tr><td>매칭</td><td>최근접 + 비율 검사</td><td>최근접</td><td>(검출기만 제안)</td><td><b>망 안에서 함께</b></td><td>코사인 + 상호 최근접</td></tr>
+      <tr><td>크기</td><td>&mdash;</td><td>940k 파라미터</td><td><b>5.9k</b> (최소 280)</td><td>큼 (트랜스포머)</td><td>76k로도 동작</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-live">교수님 코멘트</span>이번 주 발표들의 위치</h3>
+  <p>&ldquo;저희가 <b>세 주 동안</b> 하기로 했었죠 &mdash; <b>검출</b>하고, 그다음에 그걸 <b>어떻게 잘 표현할 것인지</b>, 그다음에 <b>어떻게 매칭시킬 것인지</b>. 이번 발표들은 일단 <b>검출 쪽에 초점</b>이 맞춰져 있다고 보면 됩니다.&rdquo;</p>
+  <p>&ldquo;그런데 <b>검출에서만 끝나면 안 되잖아요</b> &mdash; 결국 나중에 그걸 가지고 찾아야 하는 정보니까요. 그런 정보를 어떻게 만드는지까지가 오늘 일부 논문에서 나온 겁니다.&rdquo;
+  그래서 <b>SuperPoint · SiLK는 기술(descriptor)까지</b> 포함하고, <b>Key.Net은 검출에 더 가깝다</b>. 오늘 저녁에 열리는 온라인 강의가 바로 그 <b>기술 단계</b> &mdash; <a class="ext" href="computer-vision-week06.html">6주차 Feature Descriptors</a>다.</p>
 </div>
 </section>
 
