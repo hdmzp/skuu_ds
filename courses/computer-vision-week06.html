@@ -517,7 +517,7 @@ table.acc{min-width:0}
 <div class="mapgrid">
   <a href="#why"><b>01 기술자란 무엇인가</b><span>Detection · Description · Matching · 템플릿 매칭과 NCC · patch / gradient / histogram</span></a>
   <a href="#sift"><b>02 SIFT</b><span>σ와 스케일 · DoG 극값 · 80% 방향 규칙 · 4×4×8 = 128차원 · 공변/불변</span></a>
-  <a href="#surf"><b>03 SURF</b><span>적분 영상 · 박스 필터 · 64차원 · 3~7배 빠르게</span></a>
+  <a href="#surf"><b>03 SURF</b><span>적분 영상 · 헤시안 행렬식 · 박스 필터 · 필터 키우기 · 6s · 60° 창 · 64차원</span></a>
   <a href="#hog"><b>04 HOG</b><span>8×8 셀 · 블록 정규화 · 3780차원 · 보행자 검출</span></a>
   <a href="#brief"><b>05 BRIEF · BRISK</b><span>픽셀 쌍 비교 → 이진 문자열 · 해밍 거리</span></a>
   <a href="#orb"><b>06 ORB</b><span>FAST + 방향 + 학습된 샘플링 쌍</span></a>
@@ -1152,19 +1152,23 @@ table.acc{min-width:0}
   <div class="sec-head"><span class="sec-badge">03</span><h2 class="sec-title">SURF — 같은 생각을 훨씬 빠르게<small>교안 35~51p · Bay, Tuytelaars &amp; Van Gool, ECCV 2006</small></h2></div>
 
 <div class="deck">
-  <div class="deck-h">교안 슬라이드 모아보기 <span>36 · 37 · 38 · 39 · 41 · 42 · 43 · 46 · 47 · 48 · 49 · 51p</span></div>
+  <div class="deck-h">교안 슬라이드 모아보기 <span>36 · 37 · 38 · 39 · 40 · 41 · 42 · 43 · 44 · 45 · 46 · 47 · 48 · 49 · 50 · 51p</span></div>
   <div class="deck-g">
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-36-surf-aim.jpg" alt="교안 36p — 목표 — SIFT가 느리다"><figcaption><b>36p</b> 목표 — SIFT가 느리다</figcaption></figure>
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-37-surf-algorithm.jpg" alt="교안 37p — 두 단계 알고리즘"><figcaption><b>37p</b> 두 단계 알고리즘</figcaption></figure>
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-38-surf-hessian.jpg" alt="교안 38p — 헤시안 행렬식으로 관심점 검출"><figcaption><b>38p</b> 헤시안 행렬식으로 관심점 검출</figcaption></figure>
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-39-surf-integral.jpg" alt="교안 39p — 적분 영상"><figcaption><b>39p</b> 적분 영상</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-40-surf-hessian-det.jpg" alt="교안 40p — 헤시안 행렬과 근사 행렬식 det(H_approx)"><figcaption><b>40p</b> 헤시안 행렬과 근사 행렬식 det(H_approx)</figcaption></figure>
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-41-surf-box.jpg" alt="교안 41p — 박스 필터로 2차 미분 근사"><figcaption><b>41p</b> 박스 필터로 2차 미분 근사</figcaption></figure>
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-42-surf-scale.jpg" alt="교안 42p — 이미지를 줄이는 대신 필터를 키운다"><figcaption><b>42p</b> 이미지를 줄이는 대신 필터를 키운다</figcaption></figure>
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-43-surf-filters.jpg" alt="교안 43p — 9×9 · 15×15 필터와 옥타브"><figcaption><b>43p</b> 9×9 · 15×15 필터와 옥타브</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-44-surf-nms.jpg" alt="교안 44p — 26개 이웃 비교 — Same as SIFT"><figcaption><b>44p</b> 26개 이웃 비교 — Same as SIFT</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-45-surf-interp.jpg" alt="교안 45p — 층 사이 위치 보간"><figcaption><b>45p</b> 층 사이 위치 보간</figcaption></figure>
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-46-surf-haar.jpg" alt="교안 46p — 반지름 6s 원형 이웃에서 Haar 응답"><figcaption><b>46p</b> 반지름 6s 원형 이웃에서 Haar 응답</figcaption></figure>
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-47-surf-dominant.jpg" alt="교안 47p — 60도 창을 돌리며 주방향 찾기"><figcaption><b>47p</b> 60도 창을 돌리며 주방향 찾기</figcaption></figure>
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-48-surf-desc.jpg" alt="교안 48p — 20s × 20s 를 4×4 로 나눈 기술자"><figcaption><b>48p</b> 20s × 20s 를 4×4 로 나눈 기술자</figcaption></figure>
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-49-surf-conclusion.jpg" alt="교안 49p — SIFT 대비 3배 빠르고 정확도는 비슷"><figcaption><b>49p</b> SIFT 대비 3배 빠르고 정확도는 비슷</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-50-surf-variants.jpg" alt="교안 50p — SURF-36 · 64 · 128 비교"><figcaption><b>50p</b> SURF-36 · 64 · 128 비교</figcaption></figure>
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-51-surf-laplacian-sign.jpg" alt="교안 51p — 라플라시안 부호로 매칭 가속"><figcaption><b>51p</b> 라플라시안 부호로 매칭 가속</figcaption></figure>
   </div>
 </div>
@@ -1172,52 +1176,820 @@ table.acc{min-width:0}
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>문제의식 — SIFT는 좋은데 느리다 (36p)</h3>
-  <p><b>SURF = Speeded-Up Robust Features</b>, 말 그대로 <b>&ldquo;속도를 끌어올린 SURF판 SIFT&rdquo;</b>다. 교안은 성능을 이렇게 요약한다 &mdash; <span class="hi">SIFT보다 3~7배 빠르면서 매칭 성능은 비슷하다.</span> 대신 <b>블러와 회전에는 강하지만 시점 변화와 조명 변화에는 상대적으로 약하다</b>.</p>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>문제의식 — SIFT는 좋은데 느리다 (35 · 36p)</h3>
+  <p><b>SURF = Speeded-Up Robust Features</b>. Bay, Tuytelaars, Van Gool이 <b>ECCV 2006</b>에 발표했다(35p). 이름 그대로 <b>&ldquo;속도를 끌어올린(speeded-up) 강건한 특징&rdquo;</b>이다.</p>
+  <p>36p의 Aim &mdash; <b>&ldquo;SIFT was comparatively slow and people needed more speeded-up version.&rdquo;</b> 그래서 나온 SURF는 <span class="hi">SIFT보다 3~7배 빠르면서 매칭 성능은 비슷하다(3~7 times faster than SIFT, with similar matching performance).</span></p>
+  <p>Key Idea는 두 단어다 &mdash; <b>Haar filters</b>와 <b>Integral Images</b>. 그리고 교안의 평가: <b>블러와 회전이 있는 영상은 잘 다루지만(good at handling images with blurring and rotation), 시점 변화와 조명 변화에는 약하다(not good at handling viewpoint change and illumination change).</b></p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>전체 지도 — SIFT의 각 단계를 &lsquo;무엇으로&rsquo; 바꿨나 (37 · 38p)</h3>
+  <p>37p는 SURF를 <b>두 단계 알고리즘(Two-step Algorithm)</b>으로 요약한다 &mdash; <b>① 필터링/컨볼루션으로 관심점 검출</b>, <b>② Haar 웨이블릿으로 만든 기술자 벡터</b>. 단계 구성은 SIFT와 거의 같고, <b>각 단계를 더 싼 계산으로 갈아 끼운 것</b>이 SURF다. 아래 표를 지도로 삼아 한 칸씩 내려가 보자.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>단계</th><th>SIFT (02)</th><th>SURF</th><th>교안</th></tr></thead>
+    <tbody>
+      <tr><td>준비</td><td>가우시안 블러 영상을 여러 장 만든다</td><td><b>적분 영상 한 장</b>만 만든다</td><td>39p</td></tr>
+      <tr><td>블롭 응답</td><td>DoG(LoG 근사)</td><td><b>헤시안 행렬식</b>, 2차 미분은 <b>박스 필터</b>로 근사</td><td>38 · 40 · 41p</td></tr>
+      <tr><td>여러 스케일</td><td><b>영상을 줄여 가며</b>(피라미드)</td><td><b>영상은 그대로, 필터를 키워 가며</b></td><td>42 · 43p</td></tr>
+      <tr><td>극값 찾기 · 정밀화</td><td>26개 이웃 비교 + 2차 함수 보간</td><td><b>같다</b>(Same as SIFT)</td><td>44 · 45p</td></tr>
+      <tr><td>방향</td><td>그래디언트 방향 36칸 히스토그램</td><td><b>Haar 응답 (dx, dy)를 60° 창으로 합산</b></td><td>46 · 47p</td></tr>
+      <tr><td>기술자</td><td>4×4 셀 × 8방향 = <b>128</b></td><td>4×4 영역 × (Σdx, Σdy, Σ|dx|, Σ|dy|) = <b>64</b></td><td>48 · 50p</td></tr>
+      <tr><td>매칭 보조</td><td>&mdash;</td><td><b>라플라시안 부호</b>로 후보를 먼저 거름</td><td>51p</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>표에서 보이듯 SURF가 빨라지는 이유는 결국 하나로 모인다 &mdash; <span class="hi">모든 필터를 &lsquo;직사각형의 합&rsquo;으로 바꾸고, 직사각형의 합은 적분 영상으로 크기와 상관없이 몇 번의 덧셈으로 구한다.</span> 그래서 적분 영상을 가장 먼저, 가장 자세히 본다.</p>
+</div>
+
+<div class="pt gyo" id="surf-integral">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>적분 영상 — &ldquo;the sum of gray scale pixel values&rdquo; (39p)</h3>
+  <p>39p의 정의 &mdash; <b>&ldquo;Integral Image (summed area tables) is an intermediate representation for the image and contains the sum of gray scale pixel values of image.&rdquo;</b> 원본을 대신해 쓰는 <b>중간 표현</b>이고, 각 칸에 <b>밝기값의 합</b>이 들어 있다는 뜻이다. 무엇의 합인지는 그림 속 식이 알려 준다.</p>
+  <div class="fx">
+    <p class="fx-lab">39p 그림 속 식 &mdash; 기호를 하나씩</p>
+    <div class="tex-d">I_{\Sigma}(\mathbf{x})=\sum_{i=0}^{i\le x}\ \sum_{j=0}^{j\le y} I(i,j)</div>
+    <p class="fx-note">점 <span class="tex">\mathbf{x}=(x,y)</span>의 적분값 = <b>원점 O(왼쪽 위)부터 그 점까지 이루는 직사각형 안의 모든 화소값을 더한 것</b>. 그림에서 O부터 점 x까지 빗금 친 영역이 바로 그 범위다.</p>
+  </div>
+
+  <p class="sub-title">① 5×5 영상으로 직접 만들어 보기</p>
+  <svg class="dia" viewBox="0 0 640 245" role="img" aria-label="원본 5×5 영상과 그 적분 영상, 그리고 사각형 합을 네 귀퉁이로 구하는 법" style="max-width:640px">
+<text x="115.0" y="20" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1f2937">원본 영상 I</text>
+<rect x="30" y="30" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="47.0" y="52.0" font-size="13" text-anchor="middle" fill="#1f2937">3</text>
+<rect x="64" y="30" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="81.0" y="52.0" font-size="13" text-anchor="middle" fill="#1f2937">1</text>
+<rect x="98" y="30" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="115.0" y="52.0" font-size="13" text-anchor="middle" fill="#1f2937">4</text>
+<rect x="132" y="30" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="149.0" y="52.0" font-size="13" text-anchor="middle" fill="#1f2937">1</text>
+<rect x="166" y="30" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="183.0" y="52.0" font-size="13" text-anchor="middle" fill="#1f2937">5</text>
+<rect x="30" y="64" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="47.0" y="86.0" font-size="13" text-anchor="middle" fill="#1f2937">9</text>
+<rect x="64" y="64" width="34" height="34" fill="#e8eefb" stroke="#cbd5e1"/>
+<text x="81.0" y="86.0" font-size="13" text-anchor="middle" fill="#1f2937">2</text>
+<rect x="98" y="64" width="34" height="34" fill="#e8eefb" stroke="#cbd5e1"/>
+<text x="115.0" y="86.0" font-size="13" text-anchor="middle" fill="#1f2937">6</text>
+<rect x="132" y="64" width="34" height="34" fill="#e8eefb" stroke="#cbd5e1"/>
+<text x="149.0" y="86.0" font-size="13" text-anchor="middle" fill="#1f2937">5</text>
+<rect x="166" y="64" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="183.0" y="86.0" font-size="13" text-anchor="middle" fill="#1f2937">3</text>
+<rect x="30" y="98" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="47.0" y="120.0" font-size="13" text-anchor="middle" fill="#1f2937">5</text>
+<rect x="64" y="98" width="34" height="34" fill="#e8eefb" stroke="#cbd5e1"/>
+<text x="81.0" y="120.0" font-size="13" text-anchor="middle" fill="#1f2937">8</text>
+<rect x="98" y="98" width="34" height="34" fill="#e8eefb" stroke="#cbd5e1"/>
+<text x="115.0" y="120.0" font-size="13" text-anchor="middle" fill="#1f2937">9</text>
+<rect x="132" y="98" width="34" height="34" fill="#e8eefb" stroke="#cbd5e1"/>
+<text x="149.0" y="120.0" font-size="13" text-anchor="middle" fill="#1f2937">7</text>
+<rect x="166" y="98" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="183.0" y="120.0" font-size="13" text-anchor="middle" fill="#1f2937">9</text>
+<rect x="30" y="132" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="47.0" y="154.0" font-size="13" text-anchor="middle" fill="#1f2937">3</text>
+<rect x="64" y="132" width="34" height="34" fill="#e8eefb" stroke="#cbd5e1"/>
+<text x="81.0" y="154.0" font-size="13" text-anchor="middle" fill="#1f2937">2</text>
+<rect x="98" y="132" width="34" height="34" fill="#e8eefb" stroke="#cbd5e1"/>
+<text x="115.0" y="154.0" font-size="13" text-anchor="middle" fill="#1f2937">3</text>
+<rect x="132" y="132" width="34" height="34" fill="#e8eefb" stroke="#cbd5e1"/>
+<text x="149.0" y="154.0" font-size="13" text-anchor="middle" fill="#1f2937">8</text>
+<rect x="166" y="132" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="183.0" y="154.0" font-size="13" text-anchor="middle" fill="#1f2937">4</text>
+<rect x="30" y="166" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="47.0" y="188.0" font-size="13" text-anchor="middle" fill="#1f2937">6</text>
+<rect x="64" y="166" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="81.0" y="188.0" font-size="13" text-anchor="middle" fill="#1f2937">2</text>
+<rect x="98" y="166" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="115.0" y="188.0" font-size="13" text-anchor="middle" fill="#1f2937">6</text>
+<rect x="132" y="166" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="149.0" y="188.0" font-size="13" text-anchor="middle" fill="#1f2937">4</text>
+<rect x="166" y="166" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="183.0" y="188.0" font-size="13" text-anchor="middle" fill="#1f2937">3</text>
+<text x="47.0" y="214" font-size="10" text-anchor="middle" fill="#94a3b8">1</text>
+<text x="22" y="51.0" font-size="10" text-anchor="middle" fill="#94a3b8">1</text>
+<text x="81.0" y="214" font-size="10" text-anchor="middle" fill="#94a3b8">2</text>
+<text x="22" y="85.0" font-size="10" text-anchor="middle" fill="#94a3b8">2</text>
+<text x="115.0" y="214" font-size="10" text-anchor="middle" fill="#94a3b8">3</text>
+<text x="22" y="119.0" font-size="10" text-anchor="middle" fill="#94a3b8">3</text>
+<text x="149.0" y="214" font-size="10" text-anchor="middle" fill="#94a3b8">4</text>
+<text x="22" y="153.0" font-size="10" text-anchor="middle" fill="#94a3b8">4</text>
+<text x="183.0" y="214" font-size="10" text-anchor="middle" fill="#94a3b8">5</text>
+<text x="22" y="187.0" font-size="10" text-anchor="middle" fill="#94a3b8">5</text>
+<rect x="64" y="64" width="102" height="102" fill="none" stroke="#1b3f8b" stroke-width="3"/>
+<text x="335.0" y="20" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1f2937">적분 영상 I&#931;</text>
+<rect x="250" y="30" width="34" height="34" fill="#fff7ed" stroke="#cbd5e1"/>
+<text x="267.0" y="52.0" font-size="13" text-anchor="middle" fill="#1f2937">3</text>
+<rect x="251.5" y="31.5" width="31" height="31" fill="none" stroke="#b45309" stroke-width="3"/>
+<text x="280" y="41" font-size="10" font-weight="800" text-anchor="end" fill="#b45309">D</text>
+<rect x="284" y="30" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="301.0" y="52.0" font-size="13" text-anchor="middle" fill="#1f2937">4</text>
+<rect x="318" y="30" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="335.0" y="52.0" font-size="13" text-anchor="middle" fill="#1f2937">8</text>
+<rect x="352" y="30" width="34" height="34" fill="#fff7ed" stroke="#cbd5e1"/>
+<text x="369.0" y="52.0" font-size="13" text-anchor="middle" fill="#1f2937">9</text>
+<rect x="353.5" y="31.5" width="31" height="31" fill="none" stroke="#b45309" stroke-width="3"/>
+<text x="382" y="41" font-size="10" font-weight="800" text-anchor="end" fill="#b45309">B</text>
+<rect x="386" y="30" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="403.0" y="52.0" font-size="13" text-anchor="middle" fill="#1f2937">14</text>
+<rect x="250" y="64" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="267.0" y="86.0" font-size="13" text-anchor="middle" fill="#1f2937">12</text>
+<rect x="284" y="64" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="301.0" y="86.0" font-size="13" text-anchor="middle" fill="#1f2937">15</text>
+<rect x="318" y="64" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="335.0" y="86.0" font-size="13" text-anchor="middle" fill="#1f2937">25</text>
+<rect x="352" y="64" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="369.0" y="86.0" font-size="13" text-anchor="middle" fill="#1f2937">31</text>
+<rect x="386" y="64" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="403.0" y="86.0" font-size="13" text-anchor="middle" fill="#1f2937">39</text>
+<rect x="250" y="98" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="267.0" y="120.0" font-size="13" text-anchor="middle" fill="#1f2937">17</text>
+<rect x="284" y="98" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="301.0" y="120.0" font-size="13" text-anchor="middle" fill="#1f2937">28</text>
+<rect x="318" y="98" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="335.0" y="120.0" font-size="13" text-anchor="middle" fill="#1f2937">47</text>
+<rect x="352" y="98" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="369.0" y="120.0" font-size="13" text-anchor="middle" fill="#1f2937">60</text>
+<rect x="386" y="98" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="403.0" y="120.0" font-size="13" text-anchor="middle" fill="#1f2937">77</text>
+<rect x="250" y="132" width="34" height="34" fill="#fff7ed" stroke="#cbd5e1"/>
+<text x="267.0" y="154.0" font-size="13" text-anchor="middle" fill="#1f2937">20</text>
+<rect x="251.5" y="133.5" width="31" height="31" fill="none" stroke="#b45309" stroke-width="3"/>
+<text x="280" y="143" font-size="10" font-weight="800" text-anchor="end" fill="#b45309">C</text>
+<rect x="284" y="132" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="301.0" y="154.0" font-size="13" text-anchor="middle" fill="#1f2937">33</text>
+<rect x="318" y="132" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="335.0" y="154.0" font-size="13" text-anchor="middle" fill="#1f2937">55</text>
+<rect x="352" y="132" width="34" height="34" fill="#fff7ed" stroke="#cbd5e1"/>
+<text x="369.0" y="154.0" font-size="13" text-anchor="middle" fill="#1f2937">76</text>
+<rect x="353.5" y="133.5" width="31" height="31" fill="none" stroke="#b45309" stroke-width="3"/>
+<text x="382" y="143" font-size="10" font-weight="800" text-anchor="end" fill="#b45309">A</text>
+<rect x="386" y="132" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="403.0" y="154.0" font-size="13" text-anchor="middle" fill="#1f2937">97</text>
+<rect x="250" y="166" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="267.0" y="188.0" font-size="13" text-anchor="middle" fill="#1f2937">26</text>
+<rect x="284" y="166" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="301.0" y="188.0" font-size="13" text-anchor="middle" fill="#1f2937">41</text>
+<rect x="318" y="166" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="335.0" y="188.0" font-size="13" text-anchor="middle" fill="#1f2937">69</text>
+<rect x="352" y="166" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="369.0" y="188.0" font-size="13" text-anchor="middle" fill="#1f2937">94</text>
+<rect x="386" y="166" width="34" height="34" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="403.0" y="188.0" font-size="13" text-anchor="middle" fill="#1f2937">118</text>
+<text x="267.0" y="214" font-size="10" text-anchor="middle" fill="#94a3b8">1</text>
+<text x="242" y="51.0" font-size="10" text-anchor="middle" fill="#94a3b8">1</text>
+<text x="301.0" y="214" font-size="10" text-anchor="middle" fill="#94a3b8">2</text>
+<text x="242" y="85.0" font-size="10" text-anchor="middle" fill="#94a3b8">2</text>
+<text x="335.0" y="214" font-size="10" text-anchor="middle" fill="#94a3b8">3</text>
+<text x="242" y="119.0" font-size="10" text-anchor="middle" fill="#94a3b8">3</text>
+<text x="369.0" y="214" font-size="10" text-anchor="middle" fill="#94a3b8">4</text>
+<text x="242" y="153.0" font-size="10" text-anchor="middle" fill="#94a3b8">4</text>
+<text x="403.0" y="214" font-size="10" text-anchor="middle" fill="#94a3b8">5</text>
+<text x="242" y="187.0" font-size="10" text-anchor="middle" fill="#94a3b8">5</text>
+<text x="470" y="60" font-size="12" fill="#1f2937" font-weight="700">파란 사각형의 합</text>
+<text x="470" y="82" font-size="11.5" fill="#374151">직접 더하기: 9칸</text>
+<text x="470" y="100" font-size="11.5" fill="#374151">2+6+5+8+9</text>
+<text x="470" y="116" font-size="11.5" fill="#374151">+7+2+3+8 = 50</text>
+<text x="470" y="142" font-size="11.5" fill="#b45309" font-weight="700">적분 영상: 4칸만 읽기</text>
+<text x="470" y="160" font-size="11.5" fill="#b45309">A − B − C + D</text>
+<text x="470" y="178" font-size="11.5" fill="#b45309">= 76 − 9 − 20 + 3 = 50</text>
+<text x="470" y="204" font-size="10.5" fill="#6b7280">사각형이 99×99여도</text>
+<text x="470" y="219" font-size="10.5" fill="#6b7280">읽는 칸은 똑같이 4개</text>
+</svg>
+  <p class="dia-cap">왼쪽 원본의 각 칸을 &lsquo;원점부터 그 칸까지의 합&rsquo;으로 바꾼 것이 오른쪽 적분 영상이다</p>
+  <p>몇 칸만 검산해 보자. 맨 윗줄은 왼쪽부터 누적한 값이다 &mdash; 3, 3+1=4, 4+4=8, 8+1=9, 9+5=14. 맨 왼쪽 열도 위에서부터 누적한다 &mdash; 3, 3+9=12, 12+5=17 …. 오른쪽 맨 아래 <b>118은 원본 25칸 전체의 합</b>이다.</p>
+  <p>가운데 칸도 처음부터 다 더할 필요가 없다. <b>이미 구한 이웃 세 칸</b>을 쓰면 된다.</p>
+  <div class="fx">
+    <p class="fx-lab">한 번 훑으며 만드는 규칙</p>
+    <div class="tex-d">I_\Sigma(x,y)=I(x,y)+I_\Sigma(x-1,y)+I_\Sigma(x,y-1)-I_\Sigma(x-1,y-1)</div>
+    <p class="fx-note">예: 3행 3열의 47 = 원본 9 + 위 칸 25 + 왼쪽 칸 28 &minus; 왼쪽 위 칸 15. 위 칸과 왼쪽 칸이 <b>왼쪽 위 영역을 두 번 더했으므로</b> 한 번 빼 준다. 이렇게 영상 전체를 <b>한 번만 훑으면</b> 적분 영상이 완성된다 &mdash; 비용은 화소 수에 비례하는 한 번뿐이다.</p>
+  </div>
+
+  <p class="sub-title">② 왜 &ldquo;S = A &minus; B &minus; C + D&rdquo;인가</p>
+  <p>39p 그림은 사각형 S의 네 귀퉁이를 <b>D(왼쪽 위) · B(오른쪽 위) · C(왼쪽 아래) · A(오른쪽 아래)</b>로 이름 붙인다. 각 귀퉁이의 적분값은 <b>원점부터 그 점까지의 직사각형 합</b>이므로, 그림으로 놓고 보면 덧셈 · 뺄셈의 이유가 바로 보인다.</p>
+  <svg class="dia" viewBox="0 0 640 150" role="img" aria-label="A에서 B와 C를 빼고 D를 더하는 이유를 영역으로 보기" style="max-width:640px">
+<rect x="20" y="30" width="16" height="16" fill="#1b3f8b" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="36" y="30" width="16" height="16" fill="#1b3f8b" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="52" y="30" width="16" height="16" fill="#1b3f8b" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="68" y="30" width="16" height="16" fill="#1b3f8b" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="84" y="30" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="20" y="46" width="16" height="16" fill="#1b3f8b" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="36" y="46" width="16" height="16" fill="#1b3f8b" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="52" y="46" width="16" height="16" fill="#1b3f8b" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="68" y="46" width="16" height="16" fill="#1b3f8b" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="84" y="46" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="20" y="62" width="16" height="16" fill="#1b3f8b" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="36" y="62" width="16" height="16" fill="#1b3f8b" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="52" y="62" width="16" height="16" fill="#1b3f8b" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="68" y="62" width="16" height="16" fill="#1b3f8b" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="84" y="62" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="20" y="78" width="16" height="16" fill="#1b3f8b" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="36" y="78" width="16" height="16" fill="#1b3f8b" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="52" y="78" width="16" height="16" fill="#1b3f8b" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="68" y="78" width="16" height="16" fill="#1b3f8b" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="84" y="78" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="20" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="36" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="52" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="68" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="84" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="36" y="46" width="48" height="48" fill="none" stroke="#1f2937" stroke-width="1.5" stroke-dasharray="3 2"/>
+<text x="60.0" y="130" font-size="12" font-weight="700" text-anchor="middle" fill="#1b3f8b">A = 76</text>
+<rect x="144" y="30" width="16" height="16" fill="#9d174d" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="160" y="30" width="16" height="16" fill="#9d174d" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="176" y="30" width="16" height="16" fill="#9d174d" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="192" y="30" width="16" height="16" fill="#9d174d" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="208" y="30" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="144" y="46" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="160" y="46" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="176" y="46" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="192" y="46" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="208" y="46" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="144" y="62" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="160" y="62" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="176" y="62" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="192" y="62" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="208" y="62" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="144" y="78" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="160" y="78" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="176" y="78" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="192" y="78" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="208" y="78" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="144" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="160" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="176" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="192" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="208" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="160" y="46" width="48" height="48" fill="none" stroke="#1f2937" stroke-width="1.5" stroke-dasharray="3 2"/>
+<text x="184.0" y="130" font-size="12" font-weight="700" text-anchor="middle" fill="#9d174d">− B = 9</text>
+<rect x="268" y="30" width="16" height="16" fill="#9d174d" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="284" y="30" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="300" y="30" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="316" y="30" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="332" y="30" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="268" y="46" width="16" height="16" fill="#9d174d" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="284" y="46" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="300" y="46" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="316" y="46" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="332" y="46" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="268" y="62" width="16" height="16" fill="#9d174d" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="284" y="62" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="300" y="62" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="316" y="62" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="332" y="62" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="268" y="78" width="16" height="16" fill="#9d174d" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="284" y="78" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="300" y="78" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="316" y="78" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="332" y="78" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="268" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="284" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="300" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="316" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="332" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="284" y="46" width="48" height="48" fill="none" stroke="#1f2937" stroke-width="1.5" stroke-dasharray="3 2"/>
+<text x="308.0" y="130" font-size="12" font-weight="700" text-anchor="middle" fill="#9d174d">− C = 20</text>
+<rect x="392" y="30" width="16" height="16" fill="#0f766e" fill-opacity="0.75" stroke="#cbd5e1"/>
+<rect x="408" y="30" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="424" y="30" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="440" y="30" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="456" y="30" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="392" y="46" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="408" y="46" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="424" y="46" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="440" y="46" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="456" y="46" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="392" y="62" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="408" y="62" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="424" y="62" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="440" y="62" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="456" y="62" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="392" y="78" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="408" y="78" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="424" y="78" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="440" y="78" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="456" y="78" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="392" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="408" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="424" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="440" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="456" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="408" y="46" width="48" height="48" fill="none" stroke="#1f2937" stroke-width="1.5" stroke-dasharray="3 2"/>
+<text x="432.0" y="130" font-size="12" font-weight="700" text-anchor="middle" fill="#0f766e">+ D = 3</text>
+<rect x="516" y="30" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="532" y="30" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="548" y="30" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="564" y="30" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="580" y="30" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="516" y="46" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="532" y="46" width="16" height="16" fill="#fde7c7" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="548" y="46" width="16" height="16" fill="#fde7c7" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="564" y="46" width="16" height="16" fill="#fde7c7" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="580" y="46" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="516" y="62" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="532" y="62" width="16" height="16" fill="#fde7c7" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="548" y="62" width="16" height="16" fill="#fde7c7" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="564" y="62" width="16" height="16" fill="#fde7c7" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="580" y="62" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="516" y="78" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="532" y="78" width="16" height="16" fill="#fde7c7" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="548" y="78" width="16" height="16" fill="#fde7c7" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="564" y="78" width="16" height="16" fill="#fde7c7" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="580" y="78" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="516" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="532" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="548" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="564" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="580" y="94" width="16" height="16" fill="#fff" fill-opacity="1" stroke="#cbd5e1"/>
+<rect x="532" y="46" width="48" height="48" fill="none" stroke="#1f2937" stroke-width="1.5" stroke-dasharray="3 2"/>
+<text x="556.0" y="130" font-size="12" font-weight="700" text-anchor="middle" fill="#b45309">= 원하는 사각형 50</text>
+<text x="320" y="16" font-size="11" text-anchor="middle" fill="#6b7280">색칠된 곳 = 그 칸의 적분값이 더하고 있는 범위 (원점 ~ 그 칸)</text>
+</svg>
+  <ul class="ul">
+    <li><b>A</b>는 원점부터 사각형의 오른쪽 아래까지 &mdash; 원하는 S와 <b>그 위쪽 · 왼쪽 군더더기</b>까지 다 담고 있다</li>
+    <li><b>B를 빼면</b> 위쪽 띠가, <b>C를 빼면</b> 왼쪽 띠가 사라진다</li>
+    <li>그런데 <b>왼쪽 위 모서리(D 영역)는 B에도 C에도 들어 있어 두 번 빠졌다</b>. 그래서 <b>D를 한 번 더해</b> 되돌린다</li>
+  </ul>
+  <p>엄밀히 말하면 B · C · D는 <b>사각형 바로 바깥 칸</b>(위 예에서 1행 · 1열)의 값이어야 사각형의 첫 줄 · 첫 열이 빠지지 않는다. 위 예의 사각형은 2~4행 · 2~4열이므로 D = (1, 1), B = (1, 4), C = (4, 1), A = (4, 4)의 값을 읽었다.</p>
+
+  <p class="sub-title">③ 무엇이 빨라지나 — 크기와 무관한 상수 시간</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>사각형 크기</th><th>직접 더하기</th><th>적분 영상</th></tr></thead>
+    <tbody>
+      <tr><td>3×3</td><td>9칸 읽기</td><td><b>4칸</b> 읽기 + 덧뺄셈 3번</td></tr>
+      <tr><td>9×9</td><td>81칸</td><td><b>4칸</b></td></tr>
+      <tr><td>99×99</td><td>9,801칸</td><td><b>4칸</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><span class="hi">적분 영상을 한 번 만들어 두면, 어떤 크기의 사각형이든 합을 네 칸만 읽어 구한다.</span> 이 성질이 뒤의 모든 단계 &mdash; 박스 필터(41p), 필터 키우기(42p), Haar 웨이블릿(46 · 48p) &mdash; 를 떠받친다. 원래는 Viola &amp; Jones(2001)의 얼굴 검출에서 유명해진 기법이고, 그래픽스에서는 summed area table(Crow, 1984)이라는 이름으로 먼저 쓰였다.</p>
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>속도의 비결 ① 적분 영상 (39p)</h3>
-  <p><span class="term" tabindex="0" data-tip="integral image, summed area table. 각 픽셀에 '원점부터 그 지점까지의 밝기 합'을 미리 저장해 둔 영상.">적분 영상(integral image)</span>은 <b>&ldquo;원점부터 여기까지의 밝기를 전부 더한 값&rdquo;</b>을 픽셀마다 미리 저장해 둔 표다.</p>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>헤시안 행렬 — L<sub>xx</sub>(x, σ)는 무엇인가 (38 · 40p)</h3>
+  <p>38p &mdash; <b>Approximating the determinant of the Hessian matrix. If determinant is local max → Interest point.</b> 헤시안 행렬의 <b>행렬식</b>을 계산해 그 값이 국소 최대인 곳을 관심점으로 삼는다. 40p가 그 행렬을 적는다.</p>
   <div class="fx">
-    <p class="fx-lab">이것을 한 번 만들어 두면</p>
-    <div class="tex-d">\text{임의의 직사각형 영역의 합} = A - B - C + D</div>
-    <p class="fx-note">네 귀퉁이 값만 꺼내 <b>더하기 · 빼기 세 번</b>이면 끝난다. <span class="hi">사각형이 아무리 커도 걸리는 시간이 똑같다</span>는 것이 핵심이다.</p>
+    <p class="fx-lab">40p의 헤시안 행렬</p>
+    <div class="tex-d">\mathcal{H}(\mathbf{x},\sigma)=\begin{bmatrix} L_{xx}(\mathbf{x},\sigma) &amp; L_{xy}(\mathbf{x},\sigma)\\ L_{xy}(\mathbf{x},\sigma) &amp; L_{yy}(\mathbf{x},\sigma)\end{bmatrix}</div>
+    <p class="fx-note"><span class="tex">L_{xx}(\mathbf{x},\sigma)</span> = 영상 I를 <b>σ 가우시안의 x방향 2차 미분</b> <span class="tex">\frac{\partial^2}{\partial x^2}G(\sigma)</span>과 컨볼루션한 결과를 <b>점 x에서 읽은 값</b>. 쉽게 말해 <b>&ldquo;σ만큼 흐린 다음, 가로 방향으로 밝기가 얼마나 휘어 있는지&rdquo;</b>다. <span class="tex">L_{yy}</span>는 세로 방향, <span class="tex">L_{xy}</span>는 가로로 갈 때 세로 변화가 얼마나 바뀌는지(대각선 방향의 비틀림)다.</p>
+  </div>
+  <p><b>2차 미분 = 휘어짐(곡률)</b>을 숫자로 보자. 한 줄의 밝기가 (10, 10, 50, 10, 10)이면 가운데에서 2차 차분은 <span class="tex">10-2\times50+10=-80</span>이다. <b>크게 음수 = 가운데가 주변보다 불룩 솟은 봉우리</b>라는 뜻이다. 반대로 어두운 점이면 크게 양수가 된다. 이 <b>(+1, &minus;2, +1)</b>이라는 계수가 잠시 뒤 박스 필터의 모양 그대로 다시 나온다.</p>
+  <p class="sub-title">행렬식이 왜 블롭 검출기가 되나</p>
+  <div class="tex-d">\det\mathcal{H}=L_{xx}L_{yy}-L_{xy}^2</div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>그 자리의 모양</th><th>L<sub>xx</sub></th><th>L<sub>yy</sub></th><th>det H</th></tr></thead>
+    <tbody>
+      <tr><td>평평한 곳</td><td>≈ 0</td><td>≈ 0</td><td>≈ 0</td></tr>
+      <tr><td>세로 엣지 (가로로만 변함)</td><td>큼</td><td>≈ 0</td><td>≈ 0 &mdash; 한쪽 곱이 0이라 죽는다</td></tr>
+      <tr><td><b>블롭</b> (가로 · 세로 모두 휘어 봉우리)</td><td>크게 음수</td><td>크게 음수</td><td><b>크게 양수</b></td></tr>
+      <tr><td>안장 모양 (한쪽은 볼록, 한쪽은 오목)</td><td>양수</td><td>음수</td><td>음수 &mdash; 버린다</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><span class="hi">두 방향이 &lsquo;같은 쪽으로 함께&rsquo; 휘어 있을 때만 행렬식이 커진다</span> &mdash; 그래서 엣지는 자동으로 걸러지고 블롭만 남는다. SIFT가 따로 거쳐야 했던 엣지 제거(21p)가 여기서는 검출 단계에 이미 들어 있는 셈이다. 원 논문은 헤시안을 고른 이유를 <b>계산 시간과 정확도 모두 좋기 때문</b>이라고 적었다.</p>
+  <p class="sub-title">&ldquo;Determinant of Hessian matrix for both scale and location&rdquo;</p>
+  <p>37p는 SURF가 <b>Hessian-Laplacian</b>을 쓴다고 적었는데, 40p의 셋째 줄이 그 의미를 정확히 해 준다. 앞선 방법(Hessian-Laplace, Mikolajczyk &amp; Schmid)은 <b>위치는 헤시안 행렬식으로, 스케일은 라플라시안으로</b> 따로 골랐다. SURF는 <b>위치와 스케일을 모두 행렬식 하나로</b> 고른다. 계산할 양이 하나로 줄어든다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>박스 필터 — &ldquo;It approximates LoG with Box Filter&rdquo; (40 · 41p)</h3>
+  <p>문제는 <span class="tex">L_{xx}, L_{yy}, L_{xy}</span>를 정직하게 구하면 가우시안 2차 미분 필터와의 컨볼루션이 필요해 느리다는 것이다. 41p의 해법 &mdash; <b>Approximated second order derivatives with box filters</b>. 41p 오른쪽 위 세 장(<span class="tex">L_{xx}, L_{yy}, L_{xy}</span>)은 진짜 가우시안 2차 미분 필터이고, 아래 세 장(<span class="tex">D_{xx}, D_{yy}, D_{xy}</span>)은 그것을 <b>흑백 직사각형 몇 개로 뭉뚱그린</b> 근사다. 원 논문은 9×9 박스 필터가 <b>σ = 1.2</b>의 가우시안 2차 미분에 해당한다고 놓는다.</p>
+  <svg class="dia" viewBox="0 0 640 270" role="img" aria-label="9×9 박스 필터 Dyy와 Dxy의 칸별 가중치" style="max-width:640px">
+<text x="139.0" y="20" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1f2937">D_yy (9×9)</text>
+<rect x="40" y="30" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="62" y="30" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="84" y="30" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="95.0" y="45.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="106" y="30" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="117.0" y="45.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="128" y="30" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="139.0" y="45.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="150" y="30" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="161.0" y="45.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="172" y="30" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="183.0" y="45.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="194" y="30" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="216" y="30" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="40" y="52" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="62" y="52" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="84" y="52" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="95.0" y="67.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="106" y="52" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="117.0" y="67.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="128" y="52" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="139.0" y="67.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="150" y="52" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="161.0" y="67.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="172" y="52" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="183.0" y="67.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="194" y="52" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="216" y="52" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="40" y="74" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="62" y="74" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="84" y="74" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="95.0" y="89.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="106" y="74" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="117.0" y="89.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="128" y="74" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="139.0" y="89.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="150" y="74" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="161.0" y="89.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="172" y="74" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="183.0" y="89.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="194" y="74" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="216" y="74" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="40" y="96" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="62" y="96" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="84" y="96" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="95.0" y="111.0" font-size="9.5" text-anchor="middle" fill="#fff">-2</text>
+<rect x="106" y="96" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="117.0" y="111.0" font-size="9.5" text-anchor="middle" fill="#fff">-2</text>
+<rect x="128" y="96" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="139.0" y="111.0" font-size="9.5" text-anchor="middle" fill="#fff">-2</text>
+<rect x="150" y="96" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="161.0" y="111.0" font-size="9.5" text-anchor="middle" fill="#fff">-2</text>
+<rect x="172" y="96" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="183.0" y="111.0" font-size="9.5" text-anchor="middle" fill="#fff">-2</text>
+<rect x="194" y="96" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="216" y="96" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="40" y="118" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="62" y="118" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="84" y="118" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="95.0" y="133.0" font-size="9.5" text-anchor="middle" fill="#fff">-2</text>
+<rect x="106" y="118" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="117.0" y="133.0" font-size="9.5" text-anchor="middle" fill="#fff">-2</text>
+<rect x="128" y="118" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="139.0" y="133.0" font-size="9.5" text-anchor="middle" fill="#fff">-2</text>
+<rect x="150" y="118" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="161.0" y="133.0" font-size="9.5" text-anchor="middle" fill="#fff">-2</text>
+<rect x="172" y="118" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="183.0" y="133.0" font-size="9.5" text-anchor="middle" fill="#fff">-2</text>
+<rect x="194" y="118" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="216" y="118" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="40" y="140" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="62" y="140" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="84" y="140" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="95.0" y="155.0" font-size="9.5" text-anchor="middle" fill="#fff">-2</text>
+<rect x="106" y="140" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="117.0" y="155.0" font-size="9.5" text-anchor="middle" fill="#fff">-2</text>
+<rect x="128" y="140" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="139.0" y="155.0" font-size="9.5" text-anchor="middle" fill="#fff">-2</text>
+<rect x="150" y="140" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="161.0" y="155.0" font-size="9.5" text-anchor="middle" fill="#fff">-2</text>
+<rect x="172" y="140" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="183.0" y="155.0" font-size="9.5" text-anchor="middle" fill="#fff">-2</text>
+<rect x="194" y="140" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="216" y="140" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="40" y="162" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="62" y="162" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="84" y="162" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="95.0" y="177.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="106" y="162" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="117.0" y="177.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="128" y="162" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="139.0" y="177.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="150" y="162" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="161.0" y="177.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="172" y="162" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="183.0" y="177.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="194" y="162" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="216" y="162" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="40" y="184" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="62" y="184" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="84" y="184" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="95.0" y="199.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="106" y="184" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="117.0" y="199.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="128" y="184" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="139.0" y="199.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="150" y="184" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="161.0" y="199.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="172" y="184" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="183.0" y="199.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="194" y="184" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="216" y="184" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="40" y="206" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="62" y="206" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="84" y="206" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="95.0" y="221.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="106" y="206" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="117.0" y="221.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="128" y="206" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="139.0" y="221.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="150" y="206" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="161.0" y="221.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="172" y="206" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="183.0" y="221.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="194" y="206" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="216" y="206" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="139.0" y="246" font-size="11" text-anchor="middle" fill="#6b7280">+1 띠 15칸 · −2 띠 15칸 · +1 띠 15칸 → 합 0</text>
+<text x="479.0" y="20" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1f2937">D_xy (9×9)</text>
+<rect x="380" y="30" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="402" y="30" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="424" y="30" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="446" y="30" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="468" y="30" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="490" y="30" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="512" y="30" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="534" y="30" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="556" y="30" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="380" y="52" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="402" y="52" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="413.0" y="67.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="424" y="52" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="435.0" y="67.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="446" y="52" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="457.0" y="67.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="468" y="52" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="490" y="52" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="501.0" y="67.0" font-size="9.5" text-anchor="middle" fill="#fff">-1</text>
+<rect x="512" y="52" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="523.0" y="67.0" font-size="9.5" text-anchor="middle" fill="#fff">-1</text>
+<rect x="534" y="52" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="545.0" y="67.0" font-size="9.5" text-anchor="middle" fill="#fff">-1</text>
+<rect x="556" y="52" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="380" y="74" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="402" y="74" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="413.0" y="89.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="424" y="74" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="435.0" y="89.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="446" y="74" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="457.0" y="89.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="468" y="74" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="490" y="74" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="501.0" y="89.0" font-size="9.5" text-anchor="middle" fill="#fff">-1</text>
+<rect x="512" y="74" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="523.0" y="89.0" font-size="9.5" text-anchor="middle" fill="#fff">-1</text>
+<rect x="534" y="74" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="545.0" y="89.0" font-size="9.5" text-anchor="middle" fill="#fff">-1</text>
+<rect x="556" y="74" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="380" y="96" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="402" y="96" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="413.0" y="111.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="424" y="96" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="435.0" y="111.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="446" y="96" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="457.0" y="111.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="468" y="96" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="490" y="96" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="501.0" y="111.0" font-size="9.5" text-anchor="middle" fill="#fff">-1</text>
+<rect x="512" y="96" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="523.0" y="111.0" font-size="9.5" text-anchor="middle" fill="#fff">-1</text>
+<rect x="534" y="96" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="545.0" y="111.0" font-size="9.5" text-anchor="middle" fill="#fff">-1</text>
+<rect x="556" y="96" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="380" y="118" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="402" y="118" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="424" y="118" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="446" y="118" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="468" y="118" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="490" y="118" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="512" y="118" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="534" y="118" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="556" y="118" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="380" y="140" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="402" y="140" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="413.0" y="155.0" font-size="9.5" text-anchor="middle" fill="#fff">-1</text>
+<rect x="424" y="140" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="435.0" y="155.0" font-size="9.5" text-anchor="middle" fill="#fff">-1</text>
+<rect x="446" y="140" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="457.0" y="155.0" font-size="9.5" text-anchor="middle" fill="#fff">-1</text>
+<rect x="468" y="140" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="490" y="140" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="501.0" y="155.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="512" y="140" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="523.0" y="155.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="534" y="140" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="545.0" y="155.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="556" y="140" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="380" y="162" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="402" y="162" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="413.0" y="177.0" font-size="9.5" text-anchor="middle" fill="#fff">-1</text>
+<rect x="424" y="162" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="435.0" y="177.0" font-size="9.5" text-anchor="middle" fill="#fff">-1</text>
+<rect x="446" y="162" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="457.0" y="177.0" font-size="9.5" text-anchor="middle" fill="#fff">-1</text>
+<rect x="468" y="162" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="490" y="162" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="501.0" y="177.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="512" y="162" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="523.0" y="177.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="534" y="162" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="545.0" y="177.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="556" y="162" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="380" y="184" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="402" y="184" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="413.0" y="199.0" font-size="9.5" text-anchor="middle" fill="#fff">-1</text>
+<rect x="424" y="184" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="435.0" y="199.0" font-size="9.5" text-anchor="middle" fill="#fff">-1</text>
+<rect x="446" y="184" width="22" height="22" fill="#1f2937" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="457.0" y="199.0" font-size="9.5" text-anchor="middle" fill="#fff">-1</text>
+<rect x="468" y="184" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="490" y="184" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="501.0" y="199.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="512" y="184" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="523.0" y="199.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="534" y="184" width="22" height="22" fill="#ffffff" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="545.0" y="199.0" font-size="9.5" text-anchor="middle" fill="#1f2937">+1</text>
+<rect x="556" y="184" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="380" y="206" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="402" y="206" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="424" y="206" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="446" y="206" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="468" y="206" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="490" y="206" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="512" y="206" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="534" y="206" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<rect x="556" y="206" width="22" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.6"/>
+<text x="479.0" y="246" font-size="11" text-anchor="middle" fill="#6b7280">+1 · −1 · −1 · +1 정사각형 넷 (각 3×3)</text>
+<text x="320" y="130" font-size="11" text-anchor="middle" fill="#6b7280">회색 = 0</text>
+</svg>
+  <p class="dia-cap">41p 왼쪽 그림에 적힌 숫자(1, &minus;2, 1 / 1, &minus;1, &minus;1, 1)를 9×9 칸에 그대로 펼친 것</p>
+  <ul class="ul">
+    <li><b>D<sub>yy</sub></b> &mdash; 세로로 <b>(+1, &minus;2, +1)</b> 세 띠. 바로 앞에서 본 2차 차분 계수를 띠로 늘린 것이다. 흰 띠 · 검은 띠 · 흰 띠의 넓이가 같아 <b>가중치 합이 0</b>이므로 평평한 곳에서는 0이 나온다. D<sub>xx</sub>는 이것을 90° 돌린 것</li>
+    <li><b>D<sub>xy</sub></b> &mdash; 네 정사각형 <b>(+1, &minus;1 / &minus;1, +1)</b>. 대각선 방향으로 밝기가 비틀린 정도를 잰다</li>
+  </ul>
+  <p><b>적분 영상과 만나면</b> &mdash; 박스 필터는 &ldquo;흰 직사각형의 합 &minus; 2 × 검은 직사각형의 합 + …&rdquo;일 뿐이므로, 직사각형마다 적분 영상 네 칸을 읽으면 된다. D<sub>yy</sub>는 직사각형 3개, D<sub>xy</sub>는 4개 &mdash; <span class="hi">필터가 9×9든 99×99든 읽는 칸 수가 똑같다</span>(&ldquo;Convolution with box filter can be easily calculated with the help of integral images&rdquo;).</p>
+  <div class="fx">
+    <p class="fx-lab">40p 아래 상자의 식 &mdash; w는 무엇인가</p>
+    <div class="tex-d">\det(\mathcal{H}_{\text{approx}})=D_{xx}D_{yy}-(w\,D_{xy})^2</div>
+    <p class="fx-note">박스로 뭉뚱그리는 과정에서 <span class="tex">D_{xx}, D_{yy}</span>와 <span class="tex">D_{xy}</span>가 원래 값에서 <b>서로 다른 비율로</b> 어긋난다. <b>w</b>는 그 차이를 맞추는 보정 계수로, 원 논문은 진짜 가우시안 필터와 박스 필터의 크기 비율로 계산해 <b>w ≈ 0.9</b>를 쓴다. 또 필터가 클수록 응답이 커지지 않도록 응답을 <b>필터 넓이로 나눠</b> 스케일끼리 공평하게 비교한다 &mdash; SIFT 쪽 DoG의 스케일 정규화와 같은 목적이다.</p>
   </div>
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>속도의 비결 ② 박스 필터로 헤시안 근사 (37 · 38 · 41p)</h3>
-  <p>SURF는 블롭을 찾을 때 LoG 대신 <b>헤시안 행렬(2차 미분들을 모은 행렬)의 행렬식</b>을 쓴다. 그 행렬식이 국소 최대가 되는 곳이 관심점이다.</p>
-  <div class="fx">
-    <div class="tex-d">H(\mathbf{x},\sigma)=\begin{bmatrix} L_{xx} &amp; L_{xy} \\ L_{xy} &amp; L_{yy}\end{bmatrix}, \qquad \det H = L_{xx}L_{yy}-(L_{xy})^{2}</div>
-    <p class="fx-note">그런데 <span class="tex">L_{xx}, L_{yy}, L_{xy}</span>를 정직하게 계산하면 느리다. 그래서 <b>가우시안 2차 미분을 계단 모양의 박스 필터로 근사</b>한다. 박스 필터는 <b>직사각형 영역의 합</b>으로만 이루어져 있으므로 <b>적분 영상과 결합하면 순식간에</b> 계산된다.</p>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>영상은 그대로, 필터를 키운다 (42 · 43p)</h3>
+  <p>42p &mdash; <b>&ldquo;Instead of iteratively reducing the image size, the use of integral images allows the up-scaling of the filter at constant cost.&rdquo;</b> 그림의 두 피라미드가 이 문장을 그대로 그렸다.</p>
+  <ul class="ul">
+    <li><b>SIFT</b>(왼쪽, 똑바로 선 피라미드) &mdash; 필터는 그대로 두고 <b>영상을 흐리고 줄여</b> 위로 쌓는다. 층마다 블러 · 리샘플링 비용이 든다</li>
+    <li><b>SURF</b>(오른쪽, 뒤집힌 피라미드) &mdash; 영상은 원본 크기 그대로 두고 <b>필터를 키워</b> 간다. 적분 영상 덕분에 큰 필터도 비용이 같다(<b>at constant cost</b>)</li>
+  </ul>
+  <p>&ldquo;확대된 물체를 작은 필터로 보는 것&rdquo;과 &ldquo;원래 물체를 큰 필터로 보는 것&rdquo;은 같은 일이므로, 어느 쪽으로 스케일을 훑어도 결과의 의미는 같다. SURF는 그중 <b>적분 영상으로 싸게 할 수 있는 쪽</b>을 고른 것이다.</p>
+  <p class="sub-title">43p의 숫자 읽기 — 필터 한 변의 길이와 스케일</p>
+  <p>43p 왼쪽은 <b>9×9 → 15×15</b>로 커질 때 D<sub>yy</sub> · D<sub>xy</sub>의 띠와 정사각형이 <b>비율을 유지하며</b> 넓어지는 모습이다. 오른쪽 그래프는 옥타브마다 쓰는 필터 크기(아래 숫자)와 그에 해당하는 스케일(위 숫자)이다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>옥타브</th><th>필터 한 변 (화소)</th><th>스케일 s</th><th>간격</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>9 · 15 · 21 · 27</td><td>1.2 · 2 · 2.8 · 3.6</td><td>6씩</td></tr>
+      <tr><td>2</td><td>15 · 27 · 39 · 51</td><td>2 · 3.6 · 5.2 · 6.8</td><td>12씩</td></tr>
+      <tr><td>3</td><td>27 · 51 · 75 · 99</td><td>3.6 · 6.8 · 10 · 13.2</td><td>24씩</td></tr>
+    </tbody>
+  </table>
   </div>
+  <ul class="ul">
+    <li><b>스케일 환산</b> &mdash; 9×9가 σ = 1.2이므로 <span class="tex">s=1.2\times\frac{L}{9}</span>. 예: 27 → 1.2 × 3 = 3.6</li>
+    <li><b>왜 6씩</b> &mdash; D<sub>yy</sub>의 띠 세 개가 각각 2화소씩 길어져야 가운데 화소가 유지되고 모양이 그대로이므로 3 × 2 = 6. 옥타브가 올라갈 때마다 간격이 두 배(12, 24)가 된다</li>
+    <li><b>옥타브가 겹치는 이유</b> &mdash; 27(s = 3.6)이 세 옥타브에 모두 들어 있다. 극값 판정에는 위아래 이웃 층이 필요하므로, 옥타브 경계의 스케일도 빠짐없이 비교되도록 일부러 겹쳐 둔다</li>
+  </ul>
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>속도의 비결 ③ 이미지를 줄이지 않고 필터를 키운다 (42 · 43p)</h3>
-  <p>SIFT는 스케일을 다루려고 <b>이미지를 반복해서 줄였다</b>(가우시안 피라미드). 이미지를 줄이는 일은 매번 필터링과 리샘플링이 필요해 비용이 든다.</p>
-  <p>SURF는 반대로 간다 &mdash; <b>이미지는 원본 그대로 두고 필터 크기를 9×9 → 15×15 → …로 키운다</b>. 적분 영상 덕분에 <span class="hi">필터가 커져도 계산 비용이 늘지 않기 때문에</span> 가능한 선택이다. 교안 42p가 SIFT와 SURF의 스케일 처리를 나란히 놓고 보여 주는 이유가 이것이다.</p>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>극값 찾기와 위치 보간 — &ldquo;Same as SIFT&rdquo; (44 · 45p)</h3>
+  <p>44p &mdash; <b>Non-maximum suppression and interpolation. Blob-like feature detector. Same as SIFT.</b> 행렬식 값을 (x, y, 스케일) 3차원으로 쌓아 두고, 그림의 빨간 × 칸처럼 <b>같은 층 8개 + 위층 9개 + 아래층 9개 = 26개 이웃</b>보다 큰 점만 남긴다(<a class="ext" href="#sift">02</a>의 26개 이웃과 같다). 오른쪽 해바라기 사진은 그렇게 찾은 블롭을 원으로 그린 것으로, <b>원의 크기가 검출된 스케일</b>이다.</p>
+  <p>45p &mdash; <b>Keypoint Localization: Select the interpolated position.</b> 필터 크기는 6, 12, 24씩 띄엄띄엄이므로, 진짜 최대가 층과 층 사이에 있을 수 있다. 그래서 이웃 층의 응답 세 개에 <b>곡선(2차 함수)을 맞춰 꼭대기의 위치와 스케일을 보간</b>한다. 그림 오른쪽의 빨간 곡선이 그것이다.</p>
+  <p><b>그림을 읽을 때 주의</b> &mdash; 45p 그림의 축 이름 &ldquo;FAST score s&rdquo;와 octave / intra-octave 층은 BRISK 논문(Leutenegger 등, 2011, <a class="ext" href="#brief">05</a>)의 그림이다. BRISK는 FAST 점수로, SURF는 헤시안 행렬식으로 같은 보간을 한다고 이해하면 된다. 보간 방법 자체는 Brown &amp; Lowe(2002)의 방식이다.</p>
+</div>
+
+<div class="pt gyo" id="surf-orient">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>방향 할당 — 6s, 4s, 그리고 60° 창 (46 · 47p)</h3>
+  <p class="sub-title">46p 그림의 기호부터</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>기호</th><th>뜻</th><th>예: 9×9에서 검출(s = 1.2)</th><th>예: 27×27에서 검출(s = 3.6)</th></tr></thead>
+    <tbody>
+      <tr><td><b>s</b></td><td>그 점이 검출된 스케일 (&ldquo;s = the scale at which the point was detected&rdquo;)</td><td>1.2</td><td>3.6</td></tr>
+      <tr><td><b>6s</b></td><td>방향을 정할 때 살펴보는 <b>원형 이웃의 반지름</b> (&ldquo;circular neighborhood of radius 6s&rdquo;)</td><td>약 7화소</td><td>약 22화소</td></tr>
+      <tr><td><b>4s</b></td><td>dx · dy를 재는 <b>Haar 웨이블릿 필터 한 변</b>의 길이</td><td>약 5화소</td><td>약 14화소</td></tr>
+      <tr><td><b>σ = 2.5s</b></td><td>키포인트에서 먼 응답의 표를 깎는 <b>가우시안 가중치</b>의 폭</td><td>3</td><td>9</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><span class="hi">모든 길이가 s에 비례한다는 것이 핵심이다.</span> 크게 찍힌 물체는 큰 s로 검출되므로 살펴보는 원도 그만큼 커지고, 작게 찍힌 물체는 원도 작아진다. 결국 <b>사진 속 크기와 상관없이 물체의 같은 부분</b>을 보게 된다 &mdash; SIFT가 σ에 맞춰 패치 크기를 정한 것과 같은 원리이고, 이것이 스케일 불변성의 근원이다. (가우시안 폭은 교안 46p와 ECCV 2006판이 2.5s, 2008년 확장판 논문은 2s로 적었다.)</p>
+
+  <p class="sub-title">Haar 웨이블릿 — 가장 단순한 &lsquo;차이&rsquo; 필터</p>
+  <p>46p 아래의 두 상자가 Haar 웨이블릿이다. <b>x response</b>는 왼쪽 절반(검정, &minus;1)과 오른쪽 절반(흰색, +1), <b>y response</b>는 위(검정)와 아래(흰색). 즉 <b>&ldquo;오른쪽 합 &minus; 왼쪽 합&rdquo; = 가로 방향 밝기 변화 dx</b>, <b>&ldquo;아래 합 &minus; 위 합&rdquo; = 세로 방향 밝기 변화 dy</b>다. SIFT의 그래디언트와 같은 역할을 하는데, 직사각형 두 개의 합이므로 <b>적분 영상으로 6번의 읽기</b>만에 끝난다.</p>
+  <p>원 안의 표본점마다(간격 s) 이렇게 (dx, dy)를 구하면, 점 하나가 <b>2차원 평면의 점 하나</b>가 된다 &mdash; 46 · 47p 오른쪽 그림에서 가로축 dx, 세로축 dy 위에 찍힌 파란 점들이 그것이다(<b>&ldquo;The Haar wavelet responses are represented as vectors&rdquo;</b>).</p>
+
+  <p class="sub-title">47p — 60° 창은 무엇인가</p>
+  <p><b>&ldquo;Sum all responses within a sliding orientation window covering an angle of 60 degree.&rdquo;</b> 그림의 회색 부채꼴이 <b>60° 창</b>이다. 이 부채꼴을 원점을 중심으로 <b>한 바퀴 돌려 가며</b>, 매 위치에서</p>
+  <div class="flow">
+    <div class="fl"><b>① 창 안의 점만 고른다</b><span>방향이 그 60° 범위에 드는 응답들</span></div>
+    <div class="fl"><b>② dx끼리, dy끼리 더한다</b><span>&ldquo;The x, y two summed response yield a new vector&rdquo; &mdash; 합 벡터 (Σdx, Σdy) 하나가 생긴다</span></div>
+    <div class="fl"><b>③ 그 벡터의 길이를 잰다</b><span>창을 다 돌린 뒤 <b>가장 긴 벡터의 방향</b>이 주방향(&ldquo;The longest vector is the dominant orientation&rdquo;)</span></div>
+  </div>
+  <svg class="dia" viewBox="0 0 640 300" role="img" aria-label="Haar 응답 점들 위로 60도 창을 돌려 가장 긴 합 벡터를 찾는 과정" style="max-width:640px">
+<defs><marker id="surfah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#b45309"/></marker><marker id="surfah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="3.5" markerHeight="3.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker></defs>
+<circle cx="200" cy="150" r="125" fill="#f8faff" stroke="#94a3b8"/>
+<path d="M200,150 L271.7,252.4 A125,125 0 0 0 324.5,139.1 Z" fill="#f59e0b" fill-opacity="0.25" stroke="#f59e0b"/>
+<path d="M200,150 L308.3,87.5 A125,125 0 0 0 200.0,25.0 Z" fill="#64748b" fill-opacity="0.12" stroke="#64748b"/>
+<line x1="65" y1="150" x2="335" y2="150" stroke="#94a3b8"/>
+<line x1="200" y1="15" x2="200" y2="285" stroke="#94a3b8"/>
+<text x="339" y="154" font-size="11" fill="#374151">dx</text>
+<text x="204" y="13" font-size="11" fill="#374151">dy</text>
+<circle cx="284.0" cy="164.0" r="4" fill="#1b3f8b"/>
+<circle cx="270.0" cy="178.0" r="4" fill="#1b3f8b"/>
+<circle cx="298.0" cy="192.0" r="4" fill="#1b3f8b"/>
+<circle cx="256.0" cy="150.0" r="4" fill="#1b3f8b"/>
+<circle cx="270.0" cy="164.0" r="4" fill="#1b3f8b"/>
+<circle cx="242.0" cy="192.0" r="4" fill="#1b3f8b"/>
+<circle cx="172.0" cy="136.0" r="4" fill="#1b3f8b"/>
+<circle cx="158.0" cy="164.0" r="4" fill="#1b3f8b"/>
+<circle cx="200.0" cy="206.0" r="4" fill="#1b3f8b"/>
+<circle cx="214.0" cy="108.0" r="4" fill="#1b3f8b"/>
+<circle cx="186.0" cy="192.0" r="4" fill="#1b3f8b"/>
+<circle cx="228.0" cy="122.0" r="4" fill="#1b3f8b"/>
+<line x1="200" y1="150" x2="314.0" y2="188.0" stroke="#b45309" stroke-width="3" marker-end="url(#surfah)"/>
+<line x1="200" y1="150" x2="211.4" y2="131.0" stroke="#64748b" stroke-width="2.5" marker-end="url(#surfah2)"/>
+<text x="380" y="40" font-size="11.5" font-weight="700" fill="#b45309">주황 창 (−55° ~ +5°)</text>
+<text x="380" y="62" font-size="10.5" font-weight="400" fill="#374151">점 6개: (6,−1) (5,−2) (7,−3) (4,0) (5,−1) (3,−3)</text>
+<text x="380" y="84" font-size="11.5" font-weight="700" fill="#b45309">합 벡터 = (30, −10) · 길이 31.6 · 방향 −18°</text>
+<text x="380" y="128" font-size="11.5" font-weight="700" fill="#64748b">회색 창 (30° ~ 90°)</text>
+<text x="380" y="150" font-size="10.5" font-weight="400" fill="#374151">점 2개: (1,3) (2,2)</text>
+<text x="380" y="172" font-size="11.5" font-weight="700" fill="#64748b">합 벡터 = (3, 5) · 길이 5.8</text>
+<text x="380" y="216" font-size="10.5" font-weight="400" fill="#1f2937">창을 한 바퀴 돌리며 이 길이를 비교 →</text>
+<text x="380" y="238" font-size="11.5" font-weight="700" fill="#1f2937">가장 긴 합 벡터의 방향 −18°가 주방향</text>
+</svg>
+  <p class="dia-cap">직접 계산한 예 &mdash; 응답 12개 중 6개가 오른쪽 아래로 몰려 있으면, 그쪽을 덮는 창의 합 벡터가 가장 길어진다(47p의 빨간 화살표)</p>
+  <p><b>왜 하필 부채꼴 창인가</b> &mdash; 점 하나하나의 방향은 노이즈에 흔들린다. 일정 각도 안의 응답을 <b>모아서 더하면</b> 같은 쪽을 가리키는 응답끼리 힘을 합쳐 길어지고, 흩어진 응답은 서로 상쇄된다. <b>창이 너무 좁으면</b> 들어오는 점이 적어 다시 노이즈에 흔들리고, <b>너무 넓으면</b>(극단적으로 360°) 반대 방향 응답끼리 상쇄되어 방향이 흐려진다. 60°는 원 논문이 실험으로 고른 절충값이다.</p>
+  <p><b>SIFT와 비교하면</b> &mdash; SIFT는 360°를 10°씩 36칸으로 나눠 <b>칸마다 표를 세고</b> 가장 높은 칸을 골랐다(<a class="ext" href="#sift">02</a>). SURF는 칸을 나누는 대신 <b>60° 창을 미끄러뜨리며 벡터를 더한다</b>. 둘 다 &ldquo;가장 많은 변화가 몰린 방향&rdquo;을 찾는다는 목적은 같다. 덧붙여 원 논문에는 방향 할당을 아예 건너뛰는 <b>U-SURF(upright)</b>도 있는데, 더 빠르고 ±15° 정도의 회전까지는 견딘다 &mdash; 차량 카메라처럼 영상이 거의 기울지 않는 경우에 쓴다.</p>
+</div>
+
+<div class="pt gyo" id="surf-desc">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>기술자 — 20s 창, 4×4 영역, 영역마다 숫자 네 개 (48p)</h3>
+  <p>48p의 네 줄을 그림과 함께 한 줄씩 따라간다.</p>
+  <div class="flow">
+    <div class="fl"><b>① 20s 창을 4×4로</b><span>&ldquo;Split the interest region (20s × 20s) up into 4x4 square sub-regions&rdquo; &mdash; 키포인트를 중심으로 <b>한 변 20s</b>의 정사각형을 <b>주방향으로 돌려</b> 놓는다(그림의 기울어진 격자와 빨간 화살표). 이를 4×4 = <b>16개 영역</b>으로 나누면 영역 하나는 5s × 5s다</span></div>
+    <div class="fl"><b>② Haar 응답 dx · dy</b><span>&ldquo;Calculate Haar wavelet response dx and dy and weight the response with a Gaussian kernel&rdquo; &mdash; 영역마다 5×5개의 표본점에서 <b>한 변 2s</b>의 Haar 필터로 dx, dy를 잰다(그림 오른쪽의 2s 상자). dx · dy는 <b>주방향 기준</b>의 가로 · 세로다. 키포인트에서 먼 응답은 가우시안(원 논문 σ = 3.3s)으로 줄인다</span></div>
+    <div class="fl"><b>③ 영역마다 네 값</b><span>&ldquo;Sum the response over each sub-region for dx and dy, then sum the absolute value of response&rdquo; &mdash; 영역마다 <b>Σdx, Σdy, Σ|dx|, Σ|dy|</b> 네 값을 만든다</span></div>
+    <div class="fl"><b>④ 길이 1로</b><span>&ldquo;Normalize the vector into unit length&rdquo; &mdash; 16 × 4 = <b>64개</b>를 이어 붙여 길이 1로 맞춘다 &mdash; 대비(contrast) 변화에 불변</span></div>
+  </div>
+  <p class="sub-title">왜 &lsquo;합&rsquo;과 &lsquo;절댓값의 합&rsquo;을 둘 다 적나 — 48p 아래 세 그림</p>
+  <p>48p 아래에는 <b>세 가지 무늬</b>와 각각의 막대그래프가 있다. 세로 방향으로 4개의 표본만 있다고 단순화해 숫자로 따라가 보자(모두 가로로는 변화가 없어 dx = 0).</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>무늬 (48p)</th><th>세로 방향 응답 dy</th><th>Σdy</th><th>Σ|dy|</th><th>막대그래프에서</th></tr></thead>
+    <tbody>
+      <tr><td>균일한 회색 (왼쪽 위)</td><td>0, 0, 0, 0</td><td>0</td><td>0</td><td>네 막대 모두 거의 0</td></tr>
+      <tr><td>가로 줄무늬 (왼쪽 아래)</td><td>+8, &minus;8, +8, &minus;8</td><td><b>0</b></td><td><b>32</b></td><td><b>Σ|dy|만 길다</b></td></tr>
+      <tr><td>위에서 아래로 점점 밝아짐 (오른쪽 아래)</td><td>+8, +8, +8, +8</td><td><b>32</b></td><td><b>32</b></td><td><b>Σdy와 Σ|dy|가 둘 다 길다</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>줄무늬와 밝아지는 면은 <b>Σ|dy|가 똑같이 32</b>라서 절댓값 합만으로는 구별되지 않는다. 반대로 줄무늬와 균일한 면은 <b>Σdy가 똑같이 0</b>이라서 합만으로는 구별되지 않는다. <span class="hi">Σdy는 &lsquo;변화가 한쪽으로 쏠렸는가(방향성)&rsquo;를, Σ|dy|는 &lsquo;변화가 얼마나 많은가(활동량)&rsquo;를 적는다</span> &mdash; 둘을 함께 적어야 세 무늬가 모두 다른 벡터가 된다. 줄무늬처럼 <b>부호가 번갈아 바뀌는 응답</b>은 그냥 더하면 상쇄되지만, 절댓값으로 더하면 상쇄되지 않고 크게 남는 것이 핵심이다.</p>
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>방향과 기술자 (46~48p)</h3>
-  <p><b>방향 할당</b> &mdash; 관심점이 검출된 스케일 <span class="tex">s</span>를 기준으로 <b>반지름 6s의 원형 이웃</b>에서 <b>Haar 웨이블릿 응답</b>(가로 <span class="tex">dx</span>, 세로 <span class="tex">dy</span>)을 구한다. 이 응답들을 벡터로 보고 <b>60도짜리 부채꼴 창을 돌려 가며 합</b>을 구한 뒤, <b>가장 긴 합 벡터의 방향</b>을 주방향으로 삼는다.</p>
-  <p><b>기술자</b> &mdash; 관심점 주변 <b>20s × 20s</b> 영역을 <b>4×4 = 16개 서브영역</b>으로 나누고, 각 영역에서 Haar 응답의 <b>Σdx, Σ|dx|, Σdy, Σ|dy|</b> 네 값을 구한다.</p>
-  <div class="fx">
-    <div class="tex-d">4\times4\ \text{서브영역}\times 4\ \text{값}=64\ \text{차원}</div>
-    <p class="fx-note">SIFT의 절반 크기다. <b>절댓값 합</b>을 함께 쓰는 이유는 &ldquo;변화가 한쪽으로 쏠렸는가(Σdx)&rdquo;와 &ldquo;변화가 얼마나 격렬한가(Σ|dx|)&rdquo;가 다른 정보이기 때문이다.</p>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>결론 — 3배 빠르고, 64차원이 최적 (49 · 50p)</h3>
+  <p>49p &mdash; <b>&ldquo;SURF is faster than SIFT by 3 times, and has recall precision not worse than SIFT.&rdquo;</b> 36p의 &ldquo;3~7배&rdquo;는 조건에 따른 범위이고, 49p는 대표값 3배를 들었다. 재현율 · 정밀도는 SIFT보다 나쁘지 않다.</p>
+  <p>50p는 영역 개수와 영역당 값 개수를 바꾼 <b>세 가지 변형</b>을 비교한다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>변형</th><th>구성</th><th>교안 평가</th><th>무엇이 다른가</th></tr></thead>
+    <tbody>
+      <tr><td>SURF-36</td><td>3×3 영역 × 4 = 36</td><td>Accuracy: slightly worse · Matching: very fast</td><td>영역을 9개로 줄여 짧고 빠르지만 덜 세밀하다</td></tr>
+      <tr><td><b>SURF-64</b> (기본)</td><td>4×4 영역 × 4 = 64</td><td><b>best result</b></td><td>위에서 본 표준형</td></tr>
+      <tr><td>SURF-128</td><td>4×4 영역 × 8 = 128</td><td>Compute: not slower · Matching: slower</td><td>합을 <b>부호에 따라 나눠</b> 따로 센다. Σdx · Σ|dx|를 <b>dy &lt; 0일 때와 dy ≥ 0일 때</b> 따로, Σdy · Σ|dy|를 <b>dx의 부호</b>에 따라 따로 구한다(50p 그림의 dx&gt;0 · dx&lt;0 · dy&gt;0 · dy&lt;0 네 줄). 값이 두 배로 늘어 더 변별력 있지만, 벡터가 길어 비교가 느리다</td></tr>
+    </tbody>
+  </table>
   </div>
-  <p>마지막으로 <b>매칭을 더 빠르게 하는 요령</b>(51p) &mdash; 헤시안의 <b>대각합(trace) 부호</b>를 함께 저장해 둔다. 이 부호는 <b>밝은 배경 위의 어두운 블롭인지, 그 반대인지</b>를 뜻한다. 부호가 다르면 <b>벡터 거리를 계산할 필요도 없이</b> 후보에서 제외할 수 있다.</p>
+  <p>SURF-128의 계산이 느려지지 않는 이유는 <b>이미 구한 dx · dy를 부호에 따라 다른 칸에 더할 뿐</b>이기 때문이다. 반면 매칭은 벡터 길이에 비례하므로 두 배 느려진다. <b>계산은 한 번, 비교는 수없이</b> 하므로 실제로는 64가 가장 균형이 좋다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>매칭을 공짜로 빠르게 — 라플라시안의 부호 (51p)</h3>
+  <p>51p &mdash; <b>Matching &ndash; Fast indexing through the sign of the Laplacian for the underlying interest point. The sign of trace of the Hessian matrix.</b></p>
+  <div class="tex-d">\mathrm{Trace}=L_{xx}+L_{yy}</div>
+  <p>헤시안의 대각합은 라플라시안이다. <b>밝은 블롭</b>은 가로 · 세로 모두 봉우리라 대각합이 <b>음수</b>, <b>어두운 블롭</b>은 <b>양수</b>다. 51p 그림처럼 <b>어두운 배경의 흰 점과 밝은 배경의 검은 점은 애초에 같은 곳일 수 없으므로</b>(no match), 부호가 다르면 64차원 거리를 계산하지 않고 바로 건너뛴다.</p>
+  <p>이 부호는 <b>검출할 때 이미 계산한 D<sub>xx</sub>, D<sub>yy</sub></b>로 얻으므로 추가 비용이 없다. 비교 후보가 대략 절반으로 줄어 매칭이 빨라지고, 엉뚱한 짝도 줄어든다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>한 장으로 — SIFT와 SURF가 같은 것과 다른 것</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>SIFT</th><th>SURF</th></tr></thead>
+    <tbody>
+      <tr><td>발표</td><td>Lowe, ICCV 1999 / IJCV 2004</td><td>Bay 등, ECCV 2006 (확장판 CVIU 2008)</td></tr>
+      <tr><td>블롭 응답</td><td>DoG ≈ LoG</td><td>헤시안 행렬식 (박스 필터 근사)</td></tr>
+      <tr><td>스케일 공간</td><td>영상을 흐리고 줄인다</td><td>영상은 그대로, 필터를 키운다</td></tr>
+      <tr><td>속도의 비밀</td><td>&mdash;</td><td>적분 영상: 어떤 크기의 사각형 합도 4칸 읽기</td></tr>
+      <tr><td>엣지 제거</td><td>별도 단계(고윳값 비율)</td><td>행렬식에 이미 포함</td></tr>
+      <tr><td>방향</td><td>그래디언트 36칸 히스토그램, 80% 규칙</td><td>Haar (dx, dy), 60° 창 합 벡터</td></tr>
+      <tr><td>기술자</td><td>4×4 × 8방향 히스토그램 = 128</td><td>4×4 × (Σdx, Σdy, Σ|dx|, Σ|dy|) = 64</td></tr>
+      <tr><td>공통</td><td colspan="2">스케일에 비례하는 창 · 주방향으로 돌려 놓기 · 4×4 영역 분할 · 길이 1 정규화 &mdash; <b>&ldquo;검출은 공변, 기술은 불변&rdquo;</b>이라는 설계는 그대로다</td></tr>
+    </tbody>
+  </table>
+  </div>
 </div>
 
 <div class="pt plus">
   <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>실습에서 SURF가 안 되는 이유</h3>
-  <p>SIFT와 SURF는 모두 특허가 걸려 있었고, 그래서 OpenCV에서 <code>opencv-contrib</code>의 <code>xfeatures2d</code>로 분리되었다. <b>SIFT는 2020년에 특허가 만료되어 지금은 기본 모듈</b>(<code>cv2.SIFT_create()</code>)에 들어와 있지만, <b>SURF는 여전히 contrib에 있고 별도 빌드 옵션이 필요</b>해 <code>pip install opencv-contrib-python</code>만으로는 동작하지 않는 경우가 많다.</p>
-  <p>그래서 실습에서는 <b>SIFT와 ORB로 비교</b>하는 것이 현실적이다. ORB는 처음부터 <b>&ldquo;특허 없는 대안&rdquo;</b>을 목표로 만들어진 방법이기도 하다(06 참고).</p>
+  <p>SURF는 OpenCV에서 여전히 <code>opencv-contrib</code>의 <code>xfeatures2d</code> 안, <b>nonfree(특허 문제가 있는) 알고리즘</b>으로 분류되어 있다. 그래서 OpenCV를 <code>OPENCV_ENABLE_NONFREE</code> 옵션으로 직접 빌드해야 쓸 수 있고, <code>pip install opencv-contrib-python</code>만으로는 <code>cv2.xfeatures2d.SURF_create()</code>가 오류를 내는 경우가 많다. 반면 <b>SIFT는 2020년 특허 만료 후 기본 모듈</b>(<code>cv2.SIFT_create()</code>)로 옮겨졌다.</p>
+  <p>그래서 실습에서는 <b>SIFT와 ORB로 비교</b>하는 것이 현실적이다. ORB는 처음부터 <b>&ldquo;SIFT나 SURF를 대신할 효율적인 대안&rdquo;</b>을 목표로 만들어진 방법이다(<a class="ext" href="#orb">06</a>).</p>
 </div>
 </section>
+
 
 <!-- ===================== 04 ===================== -->
 <section class="sec" id="hog">
