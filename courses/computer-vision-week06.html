@@ -357,8 +357,6 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .pt.live{border-left-color:#9d174d}
 .pt.plus{border-left-color:#0f766e}
 .pt.pres{border-left-color:#6d28d9}
-.pt.my{border-left-color:#4d7c0f;background:#fbfdf6}
-.bdg-my{background:#f7fee7;color:#3f6212;border:1px solid #c5e09b}
 .pit{background:#fff7ed;border:1px solid #f0c48a;border-left:4px solid #ea580c;border-radius:0 var(--radius) var(--radius) 0;padding:11px 14px;margin:12px 0}
 .pit p{font-size:13px;color:#3f4854;line-height:1.8}
 .pit p + p{margin-top:7px}
@@ -492,7 +490,7 @@ table.acc{min-width:0}
   <p class="kicker">6주차 · 10.7 · 2026-2학기 · <b>내 논문 발표일</b></p>
   <h1>06. 특징 기술자 — 찾은 점을 어떻게 &lsquo;숫자로 적을&rsquo; 것인가</h1>
   <p>5주차가 <b>&ldquo;어디를 볼 것인가(검출)&rdquo;</b>였다면 이번 주는 <b>&ldquo;그곳이 어떻게 생겼는지 벡터 하나로 적어 두는 법(기술)&rdquo;</b>입니다. 사람이 손으로 설계한 네 세대의 기술자 — <b>SIFT · SURF · HOG · BRIEF/ORB</b> — 를 차례로 따라가고, 마지막 절에서 제 발표 논문이 <b>바로 이 자리에 사전학습 딥 특징을 꽂는 이야기</b>라는 것까지 이어 붙입니다.</p>
-  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 81p</span><span class="chip">슬라이드 56장</span><span class="chip">SIFT 128차원</span><span class="chip">HOG 3780차원</span><span class="chip">ORB 이진 256비트</span><span class="chip">내 발표 연결</span><span class="chip">강의 PART1 반영 · SIFT 집중</span></div>
+  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 81p</span><span class="chip">슬라이드 56장</span><span class="chip">SIFT 128차원</span><span class="chip">HOG 3780차원</span><span class="chip">ORB 이진 256비트</span><span class="chip">내 발표 연결</span></div>
 </section>
 
 <div class="legend">
@@ -500,8 +498,6 @@ table.acc{min-width:0}
   <i><span class="bdg bdg-gyo">교안</span><span>교수님 슬라이드에 있는 내용</span></i>
   <i><span class="bdg bdg-plus">보충설명</span><span>교안에 없지만 이해 · 시험을 위해 따로 찾아 정리한 내용</span></i>
   <i><span class="bdg bdg-pres">내 발표</span><span>내 논문 발표(A Tale of Two Features)와 이어지는 내용</span></i>
-  <i><span class="bdg bdg-live">강의 PART1</span><span>6주차 실강 1부 필기 — 교수님이 말로 짚은 내용을 교안과 이어 풀어 쓴 것</span></i>
-  <i><span class="bdg bdg-my">내 필기</span><span>강의 중에 내가 따로 찾아본 설명</span></i>
   <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고, <span class="hi">노란 형광펜</span>은 <b>꼭 기억할 문장</b>, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선</span>은 누르면 뜻이 뜹니다.</p>
 </div>
 
@@ -519,7 +515,7 @@ table.acc{min-width:0}
 </div>
 
 <div class="mapgrid">
-  <a href="#why"><b>01 기술자란 무엇인가</b><span>find · represent · match · 템플릿 매칭과 NCC · patch / gradient / histogram</span></a>
+  <a href="#why"><b>01 기술자란 무엇인가</b><span>Detection · Description · Matching · 템플릿 매칭과 NCC · patch / gradient / histogram</span></a>
   <a href="#sift"><b>02 SIFT</b><span>σ와 스케일 · DoG 극값 · 80% 방향 규칙 · 4×4×8 = 128차원 · 공변/불변</span></a>
   <a href="#surf"><b>03 SURF</b><span>적분 영상 · 박스 필터 · 64차원 · 3~7배 빠르게</span></a>
   <a href="#hog"><b>04 HOG</b><span>8×8 셀 · 블록 정규화 · 3780차원 · 보행자 검출</span></a>
@@ -561,21 +557,21 @@ table.acc{min-width:0}
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-live">강의 PART1</span>5주차에서 멈춘 자리에서 다시 시작한다</h3>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>5주차에서 멈춘 자리에서 다시 시작한다</h3>
   <p>지난주에 우리는 <b>Harris로 코너를, LoG로 블롭을</b> 찾았다. 그래서 사진 위에 점이 수백 개 찍혔다. 그런데 <span class="hi">점의 좌표만으로는 두 사진을 이어 붙일 수 없다</span>. 왼쪽 사진의 37번 점과 오른쪽 사진의 112번 점이 같은 곳인지 알아야 하는데, 좌표는 그 답을 주지 않기 때문이다.</p>
   <p>그래서 필요한 것이 <b>기술자(descriptor)</b>다. <b>점 주변의 생김새를 숫자 벡터 하나로 요약</b>해 두면, 두 점이 같은 곳인지는 <b>벡터 사이의 거리</b>로 판정할 수 있다. 교안 4p의 세 단계 &mdash; 추출 · 매칭 · 정렬 &mdash; 중 <b>매칭을 가능하게 만드는 부품</b>이 바로 오늘의 주제다.</p>
 </div>
 
-<div class="pt live">
-  <h3 class="pt-h"><span class="bdg bdg-live">강의 PART1</span>특징점은 &lsquo;위치만 가진 점&rsquo;이다 — 그래서 represent 단계가 필요하다</h3>
-  <p>강의는 이렇게 시작했다. 각 이미지에서 <b>설명할 수 있는 점(특징점)</b>을 코너 · 블롭 같은 검출기로 뽑아내는 데까지는 지난주에 끝냈다. <span class="hi">문제는 매칭이다. 이 점들은 &lsquo;위치를 내재한 점&rsquo;으로 존재할 뿐이기 때문이다.</span> 점 하나가 가진 정보는 (x, y) 좌표, 기껏해야 스케일 정도뿐이고, &ldquo;그 자리가 어떻게 생겼는지&rdquo;는 아직 아무 데도 적혀 있지 않다.</p>
-  <p>강의에서는 <b>How to detect / extract features?</b>라는 질문을 세 동사로 나눴다 &mdash; <b>find · represent · match</b>. 교안 4p의 Step 1 · 2 · 3(extract → match → align)과 같은 흐름을 한 칸 더 잘게 쪼갠 것이다.</p>
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>검출 다음의 질문 — &ldquo;How to match them?&rdquo; (6 · 9p)</h3>
+  <p>6p는 이번 주의 출발점을 두 줄로 적는다 &mdash; <b>&ldquo;We know how to detect points. Next question: How to match them?&rdquo;</b> 점을 찾는 법은 5주차에 배웠으니, 이제 두 사진의 점들을 <b>짝짓는 법</b>이 필요하다는 것이다.</p>
+  <p>9p(How detect/extract features?)는 지역 특징을 다루는 일을 <b>세 요소(local features: main components)</b>로 나눈다.</p>
   <div class="flow">
-    <div class="fl"><b>① find (찾기)</b><span>특징점이 <b>어디</b> 있나 &mdash; 5주차의 Harris · LoG · DoG. 출력은 좌표</span></div>
-    <div class="fl"><b>② represent (표현하기) ← 오늘</b><span>그 점 주변을 <b>벡터로 잘 표현</b>해서 <b>나중에 비교할 수 있게</b> 만든다. 출력은 고정 길이 숫자 벡터</span></div>
-    <div class="fl"><b>③ match (짝짓기)</b><span>두 이미지의 벡터끼리 <b>거리</b>를 재서 가장 가까운 것끼리 잇는다 &mdash; 자세한 방법은 다음 주</span></div>
+    <div class="fl"><b>① Detection</b><span><b>Identify the interest points</b> &mdash; 관심점이 어디 있는지 찾는다. 5주차의 Harris · LoG · DoG. 출력은 좌표(와 스케일)</span></div>
+    <div class="fl"><b>② Description ← 오늘</b><span><b>Extract vector feature descriptor surrounding each interest point</b> &mdash; 각 관심점 주변을 <b>벡터</b>로 뽑아 적는다</span></div>
+    <div class="fl"><b>③ Matching</b><span><b>Determine correspondence between descriptors in two views</b> &mdash; 두 시점의 기술자 사이에서 대응을 정한다</span></div>
   </div>
-  <p>그러니까 오늘 수업 전체는 <b>②를 어떻게 잘할 것인가</b>에 대한 이야기다. &ldquo;벡터로 잘 표현한다&rdquo;는 말에는 <b>&ldquo;③에서 비교가 잘 되도록&rdquo;</b>이라는 목적이 붙어 있다는 것을 기억해 두면, 뒤에 나오는 모든 설계가 왜 그렇게 생겼는지 이해된다.</p>
+  <p>9p 그림 옆의 기호 <span class="tex">\mathbf{x}_1=[x_1^{(1)},\dots,x_d^{(1)}]</span>, <span class="tex">\mathbf{x}_2=[x_1^{(2)},\dots,x_d^{(2)}]</span>가 ②의 결과물이다. 위첨자 (1) · (2)는 <b>첫째 · 둘째 사진</b>, 아래첨자 1 … d는 <b>벡터의 몇 번째 칸</b>을 뜻한다. 즉 두 사진의 점이 각각 <b>d개의 숫자로 된 벡터</b>가 되고, ③은 이 두 벡터가 얼마나 가까운지를 재는 일로 바뀐다. SIFT라면 d = 128이다.</p>
 </div>
 
 
@@ -595,22 +591,16 @@ table.acc{min-width:0}
   <p>5주차에서 본 <b>검출기의 조건</b>과 거의 같은 목록이다. 다만 이번 주는 이 조건들을 <b>&ldquo;벡터를 어떻게 만들 것인가&rdquo;</b>의 문제로 다시 푼다.</p>
 </div>
 
-<div class="pt live">
-  <h3 class="pt-h"><span class="bdg bdg-live">강의 PART1</span>좋은 특징점의 기준이 바뀌었다 — &lsquo;잘 보이는 점&rsquo;에서 &lsquo;다시 찾을 수 있는 점&rsquo;으로</h3>
-  <p>교수님은 위의 네 조건(Characteristics)을 표처럼 나열하지 않고 <b>생각이 옮겨 가는 순서</b>로 설명했다. 필기를 그 순서대로 정리하면 이렇다.</p>
-  <div class="tbl-wrap">
-  <table>
-    <thead><tr><th>강의에서 한 말</th><th>대응하는 교안 용어</th><th>풀어 쓰면</th></tr></thead>
-    <tbody>
-      <tr><td>① 처음엔 <b>그 이미지를 잘 표현하는 · 잘 검출되는 점</b>이 좋은 특징점이라 생각했다</td><td><b>Saliency</b></td><td>한 장 안에서 <b>눈에 띄는</b> 점. 5주차까지의 관점이다</td></tr>
-      <tr><td>② 이제는 <b>다른 각도에서 봤을 때도 잘 검출되고 식별이 가능한</b> 것이 중요하다</td><td><b>Repeatability</b> (+ 식별 가능성)</td><td>사진이 <b>두 장</b>이 되는 순간 기준이 달라진다. 한 장에서 아무리 두드러져도 다른 사진에서 <b>다시 잡히지 않으면</b> 짝지을 수 없다</td></tr>
-      <tr><td>③ 너무 많으면 곤란하니 <b>효율적으로, 많지 않아야</b> 한다</td><td><b>Compactness &amp; efficiency</b></td><td>점이 1만 개면 매칭은 1만 × 1만 번 비교다. 특징의 수는 <b>픽셀 수보다 훨씬 적어야</b> 한다</td></tr>
-      <tr><td>④ <b>지역적 · 국소적으로 작은 영역을 대표</b>하는 특징점을 가지는 동시에…</td><td><b>Locality</b></td><td>(필기가 여기서 끊겼다 &mdash; 아래 보충)</td></tr>
-    </tbody>
-  </table>
-  </div>
-  <p><b>④의 끊긴 문장을 이어 보면</b> &mdash; 교안 5p의 Locality 정의는 &ldquo;A feature occupies a relatively small area of the image; robust to clutter and occlusion&rdquo;이다. 즉 <span class="hi">작은 영역만 대표하는 동시에, 그래서 배경이 복잡하거나(clutter) 물체 일부가 가려져도(occlusion) 살아남는다</span>는 뜻이다. 컵의 손잡이가 손에 가려져도 컵 입구의 특징점은 멀쩡하다. 특징이 사진 전체를 요약한 것이었다면 손 하나로 전부 망가졌을 것이다.</p>
-  <p>①에서 ②로 넘어가는 지점이 이번 주의 출발점이다. <b>&ldquo;두 장 사이에서 같은 점을 알아본다&rdquo;</b>는 요구가 생기면서, 검출만으로는 부족하고 <b>&ldquo;알아볼 수 있게 적어 두는 것(기술)&rdquo;</b>이 필요해졌다.</p>
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>네 조건은 따로 놀지 않는다 — 사진이 &lsquo;두 장&rsquo;이 될 때 생기는 요구</h3>
+  <p>5p의 네 조건을 하나씩 외우기보다, <b>두 장의 사진을 잇는다</b>는 목적에서 거꾸로 따져 보면 왜 이 넷인지 보인다.</p>
+  <ul class="ul">
+    <li><b>Repeatability가 먼저다.</b> 한 장 안에서 아무리 눈에 띄는 점이라도, 다른 각도 · 다른 조명의 사진에서 <b>다시 검출되지 않으면</b> 짝지을 상대 자체가 없다. 정의의 &ldquo;despite geometric and photometric transformations&rdquo;는 각각 <b>위치 · 크기 · 각도의 변화</b>와 <b>밝기 · 색의 변화</b>를 가리킨다</li>
+    <li><b>Saliency(distinctive)는 그다음이다.</b> 다시 검출되더라도 비슷한 점이 수백 개면 어느 것이 짝인지 정할 수 없다. 하늘 한가운데의 점보다 산 능선의 꺾인 점이 좋은 이유다</li>
+    <li><b>Compactness는 비용 문제다.</b> 점이 N개씩이면 매칭은 대략 N × N번의 비교다. 픽셀마다 특징을 두면 100만 × 100만이 되므로 &ldquo;many fewer features than image pixels&rdquo;여야 한다. 다만 너무 적으면 가려진 부분 때문에 짝이 모자라므로 <b>적당히</b>가 핵심이다</li>
+    <li><b>Locality는 가림에 대한 보험이다.</b> 특징 하나가 작은 영역만 대표하면, 물체 일부가 손에 가려지거나(occlusion) 배경이 복잡해도(clutter) <b>가려지지 않은 나머지 특징들은 멀쩡하다</b>. 사진 전체를 하나의 숫자로 요약했다면 작은 가림 하나로 전부 달라졌을 것이다</li>
+  </ul>
+  <p>그리고 이 조건들이 오늘 주제로 바로 이어진다 &mdash; Repeatability와 Saliency를 <b>매칭 단계에서 실제로 쓸 수 있게</b> 만드는 것이 기술자의 일이다.</p>
 </div>
 
 
@@ -631,10 +621,10 @@ table.acc{min-width:0}
   <p>그래서 교안 8p는 요구 조건을 두 단어로 못박는다 &mdash; 기술자는 <b>불변(invariant)</b>해야 하고 <b>변별력(distinctive)</b>이 있어야 한다.</p>
 </div>
 
-<div class="pt live">
-  <h3 class="pt-h"><span class="bdg bdg-live">강의 PART1</span><span class="bdg bdg-plus">보충설명</span>템플릿 매칭을 천천히 — 왜 &lsquo;명암 정도는 일부 수용&rsquo;되나</h3>
-  <p><b>강의에서 한 설명</b> &mdash; 특징점을 기준으로 주변의 <b>형태를 하나 꾸려 두고(템플릿)</b>, 그와 <b>비슷한 형태를 다른 이미지에서 찾아본다</b>. 그런데 회전 · 스케일 · 관점 왜곡이 주어지면 <b>아예 무용지물</b>이 되고, <b>명암 정도는 일부 수용</b>된다. 한계가 명확하다.</p>
-  <p>&ldquo;명암은 일부 수용된다&rdquo;가 어디서 나오는지 숫자로 보자. 템플릿을 비교할 때 차이를 그냥 빼는 대신 <b>정규화 상관(NCC, normalized cross-correlation)</b>을 쓰면 밝기 변화를 어느 정도 흡수할 수 있다.</p>
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>템플릿 매칭을 천천히 — 왜 조명만 &lsquo;depends&rsquo;인가 (7p)</h3>
+  <p>7p의 정의 &mdash; <b>&ldquo;Given a template, find the region in the image with the highest matching score&rdquo;</b>. 특징점 주변을 잘라 템플릿으로 두고, 다른 사진의 모든 위치에 대 보며 <b>점수가 가장 높은 자리</b>를 찾는다. 그리고 교안은 묻는다 &mdash; 회전 · 확대 · 원근 왜곡된 사진에서도 같은 패치를 찾을 수 있나(<b>we want invariance!</b>)? 답은 Scaling NO, Rotation NO, Perspective NO, <b>Illumination만 depends</b>.</p>
+  <p>&ldquo;depends&rdquo;는 <b>matching score를 무엇으로 쓰느냐에 달렸다</b>는 뜻이다. 차이를 그냥 빼서 제곱해 더하면(SSD) 밝기가 바뀌는 즉시 점수가 무너지지만, <b>정규화 상관(NCC, normalized cross-correlation)</b>을 쓰면 밝기 변화를 어느 정도 흡수한다.</p>
   <div class="fx">
     <p class="fx-lab">한 줄짜리 템플릿 세 화소로 해 보기</p>
     <div class="tbl-wrap">
@@ -650,20 +640,20 @@ table.acc{min-width:0}
     </div>
     <p class="fx-note">두 결과 벡터를 원소끼리 곱해 더한 값이 NCC다. 위 두 줄은 <b>1(완전 일치)</b>, 마지막 줄은 <b>&minus;1(정반대)</b>이 나온다.</p>
   </div>
-  <p>①은 <b>밝기가 통째로 더해진 것(+30)</b>을 지우고, ②는 <b>통째로 곱해진 것(×2)</b>을 지운다. 그래서 <span class="hi">밝기가 &lsquo;전체에 고르게&rsquo; 바뀌는 경우는 버틴다</span>. 하지만 그림자가 패치의 반만 덮는 식으로 <b>고르지 않게</b> 바뀌면 평균 · 길이로 지울 수 없어 무너진다 &mdash; 그래서 &ldquo;전부&rdquo;가 아니라 &ldquo;<b>일부</b>&rdquo; 수용이고, 교안 표에도 &ldquo;경우에 따라&rdquo;로 적혀 있다.</p>
-  <p>반면 마지막 줄처럼 <b>화소의 순서</b>가 바뀌면 어떤 정규화로도 되돌릴 수 없다. 템플릿은 &ldquo;몇 번째 칸에 무슨 값&rdquo;을 그대로 비교하는 방식이라, 회전 · 크기 변화 · 원근처럼 <b>칸의 배치를 바꾸는 변형</b>에는 원리적으로 무력하다.</p>
+  <p>①은 <b>밝기가 통째로 더해진 것(+30)</b>을 지우고, ②는 <b>통째로 곱해진 것(×2)</b>을 지운다. 그래서 <span class="hi">밝기가 &lsquo;전체에 고르게&rsquo; 바뀌는 경우는 버틴다</span>. 하지만 그림자가 패치의 절반만 덮는 식으로 <b>고르지 않게</b> 바뀌면 평균 · 길이로 지울 수 없어 무너진다. 그래서 YES도 NO도 아닌 depends다.</p>
+  <p>반면 마지막 줄처럼 <b>화소의 순서</b>가 바뀌면 어떤 정규화로도 되돌릴 수 없다. 템플릿은 &ldquo;몇 번째 칸에 무슨 값&rdquo;을 그대로 비교하는 방식이라, 회전 · 크기 변화 · 원근처럼 <b>칸의 배치를 바꾸는 변형</b>에는 원리적으로 무력하다. 세 개가 NO인 이유다.</p>
 </div>
 
-<div class="pt live">
-  <h3 class="pt-h"><span class="bdg bdg-live">강의 PART1</span>그럼 어떻게? — &ldquo;come up with a descriptor for each &lsquo;interest point&rsquo;&rdquo;</h3>
-  <p>교안 8p(Describe a local region)는 &ldquo;How to match them?&rdquo;에 이렇게 답한다.</p>
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>그럼 어떻게? — &ldquo;Come up with a descriptor for each point&rdquo; (8p)</h3>
+  <p>8p는 &ldquo;How to match them?&rdquo;에 이렇게 답한다.</p>
   <ul class="ul">
-    <li><b>Answer: Come up with a <i>descriptor</i> for each point, find similar descriptors between the two images</b> &mdash; 점(강의에서는 &lsquo;interest point&rsquo;)마다 그 주변을 설명하는 <b>기술자(벡터)</b>를 하나씩 만들어 붙이고, 두 이미지에서 <b>비슷한 기술자끼리</b> 찾는다</li>
-    <li><b>Point descriptor should be invariant and distinctive</b> &mdash; 그 기술자는 <b>불변</b>이면서 <b>변별력</b>이 있어야 한다</li>
+    <li><b>Answer: Come up with a <i>descriptor</i> for each point, find similar descriptors between the two images</b> &mdash; 점마다 그 주변을 설명하는 <b>기술자(벡터)</b>를 하나씩 만들어 붙이고, 두 사진에서 <b>비슷한 기술자끼리</b> 찾는다</li>
+    <li><b>Point descriptor should be Invariant, Distinctive</b> &mdash; 그 기술자는 <b>불변</b>이면서 <b>변별력</b>이 있어야 한다</li>
   </ul>
   <div class="tbl-wrap">
   <table>
-    <thead><tr><th></th><th>invariant 불변</th><th>distinctive 변별력</th></tr></thead>
+    <thead><tr><th></th><th>Invariant 불변</th><th>Distinctive 변별력</th></tr></thead>
     <tbody>
       <tr><td>질문</td><td><b>같은 점</b>을 다른 조건에서 찍으면 벡터가 같은가?</td><td><b>다른 점</b>끼리는 벡터가 확실히 다른가?</td></tr>
       <tr><td>예</td><td>에펠탑 꼭대기를 낮 · 밤, 정면 · 비스듬히 찍어도 비슷한 벡터</td><td>에펠탑 꼭대기와 옆 건물 모서리는 서로 먼 벡터</td></tr>
@@ -686,21 +676,26 @@ table.acc{min-width:0}
   <p><span class="hi">불변성을 키우면 변별력이 떨어지고, 변별력을 키우면 불변성이 떨어진다.</span> 히스토그램처럼 정보를 많이 버리면 변형에 강해지지만 서로 다른 것을 구분하지 못하고, 픽셀을 그대로 두면 잘 구분하지만 조금만 바뀌어도 값이 달라진다. <b>SIFT부터 ORB까지 모든 기술자는 이 저울의 어디에 설 것인가를 다르게 답한 결과</b>다.</p>
 </div>
 
-<div class="pt live">
-  <h3 class="pt-h"><span class="bdg bdg-live">강의 PART1</span>벡터로 표현하는 세 가지 방법 — 하나씩 장점과 약점을 짚기 (10~12p)</h3>
-  <p>represent 단계에서 &ldquo;점 주변을 어떤 벡터로 적을까&rdquo;를 고민하면 가장 먼저 떠오르는 세 가지다. <b>각각이 앞의 약점을 고치려고 나왔는데, 고치는 대신 다른 것을 잃는다</b>는 흐름으로 보면 외울 필요가 없다.</p>
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>세 가지 기술자를 숫자로 따라가기 (10~12p)</h3>
+  <p>10~12p는 세 후보를 같은 형식으로 보여 준다 &mdash; <b>무엇을 쓰나 → 무엇에 강한가 → &ldquo;What are the problems?&rdquo;</b>. 각각이 <b>앞의 약점을 고치는 대신 다른 것을 잃는</b> 흐름이다.</p>
 
-  <p class="sub-title">① Image patch — 주변 화소값을 그대로 나열</p>
-  <p><b>use the pixel values of the patch</b> &mdash; 특징점 주변 패치의 화소값을 한 줄로 쭉 이어 벡터로 쓴다. 기하도 외형도 전혀 바뀌지 않았다면 이보다 정확한 표현은 없다.</p>
-  <p>약점 &mdash; <b>sensitive to absolute intensity values</b> (절대 밝기 값에 민감). 세 화소 (50, 60, 80)인 패치가 조명 때문에 전부 30씩 밝아지면 (80, 90, 110)이 된다. 생김새는 그대로인데 두 벡터의 거리는 <span class="tex">\sqrt{30^2+30^2+30^2}\approx 52</span>나 벌어져, 컴퓨터 눈에는 <b>아예 다른 정보</b>가 된다.</p>
+  <p class="sub-title">① Image Patch (10p)</p>
+  <p><b>&ldquo;Just use the pixel values of the patch&rdquo;</b> &mdash; 패치의 화소값을 한 줄로 이어 벡터로 쓴다. <b>&ldquo;Perfectly fine if geometry and appearance is unchanged&rdquo;</b> &mdash; 기하도 외형도 그대로라면 이보다 정확한 표현은 없다.</p>
+  <p>문제 &mdash; <b>sensitive to absolute intensity values</b>. 세 화소 (50, 60, 80)인 패치가 조명 때문에 전부 30씩 밝아지면 (80, 90, 110)이 된다. 생김새는 그대로인데 두 벡터의 거리는 <span class="tex">\sqrt{30^2+30^2+30^2}\approx 52</span>나 벌어진다.</p>
 
-  <p class="sub-title">② Image gradients — 밝기 &lsquo;차이&rsquo;를 적는다</p>
-  <p>이를 보완하려고 화소값 대신 <b>이웃 화소와의 차이(그래디언트)</b>를 벡터로 쓴다. 위 예에서 (50, 60, 80)의 차이는 (10, 20), 밝아진 (80, 90, 110)의 차이도 (10, 20) &mdash; <span class="hi">밝기가 통째로 변해도 차이값은 보존된다</span>. 강의 표현으로는 &ldquo;패치가 밝아지면 다 같이 변하니까 차이는 남는다&rdquo;.</p>
-  <p>약점 &mdash; <b>sensitive to deformations</b> (변형에 민감). 그래디언트도 결국 &ldquo;몇 번째 칸의 차이가 얼마&rdquo;를 순서대로 적은 것이다. 물체가 살짝 휘거나 늘어나 같은 모양이 (50, 55, 60, 70, 80)처럼 다섯 칸에 걸쳐 찍히면 차이는 (5, 5, 10, 10)이 되어 칸 수도 값도 어긋난다. <b>영상의 형태적 변화(deformation)</b>에는 여전히 약하다.</p>
+  <p class="sub-title">② Image Gradients (11p)</p>
+  <p><b>&ldquo;Use pixel differences&rdquo;</b> &mdash; 화소값 대신 이웃과의 차이를 쓴다. 그래서 <b>invariant to absolute intensity values</b>. 위 예에서 (50, 60, 80)의 차이는 (10, 20), 밝아진 (80, 90, 110)의 차이도 (10, 20)이다 &mdash; <span class="hi">밝기가 통째로 더해져도 차이는 그대로</span>다.</p>
+  <p>문제 &mdash; <b>sensitive to deformations</b>. 그래디언트도 결국 &ldquo;몇 번째 칸의 차이가 얼마&rdquo;를 순서대로 적은 것이다. 물체가 살짝 휘거나 늘어나 같은 밝기 변화가 (50, 55, 60, 70, 80)처럼 다섯 칸에 걸쳐 찍히면 차이는 (5, 5, 10, 10)이 되어 칸 수도 값도 어긋난다.</p>
 
-  <p class="sub-title">③ Color histogram — 색의 개수만 센다</p>
-  <p><b>count the colors in the image using a histogram</b> &mdash; 패치 안에 각 색이 몇 개 있는지만 센다. &ldquo;어디에&rdquo;는 버리고 &ldquo;얼마나&rdquo;만 남기므로 패치를 돌려도 개수는 그대로, 키워도 <b>비율</b>은 그대로다 &mdash; <b>invariant to changes in scale and rotation</b>.</p>
-  <p>약점 &mdash; 위치를 통째로 버렸기 때문에 <span class="hi">형태가 전혀 다른 영상을 같은 것으로 인식해 버릴 수 있다</span>.</p>
+  <p class="sub-title">③ Color Histogram (12p)</p>
+  <p><b>&ldquo;Count the colors in the image using a histogram&rdquo;</b> &mdash; 색마다 몇 개인지만 센다. &ldquo;어디에&rdquo;는 버리고 &ldquo;얼마나&rdquo;만 남기므로 <b>invariant to changes in scale and rotation</b>. 두 히스토그램의 유사도는 <b>histogram intersection</b>으로 잰다.</p>
+  <div class="fx">
+    <p class="fx-lab">histogram intersection &mdash; 칸마다 작은 쪽을 골라 더한다</p>
+    <div class="tex-d">\cap(h_1,h_2)=\sum_{i=1}^{K}\min\big(h_1(i),\,h_2(i)\big)</div>
+    <p class="fx-note">예: 검정 · 회색 · 흰색 세 칸, <span class="tex">h_1=(0.5,\,0.3,\,0.2)</span>, <span class="tex">h_2=(0.4,\,0.4,\,0.2)</span>이면 <span class="tex">\min</span>은 (0.4, 0.3, 0.2), 합은 <b>0.9</b>. 두 히스토그램이 똑같으면 1(전부 비율로 맞춘 경우), 전혀 안 겹치면 0이다.</p>
+  </div>
+  <p>문제 &mdash; <b>Different images may have same histogram</b>. 위치를 통째로 버렸기 때문이다.</p>
   <svg class="dia" viewBox="0 0 560 170" role="img" aria-label="배치가 전혀 다른 두 그림이 같은 색 히스토그램을 갖는 예" style="max-width:560px">
 <g transform="translate(30,22)"><text x="40" y="-8" font-size="11.5" font-weight="700" text-anchor="middle" fill="#1f2937">그림 A — 체스판</text>
 <rect x="0" y="0" width="20" height="20" fill="#1f2937"/><rect x="20" y="0" width="20" height="20" fill="#f1f5f9"/><rect x="40" y="0" width="20" height="20" fill="#1f2937"/><rect x="60" y="0" width="20" height="20" fill="#f1f5f9"/>
@@ -719,19 +714,19 @@ table.acc{min-width:0}
 <text x="280" y="150" font-size="11" text-anchor="middle" fill="#6b7280">색이 &lsquo;어디에&rsquo; 있었는지는 세지 않으므로 — 무늬가 전혀 다른데도 같은 벡터 (8, 8)이 된다</text>
 </svg>
 
-  <p class="dia-cap">강의에서 말한 &ldquo;아예 다른데 비슷하다고 인식해 버리는&rdquo; 경우 &mdash; 변별력(distinctive)을 잃은 것이다</p>
+  <p class="dia-cap">무늬가 전혀 다른 두 그림의 intersection이 1(완전 일치)로 나온다 &mdash; 변별력(distinctive)을 잃은 것</p>
 
   <div class="tbl-wrap">
   <table>
-    <thead><tr><th>방법</th><th>무엇을 적나</th><th>강한 것</th><th>약한 것 (교안 표현)</th></tr></thead>
+    <thead><tr><th>방법</th><th>무엇을 적나</th><th>강한 것</th><th>What are the problems?</th></tr></thead>
     <tbody>
-      <tr><td>① patch</td><td>화소값 그대로</td><td>변형이 없으면 가장 정확</td><td><b>sensitive to absolute intensity values</b></td></tr>
-      <tr><td>② gradients</td><td>이웃과의 차이</td><td>밝기 변화</td><td><b>sensitive to deformations</b></td></tr>
-      <tr><td>③ color histogram</td><td>색의 개수</td><td><b>invariant to changes in scale and rotation</b></td><td>위치를 버려 서로 다른 것을 구분 못함</td></tr>
+      <tr><td>① Image Patch</td><td>화소값 그대로</td><td>변형이 없으면 가장 정확</td><td>sensitive to absolute intensity values</td></tr>
+      <tr><td>② Image Gradients</td><td>이웃과의 차이</td><td>invariant to absolute intensity values</td><td>sensitive to deformations</td></tr>
+      <tr><td>③ Color Histogram</td><td>색의 개수</td><td>invariant to changes in scale and rotation</td><td>different images may have same histogram</td></tr>
     </tbody>
   </table>
   </div>
-  <p>그러면 <b>④ &ldquo;그래디언트(②)를 히스토그램(③)으로 세되, 위치를 완전히 버리지는 말자&rdquo;</b>가 자연스러운 다음 수가 된다. 그게 바로 SIFT다(<a class="ext" href="#sift">02</a>).</p>
+  <p>그러면 <b>&ldquo;그래디언트(②)를 히스토그램(③)으로 세되, 위치를 완전히 버리지는 말자&rdquo;</b>가 자연스러운 다음 수가 된다. 그게 바로 SIFT다(<a class="ext" href="#sift">02</a>).</p>
 </div>
 
 <div class="pt plus">
@@ -790,24 +785,24 @@ table.acc{min-width:0}
   <p>핵심 주장은 한 문장이다 &mdash; <span class="hi">영상의 내용을 이동 · 회전 · 크기 변화에 영향받지 않는 좌표계로 옮겨 적는다.</span> 그러면 같은 장면을 언제 어디서 찍었든 <b>같은 숫자</b>가 나온다.</p>
 </div>
 
-<div class="pt live">
-  <h3 class="pt-h"><span class="bdg bdg-live">강의 PART1</span><span class="bdg bdg-plus">보충설명</span>SIFT는 언제, 누가 — 그리고 왜 &lsquo;흐름도의 출발점&rsquo;인가</h3>
-  <p><b>강의에서 한 말</b> &mdash; SIFT는 <b>스케일 불변 특징점들을 추출하고 기술하자</b>는 알고리즘이다. <b>이동 · 회전 · 스케일 변화가 있어도</b> 같은 점을 찾을 수 있다. Lowe가 오래 고민해 발표했고, 이 내용 이후 분야가 <b>매우 비약적으로 발전</b>했다(교수님의 논문별 흐름도에도 들어가 있다).</p>
-  <p>필기에서 연도가 &ldquo;1980년도?&rdquo;로 남아 있어 정확히 정리해 둔다. <b>발표 때 그대로 말해도 되는 연도</b>다.</p>
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>SIFT는 언제, 무엇을 목표로 — 그리고 이후의 흐름 (14 · 15p)</h3>
+  <p>15p(Invariant Local Features)가 SIFT의 목표를 한 문장으로 적는다 &mdash; <b>&ldquo;Image content is transformed into local feature coordinates that are invariant to translation, rotation, scale, and other imaging parameters.&rdquo;</b> 영상의 내용을 <b>이동 · 회전 · 크기 및 그 밖의 촬영 조건에 불변인 지역 특징 좌표</b>로 옮겨 적는다는 뜻이다.</p>
+  <p>14p가 인용하는 원전은 <b>Lowe, &ldquo;Distinctive Image Features from Scale-Invariant Keypoints&rdquo;, IJCV 60(2), pp. 91&ndash;110, 2004</b>다. 다만 SIFT가 처음 나온 것은 그보다 5년 앞이다.</p>
   <div class="tbl-wrap">
   <table>
     <thead><tr><th>연도</th><th>논문</th><th>의미</th></tr></thead>
     <tbody>
       <tr><td><b>1999</b></td><td>Lowe, &ldquo;Object Recognition from Local Scale-Invariant Features&rdquo;, <i>ICCV</i></td><td>SIFT의 <b>첫 발표</b>. 물체 인식용으로 제안</td></tr>
-      <tr><td><b>2004</b></td><td>Lowe, &ldquo;Distinctive Image Features from Scale-Invariant Keypoints&rdquo;, <i>IJCV</i></td><td>세부 단계와 파라미터를 정리한 <b>완성판</b>. 교안 14p가 인용하는 논문이고, 보통 &ldquo;SIFT 논문&rdquo;이라 하면 이것</td></tr>
+      <tr><td><b>2004</b></td><td>Lowe, &ldquo;Distinctive Image Features from Scale-Invariant Keypoints&rdquo;, <i>IJCV</i></td><td>세부 단계와 파라미터를 정리한 <b>완성판</b>. 교안 14p의 인용이고, 보통 &ldquo;SIFT 논문&rdquo;이라 하면 이것</td></tr>
     </tbody>
   </table>
   </div>
-  <p>&ldquo;1980년대&rdquo;라는 기억은 아마 SIFT의 <b>재료</b>와 섞인 것 같다 &mdash; 스케일 공간 이론(Witkin 1983, Koenderink 1984)과 LoG 블롭 검출이 그 무렵 나왔고, SIFT는 그 재료를 실용적인 파이프라인으로 묶은 것이다.</p>
-  <p class="sub-title">이후의 흐름 — 오늘 수업과 내 발표가 한 줄에 놓인다</p>
+  <p>SIFT가 기댄 이론적 바탕은 더 오래됐다 &mdash; 스케일 공간 이론(Witkin 1983, Koenderink 1984)과 라플라시안 기반 블롭 검출(Lindeberg 1990년대)이다. SIFT는 그 재료를 <b>검출부터 기술까지 한 번에 돌아가는 실용적인 파이프라인</b>으로 묶었다는 점에서 기준점이 됐다.</p>
+  <p class="sub-title">이후의 흐름 — 오늘 교안과 내 발표가 한 줄에 놓인다</p>
   <div class="flow">
     <div class="fl"><b>SIFT 1999 / 2004</b><span>그래디언트 히스토그램 · 128차원 실수 벡터 &mdash; <b>기준점</b></span></div>
-    <div class="fl"><b>SURF 2006 · HOG 2005</b><span>같은 생각을 더 빠르게(<a class="ext" href="#surf">03</a>) / 점 대신 영역 전체를(<a class="ext" href="#hog">04</a>)</span></div>
+    <div class="fl"><b>HOG 2005 · SURF 2006</b><span>점 대신 영역 전체를(<a class="ext" href="#hog">04</a>) / 같은 생각을 더 빠르게(<a class="ext" href="#surf">03</a>)</span></div>
     <div class="fl"><b>BRIEF 2010 · ORB 2011</b><span>실수 대신 0 · 1 &mdash; 속도의 극한(<a class="ext" href="#brief">05</a> · <a class="ext" href="#orb">06</a>)</span></div>
     <div class="fl"><b>SuperPoint 2018</b><span>검출과 기술을 <b>신경망이 학습</b> &mdash; <a class="ext" href="computer-vision-week05.html#pres">5주차 학생 발표</a></span></div>
     <div class="fl"><b>SD + DINO 2023</b><span>다른 목적으로 학습된 거대 모델의 특징을 빌려 씀 &mdash; <a class="ext" href="#mypres">내 발표</a></span></div>
@@ -816,15 +811,16 @@ table.acc{min-width:0}
 
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-live">강의 PART1</span>SIFT stages — 네 단계로 나눠 보기 (16 · 32p)</h3>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>네 단계로 나눠 보기 (16 · 32p)</h3>
   <div class="flow">
     <div class="fl"><b>① 스케일 공간 극값 검출</b><span>여러 <span class="tex">\sigma</span>로 만든 <b>DoG</b>에서 극값을 찾는다 &mdash; <b>키포인트 후보</b></span></div>
     <div class="fl"><b>② 키포인트 정밀화</b><span>극값 주변에 <b>2차 함수를 맞추고 도함수를 0으로</b> 두어 <b>픽셀보다 작은 단위</b>로 위치를 잡는다</span></div>
     <div class="fl"><b>③ 방향 할당</b><span>주변 그래디언트의 <b>방향 히스토그램</b>에서 가장 큰 값을 그 점의 <b>기준 방향</b>으로 삼는다</span></div>
     <div class="fl"><b>④ 기술자 생성</b><span>기준 방향에 맞춰 돌린 뒤 <b>4×4 셀 × 8방향 = 128차원</b> 벡터를 만든다</span></div>
   </div>
-    <p>교안 32p는 네 단계를 <b>빨간 상자(detector)</b>와 <b>파란 상자(descriptor)</b>로 나눈다 &mdash; <span class="hi">①②가 검출기, ③④가 기술자</span>다. 강의에서도 &ldquo;scale-space extrema detection과 keypoint localization은 detector의 부분이고, <b>나머지(orientation assignment부터)가 descriptor의 부분</b>&rdquo;이라고 짚었다. 5주차에서 배운 블롭 검출이 ①에 그대로 들어와 있다.</p>
+    <p>교안 32p는 네 단계를 <b>빨간 상자(detector)</b>와 <b>파란 상자(descriptor)</b>로 나눈다 &mdash; <span class="hi">①②가 검출기, ③④가 기술자</span>다. 5주차에서 배운 블롭 검출이 ①에 그대로 들어와 있다.</p>
   <p>방향 할당이 왜 기술자 쪽에 들어가는지는 이렇게 이해하면 된다 &mdash; 방향은 <b>&ldquo;어디가 특징적인가&rdquo;(검출)</b>를 정하는 데는 필요 없고, <b>&ldquo;패치를 어느 쪽으로 돌려 놓고 적을까&rdquo;(기술)</b>를 정하는 데 쓰인다. 같은 이유로 ORB는 남의 검출기(FAST)를 빌리면서 방향 계산만은 자기 쪽에 따로 붙인다(<a class="ext" href="#orb">06</a>).</p>
+  <p>16p는 같은 과정을 <b>여섯 항목</b>으로 더 잘게 적는다. 이 목록은 <b>20 · 22 · 26p에 똑같이 다시 나와</b> 지금 몇 번 항목을 설명하는 중인지 짚어 주는 이정표 역할을 한다(16p에서는 1 · 2번이 상자로 묶여 있다). 두 장의 대응은 이렇다.</p>
   <div class="tbl-wrap">
   <table>
     <thead><tr><th>교안 16p (6항목)</th><th>교안 32p (4단계)</th><th>역할</th></tr></thead>
@@ -836,29 +832,13 @@ table.acc{min-width:0}
     </tbody>
   </table>
   </div>
-  <p>강의 필기의 번호(&ldquo;1, 2 스케일 &hellip;&rdquo;, &ldquo;4 enforce invariance to orientation&rdquo;, &ldquo;5, 6 &hellip;&rdquo;)는 <b>16p의 여섯 항목 번호</b>다. 교수님이 16p에서 <b>1 · 2번을 주황 상자로 따로 묶어 강조</b>한 것도 기억해 두자 &mdash; 스케일 불변성을 만드는 부분이 SIFT의 이름(Scale Invariant)이 붙은 이유이기 때문이다.</p>
 </div>
 
-<div class="pt live" id="sift-scale">
-  <h3 class="pt-h"><span class="bdg bdg-live">강의 PART1</span>16p 1 · 2번 — &ldquo;σ를 바꿔 영상을 블러링한다&rdquo;는 게 무슨 말인가</h3>
-  <p><b>강의에서 한 말</b> &mdash; 스케일에 불변한 것을 찾기 위해 <b>가우시안 필터</b>를 쓰고, 이것을 <b>다양한 스케일에 적용</b>한다. 가우시안 함수의 <b>σ(시그마) 값을 키울수록 영상의 스케일도 커진다(= 사이즈가 줄어든 것처럼 된다)</b>. 주어진 영상의 크기가 있으면, σ 값을 바꿔 영상을 블러링시켜 스케일을 변화시킨다. 이 과정을 거쳐 <b>필요 없는 부분은 제거하고 도드라지는 부분을 뽑아낸다</b>.</p>
-  <p>필기에 &ldquo;이거 뭔 소린지 잘 모르겠음&rdquo;이라고 남긴 부분이 이 카드의 핵심이다. 아래 네 카드에서 <b>① σ가 무엇인지 → ② 왜 블러가 &lsquo;멀리서 보기&rsquo;가 되는지 → ③ 왜 하필 가우시안인지 → ④ 그래서 DoG가 무엇을 골라내는지</b> 순서로 한 단계씩 푼다.</p>
-</div>
-
-<div class="pt my">
-  <h3 class="pt-h"><span class="bdg bdg-my">내 필기</span>내가 찾아본 설명 — 스케일 = &lsquo;관찰의 해상도&rsquo;</h3>
-  <p>컴퓨터 비전에서 <b>스케일(scale)</b>은 이미지를 바라보는 <b>&lsquo;관찰의 해상도(관찰 크기)&rsquo;</b>를 뜻하고, σ를 바꾼다는 것은 <b>가우시안 블러의 강도를 조절해 사물을 어느 디테일 수준에서 볼지 제어하는 작업</b>이다. 실세계 물체의 크기는 고정이지만, 카메라와의 거리나 센서 해상도에 따라 이미지 안에서 차지하는 크기는 천차만별이다.</p>
-  <div class="tbl-wrap">
-  <table>
-    <thead><tr><th></th><th>작은 스케일 (fine scale · high resolution)</th><th>큰 스케일 (coarse scale · low resolution)</th></tr></thead>
-    <tbody>
-      <tr><td>보이는 것</td><td>픽셀 단위의 미세한 질감 &mdash; 잎맥, 피부 모공, 잔주름</td><td>개별 풀잎 · 벽돌 요철은 뭉개지고 사람 실루엣, 건물 윤곽, 산등성이 같은 <b>거시적 형태</b>만 남음</td></tr>
-      <tr><td>장단점</td><td>노이즈에 매우 취약, 전체 윤곽을 파악하기 어려움</td><td>노이즈가 제거되고 물체의 <b>본질적인 구조</b>가 드러남</td></tr>
-      <tr><td>σ</td><td>작다</td><td>크다</td></tr>
-    </tbody>
-  </table>
-  </div>
-  <p>즉 스케일은 <b>&ldquo;어떤 크기의 구조를 주된 정보로 다룰 것인가&rdquo;를 정하는 척도</b>다. 렌즈를 줌인 · 줌아웃하거나 이미지를 줄여서(다운샘플링) 스케일을 바꿀 수도 있지만, <b>수학적으로 연속적인 스케일 표현</b>을 만들 때는 가우시안 필터를 쓴다.</p>
+<div class="pt gyo" id="sift-scale">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>16p 1번 · 17 · 18p — &ldquo;for many different scales&rdquo;를 어떻게 만드나</h3>
+  <p>16p 1번은 <b>Enforce invariance to scale: Compute Gaussian difference max, for many different scales; non-maximum suppression, find local maxima: keypoint candidates</b>다. 17 · 18p는 이를 <b>&ldquo;Find keypoints (extrema) using DoG (approximated LoG)&rdquo;</b>, 그리고 <b>&ldquo;Idea: Find corners, but scale invariance&rdquo;</b>로 요약한다.</p>
+  <p>여기서 이해의 관문이 <b>&ldquo;many different scales&rdquo;</b>다. 사진은 한 장뿐인데 &lsquo;여러 스케일&rsquo;은 어디서 오는가? 답은 <b>같은 사진을 가우시안의 σ를 바꿔 가며 여러 번 흐리게 만드는 것</b>이다. 그리고 17p 그림처럼 <b>폭이 다른 두 가우시안을 빼면(Difference of Gaussians)</b> 가운데가 움푹한 모자 모양 &mdash; 5주차의 LoG와 거의 같은 필터 &mdash; 이 된다.</p>
+  <p>아래 네 카드에서 <b>① σ가 무엇인지 → ② 왜 흐리게 하는 것이 &lsquo;스케일을 바꾸는 것&rsquo;인지 → ③ 왜 하필 가우시안인지 → ④ 그래서 DoG가 무엇을 골라내는지</b> 순서로 한 단계씩 푼다.</p>
 </div>
 
 <div class="pt plus">
@@ -880,7 +860,17 @@ table.acc{min-width:0}
 <div class="pt plus">
   <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>② 왜 블러가 &lsquo;스케일이 커진 것 = 사이즈가 줄어든 것&rsquo;이 되나</h3>
   <p>모자이크 벽화를 코앞에서 보면 타일 하나하나가 보이지만, <b>몇 걸음 물러서면</b> 타일은 안 보이고 그림만 보인다. 물러서면 눈에 맺히는 상이 <b>작아지고</b>, 작아진 상에서는 타일 여러 장이 망막의 한 점에 겹쳐 <b>섞여 버리기</b> 때문이다.</p>
-  <p>가우시안 블러가 하는 일이 정확히 이 &ldquo;<b>섞기</b>&rdquo;다. σ = 4로 블러한 영상은 <b>물체를 4배쯤 멀리서 본 것(= 4배 작게 찍은 것)과 같은 정보</b>를 가진다 &mdash; 다만 화소 수는 줄이지 않았을 뿐이다. 강의의 &ldquo;σ가 커질수록 스케일이 커진다(사이즈가 줄어든다)&rdquo;는 이 뜻이다. <b>스케일이 크다 = 거칠게(coarse) 본다 = 멀리서 본다</b>를 한 묶음으로 기억하자.</p>
+  <p>가우시안 블러가 하는 일이 정확히 이 &ldquo;<b>섞기</b>&rdquo;다. σ = 4로 블러한 영상은 <b>물체를 4배쯤 멀리서 본 것(= 4배 작게 찍은 것)과 같은 정보</b>를 가진다 &mdash; 다만 화소 수는 줄이지 않았을 뿐이다. 그래서 <span class="hi">σ가 커진다 = 스케일이 커진다 = 거칠게(coarse) 본다 = 멀리서 본다</span>가 한 묶음이다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>작은 스케일 (fine) &mdash; σ 작음</th><th>큰 스케일 (coarse) &mdash; σ 큼</th></tr></thead>
+    <tbody>
+      <tr><td>남는 구조</td><td>질감, 잔무늬, 글자 획 같은 <b>작은 디테일</b></td><td>윤곽, 덩어리, 큰 형태 같은 <b>거시적 구조</b></td></tr>
+      <tr><td>노이즈</td><td>그대로 남아 영향을 크게 받는다</td><td>평균에 묻혀 거의 사라진다</td></tr>
+      <tr><td>비유</td><td>코앞에서 보기 &middot; 줌인</td><td>멀리서 보기 &middot; 줌아웃</td></tr>
+    </tbody>
+  </table>
+  </div>
   <p>아래는 한 줄짜리 신호에 실제로 블러를 걸어 계산한 결과다. 왼쪽에는 <b>폭 1짜리 작은 점</b>, 오른쪽에는 <b>폭 14짜리 넓은 덩어리</b>가 있다.</p>
   <svg class="dia" viewBox="0 0 640 452" role="img" aria-label="작은 점과 넓은 덩어리를 σ를 바꿔 블러한 결과와 DoG 응답" style="max-width:640px">
 <text x="14" y="51.0" font-size="12.5" font-weight="700" fill="#1f2937">① 원본 신호</text>
@@ -912,7 +902,7 @@ table.acc{min-width:0}
 <text x="412.8813559322034" y="362" font-size="10.5" fill="#0f766e">덩어리 한가운데에서 봉우리 (7.7)</text>
 </svg>
   <p class="dia-cap">직접 계산한 값 &mdash; 작은 점의 높이는 원본 100 → σ=1에서 39.9 → σ=4에서 10.0으로 급격히 줄지만, 넓은 덩어리는 40 → 40.0 → 36.8로 거의 그대로다</p>
-  <p>②번 줄이 핵심이다. <b>σ가 작으면 둘 다 보이고, σ가 커지면 작은 점은 지워지고 넓은 덩어리만 남는다.</b> &ldquo;필요 없는 부분(그 스케일보다 작은 디테일)은 제거하고 도드라지는 부분을 뽑아낸다&rdquo;는 강의 설명이 이 그림이다. ③ · ④번 줄은 아래 &lsquo;④ DoG&rsquo; 카드에서 쓴다.</p>
+  <p>②번 줄이 핵심이다. <b>σ가 작으면 둘 다 보이고, σ가 커지면 작은 점은 지워지고 넓은 덩어리만 남는다.</b> 어떤 σ에서 보느냐에 따라 &lsquo;눈에 띄는 구조&rsquo;가 달라지는 것 &mdash; 이것이 스케일이다. ③ · ④번 줄은 아래 &lsquo;④ DoG&rsquo; 카드에서 쓴다.</p>
 </div>
 
 <div class="pt plus">
@@ -956,8 +946,8 @@ table.acc{min-width:0}
 </div>
 
 <div class="pt plus">
-  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>&ldquo;필요 없는 부분은 제거한다&rdquo; — 후보를 버리는 두 개의 문턱</h3>
-  <p>26개 이웃 비교로 나온 후보는 수천 개다. 그중 <b>믿을 수 없는 것</b>을 두 번 걸러 낸다(Lowe 2004의 값).</p>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>&ldquo;Remove inappropriate keypoints (threshold)&rdquo; — 후보를 버리는 두 개의 문턱 (21p)</h3>
+  <p>21p는 233×189 크기 영상에서 극값 후보 <b>832개가 문턱을 거쳐 536개로</b> 줄어드는 예를 보여 준다. 교안은 <b>&ldquo;Eliminate the edge responses based on Harris response function (Laplacian has strong response along edge)&rdquo;</b>만 적었지만, 원 논문(Lowe 2004)은 실제로 두 번 거른다.</p>
   <div class="tbl-wrap">
   <table>
     <thead><tr><th>문턱</th><th>무엇을 버리나</th><th>기준</th><th>왜</th></tr></thead>
@@ -978,9 +968,9 @@ table.acc{min-width:0}
   <p><span class="hi">검출이 크기를 알려 주고(σ), 방향 할당이 각도를 알려 주므로, 패치를 &lsquo;같은 크기 · 같은 각도&rsquo;로 펴 놓고 비교할 수 있게 된다.</span> 5주차 마지막에 본 <b>&ldquo;타원을 원으로 펴는 정규화&rdquo;</b>가 바로 이 대목이다(23p).</p>
 </div>
 
-<div class="pt live">
-  <h3 class="pt-h"><span class="bdg bdg-live">강의 PART1</span>16p 4번 · 23~25p — 방향 할당과 &lsquo;80% 규칙&rsquo;</h3>
-  <p><b>강의에서 한 말</b> &mdash; 4번은 <b>enforce invariance to orientation</b>(방향에 대한 불변성 강제), 23p의 제목은 <b>From covariant detection to invariant description</b>(공변하는 검출에서 불변하는 기술로)이다. keypoint description은 <b>히스토그램을 만들고, the largest value를 기준으로</b> 방향을 정한다. 그리고 <b>80% 이상</b>인 지점이 있으면 그것도 기준으로 삼으므로 <b>방향이 2개가 될 수도 있다</b>.</p>
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>16p 4번 · 23~25p — 방향 할당과 &lsquo;80% 규칙&rsquo;</h3>
+  <p>16p 4번은 <b>Enforce invariance to orientation</b> &mdash; 회전 불변성을 위해 방향을 구하고(<b>possibly multiple orientations</b>), <b>그 방향이 위를 향하도록 패치를 돌린다(Rotate patch so that orientation points up)</b>. 이 대목을 23 · 24 · 25p가 차례로 풀어 준다.</p>
   <p class="sub-title">23p — &lsquo;공변하는 검출에서 불변하는 기술로&rsquo;를 한 문장씩</p>
   <ul class="ul">
     <li><b>Scaled and rotated versions of the same neighborhood will give rise to blobs that are related by the same transformation</b> &mdash; 같은 곳을 키우고 돌려 찍으면, 검출된 블롭도 <b>똑같이 커지고 돌아가 있다</b>(공변)</li>
@@ -1050,8 +1040,8 @@ table.acc{min-width:0}
 </svg>
   <p class="dia-cap">예시 히스토그램 &mdash; 교안 25p 오른쪽 그래프에 100% · 80% 두 줄이 그어져 있는 이유가 이것이다</p>
   <div class="pit">
-    <p class="pit-h">⚠ 80% 규칙을 정확히 — 필기 &ldquo;the largest value가 80% 이상을 갖는 지점&rdquo;을 바로잡기</p>
-    <p>&ldquo;최댓값이 80%를 차지한다&rdquo;가 아니다. <b>가장 높은 봉우리를 100%로 놓고, 그 80% 이상 높이인 다른 봉우리가 있으면 그 방향으로도 키포인트를 하나 더 만든다</b>는 뜻이다. 위 예에서 220~230° 칸은 42표 = 최고(50표)의 84%라서 <b>같은 위치 · 같은 스케일에 방향만 다른 키포인트가 하나 더</b> 생긴다. 130~140° 칸(35표 = 70%)은 기준에 못 미쳐 버린다.</p>
+    <p class="pit-h">⚠ 80% 규칙을 정확히 — 25p 그래프의 100% · 80% 두 줄이 뜻하는 것</p>
+    <p>25p 본문은 &ldquo;the largest value&rdquo;까지만 적었고, 80%는 그래프의 기준선으로만 나온다. 원 논문의 규칙은 &ldquo;최댓값이 80%를 차지한다&rdquo;가 아니라, <b>가장 높은 봉우리를 100%로 놓고, 그 80% 이상 높이인 다른 봉우리가 있으면 그 방향으로도 키포인트를 하나 더 만든다</b>는 것이다. 16p의 &ldquo;possibly multiple orientations&rdquo;가 바로 이것이다. 위 예에서 220~230° 칸은 42표 = 최고(50표)의 84%라서 <b>같은 위치 · 같은 스케일에 방향만 다른 키포인트가 하나 더</b> 생긴다. 130~140° 칸(35표 = 70%)은 기준에 못 미쳐 버린다.</p>
     <p><b>왜 그렇게 하나</b> &mdash; 두 봉우리가 비슷하면 사진이 조금만 바뀌어도 1등과 2등이 뒤바뀐다. 한쪽만 고르면 다른 사진에서는 반대쪽을 골라 <b>패치가 엉뚱한 각도로 돌아가 버린다</b>. 그래서 애매하면 <b>둘 다 만들어 두는</b> 보험을 드는 것이다. Lowe에 따르면 이렇게 방향이 여럿 붙는 점은 <b>약 15%</b>뿐이지만 매칭 안정성에 크게 기여한다. 실제 구현은 봉우리 칸과 양옆 두 칸에 포물선을 맞춰 10°보다 정밀한 각도를 구한다.</p>
   </div>
   <p><b>교안 16p 4번의 문장과 다른 점</b> &mdash; 16p는 &ldquo;finding the strongest <b>second derivative</b> direction&rdquo;이라고 적었지만, 24 · 25p와 원 논문이 실제로 쓰는 것은 위처럼 <b>1차 그래디언트의 방향 히스토그램</b>이다. 질문이 나오면 25p 방식으로 답하면 된다.</p>
@@ -1068,9 +1058,9 @@ table.acc{min-width:0}
   <p>마지막으로 벡터를 <b>길이 1로 정규화</b>한다. 조명이 밝아져 그래디언트가 전체적으로 커져도 <b>방향의 분포는 그대로</b>이므로, 정규화만 하면 값이 같아진다. (원 논문은 여기에 더해 <b>큰 성분을 0.2로 자르고 다시 정규화</b>해 카메라 포화 같은 급격한 밝기 변화까지 흡수한다.)</p>
 </div>
 
-<div class="pt live">
-  <h3 class="pt-h"><span class="bdg bdg-live">강의 PART1</span>16p 5 · 6번 — 16×16 창을 4×4 창 16개로, 각각 8방향으로</h3>
-  <p><b>강의에서 한 말</b> &mdash; gradient histogram을 만들되 <b>16×16 window를 4×4 window 16개로 쪼개고, 그 각각을 8 bin orientation으로</b> 센다. (5 · 6번에서 만든 벡터로 <b>매칭하는 방법은 다음 주에 다시 설명</b>할 예정.)</p>
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>16p 5 · 6번 · 28p — 셀 하나의 히스토그램을 직접 만들어 보기</h3>
+  <p>28p의 설명 &mdash; <b>&ldquo;Thresholded image gradients are sampled over 16x16 array of locations in scale space. Create array of orientation histograms. 8 orientations x 4x4 histogram array = 128 dimensions.&rdquo;</b> 16×16 화소의 그래디언트를 4×4 화소짜리 셀 16개로 나누고, 셀마다 8방향 히스토그램을 만든다.</p>
   <p>숫자로 한 칸(4×4 화소 = 16개)만 직접 만들어 보자. 이 키포인트의 기준 방향은 앞 단계에서 <b>40°</b>로 정해졌다고 하자.</p>
   <div class="fx">
     <p class="fx-lab">셀 하나 &mdash; 각 화소의 그래디언트 &lsquo;절대 방향 / 크기&rsquo;</p>
@@ -1113,8 +1103,8 @@ table.acc{min-width:0}
     <li><b>검출은 공변, 기술은 불변</b> &mdash; 위치와 스케일은 영상을 따라 움직이고(covariant), 벡터 값은 변하지 않는다(invariant)</li>
   </ul>
 </div>
-<div class="pt live">
-  <h3 class="pt-h"><span class="bdg bdg-live">강의 PART1</span>Detection is covariant, description is invariant — 쉽게 두 문장으로 (33p)</h3>
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>Detection is covariant, description is invariant — 쉽게 두 문장으로 (33p)</h3>
   <div class="fx">
     <p class="fx-lab">교안 33p의 두 식</p>
     <div class="tex-d">\textbf{공변(검출)}:\ \ \text{features}(T(\text{image}))=T(\text{features}(\text{image}))</div>
@@ -1132,18 +1122,18 @@ table.acc{min-width:0}
   </div>
 </div>
 
-<div class="pt live">
-  <h3 class="pt-h"><span class="bdg bdg-live">강의 PART1</span><span class="bdg bdg-plus">보충설명</span>속도와 특허 — &ldquo;오늘날에는 특허에 걸려 있다&rdquo;의 현재 상황</h3>
-  <p><b>강의에서 한 말</b> &mdash; SIFT는 실시간으로 이루어지고, 당시에는 매우 빠르고 효율적이었다. 오늘날에는 이 SIFT가 특허권에 걸려 있다.</p>
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>&ldquo;Fast and efficient &mdash; can run in real time&rdquo;의 시대 배경과 특허 (34p)</h3>
+  <p>34p는 SIFT를 <b>&ldquo;Extraordinarily robust detection and description technique&rdquo;</b>라 부르며 네 가지를 꼽는다 &mdash; 평면 밖 회전 <b>약 60도</b>까지의 시점 변화, <b>낮과 밤</b>에 이르는 조명 변화, <b>실시간 동작</b>, 그리고 <b>공개된 코드가 많다</b>는 점.</p>
   <p><b>속도</b> &mdash; &ldquo;실시간&rdquo;은 2000년대 초 CPU와 당시 대안 기준이다. 지금 기준으로는 SIFT가 <b>느린 편</b>에 속하고, 바로 그 느림이 SURF(<a class="ext" href="#surf">03</a>)와 ORB(<a class="ext" href="#orb">06</a>)가 나온 동기다.</p>
   <div class="pit">
-    <p class="pit-h">⚠ 특허는 2020년에 끝났다 — 발표 Q&amp;A에서 정확히 말할 것</p>
-    <p>SIFT 특허(US 6,711,293, 브리티시컬럼비아 대학 소유)는 <b>2020년 3월에 만료</b>됐다. 그래서 OpenCV도 <b>4.4.0(2020년 7월)</b>부터 SIFT를 유료 · 비공개 모듈(<code>xfeatures2d</code>, nonfree)에서 <b>기본 모듈로 옮겼고</b>, 지금은 <code>cv2.SIFT_create()</code> 한 줄로 누구나 쓸 수 있다. &ldquo;특허 때문에 ORB를 쓴다&rdquo;는 설명은 <b>2011년 ORB 논문이 나올 당시의 사정</b>이다(ORB 논문 제목이 &ldquo;an efficient alternative to SIFT or SURF&rdquo;인 이유). 교안 · 강의의 &ldquo;특허에 걸려 있다&rdquo;는 그 시기 기준의 표현으로 이해하면 된다.</p>
+    <p class="pit-h">⚠ SIFT 특허 — 2020년에 만료됐다 (발표 Q&amp;A 대비)</p>
+    <p>SIFT 특허(US 6,711,293, 브리티시컬럼비아 대학 소유)는 <b>2020년 3월에 만료</b>됐다. 그래서 OpenCV도 <b>4.4.0(2020년 7월)</b>부터 SIFT를 유료 · 비공개 모듈(<code>xfeatures2d</code>, nonfree)에서 <b>기본 모듈로 옮겼고</b>, 지금은 <code>cv2.SIFT_create()</code> 한 줄로 누구나 쓸 수 있다. &ldquo;특허 때문에 ORB를 쓴다&rdquo;는 설명은 <b>2011년 ORB 논문이 나올 당시의 사정</b>이다(ORB 논문 제목이 &ldquo;an efficient alternative to SIFT or SURF&rdquo;인 이유).</p>
   </div>
 </div>
 
 <div class="pt pres">
-  <h3 class="pt-h"><span class="bdg bdg-pres">내 발표</span>PART1을 발표에 쓸 때 — 틀리면 안 되는 다섯 문장</h3>
+  <h3 class="pt-h"><span class="bdg bdg-pres">내 발표</span>SIFT를 발표에서 불러올 때 — 틀리면 안 되는 다섯 문장</h3>
   <p>내 발표(<a class="ext" href="#mypres">08</a>)는 &ldquo;SIFT 자리에 학습된 특징을 꽂는다&rdquo;로 시작하므로, 청중이 방금 들은 SIFT를 <b>정확한 말</b>로 불러와야 한다.</p>
   <ul class="ul">
     <li><b>&ldquo;SIFT는 Lowe가 1999년에 처음 제안하고 2004년 IJCV에서 완성한 방법입니다.&rdquo;</b></li>
