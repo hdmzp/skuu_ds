@@ -518,10 +518,10 @@ table.acc{min-width:0}
   <a href="#why"><b>01 기술자란 무엇인가</b><span>Detection · Description · Matching · 템플릿 매칭과 NCC · patch / gradient / histogram</span></a>
   <a href="#sift"><b>02 SIFT</b><span>σ와 스케일 · DoG 극값 · 80% 방향 규칙 · 4×4×8 = 128차원 · 공변/불변</span></a>
   <a href="#surf"><b>03 SURF</b><span>적분 영상 · 헤시안 행렬식 · 박스 필터 · 필터 키우기 · 6s · 60° 창 · 64차원</span></a>
-  <a href="#hog"><b>04 HOG</b><span>8×8 셀 · 블록 정규화 · 3780차원 · 보행자 검출</span></a>
-  <a href="#brief"><b>05 BRIEF · BRISK</b><span>픽셀 쌍 비교 → 이진 문자열 · 해밍 거리</span></a>
-  <a href="#orb"><b>06 ORB</b><span>FAST + 방향 + 학습된 샘플링 쌍</span></a>
-  <a href="#compare"><b>07 비교 · OpenCV</b><span>언제 무엇을 쓰나 · 코드와 매칭 방법</span></a>
+  <a href="#hog"><b>04 HOG</b><span>셀 9칸 투표 · 2×2 블록 정규화 · 7×15 블록 = 3780 · SVM</span></a>
+  <a href="#brief"><b>05 BRIEF · BRISK</b><span>이진 테스트 · 2^(i−1) · G I~V · XOR · 해밍 거리 · BRISK</span></a>
+  <a href="#orb"><b>06 ORB</b><span>74p 흐름도 · FAST-9/12 · N best · 밝기 중심 · 회전 행렬 · rBRIEF 학습</span></a>
+  <a href="#compare"><b>07 비교 · OpenCV</b><span>언제 무엇을 쓰나 · 79p 읽기 · 교안 밖의 기술자와 발표 연결</span></a>
   <a href="#mypres"><b>08 내 논문 발표와의 연결</b><span>손으로 설계한 기술자에서 학습된 특징으로</span></a>
 </div>
 </section>
@@ -2012,44 +2012,105 @@ table.acc{min-width:0}
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt plus">
-  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>먼저 &mdash; HOG는 앞의 셋과 성격이 다르다</h3>
-  <p>SIFT · SURF · ORB는 <b>키포인트 하나하나</b>에 벡터를 붙인다. 반면 <b>HOG는 정해진 크기의 창(영역) 전체</b>를 벡터 하나로 만든다. 그래서 <span class="hi">HOG는 &ldquo;매칭&rdquo;이 아니라 &ldquo;분류&rdquo;를 위한 기술자</span>다 &mdash; 원 논문 제목도 <b>&ldquo;사람 검출을 위한 방향 그래디언트 히스토그램&rdquo;</b>이고, 실제로는 <b>HOG 벡터 + SVM 분류기</b> 조합으로 쓰인다.</p>
-  <p>같은 &lsquo;그래디언트 방향 히스토그램&rsquo;이라는 재료를 쓰지만 <b>목적이 다르면 설계도 달라진다</b>는 좋은 예다.</p>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>먼저 — HOG는 앞의 둘과 쓰임이 다르다 (52 · 53p)</h3>
+  <p>52p의 원전은 <b>Dalal &amp; Triggs, &ldquo;Histograms of Oriented Gradients for Human Detection&rdquo;, CVPR 2005</b>다. 제목에 이미 목적이 적혀 있다 &mdash; <b>사람 검출(human detection)</b>.</p>
+  <p>SIFT · SURF는 <b>키포인트 하나하나</b>에 벡터를 붙여 두 사진을 <b>매칭</b>했다. HOG는 <b>정해진 크기의 창(64×128) 전체</b>를 벡터 하나로 만들고, 그 벡터를 <b>분류기(원 논문은 선형 SVM)</b>에 넣어 &ldquo;이 창 안에 사람이 있나&rdquo;를 판정한다. 큰 사진에서는 이 창을 위치와 크기를 바꿔 가며 미끄러뜨린다. <span class="hi">같은 &lsquo;그래디언트 방향 히스토그램&rsquo;을 재료로 쓰지만, 목적이 매칭이 아니라 분류</span>라는 점이 출발점이다.</p>
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>네 단계 (54~58p)</h3>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>네 단계 (54p)</h3>
   <div class="flow">
-    <div class="fl"><b>① 그래디언트 계산</b><span><span class="tex">[-1\;0\;1]</span>과 그 전치로 <span class="tex">g_x, g_y</span>를 구하고 <b>크기와 방향</b>을 계산한다 (5주차 02와 같은 도구)</span></div>
-    <div class="fl"><b>② 8×8 셀마다 히스토그램</b><span>영상을 <b>8×8 화소 셀</b>로 나누고, 각 셀에서 방향을 <b>9개 구간</b>으로 나눈 히스토그램을 만든다. 표는 <b>그래디언트 크기만큼</b> 던진다</span></div>
-    <div class="fl"><b>③ 블록 정규화</b><span>이웃한 <b>2×2 셀 = 16×16 화소</b>를 한 블록으로 묶어 <b>블록 단위로 정규화</b>한다. 블록은 <b>서로 겹치며</b> 이동한다</span></div>
-    <div class="fl"><b>④ 벡터 연결</b><span>모든 블록의 값을 <b>한 줄로 이어 붙여</b> 최종 벡터를 만든다</span></div>
-  </div>
-  <div class="fx">
-    <p class="fx-lab">교안 58p의 3780이라는 숫자</p>
-    <div class="tex-d">64\times128\ \text{영상} \Rightarrow 7\times15=105\ \text{블록},\qquad 105 \times 4\ \text{셀} \times 9\ \text{구간} = 3780</div>
-    <p class="fx-note">보행자 검출에서 쓰는 표준 창이 <b>가로 64 · 세로 128</b>이다. 8×8 셀로 나누면 8×16개 셀이 되고, 2×2 셀 블록이 <b>한 셀씩 겹치며</b> 미끄러지므로 블록은 <b>7×15 = 105개</b>가 된다.</p>
+    <div class="fl"><b>① Gradient computation</b><span>화소마다 그래디언트의 크기와 방향</span></div>
+    <div class="fl"><b>② 8×8 셀 히스토그램</b><span>&ldquo;Calculate Histogram of Gradients in 8×8 cells&rdquo; &mdash; 셀마다 9칸 히스토그램</span></div>
+    <div class="fl"><b>③ Block normalization</b><span>2×2 셀을 묶은 블록 단위로 정규화(contrast normalization)</span></div>
+    <div class="fl"><b>④ HOG feature vector</b><span>모든 블록을 이어 붙여 3780차원</span></div>
   </div>
 </div>
 
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>① 그래디언트 — [−1 0 1] 하나로 (55p)</h3>
+  <p>55p는 가로 필터 <span class="tex">[-1\;\;0\;\;1]</span>과 그것을 세운 세로 필터로 <span class="tex">g_x, g_y</span>를 구한다. 오른쪽 이웃에서 왼쪽 이웃을 빼는 것뿐이다(<a class="ext" href="computer-vision-week05.html#edge">5주차 엣지</a>의 차분과 같다).</p>
+  <div class="tex-d">g=\sqrt{g_x^2+g_y^2},\qquad \theta=\arctan\frac{g_y}{g_x}</div>
+  <p>예: 왼쪽 이웃 50, 오른쪽 이웃 80, 위 이웃 60, 아래 이웃 60이면 <span class="tex">g_x=30,\ g_y=0</span> → 크기 30, 방향 0°.</p>
+  <p>두 가지를 짚어 둔다. <b>첫째</b>, 원 논문은 미리 블러하지 않은 이 단순한 필터가 가장 좋았다고 보고한다 &mdash; 블러하면 사람 윤곽처럼 가는 경계가 뭉개지기 때문이다. <b>둘째</b>, 방향은 <b>0~180°(부호 없는 방향)</b>로 접어서 쓴다. 검은 옷이 밝은 배경 앞에 있든 흰 옷이 어두운 배경 앞에 있든 같은 윤곽으로 보기 위해서다. 그래서 다음 단계의 9칸이 0, 20, …, 160이다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>② 8×8 셀에 9칸 히스토그램 — 56p 그림의 숫자 따라가기</h3>
+  <p>56p는 64×128 영상의 머리 부분 셀 하나(8×8 = 64화소)를 확대해, 화소마다 <b>방향(Gradient Direction)</b>과 <b>크기(Gradient Magnitude)</b>를 표로 보여 준다. 아래 막대는 0, 20, 40, …, 160의 <b>9칸</b>이다. 그림의 동그라미 두 개가 투표 규칙을 그대로 보여 준다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>화소 (56p)</th><th>방향</th><th>크기</th><th>어느 칸에 얼마나</th><th>이유</th></tr></thead>
+    <tbody>
+      <tr><td>파란 동그라미</td><td>80°</td><td>2</td><td><b>80칸에 2</b></td><td>칸의 중심에 정확히 놓였다</td></tr>
+      <tr><td>빨간 동그라미</td><td>10°</td><td>4</td><td><b>0칸에 2, 20칸에 2</b></td><td>0과 20의 한가운데라 반씩 나눈다</td></tr>
+      <tr><td>(예) 36°</td><td>36°</td><td>3</td><td>20칸에 0.6, 40칸에 2.4</td><td>40에 더 가까우므로(16 : 4) 거리에 반비례해 나눈다</td></tr>
+      <tr><td>(예) 165°</td><td>165°</td><td>85</td><td>160칸에 63.75, <b>0칸에 21.25</b></td><td>180°는 0°와 같으므로 160과 0(=180) 사이로 본다</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>즉 <span class="hi">표는 그래디언트 크기만큼 던지고, 칸 사이에 걸리면 가까운 정도에 따라 두 칸에 나눠 던진다.</span> 각도가 조금 흔들려도 히스토그램이 한 칸에서 옆 칸으로 뚝 넘어가지 않게 하는 장치다. 이렇게 하면 64화소가 <b>숫자 9개</b>로 줄어든다 &mdash; 압축이면서, 화소가 한두 칸 밀려도 거의 같은 값이 나오는 강인함이다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>③ 블록 정규화 — &ldquo;4 cells × 9&rdquo; (57p)</h3>
+  <p>57p의 파란 사각형이 <b>블록</b>이다. <b>2×2 = 4개 셀</b>(16×16화소)을 묶고, 네 셀의 9칸 히스토그램(v00 … v39)을 이어 붙인다 &mdash; <b>&ldquo;Concatenate 4 × 9 and normalize&rdquo;</b>. 그래서 <b>1 block vector = 4 cells × 9 normalized elements = 36개</b>다. (그림의 각 줄이 v00~v09처럼 10칸으로 그려져 있지만, 9칸이므로 v00~v08이 맞다.)</p>
+  <p><b>왜 정규화하나</b> &mdash; 히스토그램의 값은 그래디언트 크기에서 나오는데, 그래디언트 크기는 그 동네의 밝기 대비에 그대로 끌려다닌다. 햇빛 드는 어깨와 그늘진 다리는 같은 윤곽이어도 값의 규모가 다르다. 블록 안의 36개를 그 합(또는 길이)으로 나누면 <span class="hi">&ldquo;얼마나 센 변화인가&rdquo;는 지워지고 &ldquo;그 동네 안에서 어느 방향이 상대적으로 우세한가&rdquo;만 남는다.</span></p>
+  <div class="fx">
+    <p class="fx-lab">숫자로 &mdash; 대비가 두 배가 되어도</p>
+    <div class="tex-d">(2,\,6,\,2)\ \xrightarrow{\ \div\,10\ }\ (0.2,\,0.6,\,0.2) \qquad (4,\,12,\,4)\ \xrightarrow{\ \div\,20\ }\ (0.2,\,0.6,\,0.2)</div>
+    <p class="fx-note">57p는 합으로 나누는 형태 <span class="tex">1/\sum v_{ij}</span>(L1 정규화)로 적었다. 원 논문은 여러 방식을 비교해 <b>L2-Hys</b>(길이로 나눈 뒤 0.2 넘는 값을 자르고 다시 정규화 &mdash; <a class="ext" href="#sift">SIFT</a>의 마지막 단계와 같은 요령)와 L1-sqrt가 가장 좋고, 단순 L1은 조금 떨어진다고 보고했다.</p>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>④ 3780은 어떻게 나오나 — 겹치는 블록 (58 · 59 · 60p)</h3>
+  <p>58p &mdash; <b>Total 105 blocks (7×15, overlapping) → 105 blocks × 4 cells × 9 normalized elements → 3780-sized feature vector</b>.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>단계</th><th>가로</th><th>세로</th><th>계</th></tr></thead>
+    <tbody>
+      <tr><td>영상</td><td>64화소</td><td>128화소</td><td>8,192화소</td></tr>
+      <tr><td>셀 (8×8화소)</td><td>64 ÷ 8 = 8</td><td>128 ÷ 8 = 16</td><td>128셀</td></tr>
+      <tr><td>블록 (2×2셀, <b>한 셀씩</b> 이동)</td><td>8 &minus; 1 = <b>7</b></td><td>16 &minus; 1 = <b>15</b></td><td><b>105블록</b></td></tr>
+      <tr><td>벡터</td><td colspan="3">105 × 36 = <b>3780</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>블록이 <b>한 셀(8화소)씩</b> 미끄러지므로 블록끼리 반씩 겹친다. 가장자리가 아닌 셀은 <b>4개 블록에 들어가</b> 매번 다른 이웃과 함께 정규화된다. 같은 정보가 네 번 들어가 벡터가 길어지는 대신, 블록 경계에서 값이 뚝 끊기지 않고 성능이 오른다 &mdash; 원 논문이 겹치는 쪽이 낫다고 확인했다. 59p는 이것을 &ldquo;Make it a 1D vector of length 3780&rdquo;으로 한 줄로 펼친 그림이다.</p>
+  <p>60p의 시각화(<b>Visualized by averaging the 4 normalized cells</b>)는 셀마다 9방향의 세기를 선분 길이로 그린 별 모양이다. 사람 윤곽을 따라 선분이 정렬되어 보이는데 &mdash; <span class="hi">HOG가 사람의 &lsquo;모양&rsquo;을 방향 분포로 적어 두었다</span>는 것을 눈으로 확인하는 그림이다. 61p는 실제 입력 영상과 HOG 시각화를 나란히 놓았다.</p>
+</div>
+
 <div class="pt plus">
-  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>블록 정규화가 왜 따로 필요한가</h3>
-  <p>셀 히스토그램의 값은 <b>그래디언트 크기</b>에서 나온다. 그런데 그래디언트 크기는 <b>국소적인 밝기와 대비</b>에 그대로 끌려다닌다 &mdash; 햇빛이 드는 어깨 부분과 그늘진 다리 부분은 같은 윤곽이어도 값의 규모가 다르다.</p>
-  <p>그래서 <b>이웃 셀들을 묶은 블록 단위로 벡터 길이를 1로 맞춘다</b>. 그러면 <span class="hi">&ldquo;얼마나 강한 변화인가&rdquo;가 아니라 &ldquo;그 동네 안에서 어느 방향이 상대적으로 우세한가&rdquo;만 남는다.</span> 블록을 <b>겹치게</b> 두는 이유도 같다 &mdash; 한 셀이 여러 블록에서 <b>서로 다른 기준으로</b> 정규화되어 들어가므로, 경계 부근에서 값이 뚝 끊기지 않는다.</p>
-  <p>SIFT가 마지막에 128차원 벡터를 정규화하던 것과 같은 동기이고, 차이는 <b>정규화의 단위가 &lsquo;키포인트 하나&rsquo;인가 &lsquo;겹치는 블록들&rsquo;인가</b>뿐이다.</p>
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>SIFT의 128차원과 HOG의 3780차원 — 같은 생각, 다른 단위</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>SIFT 기술자</th><th>HOG</th></tr></thead>
+    <tbody>
+      <tr><td>어디에 붙나</td><td>키포인트 하나 주변 16×16</td><td>창 전체 64×128</td></tr>
+      <tr><td>셀 · 방향 칸</td><td>4×4화소 셀, 8방향(0~360°)</td><td>8×8화소 셀, 9칸(0~180°)</td></tr>
+      <tr><td>회전 맞추기</td><td>주방향으로 돌린 뒤 계산</td><td><b>하지 않는다</b> &mdash; 서 있는 사람은 늘 세로이므로</td></tr>
+      <tr><td>정규화</td><td>128개 전체를 한 번</td><td>겹치는 블록마다</td></tr>
+      <tr><td>쓰임</td><td>매칭 (거리 비교)</td><td>분류 (SVM)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>&ldquo;셀로 나눠 방향 히스토그램을 세고 정규화한다&rdquo;는 뼈대는 같고, <b>무엇을 위해 쓰느냐</b>에 따라 회전 처리와 정규화 단위가 갈렸다.</p>
 </div>
 </section>
+
 
 <!-- ===================== 05 ===================== -->
 <section class="sec" id="brief">
   <div class="sec-head"><span class="sec-badge">05</span><h2 class="sec-title">BRIEF · BRISK — 벡터를 0과 1로 바꾸다<small>교안 64~71p · Calonder et al., ECCV 2010</small></h2></div>
 
 <div class="deck">
-  <div class="deck-h">교안 슬라이드 모아보기 <span>65 · 66 · 67 · 69 · 70 · 71p</span></div>
+  <div class="deck-h">교안 슬라이드 모아보기 <span>65 · 66 · 67 · 68 · 69 · 70 · 71p</span></div>
   <div class="deck-g">
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-65-brief-test.jpg" alt="교안 65p — 패치 위의 이진 테스트"><figcaption><b>65p</b> 패치 위의 이진 테스트</figcaption></figure>
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-66-brief-pairs.jpg" alt="교안 66p — 미리 정한 128 · 256 · 512 쌍과 해밍 거리"><figcaption><b>66p</b> 미리 정한 128 · 256 · 512 쌍과 해밍 거리</figcaption></figure>
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-67-brief-256.jpg" alt="교안 67p — BRIEF 의 처리 과정과 256개 픽셀 쌍"><figcaption><b>67p</b> BRIEF 의 처리 과정과 256개 픽셀 쌍</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-68-brief-vs-sift.jpg" alt="교안 68p — 같은 키포인트의 SIFT 기술자와 BRIEF 기술자"><figcaption><b>68p</b> 같은 키포인트의 SIFT 기술자와 BRIEF 기술자</figcaption></figure>
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-69-brief-proscons.jpg" alt="교안 69p — 장점과 단점"><figcaption><b>69p</b> 장점과 단점</figcaption></figure>
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-70-brisk.jpg" alt="교안 70p — BRISK — 스케일 공간 검출 + 이진 기술자"><figcaption><b>70p</b> BRISK — 스케일 공간 검출 + 이진 기술자</figcaption></figure>
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-71-brief-matches.jpg" alt="교안 71p — 올바른 매칭 결과"><figcaption><b>71p</b> 올바른 매칭 결과</figcaption></figure>
@@ -2059,48 +2120,179 @@ table.acc{min-width:0}
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>발상 — 값을 저장하지 말고 &ldquo;누가 더 밝은가&rdquo;만 적자 (65~67p)</h3>
-  <p><b>BRIEF = Binary Robust Independent Elementary Features</b>. 이름의 <b>Elementary(초보적인)</b>가 방법을 그대로 말해 준다.</p>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>발상 — 값을 적지 말고 &ldquo;어느 쪽이 더 밝은가&rdquo;만 적자 (64 · 65p)</h3>
+  <p><b>BRIEF = Binary Robust Independent Elementary Features</b>. Calonder, Lepetit, Strecha, Fua가 <b>ECCV 2010</b>에 발표했고 PAMI 2012에 확장판이 실렸다(64p). 이름의 <b>Binary(이진)</b>와 <b>Elementary(기초적인)</b>가 방법을 그대로 말해 준다.</p>
+  <p>65p의 두 식을 차례로 읽자.</p>
   <div class="fx">
-    <p class="fx-lab">패치 <span class="tex">p</span> 위의 이진 테스트</p>
-    <div class="tex-d">\tau(p;\,\mathbf{x},\mathbf{y})=\begin{cases}1 &amp; \text{if } p(\mathbf{x}) &lt; p(\mathbf{y})\\ 0 &amp; \text{otherwise}\end{cases}</div>
-    <p class="fx-note">패치 안에서 <b>미리 정해 둔 두 점의 밝기를 비교</b>해 <b>비트 하나</b>를 만든다. 이 비교를 <b>128 · 256 · 512번</b> 반복해 이어 붙이면 그것이 곧 기술자다. 256쌍을 쓰면 <b>256비트 = 32바이트</b>짜리 기술자가 나온다 &mdash; SIFT의 128차원 실수 벡터(보통 512바이트)와 비교하면 <span class="hi">크기가 16분의 1</span>이다.</p>
+    <p class="fx-lab">① Binary test &mdash; S×S 패치 p 위의 비교 하나</p>
+    <div class="tex-d">\tau(\mathbf{p};\mathbf{x},\mathbf{y}):=\begin{cases}1 &amp; \text{if } \mathbf{p}(\mathbf{x})&lt;\mathbf{p}(\mathbf{y})\\ 0 &amp; \text{otherwise}\end{cases}</div>
+    <p class="fx-note">패치 안의 두 점 <b>x</b>, <b>y</b>의 밝기를 견줘 <b>y가 더 밝으면 1, 아니면 0</b>. 밝기 값 자체는 버리고 <b>대소 관계 1비트</b>만 남긴다.</p>
   </div>
-  <p>순서는 <b>① 패치를 먼저 부드럽게(smoothing) → ② 정해진 쌍으로 이진 테스트 → ③ 비트열 완성</b>이다. 스무딩이 빠지면 <b>화소 하나의 잡음이 비트를 통째로 뒤집어</b> 버리기 때문에 반드시 필요한 단계다.</p>
-</div>
-
-<div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>매칭이 빨라지는 진짜 이유 &mdash; 해밍 거리 (66p)</h3>
-  <p>이진 기술자끼리는 <b>유클리디언 거리가 아니라 <span class="term" tabindex="0" data-tip="Hamming distance. 같은 길이의 두 비트열에서 서로 다른 자리의 개수.">해밍 거리</span></b>로 비교한다. 두 비트열을 <b>XOR</b>한 뒤 <b>1의 개수를 세면</b> 끝이다.</p>
-  <p>이 두 연산은 CPU가 <b>명령어 한 번</b>으로 처리한다. 128차원 실수 벡터의 거리를 구하려면 <b>곱셈 128번과 덧셈 127번</b>이 필요한 것과 견주면, <span class="hi">매칭 속도가 수십 배 빨라지는 이유가 여기 있다.</span></p>
-</div>
-
-<div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>장점과 약점 (69 · 70p)</h3>
+  <div class="fx">
+    <p class="fx-lab">② BRIEF descriptor &mdash; 비교를 n<sub>d</sub>번 해서 이진수 하나로</p>
+    <div class="tex-d">f_{n_d}(\mathbf{p}):=\sum_{1\le i\le n_d}2^{\,i-1}\,\tau(\mathbf{p};\mathbf{x}_i,\mathbf{y}_i)</div>
+    <p class="fx-note"><span class="tex">2^{i-1}</span>은 <b>i번째 비교 결과를 i번째 자리 비트에 놓으라</b>는 뜻이다. 결국 <b>n<sub>d</sub>개의 비트를 한 줄로 늘어놓은 이진수</b>가 기술자다.</p>
+  </div>
+  <p class="sub-title">숫자로 해 보기 — 비교 8번</p>
   <div class="tbl-wrap">
   <table>
-    <thead><tr><th>장점</th><th>약점</th></tr></thead>
+    <thead><tr><th>i</th><th>p(x<sub>i</sub>)</th><th>p(y<sub>i</sub>)</th><th>p(x) &lt; p(y)?</th><th>τ</th></tr></thead>
     <tbody>
-      <tr><td>작고(compact) 계산이 쉬우며 변별력이 높다</td><td rowspan="2"><b>영상의 왜곡과 변형에 민감</b>하다 &mdash; 특히 <b>평면 내 회전</b>과 <b>스케일 변화</b>에 약하다</td></tr>
-      <tr><td>해밍 거리 덕분에 <b>매칭이 매우 빠르다</b></td></tr>
+      <tr><td>1</td><td>12</td><td>90</td><td>예</td><td><b>1</b></td></tr>
+      <tr><td>2</td><td>70</td><td>52</td><td>아니오</td><td>0</td></tr>
+      <tr><td>3</td><td>85</td><td>30</td><td>아니오</td><td>0</td></tr>
+      <tr><td>4</td><td>10</td><td>35</td><td>예</td><td><b>1</b></td></tr>
+      <tr><td>5</td><td>20</td><td>88</td><td>예</td><td><b>1</b></td></tr>
+      <tr><td>6</td><td>65</td><td>50</td><td>아니오</td><td>0</td></tr>
+      <tr><td>7</td><td>80</td><td>40</td><td>아니오</td><td>0</td></tr>
+      <tr><td>8</td><td>15</td><td>70</td><td>예</td><td><b>1</b></td></tr>
     </tbody>
   </table>
   </div>
-  <p>약점의 원인은 분명하다 &mdash; <b>BRIEF에는 방향 개념이 아예 없다.</b> 패치가 돌아가면 &ldquo;미리 정해 둔 쌍&rdquo;이 가리키는 위치가 전부 달라지므로 비트열이 통째로 바뀐다.</p>
-  <p><b>BRISK</b>는 이 문제를 <b>SIFT식 스케일 공간 검출</b>과 결합해 보완한 방법이다. 키포인트 주변에서 <b>가우시안으로 평균 낸 점들의 쌍</b>을 비교해 <b>512비트</b> 기술자를 만든다.</p>
+  <p>비트열 (1, 0, 0, 1, 1, 0, 0, 1) &rarr; <span class="tex">f=2^0+2^3+2^4+2^7=1+8+16+128=153</span>. 실제로는 이 비교를 <b>128 · 256 · 512번</b> 해서 <b>16 · 32 · 64바이트</b>짜리 기술자를 만든다. SIFT의 128차원 실수 벡터(4바이트 × 128 = 512바이트)와 견주면 256비트(32바이트) BRIEF는 <span class="hi">16분의 1 크기</span>다.</p>
+  <p><b>For each S×S patch: Smooth it, then pick pixels using pre-defined binary tests</b> &mdash; 비교 전에 반드시 패치를 <b>부드럽게</b> 한다. 화소 하나의 잡음이 대소 관계를 뒤집으면 비트가 통째로 바뀌기 때문이다(원 논문은 σ = 2인 9×9 가우시안). 그리고 비교할 점 쌍은 <b>미리 정해 둔(pre-defined) 고정 패턴</b>이다 &mdash; 모든 키포인트에서 <b>같은 순서, 같은 위치</b>를 비교해야 i번째 비트끼리 견줄 수 있다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>점 쌍은 어떻게 고르나 — G I ~ G V (66 · 67p)</h3>
+  <p>66p &mdash; <b>Random selection of pairs of intensity values. Fixed sampling pattern of 128, 256, 512 pairs.</b> 아래 다섯 그림은 원 논문이 비교한 쌍 뽑기 방식이다(선 하나 = 비교 쌍 하나).</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>패턴</th><th>뽑는 법</th></tr></thead>
+    <tbody>
+      <tr><td>G I</td><td>x, y 모두 패치 안에서 <b>균일하게</b> 무작위</td></tr>
+      <tr><td><b>G II</b></td><td>x, y 모두 패치 중심 주변 <b>가우시안</b>(σ² = S²/25)으로 무작위 &mdash; <b>원 논문에서 가장 좋았다</b></td></tr>
+      <tr><td>G III</td><td>x를 중심 주변에서 뽑고, y는 <b>x 주변</b>에서 뽑는다 &mdash; 짧은 쌍이 많다</td></tr>
+      <tr><td>G IV</td><td>극좌표 격자 위의 점들 중 무작위</td></tr>
+      <tr><td>G V</td><td>x는 <b>중심 고정</b>, y만 극좌표 격자 위 &mdash; 별 모양</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>G II가 이기는 직관 &mdash; 중심 가까이의 화소는 키포인트의 특징을 가장 잘 담고, 가장자리로 갈수록 위치 오차의 영향이 커진다. 그래서 중심 쪽을 더 자주, 가장자리를 가끔 비교하는 것이 유리하다.</p>
+  <p>67p (a)는 비교 과정을 그린 것이다 &mdash; 점 하나 대신 <b>5×5 작은 창의 밝기</b>를 쓰고(창 평균은 잡음에 더 강하다), <span class="tex">p(r_1,c_1)\ge p(r_2,c_2)</span>이면 0, <span class="tex">p(r_3,c_3)&lt;p(r_4,c_4)</span>이면 1을 붙여 나간다. (b)는 30×30 패치 위의 256개 쌍 전체다.</p>
+</div>
+
+<div class="pt plus" id="brief-hamming">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>해밍 거리와 XOR — &ldquo;Hamming distance to compare descriptors (XOR)&rdquo; (66 · 68p)</h3>
+  <p>실수 벡터끼리는 유클리디언 거리(차이를 제곱해 더하고 제곱근)로 비교했다. 이진 기술자는 <b>해밍 거리</b>로 비교한다 &mdash; <b>같은 길이의 두 비트열에서 서로 다른 자리가 몇 개인가</b>. 이것을 세는 데 쓰는 연산이 <b>XOR</b>이다.</p>
+  <p class="sub-title">XOR(배타적 논리합)이란</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>a</th><th>b</th><th>a XOR b</th><th>읽는 법</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td>0</td><td>0</td><td>같다</td></tr>
+      <tr><td>0</td><td>1</td><td><b>1</b></td><td>다르다</td></tr>
+      <tr><td>1</td><td>0</td><td><b>1</b></td><td>다르다</td></tr>
+      <tr><td>1</td><td>1</td><td>0</td><td>같다</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>OR(&ldquo;둘 중 하나라도 1이면 1&rdquo;)과 달리, XOR은 <b>둘 중 정확히 하나만 1일 때</b> 1이다 &mdash; 영어 eXclusive(배타적)가 &ldquo;둘 다는 안 된다&rdquo;는 뜻이다. 결과적으로 <span class="hi">XOR은 &lsquo;두 비트가 다른가?&rsquo;라는 질문에 1(예) · 0(아니오)으로 답하는 연산</span>이다.</p>
+  <svg class="dia" viewBox="0 0 560 190" role="img" aria-label="두 8비트 기술자를 XOR 하고 1의 개수를 세어 해밍 거리를 구하는 예" style="max-width:560px">
+<text x="20" y="46" font-size="12.5" font-weight="700" fill="#1f2937">기술자 A</text>
+<rect x="120" y="20" width="40" height="38" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="140" y="45" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2937">1</text>
+<rect x="164" y="20" width="40" height="38" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="184" y="45" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2937">0</text>
+<rect x="208" y="20" width="40" height="38" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="228" y="45" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2937">1</text>
+<rect x="252" y="20" width="40" height="38" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="272" y="45" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2937">1</text>
+<rect x="296" y="20" width="40" height="38" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="316" y="45" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2937">0</text>
+<rect x="340" y="20" width="40" height="38" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="360" y="45" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2937">1</text>
+<rect x="384" y="20" width="40" height="38" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="404" y="45" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2937">0</text>
+<rect x="428" y="20" width="40" height="38" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="448" y="45" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2937">0</text>
+<text x="20" y="94" font-size="12.5" font-weight="700" fill="#1f2937">기술자 B</text>
+<rect x="120" y="68" width="40" height="38" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="140" y="93" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2937">1</text>
+<rect x="164" y="68" width="40" height="38" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="184" y="93" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2937">0</text>
+<rect x="208" y="68" width="40" height="38" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="228" y="93" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2937">0</text>
+<rect x="252" y="68" width="40" height="38" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="272" y="93" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2937">1</text>
+<rect x="296" y="68" width="40" height="38" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="316" y="93" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2937">1</text>
+<rect x="340" y="68" width="40" height="38" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="360" y="93" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2937">1</text>
+<rect x="384" y="68" width="40" height="38" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="404" y="93" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2937">0</text>
+<rect x="428" y="68" width="40" height="38" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text x="448" y="93" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2937">1</text>
+<line x1="120" x2="472" y1="111" y2="111" stroke="#94a3b8"/>
+<text x="20" y="142" font-size="12.5" font-weight="700" fill="#b45309">A XOR B</text>
+<rect x="120" y="116" width="40" height="38" rx="5" fill="#fff7ed" stroke="#cbd5e1"/>
+<text x="140" y="141" font-size="16" font-weight="700" text-anchor="middle" fill="#b45309">0</text>
+<rect x="164" y="116" width="40" height="38" rx="5" fill="#fff7ed" stroke="#cbd5e1"/>
+<text x="184" y="141" font-size="16" font-weight="700" text-anchor="middle" fill="#b45309">0</text>
+<rect x="208" y="116" width="40" height="38" rx="5" fill="#f59e0b" stroke="#cbd5e1"/>
+<text x="228" y="141" font-size="16" font-weight="700" text-anchor="middle" fill="#fff">1</text>
+<rect x="252" y="116" width="40" height="38" rx="5" fill="#fff7ed" stroke="#cbd5e1"/>
+<text x="272" y="141" font-size="16" font-weight="700" text-anchor="middle" fill="#b45309">0</text>
+<rect x="296" y="116" width="40" height="38" rx="5" fill="#f59e0b" stroke="#cbd5e1"/>
+<text x="316" y="141" font-size="16" font-weight="700" text-anchor="middle" fill="#fff">1</text>
+<rect x="340" y="116" width="40" height="38" rx="5" fill="#fff7ed" stroke="#cbd5e1"/>
+<text x="360" y="141" font-size="16" font-weight="700" text-anchor="middle" fill="#b45309">0</text>
+<rect x="384" y="116" width="40" height="38" rx="5" fill="#fff7ed" stroke="#cbd5e1"/>
+<text x="404" y="141" font-size="16" font-weight="700" text-anchor="middle" fill="#b45309">0</text>
+<rect x="428" y="116" width="40" height="38" rx="5" fill="#f59e0b" stroke="#cbd5e1"/>
+<text x="448" y="141" font-size="16" font-weight="700" text-anchor="middle" fill="#fff">1</text>
+<text x="490" y="146" font-size="12" font-weight="700" fill="#b45309">1이 3개</text>
+<text x="490" y="163" font-size="12" font-weight="700" fill="#b45309">→ 거리 3</text>
+<text x="280" y="182" font-size="10.5" text-anchor="middle" fill="#6b7280">같은 자리 비트가 다를 때만 1 — 다른 자리의 개수가 곧 해밍 거리</text>
+</svg>
+  <p class="dia-cap">두 기술자를 자리별로 XOR하면 다른 자리만 1로 남는다. 그 1의 개수(popcount)가 해밍 거리다</p>
+  <p class="sub-title">왜 빠른가</p>
+  <p>컴퓨터는 64비트를 <b>한 덩어리(워드)</b>로 다룬다. XOR은 64자리를 <b>명령어 한 번에 동시에</b> 처리하고, 1의 개수를 세는 것도 현대 CPU에는 <b>전용 명령어(POPCNT)</b>가 있다. 256비트 기술자라면 64비트씩 4덩어리 &rarr; <b>XOR 4번 + POPCNT 4번 + 덧셈 3번</b>이면 거리 하나가 나온다. SIFT 128차원의 유클리디언 거리는 <b>뺄셈 128번 + 곱셈 128번 + 덧셈 127번</b>(실수 연산)이 필요하다.</p>
+  <p class="sub-title">왜 &lsquo;매칭&rsquo; 속도가 특히 중요한가</p>
+  <p>사진 두 장에서 키포인트를 1,000개씩 뽑았다고 하자. <b>기술자 계산</b>은 2,000번이면 끝나지만, 가장 가까운 짝을 찾는 <b>매칭</b>은 1,000 × 1,000 = <b>100만 번</b>의 거리 계산이다. 영상 검색처럼 수만 장의 데이터베이스와 견주면 그 수는 훨씬 더 커진다. <span class="hi">전체 시간을 좌우하는 것은 거리 계산 한 번의 비용</span>이고, 그래서 BRIEF는 &lsquo;기술자를 빨리 만드는 것&rsquo;만큼 &lsquo;빨리 비교되는 형식&rsquo;을 고른 것이 핵심이다.</p>
+  <p>68p는 같은 키포인트(DoG로 검출)에 <b>SIFT 기술자</b>(격자 · 방향 히스토그램)와 <b>BRIEF 기술자</b>(무작위 선분 = 비교 쌍)를 나란히 놓고 &ldquo;(Hamming) distance instead of Euclidean&rdquo;을 보여 준다. 슬라이드 제목은 BRISK의 이름(Binary Robust Independent Scalable Keypoints)으로 적혀 있지만 내용은 BRIEF와 SIFT의 비교다. 그림에서 보듯 <b>BRIEF는 기술자일 뿐 검출기가 없어서</b>, DoG · FAST 같은 다른 검출기가 찾아 준 점에 붙여 쓴다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>장점과 약점 — 방향이 없다는 것 (69p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Pros (69p)</th><th>Cons (69p)</th></tr></thead>
+    <tbody>
+      <tr><td>Compact, easy-computed, highly discriminative &mdash; 작고, 계산이 쉽고, 변별력이 높다</td><td rowspan="3">More sensitive to image distortions and transformations, <b>in particular to in-plane rotation and scale change</b> &mdash; 영상의 왜곡 · 변형, 특히 <b>평면 내 회전</b>과 <b>크기 변화</b>에 민감하다</td></tr>
+      <tr><td>Fast matching using Hamming distance &mdash; 해밍 거리로 매칭이 빠르다</td></tr>
+      <tr><td>Good recognition performance &mdash; 인식 성능이 좋다</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>회전에 약한 이유</b> &mdash; BRIEF의 비교 쌍은 패치 위의 <b>고정된 좌표</b>다. 사진이 30° 돌아가면 &ldquo;왼쪽 위 점과 오른쪽 아래 점을 비교하라&rdquo;는 지시가 <b>엉뚱한 화소</b>를 가리키게 되어 비트가 대거 뒤집힌다. SIFT · SURF처럼 <b>주방향을 구해 패치를 돌려 놓는 단계가 없기 때문</b>이다. 원 논문의 실험에서도 약 10~15°를 넘으면 매칭 성능이 급격히 떨어진다. <b>크기에 약한 이유</b>도 같다 &mdash; 패치 크기 S가 고정이라 확대된 물체에서는 다른 범위를 보게 된다. 이 약점을 정면으로 고친 것이 ORB다(<a class="ext" href="#orb">06</a>).</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>BRISK — 스케일 공간 검출 + BRIEF식 기술자 (70 · 71p)</h3>
+  <p>70p &mdash; <b>Binary Robust Invariant Scalable Keypoints</b>(Leutenegger, Chli, Siegwart, ICCV 2011). 교안의 네 문장을 풀면:</p>
+  <ul class="ul">
+    <li><b>SIFT 같은 스케일 공간 검출 + BRIEF 같은 기술자</b>의 결합 &mdash; 크기 변화를 검출 단계에서 처리한다</li>
+    <li>키포인트 주변의 <b>정해진 점 패턴</b>(동심원 위의 점들)에서 각 점을 <b>가우시안으로 평균</b> 낸 값을 쓴다</li>
+    <li>미리 고른 <b>점 쌍의 가우시안 창 값을 비교</b>해 큰 쪽에 따라 1 또는 0 &rarr; <b>512비트</b> 기술자</li>
+    <li>그래서 거리는 유클리디언이 아닌 <b>해밍 거리</b></li>
+  </ul>
+  <p>교안에는 없지만 원 논문은 <b>멀리 떨어진 점 쌍들의 밝기 차이로 방향</b>도 구해, 패턴을 그 방향으로 돌린 뒤 <b>가까운 점 쌍</b>으로 비트를 만든다. 즉 BRISK는 BRIEF의 두 약점(스케일 · 회전)을 모두 손본 버전이다. 71p는 이렇게 만든 기술자로 찾은 올바른 매칭(Correct matches)의 예다.</p>
 </div>
 </section>
+
 
 <!-- ===================== 06 ===================== -->
 <section class="sec" id="orb">
   <div class="sec-head"><span class="sec-badge">06</span><h2 class="sec-title">ORB — 이진 기술자에 방향을 달다<small>교안 72~78p · Rublee et al., ICCV 2011</small></h2></div>
 
 <div class="deck">
-  <div class="deck-h">교안 슬라이드 모아보기 <span>73 · 74 · 75 · 77 · 78p</span></div>
+  <div class="deck-h">교안 슬라이드 모아보기 <span>73 · 74 · 75 · 76 · 77 · 78p</span></div>
   <div class="deck-g">
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-73-orb-idea.jpg" alt="교안 73p — Oriented FAST and Rotated BRIEF"><figcaption><b>73p</b> Oriented FAST and Rotated BRIEF</figcaption></figure>
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-74-orb-flow.jpg" alt="교안 74p — ORB 전체 흐름"><figcaption><b>74p</b> ORB 전체 흐름</figcaption></figure>
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-75-orb-fast.jpg" alt="교안 75p — FAST 코너 검출"><figcaption><b>75p</b> FAST 코너 검출</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-76-orb-learning.jpg" alt="교안 76p — 좋은 비교 쌍의 두 조건과 30만 키포인트 학습"><figcaption><b>76p</b> 좋은 비교 쌍의 두 조건과 30만 키포인트 학습</figcaption></figure>
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-77-orb-sampling.jpg" alt="교안 77p — 좋은 비교 쌍 고르기"><figcaption><b>77p</b> 좋은 비교 쌍 고르기</figcaption></figure>
     <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv6-78-orb-rotation.jpg" alt="교안 78p — BRIEF 보다 회전에 강하다"><figcaption><b>78p</b> BRIEF 보다 회전에 강하다</figcaption></figure>
   </div>
@@ -2109,41 +2301,316 @@ table.acc{min-width:0}
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>이름이 곧 설계도 (72 · 73p)</h3>
-  <p><b>ORB = Oriented FAST and Rotated BRIEF</b>. 원 논문의 부제가 <b>&ldquo;SIFT나 SURF의 효율적인 대안&rdquo;</b>이다.</p>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>이름이 곧 설계도 — Oriented FAST and Rotated BRIEF (72 · 73p)</h3>
+  <p>72p &mdash; <b>&ldquo;ORB: an efficient alternative to SIFT or SURF&rdquo;</b>, Rublee, Rabaud, Konolige, Bradski, <b>ICCV 2011</b>. 저자들은 당시 OpenCV 개발을 이끌던 로봇 연구소 <b>Willow Garage</b> 소속이었고, ORB는 처음부터 OpenCV에 들어갔다. 제목 그대로 <b>SIFT · SURF를 대신할 효율적인 대안</b>을 목표로 했다 &mdash; 빠르고, 회전에 강하고, 특허 부담이 없는 것.</p>
+  <p>73p는 ORB가 더한 것을 세 줄로 적는다.</p>
   <ul class="ul">
-    <li><b>Oriented FAST</b> &mdash; 빠른 코너 검출기 <b>FAST</b>에 <b>방향</b>을 붙였다</li>
-    <li><b>Rotated BRIEF</b> &mdash; 그 방향만큼 <b>비교 쌍을 회전</b>시켜 BRIEF를 적용한다</li>
+    <li><b>Fast and accurate orientation compensation to FAST</b> &mdash; 방향 개념이 없던 FAST 검출기에 <b>빠르고 정확한 방향</b>을 붙였다 (= <b>O</b>riented FAST)</li>
+    <li><b>Efficient computation of oriented BRIEF</b> &mdash; 그 방향만큼 BRIEF의 비교 쌍을 <b>효율적으로 돌린다</b> (= <b>R</b>otated BRIEF)</li>
+    <li><b>Learn to de-correlate BRIEF in sampling pairs under rotational invariance</b> &mdash; 돌려도 잘 작동하도록 <b>비교 쌍을 데이터로 골랐다</b></li>
   </ul>
-  <p>즉 <span class="hi">BRIEF의 유일한 치명적 약점이던 &ldquo;회전&rdquo;을, 검출 단계에서 방향을 구해 해결한 것</span>이다. 05에서 본 문제에 대한 가장 직접적인 답이다.</p>
+  <p>FAST와 BRIEF를 단순히 이어 붙인 것이 아니라, <span class="hi">FAST에 없던 방향을 검출 단계에서 구하고, 그 방향을 BRIEF가 받아 회전에 대한 약점을 메우는</span> 구조다.</p>
 </div>
 
-<div class="pt plus">
-  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>FAST 코너 검출과 밝기 중심(intensity centroid)</h3>
-  <p><b>FAST</b>는 중심 화소 주위의 <b>원형 16화소</b>를 훑어, <b>연속된 N개(보통 9~12개)가 모두 중심보다 충분히 밝거나 어두우면</b> 코너로 판정한다. 곱셈이 전혀 없어 대단히 빠르다.</p>
-  <p>문제는 FAST가 <b>방향을 알려 주지 않는다</b>는 점이다. ORB는 <b>밝기 중심</b>으로 방향을 정한다 &mdash; 패치의 밝기를 질량이라고 보고 <b>무게중심</b>을 구한 뒤, <b>패치 중심에서 무게중심으로 향하는 방향</b>을 그 키포인트의 각도로 삼는다.</p>
-  <div class="fx">
-    <div class="tex-d">m_{pq}=\sum_{x,y} x^{p}y^{q}\,I(x,y), \qquad C=\left(\frac{m_{10}}{m_{00}},\;\frac{m_{01}}{m_{00}}\right), \qquad \theta=\operatorname{atan2}(m_{01},\,m_{10})</div>
-    <p class="fx-note">SIFT가 히스토그램을 만들어 최대 구간을 찾는 것보다 훨씬 <b>가볍다</b>. 정확도는 조금 떨어지지만 <b>실시간 처리</b>가 목적이라면 충분한 타협이다.</p>
+<div class="pt plus" id="orb-flow">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>74p 흐름도를 한 칸씩 — the flow chart of basic ORB algorithm</h3>
+  <p>74p의 일곱 상자를 위에서부터 따라간다. 각 칸의 자세한 내용은 아래 카드들에서 다시 푼다.</p>
+  <div class="flow">
+    <div class="fl"><b>① Start</b><span>입력 영상. ORB는 크기 변화에 대응하려고 <b>영상 피라미드</b>(원 논문은 √2배씩 5단, OpenCV 기본값은 1.2배씩 8단)를 만들고 <b>층마다</b> 아래 과정을 한다 &mdash; 흐름도에는 생략되어 있다</span></div>
+    <div class="fl"><b>② Find the position of the key points by FAST</b><span>FAST로 코너 후보의 <b>위치</b>를 찾는다. 원 논문은 <b>FAST-9</b>를 쓴다</span></div>
+    <div class="fl"><b>③ Selecting N best points</b><span>FAST는 &lsquo;코너다 / 아니다&rsquo;만 말하고 얼마나 좋은 코너인지는 말하지 않으며, 엣지 위에서도 반응한다. 그래서 문턱을 낮춰 후보를 넉넉히 뽑은 뒤 <b>Harris 코너 점수</b>(<a class="ext" href="computer-vision-week05.html#harris">5주차</a>)로 줄을 세워 <b>상위 N개</b>만 남긴다</span></div>
+    <div class="fl"><b>④ Add a direction of the points in Intensity Centroid</b><span>점마다 <b>밝기 중심</b>으로 방향 θ를 구한다(73p 식)</span></div>
+    <div class="fl"><b>⑤ Extracting Binary descriptor by BRIEF</b><span>비교 쌍을 θ만큼 <b>돌려서</b> BRIEF를 적용한다(steered BRIEF)</span></div>
+    <div class="fl"><b>⑥ Find low correlative pixel blocks in greedy algorithm</b><span>서로 <b>상관이 낮은 비교 쌍</b>을 탐욕 알고리즘으로 고른 결과를 쓴다(rBRIEF). <b>쌍 고르기 자체는 미리 한 번</b> 해 둔 학습이고, 영상마다 다시 하지 않는다</span></div>
+    <div class="fl"><b>⑦ Receive a 256-bit descriptor</b><span>점마다 <b>256비트(32바이트)</b> 기술자 완성 &mdash; 해밍 거리로 매칭</span></div>
   </div>
+  <p>②③이 <b>검출(Oriented FAST의 FAST 부분)</b>, ④가 <b>방향(Oriented)</b>, ⑤⑥⑦이 <b>기술(Rotated BRIEF)</b>이다. SIFT의 네 단계(<a class="ext" href="#sift">02</a>)와 같은 뼈대를, 단계마다 가장 싼 계산으로 채운 셈이다.</p>
+</div>
+
+<div class="pt gyo" id="orb-fast">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>FAST 코너 검출기 — 원 위의 16화소에서 &lsquo;연속&rsquo;을 센다 (75p)</h3>
+  <p>FAST(<b>F</b>eatures from <b>A</b>ccelerated <b>S</b>egment <b>T</b>est)는 Rosten &amp; Drummond(ECCV 2006)의 검출기다. 75p 오른쪽 확대 그림이 원리를 다 담고 있다 &mdash; 가운데 화소 <b>p</b> 주위로 <b>반지름 3짜리 원 위의 화소 16개</b>(1~16번, 빨간 칸)를 본다.</p>
+  <div class="flow">
+    <div class="fl"><b>① 문턱 t를 정한다</b><span>p의 밝기를 <span class="tex">I_p</span>라 할 때 기준은 <span class="tex">I_p+t</span>와 <span class="tex">I_p-t</span></span></div>
+    <div class="fl"><b>② 16개를 셋으로 나눈다</b><span><span class="tex">I_p+t</span>보다 밝음 · <span class="tex">I_p-t</span>보다 어두움 · 그 사이(비슷함)</span></div>
+    <div class="fl"><b>③ 원을 따라 연속 개수를 센다</b><span><b>밝음이 n개 이상 연속</b>이거나 <b>어두움이 n개 이상 연속</b>이면 p는 코너. 16번 다음은 다시 1번이므로 <b>원을 한 바퀴 이어서</b> 센다</span></div>
+  </div>
+  <p><b>FAST-9 · FAST-12의 숫자가 이 n이다.</b> FAST-9는 연속 9개 이상, FAST-12는 연속 12개 이상을 요구한다. 아래는 직접 만든 예다.</p>
+  <svg class="dia" viewBox="0 0 640 340" role="img" aria-label="FAST — 중심 화소 p 주위 원 위의 16개 화소를 밝음·어두움·비슷함으로 분류하고 연속 개수를 세는 예" style="max-width:640px">
+<text x="170.0" y="26" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1f2937">p = 100, 임계값 t = 20</text>
+<rect x="30" y="40" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="70" y="40" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="110" y="40" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="150" y="40" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="190" y="40" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="230" y="40" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="270" y="40" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="30" y="80" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="70" y="80" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="110" y="80" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="150" y="80" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="190" y="80" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="230" y="80" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="270" y="80" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="30" y="120" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="70" y="120" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="110" y="120" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="150" y="120" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="190" y="120" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="230" y="120" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="270" y="120" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="30" y="160" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="70" y="160" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="110" y="160" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="150" y="160" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="190" y="160" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="230" y="160" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="270" y="160" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="30" y="200" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="70" y="200" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="110" y="200" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="150" y="200" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="190" y="200" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="230" y="200" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="270" y="200" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="30" y="240" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="70" y="240" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="110" y="240" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="150" y="240" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="190" y="240" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="230" y="240" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="270" y="240" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="30" y="280" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="70" y="280" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="110" y="280" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="150" y="280" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="190" y="280" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="230" y="280" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="270" y="280" width="40" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="150" y="40" width="40" height="40" fill="#fde68a" stroke="#94a3b8"/>
+<text x="154" y="51" font-size="9" fill="#1f2937" opacity="0.8">1</text>
+<text x="170.0" y="68.0" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2937">150</text>
+<rect x="190" y="40" width="40" height="40" fill="#fde68a" stroke="#94a3b8"/>
+<text x="194" y="51" font-size="9" fill="#1f2937" opacity="0.8">2</text>
+<text x="210.0" y="68.0" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2937">160</text>
+<rect x="230" y="80" width="40" height="40" fill="#fde68a" stroke="#94a3b8"/>
+<text x="234" y="91" font-size="9" fill="#1f2937" opacity="0.8">3</text>
+<text x="250.0" y="108.0" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2937">145</text>
+<rect x="270" y="120" width="40" height="40" fill="#fde68a" stroke="#94a3b8"/>
+<text x="274" y="131" font-size="9" fill="#1f2937" opacity="0.8">4</text>
+<text x="290.0" y="148.0" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2937">155</text>
+<rect x="270" y="160" width="40" height="40" fill="#fde68a" stroke="#94a3b8"/>
+<text x="274" y="171" font-size="9" fill="#1f2937" opacity="0.8">5</text>
+<text x="290.0" y="188.0" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2937">140</text>
+<rect x="270" y="200" width="40" height="40" fill="#fde68a" stroke="#94a3b8"/>
+<text x="274" y="211" font-size="9" fill="#1f2937" opacity="0.8">6</text>
+<text x="290.0" y="228.0" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2937">135</text>
+<rect x="230" y="240" width="40" height="40" fill="#e2e8f0" stroke="#94a3b8"/>
+<text x="234" y="251" font-size="9" fill="#1f2937" opacity="0.8">7</text>
+<text x="250.0" y="268.0" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2937">110</text>
+<rect x="190" y="280" width="40" height="40" fill="#e2e8f0" stroke="#94a3b8"/>
+<text x="194" y="291" font-size="9" fill="#1f2937" opacity="0.8">8</text>
+<text x="210.0" y="308.0" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2937">90</text>
+<rect x="150" y="280" width="40" height="40" fill="#334155" stroke="#94a3b8"/>
+<text x="154" y="291" font-size="9" fill="#fff" opacity="0.8">9</text>
+<text x="170.0" y="308.0" font-size="12" font-weight="700" text-anchor="middle" fill="#fff">60</text>
+<rect x="110" y="280" width="40" height="40" fill="#334155" stroke="#94a3b8"/>
+<text x="114" y="291" font-size="9" fill="#fff" opacity="0.8">10</text>
+<text x="130.0" y="308.0" font-size="12" font-weight="700" text-anchor="middle" fill="#fff">55</text>
+<rect x="70" y="240" width="40" height="40" fill="#334155" stroke="#94a3b8"/>
+<text x="74" y="251" font-size="9" fill="#fff" opacity="0.8">11</text>
+<text x="90.0" y="268.0" font-size="12" font-weight="700" text-anchor="middle" fill="#fff">70</text>
+<rect x="30" y="200" width="40" height="40" fill="#e2e8f0" stroke="#94a3b8"/>
+<text x="34" y="211" font-size="9" fill="#1f2937" opacity="0.8">12</text>
+<text x="50.0" y="228.0" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2937">95</text>
+<rect x="30" y="160" width="40" height="40" fill="#fde68a" stroke="#94a3b8"/>
+<text x="34" y="171" font-size="9" fill="#1f2937" opacity="0.8">13</text>
+<text x="50.0" y="188.0" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2937">130</text>
+<rect x="30" y="120" width="40" height="40" fill="#fde68a" stroke="#94a3b8"/>
+<text x="34" y="131" font-size="9" fill="#1f2937" opacity="0.8">14</text>
+<text x="50.0" y="148.0" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2937">150</text>
+<rect x="70" y="80" width="40" height="40" fill="#fde68a" stroke="#94a3b8"/>
+<text x="74" y="91" font-size="9" fill="#1f2937" opacity="0.8">15</text>
+<text x="90.0" y="108.0" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2937">165</text>
+<rect x="110" y="40" width="40" height="40" fill="#fde68a" stroke="#94a3b8"/>
+<text x="114" y="51" font-size="9" fill="#1f2937" opacity="0.8">16</text>
+<text x="130.0" y="68.0" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2937">170</text>
+<rect x="150" y="160" width="40" height="40" fill="#fecaca" stroke="#b91c1c" stroke-width="2"/><text x="170.0" y="185.0" font-size="13" font-weight="800" text-anchor="middle" fill="#b91c1c">p</text>
+<text x="330" y="48" font-size="12" font-weight="700" fill="#1f2937">판정 규칙</text>
+<text x="330" y="67" font-size="11" font-weight="400" fill="#92400e">밝음: 120보다 큼 (p + t)</text>
+<text x="330" y="86" font-size="11" font-weight="400" fill="#334155">어두움: 80보다 작음 (p − t)</text>
+<text x="330" y="105" font-size="11" font-weight="400" fill="#64748b">비슷함: 80 ~ 120 → 코너 근거가 아님</text>
+<text x="330" y="143" font-size="12" font-weight="700" fill="#1f2937">16개를 원을 따라 읽으면</text>
+<text x="330" y="162" font-size="11" font-weight="400" fill="#374151">1~6 밝음 · 7~8 비슷 · 9~11 어두움 · 12 비슷 · 13~16 밝음</text>
+<text x="330" y="181" font-size="11" font-weight="400" fill="#374151">16 다음은 다시 1 → 13·14·15·16·1·2·3·4·5·6</text>
+<text x="330" y="200" font-size="12" font-weight="700" fill="#92400e">= 밝음이 연속 10개</text>
+<text x="330" y="238" font-size="12" font-weight="700" fill="#0f766e">FAST-9 (연속 9개 이상)  → 코너 O</text>
+<text x="330" y="257" font-size="12" font-weight="700" fill="#9d174d">FAST-12 (연속 12개 이상) → 코너 X</text>
+<text x="330" y="295" font-size="11" font-weight="400" fill="#374151">빠른 사전 검사: 1·5·9·13번만 먼저 →</text>
+<text x="330" y="314" font-size="11" font-weight="400" fill="#374151">밝음·밝음·어두움·밝음 (밝음 3개) → 정밀 검사로</text>
+</svg>
+  <p class="dia-cap">밝음이 13~16번과 1~6번에 걸쳐 끊기지 않고 10개 &mdash; 원을 이어서 셌기 때문에 나오는 숫자다</p>
+  <p><b>왜 &lsquo;연속&rsquo;인가</b> &mdash; p가 코너 끝에 있으면, p를 둘러싼 원의 <b>한쪽 호 전체</b>가 배경(밝음)에 걸치고 나머지는 물체(어두움)에 걸친다. 75p 그림에서 p는 어두운 물체 쪽에 있고, 점선으로 그린 위쪽 호의 화소들이 연속해서 밝다. 반면 <b>직선 엣지 위의 점</b>이라면 원이 거의 반반 나뉘어 연속 개수가 8 안팎에 그친다. 그래서 n을 9 이상으로 두면 엣지 위의 점은 대부분 걸러지고 꺾인 모서리가 남는다 &mdash; Harris가 고윳값 두 개로 하던 판정을 <b>비교와 세기만으로</b> 하는 셈이다. 다만 완벽하지는 않아서(잡음 낀 엣지는 통과하기도 한다) ORB는 흐름도 ③에서 Harris 점수로 한 번 더 거른다.</p>
+  <p><b>왜 빠른가 &mdash; 사전 검사</b> &mdash; FAST-12라면 1 · 5 · 9 · 13번(위 · 오른쪽 · 아래 · 왼쪽) 네 개만 먼저 본다. 연속 12개가 있으려면 이 넷 중 <b>최소 3개</b>가 같은 쪽(모두 밝음 또는 모두 어두움)이어야 하므로, 그렇지 않은 화소는 <b>네 번 비교로 바로 탈락</b>이다. 영상 대부분의 화소가 여기서 걸러진다. 위 예는 네 개 중 밝음이 3개라 사전 검사는 통과하지만, 정밀 검사에서 연속 10개라 FAST-12 코너는 아니다. 곱셈 · 미분 없이 <b>밝기 비교만</b> 하므로 SIFT의 DoG보다 훨씬 빠르다.</p>
+  <p><b>원 논문에서 더 알아 둘 것</b> &mdash; Rosten &amp; Drummond는 <b>n = 9일 때 반복성(같은 점을 다시 찾는 능력)이 가장 좋았다</b>고 보고했고, 16개를 어떤 순서로 비교할지는 <b>결정 트리 학습</b>으로 정해 더 빠르게 만들었다. 이웃한 화소들이 함께 코너로 잡히면 &ldquo;원 위 화소와 p의 밝기 차이의 합&rdquo;을 점수로 써서 비최대 억제(NMS)로 하나만 남긴다.</p>
+</div>
+
+<div class="pt gyo" id="orb-centroid">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>방향 붙이기 — 밝기 중심(Intensity Centroid) (73p)</h3>
+  <p>73p 아래의 세 식이 Oriented FAST의 &lsquo;O&rsquo;다. 패치의 <b>밝기를 질량</b>이라 보고 <b>무게중심</b>을 구한 뒤, <b>패치 중심 → 무게중심</b> 방향을 그 점의 방향으로 삼는다.</p>
+  <div class="tex-d">m_{pq}=\sum_{x,y}x^{p}y^{q}I(x,y),\qquad C=\left(\frac{m_{10}}{m_{00}},\ \frac{m_{01}}{m_{00}}\right),\qquad \theta=\operatorname{atan2}(m_{01},\,m_{10})</div>
+  <ul class="ul">
+    <li><span class="tex">m_{00}=\sum I</span> &mdash; 밝기의 총합(전체 질량)</li>
+    <li><span class="tex">m_{10}=\sum x\,I</span> &mdash; x좌표에 밝기를 곱해 더한 것. 밝은 화소가 오른쪽에 많을수록 커진다</li>
+    <li><span class="tex">m_{01}=\sum y\,I</span> &mdash; 같은 것을 y로</li>
+    <li>나누면 평균 위치 = 무게중심 C. atan2는 (x, y)의 각도를 사분면까지 구분해 구하는 함수다</li>
+  </ul>
+  <svg class="dia" viewBox="0 0 600 280" role="img" aria-label="5×5 패치의 밝기를 질량으로 보고 무게중심을 구해 방향을 정하는 예" style="max-width:600px">
+<defs><marker id="orbah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#b91c1c"/></marker></defs>
+<rect x="40" y="30" width="46" height="46" fill="rgb(233,233,253)" stroke="#cbd5e1"/>
+<text x="63.0" y="58.0" font-size="13" text-anchor="middle" fill="#1f2937">1</text>
+<rect x="86" y="30" width="46" height="46" fill="rgb(233,233,253)" stroke="#cbd5e1"/>
+<text x="109.0" y="58.0" font-size="13" text-anchor="middle" fill="#1f2937">1</text>
+<rect x="132" y="30" width="46" height="46" fill="rgb(211,211,231)" stroke="#cbd5e1"/>
+<text x="155.0" y="58.0" font-size="13" text-anchor="middle" fill="#1f2937">2</text>
+<rect x="178" y="30" width="46" height="46" fill="rgb(167,167,187)" stroke="#cbd5e1"/>
+<text x="201.0" y="58.0" font-size="13" text-anchor="middle" fill="#1f2937">4</text>
+<rect x="224" y="30" width="46" height="46" fill="rgb(123,123,143)" stroke="#cbd5e1"/>
+<text x="247.0" y="58.0" font-size="13" text-anchor="middle" fill="#fff">6</text>
+<rect x="40" y="76" width="46" height="46" fill="rgb(233,233,253)" stroke="#cbd5e1"/>
+<text x="63.0" y="104.0" font-size="13" text-anchor="middle" fill="#1f2937">1</text>
+<rect x="86" y="76" width="46" height="46" fill="rgb(211,211,231)" stroke="#cbd5e1"/>
+<text x="109.0" y="104.0" font-size="13" text-anchor="middle" fill="#1f2937">2</text>
+<rect x="132" y="76" width="46" height="46" fill="rgb(189,189,209)" stroke="#cbd5e1"/>
+<text x="155.0" y="104.0" font-size="13" text-anchor="middle" fill="#1f2937">3</text>
+<rect x="178" y="76" width="46" height="46" fill="rgb(123,123,143)" stroke="#cbd5e1"/>
+<text x="201.0" y="104.0" font-size="13" text-anchor="middle" fill="#fff">6</text>
+<rect x="224" y="76" width="46" height="46" fill="rgb(79,79,99)" stroke="#cbd5e1"/>
+<text x="247.0" y="104.0" font-size="13" text-anchor="middle" fill="#fff">8</text>
+<rect x="40" y="122" width="46" height="46" fill="rgb(233,233,253)" stroke="#cbd5e1"/>
+<text x="63.0" y="150.0" font-size="13" text-anchor="middle" fill="#1f2937">1</text>
+<rect x="86" y="122" width="46" height="46" fill="rgb(211,211,231)" stroke="#cbd5e1"/>
+<text x="109.0" y="150.0" font-size="13" text-anchor="middle" fill="#1f2937">2</text>
+<rect x="132" y="122" width="46" height="46" fill="rgb(167,167,187)" stroke="#cbd5e1"/>
+<text x="155.0" y="150.0" font-size="13" text-anchor="middle" fill="#1f2937">4</text>
+<rect x="178" y="122" width="46" height="46" fill="rgb(123,123,143)" stroke="#cbd5e1"/>
+<text x="201.0" y="150.0" font-size="13" text-anchor="middle" fill="#fff">6</text>
+<rect x="224" y="122" width="46" height="46" fill="rgb(101,101,121)" stroke="#cbd5e1"/>
+<text x="247.0" y="150.0" font-size="13" text-anchor="middle" fill="#fff">7</text>
+<rect x="40" y="168" width="46" height="46" fill="rgb(255,255,255)" stroke="#cbd5e1"/>
+<text x="63.0" y="196.0" font-size="13" text-anchor="middle" fill="#1f2937">0</text>
+<rect x="86" y="168" width="46" height="46" fill="rgb(233,233,253)" stroke="#cbd5e1"/>
+<text x="109.0" y="196.0" font-size="13" text-anchor="middle" fill="#1f2937">1</text>
+<rect x="132" y="168" width="46" height="46" fill="rgb(211,211,231)" stroke="#cbd5e1"/>
+<text x="155.0" y="196.0" font-size="13" text-anchor="middle" fill="#1f2937">2</text>
+<rect x="178" y="168" width="46" height="46" fill="rgb(189,189,209)" stroke="#cbd5e1"/>
+<text x="201.0" y="196.0" font-size="13" text-anchor="middle" fill="#1f2937">3</text>
+<rect x="224" y="168" width="46" height="46" fill="rgb(167,167,187)" stroke="#cbd5e1"/>
+<text x="247.0" y="196.0" font-size="13" text-anchor="middle" fill="#1f2937">4</text>
+<rect x="40" y="214" width="46" height="46" fill="rgb(255,255,255)" stroke="#cbd5e1"/>
+<text x="63.0" y="242.0" font-size="13" text-anchor="middle" fill="#1f2937">0</text>
+<rect x="86" y="214" width="46" height="46" fill="rgb(255,255,255)" stroke="#cbd5e1"/>
+<text x="109.0" y="242.0" font-size="13" text-anchor="middle" fill="#1f2937">0</text>
+<rect x="132" y="214" width="46" height="46" fill="rgb(233,233,253)" stroke="#cbd5e1"/>
+<text x="155.0" y="242.0" font-size="13" text-anchor="middle" fill="#1f2937">1</text>
+<rect x="178" y="214" width="46" height="46" fill="rgb(211,211,231)" stroke="#cbd5e1"/>
+<text x="201.0" y="242.0" font-size="13" text-anchor="middle" fill="#1f2937">2</text>
+<rect x="224" y="214" width="46" height="46" fill="rgb(211,211,231)" stroke="#cbd5e1"/>
+<text x="247.0" y="242.0" font-size="13" text-anchor="middle" fill="#1f2937">2</text>
+<text x="63.0" y="275" font-size="10" text-anchor="middle" fill="#94a3b8">x=-2</text>
+<text x="34" y="57.0" font-size="10" text-anchor="end" fill="#94a3b8">y=-2</text>
+<text x="109.0" y="275" font-size="10" text-anchor="middle" fill="#94a3b8">x=-1</text>
+<text x="34" y="103.0" font-size="10" text-anchor="end" fill="#94a3b8">y=-1</text>
+<text x="155.0" y="275" font-size="10" text-anchor="middle" fill="#94a3b8">x=0</text>
+<text x="34" y="149.0" font-size="10" text-anchor="end" fill="#94a3b8">y=0</text>
+<text x="201.0" y="275" font-size="10" text-anchor="middle" fill="#94a3b8">x=1</text>
+<text x="34" y="195.0" font-size="10" text-anchor="end" fill="#94a3b8">y=1</text>
+<text x="247.0" y="275" font-size="10" text-anchor="middle" fill="#94a3b8">x=2</text>
+<text x="34" y="241.0" font-size="10" text-anchor="end" fill="#94a3b8">y=2</text>
+<circle cx="155.0" cy="145.0" r="4" fill="#1b3f8b"/>
+<line x1="155.0" y1="145.0" x2="239.0" y2="107.6" stroke="#b91c1c" stroke-width="3" marker-end="url(#orbah)"/>
+<circle cx="239.0" cy="107.6" r="5" fill="none" stroke="#b91c1c" stroke-width="2"/>
+<text x="320" y="44" font-size="12" font-weight="700" fill="#1f2937">밝기 = 질량으로 보고 무게중심 C 찾기</text>
+<text x="320" y="82" font-size="11.5" font-weight="400" fill="#374151">m₀₀ = Σ I = 69 (전체 밝기)</text>
+<text x="320" y="101" font-size="11.5" font-weight="400" fill="#374151">m₁₀ = Σ x·I = 63</text>
+<text x="320" y="120" font-size="11.5" font-weight="400" fill="#374151">m₀₁ = Σ y·I = −28</text>
+<text x="320" y="158" font-size="12" font-weight="700" fill="#b91c1c">C = (63/69, −28/69) = (0.91, −0.41)</text>
+<text x="320" y="177" font-size="12" font-weight="700" fill="#b91c1c">θ = atan2(−28, 63) ≈ −24°</text>
+<text x="320" y="215" font-size="11.5" font-weight="400" fill="#6b7280">영상 좌표는 y가 아래로 커지므로</text>
+<text x="320" y="234" font-size="11.5" font-weight="400" fill="#6b7280">−24° = 오른쪽에서 24° 위쪽</text>
+<text x="320" y="253" font-size="11.5" font-weight="400" fill="#6b7280">→ 밝은 쪽(오른쪽 위)을 가리킨다</text>
+<text x="320" y="272" font-size="11.5" font-weight="400" fill="#94a3b8">(화살표는 보기 쉽게 2배로 늘림)</text>
+</svg>
+  <p class="dia-cap">오른쪽 위가 밝은 5×5 패치 &mdash; 무게중심이 그쪽으로 쏠리므로 방향도 그쪽을 가리킨다</p>
+  <p><b>왜 회전에 맞춰 따라 도나</b> &mdash; 패치가 통째로 30° 돌면 밝은 부분도 함께 돌고, 무게중심도 같은 30°만큼 돈다. 즉 θ가 영상의 회전을 그대로 따라간다(<b>공변</b>). 이 θ를 기준으로 기술하면 기술자는 회전에 <b>불변</b>이 된다 &mdash; <a class="ext" href="#sift">02</a>의 &ldquo;검출은 공변, 기술은 불변&rdquo;과 같은 설계다. 원 논문은 정사각형 대신 <b>반지름 r의 원 안</b>에서만 모멘트를 계산해(r은 패치 크기 31의 절반) 돌려도 계산 범위가 변하지 않게 했다.</p>
+  <p>SIFT가 36칸 히스토그램을 만들어 봉우리를 찾는 것에 비해 <b>덧셈 몇 번</b>이면 끝난다. 정밀도는 조금 낮지만 실시간이 목적이라면 충분한 절충이다.</p>
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>비교 쌍을 &lsquo;학습&rsquo;한다 (76 · 77p)</h3>
-  <p>BRIEF는 비교할 픽셀 쌍을 <b>무작위</b>로 뽑았다. ORB는 이 쌍을 <b>골라낸다</b>. 좋은 쌍의 조건은 두 가지다.</p>
-  <ul class="ul">
-    <li><b>서로 상관이 없을 것(uncorrelated)</b> &mdash; 새 쌍이 <b>새로운 정보</b>를 가져와야 한다. 비슷한 위치의 쌍을 여럿 쓰면 비트 수만 늘고 내용은 중복된다</li>
-    <li><b>분산이 클 것(high variance)</b> &mdash; 입력에 따라 결과가 <b>잘 갈려야</b> 변별력이 생긴다. 어떤 패치에서나 늘 1이 나오는 쌍은 아무 정보도 주지 않는다</li>
-  </ul>
-  <p>방법은 <b>약 30만 개의 키포인트</b>를 모아, <b>탐욕적(greedy) 탐색</b>으로 <b>상관이 낮고 분산이 큰 256개의 이진 테스트</b>를 고르는 것이다. 게다가 <b>여러 회전 각도에서 상관을 최소화</b>하도록 골라 회전 강인성까지 확보한다(77p).</p>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>steered BRIEF — 비교 쌍에 회전 행렬을 곱한다 (73p 둘째 줄)</h3>
+  <p>&ldquo;Efficient computation of oriented BRIEF&rdquo;의 내용이다. BRIEF의 비교 쌍 n개를 좌표 행렬로 모아 두고, 키포인트 방향 θ의 <b>회전 행렬</b>을 곱한다.</p>
+  <div class="tex-d">S=\begin{pmatrix}\mathbf{x}_1 &amp; \cdots &amp; \mathbf{x}_n\\ \mathbf{y}_1 &amp; \cdots &amp; \mathbf{y}_n\end{pmatrix},\qquad R_\theta=\begin{pmatrix}\cos\theta &amp; -\sin\theta\\ \sin\theta &amp; \cos\theta\end{pmatrix},\qquad S_\theta=R_\theta S</div>
+  <p>예: 비교점 (5, 0)은 θ = 90°에서 <span class="tex">(5\cos90^\circ-0,\ 5\sin90^\circ+0)=(0,\,5)</span>로 옮겨진다. 패턴 전체가 키포인트 방향만큼 같이 돌기 때문에, 사진이 돌아가도 <b>물체 위의 같은 두 점</b>을 비교하게 된다.</p>
+  <svg class="dia" viewBox="0 0 600 230" role="img" aria-label="BRIEF 비교 쌍을 키포인트 방향만큼 회전시키는 steered BRIEF" style="max-width:600px">
+<text x="130" y="22" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1f2937">기본 BRIEF — 패턴 고정</text>
+<circle cx="130" cy="120" r="88" fill="#f8faff" stroke="#94a3b8"/>
+<line x1="58.0" y1="156.0" x2="184.0" y2="75.0" stroke="#1b3f8b" stroke-width="2.5"/>
+<circle cx="58.0" cy="156.0" r="4.5" fill="#1b3f8b"/>
+<circle cx="184.0" cy="75.0" r="4.5" fill="#1b3f8b"/>
+<line x1="103.0" y1="57.0" x2="175.0" y2="174.0" stroke="#b45309" stroke-width="2.5"/>
+<circle cx="103.0" cy="57.0" r="4.5" fill="#b45309"/>
+<circle cx="175.0" cy="174.0" r="4.5" fill="#b45309"/>
+<line x1="67.0" y1="93.0" x2="202.0" y2="111.0" stroke="#0f766e" stroke-width="2.5"/>
+<circle cx="67.0" cy="93.0" r="4.5" fill="#0f766e"/>
+<circle cx="202.0" cy="111.0" r="4.5" fill="#0f766e"/>
+<line x1="130" y1="120" x2="210.0" y2="120.0" stroke="#b91c1c" stroke-width="2" stroke-dasharray="5 3"/>
+<text x="420" y="22" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1f2937">steered BRIEF — θ = 40°만큼 회전</text>
+<circle cx="420" cy="120" r="88" fill="#f8faff" stroke="#94a3b8"/>
+<line x1="388.0" y1="193.9" x2="432.4" y2="50.8" stroke="#1b3f8b" stroke-width="2.5"/>
+<circle cx="388.0" cy="193.9" r="4.5" fill="#1b3f8b"/>
+<circle cx="432.4" cy="50.8" r="4.5" fill="#1b3f8b"/>
+<line x1="358.8" y1="89.1" x2="489.2" y2="132.4" stroke="#b45309" stroke-width="2.5"/>
+<circle cx="358.8" cy="89.1" r="4.5" fill="#b45309"/>
+<circle cx="489.2" cy="132.4" r="4.5" fill="#b45309"/>
+<line x1="354.4" y1="139.8" x2="469.4" y2="66.8" stroke="#0f766e" stroke-width="2.5"/>
+<circle cx="354.4" cy="139.8" r="4.5" fill="#0f766e"/>
+<circle cx="469.4" cy="66.8" r="4.5" fill="#0f766e"/>
+<line x1="420" y1="120" x2="481.3" y2="68.6" stroke="#b91c1c" stroke-width="2" stroke-dasharray="5 3"/>
+<text x="275" y="125" font-size="22" text-anchor="middle" fill="#64748b">→</text>
+<text x="300" y="222" font-size="10.5" text-anchor="middle" fill="#6b7280">빨간 점선 = 키포인트 방향. 비교할 두 점의 좌표에 회전 행렬 R(θ)를 곱해, 패턴 전체를 같이 돌린다</text>
+</svg>
+  <p><b>&ldquo;Efficient&rdquo;인 이유</b> &mdash; 점마다 sin · cos를 새로 계산하는 대신, 각도를 <b>12°(= 360°/30) 단위로 30개</b>로 나눠 회전된 패턴을 <b>미리 표로 만들어 둔다</b>. 실제 계산은 θ에 가장 가까운 표를 꺼내 쓰는 것뿐이다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>rBRIEF — 돌려도 좋은 비교 쌍을 데이터로 고른다 (76 · 77p)</h3>
+  <p>문제가 하나 생긴다. 원래 BRIEF의 비트들은 대체로 <b>0과 1이 반반</b> 나오고 서로 독립적이어서 정보가 많았다. 그런데 패턴을 키포인트 방향으로 돌려 맞추면, 비슷한 모양의 코너들이 모두 같은 방향으로 정렬되면서 <b>어떤 비트는 거의 늘 1, 어떤 비트끼리는 늘 같이 움직이게</b> 된다. 변별력이 떨어지는 것이다. 그래서 76p는 좋은 쌍의 성질을 둘로 적는다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>성질 (76p)</th><th>뜻</th><th>나쁜 예</th></tr></thead>
+    <tbody>
+      <tr><td><b>Uncorrelation</b> &mdash; each new pair will bring new information</td><td>새 쌍은 <b>새 정보</b>를 가져와야 한다</td><td>거의 같은 위치의 쌍 두 개 &mdash; 비트는 둘인데 내용은 하나</td></tr>
+      <tr><td><b>High variance</b> &mdash; more discriminative, since it responds differently to inputs</td><td>입력에 따라 <b>0 · 1이 잘 갈려야</b> 한다</td><td>어떤 패치에서나 늘 1 &mdash; 아무것도 구별 못 함</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>0/1 비트의 분산은 <span class="tex">\mu(1-\mu)</span>이므로 <b>평균 μ가 0.5일 때 가장 크다(0.25)</b>. &ldquo;분산이 크다 = 반반에 가깝다&rdquo;로 읽으면 된다.</p>
+  <p><b>Learning the sampling</b>(76p) &mdash; 약 <b>30만 개의 키포인트</b>를 모아 두고(원 논문은 PASCAL 2006 영상), 31×31 패치 안에서 5×5 창끼리의 모든 비교 후보(겹치는 것을 빼고 약 20만 개)를 시험한다. 그리고 <b>탐욕적 방법(greedy method)</b>으로:</p>
+  <div class="flow">
+    <div class="fl"><b>① 줄 세우기</b><span>후보마다 30만 키포인트에서 평균을 구하고, <b>0.5에 가까운 순</b>(분산이 큰 순)으로 정렬</span></div>
+    <div class="fl"><b>② 하나씩 넣기</b><span>앞에서부터 꺼내, <b>이미 고른 쌍들과의 상관이 문턱보다 낮을 때만</b> 결과에 넣고 아니면 버린다</span></div>
+    <div class="fl"><b>③ 256개까지</b><span>256개가 안 차면 문턱을 조금 올려 다시 &mdash; <b>&ldquo;256 uncorrelated binary tests with high variance&rdquo;</b></span></div>
+  </div>
+  <p>77p의 두 그림이 그 결과다. 왼쪽(<b>High variance</b>만 고려)은 분산이 큰 쌍만 모았더니 <b>세로로 긴 비슷한 쌍들이 몰려</b> 있다 &mdash; 서로 상관이 높아 같은 정보를 반복한다. 오른쪽(<b>High variance + uncorrelated</b>)은 방향 · 위치가 <b>골고루 퍼져</b> 있다. 제목의 &ldquo;Minimize correlation under various orientation changes&rdquo;대로, 여러 회전 각도에서 상관을 줄이도록 고른 결과다. 78p &mdash; 그래서 ORB는 <b>BRIEF보다 회전에 강하다(It is robust to rotation than BRIEF)</b>.</p>
 </div>
 
 <div class="pt plus">
-  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>여기서 잠깐 &mdash; 이것도 &lsquo;학습&rsquo;이다</h3>
-  <p>ORB의 쌍 선택은 <b>데이터(30만 키포인트)를 보고 기술자의 구성 요소를 정하는</b> 과정이다. 신경망은 아니지만 <span class="hi">&ldquo;사람이 전부 설계하던 자리에 데이터를 끌어들인&rdquo; 첫걸음</span>이라고 볼 수 있다.</p>
-  <p>이 흐름을 끝까지 밀고 간 것이 <b>5주차 학생 발표의 SuperPoint</b>(검출과 기술을 통째로 학습)이고, <b>오늘 제가 발표하는 논문</b>(아예 다른 목적으로 학습된 거대 모델의 내부 특징을 기술자로 전용)은 그 끝단에 있다. 08절에서 이 계보를 정리한다.</p>
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>여기서 잠깐 — 이것도 &lsquo;학습&rsquo;이다</h3>
+  <p>ORB의 쌍 선택은 <b>데이터(30만 키포인트)를 보고 기술자의 구성 요소를 정하는</b> 과정이다. 신경망은 아니지만 <span class="hi">사람이 전부 설계하던 자리에 데이터를 끌어들인</span> 사례다.</p>
+  <p>이 흐름을 더 밀고 간 것이 <a class="ext" href="computer-vision-week05.html#pres">5주차 학생 발표의 SuperPoint</a>(검출과 기술을 한 신경망으로 학습)이고, <a class="ext" href="#mypres">내 발표 논문</a>(다른 목적으로 학습된 거대 모델의 내부 특징을 기술자로 전용)은 그 끝단에 있다.</p>
 </div>
 </section>
+
 
 <!-- ===================== 07 ===================== -->
 <section class="sec" id="compare">
@@ -2174,6 +2641,28 @@ table.acc{min-width:0}
   </table>
   </div>
   <p><span class="hi">표를 관통하는 축은 하나다 &mdash; 왼쪽으로 갈수록 정확하고 무겁고, 오른쪽으로 갈수록 거칠고 가볍다.</span> 교안 79p가 같은 장면에 네 방법을 적용해 매칭선을 나란히 보여 주는 것도 이 균형을 눈으로 확인하라는 뜻이다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-plus">보충설명</span>79p 그림을 읽는 법 — 그리고 교안 밖의 기술자들</h3>
+  <p>79p(Compare methods)는 같은 쌍의 영상에 SIFT · SURF · BRIEF · ORB를 적용해 매칭선을 그린 것이다. 왼쪽은 <b>항공 사진</b>, 오른쪽은 같은 지역의 <b>지도(윤곽선)</b>처럼 생긴 영상이다. 겉모습이 이렇게 다른 두 영상에서는 네 방법 모두 <b>평행하게 정렬되지 않고 엇갈리는 선</b>이 많다 &mdash; 밝기 패턴을 적는 손설계 기술자는 &ldquo;생김새가 다르지만 같은 곳&rdquo;을 잇는 데 한계가 있다는 것을 보여 주는 그림으로 읽을 수 있다.</p>
+  <p>교안은 네 가지(와 BRISK)를 다뤘지만 기술자는 훨씬 많다. 크게 세 갈래로 나누면 이번 학기 발표들이 어디에 놓이는지 보인다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>갈래</th><th>예</th><th>한 줄 요약</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="3"><b>사람이 설계</b><br><small>(교안의 연장)</small></td><td>DAISY (2010)</td><td>SIFT식 히스토그램을 <b>모든 화소에서 촘촘하게</b> 계산하도록 다시 설계</td></tr>
+      <tr><td>FREAK (2012)</td><td>망막 구조를 본뜬 점 패턴으로 비교하는 <b>이진</b> 기술자</td></tr>
+      <tr><td>KAZE (2012) · AKAZE (2013)</td><td>가우시안 대신 <b>경계를 보존하는 비선형 확산</b>으로 스케일 공간을 만든다. AKAZE는 이진 기술자</td></tr>
+      <tr><td rowspan="4"><b>신경망이 학습</b></td><td>SuperPoint (2018)</td><td>검출 + 기술을 한 망에서 자기지도로 &mdash; <a class="ext" href="computer-vision-week05.html#pres">5주차 발표</a></td></tr>
+      <tr><td>Key.Net (2019)</td><td>미분 필터 조합으로 검출을 학습 &mdash; <a class="ext" href="computer-vision-week05.html#pres">5주차 발표</a></td></tr>
+      <tr><td>LoFTR (2021)</td><td>검출 단계 없이 트랜스포머로 <b>밀집 매칭</b> &mdash; <a class="ext" href="computer-vision-week05.html#pres">5주차 발표</a></td></tr>
+      <tr><td>SiLK (2023)</td><td>가장 단순한 구성으로 학습한 검출 · 기술 &mdash; <a class="ext" href="computer-vision-week05.html#pres">5주차 발표</a></td></tr>
+      <tr><td><b>다른 목적의 거대 모델을 빌려 씀</b></td><td>SD + DINO (2023)</td><td>생성 모델 · 자기지도 ViT의 내부 특징을 그대로 기술자로 &mdash; <a class="ext" href="#mypres">내 발표</a></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>표를 위에서 아래로 읽으면 <span class="hi">&ldquo;기술자를 누가 만드는가&rdquo;가 사람 → 학습 → 빌려 쓰기로 옮겨 가는 흐름</span>이 보인다. 오늘 배운 SIFT · SURF · HOG · BRIEF · ORB는 그 맨 위 칸이고, 학생 발표들이 바로 다음 칸들을 채운다. 전체 계보는 <a class="ext" href="computer-vision-week05.html#pres">5주차 발표 계보 도식</a>에 한 장으로 정리해 두었다.</p>
 </div>
 
 <div class="pt plus">
