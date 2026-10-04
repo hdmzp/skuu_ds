@@ -365,6 +365,22 @@ td .term,th .term{font-weight:700}
 .mark-legend{display:flex;flex-wrap:wrap;gap:8px 18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px 14px;margin:-14px 0 26px;font-size:12.5px;color:#4b5563;line-height:1.6}
 .mark-legend span{display:inline-flex;align-items:center;gap:6px}
 .mark-legend i{width:12px;height:12px;border-radius:3px;display:inline-block;flex-shrink:0}
+
+/* ===== 내 실습 정리 절 (포인트 박스 · 뱃지 · 형광펜) ===== */
+.pt{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 16px;margin:12px 0}
+.pt-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;font-weight:700;line-height:1.45;margin-bottom:7px}
+.pt > p{font-size:13.5px;color:#3f4854;line-height:1.85}
+.pt > p + p{margin-top:9px}
+.pt > p b{color:var(--ink)}
+.pt pre.code{margin:9px 0}
+.pt .tbl-wrap{margin:8px 0 4px;background:#fff}
+.pt.live{border-left-color:#9d174d}
+.pt.plus{border-left-color:#0f766e}
+.bdg{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.02em;padding:3px 9px;border-radius:999px}
+.bdg-live{background:#fdf0f5;color:#9d174d;border:1px solid #f3bcd2}
+.bdg-plus{background:#f0fdfa;color:#0f766e;border:1px solid #99e0d6}
+.hi{background:linear-gradient(transparent 58%,#ffe9a8 58%);font-weight:700;color:var(--ink);padding:0 1px}
 </style>
 </head>
 <body id="top">
@@ -391,6 +407,7 @@ td .term,th .term{font-weight:700}
   <a href="#terms">용어 · 약어</a>
   <a href="#lab">실습 노트북</a>
   <a href="#hw">과제</a>
+  <a href="#mylab">내 실습 정리</a>
   <a href="#next">다음 주 예고</a>
   <a href="#ref">참고자료</a>
 </nav>
@@ -1592,6 +1609,149 @@ cos = float(a @ b / (np.linalg.norm(a) * np.linalg.norm(b)))</pre>
   </tbody>
 </table>
 </div>
+</section>
+
+<!-- ===================== 내 실습 정리 ===================== -->
+<section class="sec" id="mylab">
+  <div class="sec-head"><span class="sec-badge">MY</span><h2 class="sec-title">내 실습 정리<small>제출본 <code>5주차_실습_2026711051_박민지.ipynb</code> — 직접 쓴 코드 · 메모 · 서술형 답안</small></h2></div>
+
+<div class="note-box"><b>제출 결과 — 과제 1~5 모두 통과, 총점 100 / 100</b><br>
+아래는 노트북에 직접 적어 둔 <b>개념 메모 · 구현 코드 · 서술형 답안</b>을 옮긴 것입니다. 교안 정리(위쪽 절들)와 달리 <b>내가 관찰하고 쓴 내용</b>이라 따로 모았습니다.</div>
+
+<div class="link-list">
+  <a href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week05-lab-mine.ipynb" download="5주차_실습_2026711051_박민지.ipynb">내 제출본 노트북 내려받기 →<small>Part 1~3 실습 + 과제 5문항 구현 + 서술형 답안 (실행 결과 포함)</small></a>
+  <a href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week05-lab-solution.ipynb" download="5주차_실습_정답.ipynb">정답 노트북과 비교하기 →<small>모범 구현</small></a>
+</div>
+
+<h3 class="sub-title">① 실습을 따라가며 적어 둔 관찰</h3>
+
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-live">내 메모</span>TF-IDF — 같은 횟수라도 희귀한 단어가 더 세다</h3>
+  <p>&ldquo;<b>영화</b>와 <b>지루</b>가 똑같이 1번씩 나왔지만, D2 결과는 <b>(영화) 0.605 vs (지루) 0.796</b>이다. 지루는 D2에만 나오는 희귀 단어라 IDF가 더 크기 때문이다.
+  <span class="hi">같은 횟수라도 희귀한 단어가 그 문서를 더 잘 대표한다</span>는 TF-IDF 핵심을 확인할 수 있다.&rdquo;</p>
+</div>
+
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-live">내 메모</span>로지스틱 회귀 학습 곡선을 읽는 법</h3>
+  <ul class="ul">
+    <li><b>첫 손실 0.6931 = log 2</b> : 가중치가 전부 0이라 모든 문서를 확률 0.5로 예측한 상태</li>
+    <li>반복할수록 손실이 <b>0.084</b>까지 꾸준히 줄어들어 학습이 잘 된 것</li>
+    <li>검증 정확도 <b>0.86</b>은 나이브 베이즈(0.80)보다 높음</li>
+    <li>iter 1000에서 검증 정확도 86% — <b>학습 데이터는 거의 외웠지만, 처음 보는 데이터에서는 50건 중 7건을 틀린다</b>는 뜻</li>
+  </ul>
+</div>
+
+<h3 class="sub-title">② 과제에서 직접 구현한 코드</h3>
+
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-live">과제 1</span>서브리니어 TF와 BM25 계열 IDF</h3>
+  <p class="">내 메모 — <b>&ldquo;횟수가 늘어날수록 추가로 주는 정보가 줄어드니 로그를 씌워 증가폭을 완만하게 만든다.&rdquo;</b></p>
+  <pre class="code">def sublinear_tf(dtm):
+    out = np.zeros_like(dtm, dtype=float)   <span class="cm"># 로그 결과(소수)를 담으려고 float</span>
+    mask = dtm &gt; 0                          <span class="cm"># dtm 과 같은 모양의 True/False 행렬</span>
+    out[mask] = 1 + np.log(dtm[mask])       <span class="cm"># 0 에 log 를 씌우면 -inf 라 반드시 마스크로 거른다</span>
+    return out
+
+def bm25_idf(dtm):
+    N = dtm.shape[0]
+    df_ = (dtm &gt; 0).sum(axis=0)             <span class="cm"># DF = '등장한 문서 수' (등장 횟수가 아님)</span>
+    return np.log(1 + (N - df_ + 0.5) / (df_ + 0.5))</pre>
+  <p><b>결과</b> — <code>[0, 1, 2, 4, 8]</code> → <code>[0, 1, 1.693, 2.386, 3.079]</code>. 횟수가 2배가 되어도 값은 2배가 되지 않는다. mini 코퍼스 BM25 IDF는 <code>[0.47, 0.47, 0.981, 0.981]</code>로 <b>DF가 큰 단어일수록 작다</b>. <b>20/20점</b></p>
+</div>
+
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-live">과제 2</span>변형 TF-IDF 행렬과 Part 1 비교</h3>
+  <pre class="code">def my_bm25_tfidf(dtm):
+    mat = sublinear_tf(dtm) * bm25_idf(dtm)              <span class="cm"># 서브리니어 TF × BM25 IDF</span>
+    norms = np.linalg.norm(mat, axis=1, keepdims=True)   <span class="cm"># 각 문서 벡터의 L2 노름</span>
+    norms[norms == 0] = 1.0                              <span class="cm"># 단어가 하나도 없는 문서는 0 으로 나누지 않게</span>
+    return mat / norms                                   <span class="cm"># 행마다 길이를 1 로</span>
+
+def max_abs_diff(dtm):
+    return float(np.abs(my_bm25_tfidf(dtm) - compute_tfidf(dtm)).max())</pre>
+  <p><b>결과</b> — 전체 코퍼스에서 두 방식의 최대 차이 <b>0.1931</b>. 같은 문서의 상위 단어도 달라진다(문서 0: Part 1은 매력적 0.767 · 각본 0.588 · 이 0.256 → BM25 변형은 매력적 0.816 · 각본 0.565 · <b>이 0.123</b>). <b>흔한 조사의 가중치가 더 세게 깎인다.</b> <b>20/20점</b></p>
+</div>
+
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-live">과제 3</span>불용어 제거의 효과 — 성능이 오히려 떨어진 이유</h3>
+  <pre class="code">STOPWORDS = {'이','가','은','는','을','를','에','에서','의','도',
+             '와','과','로','으로','만','까지','에게','로서','로써'}
+
+def tokenize_without_stopwords(text):
+    return [t for t in tokenize(text) if t not in STOPWORDS]   <span class="cm"># 순서는 그대로 유지</span></pre>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>조건</th><th>어휘 사전 크기</th><th>검증 정확도</th></tr></thead>
+    <tbody>
+      <tr><td>불용어 제거 전</td><td>272</td><td><b>0.86</b></td></tr>
+      <tr><td>불용어 제거 후</td><td>260</td><td>0.84</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>내 서술형 답안 (ANSWER_3) 요지</b></p>
+  <ul class="ul">
+    <li>19개를 지정했지만 <b>실제로 제거된 것은 12개</b> — &lsquo;은 · 를 · 에서 · 로 · 까지&rsquo;는 학습 데이터에 한 번도 나오지 않았고, &lsquo;로서 · 로써&rsquo;는 <b>토크나이저의 조사 목록(JOSA)에 없어</b> 애초에 분리되지 않았다</li>
+    <li><b>이유 ①</b> — TF-IDF가 이미 &lsquo;이 · 가&rsquo; 같은 흔한 토큰의 IDF를 낮게 주고 있었다. <b>영향력이 작아서 제거해도 얻는 이득이 거의 없다</b></li>
+    <li><b>이유 ②</b> — <span class="hi">조사가 완전히 중립적이지 않았다.</span> EDA에서 &lsquo;이&rsquo;는 부정(68회)이 긍정(57회)보다, &lsquo;가&rsquo;는 긍정(44회)이 부정(32회)보다 많았다. <b>약한 단서 역할을 하던 정보까지 함께 사라졌다</b></li>
+    <li><b>이유 ③</b> — 리뷰가 평균 5토큰 정도로 짧아 토큰을 빼면 <b>문서 벡터가 더 희소</b>해진다</li>
+    <li><b>단서</b> — 검증이 50건뿐이라 2%p 차이는 우연일 수도 있다. &ldquo;불용어 제거가 항상 성능을 높인다&rdquo;고 일반화할 수 없고 <b>데이터마다 실험해 봐야 한다</b></li>
+  </ul>
+  <p><b>20/20점</b></p>
+</div>
+
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-live">과제 4</span>하이브리드 유사도</h3>
+  <pre class="code">def pair_cosine(tokens1, tokens2):
+    vb = build_vocab([tokens1, tokens2])       <span class="cm"># 두 문장만으로 사전을 만든다</span>
+    if len(vb) == 0:
+        return 0.0
+    mat = compute_tfidf(build_dtm([tokens1, tokens2], vb))
+    return float(cosine_similarity(mat[0], mat[1]))
+
+def hybrid_similarity(tokens1, tokens2, w=0.5):
+    if not tokens1 and not tokens2:
+        return 1.0                              <span class="cm"># 둘 다 비면 1.0</span>
+    return float(w * jaccard_similarity(tokens1, tokens2)
+                 + (1 - w) * pair_cosine(tokens1, tokens2))</pre>
+  <p><b>결과</b> — <code>하이브리드(w=0.5) : [0.601, 0.144, 0.0]</code>. w=1이면 자카드, w=0이면 코사인과 정확히 같아진다. <b>20/20점</b></p>
+</div>
+
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-live">과제 5</span>스무딩 계수 탐색 — 왜 alpha가 크면 나빠지나</h3>
+  <p class="">내 메모 — <b>&ldquo;스무딩은 학습 때 한 번도 못 본 단어 때문에 확률이 0이 되는 걸 막으려고 모든 단어의 등장 횟수에 미리 더해 주는 가짜 횟수&rdquo;</b>다.
+  이것이 없으면 &ldquo;연출도 훌륭하고 배우도 최고인데 <b>형편없는</b> 장면이 하나 있다&rdquo; 같은 리뷰는 <span class="tex">P(\text{형편없}\mid\text{긍정})=0</span> 때문에 <b>긍정 확률이 무조건 0</b>이 된다 — 곱셈에 0이 하나라도 끼면 전체가 0이 되니까.</p>
+  <pre class="code">def choose_alphas():
+    return [0.01, 0.1, 0.5, 1.0, 5.0, 10.0]     <span class="cm"># 자릿수를 바꿔 가며 넓게</span>
+
+def choose_best_alpha(alphas):                  <span class="cm"># f1 이 가장 높은 alpha</span>
+    best_alpha, best_f1 = None, -1.0
+    for a in alphas:
+        pred = MyMultinomialNB(alpha=a).fit(X_tr, y_tr).predict(X_te)
+        f1 = classification_scores(y_te, pred)['f1']
+        if f1 &gt; best_f1:
+            best_alpha, best_f1 = a, f1
+    return best_alpha</pre>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>모델</th><th>accuracy</th><th>precision</th><th>recall</th><th>f1</th></tr></thead>
+    <tbody>
+      <tr><td>나이브 베이즈 (alpha=0.01)</td><td>0.82</td><td>0.808</td><td>0.84</td><td>0.824</td></tr>
+      <tr><td><b>로지스틱 회귀</b></td><td><b>0.86</b></td><td>0.846</td><td><b>0.88</b></td><td><b>0.863</b></td></tr>
+      <tr><td>랜덤 포레스트</td><td>0.82</td><td><b>0.864</b></td><td>0.76</td><td>0.809</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>내 서술형 답안 (ANSWER_5) 요지</b></p>
+  <ul class="ul">
+    <li><b>alpha가 크면 왜 나빠지나</b> — 이 노트북의 나이브 베이즈는 등장 횟수가 아니라 <b>L2 정규화된 TF-IDF 값</b>을 입력으로 받는다. 그래서 문서 하나의 값 합이 평균 <b>약 2.1</b>, 클래스별 관측값 합도 <b>약 153~160</b>뿐이다.
+    그런데 <span class="hi">alpha=1이면 어휘 272개에 1씩, 즉 클래스마다 272가 더해져 실제 관측 데이터보다 가짜 횟수가 더 커진다.</span> 단어별 확률이 균등 분포 쪽으로 끌려가 &lsquo;훌륭 · 지루&rsquo; 같은 핵심 단어의 변별력이 약해진다</li>
+    <li><b>어느 모델이 좋았나</b> — <b>로지스틱 회귀</b>(0.86 / f1 0.863). 단어별 가중치를 분류 목적에 맞게 직접 학습하므로 &lsquo;좋다&rsquo;(+5.1), &lsquo;실망&rsquo;(−5.6)처럼 결정적인 단어에 큰 가중치를 줄 수 있었다. 랜덤 포레스트는 precision 0.864로 가장 높지만 <b>recall 0.76</b>이라 긍정 리뷰를 부정으로 놓치는 경우가 많았다</li>
+    <li><b>데이터 크기의 영향</b> — 학습 150건 · 어휘 272개뿐이라 검증 데이터의 <b>OOV 비율이 19.4%</b>다. 모델 간 차이도 1~3건 수준이라 <b>순위를 확정하기 어렵다</b></li>
+  </ul>
+  <p><b>BEST_ALPHA = 0.01 · 검증 정확도 0.820 · 20/20점</b></p>
+</div>
+
+<div class="tip"><b>이 절을 다시 볼 때</b> — 위쪽 교안 정리는 &ldquo;무엇을 배웠나&rdquo;이고, 이 절은 <b>&ldquo;직접 돌려 보고 무엇을 알게 되었나&rdquo;</b>입니다. 시험 직전에는 <b>과제 3 · 5의 서술형 답안</b>만 다시 읽어도 5주차 전체가 떠오릅니다.</div>
 </section>
 
 <!-- ===================== 다음 주 ===================== -->
