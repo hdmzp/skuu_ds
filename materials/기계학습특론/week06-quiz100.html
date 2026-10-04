@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6주차 · 다층 퍼셉트론의 구조와 학습 100문제</title>
+<style>
+  :root{
+    --bg:#f4f6fa; --card:#ffffff; --ink:#16202e; --muted:#657189;
+    --line:#e2e8f2; --brand:#1560d8; --brand-deep:#0b3b8c; --brand-soft:#eaf1fe;
+    --ok:#0f8a5f; --ok-soft:#e6f6ef; --no:#d43c4a; --no-soft:#fdecee;
+    --warn:#b7791f; --shadow:0 1px 2px rgba(16,32,64,.05),0 8px 24px rgba(16,32,64,.07);
+    --r:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0e1420; --card:#161e2c; --ink:#e8edf6; --muted:#98a4bb;
+      --line:#273246; --brand:#5b96ff; --brand-deep:#a8c6ff; --brand-soft:#1a2740;
+      --ok:#48c99a; --ok-soft:#122c23; --no:#ff7b88; --no-soft:#33191e;
+      --warn:#e0b25c; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Malgun Gothic","맑은 고딕",system-ui,sans-serif;
+    line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:22px 16px 80px}
+
+  header.top{margin-bottom:18px}
+  .eyebrow{color:var(--brand);font-weight:700;font-size:13px;letter-spacing:.04em}
+  h1{font-size:25px;line-height:1.3;margin:4px 0 6px;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:14px;margin:0}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+
+  /* controls */
+  .controls{padding:14px 16px;margin-bottom:14px}
+  .ctl-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .ctl-row + .ctl-row{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+  .ctl-label{font-size:12px;font-weight:700;color:var(--muted);min-width:52px}
+  .chip{
+    border:1px solid var(--line);background:transparent;color:var(--ink);
+    padding:5px 11px;border-radius:999px;font-size:13px;cursor:pointer;
+    font-family:inherit;transition:.13s; white-space:nowrap;
+  }
+  .chip:hover{border-color:var(--brand);color:var(--brand)}
+  .chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+  .chip.ghost[aria-pressed="true"]{background:var(--brand-soft);color:var(--brand-deep);border-color:var(--brand)}
+  .spacer{flex:1}
+
+  /* progress */
+  .prog{padding:14px 16px;margin-bottom:14px}
+  .prog-head{display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;margin-bottom:9px}
+  .stat{font-size:13px;color:var(--muted)}
+  .stat b{color:var(--ink);font-size:15px;font-variant-numeric:tabular-nums}
+  .stat.ok b{color:var(--ok)} .stat.no b{color:var(--no)}
+  .bar{height:7px;background:var(--line);border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--ok));border-radius:99px;transition:width .3s}
+
+  /* question */
+  .qcard{padding:20px 20px 18px;margin-bottom:14px}
+  .qmeta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
+  .tag{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:.02em}
+  .tag.num{background:var(--brand-deep);color:#fff}
+  @media (prefers-color-scheme: dark){ .tag.num{background:var(--brand-soft);color:var(--brand-deep)} }
+  .tag.sec{background:var(--brand-soft);color:var(--brand-deep)}
+  .tag.d1{background:var(--ok-soft);color:var(--ok)}
+  .tag.d2{background:#fff4e0;color:var(--warn)}
+  .tag.d3{background:var(--no-soft);color:var(--no)}
+  @media (prefers-color-scheme: dark){ .tag.d2{background:#3a2e14} }
+  .qtext{font-size:17.5px;font-weight:600;letter-spacing:-.01em;margin:0 0 16px;line-height:1.55}
+
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{
+    display:flex;gap:11px;align-items:flex-start;text-align:left;width:100%;
+    padding:12px 14px;border:1.5px solid var(--line);background:var(--card);
+    border-radius:11px;cursor:pointer;font:inherit;font-size:15px;color:var(--ink);
+    transition:.13s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--brand);background:var(--brand-soft)}
+  .opt:disabled{cursor:default}
+  .opt .n{
+    flex:none;width:23px;height:23px;border-radius:50%;background:var(--line);color:var(--muted);
+    display:grid;place-items:center;font-size:12.5px;font-weight:700;margin-top:1px;
+  }
+  .opt.correct{border-color:var(--ok);background:var(--ok-soft)}
+  .opt.correct .n{background:var(--ok);color:#fff}
+  .opt.wrong{border-color:var(--no);background:var(--no-soft)}
+  .opt.wrong .n{background:var(--no);color:#fff}
+  .opt .mark{margin-left:auto;font-size:13px;font-weight:700;flex:none;padding-left:8px}
+  .opt.correct .mark{color:var(--ok)} .opt.wrong .mark{color:var(--no)}
+
+  .exp{margin-top:14px;padding:13px 15px;border-radius:11px;background:var(--brand-soft);border-left:3px solid var(--brand);font-size:14.5px}
+  .exp h4{margin:0 0 5px;font-size:12.5px;letter-spacing:.03em;color:var(--brand-deep)}
+  .exp p{margin:0}
+  .exp .ref{display:block;margin-top:7px;font-size:12.5px;color:var(--muted)}
+
+  .nav{display:flex;gap:8px;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+  .btn{
+    border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 16px;border-radius:10px;
+    font:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:.13s;
+  }
+  .btn:hover:not(:disabled){border-color:var(--brand);color:var(--brand)}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+  .btn.primary:hover:not(:disabled){filter:brightness(1.08);color:#fff}
+  .btn.danger{color:var(--no);border-color:var(--no)}
+  .btn.danger:hover{background:var(--no-soft)}
+
+  /* palette */
+  details.pal{padding:0;margin-bottom:14px;overflow:hidden}
+  details.pal summary{padding:13px 16px;cursor:pointer;font-size:14px;font-weight:600;list-style:none;display:flex;align-items:center;gap:8px}
+  details.pal summary::-webkit-details-marker{display:none}
+  details.pal summary::before{content:"▸";color:var(--muted);transition:.15s}
+  details.pal[open] summary::before{transform:rotate(90deg)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:6px;padding:0 16px 16px}
+  .cell{
+    aspect-ratio:1;border:1px solid var(--line);background:transparent;border-radius:8px;
+    font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;
+    font-variant-numeric:tabular-nums;transition:.1s;
+  }
+  .cell:hover{border-color:var(--brand);color:var(--brand)}
+  .cell.o{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+  .cell.x{background:var(--no-soft);border-color:var(--no);color:var(--no)}
+  .cell.cur{outline:2px solid var(--brand);outline-offset:1px}
+
+  /* result */
+  .result{padding:26px 22px;text-align:center}
+  .score{font-size:46px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:6px 0}
+  .score small{font-size:20px;color:var(--muted);font-weight:600}
+  .breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:20px 0 6px;text-align:left}
+  .bd{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .bd .k{font-size:12px;color:var(--muted)}
+  .bd .v{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+  .empty{padding:40px 20px;text-align:center;color:var(--muted);font-size:15px}
+  footer{margin-top:26px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.8}
+  @media (max-width:520px){
+    h1{font-size:21px} .qtext{font-size:16.5px} .opt{font-size:14.5px;padding:11px 12px}
+    .ctl-label{min-width:100%;margin-bottom:-3px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">CHAPTER 6 · 다층 퍼셉트론(MLP)의 구조와 학습(역전파)</div>
+    <h1>6주차 &middot; 다층 퍼셉트론(MLP)의 구조와 학습 — 100문제</h1>
+    <p class="sub">강의자료 6.1~6.6절 전 범위 · 4지선다 · 난이도 3단계</p>
+  </header>
+
+  <section class="panel controls">
+    <div class="ctl-row">
+      <span class="ctl-label">단원</span>
+      <div id="secChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    </div>
+    <div class="ctl-row">
+      <span class="ctl-label">난이도</span>
+      <div id="diffChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    </div>
+    <div class="ctl-row">
+      <span class="ctl-label">설정</span>
+      <button class="chip ghost" id="shuffleQ" aria-pressed="false">문제 순서 섞기</button>
+      <button class="chip ghost" id="shuffleO" aria-pressed="false">보기 순서 섞기</button>
+      <span class="spacer"></span>
+      <button class="chip" id="reviewBtn">오답 다시 풀기 <b id="wrongCount">0</b></button>
+      <button class="chip" id="resetBtn">처음부터</button>
+    </div>
+  </section>
+
+  <section class="panel prog">
+    <div class="prog-head">
+      <span class="stat">진도 <b><span id="doneN">0</span> / <span id="totalN">0</span></b></span>
+      <span class="stat ok">정답 <b id="okN">0</b></span>
+      <span class="stat no">오답 <b id="noN">0</b></span>
+      <span class="spacer"></span>
+      <span class="stat">정답률 <b id="rate">—</b></span>
+    </div>
+    <div class="bar"><i id="barFill"></i></div>
+  </section>
+
+  <details class="panel pal">
+    <summary>문제 번호로 이동 <span style="color:var(--muted);font-weight:400">(초록 = 정답, 빨강 = 오답)</span></summary>
+    <div class="grid" id="palette"></div>
+  </details>
+
+  <main id="stage"></main>
+
+  <footer>
+    6주차 강의자료(다층 퍼셉트론의 구조와 개념 / 다층 퍼셉트론의 학습) 기반 자율 학습용 문제 세트<br>
+    풀이 기록은 이 브라우저에만 저장되며, '처음부터'를 누르면 초기화됩니다.
+  </footer>
+</div>
+
+<script>
+const QUESTIONS = [{"id": 1, "sec": "6.1", "diff": "기초", "q": "강의자료에서 퍼셉트론(Perceptron)은 무엇을 계산하는 모델로 정의되는가?", "opts": ["레이블 y_i로부터 특징 벡터 x_i를 복원하는 모델", "특징 벡터들 사이의 거리를 계산해 군집을 만드는 모델", "데이터 D = {(x_i, y_i)}의 특징 벡터 x_i에 대한 출력 ŷ_i를 계산하는 모델", "가중치 w를 입력받아 학습 데이터 D를 생성하는 모델"], "a": 2, "exp": "자료는 퍼셉트론을 '데이터의 특징 벡터 x_i에 대한 출력 ŷ_i를 계산하는 모델'로 정의한다."}, {"id": 2, "sec": "6.1", "diff": "기초", "q": "퍼셉트론이 최종 결과를 산출하는 절차로 옳은 것은?", "opts": ["활성화 함수의 출력들을 다시 가중합하여 결과를 얻는다", "특징 벡터 성분들의 가중합 결과를 활성화 함수에 입력하여 최종 결과를 계산한다", "특징 벡터 성분들 중 최댓값을 골라 그대로 출력한다", "특징 벡터를 정규화한 뒤 평균을 취해 출력한다"], "a": 1, "exp": "퍼셉트론은 특징 벡터 성분에 대한 가중합(z_i)을 구한 뒤 이를 활성화 함수 f에 입력하여 ŷ_i를 계산한다."}, {"id": 3, "sec": "6.1", "diff": "기초", "q": "퍼셉트론의 구성요소 중 바이어스(bias)에 해당하는 입력 노드는?", "opts": ["x_1", "x_d", "z_i", "x_0"], "a": 3, "exp": "바이어스는 x_0이며 자료에서 x_0 = 1로 두므로 w_0·x_0 = w_0가 된다."}, {"id": 4, "sec": "6.1", "diff": "중급", "q": "바이어스 노드의 값을 x_0 = 1로 두는 이유로 가장 적절한 것은?", "opts": ["w_0·x_0 = w_0가 되어 바이어스 가중치가 그대로 더해지도록 하기 위해", "입력의 크기를 1로 정규화하기 위해", "활성화 함수의 기울기를 1로 만들기 위해", "출력 ŷ_i가 항상 1이 되도록 하기 위해"], "a": 0, "exp": "자료의 주석대로 x_0 = 1이므로 w_0x_0 = w_0가 되어 가중합에 상수항 w_0가 더해지는 효과를 얻는다."}, {"id": 5, "sec": "6.1", "diff": "기초", "q": "퍼셉트론의 가중합 z_i를 바르게 나타낸 식은?", "opts": ["z_i = w_0x_0 · w_1x_i1 · … · w_dx_id", "z_i = w_0 + w_1x_i1 + … + w_dx_id", "z_i = f(w_0) + f(w_1x_i1) + … + f(w_dx_id)", "z_i = (w_0 − x_i1) + … + (w_d − x_id)"], "a": 1, "exp": "자료의 정의는 z_i = w_0 + w_1x_i1 + … + w_dx_id 이며, 이는 성분별 곱의 합(가중합)이다."}, {"id": 6, "sec": "6.1", "diff": "중급", "q": "ŷ_i = f(Σ_{j=0}^{d} w_j x_ij) 에서 합의 시작 인덱스가 1이 아니라 0인 이유는?", "opts": ["첫 번째 특징 성분을 두 번 더하기 위해", "활성화 함수 f가 0에서만 정의되기 때문", "j = 0 항이 바이어스(x_0 = 1, 가중치 w_0)에 해당하기 때문", "출력 노드의 번호가 0부터 시작하기 때문"], "a": 2, "exp": "j = 0은 바이어스 노드 x_0에 대응하며, x_0 = 1이므로 이 항이 상수항 w_0가 된다."}, {"id": 7, "sec": "6.1", "diff": "기초", "q": "단층 퍼셉트론으로 구현 가능한 논리 게이트로 자료에 제시된 것은?", "opts": ["AND, OR, NAND", "XOR, XNOR, NAND", "AND, XOR, OR", "XOR 게이트만 가능"], "a": 0, "exp": "자료는 단층 퍼셉트론을 활용한 AND, OR, NAND 논리 게이트 구현을 소개하며, XOR은 단층으로 구현할 수 없다고 설명한다."}, {"id": 8, "sec": "6.1", "diff": "중급", "q": "자료의 AND 게이트 구현에서 사용된 가중합 식은?", "opts": ["z_i = x_i1 + x_i2 − 0.5", "z_i = x_i1 − x_i2 + 1.5", "z_i = x_i1 · x_i2 − 1.5", "z_i = x_i1 + x_i2 − 1.5"], "a": 3, "exp": "AND 게이트는 z_i = x_i1 + x_i2 − 1.5로 구현되어 두 입력이 모두 1일 때만 z > 0이 된다."}, {"id": 9, "sec": "6.1", "diff": "기초", "q": "자료의 OR 게이트 구현에서 사용된 가중합 식은?", "opts": ["z_i = x_i1 + x_i2 − 1.5", "z_i = x_i1 + x_i2 − 0.5", "z_i = x_i1 + x_i2 − 1.0", "z_i = x_i1 + x_i2 + 0.5"], "a": 1, "exp": "OR 게이트는 z_i = x_i1 + x_i2 − 0.5로 구현되어 입력 중 하나라도 1이면 z > 0이 된다."}, {"id": 10, "sec": "6.1", "diff": "중급", "q": "논리 게이트 구현에 사용된 계단형 활성화 함수 f(z_i)의 정의로 옳은 것은?", "opts": ["z_i ≥ 0이면 ŷ_i = 1, z_i < 0이면 ŷ_i = 0", "z_i > 0이면 ŷ_i = 0, z_i ≤ 0이면 ŷ_i = 1", "z_i > 0일 때 ŷ_i = 1, z_i ≤ 0일 때 ŷ_i = 0", "z_i > 1이면 ŷ_i = 1, 그 외에는 ŷ_i = 0"], "a": 2, "exp": "자료의 f(z_i)는 z_i > 0일 때 1, z_i ≤ 0일 때 0을 출력하는 계단 함수이다."}, {"id": 11, "sec": "6.1", "diff": "심화", "q": "AND 게이트 식 z = x_1 + x_2 − 1.5와 계단 함수를 사용할 때 입력 (1, 0)에 대한 결과는?", "opts": ["z = 0.5 이므로 ŷ = 1", "z = 1.5 이므로 ŷ = 1", "z = −0.5 이므로 ŷ = 0", "z = −1.5 이므로 ŷ = 1"], "a": 2, "exp": "1 + 0 − 1.5 = −0.5 ≤ 0 이므로 출력은 0이며, AND 게이트의 진리표와 일치한다."}, {"id": 12, "sec": "6.1", "diff": "심화", "q": "OR 게이트 식 z = x_1 + x_2 − 0.5에 입력 (0, 1)을 넣었을 때 결과는?", "opts": ["z = 0.5 이므로 ŷ = 1", "z = −0.5 이므로 ŷ = 0", "z = 0.5 이지만 ŷ = 0", "z = 1.5 이므로 ŷ = 0"], "a": 0, "exp": "0 + 1 − 0.5 = 0.5 > 0 이므로 계단 함수의 출력은 1이며, OR 게이트의 진리표와 일치한다."}, {"id": 13, "sec": "6.1", "diff": "중급", "q": "단층 퍼셉트론이 XOR 문제를 해결하지 못하는 이유로 자료가 제시한 설명은?", "opts": ["활성화 함수가 미분 불가능하기 때문", "두 개 이상의 선 또는 곡선을 이용한 분류가 불가능하기 때문", "입력 노드 개수가 2개로 제한되기 때문", "바이어스 노드를 사용할 수 없기 때문"], "a": 1, "exp": "자료는 신경 세포를 모방한 단층 퍼셉트론이 두 개 이상의 선 또는 곡선을 이용한 분류를 할 수 없어 XOR을 해결하지 못한다고 설명한다."}, {"id": 14, "sec": "6.1", "diff": "기초", "q": "저서 \"퍼셉트론(Perceptrons)\"에서 단층 퍼셉트론의 XOR 한계를 지적한 연구자들은?", "opts": ["힌튼과 르쿤", "로젠블랫과 위드로우", "루멜하트와 윌리엄스", "민스키와 페퍼트"], "a": 3, "exp": "자료의 각주는 마빈 민스키(Minsky)와 시모어 페퍼트(Papert)의 저서를 인용하며, 이들은 다층 퍼셉트론으로는 XOR 연산이 가능함도 함께 보였다."}, {"id": 15, "sec": "6.1", "diff": "중급", "q": "XOR 동작을 게이트 조합으로 표현하는 자료의 방법으로 옳은 것은?", "opts": ["NAND 게이트와 OR 게이트의 출력을 AND 게이트로 입력한다", "AND 게이트와 OR 게이트의 출력을 NAND 게이트로 입력한다", "NAND 게이트 두 개의 출력을 OR 게이트로 입력한다", "OR 게이트와 AND 게이트의 출력을 다시 OR 게이트로 입력한다"], "a": 0, "exp": "자료는 NAND 게이트와 OR 게이트의 출력(h_1, h_2)을 AND 게이트의 입력으로 넣으면 XOR 동작이 표현된다고 설명한다."}, {"id": 16, "sec": "6.1", "diff": "심화", "q": "자료의 XOR 진리표에서 입력 (1, 1)일 때 h_1(NAND), h_2(OR), ŷ(AND)의 값은?", "opts": ["h_1 = 1, h_2 = 1, ŷ = 1", "h_1 = 1, h_2 = 0, ŷ = 0", "h_1 = 0, h_2 = 1, ŷ = 0", "h_1 = 0, h_2 = 0, ŷ = 0"], "a": 2, "exp": "NAND는 입력이 모두 1이면 0, OR는 하나라도 1이면 1이므로 h_1 = 0, h_2 = 1이고 AND 결과 ŷ = 0이 되어 XOR과 일치한다."}, {"id": 17, "sec": "6.2", "diff": "기초", "q": "여러 개의 퍼셉트론(은닉층)이 필요한 이유로 자료가 제시한 것은?", "opts": ["학습 속도를 높이기 위해", "입력 데이터의 차원을 줄이기 위해", "은닉층으로 복잡한 함수를 표현하여 비선형 분리가 가능한 결정 경계선을 생성하기 위해", "가중치 개수를 줄여 과적합을 막기 위해"], "a": 2, "exp": "자료는 은닉층으로 복잡한 함수를 표현할 수 있어 비선형 분리가 가능한 결정 경계선을 생성한다고 설명한다."}, {"id": 18, "sec": "6.2", "diff": "기초", "q": "은닉층이 만들어 내는 것으로 자료가 명시한 개념은?", "opts": ["손실 함수(Loss Function)", "의사 결정 경계(Decision Boundary)", "혼동 행렬(Confusion Matrix)", "학습률(Learning Rate)"], "a": 1, "exp": "은닉층은 의사 결정 경계(Decision Boundary)를 만들어 비선형 분리가 가능한 경계선을 생성한다."}, {"id": 19, "sec": "6.2", "diff": "기초", "q": "은닉층 개수에 따른 결정 경계 변화를 관찰하도록 자료가 소개한 실습 사이트는?", "opts": ["colab.research.google.com", "scikit-learn.org", "kaggle.com", "playground.tensorflow.org"], "a": 3, "exp": "자료는 https://playground.tensorflow.org 를 통해 단층 퍼셉트론, 다층 퍼셉트론, 은닉층 3개 모델의 결정 경계를 비교하도록 안내한다."}, {"id": 20, "sec": "6.2", "diff": "기초", "q": "다층 퍼셉트론(Multi-Layer Perceptron, MLP)의 정의로 옳은 것은?", "opts": ["퍼셉트론 구조에 은닉층이 포함된 인공지능 모델", "퍼셉트론을 여러 번 반복해서 학습시킨 모델", "활성화 함수를 제거한 선형 회귀 모델", "출력층 노드를 하나로 고정한 모델"], "a": 0, "exp": "MLP는 퍼셉트론 구조에 은닉층이 포함된 모델로, 입력층과 출력층 사이에 여러 개의 노드로 구성된 여러 개의 은닉층이 추가된 형태이다."}, {"id": 21, "sec": "6.2", "diff": "중급", "q": "완전 연결 계층(Fully-Connected Layer)의 의미로 옳은 것은?", "opts": ["모든 층이 같은 개수의 노드를 갖는다", "각각의 노드가 인접한 층이 보유한 모든 노드들과 연결되어 있다", "입력층과 출력층이 은닉층을 건너뛰고 직접 연결되어 있다", "모든 엣지의 가중치가 동일한 값으로 공유된다"], "a": 1, "exp": "자료는 완전 연결 계층을 '각각의 노드는 인접한 층이 보유한 모든 노드들과 연결되어 있음'으로 설명한다."}, {"id": 22, "sec": "6.2", "diff": "중급", "q": "순전파 네트워크(Feed-Forward Network)에 대한 설명으로 옳은 것은?", "opts": ["출력층에서 입력층 방향으로 오차를 전달하는 네트워크", "노드끼리 순환 연결을 갖는 네트워크", "입력층부터 출력층까지 순서대로 변수들을 계산하여 정보를 전달하고 최종 결과를 산출하는 네트워크", "가중치를 사용하지 않고 입력을 그대로 전달하는 네트워크"], "a": 2, "exp": "자료는 MLP가 순전파 네트워크의 한 종류이며, 입력층부터 출력층까지 순서대로 계산하여 최종 결과를 산출한다고 설명한다."}, {"id": 23, "sec": "6.2", "diff": "중급", "q": "표기 h_j^(k)가 의미하는 것은?", "opts": ["k번째 은닉층의 j번째 노드의 출력", "j번째 은닉층의 k번째 엣지의 가중치", "k번째 층의 j번째 노드에 들어오는 가중합", "k번째 샘플의 j번째 특징 값"], "a": 0, "exp": "자료의 표기 정의에 따르면 h_j^(k)는 k번째 은닉층의 j번째 노드의 출력값이다."}, {"id": 24, "sec": "6.2", "diff": "중급", "q": "z_j^(k)와 h_j^(k)의 관계로 옳은 것은?", "opts": ["h_j^(k)는 가중합이고 z_j^(k)는 활성화 함수의 출력이다", "둘 다 활성화 함수의 출력으로 값이 같다", "z_j^(k)는 가중치이고 h_j^(k)는 바이어스이다", "z_j^(k)는 가중합이고 h_j^(k)는 그 가중합을 활성화 함수로 계산한 결과이다"], "a": 3, "exp": "노드 원을 반으로 나눈 표기에서 왼쪽 z는 가중합, 오른쪽 h는 활성화 함수를 통과한 출력을 나타낸다."}, {"id": 25, "sec": "6.2", "diff": "심화", "q": "은닉층이 1개인 다층 퍼셉트론의 순전파를 나타낸 식으로 옳은 것은?", "opts": ["ŷ = f_1(W_1^T f_2(W_0^T x + bias^(1)) + bias^(0))", "ŷ = f_2(W_1^T f_1(W_0^T x + bias^(0)) + bias^(1))", "ŷ = W_1^T f_1(f_2(W_0^T x)) + bias^(0)", "ŷ = f_2(W_0^T f_1(W_1^T x + bias^(1)) + bias^(0))"], "a": 1, "exp": "자료의 요약 식은 [ŷ_1; ŷ_2] = f_2(W_1^T f_1(W_0^T x + bias^(0)) + bias^(1)) 이다."}, {"id": 26, "sec": "6.2", "diff": "중급", "q": "순전파 식에서 W_0^T x + bias^(0) 부분이 담당하는 계산 구간은?", "opts": ["은닉층 → 출력층", "출력층 → 손실함수", "입력층 → 은닉층", "출력층 → 입력층"], "a": 2, "exp": "자료는 W_0^T x + bias^(0)를 '입력층 → 은닉층', 바깥쪽 W_1^T(...) + bias^(1)를 '은닉층 → 출력층'으로 표시한다."}, {"id": 27, "sec": "6.2", "diff": "중급", "q": "순전파 식에서 f_1과 f_2의 역할 구분으로 옳은 것은?", "opts": ["f_1은 은닉층의 활성화 함수, f_2는 출력층의 활성화 함수", "f_1은 출력층의 활성화 함수, f_2는 은닉층의 활성화 함수", "f_1은 손실 함수, f_2는 활성화 함수", "f_1과 f_2는 모두 입력층에서만 사용된다"], "a": 0, "exp": "자료의 요약 슬라이드는 f_1을 은닉층의 활성화 함수, f_2를 출력층의 활성화 함수로 명시한다."}, {"id": 28, "sec": "6.2", "diff": "심화", "q": "은닉층이 2개 노드로 구성될 때 f_1([z_1^(1); z_2^(1)])의 결과로 옳은 것은?", "opts": ["[z_1^(1); z_2^(1)] 그대로", "f_1(z_1^(1) + z_2^(1))", "[f_1(z_1^(1)) · f_1(z_2^(1))]", "[f_1(z_1^(1)); f_1(z_2^(1))] = [h_1^(1); h_2^(1)]"], "a": 3, "exp": "활성화 함수는 벡터의 각 성분에 원소별로 적용되어 은닉 노드의 출력 벡터 [h_1^(1); h_2^(1)]을 만든다."}, {"id": 29, "sec": "6.2", "diff": "심화", "q": "입력 x = [x_1; x_2]에 대해 W^(0)x + bias^(0)를 전개했을 때 첫 번째 성분은?", "opts": ["w_11^(0)x_1 + w_21^(0)x_2 + w_10^(0)", "w_21^(0)x_1 + w_22^(0)x_2 + w_20^(0)", "w_11^(0)x_1 + w_12^(0)x_2 + w_10^(0)", "w_11^(0)x_1 + w_12^(0)x_2 + w_20^(0)"], "a": 2, "exp": "자료의 행렬 전개에서 첫 행은 w_11^(0)x_1 + w_12^(0)x_2 이고 여기에 bias^(0)의 첫 성분 w_10^(0)이 더해진다."}, {"id": 30, "sec": "6.2", "diff": "심화", "q": "은닉층 출력 h^(1)이 주어졌을 때 자료가 제시한 ŷ_1의 최종 표현은?", "opts": ["ŷ_1 = w_11^(1)h_1^(1) + w_12^(1)h_2^(1) + w_10^(1)", "ŷ_1 = f_2(w_11^(1)h_1^(1) + w_12^(1)h_2^(1) + w_10^(1))", "ŷ_1 = f_1(w_11^(1)h_1^(1) + w_12^(1)h_2^(1))", "ŷ_1 = f_2(w_11^(0)x_1 + w_12^(0)x_2 + w_10^(0))"], "a": 1, "exp": "은닉층 출력의 가중합에 바이어스를 더한 뒤 출력층 활성화 함수 f_2를 통과시킨 값이 예측값 ŷ_1이 된다."}, {"id": 31, "sec": "6.2", "diff": "중급", "q": "은닉층의 개수가 늘어날 때 순전파 계산에 대한 자료의 설명으로 옳은 것은?", "opts": ["은닉층 개수가 증가해도 동일한 방식으로 계산된다", "은닉층이 3개를 넘으면 다른 공식을 사용해야 한다", "은닉층이 늘면 가중치 행렬 대신 스칼라 곱만 사용한다", "은닉층 개수만큼 활성화 함수를 제거해야 한다"], "a": 0, "exp": "자료는 '은닉층 개수가 증가해도 동일하게 계산'된다고 명시하며, 가중치 행렬과 활성화 함수의 합성이 반복될 뿐이다."}, {"id": 32, "sec": "6.2", "diff": "중급", "q": "\"k−1번째 층을 구성하는 모든 노드와 k번째 층을 구성하는 모든 노드가 서로 연결된\" 상태를 부르는 표현은?", "opts": ["희소 연결(Sparse Connected)", "완전 연결(Fully Connected)", "순환 연결(Recurrent Connected)", "부분 연결(Partially Connected)"], "a": 1, "exp": "자료는 이러한 연결 상태를 '완전 연결(Fully Connected)되었다'고 표현한다고 설명한다."}, {"id": 33, "sec": "6.3", "diff": "기초", "q": "MNIST 예시의 4×4 픽셀 이미지에서 색상 코드 표기로 옳은 것은?", "opts": ["0은 백색, 255는 흑색", "0은 회색, 255는 흑색", "0은 흑색, 255는 백색", "0은 백색, 1은 흑색"], "a": 2, "exp": "자료의 그림 설명에 따르면 0은 흑색에 대한 색상 코드, 255는 백색에 대한 색상 코드이다."}, {"id": 34, "sec": "6.3", "diff": "기초", "q": "MNIST Dataset에 대한 자료의 설명으로 옳지 않은 것은?", "opts": ["손으로 쓴 숫자들로 이루어진 데이터이다", "Train Image 60,000개, Test Image 10,000개로 구성된다", "0~9까지 10개 클래스의 흑백 이미지로 구성된다", "각 이미지가 컬러(RGB) 3채널로 구성된다"], "a": 3, "exp": "MNIST는 0~9의 흑백(그레이스케일) 손글씨 숫자 이미지이며 컬러 3채널이 아니다."}, {"id": 35, "sec": "6.3", "diff": "중급", "q": "16개 픽셀(4×4)로 표현된 MNIST 숫자 1 예시에서 실제값 y_1의 표현 방식은?", "opts": ["0부터 9까지의 실수 확률을 담은 벡터", "두 번째 성분만 1이고 나머지는 0인 10차원 원-핫 벡터", "16개 성분을 갖는 픽셀 벡터", "1이라는 스칼라 정수 값"], "a": 1, "exp": "MNIST 예제에서 y_i는 0~9 중 한 값을 갖는 이산형 값이며 원-핫 인코딩으로 표현되므로, 숫자 1은 두 번째 성분만 1인 10차원 벡터가 된다."}, {"id": 36, "sec": "6.3", "diff": "중급", "q": "다층 퍼셉트론 입력층의 구성으로 옳은 것은?", "opts": ["특징 벡터의 성분에 대응하는 노드와 바이어스 노드로 구성된다", "은닉 노드와 바이어스 노드로 구성된다", "클래스 개수만큼의 노드로 구성된다", "활성화 함수를 거친 노드들로만 구성된다"], "a": 0, "exp": "자료는 입력층이 특징 벡터의 성분에 대응하는 노드와 바이어스 노드로 구성되며, 퍼셉트론의 입력층과 동일하다고 설명한다."}, {"id": 37, "sec": "6.3", "diff": "중급", "q": "i번째 관측값이 (x_i, y_i)로 표현될 때 입력층의 노드 개수는?", "opts": ["x_i의 성분 개수와 같다", "y_i의 성분 개수와 같다", "x_i의 성분 개수 + 1개(바이어스)", "x_i의 성분 개수 + y_i의 성분 개수"], "a": 2, "exp": "자료는 x_i의 성분 개수에 바이어스 노드 1개를 더한 값이 입력층 노드 개수와 같다고 명시한다."}, {"id": 38, "sec": "6.3", "diff": "기초", "q": "퍼셉트론과 다층 퍼셉트론의 입력층 관계에 대한 자료의 설명은?", "opts": ["MLP의 입력층에는 바이어스 노드가 없다", "MLP의 입력층은 자체 활성화 함수를 포함한다", "MLP의 입력층 노드 수는 항상 은닉층 노드 수와 같다", "퍼셉트론과 입력층이 동일하다"], "a": 3, "exp": "자료는 '퍼셉트론과 입력층이 동일함'이라고 명시한다."}, {"id": 39, "sec": "6.3", "diff": "중급", "q": "개별 은닉 노드의 입력과 출력에 대한 설명으로 옳은 것은?", "opts": ["입력은 엣지로 연결된 이전 층 노드들의 출력 값과 대응 가중치이고, 출력은 가중합에 대한 활성화 함수의 출력이다", "입력은 손실 함수 값이고, 출력은 가중치의 갱신량이다", "입력은 원-핫 벡터이고, 출력은 클래스별 확률이다", "입력은 다음 층 노드들의 출력이고, 출력은 이전 층으로 보내는 오차이다"], "a": 0, "exp": "자료는 은닉 노드의 입력을 이전 층 노드의 출력 값(x, h)과 대응 가중치(w)로, 출력을 가중합 z에 대한 f(z)로 설명한다."}, {"id": 40, "sec": "6.3", "diff": "기초", "q": "각 은닉층에도 입력층과 마찬가지로 포함된다고 자료가 명시한 노드는?", "opts": ["출력 노드", "바이어스 노드(h_0)", "드롭아웃 노드", "정규화 노드"], "a": 1, "exp": "자료의 주석은 '각 은닉층에는 입력층과 마찬가지로 바이어스(h_0)가 포함된다'고 밝히고 있다."}, {"id": 41, "sec": "6.3", "diff": "기초", "q": "은닉층의 활성화 함수로 주로 사용한다고 자료가 밝힌 함수는?", "opts": ["Softmax 함수", "Sigmoid 함수", "계단(Step) 함수", "ReLU 함수"], "a": 3, "exp": "자료는 '은닉층 활성화 함수는 주로 ReLU 함수를 사용'한다고 설명한다."}, {"id": 42, "sec": "6.3", "diff": "중급", "q": "ReLU(Rectified Linear Unit) 함수의 정의로 옳은 것은?", "opts": ["f(z) = 1/(1 + e^(−z))", "f(z) = min(0, z)", "f(z) = max(0, z)", "f(z) = e^z / Σ e^z"], "a": 2, "exp": "자료는 f(z) = ReLU(z) = max(0, z)로 정의한다."}, {"id": 43, "sec": "6.3", "diff": "중급", "q": "ReLU의 동작을 자료의 표현대로 설명한 것은?", "opts": ["0보다 큰 양수는 항등 함수처럼 그대로, 음수일 때는 0으로 출력한다", "모든 입력을 0과 1 사이 값으로 압축한다", "입력의 부호를 반전시켜 출력한다", "입력의 절댓값을 출력한다"], "a": 0, "exp": "자료는 ReLU가 '0보다 큰 양수는 항등 함수, 음수일 때는 0으로 출력'한다고 설명한다."}, {"id": 44, "sec": "6.3", "diff": "심화", "q": "z = [−2.0, 0.0, 3.5]에 ReLU를 원소별로 적용한 결과는?", "opts": ["[2.0, 0.0, 3.5]", "[0, 0, 3.5]", "[−2.0, 0.0, 3.5]", "[0, 1, 3.5]"], "a": 1, "exp": "max(0, −2.0) = 0, max(0, 0.0) = 0, max(0, 3.5) = 3.5 이므로 [0, 0, 3.5]가 된다."}, {"id": 45, "sec": "6.3", "diff": "중급", "q": "분류가 목적인 다층 퍼셉트론에서 출력층 노드 개수는 무엇과 일치하는가?", "opts": ["은닉층의 노드 개수", "특징 벡터의 성분 개수", "클래스의 수, 즉 y_i의 성분 개수", "학습 샘플의 개수 N"], "a": 2, "exp": "자료는 y_i의 성분 개수가 출력층 노드 개수와 같고, 분류에서는 이것이 클래스의 수와 일치한다고 설명한다."}, {"id": 46, "sec": "6.3", "diff": "기초", "q": "분류 문제에서 출력층의 활성화 함수로 자료가 제시한 것은?", "opts": ["ReLU 함수", "항등 함수", "계단 함수", "Softmax 함수"], "a": 3, "exp": "자료는 '출력층 활성화 함수는 Softmax 함수를 사용(분류)'한다고 명시한다."}, {"id": 47, "sec": "6.3", "diff": "중급", "q": "출력층 σ(z)로 사용되는 함수를 문제 유형과 바르게 짝지은 것은?", "opts": ["이진 분류 - Softmax, 다중 분류 - Sigmoid", "이진 분류 - Sigmoid, 다중 분류 - Softmax", "이진 분류 - ReLU, 다중 분류 - Sigmoid", "이진 분류 - Softmax, 다중 분류 - ReLU"], "a": 1, "exp": "자료의 주석은 이진 분류의 σ(z)는 Sigmoid(z), 다중 분류의 σ(z)는 Softmax(z)라고 정리한다."}, {"id": 48, "sec": "6.3", "diff": "중급", "q": "소프트맥스(Softmax) 함수의 정의로 옳은 것은?", "opts": ["σ(z_i) = e^(z_i) / Σ_{j=1}^{C} e^(z_j)", "σ(z_i) = z_i / Σ_{j=1}^{C} z_j", "σ(z_i) = ln z_i / Σ_{j=1}^{C} ln z_j", "σ(z_i) = 1 / (1 + e^(−z_i))"], "a": 0, "exp": "소프트맥스는 각 성분의 지수를 전체 지수 합으로 나눈 값으로, 클래스별 확률 ŷ_i에 근사한다."}, {"id": 49, "sec": "6.3", "diff": "기초", "q": "원-핫 인코딩(One-hot Encoding)에 대한 설명으로 옳은 것은?", "opts": ["모든 성분이 0과 1 사이의 확률 값을 갖는 벡터로 표현한다", "클래스 번호를 이진수로 변환하여 표현한다", "클래스 개수와 동일한 개수의 성분 중 하나만 1이고 나머지는 모두 0인 벡터로 표현한다", "성분의 합이 항상 0이 되도록 표준화한다"], "a": 2, "exp": "자료는 원-핫 벡터가 클래스 개수만큼의 성분을 가지며 하나의 성분만 1이고 나머지는 0이라고 설명한다."}, {"id": 50, "sec": "6.3", "diff": "심화", "q": "σ(z) = [0.1, 0.8, 0.01, 0.004, 0.001, 0.005, 0.0004, 0.0006, 0.009, 0.07]일 때 자료의 분류 규칙에 따른 결과는?", "opts": ["첫 번째 클래스인 숫자 0으로 분류", "10번째 클래스인 숫자 9로 분류", "확률이 모두 낮아 분류 보류", "두 번째 클래스인 숫자 1로 분류"], "a": 3, "exp": "가장 큰 확률 0.8이 두 번째 성분이므로 ŷ는 두 번째 성분만 1인 원-핫 벡터가 되어 숫자 1로 분류된다."}, {"id": 51, "sec": "6.3", "diff": "심화", "q": "z = [0.05, 0.11, 1.4, 2.5, 3.6, 4.7, 5.3, 6.2, 7.1, 8.2]에 소프트맥스를 적용한 자료 예시의 결론은?", "opts": ["σ(z_10) ≈ 0.64로 가장 커서 10번째 클래스인 숫자 9로 분류된다", "σ(z_1) ≈ 0.64로 가장 커서 숫자 0으로 분류된다", "모든 σ(z_i)가 0.1로 같아 분류가 불가능하다", "σ(z_10) ≈ 8.2로 가장 커서 숫자 9로 분류된다"], "a": 0, "exp": "z의 마지막 성분 8.2가 가장 커서 σ(z_10) = e^8.2 / Σ e^(z_j) ≈ 0.64가 되고, 10번째 클래스인 숫자 9로 분류된다."}, {"id": 52, "sec": "6.3", "diff": "기초", "q": "소프트맥스 정의식에서 기호 C가 의미하는 것은?", "opts": ["은닉층의 개수", "클래스의 총 개수", "학습 샘플의 개수", "특징 벡터의 차원"], "a": 1, "exp": "자료는 z를 벡터, z_i를 z의 i번째 성분, C를 클래스의 총 개수로 정의한다."}, {"id": 53, "sec": "6.4", "diff": "기초", "q": "자료가 제시한 다층 퍼셉트론 '학습'의 세부 항목에 해당하지 않는 것은?", "opts": ["학습 데이터", "손실 함수", "정규화 항(Regularization Term)", "오차 역전파"], "a": 2, "exp": "자료의 학습 목표는 MLP 학습을 데이터, 손실 함수, 오차 역전파의 세 항목으로 나누어 설명한다."}, {"id": 54, "sec": "6.4", "diff": "기초", "q": "학습 데이터 D = {(x_i, y_i)}_{i=1}^{N}에서 x_i가 뜻하는 것은?", "opts": ["어떤 문제를 해결하기 위해 제공되는 관측 값들의 특징 벡터", "모델이 산출한 예측 출력값", "손실 함수의 기울기", "클래스별 확률 값"], "a": 0, "exp": "자료는 x_i를 문제 해결을 위해 제공되는 관측 값들의 특징 벡터로 정의한다."}, {"id": 55, "sec": "6.4", "diff": "중급", "q": "학습 데이터 표기에서 실제값을 볼드체 벡터 𝕪_i로 쓰는 경우는?", "opts": ["실제 값이 단일 실수인 회귀 문제일 때", "클래스별 실제 값의 모음을 갖는 경우", "특징 벡터가 1차원일 때", "학습 샘플이 1개뿐일 때"], "a": 1, "exp": "자료는 예측하고자 하는 실제 값 y_i, 또는 클래스별 실제 값의 모음 𝕪_i로 구분해 표기한다."}, {"id": 56, "sec": "6.4", "diff": "중급", "q": "주가 예측(회귀) 예시에서 특징 벡터 x_i를 구성하는 두 지수는?", "opts": ["코스피 지수와 PMI 지수", "VIX 지수와 코스피 지수", "PMI 지수와 환율", "PMI 지수와 VIX 지수"], "a": 3, "exp": "특정일의 코스피 지수(y_i)를 PMI 지수(x_i1)와 VIX 지수(x_i2)로 설명하는 예시이므로 특징 벡터는 PMI와 VIX로 구성된다."}, {"id": 57, "sec": "6.4", "diff": "중급", "q": "주가 예측 예시의 학습 데이터 규모와 실제값 형태로 옳은 것은?", "opts": ["N = 300, y_i ∈ {0, 1}", "N = 10,000, y_i ∈ R(실수)", "N = 300, y_i ∈ R(실수)", "N = 60,000, y_i는 원-핫 벡터"], "a": 2, "exp": "300일 동안 수집한 데이터이므로 N = 300이고, 코스피 지수는 연속형이므로 y_i는 실수이다."}, {"id": 58, "sec": "6.4", "diff": "중급", "q": "600×800 해상도의 고양이·개 사진을 사용하는 이진 분류 예시에서 특징 벡터의 차원은?", "opts": ["480,000", "10,000", "784", "600"], "a": 0, "exp": "600 × 800 = 480,000개의 픽셀 값이 특징 벡터의 성분이 되어 x_i = [x_1 x_2 … x_480000]^T로 표현된다."}, {"id": 59, "sec": "6.4", "diff": "기초", "q": "고양이·개 이진 분류 예시에서 실제값 y_i의 정의는?", "opts": ["y_i ∈ R(실수)", "y_i ∈ {0, 1}이며 0은 고양이, 1은 개", "y_i는 10차원 원-핫 벡터", "y_i ∈ {1, 2, …, 10}"], "a": 1, "exp": "이진 분류 예시에서 y_i는 0(고양이) 또는 1(개)의 카테고리 레이블을 갖는다."}, {"id": 60, "sec": "6.4", "diff": "중급", "q": "Fashion-MNIST를 사용한 다중 클래스 분류 예시의 데이터 구성으로 옳은 것은?", "opts": ["28×28 사진 10,000장, 클래스 2개", "600×800 사진 60,000장, 클래스 10개", "28×28 사진 60,000장이며 특징 벡터의 차원은 784", "4×4 픽셀 사진 60,000장, 클래스 5개"], "a": 2, "exp": "자료는 28×28 해상도의 Fashion-MNIST 사진 60,000장을 사용하며 특징 벡터는 784개 픽셀 값으로 구성된다고 설명한다."}, {"id": 61, "sec": "6.4", "diff": "심화", "q": "Fashion-MNIST 예시에서 𝕪_10 = [0, …, 0, 1]^T가 가리키는 클래스는?", "opts": ["T-shirt/top", "Sneaker", "Bag", "Ankle boot"], "a": 3, "exp": "마지막(10번째) 성분이 1이므로 레이블 10에 해당하는 Ankle boot 클래스이다."}, {"id": 62, "sec": "6.4", "diff": "기초", "q": "손실 함수(Loss Function)의 개념으로 옳은 것은?", "opts": ["모델의 가중치 개수를 세는 지표", "데이터를 통해 산출한 모델의 예측값과 실제값의 차이를 표현하는 지표", "학습 데이터의 분산을 나타내는 지표", "활성화 함수의 기울기를 나타내는 지표"], "a": 1, "exp": "자료는 손실 함수를 예측값과 실제값의 차이를 표현하는 지표이자 모델이 얼마나 잘못 예측하는지 확인하는 함수로 정의한다."}, {"id": 63, "sec": "6.4", "diff": "기초", "q": "자료가 '실제값'의 다른 이름으로 제시하지 않은 표현은?", "opts": ["예측값(Prediction)", "정답", "Label", "Ground Truth"], "a": 0, "exp": "자료의 주석은 실제값을 정답, Label, Ground Truth로 부른다고 정리하며, 예측값은 모델의 출력 ŷ_i를 가리키는 별개의 용어이다."}, {"id": 64, "sec": "6.4", "diff": "기초", "q": "y_i가 연속형 값인 회귀 문제에서 대표적으로 사용하는 손실 함수는?", "opts": ["BCE", "CCE", "MSE", "Softmax"], "a": 2, "exp": "자료는 회귀 모델에서 평균제곱오차(MSE, Mean Squared Error)를 사용한다고 설명한다."}, {"id": 65, "sec": "6.4", "diff": "중급", "q": "평균제곱오차(MSE)의 정의로 옳은 것은?", "opts": ["MSE = (1/N) Σ |y_i − ŷ_i|", "MSE = Σ (y_i − ŷ_i)^2", "MSE = −(1/N) Σ y_i ln ŷ_i", "MSE = (1/N) Σ_{i=1}^{N} (y_i − ŷ_i)^2"], "a": 3, "exp": "MSE는 샘플별 오차의 제곱을 모두 더한 뒤 샘플 수 N으로 나눈 값이다."}, {"id": 66, "sec": "6.4", "diff": "중급", "q": "이진 분류에서 사용하는 손실 함수와 예측 확률 계산 함수를 바르게 짝지은 것은?", "opts": ["BCE와 Sigmoid", "CCE와 Sigmoid", "BCE와 Softmax", "MSE와 Sigmoid"], "a": 0, "exp": "자료는 이진 분류에서 BCE(Binary Cross Entropy)를 사용하며 ŷ_i = σ(z_i) = Sigmoid(z_i) = 1/(1+e^(−z_i))로 계산한다고 설명한다."}, {"id": 67, "sec": "6.4", "diff": "심화", "q": "BCE = −(1/N) Σ {y_i·ln ŷ_i + (1−y_i)·ln(1−ŷ_i)}에서 y_i = 1인 샘플이 실제로 기여하는 항은?", "opts": ["ln(1 − ŷ_i)", "ln ŷ_i", "ln ŷ_i + ln(1 − ŷ_i)", "(1 − ŷ_i)^2"], "a": 1, "exp": "y_i = 1이면 (1 − y_i) = 0이므로 두 번째 항이 사라지고 ln ŷ_i 항만 남는다."}, {"id": 68, "sec": "6.4", "diff": "중급", "q": "자료가 CCE(Categorical Cross Entropy)를 사용한다고 밝힌 상황은?", "opts": ["y_i가 연속형 실수 값인 경우", "y_i가 0 또는 1의 값만 갖는 경우", "특징 벡터의 차원이 3 이상인 경우", "y_i가 이산형 값이고 일반적으로 3개 이상의 클래스를 갖는 경우"], "a": 3, "exp": "자료는 실제값이 이산형이고 일반적으로 3개 이상의 클래스를 갖는 다중 클래스 분류에서 CCE를 사용한다고 설명한다."}, {"id": 69, "sec": "6.4", "diff": "중급", "q": "CCE = −(1/N) Σ_i Σ_k y_ik ln ŷ_ik 에서 ŷ_ik가 의미하는 것은?", "opts": ["i번째 샘플의 k번째 특징 값", "i번째 샘플의 k번째 클래스에 대한 카테고리 레이블", "i번째 샘플이 k번째 클래스에 속할 확률 값", "k번째 클래스 노드에 연결된 가중치"], "a": 2, "exp": "자료의 주석에 따르면 y_ik는 카테고리 레이블이고, ŷ_ik는 i번째 샘플이 k번째 클래스에 속할 확률로 출력되는 MLP의 예측값이다."}, {"id": 70, "sec": "6.4", "diff": "중급", "q": "손실함수 연습 문제에서 배치 모드와 온라인 모드의 차이로 옳은 것은?", "opts": ["온라인 모드는 클래스에 대한 합도 생략한다", "배치 모드는 N개 샘플에 대해 평균(1/N)까지 취하고, 온라인 모드는 한 샘플의 클래스 합만 계산한다", "온라인 모드는 손실 대신 정확도를 계산한다", "배치 모드는 로그를 사용하지 않는다"], "a": 1, "exp": "자료는 배치 모드 −(1/N)Σ_iΣ_k y_ik ln ŷ_ik 를 온라인 모드에서는 −Σ_{k=1}^{C} y_ik ln ŷ_ik 로 적용한다고 표시한다."}, {"id": 71, "sec": "6.4", "diff": "심화", "q": "연습 문제에서 출력이 ŷ_i = [0.02, 0.90, 0.05, 0.01, 0.02]이고 실제값 𝕪_i = [0, 1, 0, 0, 0]일 때 온라인 모드 손실값은?", "opts": ["−ln(0.90) ≈ 0.105", "−ln(0.02) ≈ 3.912", "1 − 0.90 = 0.10", "0.90 × ln(0.90) ≈ −0.095"], "a": 0, "exp": "원-핫 레이블에서 1인 성분만 살아남아 L = −{1·ln(0.9)} ≈ 0.105 가 된다."}, {"id": 72, "sec": "6.5", "diff": "기초", "q": "오차 역전파(Backpropagation)의 정의로 옳은 것은?", "opts": ["입력층에서 출력층 방향으로 예측값을 계산하는 과정", "학습 데이터를 무작위로 섞어 배치를 만드는 과정", "손실함수를 최소화하기 위해 출력층에서 입력층 방향 순서대로 모든 노드들의 가중치를 업데이트하는 과정", "은닉층의 활성화 함수를 선택하는 과정"], "a": 2, "exp": "자료는 역전파를 예측값과 실제값의 차이인 손실함수를 최소화하기 위해 출력층에서 입력층 방향으로 가중치(매개변수)를 갱신하는 과정으로 정의한다."}, {"id": 73, "sec": "6.5", "diff": "기초", "q": "오차 역전파에서 가중치를 갱신하는 대표적인 방법으로 자료가 제시한 것은?", "opts": ["최소자승 정규방정식", "유전 알고리즘", "그리드 서치", "경사하강법(Gradient Descent)"], "a": 3, "exp": "자료는 '대표적인 방법으로 경사하강법을 이용하여 가중치를 갱신'한다고 명시한다."}, {"id": 74, "sec": "6.5", "diff": "중급", "q": "경사하강법의 가중치 갱신 식으로 옳은 것은?", "opts": ["w ← w + α · ∂L(w)/∂w", "w ← w − α · ∂L(w)/∂w", "w ← α · w − ∂L(w)/∂w", "w ← w − ∂L(w)/∂α"], "a": 1, "exp": "자료의 갱신식은 w_ji^(k) ← w_ji^(k) − α · ∂L(w)/∂w_ji^(k) 로, 기울기의 반대 방향으로 학습률만큼 이동한다."}, {"id": 75, "sec": "6.5", "diff": "기초", "q": "가중치 갱신 식에서 α가 의미하는 것은?", "opts": ["학습률", "손실 값", "가중치의 초기값", "은닉층의 개수"], "a": 0, "exp": "자료는 α를 학습률(learning rate)로 정의한다."}, {"id": 76, "sec": "6.5", "diff": "중급", "q": "가중치 w_ji^(k)에 대한 자료의 정의로 옳은 것은?", "opts": ["k번째 층의 j번째 노드가 갖는 바이어스 값", "j번째 은닉층의 k번째 노드의 출력", "k+1번째 층의 j번째 노드와 k번째 층의 i번째 노드를 연결하는 엣지와 연계된 가중치", "i번째 샘플의 j번째 클래스에 대한 카테고리 레이블"], "a": 2, "exp": "자료는 w_ji^(k)를 k+1번째 층의 j번째 노드와 k번째 층의 i번째 노드를 잇는 엣지의 가중치로 정의한다."}, {"id": 77, "sec": "6.5", "diff": "중급", "q": "자료가 다층 퍼셉트론 학습의 목표로 제시한 표현은?", "opts": ["max L(y, ŷ)", "W에 대한 argmax {L(y, ŷ)}", "L(y, ŷ) = 0으로 고정", "W_(0)^T, W_(1)^T에 대한 argmin {L(y, ŷ)}"], "a": 3, "exp": "학습 목표는 가중치 행렬 W_(0)^T, W_(1)^T에 대해 손실 L(y, ŷ)을 최소화하는 argmin 문제로 표현된다."}, {"id": 78, "sec": "6.5", "diff": "중급", "q": "역전파 흐름도에서 H^(2)에 해당하는 것은?", "opts": ["출력층의 출력, 즉 예측값 ŷ", "은닉층의 출력", "입력 특징 벡터 x", "손실 함수의 값"], "a": 0, "exp": "자료는 H^(2) = [f_2(z_1^(2)); f_2(z_2^(2))] = [ŷ_1; ŷ_2] = ŷ 로 표기하여 출력층의 출력이 예측값임을 보인다."}, {"id": 79, "sec": "6.5", "diff": "심화", "q": "∂L/∂H^(1)을 연쇄법칙으로 전개한 자료의 식은?", "opts": ["∂L/∂H^(1) = ∂L/∂H^(2) · ∂H^(1)/∂x", "∂L/∂H^(1) = ∂H^(2)/∂H^(1) · ∂L/∂H^(2)", "∂L/∂H^(1) = ∂H^(1)/∂W_(0)^T · ∂L/∂x", "∂L/∂H^(1) = ∂L/∂ŷ · ∂W_(1)^T/∂H^(1)"], "a": 1, "exp": "뒤쪽 층에서 계산된 ∂L/∂H^(2)에 국소 기울기 ∂H^(2)/∂H^(1)을 곱해 앞쪽 층으로 전달하는 것이 역전파의 핵심이다."}, {"id": 80, "sec": "6.5", "diff": "중급", "q": "자료가 역전파 계산의 근간으로 명시한 수학적 원리는?", "opts": ["라그랑주 승수법", "테일러 급수 전개", "베이즈 정리", "편미분의 연쇄법칙(Chain Rule)과 Local Gradient"], "a": 3, "exp": "자료는 각 층의 편미분을 곱해 나가는 편미분의 연쇄법칙과 Local Gradient를 역전파의 원리로 표시한다."}, {"id": 81, "sec": "6.5", "diff": "중급", "q": "은닉 노드(Neuron) 하나의 내부 연산 순서로 옳은 것은?", "opts": ["활성화 함수 → 가중합 → 출력", "출력 → 가중합 → 활성화 함수", "가중합(z_1^(1)) → 활성화 함수(f_1) → 출력(h_1^(1))", "가중합 → 손실 계산 → 출력"], "a": 2, "exp": "자료의 은닉 노드 확대 그림은 가중합 z를 구한 뒤 활성화 함수 f를 통과시켜 출력 h를 내보내는 순서를 보여준다."}, {"id": 82, "sec": "6.5", "diff": "심화", "q": "역전파 1단계 예시에서 ∂L(w)/∂w_11^(1)의 최종 결과로 자료가 제시한 것은?", "opts": ["(ŷ_1 − y_1) · h_1^(1)", "(ŷ_1 − y_1) · x_1", "(ŷ_1 − y_1) · w_11^(1)", "(ŷ_1 − y_1) · z_1^(2)"], "a": 0, "exp": "∂L/∂ŷ_1 · ∂ŷ_1/∂z_1^(2) · ∂z_1^(2)/∂w_11^(1) = (ŷ_1 − y_1)·h_1^(1) 이며, 마지막 항이 해당 엣지의 입력인 은닉 노드 출력 h_1^(1)이다."}, {"id": 83, "sec": "6.5", "diff": "심화", "q": "역전파 2단계 예시에서 ∂L(w)/∂w_11^(0)의 최종 결과는?", "opts": ["(ŷ_1 − y_1) · h_1^(1) · x_1", "(ŷ_1 − y_1) · w_11^(1) · 1 · x_1", "(ŷ_1 − y_1) · w_11^(0) · x_1", "(ŷ_1 − y_1) · x_1^2"], "a": 1, "exp": "연쇄법칙을 한 층 더 적용하면 (ŷ_1 − y_1)·w_11^(1)·(∂h_1^(1)/∂z_1^(1) = 1)·x_1 이 된다."}, {"id": 84, "sec": "6.5", "diff": "심화", "q": "2단계 전개에서 ∂h_1^(1)/∂z_1^(1)이 1이 되는 이유는?", "opts": ["Softmax의 미분이 항상 1이기 때문", "모든 가중치가 1로 초기화되었기 때문", "은닉 노드가 ReLU를 사용하여 양수 구간에서 기울기가 1이기 때문", "바이어스 노드의 출력이 1이기 때문"], "a": 2, "exp": "h_1^(1) = ReLU(z_1^(1))이고 ReLU는 양수 구간에서 항등 함수이므로 미분값이 1이 되어 은닉 노드의 편미분이 간단해진다."}, {"id": 85, "sec": "6.5", "diff": "중급", "q": "역전파 1단계 전개에서 자료가 밝힌 ŷ_1과 z_1^(2)의 관계는?", "opts": ["ŷ_1 = ReLU(z_1^(2))", "ŷ_1 = z_1^(2)", "ŷ_1 = Sigmoid(z_1^(2))", "ŷ_1 = h_1^(2) = σ(z_1^(2)) = Softmax(z_1^(2))"], "a": 3, "exp": "출력층 활성화 함수로 Softmax를 사용하므로 예측값 ŷ_1은 출력 노드의 가중합 z_1^(2)에 Softmax를 적용한 값이다."}, {"id": 86, "sec": "6.5", "diff": "심화", "q": "모델의 깊이가 깊어지고 은닉 노드가 많아질 때 역전파에서 나타나는 현상으로 자료가 지적한 것은?", "opts": ["가중치 갱신 식에서 학습률이 자동으로 0이 된다", "앞단에 있는 가중치를 갱신하기 위해 편미분이 계산해야 할 항이 무수히 많이 증가한다", "출력층의 가중치는 더 이상 갱신할 필요가 없어진다", "연쇄법칙 대신 단순 뺄셈으로 계산할 수 있게 된다"], "a": 1, "exp": "자료는 깊이와 노드 수가 늘수록 모델 앞단 가중치 갱신에 필요한 편미분 항이 폭발적으로 증가한다고 언급한다."}, {"id": 87, "sec": "6.5", "diff": "중급", "q": "자료가 ReLU 활성화 함수 사용의 이점으로 언급한 것은?", "opts": ["은닉 노드의 편미분이 간단해진다", "출력층 확률의 합을 1로 만들어 준다", "가중치를 자동으로 초기화해 준다", "손실 함수를 항상 볼록 함수로 만들어 준다"], "a": 0, "exp": "자료의 주석은 'ReLU 활성화 함수를 사용하기 때문에 은닉 노드의 편미분은 간단하다'고 밝힌다."}, {"id": 88, "sec": "6.5", "diff": "중급", "q": "가중치를 행렬 단위로 갱신하는 경사하강법 식으로 옳은 것은?", "opts": ["W_(1)^T ← W_(1)^T + α · ∂L/∂W_(0)^T", "W_(0)^T ← α · W_(0)^T − ∂L/∂W_(0)^T", "W_(0)^T ← W_(0)^T − α · ∂L/∂W_(0)^T", "W_(0)^T ← W_(0)^T − α · ∂W_(0)^T/∂L"], "a": 2, "exp": "자료는 W_(0)^T와 W_(1)^T 각각에 대해 W ← W − α · ∂L/∂W 형태의 갱신식을 제시한다."}, {"id": 89, "sec": "6.6", "diff": "기초", "q": "학습 절차의 1단계인 순전파(Feed-forward Calculation)에서 수행하는 일은?", "opts": ["오차를 출력층에서 입력층으로 전달한다", "가중치를 무작위로 초기화한다", "성능 평가 지표를 계산한다", "입력 데이터에 각 층의 가중치들의 가중합과 활성화 함수를 적용하여 예측값을 출력한다"], "a": 3, "exp": "자료의 흐름도는 1단계 순전파를 '입력 데이터에 각 층의 가중합과 활성화 함수를 적용하여 예측값을 출력'하는 과정으로 설명한다."}, {"id": 90, "sec": "6.6", "diff": "기초", "q": "학습 절차의 2단계인 손실값 계산에서 수행하는 일은?", "opts": ["예측값과 실제값의 차이인 오차를 손실 함수로 계산한다", "학습률을 자동으로 조정한다", "은닉층의 개수를 늘린다", "혼동 행렬을 시각화한다"], "a": 0, "exp": "2단계는 순전파로 얻은 예측값과 실제값의 차이(오차)를 CCE 등의 손실 함수로 계산하는 단계이다."}, {"id": 91, "sec": "6.6", "diff": "중급", "q": "학습 절차의 3단계인 역전파에서 수행하는 일은?", "opts": ["예측값을 처음부터 다시 계산한다", "미분 연쇄법칙을 적용하여 가중치를 업데이트한다", "학습 데이터를 새로 수집한다", "활성화 함수를 다른 함수로 교체한다"], "a": 1, "exp": "자료의 흐름도는 3단계 역전파를 '미분 연쇄법칙을 적용하여 가중치를 업데이트'하는 과정으로 표기한다."}, {"id": 92, "sec": "6.6", "diff": "중급", "q": "자료의 학습 흐름도에서 학습이 종료되는 조건은?", "opts": ["가중치가 모두 0이 될 때", "은닉층의 개수가 최대가 될 때", "학습률이 1이 될 때", "Error가 허용범위보다 작아질 때"], "a": 3, "exp": "흐름도의 판단 블록은 'Error < 허용범위'가 Yes이면 학습 종료로 이어진다."}, {"id": 93, "sec": "6.6", "diff": "중급", "q": "오차가 허용범위보다 커서 판단 블록이 No인 경우 취하는 조치는?", "opts": ["학습을 즉시 종료한다", "성능 평가 지표를 산출한다", "역전파로 가중치를 갱신한 뒤 순전파부터 다시 반복한다", "출력층의 활성화 함수를 제거한다"], "a": 2, "exp": "No 경로는 오차 역전파와 가중치 Update로 이어지고 다시 순전파를 수행하는 반복 구조를 이룬다."}, {"id": 94, "sec": "6.6", "diff": "기초", "q": "학습 종료 이후 자료의 흐름도가 이어지는 단계는?", "opts": ["모델의 성능 평가 지표 산출", "손실 함수의 재정의", "학습 데이터의 재수집", "원-핫 인코딩 수행"], "a": 0, "exp": "자료는 학습 종료 뒤 '모델의 성능 평가 지표'로 연결되는 흐름을 표시한다."}, {"id": 95, "sec": "6.6", "diff": "기초", "q": "회귀(Regression) 모델의 성능 평가 지표로 자료가 제시한 것은?", "opts": ["Confusion Matrix", "R2 square(결정계수)", "Categorical Cross Entropy", "Softmax Score"], "a": 1, "exp": "자료는 회귀 모델의 성능 평가 지표로 R2 square를, 분류 모델의 지표로 Confusion Matrix를 예로 든다."}, {"id": 96, "sec": "6.6", "diff": "기초", "q": "분류(Classification) 모델의 성능 평가 지표로 자료가 제시한 것은?", "opts": ["R2 square", "MSE", "혼동 행렬(Confusion Matrix)", "SST"], "a": 2, "exp": "자료는 분류 모델의 성능 평가 지표로 혼동 행렬(Confusion Matrix)을 제시하며 TP, FP, FN, TN 구조를 함께 보여준다."}, {"id": 97, "sec": "6.6", "diff": "중급", "q": "R² = 1 − SSR/SST 에서 SSR과 SST의 명칭으로 옳은 것은?", "opts": ["SSR: Sum of Squared Ratio, SST: Sum of Squared Total", "SSR: Regression Sum of Squares, SST: Sample Sum of Total", "SSR: Residual Squared Ratio, SST: Total Squared Ratio", "SSR: Residual Sum of Squares, SST: Total Sum of Squares"], "a": 3, "exp": "자료의 주석은 SSR을 Residual Sum of Squares, SST를 Total Sum of Squares로 정의한다."}, {"id": 98, "sec": "6.6", "diff": "중급", "q": "R² 식에 등장하는 ȳ_i가 의미하는 것은?", "opts": ["모델의 예측값", "y_i의 평균값", "잔차의 표준편차", "가중치의 평균"], "a": 1, "exp": "자료의 주석은 ȳ_i가 y_i의 평균값이고 ŷ_i가 예측값이라고 밝힌다."}, {"id": 99, "sec": "6.6", "diff": "심화", "q": "자료가 제시한 혼동 행렬의 네 가지 구성요소로 옳은 것은?", "opts": ["TP(True Positive), FP(False Positive), FN(False Negative), TN(True Negative)", "TP, FP, FN, R2", "SSR, SST, TP, TN", "Precision, Recall, SSR, SST"], "a": 0, "exp": "혼동 행렬은 실제값과 예측값의 Positive/Negative 조합에 따라 TP, FP, FN, TN의 네 칸으로 구성된다."}, {"id": 100, "sec": "6.6", "diff": "심화", "q": "자료의 MNIST 혼동 행렬 그림에서 대각선 성분이 의미하는 것은?", "opts": ["잘못 분류된 샘플의 수", "각 클래스별 학습률", "실제값과 예측값이 일치한 샘플의 수", "클래스별 손실 값"], "a": 2, "exp": "혼동 행렬의 행은 실제값(True label), 열은 예측값(Predicted label)이므로 대각선은 두 값이 일치한, 즉 올바르게 분류된 샘플 수를 나타낸다."}];
+
+const SECTIONS = {
+  "6.1": "퍼셉트론 복습과 XOR 문제",
+  "6.2": "다층 퍼셉트론의 개념과 순전파 구조",
+  "6.3": "입력층·은닉층·출력층과 활성화 함수",
+  "6.4": "학습 데이터와 손실 함수",
+  "6.5": "오차 역전파와 경사하강법",
+  "6.6": "학습 절차와 모델 성능 평가 지표"
+};
+const DIFFS = ["기초","중급","심화"];
+const DIFFCLS = {"기초":"d1","중급":"d2","심화":"d3"};
+const KEY = "mlx_week6_quiz_v1";
+
+/* ---------- state ---------- */
+let state = {
+  answers:{},           // id -> chosen original option index
+  secFilter:"ALL",
+  diffFilter:"ALL",
+  shuffleQ:false,
+  shuffleO:false,
+  reviewMode:false,
+  order:[],             // array of question ids in display order
+  optOrder:{},          // id -> array of original indices
+  cursor:0
+};
+
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify({
+    answers:state.answers, shuffleQ:state.shuffleQ, shuffleO:state.shuffleO,
+    secFilter:state.secFilter, diffFilter:state.diffFilter, optOrder:state.optOrder
+  })); }catch(e){}
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY); if(!raw) return;
+    const d = JSON.parse(raw);
+    if(d && typeof d==="object"){
+      state.answers = d.answers||{};
+      state.shuffleQ = !!d.shuffleQ; state.shuffleO = !!d.shuffleO;
+      state.secFilter = d.secFilter||"ALL"; state.diffFilter = d.diffFilter||"ALL";
+      state.optOrder = d.optOrder||{};
+    }
+  }catch(e){}
+}
+
+/* ---------- helpers ---------- */
+function shuffled(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function optOrderFor(q){
+  if(!state.shuffleO) return [0,1,2,3];
+  if(!state.optOrder[q.id]) { state.optOrder[q.id] = shuffled([0,1,2,3]); save(); }
+  return state.optOrder[q.id];
+}
+function isWrong(q){ return q.id in state.answers && state.answers[q.id] !== q.a; }
+function isRight(q){ return state.answers[q.id] === q.a; }
+
+function buildOrder(keepCursor){
+  let pool = QUESTIONS.filter(q =>
+    (state.secFilter==="ALL" || q.sec===state.secFilter) &&
+    (state.diffFilter==="ALL" || q.diff===state.diffFilter)
+  );
+  if(state.reviewMode && state.reviewIds && state.reviewIds.length)
+    pool = state.reviewIds.map(id=>byId[id]);
+  let ids = pool.map(q=>q.id);
+  if(state.shuffleQ) ids = shuffled(ids);
+  state.order = ids;
+  if(!keepCursor) state.cursor = 0;
+  if(state.cursor >= ids.length) state.cursor = Math.max(0, ids.length-1);
+}
+
+const byId = {}; QUESTIONS.forEach(q => byId[q.id]=q);
+
+/* ---------- rendering ---------- */
+const $ = s => document.querySelector(s);
+const stage = $("#stage");
+
+function renderChips(){
+  const sc = $("#secChips"); sc.innerHTML="";
+  const mk = (label,val,cur,handler)=>{
+    const b=document.createElement("button");
+    b.className="chip"; b.textContent=label;
+    b.setAttribute("aria-pressed", String(cur===val));
+    b.onclick=()=>handler(val); return b;
+  };
+  sc.appendChild(mk("전체 "+QUESTIONS.length+"문항","ALL",state.secFilter,setSec));
+  Object.keys(SECTIONS).forEach(k=>{
+    const n = QUESTIONS.filter(q=>q.sec===k).length;
+    sc.appendChild(mk(k+" "+SECTIONS[k]+" ("+n+")",k,state.secFilter,setSec));
+  });
+  const dc = $("#diffChips"); dc.innerHTML="";
+  dc.appendChild(mk("전체","ALL",state.diffFilter,setDiff));
+  DIFFS.forEach(d=>{
+    const n = QUESTIONS.filter(q=>q.diff===d).length;
+    dc.appendChild(mk(d+" ("+n+")",d,state.diffFilter,setDiff));
+  });
+  $("#shuffleQ").setAttribute("aria-pressed", String(state.shuffleQ));
+  $("#shuffleO").setAttribute("aria-pressed", String(state.shuffleO));
+  $("#reviewBtn").setAttribute("aria-pressed", String(state.reviewMode));
+}
+
+function setSec(v){ state.secFilter=v; state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+function setDiff(v){ state.diffFilter=v; state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+
+function renderProgress(){
+  const ids = state.order;
+  const done = ids.filter(id=> id in state.answers).length;
+  const ok = ids.filter(id=> isRight(byId[id])).length;
+  const no = done - ok;
+  $("#doneN").textContent = done;
+  $("#totalN").textContent = ids.length;
+  $("#okN").textContent = ok;
+  $("#noN").textContent = no;
+  $("#rate").textContent = done ? Math.round(ok/done*100)+"%" : "—";
+  $("#barFill").style.width = ids.length ? (done/ids.length*100)+"%" : "0%";
+  $("#wrongCount").textContent = QUESTIONS.filter(isWrong).length;
+}
+
+function renderPalette(){
+  const p = $("#palette"); p.innerHTML="";
+  state.order.forEach((id,i)=>{
+    const q = byId[id];
+    const b=document.createElement("button");
+    b.className="cell" + (id in state.answers ? (isRight(q)?" o":" x") : "") + (i===state.cursor?" cur":"");
+    b.textContent = q.id;
+    b.title = q.sec+" · "+q.diff;
+    b.onclick=()=>{ state.cursor=i; renderAll(); window.scrollTo({top:0,behavior:"smooth"}); };
+    p.appendChild(b);
+  });
+}
+
+function renderQuestion(){
+  stage.innerHTML="";
+  if(!state.order.length){
+    const d=document.createElement("div"); d.className="panel empty";
+    d.textContent = state.reviewMode ? "틀린 문제가 없습니다. 잘하셨어요!" : "조건에 맞는 문제가 없습니다. 필터를 바꿔 보세요.";
+    stage.appendChild(d); return;
+  }
+  const idx = state.cursor;
+  const q = byId[state.order[idx]];
+  const answered = q.id in state.answers;
+  const order = optOrderFor(q);
+
+  const card=document.createElement("section"); card.className="panel qcard";
+
+  const meta=document.createElement("div"); meta.className="qmeta";
+  meta.innerHTML =
+    '<span class="tag num">'+ (idx+1) +' / '+ state.order.length +'</span>' +
+    '<span class="tag sec">'+ q.sec +' '+ SECTIONS[q.sec] +'</span>' +
+    '<span class="tag '+ DIFFCLS[q.diff] +'">'+ q.diff +'</span>' +
+    '<span style="margin-left:auto;font-size:12px;color:var(--muted)">문제 '+ q.id +'번</span>';
+  card.appendChild(meta);
+
+  const h=document.createElement("h2"); h.className="qtext"; h.textContent=q.q; card.appendChild(h);
+
+  const wrap=document.createElement("div"); wrap.className="opts";
+  order.forEach((orig,pos)=>{
+    const b=document.createElement("button"); b.className="opt"; b.type="button";
+    b.innerHTML = '<span class="n">'+(pos+1)+'</span><span class="t"></span>';
+    b.querySelector(".t").textContent = q.opts[orig];
+    if(answered){
+      b.disabled = true;
+      if(orig===q.a){ b.classList.add("correct"); b.insertAdjacentHTML("beforeend",'<span class="mark">정답</span>'); }
+      else if(orig===state.answers[q.id]){ b.classList.add("wrong"); b.insertAdjacentHTML("beforeend",'<span class="mark">내 선택</span>'); }
+    } else {
+      b.onclick=()=>{ state.answers[q.id]=orig; save(); renderAll(); };
+    }
+    wrap.appendChild(b);
+  });
+  card.appendChild(wrap);
+
+  if(answered){
+    const e=document.createElement("div"); e.className="exp";
+    const good = isRight(q);
+    e.innerHTML = '<h4>'+(good?'✓ 정답입니다':'✕ 다시 확인해 보세요')+'</h4><p></p>'+
+                  '<span class="ref">관련 단원 · '+q.sec+' '+SECTIONS[q.sec]+'</span>';
+    e.querySelector("p").textContent = q.exp;
+    if(!good){ e.style.background="var(--no-soft)"; e.style.borderLeftColor="var(--no)"; e.querySelector("h4").style.color="var(--no)"; }
+    card.appendChild(e);
+  }
+
+  const nav=document.createElement("div"); nav.className="nav";
+  const prev=document.createElement("button"); prev.className="btn"; prev.textContent="← 이전";
+  prev.disabled = idx===0; prev.onclick=()=>{ state.cursor--; renderAll(); };
+  const next=document.createElement("button"); next.className="btn primary";
+  next.textContent = idx===state.order.length-1 ? "결과 보기 →" : "다음 →";
+  next.onclick=()=>{
+    if(idx===state.order.length-1){ showResult(); }
+    else { state.cursor++; renderAll(); }
+  };
+  const redo=document.createElement("button"); redo.className="btn"; redo.textContent="이 문제 다시";
+  redo.disabled = !answered;
+  redo.onclick=()=>{ delete state.answers[q.id]; save(); renderAll(); };
+  nav.appendChild(prev); nav.appendChild(redo);
+  const sp=document.createElement("span"); sp.className="spacer"; nav.appendChild(sp);
+  nav.appendChild(next);
+  card.appendChild(nav);
+
+  stage.appendChild(card);
+}
+
+function showResult(){
+  const ids = state.order;
+  const done = ids.filter(id=> id in state.answers).length;
+  const ok = ids.filter(id=> isRight(byId[id])).length;
+  const card=document.createElement("section"); card.className="panel result";
+  const pct = done ? Math.round(ok/done*100) : 0;
+  let msg = pct>=90?"완벽합니다. 1주차 내용을 확실히 이해했어요."
+          : pct>=75?"좋습니다. 틀린 문제만 복습하면 충분해요."
+          : pct>=50?"절반 이상 맞혔습니다. 오답 노트를 한 번 더 돌려 보세요."
+          : "해설을 읽으며 오답부터 차근히 정리해 봅시다.";
+
+  const per = {};
+  Object.keys(SECTIONS).forEach(k=>{
+    const sub = ids.map(i=>byId[i]).filter(q=>q.sec===k && (q.id in state.answers));
+    if(sub.length) per[k] = [sub.filter(isRight).length, sub.length];
+  });
+
+  card.innerHTML =
+    '<div class="eyebrow">결과</div>'+
+    '<div class="score">'+ok+' <small>/ '+done+' 정답</small></div>'+
+    '<div class="stat" style="font-size:15px">정답률 <b>'+pct+'%</b> · '+msg+'</div>'+
+    '<div class="breakdown">'+ Object.keys(per).map(k=>
+       '<div class="bd"><div class="k">'+k+' '+SECTIONS[k]+'</div><div class="v">'+per[k][0]+' / '+per[k][1]+'</div></div>'
+     ).join('') +'</div>';
+
+  const nav=document.createElement("div"); nav.className="nav";
+  const back=document.createElement("button"); back.className="btn"; back.textContent="← 문제로 돌아가기";
+  back.onclick=()=>renderAll();
+  const rev=document.createElement("button"); rev.className="btn primary";
+  const wn = QUESTIONS.filter(isWrong).length;
+  rev.textContent="틀린 문제 "+wn+"개 다시 풀기"; rev.disabled = wn===0;
+  rev.onclick=()=>enterReview();
+  nav.appendChild(back);
+  const sp=document.createElement("span"); sp.className="spacer"; nav.appendChild(sp);
+  nav.appendChild(rev);
+  card.appendChild(nav);
+
+  stage.innerHTML=""; stage.appendChild(card);
+  renderProgress(); renderPalette();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function enterReview(){
+  const wrongIds = QUESTIONS.filter(isWrong).map(q=>q.id);
+  if(!wrongIds.length){
+    state.reviewMode=false; buildOrder(false); renderAll();
+    alert("틀린 문제가 없습니다.");
+    return;
+  }
+  wrongIds.forEach(id=> delete state.answers[id]);
+  state.reviewMode = true;
+  state.reviewIds = wrongIds;
+  state.order = state.shuffleQ ? shuffled(wrongIds) : wrongIds.slice();
+  state.cursor = 0;
+  save(); renderAll(); window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function renderAll(){ renderChips(); renderProgress(); renderPalette(); renderQuestion(); }
+
+/* ---------- events ---------- */
+$("#shuffleQ").onclick=()=>{ state.shuffleQ=!state.shuffleQ; buildOrder(false); save(); renderAll(); };
+$("#shuffleO").onclick=()=>{
+  state.shuffleO=!state.shuffleO;
+  if(!state.shuffleO) state.optOrder={};
+  save(); renderAll();
+};
+$("#reviewBtn").onclick=()=>{
+  if(state.reviewMode){ state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+  else enterReview();
+};
+$("#resetBtn").onclick=()=>{
+  state.answers={}; state.optOrder={}; state.reviewMode=false;
+  buildOrder(false); save(); renderAll(); window.scrollTo({top:0,behavior:"smooth"});
+};
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT") return;
+  if(e.key==="ArrowRight" && state.cursor < state.order.length-1){ state.cursor++; renderAll(); }
+  if(e.key==="ArrowLeft" && state.cursor>0){ state.cursor--; renderAll(); }
+  if(["1","2","3","4"].includes(e.key)){
+    const btns = document.querySelectorAll(".opt:not(:disabled)");
+    const b = btns[Number(e.key)-1]; if(b) b.click();
+  }
+});
+
+/* ---------- init ---------- */
+load();
+buildOrder(false);
+// resume at first unanswered
+const firstUn = state.order.findIndex(id=> !(id in state.answers));
+state.cursor = firstUn === -1 ? 0 : firstUn;
+renderAll();
+</script>
+</body>
+</html>
