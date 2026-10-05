@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기계학습특론 | 6주차 수업내용 · 다층 퍼셉트론</title>
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0c1a3a">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+/* 수식 카드 */
+.fx{background:#f8faff;border:1px solid #cfdcf5;border-left:3px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:10px 0}
+.fx + .fx{margin-top:8px}
+.fx-lab{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.fx-note{font-size:12px;color:#4b5563;line-height:1.7;margin-top:7px}
+.fx-note b{color:var(--ink)}
+.tex-d{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:9px 2px 5px;text-align:center}
+.tex-d .katex{font-size:1.12em}
+.tex{white-space:nowrap}
+/* 풀이 예제 */
+.ex{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin:10px 0}
+.ex-q{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.65;
+  background:#f1f0ec;border-radius:7px;padding:9px 12px;margin-bottom:4px}
+.ex-q em{font-style:normal;color:var(--red);font-size:11px;font-weight:700;display:block;margin-bottom:3px}
+.step{display:grid;grid-template-columns:20px 1fr;gap:9px;align-items:baseline;
+  font-size:12.5px;color:#4b5563;line-height:1.75;padding:5px 0}
+.step i{font-style:normal;font-weight:700;color:var(--accent);font-size:11.5px}
+.step .katex{font-size:1em}
+.ex-ans{margin-top:8px;background:#f0fdf4;border:1px solid #22c55e;border-radius:8px;
+  padding:9px 12px;font-size:12.5px;color:#14532d;line-height:1.7}
+.ex-ans b{color:var(--green)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+
+/* 주차 내비 */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* 노트북 주석 */
+.nbc{color:#b45309;font-weight:700;background:#fff7ed;border-radius:3px;padding:0 3px}
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .out{color:#c9f24b}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 함수 카드 */
+.fnc{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:var(--radius);padding:13px 15px;margin:11px 0}
+.fnc h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fnc .sig{
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;color:#1b3f8b;
+  background:#eef2fb;border:1px solid #dbe3f5;border-radius:6px;padding:7px 10px;margin:7px 0 9px;
+  overflow-x:auto;white-space:pre;
+}
+.fnc dl{display:grid;grid-template-columns:minmax(84px,auto) 1fr;gap:5px 12px;font-size:12.5px;line-height:1.65}
+.fnc dt{font-weight:700;color:var(--ink)}
+.fnc dd{color:#4b5563}
+@media(max-width:440px){.fnc dl{grid-template-columns:1fr;gap:2px}.fnc dd{margin-bottom:6px}}
+/* 개념 하이라이트 + 툴팁 */
+
+/* ===== 4주차 개편: 슬라이드 모아보기 · 출처 뱃지 ===== */
+/* ===== 출처 뱃지 ===== */
+.bdg{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.02em;padding:3px 9px;border-radius:999px;white-space:nowrap;line-height:1.5}
+.bdg-gyo{background:#eef2fb;color:#1b3f8b;border:1px solid #c4d2ee}
+.bdg-flip{background:#fff7ed;color:#b45309;border:1px solid #f0c48a}
+.bdg-live{background:#fdf0f5;color:#9d174d;border:1px solid #f3bcd2}
+.bdg-plus{background:#f0fdfa;color:#0f766e;border:1px solid #99e0d6}
+.bdg-pres{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
+
+/* ===== 개념 카드 ===== */
+.pt{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin:11px 0}
+.pt-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;font-weight:700;line-height:1.45;margin-bottom:7px}
+.pt > p{font-size:13.5px;color:#3f4854;line-height:1.85}
+.pt > p + p{margin-top:9px}
+.pt > p b{color:var(--ink)}
+.pt.gyo{border-left-color:#1b3f8b}
+.pt.flip{border-left-color:#b45309}
+.pt.live{border-left-color:#9d174d}
+.pt.plus{border-left-color:#0f766e}
+.hi{background:linear-gradient(transparent 58%,#ffe9a8 58%);font-weight:700;color:var(--ink);padding:0 1px}
+.pt pre.code{margin:9px 0}
+
+/* 본문 속 짧은 보충 설명 상자 */
+.qa{background:#f0fdfa;border:1px solid #99e0d6;border-left:4px solid #0f766e;
+  border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:11px 0;
+  font-size:13px;line-height:1.85;color:#134e4a}
+.qa::before{content:'보충설명';display:table;font-size:10.5px;font-weight:800;letter-spacing:.02em;
+  padding:3px 9px;border-radius:999px;margin-bottom:7px;background:#e3f7f3;color:#0f766e;border:1px solid #99e0d6}
+.qa b{color:#0f3d3a}
+.qa .ul li{color:#134e4a}
+.qa .ul li::before{background:#0f766e;opacity:.8}
+
+/* ===== 슬라이드 모아보기 ===== */
+.deck{background:#efeeea;border:1px solid var(--border);border-radius:var(--radius);padding:12px 12px 14px;margin-bottom:20px}
+.deck-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.deck-h span{font-size:11px;font-weight:400;color:var(--muted)}
+.deck-t{font-size:12px;font-weight:700;color:var(--accent);margin:13px 0 7px;padding-left:8px;border-left:3px solid var(--accent)}
+.deck-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.sld{background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px;margin:0;cursor:zoom-in;transition:box-shadow .15s,transform .15s}
+.sld:hover{box-shadow:0 6px 16px rgba(18,34,80,.13);transform:translateY(-2px)}
+.sld img{display:block;width:100%;height:auto;border-radius:4px;background:#fff}
+.sld figcaption{font-size:11px;color:var(--muted);line-height:1.5;margin-top:6px;text-align:center}
+.sld figcaption b{color:var(--accent)}
+
+/* ===== 한 줄 요약 ===== */
+.oneline{background:#16233f;color:#e7edf9;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+.oneline > p{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--lime)}
+.oneline .ul li{color:#c5d0e8;font-size:13px}
+.oneline .ul li b{color:#fff}
+.oneline .ul li::before{background:var(--lime);opacity:.9}
+
+/* ===== 슬라이드 확대 보기 ===== */
+#lb{position:fixed;inset:0;background:rgba(9,15,31,.94);display:none;align-items:center;justify-content:center;
+  z-index:400;padding:52px 60px 64px;cursor:zoom-out;-webkit-user-select:none;user-select:none}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:80vh;border-radius:8px;background:#fff;box-shadow:0 18px 50px rgba(0,0,0,.45);cursor:default}
+#lb .cap{position:absolute;left:0;right:0;bottom:18px;text-align:center;color:#d9e1f3;font-size:12.5px;line-height:1.6;padding:0 20px;cursor:default}
+#lb .cap b{color:#fff}
+#lb .cap .num{display:block;font-size:11px;color:#9fb0d4;margin-top:4px;letter-spacing:.04em}
+#lb button{
+  position:absolute;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;
+  border-radius:50%;width:44px;height:44px;font-size:20px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .15s;
+  font-family:inherit;padding:0;
+}
+#lb button:hover{background:rgba(255,255,255,.22)}
+#lb button:disabled{opacity:.25;cursor:default}
+#lb .prev{left:12px;top:50%;transform:translateY(-50%)}
+#lb .next{right:12px;top:50%;transform:translateY(-50%)}
+#lb .x{right:12px;top:12px;width:38px;height:38px;font-size:17px}
+@media(max-width:560px){
+  #lb{padding:48px 10px 92px}
+  #lb .prev{left:50%;top:auto;bottom:16px;transform:translateX(-64px)}
+  #lb .next{right:50%;top:auto;bottom:16px;transform:translateX(64px)}
+  #lb .cap{bottom:70px}
+}
+
+.kg{display:block;width:108px;height:42px;margin:0 auto}
+.mapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px;margin-top:10px}
+.mapgrid a{
+  display:block;text-decoration:none;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:9px;padding:10px 13px;transition:.15s;
+}
+.mapgrid a:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(18,34,80,.1)}
+.mapgrid b{display:block;font-size:12.5px;color:var(--ink)}
+.mapgrid span{font-size:11.5px;color:var(--muted);line-height:1.55}
+.legend{
+  display:flex;flex-wrap:wrap;gap:9px 16px;align-items:center;
+  background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius);
+  padding:13px 15px;margin:0 0 24px;font-size:12px;color:var(--muted);line-height:1.6;
+}
+.legend i{font-style:normal;display:flex;align-items:center;gap:7px}
+.legend .legend-t{flex:0 0 100%;font-size:12.5px;font-weight:700;color:var(--ink)}
+.legend .legend-t2{flex:0 0 100%;font-size:11.5px;color:var(--muted);border-top:1px dashed var(--border);padding-top:10px;margin-top:1px}
+
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+/* 퀴즈 목록 */
+.qz{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 15px;margin-bottom:9px}
+.qz h4{font-size:13px;font-weight:700;margin-bottom:5px}
+.qz .ans{
+  display:block;margin-top:7px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;
+  padding:8px 11px;font-size:12.5px;color:#14532d;line-height:1.7;
+}
+.qz .ans summary{cursor:pointer;font-weight:700;color:#166534;list-style:none}
+.qz .ans summary::-webkit-details-marker{display:none}
+.qz .ans summary::before{content:'▸ ';font-weight:700}
+.qz .ans[open] summary::before{content:'▾ '}
+.qz .ans pre.code{margin:8px 0 0}
+
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 실시간 강의 강조 */
+.live{
+  background:#fffaf3;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#7c2d12;
+}
+.live::before{
+  content:'🎙 실시간 강의 강조';display:inline-block;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.live b{color:#7c2d12}
+.live .ul li{color:#7c2d12}
+.live .ul li::before{background:#b45309;opacity:.75}
+/* 100문제 해설 포인트 */
+.qexp{
+  background:#f0fdf4;border:1px solid #bbf7d0;border-left:4px solid #16a34a;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;font-size:13px;line-height:1.8;color:#14532d;
+}
+.qexp::before{
+  content:'✅ 100문제 해설에서 짚어 준 것';display:inline-block;background:#16a34a;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.qexp b{color:#14532d}
+.qexp .ul li{color:#166534}
+.qexp .ul li::before{background:#16a34a;opacity:.8}
+.fml{
+  display:block;background:#eef2fb;border:1px solid #dbe3f5;border-radius:8px;
+  padding:9px 12px;margin:8px 0;font-size:13px;color:#1b3f8b;text-align:center;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;overflow-x:auto;white-space:nowrap;
+}
+
+/* 계산으로 채운 수업시간 도식 (SVG) — 좁은 화면에서는 가로 스크롤 */
+.svgfig{padding:11px 11px 9px}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:560px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+.figs > .note-box{margin:0}
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#map">한눈에 보기</a>
+  <a href="#docs">강의자료</a>
+  <a href="#goal">학습 목표</a>
+  <a href="#xor">6.1 복습과 XOR</a>
+  <a href="#mlp">6.2 MLP의 개념과 순전파</a>
+  <a href="#layers">6.3 층과 활성화 함수</a>
+  <a href="#loss">6.4 데이터와 손실 함수</a>
+  <a href="#backprop">6.5 오차 역전파</a>
+  <a href="#procedure">6.6 학습 절차와 평가</a>
+  <a href="#lab">실습 노트북</a>
+  <a href="#summary">핵심 정리</a>
+  <a href="#next">다음 주 예고</a>
+</nav>
+
+<div class="wrap">
+
+<div class="weeknav">
+  <a href="machine-learning.html" class="plan">← 강의계획서</a>
+  <a href="machine-learning-week02.html">2주차 · 선형대수 · 확률</a>
+  <a href="machine-learning-week03.html">3주차 · 선형 회귀</a>
+  <a href="machine-learning-week04.html">4주차 · 로지스틱 회귀</a>
+  <a href="machine-learning-week05.html">5주차 · 퍼셉트론</a>
+  <span class="cur">6주차 · 다층 퍼셉트론</span>
+</div>
+
+<section class="hero">
+  <p class="kicker">6주차 · 10.8 · 2026-2학기</p>
+  <h1>06. 다층 퍼셉트론 — 은닉층 하나가 바꾼 것</h1>
+  <p>5주차의 퍼셉트론은 <b>직선 하나로 공간을 가르는 기계</b>였고, 그래서 XOR 앞에서 멈췄습니다. 이번 주는 그 사이에 <b>은닉층</b>을 넣어 비선형 경계를 만들고, <b>손실 함수 → 오차 역전파 → 경사하강</b>으로 그 층들을 어떻게 학습시키는지를 식으로 따라갑니다.</p>
+  <div class="chips"><span class="chip">최승호 교수</span><span class="chip">구조 22p · 학습 19p</span><span class="chip">슬라이드 35장</span><span class="chip">100문제 6.1~6.6</span><span class="chip">MNIST · Fashion-MNIST</span><span class="chip">ReLU · Softmax</span><span class="chip">역전파</span></div>
+</section>
+
+<div class="legend">
+  <p class="legend-t">내용이 어디에서 왔는지 <b>뱃지</b>로 구분했습니다</p>
+  <i><span class="bdg bdg-gyo">교안</span><span>교수님 슬라이드에 있는 내용</span></i>
+  <i><span class="bdg bdg-plus">보충설명</span><span>교안에 없거나 짧게 지나간 부분을 따로 찾아 정리한 내용</span></i>
+  <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고(← → 로 넘기기), <span class="hi">노란 형광펜</span>은 꼭 기억할 문장, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선</span>은 누르면 뜻이 뜹니다.</p>
+</div>
+
+<section class="sec" id="map">
+  <div class="sec-head"><span class="sec-badge">MAP</span><h2 class="sec-title">한눈에 보기<small>교안 두 개 — &lsquo;구조와 개념&rsquo;(22p) + &lsquo;학습&rsquo;(19p)</small></h2></div>
+
+<div class="oneline">
+  <p><b>이번 주 한 줄 요약</b></p>
+  <ul class="ul">
+    <li>단층 퍼셉트론은 <b>AND · OR · NAND는 되는데 XOR이 안 된다</b> — 직선 하나로 나눌 수 없기 때문</li>
+    <li><b>NAND와 OR의 출력을 AND에 넣으면</b> XOR이 된다. 이 중간 단계가 바로 <b>은닉층</b>이다</li>
+    <li>MLP의 순전파는 <b>가중치 행렬 곱 + 활성화 함수</b>의 반복이다 — <span class="tex">\hat{\mathbf{y}}=f_2\!\left(W_1^{\mathsf T}f_1(W_0^{\mathsf T}\mathbf{x}+b^{(0)})+b^{(1)}\right)</span></li>
+    <li>학습은 <b>손실 함수</b>(MSE · BCE · CCE)를 정하고 <b>역전파로 기울기를 구해</b> 경사하강으로 가중치를 고치는 일이다</li>
+    <li><span class="hi">역전파에 새로운 원리는 없다 — 미분의 연쇄법칙을 층마다 반복할 뿐이다.</span></li>
+  </ul>
+</div>
+
+<div class="mapgrid">
+  <a href="#xor"><b>6.1 복습과 XOR</b><span>퍼셉트론의 정의 · AND/OR/NAND · XOR의 벽</span></a>
+  <a href="#mlp"><b>6.2 MLP의 개념과 순전파</b><span>은닉층 · 완전 연결 · 행렬로 쓴 순전파</span></a>
+  <a href="#layers"><b>6.3 층과 활성화 함수</b><span>입력층 · 은닉층(ReLU) · 출력층(Softmax)</span></a>
+  <a href="#loss"><b>6.4 데이터와 손실 함수</b><span>MSE · BCE · CCE를 언제 쓰는가</span></a>
+  <a href="#backprop"><b>6.5 오차 역전파</b><span>연쇄법칙 · Local Gradient · 가중치 갱신</span></a>
+  <a href="#procedure"><b>6.6 학습 절차와 평가</b><span>순전파 → 손실 → 역전파 반복 · R² · 혼동 행렬</span></a>
+  <a href="#lab"><b>실습 노트북</b><span>MLP 실습 1 · 2</span></a>
+  <a href="#summary"><b>핵심 정리</b><span>시험 전에 이것만은</span></a>
+</div>
+</section>
+
+<section class="sec" id="docs">
+  <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">6주차 강의자료<small>제목을 누르면 앱 실행 없이 화면에서 바로 열립니다</small></h2></div>
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📘</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=ml-w06-structure">다층 퍼셉트론의 구조와 개념</a>
+      <p>퍼셉트론 복습 · XOR 게이트 · MLP의 구조와 순전파 · 입력층/은닉층/출력층 · ReLU · Softmax · <b>22페이지</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-mlp-structure.pdf" download="기계학습특론_6주차_다층퍼셉트론_구조와개념.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📗</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=ml-w06-training">다층 퍼셉트론의 학습</a>
+      <p>학습 데이터 · 손실 함수(MSE · BCE · CCE) · 오차 역전파와 연쇄법칙 · 학습 절차 · 성능 평가 지표 · <b>19페이지</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-mlp-training.pdf" download="기계학습특론_6주차_다층퍼셉트론_학습.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📝</span>HTML</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-quiz100.html" target="_blank" rel="noopener">6주차 다층 퍼셉트론 100문제 ↗</a>
+      <p>브라우저에서 바로 푸는 문제지 · 절별 문제는 아래 각 절 제목 옆 버튼으로도 열립니다 · <b>6.1~6.6 여섯 절</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-quiz100.html" download="기계학습특론_6주차_다층퍼셉트론_100문제.html">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>🐍</span>IPYNB</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab1-mlp.ipynb" download="MLP_실습1.ipynb">MLP 실습 1</a>
+      <p>다층 퍼셉트론 구현 실습 — 폴더에는 <b>7주차</b> 이름으로 올라와 있지만 6주차 내용과 이어집니다</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab1-mlp.ipynb" download="MLP_실습1.ipynb">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>🐍</span>IPYNB</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab2-mlp.ipynb" download="MLP_실습2.ipynb">MLP 실습 2</a>
+      <p>이어지는 실습 (9.6MB — 실행 결과 포함)</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab2-mlp.ipynb" download="MLP_실습2.ipynb">⬇ 다운로드</a>
+  </div>
+</div>
+</section>
+
+<section class="sec" id="goal">
+  <div class="sec-head"><span class="sec-badge">GOAL</span><h2 class="sec-title">학습 목표<small>교안 두 권의 목표를 합치면</small></h2></div>
+<div class="cards">
+  <div class="card2"><b>구조와 개념</b>
+    <ul class="ul">
+      <li>단층 퍼셉트론으로 <b>XOR을 풀 수 없는 이유</b>를 설명한다</li>
+      <li>MLP의 <b>구조와 순전파</b>를 행렬식으로 쓴다</li>
+      <li>입력층 · 은닉층 · 출력층의 <b>노드 수와 활성화 함수</b>를 정한다</li>
+    </ul>
+  </div>
+  <div class="card2"><b>학습</b>
+    <ul class="ul">
+      <li>문제 유형에 맞는 <b>손실 함수</b>를 고른다 (MSE · BCE · CCE)</li>
+      <li><b>오차 역전파</b>를 연쇄법칙으로 유도한다</li>
+      <li>학습 절차를 순서도로 설명하고 <b>성능 지표</b>를 고른다</li>
+    </ul>
+  </div>
+</div>
+</section>
+
+<!-- ===================== 6.1 ===================== -->
+<section class="sec" id="xor">
+  <div class="sec-head"><span class="sec-badge">6.1</span><h2 class="sec-title">퍼셉트론 복습과 XOR 문제<small>구조 교안 3~7p · 지난주 이야기를 한 장으로</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>3 · 4 · 5 · 6 · 7p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6a-03-perceptron-review.jpg" alt="구조 교안 3p — 퍼셉트론 복습 — 가중합과 활성화"><figcaption><b>구조 3p</b> 퍼셉트론 복습 — 가중합과 활성화</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6a-04-xor1.jpg" alt="구조 교안 4p — XOR 게이트 (1/4) — AND · OR의 결정 경계"><figcaption><b>구조 4p</b> XOR 게이트 (1/4) — AND · OR의 결정 경계</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6a-05-xor2.jpg" alt="구조 교안 5p — XOR 게이트 (2/4)"><figcaption><b>구조 5p</b> XOR 게이트 (2/4)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6a-06-xor3.jpg" alt="구조 교안 6p — XOR 게이트 (3/4) — 직선 하나로는 불가능"><figcaption><b>구조 6p</b> XOR 게이트 (3/4) — 직선 하나로는 불가능</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6a-07-xor4.jpg" alt="구조 교안 7p — XOR 게이트 (4/4) — NAND + OR → AND"><figcaption><b>구조 7p</b> XOR 게이트 (4/4) — NAND + OR → AND</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>퍼셉트론의 정의부터 (3p)</h3>
+  <p>교안은 퍼셉트론을 <b>&ldquo;데이터 <span class="tex">\mathcal{D}=\{(\mathbf{x}_i,y_i)\}_{i=1}^{N}</span>의 특징 벡터 <span class="tex">\mathbf{x}_i</span>에 대한 출력 <span class="tex">\hat y_i</span>를 계산하는 모델&rdquo;</b>로 정의한다. 계산은 두 단계다 — <b>가중합을 구하고, 그 결과를 활성화 함수에 넣는다</b>.</p>
+  <div class="fx">
+    <div class="tex-d">z_i=w_0+w_1x_{i1}+\cdots+w_dx_{id}=\sum_{j=0}^{d}w_jx_{ij}, \qquad \hat y_i=f(z_i)</div>
+    <p class="fx-note"><b>바이어스</b>는 <span class="tex">x_0</span>이고 교안은 <span class="tex">x_0=1</span>로 두므로 <span class="tex">w_0x_0=w_0</span>가 된다 — <b>가중합에 상수항이 더해지는 효과</b>다. 합의 시작이 <span class="tex">j=0</span>인 것도 이 바이어스 노드를 포함하기 위해서다.</p>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>논리 게이트로 보는 단층의 한계 (4~7p)</h3>
+  <p>단층 퍼셉트론으로 <b>AND · OR · NAND</b>는 구현된다. 교안이 쓴 식은 이렇다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>게이트</th><th>가중합</th><th>확인</th></tr></thead>
+    <tbody>
+      <tr><td><b>AND</b></td><td><span class="tex">z_i=x_{i1}+x_{i2}-1.5</span></td><td>(1,1)일 때만 <span class="tex">z=0.5>0</span> → 1. (1,0)이면 <span class="tex">1+0-1.5=-0.5\le 0</span> → 0</td></tr>
+      <tr><td><b>OR</b></td><td><span class="tex">z_i=x_{i1}+x_{i2}-0.5</span></td><td>(0,1)이면 <span class="tex">0+1-0.5=0.5>0</span> → 1. (0,0)만 0</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>활성화는 <b>계단 함수</b>다 — <span class="tex">f(z)=1\;(z>0)</span>, <span class="tex">f(z)=0\;(z\le 0)</span>. <b>AND와 OR의 차이가 절편 하나</b>(−1.5 vs −0.5)라는 점을 눈여겨볼 것.</p>
+  <p><span class="hi">그런데 XOR은 안 된다.</span> 교안의 표현으로는 &ldquo;신경 세포를 모방한 단층 퍼셉트론이 <b>두 개 이상의 선 또는 곡선을 이용한 분류를 할 수 없어</b> XOR을 해결하지 못한다&rdquo;. 각주에는 <b>마빈 민스키와 시모어 페퍼트</b>의 저서가 인용되어 있는데, 이들은 <b>다층 퍼셉트론으로는 XOR이 가능하다는 것도 함께 보였다</b>.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>해법 — 게이트를 쌓는다 (7p)</h3>
+  <div class="fx">
+    <div class="tex-d">\mathrm{XOR}(x_1,x_2)=\mathrm{AND}\bigl(\underbrace{\mathrm{NAND}(x_1,x_2)}_{h_1},\;\underbrace{\mathrm{OR}(x_1,x_2)}_{h_2}\bigr)</div>
+    <p class="fx-note">예를 들어 <span class="tex">(1,1)</span>이면 NAND는 0, OR은 1이므로 <span class="tex">h_1=0,\;h_2=1</span>이고 AND 결과는 <b>0</b> — XOR의 정답과 일치한다.</p>
+  </div>
+  <p><b>여기서 <span class="tex">h_1, h_2</span>가 바로 은닉층의 두 노드</b>다. 지난주에 &ldquo;퍼셉트론 세 개면 XOR이 된다&rdquo;고 했던 것이 이 그림이고, 다음 절부터는 이것을 <b>일반적인 구조</b>로 확장한다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>왜 &lsquo;직선 하나&rsquo;가 한계인가 — 한 줄 증명</h3>
+  <p>계단 활성화를 쓰는 단층 퍼셉트론이 XOR을 표현한다고 가정하면 네 부등식이 동시에 성립해야 한다.</p>
+  <div class="fx">
+    <div class="tex-d">w_0\le 0,\qquad w_0+w_2>0,\qquad w_0+w_1>0,\qquad w_0+w_1+w_2\le 0</div>
+    <p class="fx-note">가운데 두 식을 더하면 <span class="tex">2w_0+w_1+w_2>0</span>이고, <span class="tex">w_0\le 0</span>이므로 <span class="tex">w_0+w_1+w_2\ge 2w_0+w_1+w_2>0</span> — <b>마지막 식과 모순</b>이다. ∎</p>
+  </div>
+  <p>즉 <b>가중치를 아무리 잘 골라도 불가능</b>하다. 학습이 부족해서가 아니라 <b>모델의 표현력 자체가 모자란 것</b>이다 — <a class="ext" href="machine-learning-week05.html#gates">5주차 5.5</a>에서 본 그 증명이다.</p>
+</div>
+</section>
+
+<!-- ===================== 6.2 ===================== -->
+<section class="sec" id="mlp">
+  <div class="sec-head"><span class="sec-badge">6.2</span><h2 class="sec-title">다층 퍼셉트론의 개념과 순전파 구조<small>구조 교안 8~13p · 은닉층 · 완전 연결 · 행렬로 쓴 순전파</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>8 · 9 · 10 · 11 · 12 · 13p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6a-08-mlp-intro.jpg" alt="구조 교안 8p — 다층 퍼셉트론 — 은닉층이 만드는 비선형 경계"><figcaption><b>구조 8p</b> 다층 퍼셉트론 — 은닉층이 만드는 비선형 경계</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6a-09-mlp-sum1.jpg" alt="구조 교안 9p — 다층 퍼셉트론 요약 (1/2)"><figcaption><b>구조 9p</b> 다층 퍼셉트론 요약 (1/2)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6a-10-mlp-sum2.jpg" alt="구조 교안 10p — 다층 퍼셉트론 요약 (2/2) — 전체 순전파 식"><figcaption><b>구조 10p</b> 다층 퍼셉트론 요약 (2/2) — 전체 순전파 식</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6a-11-mlp01.jpg" alt="구조 교안 11p — MLP (1/10) — 표기 정의"><figcaption><b>구조 11p</b> MLP (1/10) — 표기 정의</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6a-12-mlp02.jpg" alt="구조 교안 12p — MLP (2/10)"><figcaption><b>구조 12p</b> MLP (2/10)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6a-13-mlp03.jpg" alt="구조 교안 13p — MLP (3/10) — 행렬 전개"><figcaption><b>구조 13p</b> MLP (3/10) — 행렬 전개</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>MLP란 무엇인가 (8p)</h3>
+  <p><b>다층 퍼셉트론(MLP)</b>은 퍼셉트론 구조에 <b>은닉층이 포함된 모델</b>이다. 입력층과 출력층 사이에 <b>여러 개의 노드로 구성된 여러 개의 은닉층</b>이 추가된 형태다.</p>
+  <p>은닉층이 하는 일은 분명하다 — <span class="hi">복잡한 함수를 표현할 수 있어 비선형 분리가 가능한 결정 경계(Decision Boundary)를 만든다.</span> 교안은 <a class="ext" href="https://playground.tensorflow.org" target="_blank" rel="noopener">playground.tensorflow.org</a>에서 <b>단층 · 다층 · 은닉층 3개</b> 모델의 결정 경계를 직접 비교해 보라고 안내한다.</p>
+  <p>또 하나의 용어 — <b>완전 연결(Fully Connected)</b>: <b>각각의 노드는 인접한 층이 보유한 모든 노드들과 연결</b>되어 있다. 그리고 MLP는 <b>순전파 네트워크</b>의 한 종류로, <b>입력층부터 출력층까지 순서대로 계산</b>해 최종 결과를 낸다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>표기 읽는 법 (11p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>표기</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tex">h_j^{(k)}</span></td><td><b>k번째 은닉층의 j번째 노드의 출력값</b></td></tr>
+      <tr><td><span class="tex">w_{ji}^{(k)}</span></td><td><b>k+1번째 층의 j번째 노드</b>와 <b>k번째 층의 i번째 노드</b>를 잇는 엣지의 가중치</td></tr>
+      <tr><td>노드 안의 <span class="tex">z \mid h</span></td><td>원을 반으로 나눠 <b>왼쪽은 가중합 <span class="tex">z</span></b>, <b>오른쪽은 활성화를 통과한 출력 <span class="tex">h</span></b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="">첨자 순서(<span class="tex">w_{ji}</span> — <b>받는 쪽이 먼저</b>)가 헷갈리지만, 행렬곱 <span class="tex">W\mathbf{h}</span>를 쓸 때 <b>행이 출력 노드, 열이 입력 노드</b>가 되도록 맞춘 것이다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>순전파를 한 줄로 (10p 요약 슬라이드)</h3>
+  <div class="fx">
+    <div class="tex-d">\begin{bmatrix}\hat y_1\\ \hat y_2\end{bmatrix}=f_2\!\left(W_1^{\mathsf T}\,f_1\!\left(W_0^{\mathsf T}\mathbf{x}+\mathrm{bias}^{(0)}\right)+\mathrm{bias}^{(1)}\right)</div>
+    <p class="fx-note">안쪽 <span class="tex">W_0^{\mathsf T}\mathbf{x}+\mathrm{bias}^{(0)}</span>가 <b>입력층 → 은닉층</b>, 바깥쪽 <span class="tex">W_1^{\mathsf T}(\cdot)+\mathrm{bias}^{(1)}</span>가 <b>은닉층 → 출력층</b>이다.
+    <span class="tex">f_1</span>은 <b>은닉층의 활성화 함수</b>, <span class="tex">f_2</span>는 <b>출력층의 활성화 함수</b>이고, 활성화는 <b>벡터의 각 성분에 원소별로</b> 적용된다.</p>
+  </div>
+  <p>행렬을 풀어 쓰면 첫 행이 <span class="tex">w_{11}^{(0)}x_1+w_{12}^{(0)}x_2</span>이고 여기에 바이어스의 첫 성분 <span class="tex">w_{10}^{(0)}</span>이 더해진다. <b>은닉층 개수가 늘어도 계산은 똑같다</b> — <span class="hi">가중치 행렬 곱과 활성화 함수의 합성이 반복될 뿐이다.</span></p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>활성화 함수가 없으면 층을 쌓아도 소용없다</h3>
+  <p>만약 <span class="tex">f_1</span>이 항등 함수라면 순전파는 <span class="tex">W_1^{\mathsf T}(W_0^{\mathsf T}\mathbf{x}+b^{(0)})+b^{(1)}=(W_1^{\mathsf T}W_0^{\mathsf T})\mathbf{x}+\text{상수}</span>가 된다.
+  <b>행렬 두 개의 곱은 다시 행렬 하나</b>이므로, 결국 <b>층이 하나인 선형 모델과 완전히 같다</b>.</p>
+  <p><span class="hi">층을 쌓는 의미는 &lsquo;층 사이에 비선형 함수가 끼어 있을 때&rsquo;만 생긴다.</span> 그래서 6.3의 ReLU가 단순한 선택이 아니라 <b>구조상 반드시 필요한 부품</b>인 것이다.</p>
+</div>
+</section>
+
+<!-- ===================== 6.3 ===================== -->
+<section class="sec" id="layers">
+  <div class="sec-head"><span class="sec-badge">6.3</span><h2 class="sec-title">입력층 · 은닉층 · 출력층과 활성화 함수<small>구조 교안 14~21p · 노드 수는 데이터가 정한다</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>14 · 15 · 16 · 17 · 18 · 19 · 20 · 21p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6a-14-mlp04.jpg" alt="구조 교안 14p — MLP (4/10) — 입력층"><figcaption><b>구조 14p</b> MLP (4/10) — 입력층</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6a-15-mlp05.jpg" alt="구조 교안 15p — MLP (5/10) — MNIST 예제"><figcaption><b>구조 15p</b> MLP (5/10) — MNIST 예제</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6a-16-mlp06.jpg" alt="구조 교안 16p — MLP (6/10) — 은닉층"><figcaption><b>구조 16p</b> MLP (6/10) — 은닉층</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6a-17-mlp07.jpg" alt="구조 교안 17p — MLP (7/10) — ReLU"><figcaption><b>구조 17p</b> MLP (7/10) — ReLU</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6a-18-mlp08.jpg" alt="구조 교안 18p — MLP (8/10) — 출력층"><figcaption><b>구조 18p</b> MLP (8/10) — 출력층</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6a-19-mlp09.jpg" alt="구조 교안 19p — MLP (9/10) — Softmax"><figcaption><b>구조 19p</b> MLP (9/10) — Softmax</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6a-20-mlp10.jpg" alt="구조 교안 20p — MLP (10/10) — 원-핫 예측"><figcaption><b>구조 20p</b> MLP (10/10) — 원-핫 예측</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6a-21-deep-mlp.jpg" alt="구조 교안 21p — 다수의 은닉층이 존재하는 다층 퍼셉트론"><figcaption><b>구조 21p</b> 다수의 은닉층이 존재하는 다층 퍼셉트론</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>세 층의 노드 수는 이렇게 정해진다</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>층</th><th>노드 수</th><th>활성화 함수</th><th>메모</th></tr></thead>
+    <tbody>
+      <tr><td><b>입력층</b></td><td><span class="tex">\mathbf{x}_i</span>의 <b>성분 개수 + 바이어스 노드 1개</b></td><td>없음</td><td>교안은 <b>&ldquo;퍼셉트론과 입력층이 동일함&rdquo;</b>이라고 명시한다</td></tr>
+      <tr><td><b>은닉층</b></td><td>설계자가 정한다</td><td><b>주로 ReLU</b></td><td>각 은닉층에도 <b>바이어스 <span class="tex">h_0</span>가 포함</b>된다</td></tr>
+      <tr><td><b>출력층</b></td><td><span class="tex">y_i</span>의 성분 개수 = <b>분류에서는 클래스 수</b></td><td><b>Softmax</b>(다중) · <b>Sigmoid</b>(이진)</td><td>교안 주석: 이진의 <span class="tex">\sigma(z)</span>는 Sigmoid, 다중의 <span class="tex">\sigma(z)</span>는 Softmax</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>은닉 노드의 입출력</b>은 이렇게 읽는다 — <b>입력</b>은 이전 층 노드의 출력값(<span class="tex">x</span> 또는 <span class="tex">h</span>)과 대응 가중치 <span class="tex">w</span>, <b>출력</b>은 가중합 <span class="tex">z</span>에 활성화를 적용한 <span class="tex">f(z)</span>다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>MNIST로 보는 입력과 출력 (15p)</h3>
+  <ul class="ul">
+    <li><b>MNIST</b>는 0~9의 <b>흑백(그레이스케일)</b> 손글씨 숫자 이미지다 — 컬러 3채널이 아니다</li>
+    <li>픽셀 값에서 <b>0은 흑색, 255는 백색</b>의 색상 코드다</li>
+    <li>정답 <span class="tex">y_i</span>는 0~9의 <b>이산형 값</b>이고 <b>원-핫 인코딩</b>으로 표현한다 — 숫자 <b>1</b>은 <b>두 번째 성분만 1인 10차원 벡터</b></li>
+  </ul>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>은닉층의 ReLU (17p)</h3>
+  <div class="fx">
+    <div class="tex-d">f(z)=\mathrm{ReLU}(z)=\max(0,\,z)</div>
+    <p class="fx-note"><b>0보다 큰 양수는 항등 함수처럼 그대로</b>, <b>음수는 0</b>으로 내보낸다. 예를 들어 <span class="tex">[-2.0,\;0.0,\;3.5]</span>를 넣으면 <span class="tex">[0,\;0,\;3.5]</span>가 된다.</p>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>출력층의 Softmax (19 · 20p)</h3>
+  <div class="fx">
+    <div class="tex-d">\sigma(z_i)=\frac{e^{z_i}}{\sum_{j=1}^{C}e^{z_j}}</div>
+    <p class="fx-note"><span class="tex">\mathbf{z}</span>는 벡터, <span class="tex">z_i</span>는 그 i번째 성분, <span class="tex">C</span>는 <b>클래스의 총 개수</b>다. 각 성분의 지수를 <b>전체 지수 합으로 나누므로</b> 결과는 <b>합이 1인 확률</b>이 된다.</p>
+  </div>
+  <p>교안의 예제 — <span class="tex">\mathbf{z}</span>의 <b>마지막(10번째) 성분이 8.2로 가장 커서</b> <span class="tex">\sigma(z_{10})\approx 0.64</span>가 되고, 결국 <b>10번째 클래스인 숫자 9</b>로 분류된다. 또 확률 중 <b>가장 큰 0.8이 두 번째 성분</b>이면 예측 <span class="tex">\hat{\mathbf{y}}</span>는 <b>두 번째 성분만 1인 원-핫 벡터</b>가 되어 <b>숫자 1</b>로 분류된다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>왜 하필 ReLU와 Softmax인가</h3>
+  <p><b>ReLU</b> — 시그모이드는 <span class="tex">z</span>가 조금만 커지거나 작아져도 <b>기울기가 0에 가까워진다</b>(기울기 소실). 층을 여러 개 쌓으면 그 작은 기울기들이 곱해져 <b>앞쪽 층에는 학습 신호가 거의 도달하지 않는다</b>. ReLU는 양수 구간의 <b>기울기가 정확히 1</b>이라 이 문제가 없고, 음수를 0으로 눌러 <b>희소한 활성화</b>를 만든다.
+  <a class="ext" href="#backprop">6.5</a>에서 보겠지만 <b>미분이 1이라 역전파 계산도 훨씬 간단해진다</b>.</p>
+  <p><b>Softmax</b> — 출력을 <b>합이 1인 확률</b>로 만들어야 <b>교차 엔트로피 손실</b>과 짝이 맞는다. 지수를 쓰는 이유는 ① 값이 항상 양수가 되고 ② <b>큰 값과 작은 값의 차이를 벌려</b> 가장 높은 클래스를 또렷하게 만들기 때문이다.</p>
+</div>
+</section>
+
+<!-- ===================== 6.4 ===================== -->
+<section class="sec" id="loss">
+  <div class="sec-head"><span class="sec-badge">6.4</span><h2 class="sec-title">학습 데이터와 손실 함수<small>학습 교안 3~10p · 문제 유형이 손실 함수를 정한다</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>3 · 4 · 5 · 6 · 7 · 8 · 9 · 10p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6b-03-review.jpg" alt="학습 교안 3p — 다층 퍼셉트론 복습"><figcaption><b>학습 3p</b> 다층 퍼셉트론 복습</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6b-04-data1.jpg" alt="학습 교안 4p — 학습 1 (1/3) — 데이터의 정의"><figcaption><b>학습 4p</b> 학습 1 (1/3) — 데이터의 정의</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6b-05-data2.jpg" alt="학습 교안 5p — 학습 1 (2/3) — 회귀 · 분류 예시"><figcaption><b>학습 5p</b> 학습 1 (2/3) — 회귀 · 분류 예시</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6b-06-data3.jpg" alt="학습 교안 6p — 학습 1 (3/3) — Fashion-MNIST"><figcaption><b>학습 6p</b> 학습 1 (3/3) — Fashion-MNIST</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6b-07-loss1.jpg" alt="학습 교안 7p — 학습 2 (1/3) — 손실 함수와 MSE"><figcaption><b>학습 7p</b> 학습 2 (1/3) — 손실 함수와 MSE</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6b-08-loss2.jpg" alt="학습 교안 8p — 학습 2 (2/3) — BCE"><figcaption><b>학습 8p</b> 학습 2 (2/3) — BCE</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6b-09-loss3.jpg" alt="학습 교안 9p — 학습 2 (3/3) — CCE"><figcaption><b>학습 9p</b> 학습 2 (3/3) — CCE</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6b-10-loss-practice.jpg" alt="학습 교안 10p — 참고 : 손실함수 연습 문제"><figcaption><b>학습 10p</b> 참고 : 손실함수 연습 문제</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>데이터부터 정리한다 (4~6p)</h3>
+  <p><span class="tex">\mathbf{x}_i</span>는 <b>문제 해결을 위해 제공되는 관측값들의 특징 벡터</b>, <span class="tex">y_i</span>는 <b>예측하고자 하는 실제 값</b>(클래스별 값의 모음이면 <span class="tex">\mathbb{y}_i</span>)이다. 교안의 예시 셋이 성격을 잘 보여 준다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>예시</th><th>특징 벡터 <span class="tex">\mathbf{x}_i</span></th><th>정답 <span class="tex">y_i</span></th><th>문제 유형</th></tr></thead>
+    <tbody>
+      <tr><td>코스피 지수 예측</td><td>PMI 지수, VIX 지수 (2개 성분)</td><td>그날의 코스피 지수 — <b>연속형 실수</b></td><td><b>회귀</b> · 300일치면 <span class="tex">N=300</span></td></tr>
+      <tr><td>고양이 / 개 사진</td><td>600 × 800 = <b>480,000개 픽셀 값</b></td><td>0(고양이) 또는 1(개)</td><td><b>이진 분류</b></td></tr>
+      <tr><td>Fashion-MNIST</td><td>28 × 28 = <b>784개 픽셀 값</b> · 사진 <b>60,000장</b></td><td>10개 클래스의 원-핫 — <b>마지막(10번째) 성분이 1이면 Ankle boot</b></td><td><b>다중 분류</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>용어 정리</b> — 교안 주석은 실제값을 <b>정답 · Label · Ground Truth</b>로 부른다고 밝힌다. <b>예측값</b>은 모델의 출력 <span class="tex">\hat y_i</span>를 가리키는 <b>별개의 용어</b>다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>손실 함수 — 세 가지를 문제 유형에 맞춰 (7~9p)</h3>
+  <p><b>손실 함수</b>는 <b>예측값과 실제값의 차이를 표현하는 지표</b>이자 <b>모델이 얼마나 잘못 예측하는지 확인하는 함수</b>다.</p>
+  <div class="fx">
+    <p class="fx-lab">① 회귀 — 평균제곱오차 (MSE, Mean Squared Error)</p>
+    <div class="tex-d">L=\frac{1}{N}\sum_{i=1}^{N}\bigl(y_i-\hat y_i\bigr)^{2}</div>
+    <p class="fx-note">샘플별 오차의 <b>제곱을 모두 더한 뒤 샘플 수 N으로 나눈다</b>. 3주차 선형 회귀에서 쓰던 그 손실이다.</p>
+    <p class="fx-lab">② 이진 분류 — 이진 교차 엔트로피 (BCE, Binary Cross Entropy)</p>
+    <div class="tex-d">L=-\frac{1}{N}\sum_{i=1}^{N}\Bigl[y_i\ln\hat y_i+(1-y_i)\ln(1-\hat y_i)\Bigr], \qquad \hat y_i=\sigma(z_i)=\frac{1}{1+e^{-z_i}}</div>
+    <p class="fx-note"><span class="tex">y_i=1</span>이면 <span class="tex">(1-y_i)=0</span>이라 <b>두 번째 항이 사라지고 <span class="tex">\ln\hat y_i</span>만 남는다</b> — 정답 쪽 확률만 키우는 식이 된다.</p>
+    <p class="fx-lab">③ 다중 분류 — 범주형 교차 엔트로피 (CCE, Categorical Cross Entropy)</p>
+    <div class="tex-d">L=-\frac{1}{N}\sum_{i=1}^{N}\sum_{k=1}^{C}y_{ik}\ln\hat y_{ik} \qquad\xrightarrow{\;\text{온라인 모드}\;}\qquad L=-\sum_{k=1}^{C}y_{ik}\ln\hat y_{ik}</div>
+    <p class="fx-note"><span class="tex">y_{ik}</span>는 <b>카테고리 레이블</b>(원-핫), <span class="tex">\hat y_{ik}</span>는 <b>i번째 샘플이 k번째 클래스에 속할 확률</b>로 나온 MLP의 예측값이다.
+    <b>원-핫이라 1인 성분 하나만 살아남는다</b> — 정답 클래스의 확률이 0.9였다면 <span class="tex">L=-\ln 0.9\approx 0.105</span>.</p>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>세 손실 함수를 고르는 기준 한 줄</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>정답의 생김새</th><th>출력층 활성화</th><th>손실 함수</th></tr></thead>
+    <tbody>
+      <tr><td><b>연속형 실수</b> (집값, 지수)</td><td>항등 함수</td><td><b>MSE</b></td></tr>
+      <tr><td><b>0 또는 1</b> (고양이/개)</td><td><b>Sigmoid</b></td><td><b>BCE</b></td></tr>
+      <tr><td><b>3개 이상 클래스</b> (숫자 0~9)</td><td><b>Softmax</b></td><td><b>CCE</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>왜 분류에 MSE를 쓰지 않나</b> — 쓸 수는 있지만 시그모이드와 MSE를 짝지으면 <b>예측이 크게 틀렸을 때 오히려 기울기가 작아진다</b>. 시그모이드의 미분이 양 끝에서 0에 가깝기 때문이다.
+  반면 <b>시그모이드 + BCE</b>, <b>소프트맥스 + CCE</b> 조합에서는 기울기가 깔끔하게 <span class="tex">(\hat y - y)</span> 꼴로 정리되어 <b>틀릴수록 더 크게 고친다</b> — <a class="ext" href="machine-learning-week05.html#learn">5주차 5.4</a>에서 본 &ldquo;오차 × 입력&rdquo;이 이것이다.</p>
+</div>
+</section>
+
+<!-- ===================== 6.5 ===================== -->
+<section class="sec" id="backprop">
+  <div class="sec-head"><span class="sec-badge">6.5</span><h2 class="sec-title">오차 역전파와 경사하강법<small>학습 교안 11~15 · 18p · 연쇄법칙을 층마다 반복한다</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>11 · 12 · 13 · 14 · 15 · 17 · 18p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6b-11-bp1.jpg" alt="학습 교안 11p — 학습 3 (1/5) — 역전파란"><figcaption><b>학습 11p</b> 학습 3 (1/5) — 역전파란</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6b-12-bp2.jpg" alt="학습 교안 12p — 학습 3 (2/5) — 경사하강 갱신식"><figcaption><b>학습 12p</b> 학습 3 (2/5) — 경사하강 갱신식</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6b-13-bp3.jpg" alt="학습 교안 13p — 학습 3 (3/5) — 연쇄법칙"><figcaption><b>학습 13p</b> 학습 3 (3/5) — 연쇄법칙</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6b-14-bp4.jpg" alt="학습 교안 14p — 학습 3 (4/5) — Local Gradient"><figcaption><b>학습 14p</b> 학습 3 (4/5) — Local Gradient</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6b-15-bp5.jpg" alt="학습 교안 15p — 학습 3 (5/5) — 가중치 갱신"><figcaption><b>학습 15p</b> 학습 3 (5/5) — 가중치 갱신</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6b-17-detail.jpg" alt="학습 교안 17p — 참고 : 다층 퍼셉트론 세부 구조"><figcaption><b>학습 17p</b> 참고 : 다층 퍼셉트론 세부 구조</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6b-18-chain-rule.jpg" alt="학습 교안 18p — 참고 : 미분 연쇄법칙과 역전파"><figcaption><b>학습 18p</b> 참고 : 미분 연쇄법칙과 역전파</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>역전파의 정의와 갱신식 (11 · 12p)</h3>
+  <p>교안은 <b>역전파</b>를 <b>&ldquo;예측값과 실제값의 차이인 손실함수를 최소화하기 위해 출력층에서 입력층 방향으로 가중치를 갱신하는 과정&rdquo;</b>으로 정의하고, <b>&ldquo;대표적인 방법으로 경사하강법을 이용해 가중치를 갱신한다&rdquo;</b>고 명시한다.</p>
+  <div class="fx">
+    <div class="tex-d">w_{ji}^{(k)} \;\leftarrow\; w_{ji}^{(k)}-\alpha\,\frac{\partial L(\mathbf{w})}{\partial w_{ji}^{(k)}}</div>
+    <p class="fx-note"><span class="tex">\alpha</span>는 <b>학습률(learning rate)</b>이고, <b>기울기의 반대 방향으로 학습률만큼 이동</b>한다. 학습 목표는 가중치 행렬 전체에 대한 <b>argmin 문제</b>로 쓸 수 있다 — <span class="tex">\arg\min_{W_0,W_1} L(\mathbf{y},\hat{\mathbf{y}})</span>.</p>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>연쇄법칙으로 한 층씩 거슬러 올라가기 (13~15p)</h3>
+  <p>출력층의 출력이 곧 예측값이다 — <span class="tex">H^{(2)}=\bigl[f_2(z_1^{(2)}),\,f_2(z_2^{(2)})\bigr]=[\hat y_1,\,\hat y_2]=\hat{\mathbf{y}}</span>.
+  역전파의 핵심은 <b>뒤쪽 층에서 계산된 <span class="tex">\partial L/\partial H^{(2)}</span>에 국소 기울기(Local Gradient)를 곱해 앞쪽 층으로 전달</b>하는 것이다.</p>
+  <div class="fx">
+    <p class="fx-lab">출력층 가중치 하나에 대한 편미분</p>
+    <div class="tex-d">\frac{\partial L}{\partial w_{11}^{(1)}}=\frac{\partial L}{\partial \hat y_1}\cdot\frac{\partial \hat y_1}{\partial z_1^{(2)}}\cdot\frac{\partial z_1^{(2)}}{\partial w_{11}^{(1)}}=(\hat y_1-y_1)\,h_1^{(1)}</div>
+    <p class="fx-note">마지막 항이 <b>그 엣지의 입력</b>, 즉 <b>은닉 노드의 출력 <span class="tex">h_1^{(1)}</span></b>이다. 결국 <span class="hi">기울기 = (오차) × (그 엣지로 들어온 값)</span>이라는 5주차의 규칙이 그대로 반복된다.</p>
+    <p class="fx-lab">한 층 더 내려가면</p>
+    <div class="tex-d">\frac{\partial L}{\partial w_{11}^{(0)}}=(\hat y_1-y_1)\,w_{11}^{(1)}\,\underbrace{\frac{\partial h_1^{(1)}}{\partial z_1^{(1)}}}_{=\,1}\,x_1</div>
+    <p class="fx-note"><span class="tex">h_1^{(1)}=\mathrm{ReLU}(z_1^{(1)})</span>이고 <b>ReLU는 양수 구간에서 항등 함수라 미분값이 1</b>이다. 교안 주석도 <b>&ldquo;ReLU 활성화 함수를 사용하기 때문에 은닉 노드의 편미분은 간단하다&rdquo;</b>고 밝힌다.</p>
+  </div>
+  <p>마지막으로 행렬 단위로 쓰면 <span class="tex">W_0^{\mathsf T},\,W_1^{\mathsf T}</span> 각각에 대해 <span class="tex">W \leftarrow W-\alpha\,\partial L/\partial W</span>가 된다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>왜 &lsquo;역&rsquo;전파인가 — 순서를 뒤집으면 계산이 줄어든다</h3>
+  <p>연쇄법칙 자체는 어느 방향으로도 쓸 수 있다. 그런데 <b>앞에서부터(입력 → 출력) 계산하면</b> 가중치 하나마다 전체 경로를 다시 따라가야 해서, 교안의 표현대로 <b>&ldquo;깊이와 노드 수가 늘수록 편미분 항이 폭발적으로 증가&rdquo;</b>한다.</p>
+  <p><b>뒤에서부터(출력 → 입력) 계산하면</b> 각 층에서 구한 <b>오차 신호를 그대로 앞 층에 넘겨 재사용</b>할 수 있다. <span class="hi">같은 계산을 한 번만 하고 돌려쓰는 것 — 이것이 역전파가 빠른 유일한 이유다.</span></p>
+  <p>그래서 순전파 때 <b>중간값(z와 h)을 저장해 두어야</b> 한다. 메모리를 쓰는 대신 계산을 아끼는 교환이고, 딥러닝 프레임워크의 <code>autograd</code>가 이 일을 자동으로 해 준다.</p>
+</div>
+</section>
+
+<!-- ===================== 6.6 ===================== -->
+<section class="sec" id="procedure">
+  <div class="sec-head"><span class="sec-badge">6.6</span><h2 class="sec-title">학습 절차와 모델 성능 평가 지표<small>학습 교안 16p · 순전파 → 손실 → 역전파를 언제까지 반복하나</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>16p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6b-16-metrics.jpg" alt="학습 교안 16p — 모델의 성능 평가 지표 — R² 와 혼동 행렬"><figcaption><b>학습 16p</b> 모델의 성능 평가 지표 — R² 와 혼동 행렬</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>학습 절차 — 교안의 흐름도를 그대로</h3>
+  <div class="flow">
+    <div class="fl"><b>1단계 · 순전파</b><span>입력 데이터에 <b>각 층의 가중합과 활성화 함수를 적용</b>해 예측값을 출력</span></div>
+    <div class="fl"><b>2단계 · 손실 계산</b><span>예측값과 실제값의 차이(오차)를 <b>CCE 등 손실 함수</b>로 계산</span></div>
+    <div class="fl"><b>3단계 · 역전파</b><span><b>미분 연쇄법칙을 적용해 가중치를 업데이트</b></span></div>
+    <div class="fl"><b>판단 · Error &lt; 허용범위?</b><span><b>Yes → 학습 종료</b> · <b>No → 다시 순전파</b>로 돌아가 반복</span></div>
+    <div class="fl"><b>학습 종료 후</b><span><b>모델의 성능 평가 지표</b>로 연결</span></div>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>평가 지표 — 회귀는 R², 분류는 혼동 행렬</h3>
+  <div class="fx">
+    <p class="fx-lab">회귀 — 결정계수 <span class="tex">R^2</span></p>
+    <div class="tex-d">R^{2}=1-\frac{\mathrm{SSR}}{\mathrm{SST}}=1-\frac{\sum_i (y_i-\hat y_i)^2}{\sum_i (y_i-\bar y)^2}</div>
+    <p class="fx-note">교안 주석대로 <b>SSR은 Residual Sum of Squares</b>(잔차 제곱합), <b>SST는 Total Sum of Squares</b>(전체 제곱합)이고 <span class="tex">\bar y</span>는 <b><span class="tex">y_i</span>의 평균</b>, <span class="tex">\hat y_i</span>는 예측값이다.
+    <b>&ldquo;평균만 찍는 모델&rdquo;보다 얼마나 나은가</b>를 재는 지표라고 읽으면 된다 — <a class="ext" href="machine-learning-week03.html">3주차 선형 회귀</a>에서 본 그 값이다.</p>
+  </div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>예측 : Positive</th><th>예측 : Negative</th></tr></thead>
+    <tbody>
+      <tr><td><b>실제 : Positive</b></td><td><b>TP</b> (True Positive)</td><td><b>FN</b> (False Negative)</td></tr>
+      <tr><td><b>실제 : Negative</b></td><td><b>FP</b> (False Positive)</td><td><b>TN</b> (True Negative)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>혼동 행렬(Confusion Matrix)</b>은 <b>행이 실제값(True label), 열이 예측값(Predicted label)</b>이므로 <b>대각선이 올바르게 분류된 샘플 수</b>다. 자연어처리 5주차에서 본 <a class="ext" href="nlp-week05.html#eval">정확도 · 정밀도 · 재현율 · F1</a>이 모두 이 네 칸에서 나온다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>&ldquo;Error &lt; 허용범위&rdquo;를 실제로는 어떻게 정하나</h3>
+  <p>교안의 흐름도는 손실이 충분히 작아지면 멈추는 것으로 되어 있지만, 실제 학습에서는 <b>훈련 손실만 보고 멈추면 과적합</b>된다. 그래서 보통
+  ① <b>에폭 수를 정해 두거나</b> ② <b>검증 손실이 더 이상 줄지 않으면 멈추는</b> 조기 종료(early stopping)를 쓴다.</p>
+  <p><span class="hi">학습을 멈추는 기준은 &ldquo;훈련 데이터에서 얼마나 잘 맞히나&rdquo;가 아니라 &ldquo;못 본 데이터에서 얼마나 잘 맞히나&rdquo;여야 한다.</span> 그래서 평가 지표도 <b>반드시 검증 · 테스트 데이터</b>에서 계산한다.</p>
+</div>
+</section>
+
+<!-- ===================== 실습 ===================== -->
+<section class="sec" id="lab">
+  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">MLP 실습 노트북<small>폴더에는 7주차 이름으로 올라와 있지만 6주차 내용의 실습입니다</small></h2></div>
+<div class="link-list">
+  <a href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab1-mlp.ipynb" download="MLP_실습1.ipynb">MLP 실습 1 내려받기 →<small>다층 퍼셉트론 구현 (1.3MB)</small></a>
+  <a href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab2-mlp.ipynb" download="MLP_실습2.ipynb">MLP 실습 2 내려받기 →<small>이어지는 실습 · 실행 결과 포함 (9.6MB)</small></a>
+  <a href="machine-learning-week05.html#lab">5주차 실습 (퍼셉트론 → MLP) →<small>XOR에서 단층 0.50 vs MLP 1.00 을 확인했던 그 노트북</small></a>
+</div>
+<div class="tip"><b>5주차 실습과 이어서 보면 좋다</b> — 5주차 파트 4에서 <code>nn.Linear(2,1)</code>(단층)과 <code>nn.Sequential(Linear(2,2), Tanh, Linear(2,1))</code>(MLP)의 XOR 학습을 비교했다. 그때 단층이 <b>손실 0.6931에서 멈추고 정확도 0.50</b>이었던 이유가 바로 이번 주 <a class="ext" href="#xor">6.1의 증명</a>이다.</div>
+</section>
+
+<!-- ===================== 정리 ===================== -->
+<section class="sec" id="summary">
+  <div class="sec-head"><span class="sec-badge">SUM</span><h2 class="sec-title">핵심 정리<small>시험 전에 이것만은</small></h2></div>
+<div class="cards">
+  <div class="card2"><b>왜 은닉층인가</b><p>단층은 <b>초평면 하나</b>로만 가른다 → XOR 불가. 은닉층은 <b>비선형 결정 경계</b>를 만든다. XOR = <b>NAND와 OR을 AND로 묶은 것</b>.</p></div>
+  <div class="card2"><b>순전파</b><p><span class="tex">\hat{\mathbf y}=f_2(W_1^{\mathsf T}f_1(W_0^{\mathsf T}\mathbf x+b^{(0)})+b^{(1)})</span> — <b>행렬곱과 활성화의 반복</b>. 층이 늘어도 형태는 같다.</p></div>
+  <div class="card2"><b>층의 크기</b><p>입력층 = <b>특징 수 + 바이어스</b>, 출력층 = <b>클래스 수</b>. 은닉층은 <b>ReLU</b>, 출력층은 <b>Softmax</b>(이진은 Sigmoid).</p></div>
+  <div class="card2"><b>손실 함수</b><p>회귀 <b>MSE</b> · 이진 <b>BCE</b> · 다중 <b>CCE</b>. 원-핫이라 CCE는 <b>정답 클래스의 <span class="tex">-\ln\hat y</span></b> 한 항만 남는다.</p></div>
+  <div class="card2"><b>역전파</b><p><b>연쇄법칙 + Local Gradient</b>. 기울기 = <b>오차 × 그 엣지의 입력</b>. ReLU 덕분에 은닉 노드의 미분이 <b>1</b>로 간단해진다.</p></div>
+  <div class="card2"><b>절차와 평가</b><p>순전파 → 손실 → 역전파를 <b>오차가 허용범위에 들 때까지</b> 반복. 회귀는 <b>R²</b>, 분류는 <b>혼동 행렬</b>.</p></div>
+</div>
+</section>
+
+<!-- ===================== 다음 주 ===================== -->
+<section class="sec" id="next">
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>7주차 — K-NN</small></h2></div>
+<div class="note-box"><b>학습하지 않는 분류기로 넘어간다.</b>
+<ul class="ul">
+  <li><b>K-최근접 이웃(K-NN)</b> — 가중치를 학습하는 대신 <b>가까운 이웃 k개의 다수결</b>로 분류한다</li>
+  <li>거리 척도(유클리디언 · 맨해튼)가 그대로 쓰인다 — <a class="ext" href="nlp-week05.html#euclid">자연어처리 5주차</a>에서 본 그 거리들</li>
+</ul></div>
+</section>
+
+<p class="src">기계학습특론 6주차 강의자료 정리 · 2026학년도 2학기<br>
+교안 두 권(<b>구조와 개념 22p · 학습 19p</b>)을 절 단위로 정리하고 슬라이드 <b>35장</b>을 캡처해 실었습니다. 100문제의 절 구분(6.1~6.6)과 같은 번호를 사용해, 절 제목 옆 버튼으로 해당 절의 문제를 바로 풀 수 있습니다.</p>
+
+</div>
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive(){
+    var cur = '';
+    sections.forEach(function(s){ if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function(t){ t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      setTimeout(function(){
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+});
+</script>
+<script>
+/* 슬라이드 확대 보기 — 좌우 이동 · 닫으면 보던 자리로 */
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.sld'));
+  if (!slides.length) return;
+
+  var lb = document.createElement('div');
+  lb.id = 'lb';
+  lb.innerHTML =
+    '<button class="prev" type="button" aria-label="이전 슬라이드">&#10094;</button>' +
+    '<img alt="">' +
+    '<button class="next" type="button" aria-label="다음 슬라이드">&#10095;</button>' +
+    '<button class="x" type="button" aria-label="닫기">&#10005;</button>' +
+    '<p class="cap"></p>';
+  document.body.appendChild(lb);
+
+  var big = lb.querySelector('img'),
+      cap = lb.querySelector('.cap'),
+      bPrev = lb.querySelector('.prev'),
+      bNext = lb.querySelector('.next'),
+      bX = lb.querySelector('.x');
+
+  var idx = -1, openedIdx = -1, savedY = 0, pushed = false, prevRestore = null;
+
+  function lock() {
+    savedY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    document.body.style.position = 'fixed';
+    document.body.style.top = (-savedY) + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  /* html{scroll-behavior:smooth} 때문에 되돌아갈 때 화면이 흘러가지 않도록 잠깐 끈다 */
+  function instantly(fn) {
+    var de = document.documentElement, prev = de.style.scrollBehavior;
+    de.style.scrollBehavior = 'auto';
+    fn();
+    void de.offsetHeight;
+    de.style.scrollBehavior = prev;
+  }
+  function unlock() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    var target = (idx >= 0 && idx !== openedIdx) ? slides[idx] : null;
+    function place() {
+      instantly(function () {
+        window.scrollTo(0, savedY);
+        /* 넘겨 본 슬라이드가 있으면 그 슬라이드 자리로, 아니면 보던 자리 그대로 */
+        if (target) target.scrollIntoView({ block: 'center' });
+      });
+    }
+    place();
+    /* 기기 뒤로가기로 닫을 때 브라우저가 옛 스크롤을 덮어쓰므로 한 프레임 뒤 한 번 더 */
+    if (window.requestAnimationFrame) window.requestAnimationFrame(place);
+    setTimeout(place, 0);
+  }
+
+  function preload(i) {
+    if (i < 0 || i >= slides.length) return;
+    var im = slides[i].querySelector('img');
+    if (im) { var p = new Image(); p.src = im.currentSrc || im.src; }
+  }
+
+  function render(i) {
+    idx = i;
+    var f = slides[i], im = f.querySelector('img'), fc = f.querySelector('figcaption');
+    big.src = im.currentSrc || im.src;
+    big.alt = im.alt || '';
+    cap.innerHTML = '';
+    cap.appendChild(document.createTextNode(fc ? fc.textContent : ''));
+    var num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = (i + 1) + ' / ' + slides.length + ' · ← → 로 넘기기';
+    cap.appendChild(num);
+    bPrev.disabled = (i === 0);
+    bNext.disabled = (i === slides.length - 1);
+    preload(i + 1); preload(i - 1);
+  }
+
+  function open(i) {
+    openedIdx = i;
+    lock();
+    render(i);
+    lb.classList.add('on');
+    if (!pushed && window.history && window.history.pushState) {
+      try {
+        if ('scrollRestoration' in window.history && prevRestore === null) {
+          prevRestore = window.history.scrollRestoration;
+          window.history.scrollRestoration = 'manual';
+        }
+        window.history.pushState({ lb: 1 }, '');
+        pushed = true;
+      } catch (e) { pushed = false; }
+    }
+  }
+  function closeNow() {
+    if (!lb.classList.contains('on')) return;
+    lb.classList.remove('on');
+    unlock();
+    idx = openedIdx = -1;
+    if (prevRestore !== null) {
+      try { window.history.scrollRestoration = prevRestore; } catch (e) {}
+      prevRestore = null;
+    }
+  }
+  function closeByUser() {
+    if (pushed) { pushed = false; window.history.back(); }  /* popstate 가 닫는다 */
+    else { closeNow(); }
+  }
+  function go(step) {
+    var n = idx + step;
+    if (n < 0 || n >= slides.length) return;
+    render(n);
+  }
+
+  slides.forEach(function (f, i) {
+    f.addEventListener('click', function () { open(i); });
+  });
+
+  bPrev.addEventListener('click', function (e) { e.stopPropagation(); go(-1); });
+  bNext.addEventListener('click', function (e) { e.stopPropagation(); go(1); });
+  bX.addEventListener('click', function (e) { e.stopPropagation(); closeByUser(); });
+  big.addEventListener('click', function (e) { e.stopPropagation(); });
+  cap.addEventListener('click', function (e) { e.stopPropagation(); });
+  lb.addEventListener('click', closeByUser);
+
+  window.addEventListener('popstate', function () {
+    if (lb.classList.contains('on')) { pushed = false; closeNow(); }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('on')) return;
+    if (e.key === 'Escape') { e.preventDefault(); closeByUser(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+  });
+
+  /* 모바일 — 좌우로 쓸어 넘기기 */
+  var tx = 0, ty = 0;
+  lb.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) return;
+    tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+  }, { passive: true });
+  lb.addEventListener('touchend', function (e) {
+    if (!e.changedTouches.length) return;
+    var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
+</script>
+
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script src="../vendor/katex/katex.min.js"></script>
+<script>
+// .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.
+// KaTeX를 못 불러온 경우에는 원문이 그대로 남아 최소한 읽을 수는 있게 둔다.
+(function () {
+  if (typeof katex === 'undefined') { return; }
+  document.querySelectorAll('.tex, .tex-d').forEach(function (el) {
+    try {
+      katex.render(el.textContent.trim(), el, {
+        displayMode: el.classList.contains('tex-d'),
+        throwOnError: false,
+        strict: false
+      });
+    } catch (e) { if (window.console) { console.error('KaTeX', e, el.textContent); } }
+  });
+})();
+</script>
+
+<script src="quiz/ml-w06.js?v=1"></script>
+<script src="quiz/inline-quiz.js?v=2"></script>
+
+</body>
+</html>

@@ -83,6 +83,27 @@ TERMS = {
    '사전학습','미세조정','명령어 튜닝','SFT','정렬','RLHF','DPO','보상 모델','강화 학습','PPO',
    '환각','RAG','검색','지식 베이스','출처','에이전트','도구 호출','멀티모달','사고 사슬',
  ],
+ 'nlp-w06': [
+   '요약','자동 요약','압축률','추출적','추상적','생성적','일반적 요약','도메인','쿼리 기반','단일 문서','다중 문서',
+   '단어 빈도','불용어','TF-IDF','문장 유사도','코사인','유사도 행렬','클러스터링',
+   'seq2seq','시퀀스 투 시퀀스','인코더','디코더','문맥 벡터','정보 병목','어텐션','트랜스포머','BART','T5','PEGASUS','환각',
+   'TextRank','PageRank','감쇠 계수','damping','그래프','인접 행렬','GloVe','문장 벡터','비지도','networkx','멱승법',
+   'ROUGE','ROUGE-1','ROUGE-2','ROUGE-L','LCS','재현율','정밀도','F1','BLEU','METEOR','BERTScore','내재적','외재적','사실성',
+   '마르코프','마르코프 체인','상태 전이','전이 확률','언어 모델','연쇄 법칙','n-gram','바이그램','트라이그램','희소성',
+   'NNLM','RNN','LSTM','GRU','GPT','자기회귀','서브워드','BPE','SentencePiece',
+   '디코딩','그리디','빔 탐색','temperature','top-k','top-p','nucleus','반복','편향',
+   '인코딩','ASCII','UTF-8','문자 수준','위치 기반','원핫','어휘 크기','희소 벡터','차원',
+   'BoW','문서 벡터','임베딩','단어 임베딩','분포 가설','Word2Vec','CBOW','Skip-gram','윈도우','네거티브 샘플링','서브샘플링',
+   'FastText','OOV','전이 학습','유추','Doc2Vec','SBERT','정적 임베딩','문맥 임베딩','ELMo','BERT','다의어',
+ ],
+ 'ml-w06': [
+   '퍼셉트론','특징 벡터','가중합','활성화 함수','바이어스','계단 함수','논리 게이트','AND','OR','NAND','XOR','선형 분리','결정 경계',
+   '다층 퍼셉트론','MLP','은닉층','입력층','출력층','노드','완전 연결','순전파','비선형','가중치 행렬','행렬 곱',
+   'MNIST','Fashion-MNIST','그레이스케일','픽셀','원-핫','클래스','ReLU','Softmax','Sigmoid','확률',
+   '학습 데이터','정답','Ground Truth','레이블','예측값','손실 함수','MSE','평균제곱오차','BCE','CCE','교차 엔트로피','회귀','이진 분류','다중 분류',
+   '역전파','경사하강법','학습률','연쇄법칙','Local Gradient','편미분','기울기','가중치 갱신','argmin',
+   '학습 절차','에폭','허용범위','성능 평가','R2','SSR','SST','혼동 행렬','Confusion Matrix','TP','FP','FN','TN',
+ ],
  'ml-w04': [
    '분류','클래스','레이블','카테고리','스팸','특징 벡터','특징 공간','홍길동','성춘향','학과','평점',
    '정수론','구분선','사후 확률','베이즈','분류 규칙','체조',
@@ -168,6 +189,10 @@ build('nlp-w03', 'materials/자연어처리/week03-quiz100.html', 'courses/quiz/
       {'title': '3주차 · 토큰화, 품사 태깅, 불용어 제거, 텍스트 정규화', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week03-quiz100.html'})
 build('nlp-w04', 'materials/자연어처리/week04-quiz100.html', 'courses/quiz/nlp-w04.js',
       {'title': '4주차 · 텍스트의 전처리, 어휘, 구문 그리고 의미 분석', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week04-quiz100.html'})
+build('ml-w06', 'materials/기계학습특론/week06-quiz100.html', 'courses/quiz/ml-w06.js',
+      {'title': '6주차 · 다층 퍼셉트론', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-quiz100.html'})
+build('nlp-w06', 'materials/자연어처리/week06-quiz100.html', 'courses/quiz/nlp-w06.js',
+      {'title': '6주차 · 텍스트 요약, 텍스트 생성, 그리고 벡터 표현', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week06-quiz100.html'})
 build('ml-w05', 'materials/기계학습특론/week05-quiz100.html', 'courses/quiz/ml-w05.js',
       {'title': '5주차 · 퍼셉트론', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week05-quiz100.html'})
 build('nlp-w05', 'materials/자연어처리/week05-quiz100.html', 'courses/quiz/nlp-w05.js',

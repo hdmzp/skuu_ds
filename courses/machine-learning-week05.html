@@ -426,6 +426,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <a href="#align">5.7 정렬 · RAG · 에이전트</a>
   <a href="#frontier">최신 동향</a>
   <a href="#lab">실습 노트북</a>
+  <a href="#mylab">내 실습 정리</a>
   <a href="#summary">핵심 정리</a>
   <a href="#next">다음 주 예고</a>
 </nav>
@@ -439,6 +440,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <a href="machine-learning-week03.html">3주차 · 선형 회귀</a>
   <a href="machine-learning-week04.html">4주차 · 로지스틱 회귀</a>
   <span class="cur">5주차 · 퍼셉트론</span>
+  <a href="machine-learning-week06.html">6주차 · 다층 퍼셉트론</a>
 </div>
 
 <section class="hero">
@@ -1219,6 +1221,165 @@ y_hat = torch.sigmoid(z)       <span class="cm"># 활성화 (sigmoid → 로지�
   <a href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week05-lab-solution.ipynb" download="5주차_실습_정답.ipynb">실습 노트북 (정답) 내려받기 →<small>위 표의 수치가 모두 출력된 상태</small></a>
   <a href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week05-lab-sklearn.ipynb" download="5주차_perceptron.ipynb">기존 sklearn 실습 노트북 →<small>digits 분류만 담긴 간단한 판본</small></a>
 </div>
+</section>
+
+<!-- ===================== 내 실습 정리 ===================== -->
+<section class="sec" id="mylab">
+  <div class="sec-head"><span class="sec-badge">MY</span><h2 class="sec-title">내 실습 정리<small>제출본 <code>5주차_퍼셉트론_2026711051_박민지.ipynb</code> — 직접 쓴 개념 메모와 추가 실험 (a)(b)(c)</small></h2></div>
+
+<div class="note-box">실습 노트북의 TODO를 채우면서 <b>셀마다 &lsquo;개념&rsquo; 메모를 직접 붙여 두었고</b>, 교안의 생각해 볼 질문 세 개를 <b>실험으로 확인</b>했습니다. 아래는 그 내용을 옮긴 것입니다.</div>
+
+<div class="link-list">
+  <a href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week05-lab-mine.ipynb" download="5주차_퍼셉트론_2026711051_박민지.ipynb">내 제출본 노트북 내려받기 →<small>파트 1~5 + 추가 실험 (a)(b)(c) · 실행 결과와 그래프 포함</small></a>
+  <a href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week05-lab-solution.ipynb" download="5주차_실습_정답.ipynb">정답 노트북과 비교하기 →<small>모범 구현</small></a>
+</div>
+
+<h3 class="sub-title">① 셀마다 적어 둔 개념 메모</h3>
+
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-live">내 메모</span>파트 1 — 퍼셉트론은 &ldquo;틀린 샘플을 만났을 때만&rdquo; 그 샘플 쪽으로 w를 끌어당긴다</h3>
+  <ul class="ul">
+    <li><span class="tex">y_i(\mathbf{w}\cdot\mathbf{x}_i)</span>는 <b>예측 점수와 정답 부호를 곱한 값</b>이다. 부호가 같으면 양수(맞춤), 다르면 음수(틀림), 0이면 경계 위.
+    그래서 <code>&lt;= 0</code>이 오분류 조건이다 — <span class="hi">등호를 빼면 w = 0에서 시작할 때 점수가 전부 0이라 한 번도 갱신이 일어나지 않는다.</span></li>
+    <li>갱신 후 같은 샘플의 점수는 <span class="tex">y_i\bigl((\mathbf{w}+\eta y_i\mathbf{x}_i)\cdot\mathbf{x}_i\bigr)=y_i(\mathbf{w}\cdot\mathbf{x}_i)+\eta\lVert\mathbf{x}_i\rVert^2</span>이라 <b>항상 <span class="tex">\eta\lVert\mathbf{x}_i\rVert^2>0</span>만큼 커진다</b></li>
+    <li>결정 경계는 <span class="tex">w_0+w_1x_1+w_2x_2=0</span>인 직선이고, <span class="tex">x_2</span>에 대해 풀면 그래프를 그리는 식이 나온다</li>
+  </ul>
+</div>
+
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-live">내 메모</span>R과 γ가 각각 무엇인지</h3>
+  <ul class="ul">
+    <li><b>R은 &ldquo;데이터가 얼마나 멀리 퍼져 있나&rdquo;</b>, <b>γ는 &ldquo;두 클래스 사이 빈 틈이 얼마나 넓나&rdquo;</b></li>
+    <li>여기서 <span class="tex">\mathbf{x}=[1,x_1,x_2]</span>이고 <span class="tex">x_1,x_2\in[-1,1]</span>이므로 <span class="tex">\lVert\mathbf{x}\rVert\le\sqrt{3}</span> — <span class="hi">바이어스 성분 1도 벡터의 일부라서 빼면 안 된다.</span></li>
+    <li>γ가 절반이 되면 상한은 <span class="tex">2^2=4</span>배. 로그-로그 그래프에서는 <b>기울기 −2인 직선</b>으로 보인다</li>
+  </ul>
+</div>
+
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-live">내 메모</span>파트 2 — 출력 표현 {0,1}과 학습 레이블 {−1,+1}을 구분해야 한다</h3>
+  <ul class="ul">
+    <li>진리표는 0/1이지만 <b>퍼셉트론 학습 규칙은 <span class="tex">y\in\{-1,+1\}</span>을 가정</b>한다. <span class="tex">y=0</span>이면 <span class="tex">y_i(\mathbf{w}\cdot\mathbf{x}_i)</span>가 항상 0이라 &lsquo;늘 틀림&rsquo; 상태가 되고, 갱신량 <span class="tex">\eta\cdot 0\cdot\mathbf{x}_i</span>도 0이라 <b>아무것도 배우지 못한다</b></li>
+    <li>예측할 때는 반대로 계단 함수로 다시 0/1을 만든다</li>
+    <li>XOR은 대각선끼리 같은 클래스라 직선 하나로 나눌 수 없다 — <b>XOR 정확도가 1.00이 나오면 구현이 틀린 것</b></li>
+  </ul>
+</div>
+
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-live">내 메모</span>파트 3 — 표준화와 one-vs-rest</h3>
+  <ul class="ul">
+    <li>픽셀값은 0~16이고 가장자리는 거의 항상 0이다. <b>평균 0 · 표준편차 1로 맞추면 특정 픽셀이 갱신을 독점하지 않아</b> 학습이 안정적이다</li>
+    <li><code>make_pipeline</code>으로 묶으면 <b>훈련 데이터로만</b> 평균 · 표준편차를 구하고 테스트에는 그 값을 적용한다 — <b>정보 누수가 없다</b></li>
+    <li>클래스가 10개라 퍼셉트론도 <b>10개(숫자 k vs 나머지)</b>를 따로 학습한다. 그래서 <code>coef_</code>의 shape이 <b>(10, 64)</b></li>
+  </ul>
+</div>
+
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-live">내 메모</span>파트 4 — PyTorch 학습 한 스텝</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>단계</th><th>하는 일</th></tr></thead>
+    <tbody>
+      <tr><td><code>logits = model(X)</code></td><td>순전파. 시그모이드를 통과하기 <b>전</b> 점수(logit)</td></tr>
+      <tr><td><code>binary_cross_entropy_with_logits</code></td><td>내부에서 <b>시그모이드 + BCE를 함께</b> 계산한다. 따로 하면 <span class="tex">\log 0</span>이 생길 수 있어 이 함수가 더 안정적</td></tr>
+      <tr><td><code>opt.zero_grad()</code></td><td>PyTorch는 기울기를 <b>누적</b>하므로 매 스텝 비워야 한다</td></tr>
+      <tr><td><code>loss.backward()</code></td><td>역전파 — 모든 파라미터의 <span class="tex">\partial L/\partial\theta</span> 계산</td></tr>
+      <tr><td><code>opt.step()</code></td><td>AdamW로 가중치 갱신</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><code>nn.Linear(2,1)</code> + 시그모이드는 <b>로지스틱 회귀</b>이고 결정 경계는 여전히 직선 하나다. 그래서 XOR에서 loss가 <span class="tex">\log 2\approx 0.693</span> 근처에 머문다 — <b>&ldquo;모든 점에 확률 0.5&rdquo;</b>라는 뜻이다.</p>
+</div>
+
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-live">내 메모</span>은닉층은 &lsquo;XOR을 풀 수 있는 새 좌표계로 옮겨 주는 변환&rsquo;</h3>
+  <ul class="ul">
+    <li>원래 입력 공간에서는 직선으로 나눌 수 없지만, 은닉층 출력 <span class="tex">\mathbf{h}=\tanh(W_1\mathbf{x}+\mathbf{b}_1)</span> 공간으로 옮기면 <b>두 클래스가 직선 하나로 나뉘는 위치로 재배치</b>된다</li>
+    <li>출력층은 그 <span class="tex">\mathbf{h}</span> 공간에서 <b>그냥 퍼셉트론 하나</b>다 — <span class="hi">&lsquo;특징 학습(은닉층) + 선형 분류기(출력층)&rsquo; 구조</span></li>
+  </ul>
+</div>
+
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-live">내 메모</span>평가할 때 <code>model.eval()</code>을 빠뜨리면 생기는 일</h3>
+  <p><b>Dropout은 학습할 때 뉴런을 무작위로 끈다.</b> 평가 때도 켜져 있으면 예측이 매번 흔들린다.</p>
+  <p>정답 예시처럼 <code>model.eval()</code> 없이 평가하면 MLP 정확도가 <b>0.9711</b>, 넣으면 <b>0.9667</b>이었다(450개 중 2개 차이). 선형 모델은 Dropout이 없어 0.9600으로 같다.
+  <span class="hi">eval 없이 나온 0.9711은 Dropout이 켜진 채 무작위로 뉴런을 끈 상태의 값이라 실행할 때마다 달라질 수 있다 — 평가는 <code>model.eval()</code> 상태에서 하는 것이 맞다.</span></p>
+</div>
+
+<div class="pt live">
+  <h3 class="pt-h"><span class="bdg bdg-live">내 메모</span>파트 5 — FFN 파라미터를 직접 세어 보면 (d_model=64, dim_feedforward=256)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>부분</th><th>계산</th><th>개수</th></tr></thead>
+    <tbody>
+      <tr><td>FFN <code>linear1</code> (64→256)</td><td>64×256 + 256</td><td>16,640</td></tr>
+      <tr><td>FFN <code>linear2</code> (256→64)</td><td>256×64 + 64</td><td>16,448</td></tr>
+      <tr><td>어텐션 <code>in_proj</code> (Q,K,V)</td><td>3×64×64 + 3×64</td><td>12,480</td></tr>
+      <tr><td>어텐션 <code>out_proj</code></td><td>64×64 + 64</td><td>4,160</td></tr>
+      <tr><td>LayerNorm ×2</td><td>2×(64+64)</td><td>256</td></tr>
+      <tr><td><b>합계</b></td><td></td><td><b>49,984</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>FFN이 <b>33,088 / 49,984 ≈ 66.2%</b>로 약 2/3를 차지한다. FFN 폭을 <span class="tex">4d</span>로 두면 <b>FFN이 약 <span class="tex">8d^2</span>, 어텐션이 약 <span class="tex">4d^2</span></b>이 되기 때문이다. 그리고 <b>FFN의 은닉 뉴런 하나하나가 &ldquo;<span class="tex">w_1\cdot x+b \to</span> ReLU&rdquo;인 퍼셉트론</b>이다.</p>
+</div>
+
+<h3 class="sub-title">② 교안의 &lsquo;생각해 볼 질문&rsquo;을 직접 실험으로 확인</h3>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">실험 (a)</span>학습률 η를 바꿔도 갱신 횟수가 변하지 않는 이유</h3>
+  <pre class="code">for lr in [0.01, 0.1, 1.0, 10.0, 100.0]:
+    w_a, n_a, h_a = perceptron_train(Xb_a, y_a, lr=lr, max_epochs=5000)
+    w_dir = w_a / lr     <span class="cm"># η 로 나누면 모두 같은 벡터가 나와야 함</span>
+
+lr=  0.01  갱신 횟수=16  에폭=4  w/lr=[0, 3.151, -3.307]  (lr=0.01 과 같은가? <span class="out">True</span>)
+lr=  0.10  갱신 횟수=16  에폭=4  w/lr=[0, 3.151, -3.307]  <span class="out">True</span>
+lr=  1.00  갱신 횟수=16  에폭=4  w/lr=[0, 3.151, -3.307]  <span class="out">True</span>
+lr= 10.00  갱신 횟수=16  에폭=4  w/lr=[0, 3.151, -3.307]  <span class="out">True</span>
+lr=100.00  갱신 횟수=16  에폭=4  w/lr=[0, 3.151, -3.307]  <span class="out">True</span></pre>
+  <p><b>내 답</b> — η를 <b>10<sup>4</sup>배</b> 바꿔도 갱신 횟수(16회)와 에폭(4회)이 똑같았고, 최종 가중치를 η로 나눈 값도 완전히 같았다. <b>η는 학습 과정을 바꾸지 못하고 가중치의 크기만 키웠다.</b></p>
+  <p>이유는 <b>가중치를 0 벡터에서 시작</b>하기 때문이다. 갱신은 <span class="tex">\eta y_i\mathbf{x}_i</span>를 더하는 일이라 결국 <span class="tex">\mathbf{w}=\eta\mathbf{v}</span> 꼴이 되고, 오분류 판정 <span class="tex">y_i(\mathbf{w}\cdot\mathbf{x}_i)=\eta\,y_i(\mathbf{v}\cdot\mathbf{x}_i)</span>에서 <b>양수 η는 부호를 바꾸지 못한다</b>.
+  그래서 <b>어떤 샘플이 틀렸는지에 대한 판단이 η와 무관</b>하고, 첫 갱신이 같으면 그다음도 같아져 끝까지 이어진다. 결정 경계 <span class="tex">\mathbf{w}\cdot\mathbf{x}=0</span>은 <b>방향으로만 정해지므로</b> 경계도 그대로다.</p>
+  <p><span class="hi">다만 이 성질은 0으로 초기화했을 때만 성립한다.</span> 무작위 초기화면 <span class="tex">\mathbf{w}=\mathbf{w}_0+\eta\mathbf{v}</span>가 되어 η의 크기에 따라 초기값의 비중이 달라지고, 그러면 갱신 횟수도 η에 따라 변한다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">실험 (b)</span>은닉 뉴런이 1개뿐인 MLP로 XOR을 풀 수 있는가</h3>
+  <pre class="code">for hidden in [1, 2]:
+    for seed in range(10):
+        m = nn.Sequential(nn.Linear(2, hidden), nn.Tanh(), nn.Linear(hidden, 1))
+
+은닉 수 | 시드별 정확도 (0~9)                                | 최고 | 1.00 달성
+     1 | 0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 0.75 | 0.75 | <span class="out">0 / 10</span>
+     2 | 1.00 0.75 1.00 1.00 1.00 0.50 0.50 0.75 0.50 0.50 | 1.00 | <span class="out">4 / 10</span>
+
+은닉 1개 모델의 최종 loss (시드별) : [0.477 0.477 0.477 ... 0.477]   <span class="cm"># 전부 같다</span></pre>
+  <p><b>내 답 — 은닉 뉴런 1개로는 XOR을 풀 수 없다.</b> 은닉 출력은 <span class="tex">h=\tanh(s)</span>인 <b>스칼라 하나</b>이고 출력 logit은 <span class="tex">a\tanh(s)+c</span>다. tanh는 단조 증가라 &ldquo;출력이 양수&rdquo;인 조건은 결국 <span class="tex">s>t</span> 또는 <span class="tex">s<t</span> 꼴이 된다 — <span class="hi">즉 결정 경계는 <span class="tex">\mathbf{w}\cdot\mathbf{x}+b=t</span>인 직선 하나이고, 비선형 활성화를 넣어도 단층과 표현력이 같다.</span> 직선으로는 4점 중 최대 3점(0.75)만 맞힌다.</p>
+  <p><b>loss가 항상 0.477인 이유</b>도 계산으로 확인했다. 최선은 <b>한 점을 직선으로 떼어 확실히 맞히고</b>(loss→0) 나머지 세 점(정답 1이 둘, 0이 하나)에 같은 확률 <span class="tex">p</span>를 주는 것이고, 이때 <span class="tex">p=2/3</span>가 최적이다.</p>
+  <div class="fx">
+    <div class="tex-d">L=\frac{-2\ln(2/3)-\ln(1/3)}{4}=\frac{0.811+1.099}{4}\approx 0.477</div>
+    <p class="fx-note">실측값과 정확히 일치한다. <b>시드와 관계없이 같은 값이 나온 것은 이것이 은닉 1개 모델의 전역 최적이기 때문</b>이다.</p>
+  </div>
+  <p>덧붙여 <b>은닉 2개여도 시드 10개 중 4개만</b> 1.00에 도달했다 — <b>표현력이 있다는 것과 경사하강이 그 해를 찾는다는 것은 다른 문제</b>(5주차 보편 근사 정리의 &ldquo;존재 ≠ 학습 가능&rdquo;)라는 것을 눈으로 확인한 셈이다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">실험 (c)</span>은닉층 폭을 32 · 128 · 512로 바꾸면 (digits)</h3>
+  <pre class="code">모델                   파라미터 수   정확도(seed 0)   평균(3 seeds)   표준편차
+선형 (64→10)                650       0.9600        0.9593      0.0010
+MLP 64→32→10             2,410       0.9733        <span class="out">0.9733</span>      0.0018
+MLP 64→128→10            9,610       0.9667        0.9704      0.0038
+MLP 64→512→10           38,410       0.9756        <span class="out">0.9748</span>      0.0010</pre>
+  <p><b>내 결론</b></p>
+  <ul class="ul">
+    <li><b>은닉층을 넣는 것 자체의 효과가 가장 크다</b> — 선형 0.959 → MLP 0.970~0.975로 약 1~1.5%p(450개 중 5~7개)</li>
+    <li><b>폭을 늘리는 효과는 작다</b> — 폭 32 → 512로 파라미터가 <b>16배</b> 늘었지만 평균은 0.9733 → 0.9748로 <b>0.15%p</b>. 폭 128은 오히려 32보다 낮았고, 시드 간 표준편차(0.001~0.004)를 감안하면 <b>세 MLP의 순위는 우연 범위 안</b></li>
+    <li>digits는 선형 모델로도 96%가 나올 만큼 <b>거의 선형 분리가 가능한 쉬운 데이터</b>라, 작은 은닉층(32)만으로 남은 오류를 대부분 잡는다</li>
+    <li>폭 512는 파라미터(38,410)가 훈련 샘플(1,347)보다 훨씬 많은데도 성능이 떨어지지 않았다 — <b>Dropout(0.1) · weight decay(1e-4) · 60에폭이라는 짧은 학습</b>이 과적합을 막았다</li>
+  </ul>
+  <p><span class="hi">→ 이 데이터에서는 폭 32가 파라미터 대비 효율이 가장 좋다.</span></p>
+</div>
+
+<div class="tip"><b>이 절을 다시 볼 때</b> — 위쪽 교안 정리는 &ldquo;무엇을 배웠나&rdquo;이고, 이 절은 <b>&ldquo;직접 돌려 보고 무엇을 알게 되었나&rdquo;</b>입니다. (a)의 η 불변성과 (b)의 loss 0.477 유도는 <b>시험에서 그대로 쓸 수 있는 설명</b>입니다.</div>
 </section>
 
 <!-- ===================== 정리 ===================== -->

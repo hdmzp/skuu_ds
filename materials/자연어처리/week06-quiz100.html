@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6주차 텍스트 요약·생성·벡터 표현 — 100문제 풀이</title>
+<style>
+  :root{
+    --bg:#f4f6fa; --card:#ffffff; --ink:#16202e; --muted:#657189;
+    --line:#e2e8f2; --brand:#1560d8; --brand-deep:#0b3b8c; --brand-soft:#eaf1fe;
+    --ok:#0f8a5f; --ok-soft:#e6f6ef; --no:#d43c4a; --no-soft:#fdecee;
+    --warn:#b7791f; --shadow:0 1px 2px rgba(16,32,64,.05),0 8px 24px rgba(16,32,64,.07);
+    --r:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0e1420; --card:#161e2c; --ink:#e8edf6; --muted:#98a4bb;
+      --line:#273246; --brand:#5b96ff; --brand-deep:#a8c6ff; --brand-soft:#1a2740;
+      --ok:#48c99a; --ok-soft:#122c23; --no:#ff7b88; --no-soft:#33191e;
+      --warn:#e0b25c; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Malgun Gothic","맑은 고딕",system-ui,sans-serif;
+    line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:22px 16px 80px}
+
+  header.top{margin-bottom:18px}
+  .eyebrow{color:var(--brand);font-weight:700;font-size:13px;letter-spacing:.04em}
+  h1{font-size:25px;line-height:1.3;margin:4px 0 6px;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:14px;margin:0}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+
+  /* controls */
+  .controls{padding:14px 16px;margin-bottom:14px}
+  .ctl-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .ctl-row + .ctl-row{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+  .ctl-label{font-size:12px;font-weight:700;color:var(--muted);min-width:52px}
+  .chip{
+    border:1px solid var(--line);background:transparent;color:var(--ink);
+    padding:5px 11px;border-radius:999px;font-size:13px;cursor:pointer;
+    font-family:inherit;transition:.13s; white-space:nowrap;
+  }
+  .chip:hover{border-color:var(--brand);color:var(--brand)}
+  .chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+  .chip.ghost[aria-pressed="true"]{background:var(--brand-soft);color:var(--brand-deep);border-color:var(--brand)}
+  .spacer{flex:1}
+
+  /* progress */
+  .prog{padding:14px 16px;margin-bottom:14px}
+  .prog-head{display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;margin-bottom:9px}
+  .stat{font-size:13px;color:var(--muted)}
+  .stat b{color:var(--ink);font-size:15px;font-variant-numeric:tabular-nums}
+  .stat.ok b{color:var(--ok)} .stat.no b{color:var(--no)}
+  .bar{height:7px;background:var(--line);border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--ok));border-radius:99px;transition:width .3s}
+
+  /* question */
+  .qcard{padding:20px 20px 18px;margin-bottom:14px}
+  .qmeta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
+  .tag{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:.02em}
+  .tag.num{background:var(--brand-deep);color:#fff}
+  @media (prefers-color-scheme: dark){ .tag.num{background:var(--brand-soft);color:var(--brand-deep)} }
+  .tag.sec{background:var(--brand-soft);color:var(--brand-deep)}
+  .tag.d1{background:var(--ok-soft);color:var(--ok)}
+  .tag.d2{background:#fff4e0;color:var(--warn)}
+  .tag.d3{background:var(--no-soft);color:var(--no)}
+  @media (prefers-color-scheme: dark){ .tag.d2{background:#3a2e14} }
+  .qtext{font-size:17.5px;font-weight:600;letter-spacing:-.01em;margin:0 0 16px;line-height:1.55}
+
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{
+    display:flex;gap:11px;align-items:flex-start;text-align:left;width:100%;
+    padding:12px 14px;border:1.5px solid var(--line);background:var(--card);
+    border-radius:11px;cursor:pointer;font:inherit;font-size:15px;color:var(--ink);
+    transition:.13s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--brand);background:var(--brand-soft)}
+  .opt:disabled{cursor:default}
+  .opt .n{
+    flex:none;width:23px;height:23px;border-radius:50%;background:var(--line);color:var(--muted);
+    display:grid;place-items:center;font-size:12.5px;font-weight:700;margin-top:1px;
+  }
+  .opt.correct{border-color:var(--ok);background:var(--ok-soft)}
+  .opt.correct .n{background:var(--ok);color:#fff}
+  .opt.wrong{border-color:var(--no);background:var(--no-soft)}
+  .opt.wrong .n{background:var(--no);color:#fff}
+  .opt .mark{margin-left:auto;font-size:13px;font-weight:700;flex:none;padding-left:8px}
+  .opt.correct .mark{color:var(--ok)} .opt.wrong .mark{color:var(--no)}
+
+  .exp{margin-top:14px;padding:13px 15px;border-radius:11px;background:var(--brand-soft);border-left:3px solid var(--brand);font-size:14.5px}
+  .exp h4{margin:0 0 5px;font-size:12.5px;letter-spacing:.03em;color:var(--brand-deep)}
+  .exp p{margin:0}
+  .exp .ref{display:block;margin-top:7px;font-size:12.5px;color:var(--muted)}
+
+  .nav{display:flex;gap:8px;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+  .btn{
+    border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 16px;border-radius:10px;
+    font:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:.13s;
+  }
+  .btn:hover:not(:disabled){border-color:var(--brand);color:var(--brand)}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+  .btn.primary:hover:not(:disabled){filter:brightness(1.08);color:#fff}
+  .btn.danger{color:var(--no);border-color:var(--no)}
+  .btn.danger:hover{background:var(--no-soft)}
+
+  /* palette */
+  details.pal{padding:0;margin-bottom:14px;overflow:hidden}
+  details.pal summary{padding:13px 16px;cursor:pointer;font-size:14px;font-weight:600;list-style:none;display:flex;align-items:center;gap:8px}
+  details.pal summary::-webkit-details-marker{display:none}
+  details.pal summary::before{content:"▸";color:var(--muted);transition:.15s}
+  details.pal[open] summary::before{transform:rotate(90deg)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:6px;padding:0 16px 16px}
+  .cell{
+    aspect-ratio:1;border:1px solid var(--line);background:transparent;border-radius:8px;
+    font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;
+    font-variant-numeric:tabular-nums;transition:.1s;
+  }
+  .cell:hover{border-color:var(--brand);color:var(--brand)}
+  .cell.o{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+  .cell.x{background:var(--no-soft);border-color:var(--no);color:var(--no)}
+  .cell.cur{outline:2px solid var(--brand);outline-offset:1px}
+
+  /* result */
+  .result{padding:26px 22px;text-align:center}
+  .score{font-size:46px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:6px 0}
+  .score small{font-size:20px;color:var(--muted);font-weight:600}
+  .breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:20px 0 6px;text-align:left}
+  .bd{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .bd .k{font-size:12px;color:var(--muted)}
+  .bd .v{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+  .empty{padding:40px 20px;text-align:center;color:var(--muted);font-size:15px}
+  footer{margin-top:26px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.8}
+  @media (max-width:520px){
+    h1{font-size:21px} .qtext{font-size:16.5px} .opt{font-size:14.5px;padding:11px 12px}
+    .ctl-label{min-width:100%;margin-bottom:-3px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">CHAPTER 6 · 자연어처리</div>
+    <h1>6주차 &middot; 텍스트 요약, 텍스트 생성, 그리고 벡터 표현 — 100문제</h1>
+    <p class="sub">강의자료 6.1~6.3절 전 범위 · 4지선다 · 난이도 3단계</p>
+  </header>
+
+  <section class="panel controls">
+    <div class="ctl-row">
+      <span class="ctl-label">단원</span>
+      <div id="secChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    </div>
+    <div class="ctl-row">
+      <span class="ctl-label">난이도</span>
+      <div id="diffChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    </div>
+    <div class="ctl-row">
+      <span class="ctl-label">설정</span>
+      <button class="chip ghost" id="shuffleQ" aria-pressed="false">문제 순서 섞기</button>
+      <button class="chip ghost" id="shuffleO" aria-pressed="false">보기 순서 섞기</button>
+      <span class="spacer"></span>
+      <button class="chip" id="reviewBtn">오답 다시 풀기 <b id="wrongCount">0</b></button>
+      <button class="chip" id="resetBtn">처음부터</button>
+    </div>
+  </section>
+
+  <section class="panel prog">
+    <div class="prog-head">
+      <span class="stat">진도 <b><span id="doneN">0</span> / <span id="totalN">0</span></b></span>
+      <span class="stat ok">정답 <b id="okN">0</b></span>
+      <span class="stat no">오답 <b id="noN">0</b></span>
+      <span class="spacer"></span>
+      <span class="stat">정답률 <b id="rate">—</b></span>
+    </div>
+    <div class="bar"><i id="barFill"></i></div>
+  </section>
+
+  <details class="panel pal">
+    <summary>문제 번호로 이동 <span style="color:var(--muted);font-weight:400">(초록 = 정답, 빨강 = 오답)</span></summary>
+    <div class="grid" id="palette"></div>
+  </details>
+
+  <main id="stage"></main>
+
+  <footer>
+    6주차 강의자료(텍스트 요약, 텍스트 생성, 그리고 벡터 표현) 기반 자율 학습용 문제 세트<br>
+    풀이 기록은 이 브라우저에만 저장되며, '처음부터'를 누르면 초기화됩니다.
+  </footer>
+</div>
+
+<script>
+const QUESTIONS = [{"id": 1, "sec": "6.1.1", "diff": "기초", "q": "강의자료에서 정의한 '자동 텍스트 요약'의 설명으로 가장 적절한 것은?", "opts": ["원래 콘텐츠에 존재하는 모든 핵심 정보를 보존하는, 텍스트의 간결한 버전을 생성하는 과정", "문서를 주제별 카테고리로 자동 분류하는 과정", "원문을 다른 언어로 번역해 가독성을 높이는 과정", "문서에서 불용어와 특수문자를 제거하는 전처리 과정"], "a": 0, "exp": "자동 텍스트 요약은 핵심 정보를 보존하면서 텍스트의 간결한 버전을 만드는 과정으로 정의된다. 번역·전처리·분류는 요약과 다른 과제다."}, {"id": 2, "sec": "6.1.1", "diff": "중급", "q": "압축률(compression ratio)의 정의와 일반적인 목표 수준을 바르게 짝지은 것은?", "opts": ["요약문 길이 / 원문 길이, 일반적으로 50~70% 수준", "원문 길이 / 요약문 길이, 일반적으로 10~30% 수준", "겹치는 n-gram 수 / 참조 요약 n-gram 수, 일반적으로 10~30% 수준", "요약문 길이 / 원문 길이, 일반적으로 10~30% 수준"], "a": 3, "exp": "강의자료는 압축률을 요약문 길이를 원문 길이로 나눈 값으로 정의하고 보통 10~30%를 목표로 한다고 설명한다."}, {"id": 3, "sec": "6.1.1", "diff": "중급", "q": "자동 요약의 이점 중 '인덱싱'에 해당하는 설명은?", "opts": ["기사를 공개하기 전 샘플로 제공해 전체를 읽을지 결정하게 한다", "검색 결과 화면에 표시해 사용자가 고를 수 있게 한다", "챗봇이 사용자 질문의 응답으로 요약을 제공한다", "원본 문서의 압축적 표현으로 검색 색인에 요약본을 사용해 필요한 스토리지 양을 줄인다"], "a": 3, "exp": "인덱싱은 요약본을 원본의 압축 표현으로 검색 색인에 사용하는 것이며, 스토리지 절감 효과도 있다. 나머지는 각각 샘플링, 검색, 질의 응답의 설명이다."}, {"id": 4, "sec": "6.1.1", "diff": "기초", "q": "'챗봇이 사용자 질문에 대한 응답으로 자동 요약을 제공할 수 있다'는 자동 요약의 어떤 이점에 해당하는가?", "opts": ["질의 응답", "인덱싱", "읽기 시간", "샘플링"], "a": 0, "exp": "강의자료는 챗봇의 응답 제공을 질의 응답 이점으로 분류한다."}, {"id": 5, "sec": "6.1.1", "diff": "기초", "q": "강의자료가 제시한 '텍스트 요약의 고수준 뷰'를 이루는 세 가지 각도는?", "opts": ["학습 / 추론 / 평가", "단어 / 문장 / 문서", "목적 / 입력 / 출력", "정확도 / 속도 / 비용"], "a": 2, "exp": "텍스트 요약을 목적, 입력, 출력의 세 각도에서 조망하는 것이 고수준 뷰다."}, {"id": 6, "sec": "6.1.1", "diff": "중급", "q": "'목적' 관점에서 나눈 요약의 세 가지 종류가 바르게 나열된 것은?", "opts": ["단일 문서 요약, 다중 문서 요약, 하이브리드 요약", "추출적 요약, 추상적 요약, 혼합 요약", "내재적 요약, 외재적 요약, 사람 평가 요약", "일반적 요약, 도메인 한정 요약, 쿼리 기반 요약"], "a": 3, "exp": "목적 각도에서는 일반적 요약, 도메인 한정 요약, 쿼리 기반 요약으로 구분한다. 단일/다중은 입력, 추출/추상은 출력 각도다."}, {"id": 7, "sec": "6.1.1", "diff": "중급", "q": "쿼리 기반 요약의 핵심 특징으로 옳은 것은?", "opts": ["여러 판례 문서를 하나로 간추리는 것이 핵심이다", "검색 창이나 챗봇의 사용자 입력에 응답하므로 질문과의 관련성이 핵심이다", "금융·의료 등 특정 도메인 용어를 고려하는 것이 핵심이다", "원문 문장을 그대로 발췌하는 것이 핵심이다"], "a": 1, "exp": "쿼리 기반 요약은 사용자 질문에 대한 응답 제공이 목적이므로 질문과의 관련성이 가장 중요하다."}, {"id": 8, "sec": "6.1.1", "diff": "중급", "q": "도메인 한정 요약에 대한 강의자료의 설명으로 옳은 것은?", "opts": ["사용자 질의가 있어야만 동작한다", "반드시 추상적 요약 기법만 사용할 수 있다", "입력 문서가 항상 여러 개여야 하며 문서 수가 많을수록 좋다", "금융, 쇼핑, 의료, 여행 같은 도메인에 한정되며 해당 도메인의 중요한 특정 용어를 고려해야 한다"], "a": 3, "exp": "도메인 한정 요약은 특정 분야에 국한되며 그 분야의 전문 용어를 고려해야 한다는 점이 특징이다."}, {"id": 9, "sec": "6.1.1", "diff": "중급", "q": "강의자료가 '여러 문서(다중 문서)' 입력의 예로 든 사례는?", "opts": ["챗봇이 하나의 질문에 답하는 작업", "소셜 미디어 게시물 하나를 짧게 다듬는 작업", "한 통의 긴 이메일을 세 문장으로 줄이는 작업", "법률 회사가 여러 판례 문서를 하나의 요약으로 간추리는 프로세스"], "a": 3, "exp": "여러 문서를 분석해 하나의 요약을 만드는 예로 법률 회사의 판례 문서 요약이 제시되었다."}, {"id": 10, "sec": "6.1.1", "diff": "기초", "q": "추출적 요약과 추상적 요약의 비교로 옳지 않은 것은?", "opts": ["추상적 요약은 환각으로 사실과 다른 내용을 생성할 위험이 있다", "추출적 요약은 문법 오류와 사실 왜곡이 거의 없다", "추상적 요약은 사람이 쓴 요약과 유사하고 압축률이 높다", "추출적 요약은 원문에 없는 표현으로 자유롭게 압축할 수 있다"], "a": 3, "exp": "추출적 요약은 원문 문장을 그대로 골라 붙이므로 원문에 없는 표현으로 압축하지 못하는 것이 단점이다."}, {"id": 11, "sec": "6.1.2", "diff": "기초", "q": "추출적 텍스트 요약의 핵심 원리로 가장 적절한 것은?", "opts": ["문서를 여러 청크로 나눈 뒤 각각을 번역한다", "원문의 의미를 학습해 새로운 문장을 생성한다", "텍스트의 문장들을 중요도별로 순위를 매긴 뒤 상위 문장을 골라 요약을 구성한다", "불용어를 제거해 남은 단어를 나열한다"], "a": 2, "exp": "추출적 요약은 문장 중요도 순위를 매기고 상위 문장을 골라 이어 붙이는 원리로 동작한다."}, {"id": 12, "sec": "6.1.2", "diff": "중급", "q": "강의자료가 제시한 추출적 요약의 문장 순위 기준이 아닌 것은?", "opts": ["클러스터링 중심(clustering centroid)", "문장 유사도(sentence similarity)", "어텐션 가중치", "단어 빈도(word frequency)"], "a": 2, "exp": "문장 순위 기준으로는 단어 빈도, 문장 유사도, 클러스터링 중심이 제시되었다. 어텐션은 추상적 요약 쪽 개념이다."}, {"id": 13, "sec": "6.1.2", "diff": "중급", "q": "단어 빈도로 문장 순위를 매길 때 반드시 고려해야 할 점은?", "opts": ["문장의 길이가 긴 순서대로 가중치를 더 주어야 한다", "문서의 마지막 문장에 가장 큰 가중치를 주어야 한다", "모든 단어를 대문자로 변환해 세어야 한다", "불용어처럼 문서를 제대로 대표하지 않는 단어들을 무시해야 한다"], "a": 3, "exp": "흔한 불용어가 순위를 왜곡하므로 문서를 대표하지 못하는 단어는 제외해야 한다."}, {"id": 14, "sec": "6.1.2", "diff": "심화", "q": "6주차 강의자료가 정의한 TF(t, d)는?", "opts": ["단어 t가 등장한 문서 수 / 전체 문서 수", "문서 d에서 단어 t의 상대 빈도 = (등장 횟수) / (문서 d의 총 단어 수)", "문서 d에서 단어 t의 원시 등장 횟수", "log(N / (1 + df(t))) + 1"], "a": 1, "exp": "6주차는 TF를 상대 빈도로 정의하며, 원시 빈도로 정의하는 5주차와 값의 스케일이 다르다고 명시했다."}, {"id": 15, "sec": "6.1.2", "diff": "심화", "q": "6주차 판 IDF 공식 IDF(t) = log( N / (1 + df(t)) ) + 1 에서 마지막 '+1'의 역할은?", "opts": ["IDF가 음수가 되는 것을 막는 보정항", "문서 길이를 정규화하는 항", "분모가 0이 되는 것을 막는 항", "코사인 유사도를 0~1로 만드는 항"], "a": 0, "exp": "모든 문서에 등장하는 단어는 log 값이 음수가 될 수 있으므로 +1을 더해 음수를 방지한다. 분모의 1이 0 나눗셈을 막는 항이다."}, {"id": 16, "sec": "6.1.2", "diff": "중급", "q": "문장 유사도 계산에서 유클리드 거리 대신 코사인 유사도를 쓰는 이유는?", "opts": ["코사인 유사도는 벡터 차원 수와 무관하게 항상 1을 반환하기 때문", "유클리드 거리는 음수 값을 가질 수 없어 비교가 불가능하기 때문", "문장이 길어지면 벡터의 크기가 커지지만 내용은 같을 수 있는데, 코사인은 크기를 정규화해 길이의 영향을 받지 않기 때문", "코사인 유사도는 항상 정수 값을 반환해 계산이 빠르기 때문"], "a": 2, "exp": "코사인 유사도는 벡터의 크기를 정규화하므로 문장 길이의 영향을 받지 않아 내용 유사성 측정에 적합하다."}, {"id": 17, "sec": "6.1.3", "diff": "기초", "q": "추상적(생성적) 요약이 추출적 요약보다 알고리즘을 만들기 어려운 이유는?", "opts": ["원래 텍스트의 의미를 학습한 뒤 새로운 문장을 만들어야 하기 때문", "문서를 반드시 여러 개 입력해야 하기 때문", "불용어를 하나도 제거할 수 없기 때문", "원문 문장을 그대로 복사해야 하는 제약이 있기 때문"], "a": 0, "exp": "추상적 요약은 의미를 학습해 다시 쓰는 작업이므로 난도가 높고, 보통 신경망 모델 같은 진보된 기술이 필요하다."}, {"id": 18, "sec": "6.1.3", "diff": "중급", "q": "텍스트 요약을 시퀀스 투 시퀀스 문제로 볼 수 있는 근거로 옳은 것은?", "opts": ["입력 텍스트는 단어·문자의 시퀀스이고 요약은 출력 시퀀스로 볼 수 있기 때문", "입력과 출력의 길이가 반드시 같아야 하기 때문", "입력 문서 수가 출력 문서 수와 같아야 하기 때문", "요약은 항상 분류 문제로 환원되기 때문"], "a": 0, "exp": "입력을 시퀀스, 요약을 또 다른 시퀀스로 보면 요약은 시퀀스 변환 문제가 된다. seq2seq는 기계 번역·질의응답에도 쓰인다."}, {"id": 19, "sec": "6.1.3", "diff": "중급", "q": "인코더-디코더 네트워크에서 인코더와 디코더의 역할을 바르게 짝지은 것은?", "opts": ["인코더는 토큰화를, 디코더는 불용어 제거를 담당한다", "인코더는 입력 단어 시퀀스로 문맥 벡터를 만들고, 디코더는 그 표현으로 출력 시퀀스를 만든다", "인코더와 디코더 모두 입력 시퀀스만 처리한다", "인코더는 출력 시퀀스를 만들고, 디코더는 문맥 벡터를 만든다"], "a": 1, "exp": "인코더는 입력을 내재적 표현(문맥 벡터)으로 압축하고, 디코더는 그 표현으로부터 출력 단어 시퀀스를 생성한다."}, {"id": 20, "sec": "6.1.3", "diff": "심화", "q": "초기 인코더-디코더 구조의 '정보 병목' 문제와 그 해결책을 바르게 설명한 것은?", "opts": ["단어 사전이 너무 커서 생기는 문제이며, 불용어 제거로 해결한다", "출력이 너무 짧아지는 문제이며, 길이 페널티로 해결한다", "GPU 메모리가 부족해 생기는 문제이며, 배치 크기를 줄여 해결한다", "긴 입력을 고정 길이 문맥 벡터 하나에 담기 어려운 문제이며, 어텐션으로 디코더가 입력의 어느 부분을 볼지 선택하게 해 해결한다"], "a": 3, "exp": "고정 길이 문맥 벡터에 긴 입력의 정보를 모두 담기 어려운 것이 정보 병목이며, 어텐션 메커니즘이 이를 완화한다."}, {"id": 21, "sec": "6.1.3", "diff": "심화", "q": "강의자료에 제시된 어텐션 수식으로 옳은 것은?", "opts": ["Attention(Q, K, V) = softmax( Q + K + V )", "Attention(Q, K, V) = softmax( Q K^T / sqrt(d_k) ) V", "Attention(Q, K, V) = (Q · K) / (||Q|| x ||K||)", "Attention(Q, K, V) = softmax( Q V^T / sqrt(d_k) ) K"], "a": 1, "exp": "질의와 키의 유사도를 sqrt(d_k)로 나눈 뒤 softmax로 가중치를 만들고 값(V)을 가중합한다."}, {"id": 22, "sec": "6.1.3", "diff": "중급", "q": "트랜스포머(2017)에 대한 설명으로 옳지 않은 것은?", "opts": ["순환 구조 없이 셀프 어텐션만으로 문맥을 파악한다", "인코더-디코더 구조를 유지하면서 어텐션을 핵심 연산으로 사용한다", "순환 구조(RNN)를 셀프 어텐션과 함께 반드시 사용해야 문맥을 파악할 수 있다", "병렬 학습이 가능해 대규모 학습에 유리하다"], "a": 2, "exp": "트랜스포머는 RNN 없이 셀프 어텐션만으로 문맥을 파악하는 것이 핵심이며, 그 덕분에 병렬 학습이 가능하다."}, {"id": 23, "sec": "6.1.3", "diff": "중급", "q": "사전 학습 요약 모델의 학습 방식 설명이 바르게 짝지어진 것은?", "opts": ["BART - 모든 NLP 과제를 'text-to-text'로 통일한 모델", "KoBART - 문자 n-gram의 합으로 단어를 표현하는 모델", "PEGASUS - 문서에서 중요한 문장을 통째로 가린 뒤 복원하도록 학습", "T5 - 원문을 일부 손상시킨 뒤 복원하도록 사전 학습한 인코더-디코더"], "a": 2, "exp": "PEGASUS는 중요 문장을 가리고 복원하는 요약 특화 사전 학습을 사용한다. BART는 손상 후 복원, T5는 text-to-text 통일 모델이다."}, {"id": 24, "sec": "6.1.4", "diff": "기초", "q": "TextRank가 기반을 두고 만들어진 알고리즘은?", "opts": ["K-평균 클러스터링", "Word2Vec", "BERTScore", "PageRank"], "a": 3, "exp": "TextRank는 구글의 PageRank를 문장 그래프에 적용해 만든 추출 요약 알고리즘이다."}, {"id": 25, "sec": "6.1.4", "diff": "중급", "q": "PageRank의 동작 원칙에 대한 설명으로 옳은 것은?", "opts": ["단순한 링크 개수가 아니라 그 페이지를 참조한 페이지들의 중요도를 가중해 재귀적으로 순위를 정한다", "최근에 갱신된 페이지에 가장 높은 순위를 준다", "링크 개수만 세어 많은 순서대로 순위를 정한다", "페이지의 글자 수가 많을수록 높은 순위를 준다"], "a": 0, "exp": "PageRank는 참조한 페이지들의 중요도를 가중해 재귀적으로 순위를 계산하며, 단순 링크 개수 세기와 다르다."}, {"id": 26, "sec": "6.1.4", "diff": "기초", "q": "TextRank가 실무에서 갖는 큰 장점으로 강의자료가 강조한 것은?", "opts": ["GPU 없이는 동작하지 않지만 정확도가 매우 높다", "대규모 라벨링 데이터가 있어야 성능이 나온다", "비지도 방식이라 정답 요약 데이터가 없어도 바로 적용할 수 있다", "항상 원문에 없는 새로운 문장을 생성할 수 있다"], "a": 2, "exp": "TextRank는 비지도 알고리즘이므로 정답 요약 데이터가 없는 상황에서도 즉시 적용할 수 있다."}, {"id": 27, "sec": "6.1.4", "diff": "중급", "q": "TextRank 알고리즘 동작 단계에서 문장 벡터를 만드는 방법으로 옳은 것은?", "opts": ["문장의 단어 벡터를 모두 이어 붙여 긴 벡터를 만든다", "문장의 첫 단어 벡터를 그대로 문장 벡터로 쓴다", "문장의 각 단어를 벡터로 바꾼 뒤 단어 벡터의 평균으로 문장 전체 벡터를 구한다", "문장 길이를 원핫 인코딩해 문장 벡터로 쓴다"], "a": 2, "exp": "3~4단계에서 GloVe 등 사전 학습 단어 벡터를 조회한 뒤 그 평균으로 문장 벡터를 만든다."}, {"id": 28, "sec": "6.1.4", "diff": "중급", "q": "TextRank 과정의 데이터 흐름 순서로 옳은 것은?", "opts": ["문서 → 문장 → 텍스트 → 그래프 → 벡터 → 유사도 행렬 → 요약 → 문장 순위", "문서 → 텍스트 → 유사도 행렬 → 문장 → 벡터 → 문장 순위 → 그래프 → 요약", "문서 → 텍스트 → 문장 → 벡터 → 유사도 행렬 → 그래프 → 문장 순위 → 요약", "문서 → 벡터 → 텍스트 → 문장 → 그래프 → 유사도 행렬 → 요약 → 문장 순위"], "a": 2, "exp": "강의자료의 흐름도는 문서에서 텍스트, 문장, 벡터, 유사도 행렬, 그래프, 문장 순위를 거쳐 요약에 이른다."}, {"id": 29, "sec": "6.1.4", "diff": "기초", "q": "TextRank 점수 계산식에서 감쇠 계수 d 로 보통 사용하는 값은?", "opts": ["1.0", "0.15", "0.5", "0.85"], "a": 3, "exp": "PageRank와 마찬가지로 감쇠 계수는 보통 0.85를 사용한다."}, {"id": 30, "sec": "6.1.4", "diff": "심화", "q": "WS(Vi) = (1 - d)/n + d x SUM_j [ w_ij / SUM_k w_jk ] x WS(Vj) 에 대한 설명으로 옳지 않은 것은?", "opts": ["w_ij 는 문장 i 와 j 사이의 유클리드 거리를 뜻한다", "'중요한 문장과 많이 닮은 문장'이 다시 중요해지는 재귀적 정의다", "원논문은 (1-d)를, networkx는 (1-d)/n 을 사용한다", "Vi 는 문장 i 를 나타내는 노드다"], "a": 0, "exp": "w_ij 는 문장 i 와 j 의 코사인 유사도이며 거리가 아니다."}, {"id": 31, "sec": "6.1.4", "diff": "중급", "q": "TextRank 점수를 실제로 계산하는 방법에 대한 설명으로 옳은 것은?", "opts": ["경사 하강법으로 손실 함수를 최소화해 학습한다", "정답 요약과의 ROUGE 를 최대화하도록 지도 학습한다", "점수 벡터가 수렴할 때까지 반복(멱승법)하며, networkx 의 pagerank() 가 이를 수행한다", "한 번의 행렬 곱만으로 정확한 해가 나온다"], "a": 2, "exp": "TextRank 점수는 반복적으로 갱신해 수렴시키는 멱승법으로 구하며 networkx의 pagerank() 함수가 이를 처리한다."}, {"id": 32, "sec": "6.1.4", "diff": "중급", "q": "TextRank 실습에서 NLTK 3.9 이상을 사용할 때 추가로 내려받아야 한다고 명시된 데이터는?", "opts": ["punkt_tab", "vader_lexicon", "wordnet", "averaged_perceptron_tagger"], "a": 0, "exp": "강의자료는 NLTK 3.9 이상에서는 punkt 외에 punkt_tab 도 내려받아야 한다고 표기했다."}, {"id": 33, "sec": "6.1.4", "diff": "기초", "q": "TextRank 실습에서 사용한 사전 학습 단어 벡터 파일은?", "opts": ["GoogleNews-vectors-negative300.bin", "all-MiniLM-L6-v2.bin", "cc.ko.300.vec", "glove.6B.50d.txt"], "a": 3, "exp": "실습은 GLOVE_TXT = 'data/glove/glove.6B.50d.txt' 를 사용하며, 없으면 gensim downloader 로 glove-wiki-gigaword-50 을 내려받는다."}, {"id": 34, "sec": "6.1.4", "diff": "기초", "q": "TextRank 실습에서 그래프 생성과 PageRank 계산을 담당하는 라이브러리는?", "opts": ["seaborn", "matplotlib", "networkx", "statsmodels"], "a": 2, "exp": "실습은 networkx 의 from_numpy_array 와 pagerank 를 사용해 그래프를 만들고 점수를 계산한다."}, {"id": 35, "sec": "6.1.4", "diff": "중급", "q": "예시 코퍼스 SAMPLE_ARTICLES 에 대해 강의자료가 명시한 조건은?", "opts": ["기사 수가 반드시 10개 이상이어야 한다", "기사마다 문장이 3개 이상이면 TextRank 가 정상 동작한다", "모든 기사가 같은 길이여야 한다", "기사마다 단어가 100개 이상이어야 한다"], "a": 1, "exp": "CSV가 없을 때 대체하는 예시 코퍼스는 기사마다 문장이 3개 이상이면 TextRank가 정상 동작한다고 설명했다."}, {"id": 36, "sec": "6.1.4", "diff": "심화", "q": "실습의 CLEAN_PATTERN = r'[^a-zA-Z\\s]' 를 re.sub 로 적용하면 어떤 결과가 되는가?", "opts": ["영문자만 제거되고 숫자와 문장부호는 남는다", "공백만 제거되어 단어들이 붙는다", "대문자만 소문자로 바뀐다", "영문자와 공백을 제외한 모든 문자(숫자, 문장부호 등)가 제거된다"], "a": 3, "exp": "[^a-zA-Z\\s] 는 영문자와 공백이 아닌 문자를 뜻하므로, 이를 빈 문자열로 치환하면 숫자와 특수문자가 제거된다."}, {"id": 37, "sec": "6.1.4", "diff": "심화", "q": "실습에서 WordsInSentences 열을 만들 때 적용한 함수의 순서로 옳은 것은?", "opts": ["clean_sentences → tokenize_words → lower → remove_stopwords", "tokenize_words → lower → remove_stopwords → clean_sentences", "lower → tokenize_words → clean_sentences → remove_stopwords", "remove_stopwords → lower → tokenize_words → clean_sentences"], "a": 1, "exp": "코드는 SentencesInArticle 에 tokenize_words, lower, remove_stopwords, clean_sentences 를 순서대로 apply 한다. 즉 토큰화 → 소문자 → 불용어 제거 → 특수문자 제거다."}, {"id": 38, "sec": "6.1.4", "diff": "중급", "q": "문장 벡터 생성 코드에서 VECTOR_SIZE 값과 OOV(사전에 없는 단어) 처리 방식이 바르게 짝지어진 것은?", "opts": ["50, 무작위 벡터로 처리", "300, 영벡터로 처리", "100, 해당 단어를 건너뛰고 무시", "50, 영벡터(EMPTY_VECTOR)로 처리"], "a": 3, "exp": "VECTOR_SIZE = 50 이고 glove_vectors.get(w, EMPTY_VECTOR) 로 미등록 단어를 영벡터로 대체한다."}, {"id": 39, "sec": "6.1.4", "diff": "심화", "q": "sentence_vector 함수에서 len(sentence) == 0 인 경우의 반환값은?", "opts": ["EMPTY_VECTOR(길이 50의 영벡터)", "0(스칼라)", "None", "빈 리스트 []"], "a": 0, "exp": "빈 문장이면 EMPTY_VECTOR = np.zeros(VECTOR_SIZE) 를 반환해 0으로 나누는 오류를 피한다."}, {"id": 40, "sec": "6.1.4", "diff": "심화", "q": "similarity_matrix 함수에 대한 설명으로 옳지 않은 것은?", "opts": ["i == j 인 경우 continue 로 건너뛴다", "n x n 크기의 영행렬로 시작해 값을 채운다", "대각 원소 sim_mat[i][i] 에는 1.0 이 채워진다", "음수 유사도는 max(0.0, ...) 로 0 으로 잘라 낸다"], "a": 2, "exp": "코드는 i == j 일 때 continue 하므로 대각 원소는 초기값 0 그대로 남는다."}, {"id": 41, "sec": "6.1.4", "diff": "중급", "q": "compute_graph 함수의 동작을 바르게 설명한 것은?", "opts": ["유사도 행렬의 고윳값을 직접 구해 상위 문장을 고른다", "유사도 행렬을 TfidfVectorizer 에 넣어 가중치를 계산한다", "유사도 행렬을 nx.from_numpy_array 로 그래프로 만든 뒤 nx.pagerank 로 점수를 계산한다", "유사도 행렬을 정규화한 뒤 K-평균으로 문장을 군집화한다"], "a": 2, "exp": "유사도 행렬을 인접 행렬로 삼아 networkx 그래프를 만들고 pagerank() 로 문장 중요도 점수를 얻는다."}, {"id": 42, "sec": "6.1.4", "diff": "중급", "q": "get_ranked_sentences 함수가 상위 문장을 고른 뒤 sorted(top) 을 사용하는 이유는?", "opts": ["점수가 높은 순서대로 다시 정렬하기 위해", "중복 문장을 제거하기 위해", "문장 길이 순으로 정렬하기 위해", "읽기 쉽도록 선택된 문장을 원문 순서로 되돌리기 위해"], "a": 3, "exp": "점수 내림차순으로 뽑은 인덱스를 다시 오름차순 정렬해 원문에 나온 순서대로 이어 붙여 가독성을 높인다."}, {"id": 43, "sec": "6.1.4", "diff": "기초", "q": "get_ranked_sentences(sentences, scores, n=3) 에서 기본적으로 요약에 포함되는 문장 수는?", "opts": ["전체 문장의 30%", "1개", "3개", "5개"], "a": 2, "exp": "함수의 기본 인자 n=3 이므로 기본값으로 상위 3개 문장을 골라 요약을 만든다."}, {"id": 44, "sec": "6.1.5", "diff": "기초", "q": "요약 품질 평가에서 '내재적(intrinsic) 평가'에 해당하는 것은?", "opts": ["사람이 작성한 참조 요약과 얼마나 겹치는지 ROUGE, BLEU 로 측정", "요약 생성에 걸린 시간을 측정", "요약을 사용한 검색 작업의 성능 향상을 측정", "요약을 사용한 분류 모델의 정확도를 측정"], "a": 0, "exp": "참조 요약과의 겹침을 직접 재는 것이 내재적 평가이며, 후속 작업 성능으로 간접 측정하는 것이 외재적 평가다."}, {"id": 45, "sec": "6.1.5", "diff": "중급", "q": "요약 평가에 대한 강의자료의 결론으로 옳은 것은?", "opts": ["정량 지표는 '의미가 같은 다른 표현'을 인정하지 못하므로 정량 지표와 사람 평가를 함께 쓰는 것이 표준이다", "ROUGE 점수가 1.0 이면 요약이 완벽하다고 결론지을 수 있다", "요약에는 항상 유일한 정답이 존재하므로 평가가 간단하다", "사람 평가는 주관적이므로 배제하고 정량 지표만 사용해야 한다"], "a": 0, "exp": "요약에는 정답이 하나로 정해지지 않으며 정량 지표의 한계 때문에 사람 평가(정확성·일관성·가독성)를 병행하는 것이 표준이다."}, {"id": 46, "sec": "6.1.5", "diff": "기초", "q": "ROUGE 는 무엇의 약자인가?", "opts": ["Recall Of Unigram Generation Evaluation", "Ranked Order Unified Gain Evaluation", "Relative Overlap Under Gisting Estimation", "Recall-Oriented Understudy for Gisting Evaluation"], "a": 3, "exp": "ROUGE 는 Recall-Oriented Understudy for Gisting Evaluation 의 약자로, 참조 요약과의 n-gram 중복을 측정한다."}, {"id": 47, "sec": "6.1.5", "diff": "중급", "q": "ROUGE-N Precision 의 정의로 옳은 것은?", "opts": ["(겹치는 n-gram 수) / (참조 요약의 n-gram 수)", "2PR / (P + R)", "(겹치는 n-gram 수) / (생성 요약의 n-gram 수)", "(참조 요약의 n-gram 수) / (생성 요약의 n-gram 수)"], "a": 2, "exp": "Precision 은 생성 요약의 n-gram 수로 나누고, Recall 은 참조 요약의 n-gram 수로 나눈다."}, {"id": 48, "sec": "6.1.5", "diff": "중급", "q": "ROUGE 변형과 그 의미가 바르게 짝지어진 것은?", "opts": ["ROUGE-2 : 2-gram 중복으로 표현의 자연스러움과 어순을 본다", "ROUGE-L : 단어(unigram) 중복으로 내용어 포함 여부를 본다", "ROUGE-1 : 최장 공통 부분 수열 기반으로 문장 구조를 본다", "ROUGE-2 : 문맥 임베딩의 코사인 유사도를 본다"], "a": 0, "exp": "ROUGE-1은 unigram 중복, ROUGE-2는 2-gram 중복(자연스러움/어순), ROUGE-L은 LCS 기반 문장 구조 유사성이다."}, {"id": 49, "sec": "6.1.5", "diff": "중급", "q": "참조 요약 'the cat was found under the bed'(7단어)와 생성 요약 'the cat was under the bed'(6단어)의 ROUGE-1 Recall 값은?", "opts": ["약 1.000", "약 0.923", "약 0.857", "약 0.750"], "a": 2, "exp": "겹치는 unigram 6개를 참조 unigram 7개로 나누어 6/7 ≈ 0.857 이다."}, {"id": 50, "sec": "6.1.5", "diff": "심화", "q": "위 예시에서 ROUGE-1 Precision 과 F1 값을 바르게 짝지은 것은?", "opts": ["Precision 1.000, F1 0.923", "Precision 0.857, F1 0.857", "Precision 0.750, F1 0.800", "Precision 0.923, F1 1.000"], "a": 0, "exp": "겹치는 6개를 생성 요약 6개로 나눠 Precision = 1.0 이고, F1 = 2 x (0.857 x 1.0) / (0.857 + 1.0) ≈ 0.923 이다."}, {"id": 51, "sec": "6.1.5", "diff": "심화", "q": "ROUGE-L 에 대한 설명으로 옳은 것은?", "opts": ["LCS 기반이므로 어순을 전혀 반영하지 못한다", "LCS 는 연속일 필요 없이 순서만 유지되면 되므로 어순이 뒤바뀐 요약에서는 ROUGE-1 과 달리 점수가 떨어진다", "LCS 는 반드시 연속된 부분 문자열이어야 하므로 ROUGE-2 와 같은 값이 된다", "β 값은 항상 0 으로 두어 재현율만 사용한다"], "a": 1, "exp": "ROUGE-L은 순서를 유지하는 최장 공통 부분 수열을 사용하므로 어순 변화에 민감하며, 보통 β = 1 로 F_lcs 를 계산한다."}, {"id": 52, "sec": "6.1.5", "diff": "중급", "q": "요약 평가에서 BLEU 보다 ROUGE 를 더 선호하는 이유는?", "opts": ["BLEU 는 계산 비용이 지나치게 크기 때문", "요약은 '빠짐없이 담았는가'가 중요하므로 재현율 중심의 ROUGE 가 적합하기 때문", "ROUGE 가 문맥 임베딩을 사용해 의미를 직접 비교하기 때문", "BLEU 는 n-gram 을 전혀 사용하지 않기 때문"], "a": 1, "exp": "BLEU는 정밀도 중심의 기계 번역 지표이고, 요약은 내용 누락 여부가 중요하므로 재현율 중심의 ROUGE를 더 선호한다."}, {"id": 53, "sec": "6.1.5", "diff": "중급", "q": "'표현이 달라도 의미가 같으면 높은 점수를 준다'는 특징을 가진 평가 지표는?", "opts": ["ROUGE-2", "BLEU", "BERTScore", "압축률"], "a": 2, "exp": "BERTScore는 단어를 문맥 임베딩으로 바꾼 뒤 코사인 유사도로 매칭하므로 표현이 달라도 의미가 같으면 높은 점수를 준다."}, {"id": 54, "sec": "6.2.1", "diff": "기초", "q": "텍스트 생성의 핵심 개념으로 강의자료가 제시한 것은?", "opts": ["텍스트의 통계적인 속성을 활용해 출력 텍스트를 더 사실적으로 만드는 것", "텍스트를 원핫 벡터로 저장해 압축하는 것", "텍스트를 도메인별로 분류하는 것", "텍스트를 사람이 직접 편집해 문법을 교정하는 것"], "a": 0, "exp": "텍스트 생성은 텍스트에 내재된 통계적 속성을 활용해 더 사실적인 출력을 만드는 것이 핵심이라고 설명한다."}, {"id": 55, "sec": "6.2.1", "diff": "기초", "q": "마르코프 체인에 대한 설명으로 옳은 것은?", "opts": ["확률을 쓰지 않고 규칙만으로 상태를 전환한다", "확률에 기반한 상태 전환 시스템으로, 시점 단위로 작동하며 각 시점 후에 새로운 상태를 선택한다", "상태의 수가 학습 중에 무한히 늘어나는 시스템이다", "과거 모든 상태의 이력을 그대로 저장해 다음 상태를 결정한다"], "a": 1, "exp": "마르코프 체인은 확률 기반 상태 전환 시스템이며 시점 단위로 새 상태를 선택한다. 가능한 미래 상태는 현재 상태에 도달한 경로와 무관하게 정해져 있다."}, {"id": 56, "sec": "6.2.1", "diff": "중급", "q": "강의자료가 제시한 마르코프 가정의 수식은?", "opts": ["P(w_1..w_n) = P(w_1) x P(w_2) x ... x P(w_n)", "P(w_t | w_(t-1)) ≈ P(w_t)", "P(w_t | w_1, ..., w_(t-1)) ≈ P(w_t | w_(t-1))", "P(w_t | w_(t-1)) = count(w_t) / N"], "a": 2, "exp": "마르코프 가정은 전체 이력을 직전 한 단어로 근사한다."}, {"id": 57, "sec": "6.2.1", "diff": "중급", "q": "코퍼스 '나는 밥을 먹었다 / 나는 빵을 먹었다 / 나는 밥을 남겼다' 에서 P(밥을 | 나는) 의 값은?", "opts": ["3/3 = 1.0", "2/3 ≈ 0.67", "1/3 ≈ 0.33", "1/2 = 0.5"], "a": 1, "exp": "'나는' 다음에 밥을이 2회, 빵을이 1회 나오므로 P(밥을|나는) = 2/3 이다."}, {"id": 58, "sec": "6.2.1", "diff": "중급", "q": "같은 코퍼스에서 P(먹었다 | 밥을) 과 P(남겼다 | 밥을) 의 값은?", "opts": ["각각 0.67 과 0.33", "각각 0.33 과 0.67", "각각 1.0 과 0.0", "둘 다 0.5"], "a": 3, "exp": "'밥을' 다음에 먹었다 1회, 남겼다 1회가 나오므로 두 확률 모두 0.5 다."}, {"id": 59, "sec": "6.2.1", "diff": "기초", "q": "언어 모델(Language Model)의 정의로 옳은 것은?", "opts": ["단어 시퀀스의 확률 P(w_1, w_2, ..., w_n) 을 계산하는 모델", "문서를 카테고리로 분류하는 모델", "두 문장의 코사인 유사도를 계산하는 함수", "단어를 원핫 벡터로 변환하는 규칙"], "a": 0, "exp": "언어 모델은 단어 시퀀스에 확률을 부여하는 모델이다."}, {"id": 60, "sec": "6.2.1", "diff": "심화", "q": "연쇄 법칙에 따른 P(w_1..w_n) 의 전개로 옳은 것은?", "opts": ["P(w_1) x P(w_2|w_1) x ... x P(w_n | w_1..w_(n-1))", "P(w_n) x P(w_(n-1)|w_n) x ... x P(w_1)", "P(w_1|w_2) x P(w_2|w_3) x ... x P(w_(n-1)|w_n)", "P(w_1) x P(w_2) x ... x P(w_n)"], "a": 0, "exp": "연쇄 법칙은 결합 확률을 앞 단어들에 대한 조건부 확률의 곱으로 분해한다."}, {"id": 61, "sec": "6.2.1", "diff": "중급", "q": "bigram 확률 P(w_t | w_(t-1)) 의 최대우도 추정식은?", "opts": ["count(w_(t-1)) / count(w_(t-1), w_t)", "count(w_t) / 전체 단어 수", "count(w_(t-1), w_t) / count(w_(t-1))", "count(w_(t-1), w_t) / count(w_t)"], "a": 2, "exp": "bigram 확률은 두 단어가 연달아 나온 횟수를 앞 단어의 등장 횟수로 나눈다."}, {"id": 62, "sec": "6.2.1", "diff": "중급", "q": "n-gram 언어 모델에 대한 설명으로 옳은 것은?", "opts": ["문맥 길이에 제한이 없는 모델이다", "직전 n개 단어를 모두 보는 근사이며, trigram 은 직전 3개 단어를 조건으로 한다", "직전 (n-1)개 단어만 보는 근사이며, 마르코프 체인 텍스트 생성은 bigram 언어 모델에서 표본을 뽑는 것과 같다", "단어를 연속 벡터로 표현해 희소성 문제를 해결한 모델이다"], "a": 2, "exp": "n-gram은 직전 (n-1)개 단어만 보며, 마르코프 체인 생성은 bigram 모델에서 샘플링하는 것과 동등하다."}, {"id": 63, "sec": "6.2.1", "diff": "중급", "q": "n-gram 에서 n 을 키울 때 생기는 문제와 그 대응으로 옳은 것은?", "opts": ["모델 크기가 줄어들어 과소적합이 발생하므로 정규화를 없애야 한다", "한 번도 못 본 n-gram 이 늘어나는 데이터 희소성 문제가 커지므로 스무딩이 필요하다", "계산 속도가 빨라지지만 문맥이 나빠지므로 n 을 더 키워야 한다", "모든 확률이 1 이 되어 버리므로 로그를 취해야 한다"], "a": 1, "exp": "n이 커지면 문맥은 좋아지지만 관측되지 않은 n-gram이 많아지는 희소성 문제가 심해져 스무딩이 필요하다."}, {"id": 64, "sec": "6.2.1", "diff": "심화", "q": "마르코프 체인 생성 코드에서 build_word_dict 가 하는 일은?", "opts": ["make_pairs 로 만든 연속 단어 쌍을 순회하며 defaultdict(list) 에 앞 단어를 키, 뒤 단어를 값으로 누적한다", "코퍼스의 단어를 알파벳순으로 정렬해 사전을 만든다", "각 단어의 TF-IDF 값을 계산해 사전에 저장한다", "단어를 GloVe 벡터로 바꿔 사전에 저장한다"], "a": 0, "exp": "build_word_dict 는 make_pairs 가 만든 (w1, w2) 쌍을 돌며 d[w1].append(w2) 로 전이 사전을 구성한다."}, {"id": 65, "sec": "6.2.1", "diff": "중급", "q": "마르코프 체인의 한계로 강의자료가 지적하지 않은 것은?", "opts": ["단어를 기호로만 다뤄 '고양이'와 '고양이들'을 전혀 다른 상태로 취급한다", "문맥이 직전 한 단어(또는 n-1 단어)뿐이라 문장 전체의 일관성이 없다", "문장이 지나치게 길어져 항상 목표 길이를 초과한다", "학습 데이터에 없던 단어 조합은 절대 생성하지 못한다"], "a": 2, "exp": "강의자료가 든 한계는 짧은 문맥, 일반화 불가, 의미 유사성 무지, n 증가 시 데이터 폭증이며 문장 길이 초과는 언급되지 않는다."}, {"id": 66, "sec": "6.2.2", "diff": "중급", "q": "NNLM(2003)이 해결하고자 한 문제는?", "opts": ["문장의 어순을 완전히 무시해 계산량을 줄이는 것", "단어를 임베딩 벡터로 바꾼 뒤 신경망으로 다음 단어를 예측해 희소성 문제를 완화하는 것", "서브워드 토큰화로 미등록 단어를 없애는 것", "GPU 병렬 학습을 최초로 가능하게 하는 것"], "a": 1, "exp": "NNLM은 단어를 임베딩 벡터로 표현하고 신경망으로 다음 단어를 예측해 n-gram의 데이터 희소성 문제를 완화했다."}, {"id": 67, "sec": "6.2.2", "diff": "중급", "q": "RNN/LSTM/GRU 계열 언어 모델의 장단점으로 옳은 것은?", "opts": ["문맥 길이가 이론상 2개 단어로 제한된다", "병렬화가 쉬워 대규모 학습에 유리하지만 순서 정보를 다루지 못한다", "은닉 상태 없이 어텐션만으로 문맥을 누적한다", "순차적 정보를 자연스럽게 처리하지만 병렬화가 어렵고 아주 긴 의존 관계는 여전히 학습이 어렵다"], "a": 3, "exp": "RNN 계열은 은닉 상태로 임의 길이 문맥을 누적하지만 순차 계산이라 병렬화가 어렵고 장거리 의존 학습이 어렵다."}, {"id": 68, "sec": "6.2.2", "diff": "기초", "q": "GPT 계열 생성 모델의 구조로 옳은 것은?", "opts": ["RNN 과 CNN 을 결합한 하이브리드 모델", "마르코프 체인을 신경망으로 근사한 모델", "트랜스포머 인코더만 쌓아 올린 양방향 모델", "트랜스포머 디코더만 쌓아 올린 자기회귀(autoregressive) 언어 모델"], "a": 3, "exp": "GPT는 트랜스포머 디코더 블록만 쌓은 자기회귀 언어 모델이다."}, {"id": 69, "sec": "6.2.2", "diff": "심화", "q": "GPT 계열과 마르코프 체인의 관계에 대한 설명으로 옳은 것은?", "opts": ["GPT 는 마르코프 가정을 그대로 사용해 직전 한 단어만 본다", "학습 목표가 완전히 달라 GPT 는 문장 분류를 학습한다", "마르코프 체인도 연속 벡터로 단어를 표현한다", "학습 목표는 '다음 토큰 예측'으로 본질적으로 같고, 차이는 문맥의 길이와 표현 방식(연속 벡터)이다"], "a": 3, "exp": "둘 다 다음 토큰 예측을 목표로 하지만 GPT는 수천~수십만 토큰의 문맥과 연속 벡터 표현을 사용한다는 점이 다르다."}, {"id": 70, "sec": "6.2.2", "diff": "중급", "q": "GPT 계열이 미등록 단어 문제를 해결하기 위해 사용하는 토큰화 방식은?", "opts": ["서브워드 단위(BPE, SentencePiece)", "형태소 단위 원핫 인코딩", "문자 단위 ASCII 인코딩", "문장 단위 평균 벡터"], "a": 0, "exp": "단어가 아닌 서브워드(BPE, SentencePiece) 단위를 사용해 미등록 단어 문제를 해결한다."}, {"id": 71, "sec": "6.2.2", "diff": "기초", "q": "그리디 탐색(greedy search)의 특징으로 옳은 것은?", "opts": ["로짓을 온도로 나눠 분포의 날카로움을 조절한다", "매 시점 확률이 가장 높은 토큰 하나를 선택하며, 빠르지만 지역 최적에 빠지고 반복이 생기기 쉽다", "확률 상위 k개 후보를 동시에 유지하며 전체 확률을 최대화한다", "누적 확률이 p 가 될 때까지의 토큰 중에서 무작위로 뽑는다"], "a": 1, "exp": "그리디 탐색은 매 단계 최고 확률 토큰을 고르는 결정적 방법으로, 빠르지만 지역 최적과 반복 문제가 있다."}, {"id": 72, "sec": "6.2.2", "diff": "중급", "q": "빔 탐색(beam search)에 대한 설명으로 옳지 않은 것은?", "opts": ["확률이 높은 후보 k개(빔)를 동시에 유지한다", "시퀀스 전체의 확률을 최대화하려 한다", "창의적이고 다양한 문장 생성에 가장 적합한 전략이다", "요약·번역처럼 정답이 비교적 정해진 과제에 적합하다"], "a": 2, "exp": "빔 탐색은 창의적 생성에서는 문장이 단조로워지는 단점이 있어 적합하지 않다."}, {"id": 73, "sec": "6.2.2", "diff": "심화", "q": "온도(temperature) T 의 효과로 옳은 것은?", "opts": ["로짓에 T 를 곱하며, T < 1 이면 분포가 평평해져 다양해진다", "로짓을 T 로 나누며, T < 1 이면 분포가 뾰족해져 보수적이고 T > 1 이면 평평해져 다양하지만 위험해진다", "T 는 후보 토큰의 개수를 직접 지정하는 정수다", "T 는 누적 확률의 임계값으로 0~1 사이 값을 갖는다"], "a": 1, "exp": "온도는 로짓을 T로 나누어 분포의 날카로움을 조절한다. 후보 개수를 정하는 것은 top-k, 누적 확률 임계값은 top-p다."}, {"id": 74, "sec": "6.2.2", "diff": "중급", "q": "top-p(nucleus) 샘플링이 top-k 샘플링보다 유연하다고 하는 이유는?", "opts": ["분포가 뾰족할 땐 후보가 적어지고 평평할 땐 후보가 많아지도록 후보 수가 자동으로 변하기 때문", "빔을 여러 개 유지해 전체 확률을 최대화하기 때문", "확률이 가장 높은 토큰 하나만 선택하기 때문", "항상 고정된 개수의 후보만 사용하기 때문"], "a": 0, "exp": "top-p는 누적 확률이 p가 될 때까지의 토큰만 후보로 삼으므로 분포 모양에 따라 후보 수가 자동 조절된다."}, {"id": 75, "sec": "6.3.1", "diff": "기초", "q": "강의자료의 벡터·텐서 설명으로 옳은 것은?", "opts": ["행렬은 벡터를 포함할 수 없는 별개의 구조다", "벡터는 실수 값들의 집합이며 행렬의 한 행으로 볼 수 있고, 텐서는 스칼라·벡터·행렬을 모두 포괄하는 일반적 개념이다", "벡터는 정수 값만 담을 수 있다", "텐서는 벡터의 특수한 경우로 항상 1차원이다"], "a": 1, "exp": "벡터는 실수 값의 집합으로 행렬의 한 행으로 볼 수 있고, 텐서는 스칼라·벡터·행렬을 포괄하는 상위 개념이다."}, {"id": 76, "sec": "6.3.1", "diff": "중급", "q": "강의자료가 정의한 텍스트 단위 설명 중 옳지 않은 것은?", "opts": ["문서는 단어들의 집합이며 구절들로 나눌 수 있다", "문자는 알파벳의 한 단위다", "구절은 하나의 문자만을 가리키는 최소 단위다", "문장은 연속된 단어들의 집합이다"], "a": 2, "exp": "구절은 단어들의 시퀀스로 정의되며, 알파벳의 한 단위는 문자다."}, {"id": 77, "sec": "6.3.1", "diff": "중급", "q": "벡터 표현을 사용하는 이유로 강의자료가 든 것이 아닌 것은?", "opts": ["텍스트 단위들의 형태가 서로 달라 알고리즘에서 그대로 다루기 어렵기 때문", "텍스트의 어순 정보를 완벽히 보존할 수 있기 때문", "데이터를 벡터로 표현하면 CPU/GPU 가 일괄(배치) 처리할 수 있어 성능이 향상되기 때문", "'유사도'라는 개념을 수학적으로 정의할 수 있게 되기 때문"], "a": 1, "exp": "벡터화의 이유로 배치 처리 성능, 유사도의 수학적 정의, 이질적 단위의 통일이 제시되었다. 어순 보존은 오히려 BoW 등에서 잃는 정보다."}, {"id": 78, "sec": "6.3.1", "diff": "기초", "q": "'인코딩'에 대한 강의자료의 정의로 옳은 것은?", "opts": ["문서의 중요 문장을 골라내는 과정", "벡터에서 다시 원문 텍스트를 복원하는 과정", "데이터를 압축해 파일 크기를 줄이는 과정", "원래 데이터를 다른 프로세스에서 사용할 수 있는 형태로 바꾸기 위해 코드를 적용하는 과정"], "a": 3, "exp": "인코딩은 데이터를 특정 형식으로 변환해 다른 프로세스가 사용할 수 있게 하는 과정이다."}, {"id": 79, "sec": "6.3.1", "diff": "심화", "q": "'인코딩 전체 지도'에서 위쪽(문자 수준)과 아래쪽(문맥 임베딩)의 성질 변화를 바르게 설명한 것은?", "opts": ["위로 갈수록 희소하고 의미를 담지 못하며, 아래로 갈수록 밀집하고 의미를 담는다", "위로 갈수록 밀집하고 의미를 담으며, 아래로 갈수록 희소해진다", "위아래 모두 희소하며 의미를 담는 정도만 다르다", "위로 갈수록 차원 수가 늘고 아래로 갈수록 어순 정보가 늘어난다"], "a": 0, "exp": "지도의 순서는 문자 수준 → 위치 기반 → 원핫 → 단어 수준 원핫 → BoW/TF-IDF → 단어 임베딩 → 문서 벡터/문맥 임베딩이며, 아래로 갈수록 밀집하고 의미를 담는다."}, {"id": 80, "sec": "6.3.1", "diff": "중급", "q": "문자 수준 인코딩의 예로 옳은 것은?", "opts": ["토큰이 최초로 나타나는 위치에 따라 정수를 부여한다", "어휘 크기 N 의 벡터에서 한 자리만 1 로 둔다", "'A' → 65, 'B' → 66 처럼 ASCII 코드나 유니코드 코드포인트를 사용한다", "단어의 문자 n-gram 벡터를 합산한다"], "a": 2, "exp": "문자 수준 인코딩은 문자에 ASCII 코드나 유니코드 코드포인트를 대응시키는 방식이다. 두 번째는 위치 기반, 세 번째는 원핫, 네 번째는 FastText다."}, {"id": 81, "sec": "6.3.1", "diff": "중급", "q": "위치 기반 수준의 인코딩에 대한 설명으로 옳은 것은?", "opts": ["문서에서 단어가 등장한 횟수를 세어 값을 부여한다", "각 문자나 단어를 그 위치에 따라 인코딩하며, 해당 토큰이 최초로 나타나는 위치를 기준으로 정수 값을 부여할 수 있다", "문서 전체를 하나의 정수로 압축한다", "단어의 의미적 유사성에 따라 실수 벡터를 부여한다"], "a": 1, "exp": "위치 기반 인코딩은 토큰의 등장 위치, 특히 최초 등장 위치를 기준으로 정수를 부여한다."}, {"id": 82, "sec": "6.3.1", "diff": "기초", "q": "원핫 벡터에 대한 설명으로 옳은 것은?", "opts": ["모든 셀이 0과 1 사이의 실수 값을 갖는 밀집 벡터다", "어휘의 각 단어를 나타내는 1 x N 행렬로, 한 개의 셀만 1 이고 나머지는 모두 0 이다", "차원 수가 항상 50 으로 고정된 벡터다", "단어의 등장 횟수를 그대로 담은 벡터다"], "a": 1, "exp": "원핫 벡터는 어휘 크기 N 길이의 벡터로 해당 단어 인덱스만 1이고 나머지는 0이다."}, {"id": 83, "sec": "6.3.1", "diff": "중급", "q": "원핫 인코딩의 주요 단계에 포함되지 않는 것은?", "opts": ["텍스트를 토큰화할 방법과 무관한 토큰을 제거할 방법을 결정한다", "인코딩할 문자나 단어를 결정한다", "고유 토큰 수(어휘 크기 N)를 결정하고 각 토큰에 인덱스를 부여한다", "단어 사이의 코사인 유사도를 계산해 가까운 단어끼리 묶는다"], "a": 3, "exp": "원핫 인코딩의 단계는 대상 결정, 토큰화·정제 방법 결정, 어휘 크기 결정, 인덱스 부여와 벡터 생성이다. 유사도 계산은 포함되지 않는다."}, {"id": 84, "sec": "6.3.1", "diff": "심화", "q": "어휘 ['나는','밥을','빵을','먹었다'] 에 대한 원핫 인코딩 예시에서 지적한 문제로 옳은 것은?", "opts": ["벡터 차원이 어휘 크기보다 작아 정보가 손실된다", "'밥을'과 '빵을'의 코사인 유사도가 1 이라 두 단어를 구분할 수 없다", "각 벡터의 원소 합이 0 이 되어 계산이 불가능하다", "'밥을'과 '빵을'의 코사인 유사도가 0 이라 두 단어의 유사성을 전혀 알 수 없다"], "a": 3, "exp": "서로 다른 원핫 벡터는 겹치는 1이 없어 내적이 0이 되므로 코사인 유사도가 0이며, 의미적 유사성을 전혀 표현하지 못한다."}, {"id": 85, "sec": "6.3.2", "diff": "기초", "q": "BoW(Bag of Words) 표현의 핵심 성질로 옳은 것은?", "opts": ["단어의 등장 순서를 그대로 보존해 벡터로 만든다", "문서에 등장한 단어의 개수만 세어 하나의 벡터로 표현하며 어순은 버린다", "문서마다 고유한 벡터를 함께 학습한다", "단어를 밀집된 저차원 실수 벡터로 바꾼다"], "a": 1, "exp": "BoW는 단어 빈도만 세고 어순을 버리는 표현이다. 마지막 설명은 Doc2Vec에 해당한다."}, {"id": 86, "sec": "6.3.2", "diff": "중급", "q": "어휘 [나는, 밥을, 빵을, 먹었다] 에 대해 D1 = '나는 밥을 먹었다', D2 = '나는 빵을 먹었다' 의 BoW 벡터는?", "opts": ["D1 = [1,1,0,1], D2 = [1,0,1,1]", "D1 = [1,0,1,1], D2 = [1,1,0,1]", "D1 = [1,1,0,1], D2 = [0,1,1,1]", "D1 = [1,1,1,0], D2 = [1,0,1,1]"], "a": 0, "exp": "어휘 순서대로 등장 여부를 세면 D1은 나는·밥을·먹었다가 1, D2는 나는·빵을·먹었다가 1이다."}, {"id": 87, "sec": "6.3.2", "diff": "심화", "q": "문서 3개, 단어 '자연어'가 문서 1에서 3회 등장하고 문서 1의 총 단어 수가 100, df = 1 일 때 6주차 공식으로 계산한 TF-IDF 값은?", "opts": ["약 0.03", "약 0.71", "약 1.405", "약 0.0422"], "a": 3, "exp": "TF = 3/100 = 0.03, IDF = log(3/2) + 1 ≈ 1.405 이므로 TF-IDF = 0.03 x 1.405 ≈ 0.0422 이다."}, {"id": 88, "sec": "6.3.2", "diff": "심화", "q": "3개 문서 모두에 등장하는 '그리고'의 IDF 계산에 대한 설명으로 옳은 것은?", "opts": ["보정항이 없으면 log(3/4) ≈ -0.29 로 음수가 되므로 +1 을 더해 약 0.71 의 작지만 양수인 값이 되게 한다", "df 가 크면 IDF 도 함께 커져 흔한 단어가 강조된다", "보정항 때문에 IDF 가 오히려 가장 큰 값이 된다", "보정항이 없으면 0 이 되므로 +1 을 더해 1 이 되게 한다"], "a": 0, "exp": "df = 3, N = 3 이면 log(3/(1+3)) ≈ -0.29 로 음수가 되므로 +1 보정으로 약 0.71 의 작은 양수를 만든다."}, {"id": 89, "sec": "6.3.3", "diff": "중급", "q": "강의자료가 제시한 단어 임베딩의 변환 과정으로 옳은 것은?", "opts": ["문서 → 문장 → 단어 → 원핫 벡터", "단어 → 임베딩 벡터 → 원핫 벡터 → 문서 벡터", "단어 → 원핫 벡터 → (가중치 행렬 곱) → 임베딩 벡터", "단어 → TF-IDF → 코사인 유사도 → 임베딩 벡터"], "a": 2, "exp": "단어를 원핫 벡터로 만든 뒤 가중치 행렬을 곱해 밀집 임베딩 벡터를 얻는다."}, {"id": 90, "sec": "6.3.3", "diff": "중급", "q": "원핫 벡터의 한계로 강의자료가 든 것이 아닌 것은?", "opts": ["벡터 사이의 상관관계 정보가 없어 가까운지 먼지 결정할 수 없다", "벡터가 상당히 커질 수 있다(어휘 크기 = 차원 수)", "학습에 매우 오랜 시간이 걸려 사전 학습이 불가능하다", "벡터가 희소하다(거의 모든 값이 0)"], "a": 2, "exp": "강의자료가 든 한계는 큰 차원, 희소성, 상관관계 정보 부재 세 가지다."}, {"id": 91, "sec": "6.3.3", "diff": "기초", "q": "좋은 단어 벡터 표현이 만족해야 할 조건으로 강의자료가 제시한 차원 수 범위는?", "opts": ["보통 5,000 ~ 50,000 차원", "보통 5 ~ 10 차원", "어휘 크기와 항상 같은 차원", "보통 50 ~ 300 차원"], "a": 3, "exp": "원핫의 큰 차원을 압축해 보통 50~300 차원의 밀집 벡터를 목표로 한다."}, {"id": 92, "sec": "6.3.3", "diff": "중급", "q": "분포 가설(distributional hypothesis)의 내용과 제안자로 옳은 것은?", "opts": ["'단어의 의미는 그 주변에 함께 나타나는 단어들에 의해 결정된다' (Firth, 1957)", "'단어의 의미는 문서 전체 빈도로 결정된다' (Mikolov, 2013)", "'단어의 의미는 어순으로만 결정된다' (Vaswani, 2017)", "'단어의 의미는 사전의 정의로 완전히 결정된다' (Firth, 1957)"], "a": 0, "exp": "분포 가설은 Firth(1957)의 명제로, 같은 문맥에 나올 단어를 예측하도록 학습하면 의미를 담은 벡터를 얻을 수 있다는 Word2Vec의 근거가 된다."}, {"id": 93, "sec": "6.3.3", "diff": "중급", "q": "Word2Vec 의 CBOW 와 Skip-gram 을 바르게 비교한 것은?", "opts": ["CBOW 는 주변 단어로 가운데 단어를 예측해 학습이 빠르고, Skip-gram 은 가운데 단어로 주변 단어를 예측해 희귀 단어 표현이 더 좋다", "CBOW 는 가운데 단어로 주변 단어를 예측하고, Skip-gram 은 그 반대다", "CBOW 는 학습이 느리지만 희귀 단어에 강하다", "둘 다 문서 벡터를 직접 학습하는 방법이다"], "a": 0, "exp": "CBOW는 주변→중심 예측으로 빠르고 빈출 단어에 유리하며, Skip-gram은 중심→주변 예측으로 느리지만 희귀 단어 표현이 좋다."}, {"id": 94, "sec": "6.3.3", "diff": "심화", "q": "Word2Vec 의 네거티브 샘플링에 대한 설명으로 옳은 것은?", "opts": ["단어를 문자 n-gram 으로 쪼개 OOV 를 처리하는 기법이다", "'the' 같은 초고빈도 단어를 확률적으로 제거해 학습 효율을 높이는 기법이다", "출력층 softmax 가 어휘 크기만큼 계산해야 해 느리므로, 정답 1개와 무작위 오답 k개(보통 5~20)만으로 이진 분류 문제로 바꿔 학습한다", "동시 등장 행렬을 직접 분해하는 기법이다"], "a": 2, "exp": "네거티브 샘플링은 전체 어휘 softmax를 정답 1개 + 오답 k개의 이진 분류로 바꾸는 학습 트릭이다. 초고빈도 단어 제거는 서브샘플링이다."}, {"id": 95, "sec": "6.3.3", "diff": "중급", "q": "GloVe 의 학습 방식으로 옳은 것은?", "opts": ["전체 코퍼스의 단어 동시 등장 행렬을 직접 분해해 학습하며, 지역적 문맥과 전역 통계 정보를 결합한다", "문서마다 고유한 벡터를 함께 학습한다", "단어를 문자 n-gram 의 합으로 표현해 OOV 를 처리한다", "BERT 를 문장 쌍 유사도로 미세조정한다"], "a": 0, "exp": "GloVe는 동시 등장 행렬을 분해해 Word2Vec의 지역 문맥과 전역 통계를 결합한 방식이다."}, {"id": 96, "sec": "6.3.3", "diff": "심화", "q": "FastText 의 특징으로 옳은 것은?", "opts": ["단어를 원핫 벡터 그대로 사용해 계산을 단순화한다", "문장 단위 임베딩만 생성할 수 있다", "단어 앞뒤에 경계 기호를 붙인 뒤 문자 n-gram(n=3)의 합으로 표현해 OOV 단어도 벡터를 만들 수 있다", "문맥에 따라 같은 단어에 다른 벡터를 부여한다"], "a": 2, "exp": "FastText는 '<apple>' → <ap, app, ppl, ple, le> 처럼 문자 n-gram의 합으로 단어를 표현해 미등록 단어도 처리하며 형태가 복잡한 한국어에 유리하다."}, {"id": 97, "sec": "6.3.3", "diff": "중급", "q": "단어 벡터의 유추(analogy) 연산 예시로 강의자료에 제시된 것은?", "opts": ["cos(king, banana) ≈ 1", "vec(king) x vec(woman) ≈ vec(queen)", "vec(king) - vec(man) + vec(woman) ≈ vec(queen)", "vec(king) + vec(man) - vec(woman) ≈ vec(queen)"], "a": 2, "exp": "벡터 덧셈·뺄셈이 의미 관계를 표현하는 예로 king - man + woman ≈ queen, Paris - France + Korea ≈ Seoul 이 제시되었다. 학습 데이터의 사회적 편향도 벡터에 반영된다는 주의가 함께 나온다."}, {"id": 98, "sec": "6.3.4", "diff": "기초", "q": "문서 벡터를 만드는 가장 단순한 방법으로 강의자료가 든 것은?", "opts": ["문서에 포함된 단어 벡터의 평균을 사용한다", "문서를 ASCII 코드 열로 변환한다", "문서의 글자 수를 그대로 벡터로 쓴다", "문서의 첫 문장만 원핫 인코딩한다"], "a": 0, "exp": "TextRank 실습에서 쓴 방식처럼 단어 벡터의 평균을 문서(문장) 벡터로 쓰는 것이 가장 단순한 방법이다."}, {"id": 99, "sec": "6.3.4", "diff": "중급", "q": "단순 평균 문서 벡터의 한계와 개선 방법을 바르게 짝지은 것은?", "opts": ["계산이 너무 느린 것이 한계이며, BoW 로 개선할 수 있다", "희소성이 한계이며, TF-IDF 로 개선할 수 있다", "차원이 너무 커지는 것이 한계이며, 원핫 인코딩으로 개선할 수 있다", "어순을 무시하고 중요한 단어와 사소한 단어를 똑같이 취급하며, Doc2Vec 이나 SBERT 로 개선할 수 있다"], "a": 3, "exp": "단순 평균은 어순 무시와 단어 중요도 균일 취급이 한계이며, 문서 고유 벡터를 학습하는 Doc2Vec이나 문장 임베딩을 직접 만드는 SBERT가 대안이다."}, {"id": 100, "sec": "6.3.4", "diff": "심화", "q": "정적 임베딩과 문맥 임베딩의 차이로 옳은 것은?", "opts": ["문맥 임베딩은 원핫 인코딩의 다른 이름이다", "둘 다 다의어를 완벽히 구분할 수 있으며 차이는 차원 수뿐이다", "Word2Vec·GloVe·FastText 는 한 단어에 벡터가 하나뿐이라 다의어를 구분하지 못하지만, ELMo·BERT·GPT 는 문장에 따라 다른 벡터를 생성한다", "정적 임베딩은 문장마다 다른 벡터를 만들고, 문맥 임베딩은 단어마다 하나의 벡터만 만든다"], "a": 2, "exp": "정적 임베딩은 단어당 벡터가 하나여서 '배'(ship/pear/stomach) 같은 다의어를 구분하지 못하지만, 문맥 임베딩은 문장에 따라 다른 벡터를 만든다."}];
+
+const SECTIONS = {
+  "6.1.1": "요약 개요",
+  "6.1.2": "추출적 요약",
+  "6.1.3": "추상적 요약",
+  "6.1.4": "TextRank",
+  "6.1.5": "요약 평가",
+  "6.2.1": "마르코프·n-gram",
+  "6.2.2": "신경망 생성",
+  "6.3.1": "인코딩·원핫",
+  "6.3.2": "BoW·TF-IDF",
+  "6.3.3": "단어 임베딩",
+  "6.3.4": "문서·문맥 벡터"
+};
+const DIFFS = ["기초","중급","심화"];
+const DIFFCLS = {"기초":"d1","중급":"d2","심화":"d3"};
+const KEY = "nlp_week6_quiz_v1";
+
+/* ---------- state ---------- */
+let state = {
+  answers:{},           // id -> chosen original option index
+  secFilter:"ALL",
+  diffFilter:"ALL",
+  shuffleQ:false,
+  shuffleO:false,
+  reviewMode:false,
+  order:[],             // array of question ids in display order
+  optOrder:{},          // id -> array of original indices
+  cursor:0
+};
+
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify({
+    answers:state.answers, shuffleQ:state.shuffleQ, shuffleO:state.shuffleO,
+    secFilter:state.secFilter, diffFilter:state.diffFilter, optOrder:state.optOrder
+  })); }catch(e){}
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY); if(!raw) return;
+    const d = JSON.parse(raw);
+    if(d && typeof d==="object"){
+      state.answers = d.answers||{};
+      state.shuffleQ = !!d.shuffleQ; state.shuffleO = !!d.shuffleO;
+      state.secFilter = d.secFilter||"ALL"; state.diffFilter = d.diffFilter||"ALL";
+      state.optOrder = d.optOrder||{};
+    }
+  }catch(e){}
+}
+
+/* ---------- helpers ---------- */
+function shuffled(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function optOrderFor(q){
+  if(!state.shuffleO) return [0,1,2,3];
+  if(!state.optOrder[q.id]) { state.optOrder[q.id] = shuffled([0,1,2,3]); save(); }
+  return state.optOrder[q.id];
+}
+function isWrong(q){ return q.id in state.answers && state.answers[q.id] !== q.a; }
+function isRight(q){ return state.answers[q.id] === q.a; }
+
+function buildOrder(keepCursor){
+  let pool = QUESTIONS.filter(q =>
+    (state.secFilter==="ALL" || q.sec===state.secFilter) &&
+    (state.diffFilter==="ALL" || q.diff===state.diffFilter)
+  );
+  if(state.reviewMode && state.reviewIds && state.reviewIds.length)
+    pool = state.reviewIds.map(id=>byId[id]);
+  let ids = pool.map(q=>q.id);
+  if(state.shuffleQ) ids = shuffled(ids);
+  state.order = ids;
+  if(!keepCursor) state.cursor = 0;
+  if(state.cursor >= ids.length) state.cursor = Math.max(0, ids.length-1);
+}
+
+const byId = {}; QUESTIONS.forEach(q => byId[q.id]=q);
+
+/* ---------- rendering ---------- */
+const $ = s => document.querySelector(s);
+const stage = $("#stage");
+
+function renderChips(){
+  const sc = $("#secChips"); sc.innerHTML="";
+  const mk = (label,val,cur,handler)=>{
+    const b=document.createElement("button");
+    b.className="chip"; b.textContent=label;
+    b.setAttribute("aria-pressed", String(cur===val));
+    b.onclick=()=>handler(val); return b;
+  };
+  sc.appendChild(mk("전체 "+QUESTIONS.length+"문항","ALL",state.secFilter,setSec));
+  Object.keys(SECTIONS).forEach(k=>{
+    const n = QUESTIONS.filter(q=>q.sec===k).length;
+    sc.appendChild(mk(k+" "+SECTIONS[k]+" ("+n+")",k,state.secFilter,setSec));
+  });
+  const dc = $("#diffChips"); dc.innerHTML="";
+  dc.appendChild(mk("전체","ALL",state.diffFilter,setDiff));
+  DIFFS.forEach(d=>{
+    const n = QUESTIONS.filter(q=>q.diff===d).length;
+    dc.appendChild(mk(d+" ("+n+")",d,state.diffFilter,setDiff));
+  });
+  $("#shuffleQ").setAttribute("aria-pressed", String(state.shuffleQ));
+  $("#shuffleO").setAttribute("aria-pressed", String(state.shuffleO));
+  $("#reviewBtn").setAttribute("aria-pressed", String(state.reviewMode));
+}
+
+function setSec(v){ state.secFilter=v; state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+function setDiff(v){ state.diffFilter=v; state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+
+function renderProgress(){
+  const ids = state.order;
+  const done = ids.filter(id=> id in state.answers).length;
+  const ok = ids.filter(id=> isRight(byId[id])).length;
+  const no = done - ok;
+  $("#doneN").textContent = done;
+  $("#totalN").textContent = ids.length;
+  $("#okN").textContent = ok;
+  $("#noN").textContent = no;
+  $("#rate").textContent = done ? Math.round(ok/done*100)+"%" : "—";
+  $("#barFill").style.width = ids.length ? (done/ids.length*100)+"%" : "0%";
+  $("#wrongCount").textContent = QUESTIONS.filter(isWrong).length;
+}
+
+function renderPalette(){
+  const p = $("#palette"); p.innerHTML="";
+  state.order.forEach((id,i)=>{
+    const q = byId[id];
+    const b=document.createElement("button");
+    b.className="cell" + (id in state.answers ? (isRight(q)?" o":" x") : "") + (i===state.cursor?" cur":"");
+    b.textContent = q.id;
+    b.title = q.sec+" · "+q.diff;
+    b.onclick=()=>{ state.cursor=i; renderAll(); window.scrollTo({top:0,behavior:"smooth"}); };
+    p.appendChild(b);
+  });
+}
+
+function renderQuestion(){
+  stage.innerHTML="";
+  if(!state.order.length){
+    const d=document.createElement("div"); d.className="panel empty";
+    d.textContent = state.reviewMode ? "틀린 문제가 없습니다. 잘하셨어요!" : "조건에 맞는 문제가 없습니다. 필터를 바꿔 보세요.";
+    stage.appendChild(d); return;
+  }
+  const idx = state.cursor;
+  const q = byId[state.order[idx]];
+  const answered = q.id in state.answers;
+  const order = optOrderFor(q);
+
+  const card=document.createElement("section"); card.className="panel qcard";
+
+  const meta=document.createElement("div"); meta.className="qmeta";
+  meta.innerHTML =
+    '<span class="tag num">'+ (idx+1) +' / '+ state.order.length +'</span>' +
+    '<span class="tag sec">'+ q.sec +' '+ SECTIONS[q.sec] +'</span>' +
+    '<span class="tag '+ DIFFCLS[q.diff] +'">'+ q.diff +'</span>' +
+    '<span style="margin-left:auto;font-size:12px;color:var(--muted)">문제 '+ q.id +'번</span>';
+  card.appendChild(meta);
+
+  const h=document.createElement("h2"); h.className="qtext"; h.textContent=q.q; card.appendChild(h);
+
+  const wrap=document.createElement("div"); wrap.className="opts";
+  order.forEach((orig,pos)=>{
+    const b=document.createElement("button"); b.className="opt"; b.type="button";
+    b.innerHTML = '<span class="n">'+(pos+1)+'</span><span class="t"></span>';
+    b.querySelector(".t").textContent = q.opts[orig];
+    if(answered){
+      b.disabled = true;
+      if(orig===q.a){ b.classList.add("correct"); b.insertAdjacentHTML("beforeend",'<span class="mark">정답</span>'); }
+      else if(orig===state.answers[q.id]){ b.classList.add("wrong"); b.insertAdjacentHTML("beforeend",'<span class="mark">내 선택</span>'); }
+    } else {
+      b.onclick=()=>{ state.answers[q.id]=orig; save(); renderAll(); };
+    }
+    wrap.appendChild(b);
+  });
+  card.appendChild(wrap);
+
+  if(answered){
+    const e=document.createElement("div"); e.className="exp";
+    const good = isRight(q);
+    e.innerHTML = '<h4>'+(good?'✓ 정답입니다':'✕ 다시 확인해 보세요')+'</h4><p></p>'+
+                  '<span class="ref">관련 단원 · '+q.sec+' '+SECTIONS[q.sec]+'</span>';
+    e.querySelector("p").textContent = q.exp;
+    if(!good){ e.style.background="var(--no-soft)"; e.style.borderLeftColor="var(--no)"; e.querySelector("h4").style.color="var(--no)"; }
+    card.appendChild(e);
+  }
+
+  const nav=document.createElement("div"); nav.className="nav";
+  const prev=document.createElement("button"); prev.className="btn"; prev.textContent="← 이전";
+  prev.disabled = idx===0; prev.onclick=()=>{ state.cursor--; renderAll(); };
+  const next=document.createElement("button"); next.className="btn primary";
+  next.textContent = idx===state.order.length-1 ? "결과 보기 →" : "다음 →";
+  next.onclick=()=>{
+    if(idx===state.order.length-1){ showResult(); }
+    else { state.cursor++; renderAll(); }
+  };
+  const redo=document.createElement("button"); redo.className="btn"; redo.textContent="이 문제 다시";
+  redo.disabled = !answered;
+  redo.onclick=()=>{ delete state.answers[q.id]; save(); renderAll(); };
+  nav.appendChild(prev); nav.appendChild(redo);
+  const sp=document.createElement("span"); sp.className="spacer"; nav.appendChild(sp);
+  nav.appendChild(next);
+  card.appendChild(nav);
+
+  stage.appendChild(card);
+}
+
+function showResult(){
+  const ids = state.order;
+  const done = ids.filter(id=> id in state.answers).length;
+  const ok = ids.filter(id=> isRight(byId[id])).length;
+  const card=document.createElement("section"); card.className="panel result";
+  const pct = done ? Math.round(ok/done*100) : 0;
+  let msg = pct>=90?"완벽합니다. 1주차 내용을 확실히 이해했어요."
+          : pct>=75?"좋습니다. 틀린 문제만 복습하면 충분해요."
+          : pct>=50?"절반 이상 맞혔습니다. 오답 노트를 한 번 더 돌려 보세요."
+          : "해설을 읽으며 오답부터 차근히 정리해 봅시다.";
+
+  const per = {};
+  Object.keys(SECTIONS).forEach(k=>{
+    const sub = ids.map(i=>byId[i]).filter(q=>q.sec===k && (q.id in state.answers));
+    if(sub.length) per[k] = [sub.filter(isRight).length, sub.length];
+  });
+
+  card.innerHTML =
+    '<div class="eyebrow">결과</div>'+
+    '<div class="score">'+ok+' <small>/ '+done+' 정답</small></div>'+
+    '<div class="stat" style="font-size:15px">정답률 <b>'+pct+'%</b> · '+msg+'</div>'+
+    '<div class="breakdown">'+ Object.keys(per).map(k=>
+       '<div class="bd"><div class="k">'+k+' '+SECTIONS[k]+'</div><div class="v">'+per[k][0]+' / '+per[k][1]+'</div></div>'
+     ).join('') +'</div>';
+
+  const nav=document.createElement("div"); nav.className="nav";
+  const back=document.createElement("button"); back.className="btn"; back.textContent="← 문제로 돌아가기";
+  back.onclick=()=>renderAll();
+  const rev=document.createElement("button"); rev.className="btn primary";
+  const wn = QUESTIONS.filter(isWrong).length;
+  rev.textContent="틀린 문제 "+wn+"개 다시 풀기"; rev.disabled = wn===0;
+  rev.onclick=()=>enterReview();
+  nav.appendChild(back);
+  const sp=document.createElement("span"); sp.className="spacer"; nav.appendChild(sp);
+  nav.appendChild(rev);
+  card.appendChild(nav);
+
+  stage.innerHTML=""; stage.appendChild(card);
+  renderProgress(); renderPalette();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function enterReview(){
+  const wrongIds = QUESTIONS.filter(isWrong).map(q=>q.id);
+  if(!wrongIds.length){
+    state.reviewMode=false; buildOrder(false); renderAll();
+    alert("틀린 문제가 없습니다.");
+    return;
+  }
+  wrongIds.forEach(id=> delete state.answers[id]);
+  state.reviewMode = true;
+  state.reviewIds = wrongIds;
+  state.order = state.shuffleQ ? shuffled(wrongIds) : wrongIds.slice();
+  state.cursor = 0;
+  save(); renderAll(); window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function renderAll(){ renderChips(); renderProgress(); renderPalette(); renderQuestion(); }
+
+/* ---------- events ---------- */
+$("#shuffleQ").onclick=()=>{ state.shuffleQ=!state.shuffleQ; buildOrder(false); save(); renderAll(); };
+$("#shuffleO").onclick=()=>{
+  state.shuffleO=!state.shuffleO;
+  if(!state.shuffleO) state.optOrder={};
+  save(); renderAll();
+};
+$("#reviewBtn").onclick=()=>{
+  if(state.reviewMode){ state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+  else enterReview();
+};
+$("#resetBtn").onclick=()=>{
+  state.answers={}; state.optOrder={}; state.reviewMode=false;
+  buildOrder(false); save(); renderAll(); window.scrollTo({top:0,behavior:"smooth"});
+};
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT") return;
+  if(e.key==="ArrowRight" && state.cursor < state.order.length-1){ state.cursor++; renderAll(); }
+  if(e.key==="ArrowLeft" && state.cursor>0){ state.cursor--; renderAll(); }
+  if(["1","2","3","4"].includes(e.key)){
+    const btns = document.querySelectorAll(".opt:not(:disabled)");
+    const b = btns[Number(e.key)-1]; if(b) b.click();
+  }
+});
+
+/* ---------- init ---------- */
+load();
+buildOrder(false);
+// resume at first unanswered
+const firstUn = state.order.findIndex(id=> !(id in state.answers));
+state.cursor = firstUn === -1 ? 0 : firstUn;
+renderAll();
+</script>
+</body>
+</html>
