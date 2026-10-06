@@ -446,7 +446,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <section class="hero">
   <p class="kicker">5주차 · 10.1 · 2026-2학기</p>
   <h1>05. 퍼셉트론 — 1958년의 수식이 2026년 LLM 안에 그대로 있다</h1>
-  <p>퍼셉트론은 <b>가중합 하나와 비선형 함수 하나</b>로 이루어진 가장 작은 신경망입니다. 4주차의 로지스틱 회귀가 사실은 <b>활성화 함수로 시그모이드를 고른 퍼셉트론</b>이라는 것에서 출발해, <b>학습 규칙 → 논리 게이트와 XOR의 한계 → 다층 퍼셉트론 → 트랜스포머와 LLM</b>까지 한 줄로 잇습니다.</p>
+  <p>퍼셉트론은 <b>가중합 하나와 비선형 함수 하나</b>로 이루어진 가장 작은 신경망이다. 4주차의 로지스틱 회귀가 사실은 <b>활성화 함수로 시그모이드를 고른 퍼셉트론</b>이라는 것에서 출발해, <b>학습 규칙 → 논리 게이트와 XOR의 한계 → 다층 퍼셉트론 → 트랜스포머와 LLM</b>까지 한 줄로 잇는다.</p>
   <div class="chips"><span class="chip">최승호 교수</span><span class="chip">개정판 54p</span><span class="chip">슬라이드 44장</span><span class="chip">100문제 5.1~5.7</span><span class="chip">PyTorch 실습</span><span class="chip">LLM 통합</span></div>
 </section>
 
@@ -1227,7 +1227,7 @@ y_hat = torch.sigmoid(z)       <span class="cm"># 활성화 (sigmoid → 로지�
 <section class="sec" id="mylab">
   <div class="sec-head"><span class="sec-badge">MY</span><h2 class="sec-title">내 실습 정리<small>제출본 <code>5주차_퍼셉트론_2026711051_박민지.ipynb</code> — 직접 쓴 개념 메모와 추가 실험 (a)(b)(c)</small></h2></div>
 
-<div class="note-box">실습 노트북의 TODO를 채우면서 <b>셀마다 &lsquo;개념&rsquo; 메모를 직접 붙여 두었고</b>, 교안의 생각해 볼 질문 세 개를 <b>실험으로 확인</b>했습니다. 아래는 그 내용을 옮긴 것입니다.</div>
+<div class="note-box">실습 노트북의 TODO를 채우면서 <b>셀마다 &lsquo;개념&rsquo; 메모를 직접 붙여 두었고</b>, 교안의 생각해 볼 질문 세 개를 <b>실험으로 확인</b>했다. 아래는 그 내용을 옮긴 것이다.</div>
 
 <div class="link-list">
   <a href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week05-lab-mine.ipynb" download="5주차_퍼셉트론_2026711051_박민지.ipynb">내 제출본 노트북 내려받기 →<small>파트 1~5 + 추가 실험 (a)(b)(c) · 실행 결과와 그래프 포함</small></a>
@@ -1338,7 +1338,7 @@ lr= 10.00  갱신 횟수=16  에폭=4  w/lr=[0, 3.151, -3.307]  <span class="out
 lr=100.00  갱신 횟수=16  에폭=4  w/lr=[0, 3.151, -3.307]  <span class="out">True</span></pre>
   <p><b>내 답</b> — η를 <b>10<sup>4</sup>배</b> 바꿔도 갱신 횟수(16회)와 에폭(4회)이 똑같았고, 최종 가중치를 η로 나눈 값도 완전히 같았다. <b>η는 학습 과정을 바꾸지 못하고 가중치의 크기만 키웠다.</b></p>
   <p>이유는 <b>가중치를 0 벡터에서 시작</b>하기 때문이다. 갱신은 <span class="tex">\eta y_i\mathbf{x}_i</span>를 더하는 일이라 결국 <span class="tex">\mathbf{w}=\eta\mathbf{v}</span> 꼴이 되고, 오분류 판정 <span class="tex">y_i(\mathbf{w}\cdot\mathbf{x}_i)=\eta\,y_i(\mathbf{v}\cdot\mathbf{x}_i)</span>에서 <b>양수 η는 부호를 바꾸지 못한다</b>.
-  그래서 <b>어떤 샘플이 틀렸는지에 대한 판단이 η와 무관</b>하고, 첫 갱신이 같으면 그다음도 같아져 끝까지 이어진다. 결정 경계 <span class="tex">\mathbf{w}\cdot\mathbf{x}=0</span>은 <b>방향으로만 정해지므로</b> 경계도 그대로다.</p>
+  그래서 <b>어떤 샘플을 틀렸다고 판단할지가 η와 무관</b>하고, 첫 갱신이 같으면 그다음도 같아져 끝까지 이어진다. 결정 경계 <span class="tex">\mathbf{w}\cdot\mathbf{x}=0</span>은 <b>방향으로만 정해지므로</b> 경계도 그대로다.</p>
   <p><span class="hi">다만 이 성질은 0으로 초기화했을 때만 성립한다.</span> 무작위 초기화면 <span class="tex">\mathbf{w}=\mathbf{w}_0+\eta\mathbf{v}</span>가 되어 η의 크기에 따라 초기값의 비중이 달라지고, 그러면 갱신 횟수도 η에 따라 변한다.</p>
 </div>
 
@@ -1379,7 +1379,7 @@ MLP 64→512→10           38,410       0.9756        <span class="out">0.9748<
   <p><span class="hi">→ 이 데이터에서는 폭 32가 파라미터 대비 효율이 가장 좋다.</span></p>
 </div>
 
-<div class="tip"><b>이 절을 다시 볼 때</b> — 위쪽 교안 정리는 &ldquo;무엇을 배웠나&rdquo;이고, 이 절은 <b>&ldquo;직접 돌려 보고 무엇을 알게 되었나&rdquo;</b>입니다. (a)의 η 불변성과 (b)의 loss 0.477 유도는 <b>시험에서 그대로 쓸 수 있는 설명</b>입니다.</div>
+<div class="tip"><b>이 절을 다시 볼 때</b> — 위쪽 교안 정리는 &ldquo;무엇을 배웠나&rdquo;이고, 이 절은 <b>&ldquo;직접 돌려 보고 무엇을 알게 되었나&rdquo;</b>이다. (a)의 η 불변성과 (b)의 loss 0.477 유도는 <b>시험에서 그대로 쓸 수 있는 설명</b>이다.</div>
 </section>
 
 <!-- ===================== 정리 ===================== -->
@@ -1420,7 +1420,7 @@ MLP 64→512→10           38,410       0.9756        <span class="out">0.9748<
 </section>
 
 <p class="src">기계학습특론 5주차 (CHAPTER 5) 강의자료 정리 · 2026학년도 2학기<br>
-<b>2026 개정판 54페이지</b>를 절 단위로 정리하고 슬라이드 <b>44장</b>을 캡처해 실었으며, LLM 교안(20p)의 내용을 5.6 · 5.7 절에 통합했습니다. 실습 수치는 <b>정답 노트북의 실제 출력</b>입니다. 100문제의 절 구분(5.1~5.7)과 같은 번호를 사용해, 절 제목 옆 버튼으로 해당 절의 문제를 바로 풀 수 있습니다.</p>
+<b>2026 개정판 54페이지</b>를 절 단위로 정리하고 슬라이드 <b>44장</b>을 캡처해 실었으며, LLM 교안(20p)의 내용을 5.6 · 5.7 절에 통합했다. 실습 수치는 <b>정답 노트북의 실제 출력</b>이다. 100문제의 절 구분(5.1~5.7)과 같은 번호를 사용해, 절 제목 옆 버튼으로 해당 절의 문제를 바로 풀 수 있다.</p>
 
 </div>
 
