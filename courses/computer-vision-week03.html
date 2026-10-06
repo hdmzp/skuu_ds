@@ -363,7 +363,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <section class="hero">
   <p class="kicker">3주차 · 9.16 · 2026-2학기</p>
   <h1>03. Linear Filters — Cross-correlation &amp; Convolution</h1>
-  <p>이미지는 무엇이며 왜 필터링이 필요한가. <b>주변 화소를 함께 보는 연산</b>으로 노이즈를 줄이고(평균 · 가우시안 · 미디언), 같은 도구를 미분으로 바꿔 <b>에지를 찾아내는</b> 과정까지를 교안 순서대로 정리했습니다.</p>
+  <p>이미지는 무엇이며 왜 필터링이 필요한가. <b>주변 화소를 함께 보는 연산</b>으로 노이즈를 줄이고(평균 · 가우시안 · 미디언), 같은 도구를 미분으로 바꿔 <b>에지를 찾아내는</b> 과정까지를 교안 순서대로 정리했다.</p>
   <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 64p</span><span class="chip">플립러닝 필기 반영</span><span class="chip">교안 캡처 43장</span><span class="chip">실시간 실습 · 발표 · 과제</span></div>
 </section>
 
@@ -402,7 +402,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <div class="matbar">
   <p class="tagline">3주차 1) 플립러닝 강의 · 온라인 사전제작 콘텐츠</p>
   <h2>03. Linear Filters (Cross-correlation, Convolution)</h2>
-  <p>64페이지 · What is an image → Linear filter → Convolution → Related Codes 순으로 이루어져 있습니다.</p>
+  <p>64페이지 · What is an image → Linear filter → Convolution → Related Codes 순으로 이루어져 있다.</p>
   <div class="acts">
     <a class="primary" href="pdf-viewer.html?doc=cv-w03-filters">뷰어로 보기</a>
     <a href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week03-linear-filters.pdf" download="컴퓨터비전_3주차_Linear_Filters.pdf">⬇ 다운로드</a>
@@ -450,7 +450,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </ul></div>
 
 <h3 class="sub-title">노이즈 — 필터링이 필요한 이유</h3>
-<figure class="fig"><img width="1311" height="668" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-04-noise.jpg" alt="교안 8p — 노이즈가 섞인 이미지 예시"><figcaption>교안 8p — 이미지는 노이즈를 갖는다. 원인은 <b>센서 품질 · 빛의 흔들림 · 양자화 효과</b></figcaption></figure>
+<figure class="fig"><img width="1311" height="668" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-04-noise.jpg" alt="교안 8p — 노이즈가 섞인 이미지 예시"><figcaption>교안 8p — 이미지에는 노이즈가 있다. 원인은 <b>센서 품질 · 빛의 흔들림 · 양자화 효과</b></figcaption></figure>
 <div class="note-box"><ul class="ul">
   <li>필기 : <span class="hw">센서 퀄리티</span>, <span class="hw">빛이 불균일하게 발산될 수도</span> 있고, <span class="hw">임의로 샘플링할 때 잘못 샘플링되면 노이즈가 발생</span>한다
     &nbsp;<span style="color:#6b7280">— 교안이 적은 세 번째 원인은 정확히는 <b>양자화 효과(quantization effects)</b>다.
@@ -854,7 +854,7 @@ Prewitt의 [1 1 1] 스무딩이 Sobel에서는 <b>[1 2 1]</b>이 된다. 가운�
 </div>
 <div class="tip"><b>주의</b> — <code>cv2.filter2D()</code>는 이름과 달리 <b>컨볼루션이 아니라 교차 상관</b>을 계산한다.
 진짜 컨볼루션이 필요하면 커널을 <code>cv2.flip(kernel, -1)</code>로 <b>상하좌우 뒤집어</b> 넣어야 한다 — 교안 44p의 &ldquo;flip the filter in both dimensions&rdquo; 그대로다.
-<span style="color:#6b7280">(위 정리는 링크의 튜토리얼 내용을 교안 개념에 맞춰 요약한 것입니다. 실제 코드와 결과 이미지는 링크에서 확인하세요.)</span></div>
+<span style="color:#6b7280">(위 정리는 링크의 튜토리얼 내용을 교안 개념에 맞춰 요약한 것이다. 실제 코드와 결과 이미지는 링크에서 확인하세요.)</span></div>
 </section>
 
 <!-- ==================================================================== -->
@@ -863,7 +863,7 @@ Prewitt의 [1 1 1] 스무딩이 Sobel에서는 <b>[1 2 1]</b>이 된다. 가운�
 <div class="matbar">
   <p class="tagline">3주차 2) 실시간 강의 · 수요일 19:00~20:30 (Zoom)</p>
   <h2>Python / OpenCV (2) · HW1 부여 &amp; 설명 · 논문 발표 시작</h2>
-  <p>기초 코드 실습 2(OpenCV 특징 검출 · 이미지 피라미드 · Scikit-learn/image), 학생 논문 발표 2건, 과제 #1 부여 내용을 정리했습니다.</p>
+  <p>기초 코드 실습 2(OpenCV 특징 검출 · 이미지 피라미드 · Scikit-learn/image), 학생 논문 발표 2건, 과제 #1 부여 내용을 정리했다.</p>
 </div>
 
 <section class="sec" id="live">
@@ -961,7 +961,7 @@ lines = cv2.HoughLines(edges, 1, np.pi/180, 150)</pre>
 <figure class="fig"><img width="1150" height="543" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3p-01-hough.png" alt="실습 교안 — HoughLines 코드와 체크무늬 천에서 검출된 직선들"><figcaption>실습 교안 — <code>lines.shape</code>가 <b>(66, 1, 2)</b>: 직선 66개, 각각 <code>(ρ, θ)</code> 2개 값. 검출된 직선이 이미지 끝까지 그어진 것이 보인다</figcaption></figure>
 
 <h3 class="sub-title">선분 찾기 — cv2.HoughLinesP (P = Probabilistic)</h3>
-<div class="note-box"><b>왜 필요한가</b> — 기본 Hough 변환은 <b>모든 엣지 픽셀에 대해</b> 투표를 수행해 시간이 많이 걸린다. <code>HoughLinesP</code>는 <b>무작위로 뽑은 엣지 픽셀만</b> 사용하고, 직선이 아니라 <b>끊기지 않고 이어진 구간(선분)</b>을 돌려준다.</div>
+<div class="note-box"><b>왜 필요한가</b> — 기본 Hough 변환은 <b>모든 엣지 픽셀마다</b> 투표해 시간이 많이 걸린다. <code>HoughLinesP</code>는 <b>무작위로 뽑은 엣지 픽셀만</b> 사용하고, 직선이 아니라 <b>끊기지 않고 이어진 구간(선분)</b>을 돌려준다.</div>
 <pre class="code">minLineLength = 100    <span class="cm"># 이보다 짧은 선분은 버림</span>
 maxLineGap = 0         <span class="cm"># 두 점 사이가 이 값 이하로 끊기면 같은 선분으로 이어 붙임 (0 = 끊기면 무조건 분리)</span>
 
@@ -1207,7 +1207,7 @@ print("Otsu threshold:", threshold)       <span class="out"># 0.388671875</span>
 </ul></div>
 
 <h3 class="sub-title">② 조민한 — Ocean&rsquo;s 8: Master Key Filters, NeurIPS 2025</h3>
-<div class="note-box"><b>문제의식</b> — Depthwise Separable CNN의 <b>depthwise 필터</b>(채널마다 공간 정보를 보는 필터)에서 반복되는 패턴이 발견돼 왔다. 그렇다면 <b>모든 모델·데이터에 공통인 &lsquo;마스터 키&rsquo; 필터 집합</b>이 존재할까?
+<div class="note-box"><b>문제의식</b> — Depthwise Separable CNN의 <b>depthwise 필터</b>(채널마다 공간 정보를 보는 필터)에서 반복되는 패턴이 거듭 나타났다. 그렇다면 <b>모든 모델·데이터에 공통인 &lsquo;마스터 키&rsquo; 필터 집합</b>이 존재할까?
 <ul class="ul">
   <li><b>방법</b> — 49개 사전학습 DS-CNN(ConvNeXt(V2), MogaNet, HorNet, ConvMixer)에서 7×7 depthwise 필터 <b>100만 개 이상</b>을 모아 정규화 → 오토인코더 잠재공간에서 후보 50개 생성 → 원래 필터를 후보의 <b>아핀 변환(aX+b)</b>으로 근사 → 정확도 기준 그리디 탐색으로 <b>8개</b> 선정</li>
   <li><b>8개 필터의 정체</b> — 1~4번은 <b>중심 차분형</b>(엣지 검출), 5~6번은 <b>가우시안 1차 미분</b>의 x·y 방향(엣지 방향·텍스처), 7번은 <b>DoG</b>(중심-주변 대비), 8번은 <b>가우시안</b>(스무딩). <b>이번 주 교안에서 배운 필터들이 그대로 나온다</b></li>
@@ -1255,7 +1255,7 @@ def my_median_blur(image, size):        <span class="cm"># 문제 4 — 직접 �
 
 
 <p class="src">출처 — 컴퓨터비전 03. Linear Filters (Cross-correlation, Convolution) · 3주차 플립러닝 강의 필기 (2026-2학기)<br>
-교안 64페이지의 내용을 절 단위로 정리하고, 도식 · 예시 슬라이드 43장을 캡처해 함께 실었습니다.<br>실시간 강의 부분은 기초 코드 실습 2 교안(22p) · 학생 발표자료 2건 · 과제 #1 문제지와 템플릿 코드를 바탕으로 정리했습니다.</p>
+교안 64페이지의 내용을 절 단위로 정리하고, 도식 · 예시 슬라이드 43장을 캡처해 함께 실었다.<br>실시간 강의 부분은 기초 코드 실습 2 교안(22p) · 학생 발표자료 2건 · 과제 #1 문제지와 템플릿 코드를 바탕으로 정리했다.</p>
 
 </div>
 
