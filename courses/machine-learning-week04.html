@@ -443,7 +443,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <section class="hero">
   <p class="kicker">4주차 · 2026-2학기</p>
   <h1>04. 로지스틱 회귀 — 확률로 분류하기</h1>
-  <p>선형 회귀는 <b>값</b>을 맞혔다면, 로지스틱 회귀는 <b>0이냐 1이냐</b>를 맞힌다. 로그 오드를 선형식으로 놓는 아이디어에서 시작해 <b>시그모이드 · 베르누이 · 우도 · 크로스 엔트로피 · 경사하강법</b>까지 한 줄로 이어집니다.</p>
+  <p>선형 회귀는 <b>값</b>을 맞혔다면, 로지스틱 회귀는 <b>0이냐 1이냐</b>를 맞힌다. 로그 오드를 선형식으로 놓는 아이디어에서 시작해 <b>시그모이드 · 베르누이 · 우도 · 크로스 엔트로피 · 경사하강법</b>까지 한 줄로 이어진다.</p>
   <div class="chips"><span class="chip">최승호 교수</span><span class="chip">로지스틱 1부 18p · 2부 16p</span><span class="chip">슬라이드 28장</span><span class="chip">플립러닝 필기 반영</span><span class="chip">100문제 4.1~4.6</span></div>
 </section>
 
@@ -624,7 +624,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 
 <div class="pt gyo">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>구분선은 하나로 정해지지 않는다</h3>
-  <p>&lsquo;정수론&rsquo; 수강 여부 예제에서 인공지능학과 3명 <span class="tex">[1\;2.2],[1\;3.8],[1\;3.9]</span> 은 미수강(<b>0</b>), 수학과 3명 <span class="tex">[3\;2.2],[3\;4.0],[3\;3.2]</span> 는 수강(<b>1</b>)이다. 이 여섯 점을 가르는 선은 <b>하나가 아니라 여러 개</b>가 가능하다(교안의 구분선 1, 2). 그래서 &ldquo;어떤 선이 더 나은가&rdquo;를 정하는 기준이 필요해진다.</p>
+  <p>&lsquo;정수론&rsquo; 수강 여부 예제에서 인공지능학과 3명 <span class="tex">[1\;2.2],[1\;3.8],[1\;3.9]</span> 은 미수강(<b>0</b>), 수학과 3명 <span class="tex">[3\;2.2],[3\;4.0],[3\;3.2]</span> 는 수강(<b>1</b>)이다. 이 여섯 점을 가르는 선은 <b>하나가 아니라 여러 개</b>를 그을 수 있다(교안의 구분선 1, 2). 그래서 &ldquo;어떤 선이 더 나은가&rdquo;를 정하는 기준이 필요해진다.</p>
 </div>
 
 <div class="pt gyo">
@@ -696,7 +696,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 
 <div class="pt plus">
   <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>부호만으로는 부족하다 — 다음 절로 가는 이유</h3>
-  <p><span class="tex">g(\mathbf x)=0.1</span> 도 <span class="tex">C_1</span>, <span class="tex">g(\mathbf x)=50</span> 도 <span class="tex">C_1</span> 이다. 부호만 보면 <b>간신히 맞힌 것과 확실한 것을 구별할 수 없고</b>, 구분선도 여러 개가 가능하다. 그래서 <span class="tex">g(\mathbf x)</span> 를 <b>0~1 사이 확률로 바꿔 주는 함수</b>가 필요하다. 그 함수가 4.5의 <b>로지스틱 함수</b>다.</p>
+  <p><span class="tex">g(\mathbf x)=0.1</span> 도 <span class="tex">C_1</span>, <span class="tex">g(\mathbf x)=50</span> 도 <span class="tex">C_1</span> 이다. 부호만 보면 <b>간신히 맞힌 것과 확실한 것을 구별할 수 없고</b>, 구분선도 여러 개를 그을 수 있다. 그래서 <span class="tex">g(\mathbf x)</span> 를 <b>0~1 사이 확률로 바꿔 주는 함수</b>가 필요하다. 그 함수가 4.5의 <b>로지스틱 함수</b>다.</p>
 </div>
 </section>
 
@@ -1134,8 +1134,8 @@ w, l, train_acc, test_acc = train(X_train, y_train, bs=100, epochs=100, lr=0.1/l
 </div>
 <div class="tip"><b>그래프 두 개</b> — 에폭별 <b>훈련·테스트 정확도</b> 곡선(<code>train_test.png</code>)과 <b>Negative Log Likelihood</b> 곡선(<code>Negative_log_likelihood.png</code>)을 그려 저장한다. 손실이 줄면서 정확도가 올라가 평탄해지는지 확인하는 것이 목적이다.
 마지막 셀의 <code>plt.contourf(h, levels=[5,40,50], extend='both')</code>는 <b>등고선 채우기 함수의 사용법 예시</b>로, 경계값 사이 구간을 다른 색으로 칠하고 범위 밖을 <code>set_over</code>·<code>set_under</code> 색으로 표시한다.</div>
-<div class="note-box" style="color:#6b7280">배포된 노트북에는 실행 결과가 저장되어 있지 않아(데이터 파일도 실습 저장소에 있음) 정확도 수치는 적지 않았습니다. Colab에서 실행해 보면 sklearn 결과와 직접 구현 결과를 비교할 수 있습니다.</div>
-<div class="warn"><b>제출</b> — 매주 <b>실습 실행 화면 캡쳐</b>와 <b>100문제 풀이 증명 캡쳐</b> 2건을 제출합니다. (1주차 OT 안내 기준, 100문제 정답률 50% 이상)</div>
+<div class="note-box" style="color:#6b7280">배포된 노트북에는 실행 결과가 저장되어 있지 않아(데이터 파일도 실습 저장소에 있음) 정확도 수치는 적지 않았다. Colab에서 실행해 보면 sklearn 결과와 직접 구현 결과를 비교할 수 있다.</div>
+<div class="warn"><b>제출</b> — 매주 <b>실습 실행 화면 캡쳐</b>와 <b>100문제 풀이 증명 캡쳐</b> 2건을 제출한다. (1주차 OT 안내 기준, 100문제 정답률 50% 이상)</div>
 </section>
 
 <section class="sec" id="next">
@@ -1147,7 +1147,7 @@ w, l, train_acc, test_acc = train(X_train, y_train, bs=100, epochs=100, lr=0.1/l
 </section>
 
 <p class="src">출처 — 기계학습특론 4주차 강의자료(로지스틱 회귀 1 · 18페이지, 로지스틱 회귀 2 · 16페이지) · 4주차_logistic_regression 실습 노트북<br>
-교안 슬라이드 28장을 절별로 묶어 싣고, 그 아래에 플립러닝 필기와 보충 공부 내용을 합쳐 정리했습니다. 오드비 · 로짓 변환 · 편미분 · argmin 설명과 시그모이드 · 크로스 엔트로피 도식은 교안 범위 밖이라 따로 찾아 채운 것입니다.</p>
+교안 슬라이드 28장을 절별로 묶어 싣고, 그 아래에 플립러닝 필기와 보충 공부 내용을 합쳐 정리했다. 오드비 · 로짓 변환 · 편미분 · argmin 설명과 시그모이드 · 크로스 엔트로피 도식은 교안 범위 밖이라 따로 찾아 채운 것이다.</p>
 
 </div>
 
