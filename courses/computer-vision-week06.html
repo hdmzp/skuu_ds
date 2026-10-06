@@ -489,7 +489,7 @@ table.acc{min-width:0}
 <section class="hero">
   <p class="kicker">6주차 · 10.7 · 2026-2학기 · <b>내 논문 발표일</b></p>
   <h1>06. 특징 기술자 — 찾은 점을 어떻게 &lsquo;숫자로 적을&rsquo; 것인가</h1>
-  <p>5주차가 <b>&ldquo;어디를 볼 것인가(검출)&rdquo;</b>였다면 이번 주는 <b>&ldquo;그곳이 어떻게 생겼는지 벡터 하나로 적어 두는 법(기술)&rdquo;</b>입니다. 사람이 손으로 설계한 네 세대의 기술자 — <b>SIFT · SURF · HOG · BRIEF/ORB</b> — 를 차례로 따라가고, 마지막 절에서 제 발표 논문이 <b>바로 이 자리에 사전학습 딥 특징을 꽂는 이야기</b>라는 것까지 이어 붙입니다.</p>
+  <p>5주차가 <b>&ldquo;어디를 볼 것인가(검출)&rdquo;</b>였다면 이번 주는 <b>&ldquo;그곳이 어떻게 생겼는지 벡터 하나로 적어 두는 법(기술)&rdquo;</b>이다. 사람이 손으로 설계한 네 세대의 기술자 — <b>SIFT · SURF · HOG · BRIEF/ORB</b> — 를 차례로 따라가고, 마지막 절에서 제 발표 논문이 <b>바로 이 자리에 사전학습 딥 특징을 꽂는 이야기</b>라는 것까지 이어 붙인다.</p>
   <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 81p</span><span class="chip">슬라이드 56장</span><span class="chip">SIFT 128차원</span><span class="chip">HOG 3780차원</span><span class="chip">ORB 이진 256비트</span><span class="chip">내 발표 연결</span></div>
 </section>
 
@@ -529,7 +529,7 @@ table.acc{min-width:0}
 <div class="matbar">
   <p class="tagline">6주차 강의 · Feature Descriptors</p>
   <h2>06. Feature Descriptors</h2>
-  <p>81페이지 · Feature Description → SIFT · SURF · HOG → BRIEF · ORB 순서입니다.</p>
+  <p>81페이지 · Feature Description → SIFT · SURF · HOG → BRIEF · ORB 순서다.</p>
   <div class="acts">
     <a class="primary" href="pdf-viewer.html?doc=cv-w06-descriptors">뷰어로 보기</a>
     <a href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week06-feature-descriptors.pdf" download="컴퓨터비전_6주차_Feature_Descriptors.pdf">⬇ 다운로드</a>
@@ -598,7 +598,7 @@ table.acc{min-width:0}
     <li><b>Repeatability가 먼저다.</b> 한 장 안에서 아무리 눈에 띄는 점이라도, 다른 각도 · 다른 조명의 사진에서 <b>다시 검출되지 않으면</b> 짝지을 상대 자체가 없다. 정의의 &ldquo;despite geometric and photometric transformations&rdquo;는 각각 <b>위치 · 크기 · 각도의 변화</b>와 <b>밝기 · 색의 변화</b>를 가리킨다</li>
     <li><b>Saliency(distinctive)는 그다음이다.</b> 다시 검출되더라도 비슷한 점이 수백 개면 어느 것이 짝인지 정할 수 없다. 하늘 한가운데의 점보다 산 능선의 꺾인 점이 좋은 이유다</li>
     <li><b>Compactness는 비용 문제다.</b> 점이 N개씩이면 매칭은 대략 N × N번의 비교다. 픽셀마다 특징을 두면 100만 × 100만이 되므로 &ldquo;many fewer features than image pixels&rdquo;여야 한다. 다만 너무 적으면 가려진 부분 때문에 짝이 모자라므로 <b>적당히</b>가 핵심이다</li>
-    <li><b>Locality는 가림에 대한 보험이다.</b> 특징 하나가 작은 영역만 대표하면, 물체 일부가 손에 가려지거나(occlusion) 배경이 복잡해도(clutter) <b>가려지지 않은 나머지 특징들은 멀쩡하다</b>. 사진 전체를 하나의 숫자로 요약했다면 작은 가림 하나로 전부 달라졌을 것이다</li>
+    <li><b>Locality는 가림에 대비한 보험이다.</b> 특징 하나가 작은 영역만 대표하면, 물체 일부가 손에 가려지거나(occlusion) 배경이 복잡해도(clutter) <b>가려지지 않은 나머지 특징들은 멀쩡하다</b>. 사진 전체를 하나의 숫자로 요약했다면 작은 가림 하나로 전부 달라졌을 것이다</li>
   </ul>
   <p>그리고 이 조건들이 오늘 주제로 바로 이어진다 &mdash; Repeatability와 Saliency를 <b>매칭 단계에서 실제로 쓸 수 있게</b> 만드는 것이 기술자의 일이다.</p>
 </div>
@@ -1142,7 +1142,7 @@ table.acc{min-width:0}
     <li><b>&ldquo;검출은 공변, 기술은 불변입니다.&rdquo;</b> &mdash; 점은 사진을 따라 움직이고, 벡터는 그대로</li>
     <li><b>&ldquo;이 불변성은 모두 사람이 설계한 규칙에서 나옵니다 &mdash; σ로 크기를, 히스토그램 봉우리로 방향을, L2 정규화로 조명을 맞춥니다.&rdquo;</b> &mdash; 바로 이 문장이 내 논문으로 넘어가는 다리다. 논문의 SD · DINO 특징은 <b>이런 규칙 없이</b> 데이터에서 불변성을 얻는다. 그런데 <b>마지막 L2 정규화만은 똑같이</b> 쓴다</li>
   </ul>
-  <p><b>예상 질문 하나 더</b> &mdash; &ldquo;SD · DINO 특징에도 SIFT의 방향 할당 같은 단계가 있나요?&rdquo; &rarr; 없다. 논문은 패치를 크기 · 방향에 맞춰 펴 놓는 단계 없이 모든 위치(60×60 격자)의 특징을 그대로 비교하고, 그런 변화에 대한 강인함은 <b>수억 장으로 학습한 표현</b>에 맡긴다. SIFT가 규칙으로 하던 일을 데이터가 대신하는 셈이다.</p>
+  <p><b>예상 질문 하나 더</b> &mdash; &ldquo;SD · DINO 특징에도 SIFT의 방향 할당 같은 단계가 있나요?&rdquo; &rarr; 없다. 논문은 패치를 크기 · 방향에 맞춰 펴 놓는 단계 없이 모든 위치(60×60 격자)의 특징을 그대로 비교하고, 그런 변화에 강한 성질은 <b>수억 장으로 학습한 표현</b>에 맡긴다. SIFT가 규칙으로 하던 일을 데이터가 대신하는 셈이다.</p>
 </div>
 
 </section>
@@ -2309,7 +2309,7 @@ table.acc{min-width:0}
     <li><b>Efficient computation of oriented BRIEF</b> &mdash; 그 방향만큼 BRIEF의 비교 쌍을 <b>효율적으로 돌린다</b> (= <b>R</b>otated BRIEF)</li>
     <li><b>Learn to de-correlate BRIEF in sampling pairs under rotational invariance</b> &mdash; 돌려도 잘 작동하도록 <b>비교 쌍을 데이터로 골랐다</b></li>
   </ul>
-  <p>FAST와 BRIEF를 단순히 이어 붙인 것이 아니라, <span class="hi">FAST에 없던 방향을 검출 단계에서 구하고, 그 방향을 BRIEF가 받아 회전에 대한 약점을 메우는</span> 구조다.</p>
+  <p>FAST와 BRIEF를 단순히 이어 붙인 것이 아니라, <span class="hi">FAST에 없던 방향을 검출 단계에서 구하고, 그 방향을 BRIEF가 받아 회전에 약한 점을 메우는</span> 구조다.</p>
 </div>
 
 <div class="pt plus" id="orb-flow">
@@ -2731,7 +2731,7 @@ good = [m for m, n in matches if m.distance &lt; <span class="cm">0.75</span> * 
     <div class="fl"><b>① 각각 뽑는다</b><span>같은 이미지에서 SD 특징과 DINO 특징을 각각 추출한다</span></div>
     <div class="fl"><b>② 각각 정규화한다</b><span>두 특징은 값의 크기 범위가 전혀 다르다. <b>L2 정규화</b>로 길이를 맞추지 않으면 한쪽이 거리 계산을 독차지한다</span></div>
     <div class="fl"><b>③ 이어 붙인다(concatenate)</b><span>두 벡터를 연결해 하나의 긴 기술자로 만든다</span></div>
-    <div class="fl"><b>④ 최근접 이웃으로 매칭한다</b><span>한 이미지의 한 점에 대해, 다른 이미지에서 <b>가장 가까운 벡터</b>를 찾는다. 학습은 하지 않는다(<b>zero-shot</b>)</span></div>
+    <div class="fl"><b>④ 최근접 이웃으로 매칭한다</b><span>한 이미지의 점마다 다른 이미지에서 <b>가장 가까운 벡터</b>를 찾는다. 학습은 하지 않는다(<b>zero-shot</b>)</span></div>
   </div>
   <p>②의 <b>L2 정규화</b>는 오늘 SIFT에서 이미 만난 도구다(<a class="ext" href="#sift">02</a>). SIFT는 조명 때문에 커진 벡터를 길이 1로 맞춰 <b>&ldquo;크기 말고 방향만&rdquo;</b> 비교했다. 여기서도 같은 이유로, <b>서로 다른 모델에서 나온 두 벡터를 공평하게 섞기 위해</b> 정규화한다.</p>
   <p>④의 <b>최근접 이웃 매칭</b>도 07절의 <code>BFMatcher</code>와 개념이 똑같다. <span class="hi">달라진 것은 오직 &lsquo;벡터를 어떻게 만들었는가&rsquo; 하나뿐이다.</span></p>
@@ -2790,7 +2790,7 @@ good = [m for m, n in matches if m.distance &lt; <span class="cm">0.75</span> * 
 </section>
 
 <p class="src">출처 — 컴퓨터비전 06. Feature Descriptors (2026-2학기, 81페이지)<br>
-교안 내용을 절 단위로 정리하고 도식 · 예시 슬라이드 <b>56장</b>을 캡처해 실었습니다. &lsquo;보충설명&rsquo; 뱃지가 붙은 부분과 08절은 교안에 없는 내용을 따로 찾아 정리한 것입니다.</p>
+교안 내용을 절 단위로 정리하고 도식 · 예시 슬라이드 <b>56장</b>을 캡처해 실었다. &lsquo;보충설명&rsquo; 뱃지가 붙은 부분과 08절은 교안에 없는 내용을 따로 찾아 정리한 것이다.</p>
 
 </div>
 
