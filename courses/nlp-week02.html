@@ -247,7 +247,7 @@ a.ext:hover{border-bottom-color:var(--accent)}
 <section class="hero">
   <p class="kicker">2주차 · 9.7 ~ 9.13 · 2026-2학기</p>
   <h1>CHAPTER 2 — 자연어처리를 위한 수학과 언어학의 기본 원리</h1>
-  <p>자연어처리에 필요한 수학적 · 언어학적 기초는 무엇인가. 확률 · 정보이론 · 선형대수라는 &lsquo;계산의 언어&rsquo;와, 형태론 · 통사론 · 의미론이라는 &lsquo;언어의 구조&rsquo;를 함께 익히는 주차입니다.</p>
+  <p>자연어처리에 필요한 수학적 · 언어학적 기초는 무엇인가. 확률 · 정보이론 · 선형대수라는 &lsquo;계산의 언어&rsquo;와, 형태론 · 통사론 · 의미론이라는 &lsquo;언어의 구조&rsquo;를 함께 익히는 주차다.</p>
   <div class="chips"><span class="chip">확률 · MLE/MAP</span><span class="chip">엔트로피 · Perplexity</span><span class="chip">벡터 · 코사인 유사도</span><span class="chip">형태소 · 품사 · 의존구조</span><span class="chip">교안 57페이지</span></div>
 </section>
 
@@ -600,7 +600,7 @@ a.ext:hover{border-bottom-color:var(--accent)}
 어절을 그대로 어휘로 쓰면 <b>미등록어(OOV)가 급증</b> → <b>형태소 분석 또는 서브워드 분절</b>이 필요하다.</div>
 
 <div class="tip"><b>언어별 차이</b> — 영어는 굴절어이지만 굴절이 약화되어 <b>분석적(analytic) 성격</b>이 강하다.
-기능어가 <b>독립 단어로 분리</b>되어 있어 <b>공백 토큰화만으로도 상당 부분 처리</b>가 가능하다.</div>
+기능어가 <b>독립 단어로 분리</b>되어 있어 <b>공백 토큰화만으로도 상당 부분을 처리</b>할 수 있다.</div>
 
 <h3 class="sub-title">품사 (Part-of-Speech)</h3>
 <div class="note-box"><b>품사</b> — 단어를 <b>문법적 성질</b>에 따라 분류한 갈래
@@ -752,7 +752,7 @@ a.ext:hover{border-bottom-color:var(--accent)}
 <!-- ===================== 실습 ===================== -->
 <section class="sec" id="lab">
   <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">2주차 실습<small>수학·언어학 기초를 코드로 확인하기 (Google Colab)</small></h2></div>
-<div class="note-box"><b>실습 구성</b> — 각 Part는 <b>(1) 라이브러리를 이용한 방법</b>을 먼저 보고 <b>(2) 직접 함수를 구현하는 방법</b>으로 진행합니다.
+<div class="note-box"><b>실습 구성</b> — 각 Part는 <b>(1) 라이브러리를 이용한 방법</b>을 먼저 보고 <b>(2) 직접 함수를 구현하는 방법</b>으로 진행한다.
 <ul class="ul">
   <li><b>Part 1 (2.1~2.2) 확률·통계</b> — 미니 코퍼스에서 유니그램/바이그램 MLE 확률, Add-k 스무딩, 연쇄법칙으로 문장 확률 계산</li>
   <li><b>Part 2 (2.3) 정보이론</b> — 엔트로피 직접 구현, 이진 엔트로피 곡선, 교차 엔트로피와 KL divergence, Perplexity</li>
@@ -768,8 +768,8 @@ a.ext:hover{border-bottom-color:var(--accent)}
   <li><b>과제 4. 명사 상위 5개 추출</b> — <code>pos_tag()</code> 결과에서 품사가 <code>Noun</code>인 형태소만 세어 <code>Counter.most_common(5)</code> 로 반환</li>
   <li><b>과제 5. PPMI 행렬</b> — 공기 행렬 C에서 PMI = log2( P(x,y) / (P(x)P(y)) ), PPMI = max(0, PMI) 계산 (18×18, 모든 원소 0 이상)</li>
 </ul></div>
-<div class="note-box"><b>환경 설정 메모</b> — KoNLPy(Okt)는 자바 분석기의 래퍼라 <code>openjdk-17-jdk-headless</code> 를 먼저 설치해야 <code>okt.pos()</code> 가 동작합니다
-(설치하지 않으면 <code>JVMNotFoundException</code>). 그래프의 한글 폰트는 설치만으로는 반영되지 않아 <code>fontManager.addfont()</code> 로 직접 등록합니다.</div>
+<div class="note-box"><b>환경 설정 메모</b> — KoNLPy(Okt)는 자바 분석기의 래퍼라 <code>openjdk-17-jdk-headless</code> 를 먼저 설치해야 <code>okt.pos()</code> 가 동작한다
+(설치하지 않으면 <code>JVMNotFoundException</code>). 그래프의 한글 폰트는 설치만으로는 반영되지 않아 <code>fontManager.addfont()</code> 로 직접 등록한다.</div>
 <div class="warn"><b>제출</b> — <code>런타임 → 모두 실행</code> 후 <b>모든 셀의 출력이 남아 있는 상태</b>로 <code>2주차_실습_학번_이름.ipynb</code> 저장하여 제출.</div>
 </section>
 
@@ -805,7 +805,7 @@ a.ext:hover{border-bottom-color:var(--accent)}
 </section>
 
 <p class="src">자연어처리 2주차 (CHAPTER 2) 강의자료 정리 · 2026학년도 2학기<br>
-원본 교안 57페이지의 내용을 절 단위로 정리했습니다.</p>
+원본 교안 57페이지의 내용을 절 단위로 정리했다.</p>
 
 </div>
 
