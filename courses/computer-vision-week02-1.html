@@ -356,7 +356,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <section class="hero">
   <p class="kicker">2주차 실시간 수업 · Python Review 1 · 2026-2학기</p>
   <h1>기초 코드 실습 1 — Python &amp; OpenCV Library</h1>
-  <p>과제 구현에 필요한 Python 문법을 복습하고, NumPy로 이미지를 배열(텐서)로 다루는 법과 OpenCV의 입출력·이진화·기하 변환·필터링·에지 검출을 실습합니다. 교안의 코드 캡처와 결과 이미지를 함께 실었습니다.</p>
+  <p>과제 구현에 필요한 Python 문법을 복습하고, NumPy로 이미지를 배열(텐서)로 다루는 법과 OpenCV의 입출력·이진화·기하 변환·필터링·에지 검출을 실습한다. 교안의 코드 캡처와 결과 이미지를 함께 실었다.</p>
   <div class="chips"><span class="chip">담당교수 최재영</span><span class="chip">조교 한상훈</span><span class="chip">Python 3.10.x</span><span class="chip">OpenCV 4.10.x</span><span class="chip">교안 42p</span></div>
 </section>
 
@@ -406,8 +406,8 @@ pip install numpy matplotlib
 
 <span class="cm"># 설치 확인</span>
 python -c "import cv2, numpy; print(cv2.__version__, numpy.__version__)"</pre>
-<div class="tip"><b>Colab에서 실습한다면</b> — OpenCV·NumPy·matplotlib이 이미 설치되어 있습니다. 다만 <code>cv2.imshow()</code>는 창을 띄우지 못하므로
-<code>from google.colab.patches import cv2_imshow</code> 를 쓰거나 <code>plt.imshow()</code>로 대신 표시해야 합니다.</div>
+<div class="tip"><b>Colab에서 실습한다면</b> — OpenCV·NumPy·matplotlib이 이미 설치되어 있다. 다만 <code>cv2.imshow()</code>는 창을 띄우지 못하므로
+<code>from google.colab.patches import cv2_imshow</code> 를 쓰거나 <code>plt.imshow()</code>로 대신 표시해야 한다.</div>
 </section>
 
 <section class="sec" id="pytype">
@@ -422,7 +422,7 @@ python -c "import cv2, numpy; print(cv2.__version__, numpy.__version__)"</pre>
   </tbody>
 </table>
 </div>
-<div class="note-box"><b>Tuple의 성질</b> — 각 요소를 바꿀 수는 없지만, <b>변수에 새로운 튜플을 다시 할당</b>하는 것은 가능하다.
+<div class="note-box"><b>Tuple의 성질</b> — 각 요소를 바꿀 수는 없지만, <b>변수에 새로운 튜플을 다시 할당</b>할 수는 있다.
 <pre class="code">t = (1, 2, 3)
 <span class="cm"># t[0] = 9      → TypeError (요소 수정 불가)</span>
 t = (9, 2, 3)   <span class="cm"># 새 튜플을 다시 할당하는 것은 OK</span></pre></div>
@@ -579,7 +579,7 @@ warping · filtering · binarize · edge detect · pattern recognition · ROI �
 img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)    <span class="cm"># matplotlib용으로 변환</span>
 plt.imshow(img_rgb)</pre>
 </div>
-<div class="warn"><b>과제 감점 주의</b> — <span class="hw">나중에 과제로 출제되며, 미적용 시 감점</span>이라고 교안에 명시되어 있습니다.
+<div class="warn"><b>과제 감점 주의</b> — <span class="hw">나중에 과제로 출제되며, 미적용 시 감점</span>이라고 교안에 명시되어 있다.
 matplotlib으로 결과를 제출할 때는 <b>반드시 BGR → RGB 변환</b>을 거칠 것.</div>
 </section>
 
@@ -677,7 +677,7 @@ cv2.destroyAllWindows()     <span class="cm"># 창 정리</span></pre>
   <dl>
     <dt>dsize</dt><dd>결과 크기 <code>(width, height)</code>. <b>배수로 지정할 때는 <code>None</code></b> 을 넣고 fx·fy를 쓴다</dd>
     <dt>fx, fy</dt><dd>가로·세로 배율 (0.5면 절반, 2면 두 배)</dd>
-    <dt>interpolation</dt><dd><span class="term" tabindex="0" data-tip="이미지를 늘리거나 줄일 때 원본에 없는 위치의 화소 값을 주변 값으로 추정하는 방법. 축소는 INTER_AREA, 확대는 INTER_CUBIC 이 권장된다.">보간(interpolation)</span> 방법 — <b>축소는 <code>cv2.INTER_AREA</code>, 확대는 <code>cv2.INTER_CUBIC</code></b> 권장</dd>
+    <dt>interpolation</dt><dd><span class="term" tabindex="0" data-tip="이미지를 늘리거나 줄일 때 원본에 없는 위치의 화소 값을 주변 값으로 추정하는 방법. 축소에는 INTER_AREA, 확대에는 INTER_CUBIC을 권장한다.">보간(interpolation)</span> 방법 — <b>축소는 <code>cv2.INTER_AREA</code>, 확대는 <code>cv2.INTER_CUBIC</code></b> 권장</dd>
     <dt>주의</dt><dd>dsize는 <code>(width, height)</code> 순서인데 <code>img.shape</code>는 <code>(height, width)</code> 순서다 — <b>서로 반대</b></dd>
   </dl>
 </div>
@@ -690,7 +690,7 @@ cv2.destroyAllWindows()     <span class="cm"># 창 정리</span></pre>
 <div class="fnc">
   <div class="sig">dst = cv2.warpAffine(src, M, dsize)</div>
   <dl>
-    <dt>M</dt><dd><b>2×3</b> <span class="term" tabindex="0" data-tip="선형 변환 + 평행이동. 평행선은 평행하게 유지되며 2×3 행렬로 표현된다. 대응점 3쌍이면 결정된다.">아핀</span> 행렬 (<code>np.float32</code>). 3행짜리를 넣으면 에러가 난다</dd>
+    <dt>M</dt><dd><b>2×3</b> <span class="term" tabindex="0" data-tip="선형 변환 + 평행이동. 평행선은 평행하게 남고, 2×3 행렬 하나로 나타낼 수 있다. 대응점 3쌍이면 결정된다.">아핀</span> 행렬 (<code>np.float32</code>). 3행짜리를 넣으면 에러가 난다</dd>
     <dt>dsize</dt><dd>출력 캔버스 크기 <code>(width, height)</code>. 작게 주면 밀려난 부분이 <b>잘려 나간다</b></dd>
     <dt>빈 영역</dt><dd>이동해서 생긴 빈 자리는 기본적으로 검은색(0)으로 채워진다</dd>
   </dl>
@@ -730,7 +730,7 @@ dst = cv2.warpAffine(img, M, (width, height))</pre>
 dst = cv2.warpPerspective(src, M, dsize)</div>
   <dl>
     <dt>pts1 / pts2</dt><dd>대응점 <b>4쌍</b>. 교안은 <b>좌상 → 좌하 → 우상 → 우하</b> 순서로 찍는다 (순서가 뒤섞이면 이미지가 꼬인다)</dd>
-    <dt>M</dt><dd><b>3×3</b> <span class="term" tabindex="0" data-tip="원근(투영) 변환. 3×3 행렬로 표현되며 평행선이 소실점으로 모인다. 대응점 4쌍이 필요하다.">원근(투영)</span> 행렬 — 자유도 8이라 4쌍이 필요하다</dd>
+    <dt>M</dt><dd><b>3×3</b> <span class="term" tabindex="0" data-tip="원근(투영) 변환. 3×3 행렬로 나타내며, 평행선이 소실점으로 모인다. 대응점 4쌍이 필요하다.">원근(투영)</span> 행렬 — 자유도 8이라 4쌍이 필요하다</dd>
     <dt>활용</dt><dd>비스듬히 찍은 문서·표지판을 정면으로 펴는 보정(문서 스캔), 도로를 위에서 본 것처럼 바꾸는 bird's-eye view</dd>
   </dl>
 </div>
@@ -876,7 +876,7 @@ lines = cv2.HoughLinesP(cropped, 1, np.pi / 180, 50,
 </section>
 
 <p class="src">출처 — 컴퓨터비전 기초 코드 실습 1 (CV2026-2-python-01. Python &amp; OpenCV Library) · 2주차 실시간 수업 필기 (2026-2학기)<br>
-코드·결과 이미지는 교안 캡처를 그대로 실었습니다.</p>
+코드·결과 이미지는 교안 캡처를 그대로 실었다.</p>
 
 </div>
 

@@ -324,7 +324,7 @@ a.ext:hover{border-bottom-color:var(--accent)}
 <section class="hero">
   <p class="kicker">2주차-2 · 9.9 (수) 온라인 콘텐츠 · 2026-2학기 · ADS5034-01</p>
   <h1>Geometric Camera Models</h1>
-  <p>2D 이미지 변환을 자유도와 행렬식으로 정리하고(part 1), 3D 세계가 2D 이미지로 투영되는 과정을 핀홀 모델에서 카메라 행렬 P까지 쌓아 올린 뒤 왜곡 보정까지 다룹니다(part 2).</p>
+  <p>2D 이미지 변환을 자유도와 행렬식으로 정리하고(part 1), 3D 세계가 2D 이미지로 투영되는 과정을 핀홀 모델에서 카메라 행렬 P까지 쌓아 올린 뒤 왜곡 보정까지 다룬다(part 2).</p>
   <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 63p</span><span class="chip">필기 통합본</span></div>
 </section>
 
@@ -361,7 +361,7 @@ a.ext:hover{border-bottom-color:var(--accent)}
 <div class="matbar">
   <p class="tagline">2주차-2 교안 · 온라인 콘텐츠</p>
   <h2>02. Geometric Camera Models</h2>
-  <p>63페이지 · Image Transformation(part 1)과 Geometric Camera Model(part 2)로 이루어져 있습니다.</p>
+  <p>63페이지 · Image Transformation(part 1)과 Geometric Camera Model(part 2)로 이루어져 있다.</p>
   <div class="acts">
     <a class="primary" href="pdf-viewer.html?doc=cv-w02-2-camera">뷰어로 보기</a>
     <a href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week02-2-geometric-camera-models.pdf" download="컴퓨터비전_2주차-2_Geometric_Camera_Models.pdf">⬇ 다운로드</a>
@@ -498,11 +498,11 @@ a.ext:hover{border-bottom-color:var(--accent)}
 </div>
 
 <div class="warn"><b>📌 과제 2 예고 — 실시간 수업 공지</b><br>
-<span class="hw">affine이나 perspective 알고리즘을 집어넣어서 그림을 합치는 것을 두 번째 과제에서 실습</span>합니다 —
+<span class="hw">affine이나 perspective 알고리즘을 집어넣어서 그림을 합치는 것을 두 번째 과제에서 실습</span>한다 —
 <b>펼쳐진 파노라마 사진처럼 만들기</b>.<br>
 <span style="color:#7f1d1d">두 사진에서 같은 지점(대응점)을 찾아 → 아핀이면 3쌍, 원근(호모그래피)이면 4쌍으로 변환 행렬을 구하고 →
-한쪽 이미지를 다른 쪽 좌표계로 워핑해 이어 붙이는 흐름입니다.
-<a href="computer-vision-week02-1.html#geom" style="color:#7f1d1d;font-weight:700;text-decoration:underline">2주차-1의 getAffineTransform / getPerspectiveTransform 실습</a>이 그대로 재료가 됩니다.</span></div>
+한쪽 이미지를 다른 쪽 좌표계로 워핑해 이어 붙이는 흐름이다.
+<a href="computer-vision-week02-1.html#geom" style="color:#7f1d1d;font-weight:700;text-decoration:underline">2주차-1의 getAffineTransform / getPerspectiveTransform 실습</a>이 그대로 재료가 된다.</span></div>
 </section>
 
 <section class="sec" id="table">
@@ -561,8 +561,8 @@ translation ⊂ rigid ⊂ similarity ⊂ affine ⊂ projective 순서로 포함 
   <li><b>또 하나의 가장 중요한 특징</b> — 카메라의 시선들이 모이는 <span class="term" tabindex="0" data-tip="실제로는 평행한 직선들이 투영된 이미지에서 만나는 점. 방향마다 자신의 소실점을 갖는다.">vanishing point(소실점)</span>. <span class="hw">소실점을 중심으로 펼쳐 나가면서 평행했던 것들이 더 이상 평행하지 않게</span> 된다. 방향마다 자기 소실점이 있고, 이들이 모이면 <span class="term" tabindex="0" data-tip="지면처럼 같은 평면에 놓인 여러 방향의 소실점들이 모여 이루는 직선. 사진 속 수평선이 바로 이것이다.">horizon line(소실선)</span>이 된다</li>
   <li>단, <b>이미지 평면과 평행한 직선들은</b> 투영 후에도 평행을 유지한다</li>
 </ul></div>
-<div class="good"><b>용어 체크</b> — <span class="hw">소실점(vanishing point)은 용어를 잘 기억해 두라</span>고 짚어 주신 부분입니다.
-평행선이 투영 후 만나는 점이며, 같은 평면 위 여러 방향의 소실점을 이으면 <b>소실선(horizon line)</b>이 됩니다.</div>
+<div class="good"><b>용어 체크</b> — <span class="hw">소실점(vanishing point)은 용어를 잘 기억해 두라</span>고 짚어 주신 부분이다.
+평행선이 투영 후 만나는 점이며, 같은 평면 위 여러 방향의 소실점을 이으면 <b>소실선(horizon line)</b>이 된다.</div>
 <div class="tip"><b>"(x, y, 1) = (2x, 2y, 2), 스케일에 대한 의미는 없다"의 뜻</b> — <span class="term" tabindex="0" data-tip="동차 좌표에서는 0이 아닌 수를 전체에 곱해도 같은 점이다. (x, y, 1) = (2x, 2y, 2) — w로 나누면 둘 다 (x, y)가 되기 때문.">동차 좌표의 스케일 불변성</span>
 투영식 (x, y, z) → (f·x/z, f·y/z) 에는 <b>z로 나누는 연산</b>이 들어 있는데, 동차 좌표로는 (f·x, f·y, z) 라고만 적어 두고
 <b>마지막에 w로 나누기</b>만 하면 된다. 그래서 투영이 행렬 곱 하나로 표현된다.</div>
@@ -574,7 +574,7 @@ translation ⊂ rigid ⊂ similarity ⊂ affine ⊂ projective 순서로 포함 
   <div class="fl"><div class="fl-n">1</div><div><h4>문제 — 필름만 두면 상이 맺히지 않는다</h4>
     <p>하나의 객체에서 나오는 여러 빛은 <span class="hw">방사(사방으로 퍼짐)하기 때문에 film의 여러 곳에 닿는다</span>. 모든 점의 빛이 겹쳐 아무 상도 생기지 않는다.</p></div></div>
   <div class="fl"><div class="fl-n">2</div><div><h4>해결 — <span class="hw">barrier(장벽)를 설치</span>한다</h4>
-    <p><span class="hw">대부분의 빛은 장벽에서 차단되고, 어떤 하나의 빛 정도만 통과</span>해 film에 전달되어 맺힌다. 물체의 한 점 ↔ 필름의 한 점이 대응되어 또렷한 상이 생긴다.</p></div></div>
+    <p><span class="hw">대부분의 빛은 장벽에서 차단되고, 어떤 하나의 빛 정도만 통과</span>해 필름에 맺힌다. 물체의 한 점 ↔ 필름의 한 점이 대응되어 또렷한 상이 생긴다.</p></div></div>
   <div class="fl"><div class="fl-n">3</div><div><h4>결과 — 역상, 그리고 <span class="term" tabindex="0" data-tip="빛이 통과하는 구멍의 크기. 핀홀에서는 구멍 자체, 렌즈 카메라에서는 조리개다. 크면 밝지만 흐려지고, 작으면 선명하지만 어둡다.">조리개(aperture)</span></h4>
     <p>구멍에서 광선이 교차하므로 <span class="hw">위는 아래로</span> 뒤집혀 맺힌다. 이때 <span class="hw">핀홀이 곧 조리개가 된다</span>.</p></div></div>
   <div class="fl"><div class="fl-n">4</div><div><h4>정리 — <span class="term" tabindex="0" data-tip="핀홀 모델에서 상은 뒤집혀 맺힌다. 계산 편의를 위해 이미지 평면을 핀홀 앞쪽(초점거리 f 위치)으로 옮긴 것이 가상 이미지이며, 이때는 상이 바로 선다.">Virtual image(가상 이미지)</span></h4>
