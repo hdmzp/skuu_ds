@@ -2882,64 +2882,240 @@ good = [m for m, n in matches if m.distance &lt; <span class="cm">0.75</span> * 
 </div>
 
 <!-- ---------- ③ RDD ---------- -->
-<h3 class="sub-title">③ 이승찬 — RDD (2025) · 기술은 멀리 보고, 검출은 정밀하게, 둘은 따로</h3>
+<h3 class="sub-title">③ 이승찬 — RDD (2025) · 천천히 풀어 읽기</h3>
 
-<div class="pt pres">
-  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>문제 제기 — 기하 불변성을 &lsquo;어디까지 보고&rsquo; 배울 것인가</h3>
-  <p>시점 · 스케일 · 조명이 크게 바뀌어도 믿을 수 있는 키포인트와 기술자가 필요하다. 발표는 지금까지의 접근을 네 단계로 정리한다.</p>
-  <div class="tbl-wrap">
-  <table>
-    <thead><tr><th>단계</th><th>대표</th><th>기하 불변성을 얻는 방법</th><th>한계</th></tr></thead>
-    <tbody>
-      <tr><td><b>손설계</b></td><td>SIFT · ORB</td><td>그래디언트 히스토그램 · 무게중심으로 <b>스케일 · 방향</b>을 추정 (오늘 02 · 06절)</td><td>규칙이 정한 변환까지만</td></tr>
-      <tr><td><b>학습</b></td><td>LIFT · AffNet · LF-Net</td><td>대부분 데이터 증강, 일부는 아핀 파라미터를 예측해 STN으로 패치를 펴 준다</td><td><b>미리 정한 변환 형태</b>를 가정</td></tr>
-      <tr><td><b>Deformable Conv</b></td><td>ASLFeat · ALIKED</td><td>합성곱 커널의 샘플링 위치를 <b>학습으로 비틀어</b> 불변 특징을 직접 뽑는다</td><td><b>국소 창(local window)</b>에 갇힘</td></tr>
-      <tr><td><b>Deformable Attention</b></td><td><b>RDD</b></td><td>쿼리마다 <b>소수의 핵심 위치를 거리 제한 없이</b> 골라 본다</td><td>&mdash;</td></tr>
-    </tbody>
-  </table>
-  </div>
-  <p>또 하나의 축은 <b>검출과 기술을 같이 배울지 따로 배울지</b>다. SIFT는 따로, SuperPoint · SiLK(<a class="ext" href="computer-vision-week05.html#pres">5주차 발표</a>)는 같이 학습했는데, <b>기술자가 덜 학습되면 검출 품질까지 끌어내린다</b>는 결과가 나오면서 DeDoDe · XFeat부터 <b>다시 분리</b>하는 흐름이 생겼다. RDD도 이 흐름을 따라 <b>두 갈래(branch)</b>로 나눈다.</p>
+<div class="oneline">
+  <p><b>RDD를 세 문장으로</b></p>
+  <ul class="ul">
+    <li><b>무엇을 만드나</b> &mdash; SIFT처럼 <b>&ldquo;점(키포인트) + 그 점의 설명 벡터(기술자)&rdquo;</b>를 뽑는 신경망. 사진 두 장을 넣으면 매칭이 나온다</li>
+    <li><b>무엇이 새롭나</b> &mdash; 기술자를 만들 때 <b>주변 9칸이 아니라, 멀리 떨어진 곳까지 &lsquo;골라서&rsquo; 본다</b>(deformable attention). 그리고 <b>점 찍는 일과 설명 쓰는 일을 서로 다른 망에 맡긴다</b></li>
+    <li><b>그래서 뭐가 좋나</b> &mdash; 드론 사진 ↔ 지상 사진처럼 <b>시점 · 크기가 확 바뀌는 쌍</b>에서 기존 방법보다 훨씬 잘 맞춘다</li>
+  </ul>
 </div>
 
 <div class="pt plus">
-  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>Deformable Attention을 한 문단으로</h3>
-  <p>보통의 셀프 어텐션은 <b>모든 픽셀이 모든 픽셀</b>을 본다. 넓게 보지만 계산량이 픽셀 수의 <b>제곱</b>이라 고해상도 특징맵에 쓰기 어렵다. 합성곱은 반대로 싸지만 <b>3×3 같은 이웃</b>만 본다.</p>
-  <p>Deformable attention은 그 사이다. 각 픽셀(쿼리)이 자기 특징을 보고 <b>&ldquo;어디를 볼지(오프셋 Δp)&rdquo;와 &ldquo;얼마나 믿을지(가중치 A)&rdquo;</b>를 선형층으로 직접 예측해, <b>정해진 개수(RDD는 8점)</b>만 샘플링한다. 그 위치는 멀리 떨어져 있어도 되고, <b>여러 스케일의 특징맵</b>에서 함께 가져온다.</p>
-  <p>SIFT가 <b>방향을 재서 창을 돌리고, 스케일을 재서 창 크기를 맞췄던</b> 일(02절)을 <span class="hi">망이 쿼리마다 &lsquo;샘플링 위치를 옮기는&rsquo; 방식으로 스스로 배운다</span>고 보면 된다.</p>
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>먼저 비유 하나 &mdash; 몽타주 그리기</h3>
+  <p>범인 얼굴을 찾는 두 사람이 있다고 하자. <b>한 사람은 돋보기</b>를 들고 사진에서 &ldquo;눈꼬리, 입꼬리, 점&rdquo;처럼 <b>위치가 딱 떨어지는 곳</b>에 핀을 꽂는다. <b>다른 사람은 한 걸음 물러서서</b> 그 핀 자리가 &ldquo;어떤 얼굴의 어느 부분인지&rdquo;를 <b>주변 맥락까지 보고</b> 글로 적는다.</p>
+  <p>예전 학습 방법(SuperPoint 등)은 <b>한 사람이 두 일을 동시에</b> 했다. 그러다 보니 설명을 잘 못 쓰면 핀 꽂는 실력까지 흔들렸다. RDD는 <b>두 사람으로 나눴다</b> &mdash; <span class="hi">핀 꽂기 = 키포인트 갈래(CNN), 설명 쓰기 = 기술자 갈래(트랜스포머)</span>. 그리고 설명 쓰는 사람에게 <b>&ldquo;아무 데나 다 보지 말고, 중요한 8군데만 골라서 봐&rdquo;</b>라는 규칙을 준 것이 deformable attention이다.</p>
 </div>
 
-<div class="pt pres">
-  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>구조 — 두 갈래가 따로 일한다</h3>
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>발표에 나오는 낯선 단어 미리 보기</h3>
   <div class="tbl-wrap">
   <table>
-    <thead><tr><th></th><th>기술자 갈래 F<sub>D</sub> (넓게 보는 트랜스포머)</th><th>키포인트 갈래 F<sub>K</sub> (정밀한 CNN)</th></tr></thead>
+    <thead><tr><th>단어</th><th>쉬운 뜻</th></tr></thead>
     <tbody>
-      <tr><td>입력 → 특징</td><td><b>ResNet-50</b>에서 1/4 · 1/8 · 1/16 · 1/32 스케일 + CNN으로 1/64 추가 → 위치 인코딩</td><td><b>경량 CNN</b>(잔차 연결)으로 1/1 · 1/2 · 1/8 · 1/32 스케일(각 32채널)</td></tr>
-      <tr><td>핵심 연산</td><td><b>Multi-scale deformable attention</b> 4층 × 8헤드 × 8점</td><td>원해상도로 키워 이어 붙임(H×W×128) → 점수맵 S</td></tr>
-      <tr><td>출력</td><td><b>기술자 맵 D</b> (H/4 × W/4 × <b>256</b>) + <b>매칭 가능성 맵 M</b></td><td><b>DKD</b>로 서브픽셀 키포인트 → 그 위치에서 D를 샘플링해 <b>256-D 기술자</b></td></tr>
+      <tr><td><b>Branch (갈래)</b></td><td>한 망 안에서 <b>따로 계산되는 길</b>. RDD에는 두 갈래가 있다</td></tr>
+      <tr><td><b>ResNet-50</b></td><td>사진 분류용으로 유명한 50층 CNN. 여기서는 <b>특징을 뽑는 몸통(backbone)</b>으로 빌려 쓴다</td></tr>
+      <tr><td><b>특징맵 1/4, 1/8 …</b></td><td>CNN을 지나며 가로세로가 줄어든 결과. 640×480 사진이면 1/4 맵은 <b>160×120</b>. 작을수록 넓은 영역을 요약한 정보 &mdash; <a class="ext" href="computer-vision-week04.html">4주차 피라미드</a>와 같은 생각</td></tr>
+      <tr><td><b>어텐션 · 트랜스포머</b></td><td>&ldquo;이 픽셀을 설명하려면 <b>다른 어느 픽셀을 얼마나 참고할까</b>&rdquo;를 가중치로 계산해 섞는 연산. 그 연산을 쌓은 망이 트랜스포머</td></tr>
+      <tr><td><b>Deformable</b></td><td>&ldquo;모양이 바뀌는&rdquo;. 볼 위치가 <b>고정 격자가 아니라 입력에 따라 움직인다</b>는 뜻</td></tr>
+      <tr><td><b>서브픽셀</b></td><td>픽셀 칸보다 더 촘촘한 위치. 예: (120, 85)가 아니라 <b>(120.3, 84.8)</b></td></tr>
+      <tr><td><b>NMS</b></td><td>Non-Maximum Suppression. 주변보다 <b>점수가 가장 높은 칸만 남기고</b> 나머지를 지우는 것 (Canny · Harris에서 이미 봤다)</td></tr>
+      <tr><td><b>Matchability (매칭 가능성)</b></td><td>&ldquo;이 위치가 <b>다른 사진에서도 짝을 찾을 수 있을 만한 곳인가</b>&rdquo;의 점수. 하늘 · 흰 벽은 낮고, 창문 모서리 · 간판 글자는 높다</td></tr>
+      <tr><td><b>Freeze (얼리기)</b></td><td>이미 학습한 부분의 가중치를 <b>더 이상 바꾸지 않게 고정</b>하는 것</td></tr>
+      <tr><td><b>에피폴라 선</b></td><td>사진 1의 점 하나가 사진 2에서 <b>&ldquo;이 직선 위 어딘가&rdquo;</b>에 있어야 한다는 기하 규칙. 아래 매칭 단락에서 그림으로 설명</td></tr>
     </tbody>
   </table>
   </div>
-  <p><b>DKD(Differentiable Keypoint Detection)</b> &mdash; 5×5 창에서 NMS로 정수 좌표를 고른 뒤, 창 안 점수를 softmax로 확률로 바꿔 <b>가중 평균 위치(soft-argmax)</b>를 더한다. 02절 SIFT의 <b>서브픽셀 위치 보정</b>을 미분 가능하게 만든 것이라 보면 된다.</p>
-  <p><b>학습도 따로</b> &mdash; 기술자 갈래를 먼저(focal loss + 매칭 가능성 loss, H100 8장으로 하루) 학습하고 <b>얼린(freeze) 다음</b> 키포인트 갈래를(재투영 · 신뢰도 · peaky loss, H100 1장으로 4시간) 학습한다. 정답 대응은 MegaDepth와 새로 모은 <b>Air-to-Ground</b>(드론 영상 ↔ 지상 사진)의 포즈 · 깊이로 만든다.</p>
 </div>
 
 <div class="pt pres">
-  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>매칭 — RDD(희소)와 RDD*(준밀집)</h3>
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>왜 이 논문이 나왔나 ① &mdash; &ldquo;얼마나 넓게 보고&rdquo; 기술자를 만들까</h3>
+  <p>같은 건물을 정면과 45° 옆에서 찍으면 창문 하나가 <b>찌그러지고 크기도 달라진다</b>. 그래도 같은 벡터가 나와야 한다(기하 불변성). 이걸 해결해 온 방법이 네 단계로 발전했다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>단계</th><th>대표</th><th>어떻게 했나 (쉽게)</th><th>아쉬운 점</th></tr></thead>
+    <tbody>
+      <tr><td><b>① 손설계</b></td><td>SIFT · ORB</td><td>방향을 재서 <b>창을 돌리고</b>, 스케일을 재서 <b>창 크기를 맞춘다</b> (오늘 02 · 06절)</td><td>사람이 정한 회전 · 크기 변화까지만 대응</td></tr>
+      <tr><td><b>② 학습 + 가정</b></td><td>LIFT · AffNet · LF-Net</td><td>대부분 <b>데이터 증강</b>(일부러 돌리고 늘린 사진으로 학습). 일부는 &ldquo;이 패치가 얼마나 찌그러졌는지&rdquo;(아핀 변환)를 예측해 <b>펴서</b> 본다</td><td>변형이 <b>아핀 같은 정해진 꼴</b>이라고 미리 가정</td></tr>
+      <tr><td><b>③ Deformable Conv</b></td><td>ASLFeat · ALIKED</td><td>3×3 합성곱의 9개 칸 위치를 <b>조금씩 옮겨서</b> 찌그러진 모양을 따라가게 한다</td><td>옮겨도 결국 <b>주변 가까운 곳</b>만 본다</td></tr>
+      <tr><td><b>④ Deformable Attention</b></td><td><b>RDD</b></td><td>볼 곳 몇 군데를 <b>거리 제한 없이</b> 골라 본다</td><td>&mdash;</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>③ → ④의 차이가 핵심이다. 발표 예시처럼 <b>소실선(vanishing line)</b> &mdash; 철로 · 복도처럼 멀리 한 점으로 모이는 선 &mdash; 같은 정보는 <b>사진 전체에 걸쳐 있어서</b> 주변 몇 칸만 봐서는 알 수 없다.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>왜 이 논문이 나왔나 ② &mdash; 점 찍기와 설명 쓰기, 같이 배울까 따로 배울까</h3>
+  <div class="flow">
+    <div class="fl"><b>따로</b><span>SIFT는 DoG로 점을 찾고, 그다음 히스토그램으로 설명을 쓴다. Key.Net(<a class="ext" href="computer-vision-week05.html#pres">5주차</a>)도 검출만 학습</span></div>
+    <div class="fl"><b>같이</b><span>SuperPoint · D2-Net · R2D2 · SiLK는 <b>한 망에서 함께</b> 학습했다. &ldquo;서로 도와서 둘 다 좋아질 것&rdquo;이라는 기대</span></div>
+    <div class="fl"><b>다시 따로</b><span>그런데 <b>설명(기술자)을 덜 배운 상태가 점 찍기 품질까지 떨어뜨린다</b>는 결과가 나왔다. 그래서 DeDoDe는 망을 아예 두 개로, XFeat는 작업별로 나눴다</span></div>
+    <div class="fl"><b>RDD</b><span>한 모델 안에 <b>두 갈래</b>를 두고 <b>학습 시기도 나눈다</b> (아래 학습 단락)</span></div>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>Deformable attention을 그림으로</h3>
+  <div class="svg-scroll" style="border:1px solid var(--border);border-radius:12px;background:#fff;padding:8px;margin:12px 0">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" role="img" aria-label="빨간 칸(쿼리) 하나가 합성곱은 주변 3×3만, 셀프 어텐션은 전체를, deformable attention은 스스로 고른 8곳만 보는 것을 비교한 그림">
+<rect width="900" height="330" fill="#fff"/>
+<defs><marker id="dfa" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L8 4 L0 8z" fill="#7c3aed"/></marker></defs>
+<rect x="36" y="70" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="58" y="70" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="80" y="70" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="102" y="70" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="124" y="70" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="146" y="70" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="168" y="70" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="190" y="70" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="212" y="70" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="36" y="92" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="58" y="92" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="80" y="92" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="102" y="92" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="124" y="92" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="146" y="92" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="168" y="92" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="190" y="92" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="212" y="92" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="36" y="114" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="58" y="114" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="80" y="114" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="102" y="114" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="124" y="114" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="146" y="114" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="168" y="114" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="190" y="114" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="212" y="114" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="36" y="136" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="58" y="136" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="80" y="136" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="102" y="136" width="22" height="22" fill="#bfdbfe" stroke="#e2e8f0"/><rect x="124" y="136" width="22" height="22" fill="#bfdbfe" stroke="#e2e8f0"/><rect x="146" y="136" width="22" height="22" fill="#bfdbfe" stroke="#e2e8f0"/><rect x="168" y="136" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="190" y="136" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="212" y="136" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="36" y="158" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="58" y="158" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="80" y="158" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="102" y="158" width="22" height="22" fill="#bfdbfe" stroke="#e2e8f0"/><rect x="124" y="158" width="22" height="22" fill="#bfdbfe" stroke="#e2e8f0"/><rect x="146" y="158" width="22" height="22" fill="#bfdbfe" stroke="#e2e8f0"/><rect x="168" y="158" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="190" y="158" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="212" y="158" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="36" y="180" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="58" y="180" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="80" y="180" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="102" y="180" width="22" height="22" fill="#bfdbfe" stroke="#e2e8f0"/><rect x="124" y="180" width="22" height="22" fill="#bfdbfe" stroke="#e2e8f0"/><rect x="146" y="180" width="22" height="22" fill="#bfdbfe" stroke="#e2e8f0"/><rect x="168" y="180" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="190" y="180" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="212" y="180" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="36" y="202" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="58" y="202" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="80" y="202" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="102" y="202" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="124" y="202" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="146" y="202" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="168" y="202" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="190" y="202" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="212" y="202" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="36" y="224" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="58" y="224" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="80" y="224" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="102" y="224" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="124" y="224" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="146" y="224" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="168" y="224" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="190" y="224" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="212" y="224" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="36" y="246" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="58" y="246" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="80" y="246" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="102" y="246" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="124" y="246" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="146" y="246" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="168" y="246" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="190" y="246" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="212" y="246" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="336" y="70" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="358" y="70" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="380" y="70" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="402" y="70" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="424" y="70" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="446" y="70" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="468" y="70" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="490" y="70" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="512" y="70" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="336" y="92" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="358" y="92" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="380" y="92" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="402" y="92" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="424" y="92" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="446" y="92" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="468" y="92" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="490" y="92" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="512" y="92" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="336" y="114" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="358" y="114" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="380" y="114" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="402" y="114" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="424" y="114" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="446" y="114" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="468" y="114" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="490" y="114" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="512" y="114" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="336" y="136" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="358" y="136" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="380" y="136" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="402" y="136" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="424" y="136" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="446" y="136" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="468" y="136" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="490" y="136" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="512" y="136" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="336" y="158" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="358" y="158" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="380" y="158" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="402" y="158" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="424" y="158" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="446" y="158" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="468" y="158" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="490" y="158" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="512" y="158" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="336" y="180" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="358" y="180" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="380" y="180" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="402" y="180" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="424" y="180" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="446" y="180" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="468" y="180" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="490" y="180" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="512" y="180" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="336" y="202" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="358" y="202" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="380" y="202" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="402" y="202" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="424" y="202" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="446" y="202" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="468" y="202" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="490" y="202" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="512" y="202" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="336" y="224" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="358" y="224" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="380" y="224" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="402" y="224" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="424" y="224" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="446" y="224" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="468" y="224" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="490" y="224" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="512" y="224" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="336" y="246" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="358" y="246" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="380" y="246" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="402" y="246" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="424" y="246" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="446" y="246" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="468" y="246" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="490" y="246" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="512" y="246" width="22" height="22" fill="#fde68a" stroke="#e2e8f0"/><rect x="636" y="70" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="658" y="70" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="680" y="70" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="702" y="70" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="724" y="70" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="746" y="70" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="768" y="70" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="790" y="70" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="812" y="70" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="636" y="92" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="658" y="92" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="680" y="92" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="702" y="92" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="724" y="92" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="746" y="92" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="768" y="92" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="790" y="92" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="812" y="92" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="636" y="114" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="658" y="114" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="680" y="114" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="702" y="114" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="724" y="114" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="746" y="114" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="768" y="114" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="790" y="114" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="812" y="114" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="636" y="136" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="658" y="136" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="680" y="136" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="702" y="136" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="724" y="136" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="746" y="136" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="768" y="136" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="790" y="136" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="812" y="136" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="636" y="158" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="658" y="158" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="680" y="158" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="702" y="158" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="724" y="158" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="746" y="158" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="768" y="158" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="790" y="158" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="812" y="158" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="636" y="180" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="658" y="180" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="680" y="180" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="702" y="180" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="724" y="180" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="746" y="180" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="768" y="180" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="790" y="180" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="812" y="180" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="636" y="202" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="658" y="202" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="680" y="202" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="702" y="202" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="724" y="202" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="746" y="202" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="768" y="202" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="790" y="202" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="812" y="202" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="636" y="224" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="658" y="224" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="680" y="224" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="702" y="224" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="724" y="224" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="746" y="224" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="768" y="224" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="790" y="224" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="812" y="224" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="636" y="246" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="658" y="246" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="680" y="246" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="702" y="246" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="724" y="246" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="746" y="246" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="768" y="246" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="790" y="246" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><rect x="812" y="246" width="22" height="22" fill="#ffffff" stroke="#e2e8f0"/><path d="M 735.0 169.0 L 669.0 81.0" stroke="#7c3aed" stroke-width="1.3" opacity=".55" marker-end="url(#dfa)"/><circle cx="669.0" cy="81.0" r="8.0" fill="#7c3aed" opacity="0.95"/><path d="M 735.0 169.0 L 801.0 103.0" stroke="#7c3aed" stroke-width="1.3" opacity=".55" marker-end="url(#dfa)"/><circle cx="801.0" cy="103.0" r="6.0" fill="#7c3aed" opacity="0.71"/><path d="M 735.0 169.0 L 691.0 147.0" stroke="#7c3aed" stroke-width="1.3" opacity=".55" marker-end="url(#dfa)"/><circle cx="691.0" cy="147.0" r="7.0" fill="#7c3aed" opacity="0.83"/><path d="M 735.0 169.0 L 757.0 125.0" stroke="#7c3aed" stroke-width="1.3" opacity=".55" marker-end="url(#dfa)"/><circle cx="757.0" cy="125.0" r="5.5" fill="#7c3aed" opacity="0.65"/><path d="M 735.0 169.0 L 647.0 213.0" stroke="#7c3aed" stroke-width="1.3" opacity=".55" marker-end="url(#dfa)"/><circle cx="647.0" cy="213.0" r="5.2" fill="#7c3aed" opacity="0.62"/><path d="M 735.0 169.0 L 779.0 257.0" stroke="#7c3aed" stroke-width="1.3" opacity=".55" marker-end="url(#dfa)"/><circle cx="779.0" cy="257.0" r="7.5" fill="#7c3aed" opacity="0.89"/><path d="M 735.0 169.0 L 823.0 191.0" stroke="#7c3aed" stroke-width="1.3" opacity=".55" marker-end="url(#dfa)"/><circle cx="823.0" cy="191.0" r="4.8" fill="#7c3aed" opacity="0.56"/><path d="M 735.0 169.0 L 713.0 235.0" stroke="#7c3aed" stroke-width="1.3" opacity=".55" marker-end="url(#dfa)"/><circle cx="713.0" cy="235.0" r="6.5" fill="#7c3aed" opacity="0.77"/><rect x="124" y="158" width="22" height="22" fill="#dc2626"/><rect x="424" y="158" width="22" height="22" fill="#dc2626"/><rect x="724" y="158" width="22" height="22" fill="#dc2626"/><text x="135.0" y="40" font-size="15" font-weight="700" fill="#0f172a" text-anchor="middle">합성곱 3×3</text><text x="135.0" y="58" font-size="11.5" fill="#64748b" text-anchor="middle">바로 옆 9칸만 본다</text><text x="135.0" y="292" font-size="12" font-weight="700" fill="#334155" text-anchor="middle">싸다 · 하지만 시야가 좁다</text><text x="435.0" y="40" font-size="15" font-weight="700" fill="#0f172a" text-anchor="middle">셀프 어텐션 (전체)</text><text x="435.0" y="58" font-size="11.5" fill="#64748b" text-anchor="middle">모든 칸을 다 본다</text><text x="435.0" y="292" font-size="12" font-weight="700" fill="#334155" text-anchor="middle">넓다 · 하지만 칸 수의 제곱만큼 비싸다</text><text x="735.0" y="40" font-size="15" font-weight="700" fill="#0f172a" text-anchor="middle">Deformable attention</text><text x="735.0" y="58" font-size="11.5" fill="#64748b" text-anchor="middle">볼 곳 8군데를 스스로 고른다</text><text x="735.0" y="292" font-size="12" font-weight="700" fill="#334155" text-anchor="middle">멀리도 본다 · 비용은 8칸 값</text>
+<text x="450" y="318" font-size="11" fill="#64748b" text-anchor="middle">빨간 칸 = 지금 기술자를 만들고 있는 픽셀(쿼리) · 보라 점 크기 = 그 위치를 얼마나 믿는지(가중치 A) · 화살표 = 쿼리가 예측한 오프셋 Δp</text>
+</svg></div>
   <ul class="ul">
-    <li><b>RDD (sparse)</b> &mdash; 두 영상 기술자의 내적 행렬에 <b>행 방향 · 열 방향 softmax를 둘 다</b> 걸어 곱한다(dual-softmax). 서로가 서로를 1등으로 고른 쌍에서 값이 커지는 <b>&ldquo;부드러운 상호 최근접(MNN)&rdquo;</b>이고, 07절 <code>BFMatcher(crossCheck=True)</code>와 같은 발상이다. 확률 0.01 이상만 채택</li>
-    <li><b>RDD* (semi-dense)</b> &mdash; 매칭 가능성 맵 M 상위 K개 위치로 거친(1/4 해상도) 매칭을 더 만든 뒤, 희소 매칭으로 <b>기본 행렬 F</b>를 8점법으로 추정하고, 각 거친 매칭점을 <b>에피폴라 선 위로 닫힌 해로 끌어당겨</b> 서브픽셀로 보정한다. 4픽셀 넘게 움직여야 하면 이상치로 버린다</li>
-    <li>LoFTR(<a class="ext" href="computer-vision-week05.html#pres">5주차 발표</a>)처럼 미세 특징을 다시 잘라 오프셋을 예측하는 대신 <b>기하 제약 하나로</b> 보정해 단순하다. 이 보정을 빼면 MegaDepth AUC@5°가 <b>51.3 → 41.3</b></li>
+    <li><b>합성곱</b>은 빨간 칸 주변 9칸만 섞는다. 층을 많이 쌓아야 겨우 멀리까지 닿는다</li>
+    <li><b>보통 어텐션</b>은 모든 칸을 다 본다. 160×120 맵이면 칸이 19,200개라, 칸마다 19,200개를 보면 <b>약 3억 7천만 번</b> 계산 &mdash; 고해상도에서는 너무 무겁다</li>
+    <li><b>Deformable attention</b>은 빨간 칸이 자기 특징을 보고 <b>&ldquo;어디를 볼지(Δp)&rdquo;와 &ldquo;얼마나 믿을지(A)&rdquo;</b>를 직접 예측해, <b>8곳만</b> 가져와 가중 평균한다. 멀리 있어도 되고, <b>5개 스케일의 맵 각각에서</b> 가져온다(발표 식 6 · 7의 l, k가 바로 스케일 번호와 점 번호)</li>
+    <li>RDD는 이것을 <b>8개 헤드</b>로 동시에 한다 &mdash; 헤드마다 <b>서로 다른 곳</b>을 골라 보므로 한 층에서도 여러 관점의 맥락이 섞인다. 이 층을 4번 쌓는다</li>
+  </ul>
+  <p>SIFT가 창을 <b>돌리고 키워서</b> 찌그러짐에 대응했다면, RDD는 <span class="hi">&ldquo;볼 위치 자체를 옮겨서&rdquo; 대응하는 법을 데이터에서 배운다</span>.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>구조 &mdash; 640×480 사진 한 장을 따라가 보기</h3>
+  <div class="svg-scroll" style="border:1px solid var(--border);border-radius:12px;background:#fff;padding:8px;margin:12px 0">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 990 380" role="img" aria-label="RDD 구조. 위쪽 기술자 갈래는 ResNet-50과 deformable 트랜스포머로 기술자 맵 D와 매칭 가능성 맵 M을 만들고, 아래쪽 키포인트 갈래는 경량 CNN과 DKD로 키포인트 좌표를 찾은 뒤, 그 좌표에서 D를 읽어 키포인트마다 256차원 기술자를 얻는다">
+<rect width="990" height="380" fill="#fff"/>
+<defs><marker id="ra" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L8 4 L0 8z" fill="#64748b"/></marker></defs>
+<text x="14" y="24" font-size="15" font-weight="700" fill="#0f172a">RDD 한 장 요약 — 두 갈래가 따로 계산하고, 마지막에 &ldquo;좌표&rdquo;로만 만난다</text>
+<rect x="120" y="40" width="860" height="150" rx="14" fill="#fff7ed" opacity=".45" stroke="#fdba74" stroke-dasharray="5 4"/><text x="134" y="60" font-size="12" font-weight="700" fill="#c2410c">① 기술자 갈래 F_D — &ldquo;넓게 보고 이 점이 어떻게 생겼는지 적는다&rdquo;</text><rect x="120" y="215" width="860" height="150" rx="14" fill="#eff6ff" opacity=".45" stroke="#93c5fd" stroke-dasharray="5 4"/><text x="134" y="235" font-size="12" font-weight="700" fill="#1d4ed8">② 키포인트 갈래 F_K — &ldquo;정확히 어디에 점을 찍을지만 정한다&rdquo;</text><rect x="14" y="165" width="90" height="70" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.4"/><text x="59.0" y="197.0" font-size="12.5" font-weight="700" fill="#0f172a" text-anchor="middle">입력 사진</text><text x="59.0" y="213.0" font-size="10.5" fill="#475569" text-anchor="middle">H × W × 3</text><path d="M 104 190 L 140 115" stroke="#64748b" stroke-width="1.6" fill="none" marker-end="url(#ra)"/><path d="M 104 210 L 140 290" stroke="#64748b" stroke-width="1.6" fill="none" marker-end="url(#ra)"/><rect x="140" y="80" width="150" height="70" rx="8" fill="#fff7ed" stroke="#ea580c" stroke-width="1.4"/><text x="215.0" y="112.0" font-size="12.5" font-weight="700" fill="#0f172a" text-anchor="middle">ResNet-50</text><text x="215.0" y="128.0" font-size="10.5" fill="#475569" text-anchor="middle">1/4 ~ 1/32 크기 특징맵</text><path d="M 290 115 L 315 115" stroke="#64748b" stroke-width="1.6" fill="none" marker-end="url(#ra)"/><rect x="315" y="80" width="130" height="70" rx="8" fill="#fff7ed" stroke="#ea580c" stroke-width="1.4"/><text x="380.0" y="112.0" font-size="12.5" font-weight="700" fill="#0f172a" text-anchor="middle">+ 1/64 맵 추가</text><text x="380.0" y="128.0" font-size="10.5" fill="#475569" text-anchor="middle">총 5단계 스케일</text><path d="M 445 115 L 470 115" stroke="#64748b" stroke-width="1.6" fill="none" marker-end="url(#ra)"/><rect x="470" y="80" width="190" height="70" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.4"/><text x="565.0" y="112.0" font-size="12.5" font-weight="700" fill="#5b21b6" text-anchor="middle">Deformable 트랜스포머</text><text x="565.0" y="128.0" font-size="10.5" fill="#475569" text-anchor="middle">4층 × 8헤드 × 8점</text><path d="M 660 105 L 700 92" stroke="#64748b" stroke-width="1.6" fill="none" marker-end="url(#ra)"/><path d="M 660 128 L 700 145" stroke="#64748b" stroke-width="1.6" fill="none" marker-end="url(#ra)"/><rect x="700" y="66" width="145" height="50" rx="8" fill="#fff7ed" stroke="#ea580c" stroke-width="1.4"/><text x="772.5" y="88.0" font-size="12.5" font-weight="700" fill="#0f172a" text-anchor="middle">기술자 맵 D</text><text x="772.5" y="104.0" font-size="10.5" fill="#475569" text-anchor="middle">H/4 × W/4 × 256</text><rect x="700" y="124" width="145" height="50" rx="8" fill="#fff7ed" stroke="#ea580c" stroke-width="1.4"/><text x="772.5" y="146.0" font-size="12.5" font-weight="700" fill="#0f172a" text-anchor="middle">매칭 가능성 맵 M</text><text x="772.5" y="162.0" font-size="10.5" fill="#475569" text-anchor="middle">H/4 × W/4 × 1</text><rect x="140" y="255" width="150" height="70" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.4"/><text x="215.0" y="287.0" font-size="12.5" font-weight="700" fill="#0f172a" text-anchor="middle">경량 CNN</text><text x="215.0" y="303.0" font-size="10.5" fill="#475569" text-anchor="middle">1/1 · 1/2 · 1/8 · 1/32</text><path d="M 290 290 L 315 290" stroke="#64748b" stroke-width="1.6" fill="none" marker-end="url(#ra)"/><rect x="315" y="255" width="130" height="70" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.4"/><text x="380.0" y="287.0" font-size="12.5" font-weight="700" fill="#0f172a" text-anchor="middle">원래 크기로 키워</text><text x="380.0" y="303.0" font-size="10.5" fill="#475569" text-anchor="middle">이어 붙이기</text><path d="M 445 290 L 470 290" stroke="#64748b" stroke-width="1.6" fill="none" marker-end="url(#ra)"/><rect x="470" y="255" width="120" height="70" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.4"/><text x="530.0" y="287.0" font-size="12.5" font-weight="700" fill="#0f172a" text-anchor="middle">점수맵 S</text><text x="530.0" y="303.0" font-size="10.5" fill="#475569" text-anchor="middle">H × W</text><path d="M 590 290 L 615 290" stroke="#64748b" stroke-width="1.6" fill="none" marker-end="url(#ra)"/><rect x="615" y="255" width="110" height="70" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.4"/><text x="670.0" y="287.0" font-size="12.5" font-weight="700" fill="#0f172a" text-anchor="middle">DKD</text><text x="670.0" y="303.0" font-size="10.5" fill="#475569" text-anchor="middle">서브픽셀 좌표</text><path d="M 725 290 L 760 290" stroke="#64748b" stroke-width="1.6" fill="none" marker-end="url(#ra)"/><rect x="760" y="255" width="95" height="70" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.4"/><text x="807.5" y="287.0" font-size="12.5" font-weight="700" fill="#0f172a" text-anchor="middle">키포인트</text><text x="807.5" y="303.0" font-size="10.5" fill="#475569" text-anchor="middle">(x, y) 수백~수천 개</text><path d="M 808 255 L 790 176" stroke="#dc2626" stroke-width="1.6" fill="none" marker-end="url(#ra)" stroke-dasharray="5 3"/><text x="815" y="215" font-size="10.5" font-weight="700" fill="#dc2626">이 좌표에서 D를 읽는다</text><path d="M 845 91 L 870 91" stroke="#64748b" stroke-width="1.6" fill="none" marker-end="url(#ra)"/><rect x="870" y="66" width="100" height="50" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="1.4"/><text x="920.0" y="88.0" font-size="12.5" font-weight="700" fill="#991b1b" text-anchor="middle">키포인트마다</text><text x="920.0" y="104.0" font-size="10.5" fill="#475569" text-anchor="middle">256-D 기술자</text>
+</svg></div>
+  <div class="flow">
+    <div class="fl"><b>① 기술자 갈래</b><span>ResNet-50이 사진을 1/4(160×120) · 1/8 · 1/16 · 1/32 크기의 특징맵으로 만들고, 작은 CNN으로 <b>1/64</b> 맵을 하나 더 만든다. 각 맵에 <b>위치 정보(positional encoding)</b>를 더해 &ldquo;이 값이 사진의 어디였는지&rdquo;를 알려 준다</span></div>
+    <div class="fl"><b>② Deformable 트랜스포머</b><span>위 그림의 방식으로 4층을 거친 뒤 맵들을 1/4 크기로 맞춰 더한다 → <b>기술자 맵 D (160×120×256)</b>. 160×120 칸 하나하나에 256개 숫자짜리 설명이 붙어 있는 셈</span></div>
+    <div class="fl"><b>③ 매칭 가능성 맵 M</b><span>D를 보고 칸마다 &ldquo;여기는 짝을 찾을 만한 곳인가&rdquo; 점수(0~1)를 낸다. 나중에 RDD*가 <b>점을 더 뽑을 위치</b>를 고를 때 쓴다</span></div>
+    <div class="fl"><b>④ 키포인트 갈래</b><span>가벼운 CNN이 <b>원래 해상도(640×480)</b>를 유지한 채 여러 크기 특징을 만들어, 원래 크기로 키워 이어 붙이고 <b>점수맵 S (640×480)</b>를 낸다. 점을 정확히 찍어야 하므로 <b>해상도를 줄이지 않는 것</b>이 중요하다</span></div>
+    <div class="fl"><b>⑤ DKD로 점 찍기 → 기술자 읽기</b><span>S에서 서브픽셀 키포인트를 찾고(아래 예시), 그 좌표를 4로 나눈 위치에서 D를 <b>보간해 읽으면</b> 키포인트마다 <b>256-D 기술자</b>가 나온다. <span class="hi">두 갈래는 마지막에 &lsquo;좌표&rsquo;로만 만난다</span></span></div>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>DKD 숫자 예시 &mdash; 칸 사이의 위치를 어떻게 찾나</h3>
+  <p>NMS로 (120, 85) 칸이 주변 5×5 중 최고 점수라고 하자. 문제를 단순하게 <b>가로 3칸</b>만 보면 점수가 이렇다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>왼쪽 (−1)</th><th>가운데 (0)</th><th>오른쪽 (+1)</th></tr></thead>
+    <tbody>
+      <tr><td>점수 s</td><td>0.2</td><td><b>0.9</b></td><td>0.6</td></tr>
+      <tr><td>softmax로 바꾼 확률 s′ (온도 0.1 가정)</td><td>0.001</td><td><b>0.952</b></td><td>0.047</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>가중 평균 위치 = (−1)×0.001 + 0×0.952 + (+1)×0.047 ≈ <b>+0.05</b>. 그래서 최종 x 좌표는 <b>120 + 0.05 = 120.05</b>. 오른쪽 점수가 왼쪽보다 높으니 <b>오른쪽으로 살짝</b> 옮겨진 것이다.</p>
+  <ul class="ul">
+    <li>이게 발표 식 (1)~(3) 전부다: <b>NMS로 정수 칸 → softmax로 확률 → 가중 평균으로 오프셋 → 더하기</b></li>
+    <li>argmax(&ldquo;제일 큰 칸 고르기&rdquo;)는 미분이 안 되지만, 가중 평균(soft-argmax)은 미분이 된다. 그래서 <b>&ldquo;좌표가 틀렸다&rdquo;는 오차를 망까지 역전파</b>해 학습할 수 있다 &mdash; 이름의 &lsquo;Differentiable&rsquo;</li>
+    <li>SIFT도 DoG 극값을 <b>테일러 전개로 서브픽셀 보정</b>했다. 같은 목적을 학습 가능한 방식으로 바꾼 것</li>
   </ul>
 </div>
 
 <div class="pt pres">
-  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>결과 — 어려울수록 격차가 벌어진다</h3>
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>학습 &mdash; 기술자 먼저, 얼리고, 그다음 키포인트</h3>
+  <p><b>정답은 어디서?</b> &mdash; 사람이 짝을 찍은 데이터는 없다. 대신 <b>MegaDepth</b>(관광지 사진으로 3D 복원한 데이터)와 새로 모은 <b>Air-to-Ground</b>(인터넷 드론 영상 ↔ 유명 랜드마크 지상 사진)에 <b>카메라 위치와 깊이</b>가 있어서, &ldquo;사진 1의 이 픽셀은 사진 2의 저 픽셀&rdquo;을 계산으로 만든다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>순서</th><th>손실</th><th>쉬운 뜻</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="2"><b>1단계</b><br>기술자 갈래<br><small>H100 8장 · 하루</small></td><td>Focal loss</td><td>정답 짝의 매칭 확률을 1로 올린다. 단 <b>이미 잘 맞히는 쉬운 짝은 덜, 헷갈리는 짝은 더</b> 신경 쓰도록 가중 &mdash; HardNet의 &lsquo;어려운 오답에 집중&rsquo;과 같은 정신</td></tr>
+      <tr><td>Matchability loss</td><td>정답 짝이 있는 칸은 M = 1, 없는 칸은 0이 되게 학습 (BCE를 focal 방식으로 가중)</td></tr>
+      <tr><td colspan="3" style="text-align:center"><b>↓ 기술자 갈래를 얼린다(freeze) &mdash; 이후로는 안 바뀜</b></td></tr>
+      <tr><td rowspan="3"><b>2단계</b><br>키포인트 갈래<br><small>H100 1장 · 4시간</small></td><td>Reprojection loss</td><td>사진 1의 점을 정답 변환으로 사진 2에 옮겼을 때 <b>그 근처(5픽셀 안)에 사진 2의 점도 있어야</b> 한다 &mdash; 반복성</td></tr>
+      <tr><td>Reliability loss</td><td>얼린 기술자로 <b>매칭이 잘 되는 곳에 높은 점수</b>를 주게 한다</td></tr>
+      <tr><td>Peaky loss</td><td>점수가 넓게 퍼지지 않고 <b>한 곳에 뾰족하게</b> 모이게 해, 위 DKD 오프셋이 깔끔해지게 한다</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>왜 얼리나?</b> &mdash; 같이 학습하면 키포인트 쪽이 실패할 때 그 오차가 기술자 쪽까지 흔든다. 발표의 ablation도 &ldquo;함께 학습하면 <b>한쪽만 실패해도 두 갈래가 모두 갱신돼</b> 기술자가 잘 수렴하지 않는다&rdquo;고 보고한다. 기술자를 먼저 완성해 고정해 두면, 키포인트 갈래는 <span class="hi">&ldquo;이 완성된 설명으로 매칭이 잘 되는 곳에 점을 찍어라&rdquo;</span>라는 명확한 목표만 배우면 된다.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>매칭 ① RDD &mdash; dual-softmax (서로 1등인지 부드럽게 확인)</h3>
+  <p>사진 1의 점 3개(A, B, C)와 사진 2의 점 3개(가, 나, 다)의 기술자 유사도(내적)가 이렇다고 하자.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>유사도</th><th>가</th><th>나</th><th>다</th></tr></thead>
+    <tbody>
+      <tr><td><b>A</b></td><td><b>0.9</b></td><td>0.2</td><td>0.1</td></tr>
+      <tr><td><b>B</b></td><td>0.8</td><td>0.3</td><td>0.2</td></tr>
+      <tr><td><b>C</b></td><td>0.1</td><td>0.2</td><td><b>0.7</b></td></tr>
+    </tbody>
+  </table>
+  </div>
   <ul class="ul">
-    <li><b>상대 포즈 추정 AUC@5°</b>에서 2위와의 격차가 MegaDepth-1500 <b>+1.0</b> → 시점 · 스케일 변화가 큰 MegaDepth-View <b>+5.2</b> → 항공 ↔ 지상 Air-to-Ground <b>+9.9</b>pt로 커진다. Air-to-Ground에서 RDD <b>41.4</b>, DeDoDe-V2-G 31.5, DISK 19.2, SuperPoint 1.9</li>
-    <li><b>HPatches 호모그래피</b> &mdash; 조명 변화에서는 모든 방법이 비슷하고, <b>시점 변화 MHA@10px에서 RDD 90%</b>로 1위(ALIKED 88, SuperPoint 87)</li>
-    <li><b>Aachen 주야간 위치 추정</b> &mdash; 가장 어려운 <b>야간</b>에서 세 기준 모두 1위(86.7 / 92.9 / 99.0)</li>
-    <li><b>한계</b> &mdash; 학습 때 <b>명시적 데이터 증강이 없고</b>, RDD*는 희소 매칭이 틀리면 F가 틀려 <b>준밀집 보정까지 함께 실패</b>할 수 있다</li>
+    <li><b>가로 softmax</b> = &ldquo;A 입장에서 가 · 나 · 다 중 누가 제일 닮았나&rdquo;. <b>세로 softmax</b> = &ldquo;가 입장에서 A · B · C 중 누가 제일 닮았나&rdquo;. 두 확률을 <b>곱한다</b></li>
+    <li><b>A–가</b>: A는 가를 제일 좋아하고, 가도 A를 제일 좋아한다 → 곱이 큼 → <b>채택</b></li>
+    <li><b>B–가</b>: B도 가를 제일 좋아하지만, 가는 A를 더 좋아한다 → 세로 확률이 깎여 <b>곱이 A–가보다 확 낮아지고</b>, 서로 1등이 아니므로 짝이 되지 못한다. 한쪽만 좋아하는 짝사랑은 걸러진다</li>
+    <li><b>C–다</b>: 서로 1등 → 채택</li>
+  </ul>
+  <p>07절의 <code>BFMatcher(crossCheck=True)</code>(서로 최근접일 때만 인정)와 같은 생각을 <b>확률로 부드럽게</b> 한 것이다. τ(온도)가 작을수록 1등과 2등 차이를 더 크게 벌린다. RDD는 이 확률이 <b>0.01보다 큰 쌍</b>만 매칭으로 쓴다.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>매칭 ② RDD* &mdash; 점을 더 많이, 그리고 직선 위로 끌어당겨 정확하게</h3>
+  <p>키포인트만 쓰면 매칭이 수천 개 수준이다. RDD*는 <b>매칭 가능성 맵 M에서 점수가 높은 칸을 추가로 잔뜩</b> 뽑아 매칭을 늘린다(준밀집, semi-dense). 문제는 이 칸들이 <b>1/4 해상도</b>라 위치가 최대 몇 픽셀씩 어긋난다는 것. 그래서 보정이 필요하다.</p>
+  <div class="svg-scroll" style="border:1px solid var(--border);border-radius:12px;background:#fff;padding:8px;margin:12px 0">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300" role="img" aria-label="왼쪽 사진의 점 하나는 오른쪽 사진에서 직선(에피폴라 선) 하나에 대응한다. 거친 매칭점을 그 직선에 수직으로 내려 가장 가까운 점으로 옮기고, 4픽셀보다 멀면 버린다">
+<rect width="900" height="300" fill="#fff"/>
+<defs><marker id="ea" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L8 4 L0 8z" fill="#64748b"/></marker></defs>
+<text x="16" y="24" font-size="15" font-weight="700" fill="#0f172a">RDD* 보정 — &ldquo;점 하나 ↔ 직선 하나&rdquo; 규칙으로 거친 매칭을 끌어당긴다</text>
+<rect x="30" y="50" width="330" height="220" rx="8" fill="#f8fafc" stroke="#94a3b8"/>
+<text x="195" y="290" font-size="12" font-weight="700" fill="#334155" text-anchor="middle">사진 1</text>
+<circle cx="170" cy="150" r="7" fill="#2563eb"/>
+<text x="182" y="146" font-size="12" font-weight="700" fill="#1d4ed8">p₁ (고정)</text>
+<rect x="520" y="50" width="350" height="220" rx="8" fill="#f8fafc" stroke="#94a3b8"/>
+<text x="695" y="290" font-size="12" font-weight="700" fill="#334155" text-anchor="middle">사진 2</text>
+<path d="M 530 240 L 860 80" stroke="#16a34a" stroke-width="2.5"/>
+<text x="800" y="78" font-size="12" font-weight="700" fill="#15803d">에피폴라 선 L = F·p₁</text>
+<path d="M 360 150 C 430 120, 460 120, 520 140" stroke="#94a3b8" stroke-width="1.4" fill="none" stroke-dasharray="5 4" marker-end="url(#ea)"/>
+<text x="440" y="112" font-size="11" fill="#64748b" text-anchor="middle">F가 점을 선으로 바꾼다</text>
+<circle cx="690" cy="196" r="26" fill="none" stroke="#f59e0b" stroke-dasharray="4 3"/>
+<circle cx="690" cy="196" r="6" fill="#f97316"/>
+<text x="640" y="240" font-size="11.5" font-weight="700" fill="#c2410c">거친 매칭 p_c2</text>
+<text x="640" y="255" font-size="10.5" fill="#92400e">(1/4 해상도라 조금 빗나감)</text>
+<path d="M 690 196 L 674.6 164.2" stroke="#dc2626" stroke-width="1.8" marker-end="url(#ea)"/>
+<circle cx="673" cy="161" r="6" fill="#dc2626"/>
+<text x="560" y="150" font-size="11.5" font-weight="700" fill="#b91c1c">보정된 점 = 수선의 발</text>
+<text x="735" y="215" font-size="10.5" fill="#92400e">주황 점선 원 = 4픽셀</text>
+<text x="735" y="229" font-size="10.5" fill="#92400e">이보다 멀리 옮겨야 하면 버림</text>
+</svg></div>
+  <div class="flow">
+    <div class="fl"><b>① 먼저 믿을 만한 매칭으로 F 구하기</b><span>위 dual-softmax로 얻은 정확한 키포인트 매칭으로 <b>기본 행렬(fundamental matrix) F</b>를 계산한다(8점법). F는 두 카메라의 위치 관계를 담은 3×3 행렬이다</span></div>
+    <div class="fl"><b>② 점 하나 → 선 하나</b><span>사진 1의 점 p₁을 F에 곱하면 사진 2의 <b>직선 ax + by + c = 0</b>이 나온다. 카메라가 다른 곳에 있으니, p₁의 실제 3D 위치(깊이)를 모르면 사진 2에서는 <b>&ldquo;이 선 위 어딘가&rdquo;</b>까지만 알 수 있다 &mdash; 이게 에피폴라 선</span></div>
+    <div class="fl"><b>③ 거친 점을 선 위로 내린다</b><span>거친 매칭점 p_c2가 선에서 조금 벗어나 있으면, <b>점에서 직선에 수선을 내린 발</b>로 옮긴다. 발표의 식 (11)은 고등학교 &lsquo;점과 직선 사이의 수선의 발&rsquo; 공식 그대로라 계산이 한 줄이다(닫힌 해)</span></div>
+    <div class="fl"><b>④ 너무 멀면 버린다</b><span>옮겨야 할 거리가 <b>4픽셀(패치 한 칸)</b>보다 크면, 애초에 엉뚱한 칸과 짝지어진 것으로 보고 버린다</span></div>
+  </div>
+  <p><b>왜 좋은가</b> &mdash; LoFTR(<a class="ext" href="computer-vision-week05.html#pres">5주차 발표</a>)는 보정할 때 주변의 고해상도 특징을 다시 잘라 와 <b>신경망으로 오프셋을 또 예측</b>한다. RDD*는 <b>기하 규칙 하나로</b> 끝내서 단순하고 빠르다. 이 보정을 빼면 성능(MegaDepth AUC@5°)이 <b>51.3 → 41.3</b>으로 크게 떨어진다.</p>
+  <p class="tip"><b>주의</b> &mdash; ①의 키포인트 매칭이 틀려서 F가 틀리면, ③에서 <b>엉뚱한 선 위로 끌어당기게</b> 된다. 발표가 한계로 꼽은 &ldquo;희소 대응에 의존한다&rdquo;가 바로 이것이다.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>결과 &mdash; 지표부터 읽고 숫자 보기</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>지표</th><th>무엇을 재나 (쉽게)</th></tr></thead>
+    <tbody>
+      <tr><td><b>AUC@5°</b></td><td>매칭으로 두 카메라의 상대 위치 · 방향을 계산하고, 허용 각도 오차를 0°에서 5°까지 늘려 가며 <b>맞힌 쌍의 비율을 그린 곡선 아래 면적</b>(0~100). 클수록 좋고, 10° · 20°보다 5°가 가장 엄격하다</td></tr>
+      <tr><td><b>MHA@10px</b></td><td>매칭으로 호모그래피를 구해 사진 네 모서리를 옮겼을 때 <b>평균 오차가 10픽셀 이내인 쌍의 비율</b></td></tr>
+      <tr><td><b>Aachen 위치 추정</b></td><td>사진 한 장만 보고 <b>찍은 위치를 몇 m · 몇 ° 오차로 맞히나</b>. 거리 · 각도 기준 세 개(가장 엄격한 것이 0.25 m · 2°)에서 맞힌 비율</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>시험</th><th>상황</th><th>RDD</th><th>비교</th></tr></thead>
+    <tbody>
+      <tr><td>MegaDepth-1500</td><td>보통 난이도 실외</td><td>2위보다 <b>+1.0</b></td><td>쉬우면 다들 잘한다</td></tr>
+      <tr><td>MegaDepth-View</td><td>시점 · 크기 변화가 큰 쌍만</td><td>2위보다 <b>+5.2</b></td><td>어려워지자 격차 확대</td></tr>
+      <tr><td>Air-to-Ground</td><td><b>드론 ↔ 지상</b></td><td><b>41.4</b></td><td>DeDoDe-V2-G 31.5 · DISK 19.2 · SuperPoint <b>1.9</b> (거의 실패)</td></tr>
+      <tr><td>HPatches 시점 변화</td><td>MHA@10px</td><td><b>90%</b> (1위)</td><td>ALIKED 88 · SuperPoint 87 · DISK 84. 조명 변화에서는 모두 비슷</td></tr>
+      <tr><td>Aachen 야간</td><td>밤 사진 → 낮에 만든 3D 지도</td><td><b>86.7 / 92.9 / 99.0</b></td><td>세 기준 모두 1위</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><span class="hi">&ldquo;쉬운 시험에서는 비슷하고, 어려운 시험일수록 차이가 벌어진다&rdquo;</span>가 이 논문 결과의 요지다. 멀리까지 골라 보는 deformable attention이 <b>큰 시점 변화</b>에서 힘을 쓴다는 근거로 읽으면 된다.</p>
+  <p><b>한계</b> &mdash; ① 학습할 때 <b>회전 · 크기 등 데이터 증강을 따로 하지 않았다</b>. ② RDD*는 위 주의처럼 <b>키포인트 매칭이 틀리면 보정도 함께 틀린다</b>. 저자들은 증강을 넣고, 보정을 기하 규칙만이 아니라 영상 특징도 보게 고치면 더 좋아질 것이라고 본다.</p>
+</div>
+
+<div class="ex">
+  <p><b>한 번 더 정리 &mdash; 질문이 나오면 이렇게 답하기</b></p>
+  <ul class="ul">
+    <li><b>Q. SIFT와 가장 큰 차이는?</b> &mdash; SIFT는 창을 돌리고 키우는 규칙을 사람이 정했고, RDD는 <b>어디를 볼지</b>를 데이터에서 배운다. 기술자도 128-D가 아니라 256-D</li>
+    <li><b>Q. 왜 두 갈래로 나눴나?</b> &mdash; 같이 학습하면 한쪽 실패가 다른 쪽까지 망쳐서. 기술자를 먼저 배우고 얼린 뒤 키포인트를 배운다</li>
+    <li><b>Q. RDD와 RDD*의 차이는?</b> &mdash; RDD는 키포인트끼리만 매칭(희소), RDD*는 매칭 가능성 맵에서 점을 더 뽑고 <b>에피폴라 선으로 보정</b>(준밀집)</li>
   </ul>
 </div>
 
