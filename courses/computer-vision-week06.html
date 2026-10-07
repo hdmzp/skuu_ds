@@ -473,6 +473,7 @@ table.acc{min-width:0}
   <a href="#orb">06 ORB</a>
   <a href="#compare">07 비교 · OpenCV</a>
   <a href="#mypres">08 내 논문 발표와의 연결</a>
+  <a href="#pres">학생 논문 발표 3편</a>
 </nav>
 
 <div class="wrap">
@@ -498,6 +499,7 @@ table.acc{min-width:0}
   <i><span class="bdg bdg-gyo">교안</span><span>교수님 슬라이드에 있는 내용</span></i>
   <i><span class="bdg bdg-plus">보충설명</span><span>교안에 없지만 이해 · 시험을 위해 따로 찾아 정리한 내용</span></i>
   <i><span class="bdg bdg-pres">내 발표</span><span>내 논문 발표(A Tale of Two Features)와 이어지는 내용</span></i>
+  <i><span class="bdg bdg-pres">학생발표</span><span>학생 논문 발표에서 다룬 내용 — <a class="ext" href="#pres">맨 아래 절</a>에 모아 두었습니다</span></i>
   <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고, <span class="hi">노란 형광펜</span>은 <b>꼭 기억할 문장</b>, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선</span>은 누르면 뜻이 뜹니다.</p>
 </div>
 
@@ -2654,10 +2656,12 @@ table.acc{min-width:0}
       <tr><td rowspan="3"><b>사람이 설계</b><br><small>(교안의 연장)</small></td><td>DAISY (2010)</td><td>SIFT식 히스토그램을 <b>모든 화소에서 촘촘하게</b> 계산하도록 다시 설계</td></tr>
       <tr><td>FREAK (2012)</td><td>망막 구조를 본뜬 점 패턴으로 비교하는 <b>이진</b> 기술자</td></tr>
       <tr><td>KAZE (2012) · AKAZE (2013)</td><td>가우시안 대신 <b>경계를 보존하는 비선형 확산</b>으로 스케일 공간을 만든다. AKAZE는 이진 기술자</td></tr>
-      <tr><td rowspan="4"><b>신경망이 학습</b></td><td>SuperPoint (2018)</td><td>검출 + 기술을 한 망에서 자기지도로 &mdash; <a class="ext" href="computer-vision-week05.html#pres">5주차 발표</a></td></tr>
+      <tr><td rowspan="6"><b>신경망이 학습</b></td><td>HardNet (2017)</td><td>L2Net 구조 그대로, <b>가장 헷갈리는 오답</b>으로 학습해 SIFT 자리(128-D)에서 SIFT를 넘음 &mdash; <a class="ext" href="#pres">6주차 발표</a></td></tr>
+      <tr><td>SuperPoint (2018)</td><td>검출 + 기술을 한 망에서 자기지도로 &mdash; <a class="ext" href="computer-vision-week05.html#pres">5주차 발표</a></td></tr>
       <tr><td>Key.Net (2019)</td><td>미분 필터 조합으로 검출을 학습 &mdash; <a class="ext" href="computer-vision-week05.html#pres">5주차 발표</a></td></tr>
       <tr><td>LoFTR (2021)</td><td>검출 단계 없이 트랜스포머로 <b>밀집 매칭</b> &mdash; <a class="ext" href="computer-vision-week05.html#pres">5주차 발표</a></td></tr>
       <tr><td>SiLK (2023)</td><td>가장 단순한 구성으로 학습한 검출 · 기술 &mdash; <a class="ext" href="computer-vision-week05.html#pres">5주차 발표</a></td></tr>
+      <tr><td>RDD (2025)</td><td>기술은 <b>deformable 트랜스포머</b>, 검출은 CNN으로 <b>분리</b> &mdash; <a class="ext" href="#pres">6주차 발표</a></td></tr>
       <tr><td><b>다른 목적의 거대 모델을 빌려 씀</b></td><td>SD + DINO (2023)</td><td>생성 모델 · 자기지도 ViT의 내부 특징을 그대로 기술자로 &mdash; <a class="ext" href="#mypres">내 발표</a></td></tr>
     </tbody>
   </table>
@@ -2789,8 +2793,181 @@ good = [m for m, n in matches if m.distance &lt; <span class="cm">0.75</span> * 
 발표 자료와 과제 파일은 <a class="ext" href="computer-vision-assignments.html">과제 · 논문 발표 페이지</a>에 함께 정리해 두었다.</div>
 </section>
 
+<!-- ===================== 발표 ===================== -->
+<section class="sec" id="pres">
+  <div class="sec-head"><span class="sec-badge">발표</span><h2 class="sec-title">학생 논문 발표 3편 — 학습된 기술자<small>10/7 발표 · 사람이 설계하던 기술자 자리를 학습이 어떻게 채우나</small></h2></div>
+
+<div class="oneline">
+  <p><b>세 발표를 한 줄로 꿰면</b></p>
+  <ul class="ul">
+    <li>오늘 교안의 SIFT · ORB는 <b>패치를 벡터로 바꾸는 규칙을 사람이 정한</b> 기술자다. 세 발표는 모두 <b>그 규칙을 데이터에서 얻는다</b></li>
+    <li><b>HardNet(2017)</b>은 구조는 단순하게 두고 <b>&ldquo;무엇과 비교하며 배우느냐&rdquo;</b>를 바꿔, SIFT와 같은 128차원 자리에서 SIFT를 넘는다</li>
+    <li><b>RDD(2025)</b>는 기술자를 <b>멀리까지 골라 보는 트랜스포머</b>로, 검출은 <b>정밀한 CNN</b>으로 <b>따로</b> 맡겨 큰 시점 · 스케일 변화에 강해진다</li>
+    <li><b>내 발표(SD + DINO, 2023)</b>는 아예 학습하지 않고 <b>다른 목적으로 학습된 거대 모델의 특징을 빌려</b> 다른 개체 사이의 같은 부위를 잇는다</li>
+  </ul>
+</div>
+
+<div class="docs">
+  <div class="doc" style="border-left-color:#6d28d9">
+    <div class="doc-ico" style="background:#f5f0fd;border-color:#d6c7f5;color:#6d28d9"><span>🎤</span>MY</div>
+    <div class="doc-main">
+      <a class="doc-open" href="#mypres">① 박민지 (내 발표) — A Tale of Two Features: Stable Diffusion Complements DINO for Zero-Shot Semantic Correspondence</a>
+      <p>Zhang et al., <b>NeurIPS 2023</b> · 정리는 위 <a class="ext" href="#mypres">08절</a>, 발표 자료(원문 · 번역 · 슬라이드)는 <a class="ext" href="computer-vision-assignments.html#mypres">과제 · 논문 발표 페이지</a></p>
+    </div>
+    <a class="doc-dl" href="computer-vision-assignments.html#mypres">바로가기 →</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📕</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-w06-pres-hardnet">② 김유진 — Working Hard to Know Your Neighbor&rsquo;s Margins: Local Descriptor Learning Loss (HardNet)</a>
+      <p>Mishchuk, Mishkin, Radenović &amp; Matas, <b>NIPS 2017</b> · <a class="ext" href="https://arxiv.org/abs/1705.10872" target="_blank" rel="noopener">arXiv:1705.10872</a> · 코드 <a class="ext" href="https://github.com/DagnyT/hardnet" target="_blank" rel="noopener">DagnyT/hardnet</a></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week06-presentation-kim-hardnet.pdf" download="컴퓨터비전_6주차_학생발표_김유진_HardNet.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📕</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-w06-pres-rdd">③ 이승찬 — RDD: Robust Feature Detector and Descriptor using Deformable Transformer</a>
+      <p>Chen, Fu, Chen, Teng, Xiao &amp; Zhao, <b>CVPR 2025</b> · <a class="ext" href="https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=11093965" target="_blank" rel="noopener">IEEE</a> · 프로젝트 <a class="ext" href="https://xtcpete.github.io/rdd/" target="_blank" rel="noopener">xtcpete.github.io/rdd</a></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week06-presentation-lee-rdd.pdf" download="컴퓨터비전_6주차_학생발표_이승찬_RDD.pdf">⬇ 다운로드</a>
+  </div>
+</div>
+
+<!-- ---------- ② HardNet ---------- -->
+<h3 class="sub-title">② 김유진 — HardNet (2017) · 구조가 아니라 &lsquo;오답 고르는 법&rsquo;을 바꿨다</h3>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>문제 제기 — CNN 기술자는 왜 SIFT를 못 이겼나</h3>
+  <p>좋은 기술자의 두 조건은 오늘 01절과 같다 &mdash; <b>불변성</b>(조명 · 시점 · 스케일이 바뀌어도 같은 지점은 같은 벡터)과 <b>변별력</b>(다른 지점은 벡터 공간에서 뚜렷이 떨어져야 함). SIFT는 <b>4×4 셀 × 8방향 = 128차원</b> 수작업 설계로 15년 넘게 표준이었다.</p>
+  <p>CNN으로 바꾸면 복잡한 텍스처 · 조명 변화에 더 잘 대응할 것 같았지만, 실제로는 <b>패치 검증 벤치마크만 통과하고 광각 스테레오 · 대규모 검색에서는 SIFT에 계속 졌다</b>. 발표의 진단은 <span class="hi">&ldquo;망 구조가 아니라 학습할 때 보여 주는 오답(negative)이 문제였다&rdquo;</span>는 것이다. 무작위로 뽑은 오답은 대부분 <b>이미 충분히 멀어서</b> 더 배울 것이 없다.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>핵심 아이디어 — 배치 안에서 가장 헷갈리는 이웃과 싸운다</h3>
+  <div class="flow">
+    <div class="fl"><b>① 패치 쌍 n개를 한 배치로</b><span>같은 3D 점을 다른 사진에서 찍은 <b>32×32 패치 쌍</b>(anchor a<sub>i</sub>, positive p<sub>i</sub>)을 n개 넣는다</span></div>
+    <div class="fl"><b>② CNN(L2Net 구조)이 128차원 벡터로</b><span>3×3 합성곱 6층(32 → 32 → 64 → 64 → 128 → 128, 중간에 stride 2) + 마지막 8×8 합성곱 → <b>L2 정규화된 128-D</b>. SIFT와 차원이 같아 기존 파이프라인에 그대로 꽂힌다</span></div>
+    <div class="fl"><b>③ n×n 거리 행렬</b><span>모든 a<sub>i</sub>와 p<sub>j</sub> 사이 거리를 잰다. <b>대각선 = 정답 쌍</b>(짧아야 함), <b>나머지 = 오답 후보</b></span></div>
+    <div class="fl"><b>④ Hardest-in-batch 마이닝</b><span>각 정답 쌍마다 <b>같은 행 · 같은 열에서 대각선을 뺀 최솟값</b> &mdash; 즉 <b>가장 가까운(가장 헷갈리는) 오답</b> 하나만 고른다</span></div>
+    <div class="fl"><b>⑤ Triplet margin loss</b><span>정답 거리 + 마진(m = 1)이 그 오답 거리보다 작아지도록 밀어낸다</span></div>
+  </div>
+  <p class="tex-d">L=\frac{1}{n}\sum_{i=1}^{n}\max\Bigl(0,\;1+d(a_i,p_i)-\min\bigl(d(a_i,p_{j_{\min}}),\,d(a_{k_{\min}},p_i)\bigr)\Bigr)</p>
+  <p>발표의 정리 &mdash; <b>&ldquo;CNN은 기술자를 만들고, HardNet의 손실은 기술자 공간을 학습한다.&rdquo;</b> 마이닝과 손실은 <b>학습 때만</b> 쓰이고, 실제 사용 시에는 가벼운 128-D 추출기 하나만 남는다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>왜 &lsquo;가장 가까운 오답&rsquo;인가 — 07절 비율 검사와 같은 이야기</h3>
+  <p>07절 매칭에서 <b>Lowe의 비율 검사</b>는 &ldquo;1등 후보와 2등 후보의 거리가 비슷하면 버린다&rdquo;였다. 실제 매칭을 망치는 것은 <b>멀리 있는 오답이 아니라 정답 바로 옆에 붙은 오답</b>이라는 뜻이다.</p>
+  <p>HardNet의 손실은 이 상황을 <b>학습 단계에서 미리</b> 다룬다. 정답 거리와 <b>가장 가까운 오답</b> 거리 사이에 마진 1을 강제하면 테스트에서 1등과 2등의 거리 차가 벌어지고, <span class="hi">비율 검사를 통과하는 좋은 매칭이 늘어난다</span>.</p>
+  <p><b>큰 배치가 필수인 이유</b>도 여기서 나온다. 배치가 16이면 후보가 15개뿐이라 &ldquo;적당히 먼&rdquo; 오답만 잡히고, 512면 <b>진짜로 헷갈리는</b> 오답이 후보 안에 들어올 확률이 커진다(발표 11p).</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>결과 — 숫자를 읽는 법</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>기술자</th><th>SIFT</th><th>TFeat-M</th><th>L2Net</th><th>HardNet+</th></tr></thead>
+    <tbody>
+      <tr><td>Brown 데이터셋 평균 <b>FPR95</b> (낮을수록 좋음)</td><td>26.55%</td><td>6.64%</td><td>3.24%</td><td><b>1.90%</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <ul class="ul">
+    <li><b>FPR95</b> &mdash; 정답 쌍의 <b>95%를 맞히도록</b> 거리 기준을 잡았을 때, 오답 쌍을 정답이라고 잘못 받아들이는 비율. 작을수록 정답과 오답이 잘 갈라진다</li>
+    <li><b>같은 구조인 L2Net의 절반</b> &mdash; 망은 같고 학습 방법만 바꿨는데 에러가 절반이 됐다. <span class="hi">&lsquo;구조 변경&rsquo;이 아니라 &lsquo;학습 전략&rsquo;의 승리</span></li>
+    <li><b>학습에 안 쓴 HPatches</b>에서도 mAP가 매칭 40.8 → <b>50.3</b>, 검색 58.6 → <b>65.2</b> (L2Net → HardNet)</li>
+    <li><b>Ablation</b> &mdash; 손실(Softmin · Triplet · Contrastive)을 바꿔도 Hardest-in-batch 샘플링이면 0.47~0.48로 비슷하고, 무작위 샘플링이면 0.08~0.35로 떨어진다. <b>&ldquo;손실 종류보다 어떤 오답을 뽑느냐가 훨씬 중요하다&rdquo;</b></li>
+  </ul>
+</div>
+
+<!-- ---------- ③ RDD ---------- -->
+<h3 class="sub-title">③ 이승찬 — RDD (2025) · 기술은 멀리 보고, 검출은 정밀하게, 둘은 따로</h3>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>문제 제기 — 기하 불변성을 &lsquo;어디까지 보고&rsquo; 배울 것인가</h3>
+  <p>시점 · 스케일 · 조명이 크게 바뀌어도 믿을 수 있는 키포인트와 기술자가 필요하다. 발표는 지금까지의 접근을 네 단계로 정리한다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>단계</th><th>대표</th><th>기하 불변성을 얻는 방법</th><th>한계</th></tr></thead>
+    <tbody>
+      <tr><td><b>손설계</b></td><td>SIFT · ORB</td><td>그래디언트 히스토그램 · 무게중심으로 <b>스케일 · 방향</b>을 추정 (오늘 02 · 06절)</td><td>규칙이 정한 변환까지만</td></tr>
+      <tr><td><b>학습</b></td><td>LIFT · AffNet · LF-Net</td><td>대부분 데이터 증강, 일부는 아핀 파라미터를 예측해 STN으로 패치를 펴 준다</td><td><b>미리 정한 변환 형태</b>를 가정</td></tr>
+      <tr><td><b>Deformable Conv</b></td><td>ASLFeat · ALIKED</td><td>합성곱 커널의 샘플링 위치를 <b>학습으로 비틀어</b> 불변 특징을 직접 뽑는다</td><td><b>국소 창(local window)</b>에 갇힘</td></tr>
+      <tr><td><b>Deformable Attention</b></td><td><b>RDD</b></td><td>쿼리마다 <b>소수의 핵심 위치를 거리 제한 없이</b> 골라 본다</td><td>&mdash;</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>또 하나의 축은 <b>검출과 기술을 같이 배울지 따로 배울지</b>다. SIFT는 따로, SuperPoint · SiLK(<a class="ext" href="computer-vision-week05.html#pres">5주차 발표</a>)는 같이 학습했는데, <b>기술자가 덜 학습되면 검출 품질까지 끌어내린다</b>는 결과가 나오면서 DeDoDe · XFeat부터 <b>다시 분리</b>하는 흐름이 생겼다. RDD도 이 흐름을 따라 <b>두 갈래(branch)</b>로 나눈다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>Deformable Attention을 한 문단으로</h3>
+  <p>보통의 셀프 어텐션은 <b>모든 픽셀이 모든 픽셀</b>을 본다. 넓게 보지만 계산량이 픽셀 수의 <b>제곱</b>이라 고해상도 특징맵에 쓰기 어렵다. 합성곱은 반대로 싸지만 <b>3×3 같은 이웃</b>만 본다.</p>
+  <p>Deformable attention은 그 사이다. 각 픽셀(쿼리)이 자기 특징을 보고 <b>&ldquo;어디를 볼지(오프셋 Δp)&rdquo;와 &ldquo;얼마나 믿을지(가중치 A)&rdquo;</b>를 선형층으로 직접 예측해, <b>정해진 개수(RDD는 8점)</b>만 샘플링한다. 그 위치는 멀리 떨어져 있어도 되고, <b>여러 스케일의 특징맵</b>에서 함께 가져온다.</p>
+  <p>SIFT가 <b>방향을 재서 창을 돌리고, 스케일을 재서 창 크기를 맞췄던</b> 일(02절)을 <span class="hi">망이 쿼리마다 &lsquo;샘플링 위치를 옮기는&rsquo; 방식으로 스스로 배운다</span>고 보면 된다.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>구조 — 두 갈래가 따로 일한다</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>기술자 갈래 F<sub>D</sub> (넓게 보는 트랜스포머)</th><th>키포인트 갈래 F<sub>K</sub> (정밀한 CNN)</th></tr></thead>
+    <tbody>
+      <tr><td>입력 → 특징</td><td><b>ResNet-50</b>에서 1/4 · 1/8 · 1/16 · 1/32 스케일 + CNN으로 1/64 추가 → 위치 인코딩</td><td><b>경량 CNN</b>(잔차 연결)으로 1/1 · 1/2 · 1/8 · 1/32 스케일(각 32채널)</td></tr>
+      <tr><td>핵심 연산</td><td><b>Multi-scale deformable attention</b> 4층 × 8헤드 × 8점</td><td>원해상도로 키워 이어 붙임(H×W×128) → 점수맵 S</td></tr>
+      <tr><td>출력</td><td><b>기술자 맵 D</b> (H/4 × W/4 × <b>256</b>) + <b>매칭 가능성 맵 M</b></td><td><b>DKD</b>로 서브픽셀 키포인트 → 그 위치에서 D를 샘플링해 <b>256-D 기술자</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>DKD(Differentiable Keypoint Detection)</b> &mdash; 5×5 창에서 NMS로 정수 좌표를 고른 뒤, 창 안 점수를 softmax로 확률로 바꿔 <b>가중 평균 위치(soft-argmax)</b>를 더한다. 02절 SIFT의 <b>서브픽셀 위치 보정</b>을 미분 가능하게 만든 것이라 보면 된다.</p>
+  <p><b>학습도 따로</b> &mdash; 기술자 갈래를 먼저(focal loss + 매칭 가능성 loss, H100 8장으로 하루) 학습하고 <b>얼린(freeze) 다음</b> 키포인트 갈래를(재투영 · 신뢰도 · peaky loss, H100 1장으로 4시간) 학습한다. 정답 대응은 MegaDepth와 새로 모은 <b>Air-to-Ground</b>(드론 영상 ↔ 지상 사진)의 포즈 · 깊이로 만든다.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>매칭 — RDD(희소)와 RDD*(준밀집)</h3>
+  <ul class="ul">
+    <li><b>RDD (sparse)</b> &mdash; 두 영상 기술자의 내적 행렬에 <b>행 방향 · 열 방향 softmax를 둘 다</b> 걸어 곱한다(dual-softmax). 서로가 서로를 1등으로 고른 쌍에서 값이 커지는 <b>&ldquo;부드러운 상호 최근접(MNN)&rdquo;</b>이고, 07절 <code>BFMatcher(crossCheck=True)</code>와 같은 발상이다. 확률 0.01 이상만 채택</li>
+    <li><b>RDD* (semi-dense)</b> &mdash; 매칭 가능성 맵 M 상위 K개 위치로 거친(1/4 해상도) 매칭을 더 만든 뒤, 희소 매칭으로 <b>기본 행렬 F</b>를 8점법으로 추정하고, 각 거친 매칭점을 <b>에피폴라 선 위로 닫힌 해로 끌어당겨</b> 서브픽셀로 보정한다. 4픽셀 넘게 움직여야 하면 이상치로 버린다</li>
+    <li>LoFTR(<a class="ext" href="computer-vision-week05.html#pres">5주차 발표</a>)처럼 미세 특징을 다시 잘라 오프셋을 예측하는 대신 <b>기하 제약 하나로</b> 보정해 단순하다. 이 보정을 빼면 MegaDepth AUC@5°가 <b>51.3 → 41.3</b></li>
+  </ul>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>결과 — 어려울수록 격차가 벌어진다</h3>
+  <ul class="ul">
+    <li><b>상대 포즈 추정 AUC@5°</b>에서 2위와의 격차가 MegaDepth-1500 <b>+1.0</b> → 시점 · 스케일 변화가 큰 MegaDepth-View <b>+5.2</b> → 항공 ↔ 지상 Air-to-Ground <b>+9.9</b>pt로 커진다. Air-to-Ground에서 RDD <b>41.4</b>, DeDoDe-V2-G 31.5, DISK 19.2, SuperPoint 1.9</li>
+    <li><b>HPatches 호모그래피</b> &mdash; 조명 변화에서는 모든 방법이 비슷하고, <b>시점 변화 MHA@10px에서 RDD 90%</b>로 1위(ALIKED 88, SuperPoint 87)</li>
+    <li><b>Aachen 주야간 위치 추정</b> &mdash; 가장 어려운 <b>야간</b>에서 세 기준 모두 1위(86.7 / 92.9 / 99.0)</li>
+    <li><b>한계</b> &mdash; 학습 때 <b>명시적 데이터 증강이 없고</b>, RDD*는 희소 매칭이 틀리면 F가 틀려 <b>준밀집 보정까지 함께 실패</b>할 수 있다</li>
+  </ul>
+</div>
+
+<!-- ---------- 마무리 ---------- -->
+<h3 class="sub-title">세 발표를 교안과 나란히 놓고 보기</h3>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>같은 질문에 대한 네 가지 대답</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>질문</th><th>SIFT (오늘 교안)</th><th>HardNet</th><th>RDD</th><th>SD + DINO (내 발표)</th></tr></thead>
+    <tbody>
+      <tr><td>벡터를 누가 만드나</td><td>사람이 설계한 규칙</td><td><b>CNN</b> + 가장 헷갈리는 오답과의 triplet 손실</td><td><b>Deformable 트랜스포머</b></td><td><b>다른 목적의 거대 모델</b>을 빌려 씀 (추가 학습 없음)</td></tr>
+      <tr><td>차원</td><td>128</td><td><b>128</b> (SIFT 자리에 그대로)</td><td>256</td><td>두 특징을 이어 붙여 훨씬 큼</td></tr>
+      <tr><td>검출은</td><td>DoG 극값</td><td>다루지 않음 &mdash; <b>기술자만</b> 학습</td><td>별도의 CNN 갈래 + DKD</td><td>없음 &mdash; 모든 위치(dense)</td></tr>
+      <tr><td>불변성은 어디서</td><td>스케일 · 방향 정규화</td><td>데이터 + <b>어려운 오답</b></td><td>데이터 + <b>샘플링 위치를 옮기는 어텐션</b></td><td>수억 장으로 학습된 표현</td></tr>
+      <tr><td>잇는 대상</td><td>같은 장면</td><td>같은 장면</td><td>같은 장면 (항공 ↔ 지상 같은 <b>극단적 시점</b>까지)</td><td><b>다른 개체의 같은 부위</b></td></tr>
+      <tr><td>매칭</td><td>최근접 + 비율 검사</td><td>최근접 (L2)</td><td>dual-softmax 상호 최근접</td><td>최근접</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>세 발표 모두 <span class="hi">&ldquo;기술자는 벡터이고, 매칭은 벡터 사이 거리 비교&rdquo;</span>라는 오늘 교안의 틀은 그대로 둔다. 바뀐 것은 <b>그 벡터를 만드는 주체</b>뿐이다 &mdash; <a class="ext" href="#compare">07절 표</a>에도 HardNet과 RDD를 끼워 두었다.</p>
+</div>
+</section>
+
 <p class="src">출처 — 컴퓨터비전 06. Feature Descriptors (2026-2학기, 81페이지)<br>
-교안 내용을 절 단위로 정리하고 도식 · 예시 슬라이드 <b>56장</b>을 캡처해 실었다. &lsquo;보충설명&rsquo; 뱃지가 붙은 부분과 08절은 교안에 없는 내용을 따로 찾아 정리한 것이다.</p>
+교안 내용을 절 단위로 정리하고 도식 · 예시 슬라이드 <b>56장</b>을 캡처해 실었다. &lsquo;보충설명&rsquo; 뱃지가 붙은 부분과 08절은 교안에 없는 내용을 따로 찾아 정리한 것이다.<br>
+학생 논문 발표 절은 김유진(HardNet, NIPS 2017) · 이승찬(RDD, CVPR 2025) 발표 자료를 바탕으로 정리했다.</p>
 
 </div>
 
