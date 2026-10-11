@@ -281,6 +281,9 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .qa .tbl-wrap{background:#fff;margin:8px 0}
 .qa table{min-width:0}
 
+.pt .fix{margin-top:9px;padding:8px 12px;border-radius:7px;background:#fff7ed;border:1px dashed #f0c48a;font-size:12.5px;color:#7c2d12;line-height:1.75}
+.pt .fix b{color:#7c2d12}
+
 /* ===== 슬라이드 모아보기 ===== */
 .deck{background:#efeeea;border:1px solid var(--border);border-radius:var(--radius);padding:12px 12px 14px;margin-bottom:20px}
 .deck-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:8px}
@@ -820,6 +823,34 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <p><b>ReLU</b> — 시그모이드는 <span class="tex">z</span>가 조금만 커지거나 작아져도 <b>기울기가 0에 가까워진다</b>(기울기 소실). 층을 여러 개 쌓으면 그 작은 기울기들이 곱해져 <b>앞쪽 층에는 학습 신호가 거의 도달하지 않는다</b>. ReLU는 양수 구간의 <b>기울기가 정확히 1</b>이라 이 문제가 없고, 음수를 0으로 눌러 <b>희소한 활성화</b>를 만든다.
   <a class="ext" href="#backprop">6.5</a>에서 보겠지만 <b>미분이 1이라 역전파 계산도 훨씬 간단해진다</b>.</p>
   <p><b>Softmax</b> — 출력을 <b>합이 1인 확률</b>로 만들어야 <b>교차 엔트로피 손실</b>과 짝이 맞는다. 지수를 쓰는 이유는 ① 값이 항상 양수가 되고 ② <b>큰 값과 작은 값의 차이를 벌려</b> 가장 높은 클래스를 또렷하게 만들기 때문이다.</p>
+</div>
+
+<div class="pt plus" id="sparse">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>희소한 활성화(Sparse Activation) — ReLU가 음수를 0으로 누르는 것의 의미</h3>
+  <p><b>희소한 활성화</b>란 &ldquo;신경망의 수많은 노드 중 <b>일부만 켜지고(활성화) 나머지는 정확히 0으로 꺼져 있는</b> 상태&rdquo;를 말한다. 수학 · 컴퓨터 공학에서 <b>희소하다(sparse)</b>는 데이터 대부분이 0으로 채워진 상태이고, 0이 거의 없이 숫자로 꽉 찬 상태는 <b>밀집(dense)</b>이라고 한다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th></th><th>시그모이드</th><th>ReLU</th></tr></thead>
+    <tbody>
+      <tr><td>큰 음수를 넣으면</td><td>0에 <b>가까운</b> 값(예: <span class="tex">\sigma(-9)\approx0.0001</span>) &mdash; 완전한 0은 아니다</td><td><span class="tex">z\le0</span>이면 <b>정확히 0</b></td></tr>
+      <tr><td>층 전체의 출력</td><td>모든 노드가 미세하게나마 값을 가진다 &rarr; <b>밀집된 활성화</b></td><td>상당수 노드가 0 &rarr; <b>희소한 활성화</b></td></tr>
+    </tbody>
+  </table></div>
+  <p>예) 은닉층 가중합이 <span class="tex">\mathbf z=[-2.0,\;0.5,\;-0.3,\;1.8]</span>이면 시그모이드 출력은 <span class="tex">[0.12,\;0.62,\;0.43,\;0.86]</span>으로 넷 다 켜져 있지만, ReLU 출력은 <span class="tex">[0,\;0.5,\;0,\;1.8]</span>로 <b>두 개가 완전히 꺼진다</b>.</p>
+  <p><b>왜 좋다고 하나</b></p>
+  <ul class="ul">
+    <li><b>연산 효율</b> &mdash; 0이 된 노드는 다음 층에 곱해도 0이라 원리적으로 계산을 건너뛸 수 있다</li>
+    <li><b>뇌와 비슷한 선택적 반응</b> &mdash; 사과를 볼 때 모든 뇌세포가 반응하지 않고 &lsquo;빨간색&rsquo; · &lsquo;둥근 모양&rsquo; 담당 뉴런만 켜지듯, 특정 특징에만 반응하는 소수의 노드가 켜지면 노이즈가 줄고 표현이 명확해진다</li>
+    <li><b>과적합 억제</b> &mdash; 모든 노드가 항상 얽혀 값을 주고받으면 훈련 데이터의 노이즈까지 외우기 쉽다. 필요한 노드만 독립적으로 일하게 하면 일반화에 도움이 된다</li>
+  </ul>
+  <p><b>한 줄 요약</b> &mdash; &ldquo;음수를 0으로 눌러 희소한 활성화를 만든다&rdquo; = 노드를 항상 다 켜 두지 않고, 음수인 노드는 완전히 꺼서(0) <b>핵심 노드만 일하게</b> 만든다는 뜻이다.</p>
+  <div class="fix"><b>정정 · 주의</b>
+    <ul class="ul">
+      <li><b>&lsquo;절반 정도가 꺼진다&rsquo;는 경우에 따라 다르다</b> &mdash; 가중합이 0을 중심으로 대칭으로 퍼져 있을 때(예: He 초기화 직후) 약 절반이 음수라 그렇게 되는 것이고, 학습이 진행되면 층과 데이터에 따라 비율이 달라진다. He 초기화가 분산을 2배로 잡는 것도 바로 이 &lsquo;절반이 0&rsquo;을 메우기 위해서다(<a class="ext" href="#v2-structure">개정① 21p</a>)</li>
+      <li><b>속도 이득은 자동으로 생기지 않는다</b> &mdash; GPU의 일반 행렬곱은 0이 있어도 그냥 곱한다. ReLU가 실제로 빠른 이유는 주로 <span class="tex">\max(0,z)</span> 자체가 지수 계산(시그모이드)보다 싸고, 기울기가 0 또는 1이라 역전파가 간단하기 때문이다. &lsquo;0인 부분은 아예 계산하지 않기&rsquo;를 구조적으로 구현한 것이 개정판 24p의 <b>MoE의 희소 활성화</b>(토큰마다 전문가 FFN 일부만 계산)다 &mdash; 같은 이름이지만 단위가 &lsquo;노드&rsquo;가 아니라 &lsquo;전문가 블록&rsquo;이다</li>
+      <li><b>과적합 억제는 보조 효과</b>로 보는 편이 정확하다. 과적합을 직접 겨냥한 도구는 드롭아웃 · 가중치 감쇠 · 조기 종료다(<a class="ext" href="#v2-train">개정② 24p</a>)</li>
+      <li><b>대가도 있다 &mdash; dying ReLU</b>. <span class="tex">z&lt;0</span>인 노드는 기울기도 0이라, 어떤 노드가 모든 입력에서 음수가 되어 버리면 다시는 갱신되지 않고 영원히 꺼진다. LeakyReLU · GELU가 음수 쪽에 작은 기울기를 남겨 이를 완화한다 &mdash; 실습 1 §3에서 GELU 10/10, ReLU 6/10 성공</li>
+    </ul>
+  </div>
 </div>
 </section>
 
