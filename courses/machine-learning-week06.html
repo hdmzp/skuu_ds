@@ -1092,18 +1092,28 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   </ul>
 </div>
 
+<div class="pt plus" id="mnist">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>MNIST 데이터셋이란</h3>
+  <p><b>MNIST</b>(Modified National Institute of Standards and Technology)는 <b>0부터 9까지의 손글씨 숫자 이미지</b>로 이루어진, 머신러닝 · 딥러닝 분야의 가장 대표적인 기초 데이터셋이다.</p>
+  <ul class="ul">
+    <li><b>데이터 구성</b> &mdash; <b>28 × 28 픽셀 흑백(grayscale)</b> 이미지, 훈련용 <b>60,000개</b> · 테스트용 <b>10,000개</b>. 실습 2는 훈련 60,000개 중 10%를 떼어 <b>훈련 54,000 / 검증 6,000</b>으로 나눠 쓴다(<a class="ext" href="#v2-train">개정② 6p</a>)</li>
+    <li><b>주요 용도</b> &mdash; 새 이미지 분류 알고리즘이나 컴퓨터 비전 모델이 정상적으로 작동하는지 검증하는 <b>&lsquo;Hello, World&rsquo; 격의 표준 벤치마크</b>로 널리 쓰인다</li>
+    <li><b>데이터 증강 시 주의점</b> &mdash; 과적합을 막으려고 이미지를 변형할 때 <b>상하 반전이나 180도 회전</b>을 적용하면 숫자 &lsquo;6&rsquo;이 &lsquo;9&rsquo;로 바뀌어 <b>정답 클래스(라벨)가 달라지는</b> 문제가 생길 수 있다. 그래서 실습 2의 &lsquo;생각해 볼 문제 5&rsquo;도 뒤집기 대신 작은 이동 · 회전만 주는 <code>transforms.RandomAffine</code>을 권한다</li>
+  </ul>
+</div>
+
 <div class="pt gyo">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>활성화 함수 — 고전 vs 현대, 그리고 기울기 소실 (15 · 16p)</h3>
   <div class="tbl-wrap">
   <table>
-    <thead><tr><th>함수</th><th>식</th><th>특징 / 주 사용처</th></tr></thead>
+    <thead><tr><th>함수</th><th>식</th><th>특징 / 주 사용처</th><th>한 줄 요약 <span class="bdg bdg-plus">보충설명</span></th></tr></thead>
     <tbody>
-      <tr><td>Sigmoid</td><td><span class="tex">1/(1+e^{-z})</span></td><td>출력 (0, 1) &mdash; 이진 분류 출력층</td></tr>
-      <tr><td>tanh</td><td><span class="tex">(e^z-e^{-z})/(e^z+e^{-z})</span></td><td>출력 (−1, 1) &mdash; RNN 게이트</td></tr>
-      <tr><td><b>ReLU</b></td><td><span class="tex">\max(0,z)</span></td><td><b>은닉층 기본값</b> &mdash; dying ReLU 문제</td></tr>
-      <tr><td>LeakyReLU</td><td><span class="tex">\max(\alpha z,z)</span></td><td>음수 영역에 작은 기울기 α</td></tr>
-      <tr><td><b>GELU</b></td><td><span class="tex">z\cdot\Phi(z)</span></td><td>BERT · GPT-2/3 · ViT</td></tr>
-      <tr><td><b>SiLU / Swish</b></td><td><span class="tex">z\cdot\sigma(z)</span></td><td>EfficientNet · LLaMA(SwiGLU)</td></tr>
+      <tr><td>Sigmoid</td><td><span class="tex">1/(1+e^{-z})</span></td><td>출력 (0, 1) &mdash; 이진 분류 출력층</td><td>출력값을 0과 1 사이의 확률로 바꿔, 주로 <b>이진 분류 모델의 최종 출력층</b>에 쓴다</td></tr>
+      <tr><td>tanh</td><td><span class="tex">(e^z-e^{-z})/(e^z+e^{-z})</span></td><td>출력 (−1, 1) &mdash; RNN 게이트</td><td>출력값을 −1과 1 사이로 맞춰 <b>값의 중심을 0</b>으로 두며, 주로 RNN 계열의 게이트 제어에 쓴다</td></tr>
+      <tr><td><b>ReLU</b></td><td><span class="tex">\max(0,z)</span></td><td><b>은닉층 기본값</b> &mdash; dying ReLU 문제</td><td>음수를 0으로 눌러 연산이 빠르고 <b>은닉층의 기본값</b>으로 쓰지만, 모든 입력에서 0 이하가 된 뉴런은 영구히 꺼지는 <b>Dying ReLU</b> 문제가 있다</td></tr>
+      <tr><td>LeakyReLU</td><td><span class="tex">\max(\alpha z,z)</span></td><td>음수 영역에 작은 기울기 α</td><td>음수 영역에 아주 작은 기울기 <span class="tex">\alpha</span>를 남겨 <b>뉴런이 꺼지는 문제를 막은</b> ReLU 개선형</td></tr>
+      <tr><td><b>GELU</b></td><td><span class="tex">z\cdot\Phi(z)</span></td><td>BERT · GPT-2/3 · ViT</td><td>정규분포의 누적확률 <span class="tex">\Phi(z)</span>를 곱해 <b>매끄럽게 꺾이는</b> 모양 &mdash; BERT · GPT 시리즈 등 <b>트랜스포머의 표준</b></td></tr>
+      <tr><td><b>SiLU / Swish</b></td><td><span class="tex">z\cdot\sigma(z)</span></td><td>EfficientNet · LLaMA(SwiGLU)</td><td>입력값에 시그모이드를 곱해 <b>부드러운 미분값</b>을 주며, EfficientNet · LLaMA 등 최근 고성능 모델에 폭넓게 쓰인다</td></tr>
     </tbody>
   </table>
   </div>
