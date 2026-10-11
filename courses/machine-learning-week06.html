@@ -281,6 +281,9 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .qa .tbl-wrap{background:#fff;margin:8px 0}
 .qa table{min-width:0}
 
+.bdg-lab{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
+.pt.lab{border-left-color:#6d28d9}
+.pt figure.sld.solo{margin:10px 0;cursor:zoom-in}
 .pt .fix{margin-top:9px;padding:8px 12px;border-radius:7px;background:#fff7ed;border:1px dashed #f0c48a;font-size:12.5px;color:#7c2d12;line-height:1.75}
 .pt .fix b{color:#7c2d12}
 
@@ -1026,6 +1029,29 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   </div>
 </div>
 
+<div class="pt lab" id="lab-flow">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>한 장으로 보는 MLP 학습 흐름 — 위 네 단계가 그림의 어디인가</h3>
+  <figure class="sld solo"><img width="2000" height="982" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6lab-train-flow.jpg" alt="실습 그림 — 784-600-500-10 MLP의 순전파 · 손실 계산 · 오차 역전파 · 가중치 갱신 · Error 허용범위 판단 흐름"><figcaption><b>실습 그림</b> 순전파 → 손실 → 판단 → 역전파 → 갱신의 순환 (누르면 크게)</figcaption></figure>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>그림 속 위치</th><th>단계</th><th>하는 일</th></tr></thead>
+    <tbody>
+      <tr><td>아래 오른쪽 화살표</td><td><b>1. 순전파</b></td><td>입력 <span class="tex">x_1\ldots x_{784}</span> → 은닉층(600) → 은닉층(500) → 출력층(10). 각 층에서 가중합 <span class="tex">z</span>를 구하고 활성화 함수를 거쳐 <span class="tex">h</span>를 낸다 &mdash; 노드를 반으로 나눈 그림(왼쪽 <span class="tex">z</span>, 오른쪽 <span class="tex">h</span>)이 그 뜻이다</td></tr>
+      <tr><td>오른쪽 아래 상자</td><td><b>2. 손실 계산</b></td><td>예측 <span class="tex">\hat y_1\ldots\hat y_{10}</span>과 정답의 차이를 CCE 같은 손실 함수 <span class="tex">L(\mathbf y,\hat{\mathbf y})</span>로 계산</td></tr>
+      <tr><td>마름모</td><td><b>판단</b></td><td><b>Error &lt; 허용범위</b>면 Yes → 학습 종료(→ 성능 평가 지표), No → 역전파로</td></tr>
+      <tr><td>위 왼쪽 큰 화살표</td><td><b>3. 오차 역전파</b></td><td>미분 연쇄법칙으로 <span class="tex">\partial L/\partial\mathbf W_{(0)},\;\partial L/\partial\mathbf W_{(1)}</span>을 구한다(출력층 → 입력층 방향)</td></tr>
+      <tr><td>왼쪽 Update 상자</td><td><b>가중치 갱신</b></td><td><span class="tex">\mathbf W\leftarrow\mathbf W-\alpha\,\partial L/\partial\mathbf W</span> &mdash; 목표는 <span class="tex">\arg\min_{\mathbf W}L(\mathbf y,\hat{\mathbf y})</span>. 갱신된 W로 다시 순전파</td></tr>
+      <tr><td>오른쪽 위 주황 상자</td><td>은닉 노드 확대</td><td>1번째 은닉층 1번째 노드 &mdash; bias · <span class="tex">x_1</span> · <span class="tex">x_2</span>에 가중치 <span class="tex">w^{(0)}_{10},w^{(0)}_{11},w^{(0)}_{12}</span>를 곱해 더한 <span class="tex">z^{(1)}_1</span> → 활성화 <span class="tex">f_1</span> → 출력 <span class="tex">h^{(1)}_1</span>. <b>파란 점선</b>은 역전파 때 기울기가 거꾸로 흐르는 길이다</td></tr>
+    </tbody>
+  </table></div>
+  <div class="fix"><b>정정 · 주의 — 그림 속 표기 두 군데가 784-600-500-10 구조와 맞지 않는다</b>
+    <ul class="ul">
+      <li><b>CCE의 <span class="tex">C=2</span></b> &mdash; 출력이 <span class="tex">\hat y_1\ldots\hat y_{10}</span>이므로 클래스 수는 <b><span class="tex">C=10</span></b>이어야 한다(<span class="tex">C=2</span>면 이진 분류라 BCE와 같다, <a class="ext" href="#cce-symbols">6.4 CCE 기호</a>)</li>
+      <li><b>가중치 행렬 개수</b> &mdash; 그림 위쪽에는 <span class="tex">\mathbf W_{(0)},\mathbf W_{(1)},\mathbf W_{(2)}</span> 세 개가 그려져 있는데(은닉층이 2개라 층 사이가 3곳), Update 상자 · 역전파 화살표 · 순전파 식 <span class="tex">f_2(\mathbf w_1^\top f_1(\mathbf w_0^\top\mathbf x+bias^{(0)})+bias^{(1)})</span>은 <b>은닉층 1개짜리(가중치 2개)</b> 기준이다. 784-600-500-10이면 <span class="tex">\mathbf W_{(2)}</span>까지 갱신하고, 순전파도 <span class="tex">f_3(\mathbf W_2 f_2(\mathbf W_1 f_1(\mathbf W_0\mathbf x+\mathbf b_0)+\mathbf b_1)+\mathbf b_2)</span>로 한 겹 더 감싸야 한다</li>
+      <li><b>&lsquo;Error &lt; 허용범위&rsquo;를 무엇으로 재나</b> &mdash; 실제 실습 2는 정해진 <b>에폭 수(5)</b>만큼 돌고 멈추며, 멈추는 시점은 훈련 손실이 아니라 <b>검증 손실</b>로 판단하는 것이 맞다(바로 아래 보충설명 · 개정② 24p 조기 종료)</li>
+    </ul>
+  </div>
+</div>
+
 <div class="pt gyo">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>평가 지표 — 회귀는 R², 분류는 혼동 행렬</h3>
   <div class="fx">
@@ -1268,6 +1294,38 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   </table>
   </div>
   <p>용어 &mdash; <b>1 iteration(step)</b> = 미니배치 1개로 갱신 1회, <b>1 epoch</b> = 훈련 데이터 전체를 한 번 통과. MNIST 훈련 54,000, B = 128이면 <span class="tex">\lceil54000/128\rceil=</span> <b>422 step</b>. 배치를 키우면 학습률도 함께 키운다(선형 스케일링 규칙, Goyal 외 2017). 학습률은 <b>가장 중요한 하이퍼파라미터</b>(보통 <span class="tex">10^{-4}\sim10^{-1}</span>, 로그 스케일로 탐색)이고, 헤시안(77만 × 77만)이 너무 커서 뉴턴법 같은 2차 방법은 실용적이지 않다.</p>
+</div>
+
+<div class="pt lab" id="lab-sgd">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>SGD와 모멘텀 — 실습 과정에서 정리한 것</h3>
+  <figure class="sld solo"><img width="1078" height="406" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6lab-gd-sgd-momentum.png" alt="실습 그림 — 경사 하강법 · 확률적 경사 하강법 · 모멘텀이 등고선 위에서 최적 해로 가는 경로"><figcaption><b>실습 그림</b> 경사 하강법 · 확률적 경사 하강법 · 모멘텀의 이동 경로</figcaption></figure>
+  <p><b>SGD (Stochastic Gradient Descent)</b>는</p>
+  <ul class="ul">
+    <li>전체 훈련 데이터 N개를 <b>무작위로 섞은 다음</b></li>
+    <li><b>훈련 데이터 1개씩</b>에 대해 경사하강법으로 가중치를 업데이트하는 학습 방법이다</li>
+  </ul>
+  <p>이때 <b>모멘텀 계수</b>를 추가로 활용할 수 있는데, 일종의 <b>관성</b>을 부여하는 것이다. <b>모멘텀(Momentum)</b>은</p>
+  <ul class="ul">
+    <li>모델의 인자를 갱신할 때,</li>
+    <li>지금까지처럼 손실 함수(목적 함수)의 <b>현재 그레이디언트만</b> 쓰는 것이 아니라</li>
+    <li><b>과거에 계산된 그레이디언트를 축적해서</b> 활용하는 방법이다</li>
+    <li>수식으로 정의하면 더 명확해지지만, 실습 노트북은 모멘텀의 수식적 정의를 &lsquo;인공지능입문 교육 범위 밖&rsquo;으로 두었다</li>
+  </ul>
+  <p><b>그림 읽기</b> &mdash; 등고선의 중심이 최적 해(손실 최소점)다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>방법</th><th>그림 속 경로</th><th>이유</th></tr></thead>
+    <tbody>
+      <tr><td><b>경사 하강법</b></td><td>최적 해를 향해 <b>곧게</b> 촘촘히 나아간다</td><td>매번 <b>전체 데이터</b>로 정확한 기울기를 구한다 &mdash; 대신 한 걸음이 비싸다</td></tr>
+      <tr><td><b>확률적 경사 하강법</b></td><td><b>지그재그</b>로 흔들리며 다가간다</td><td>샘플 하나(또는 미니배치)로 구한 기울기는 <b>잡음이 섞인 추정값</b>이라 방향이 매번 조금씩 틀어진다 &mdash; 대신 한 걸음이 싸다</td></tr>
+      <tr><td><b>모멘텀</b></td><td>지그재그가 줄고 <b>큰 보폭으로</b> 최적 해에 붙는다</td><td>과거 기울기를 쌓아 두므로 <b>매번 바뀌는 방향(진동)은 서로 상쇄</b>되고 <b>일관된 방향만 누적</b>된다</td></tr>
+    </tbody>
+  </table></div>
+  <div class="fix"><b>정정 · 주의</b>
+    <ul class="ul">
+      <li><b>&lsquo;1개씩&rsquo;은 순수 SGD의 정의다</b> &mdash; 실제로는(이번 주 PyTorch 실습 2 포함) <b>미니배치 B개</b>씩 갱신하는 것을 그냥 SGD라고 부르는 경우가 대부분이다. 실습 2는 B = 128이라 1에폭이 422 step이다(바로 위 상자)</li>
+      <li><b>모멘텀 식</b>은 개정판 20p에 나온다 &mdash; 속도 <span class="tex">v\leftarrow\beta v+\nabla L</span>, 갱신 <span class="tex">W\leftarrow W-\eta v</span>(β ≈ 0.9, 최근 ~10스텝의 지수 이동 평균). 교과 범위 밖이라도 &lsquo;β만큼 이전 속도를 남긴다&rsquo;만 알면 그림이 그대로 읽힌다. PyTorch에서는 <code>torch.optim.SGD(params, lr=0.5, momentum=0.9)</code>의 <code>momentum</code> 인자 하나다(실습 1)</li>
+    </ul>
+  </div>
 </div>
 
 <div class="pt gyo">
