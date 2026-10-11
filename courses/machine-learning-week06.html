@@ -277,6 +277,10 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .qa .ul li{color:#134e4a}
 .qa .ul li::before{background:#0f766e;opacity:.8}
 
+.qa.ask::before{content:'💡 필기 속 질문 풀이';background:#fffbeb;color:#92400e;border-color:#f0c48a}
+.qa .tbl-wrap{background:#fff;margin:8px 0}
+.qa table{min-width:0}
+
 /* ===== 슬라이드 모아보기 ===== */
 .deck{background:#efeeea;border:1px solid var(--border);border-radius:var(--radius);padding:12px 12px 14px;margin-bottom:20px}
 .deck-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:8px}
@@ -651,6 +655,25 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   </div>
   <p>활성화는 <b>계단 함수</b>다 — <span class="tex">f(z)=1\;(z>0)</span>, <span class="tex">f(z)=0\;(z\le 0)</span>. <b>AND와 OR의 차이가 절편 하나</b>(−1.5 vs −0.5)라는 점을 눈여겨볼 것.</p>
   <p><span class="hi">그런데 XOR은 안 된다.</span> 교안의 표현으로는 &ldquo;신경 세포를 모방한 단층 퍼셉트론이 <b>두 개 이상의 선 또는 곡선을 이용한 분류를 할 수 없어</b> XOR을 해결하지 못한다&rdquo;. 각주에는 <b>마빈 민스키와 시모어 페퍼트</b>의 저서가 인용되어 있는데, 이들은 <b>다층 퍼셉트론으로는 XOR을 풀 수 있다는 것도 함께 보였다</b>.</p>
+</div>
+
+<div class="qa ask">
+  <p><b>질문 &mdash; &ldquo;AND도 OR도 1과 0이 나왔는데, 왜 둘이 다른 게이트라는 거야?&rdquo;</b></p>
+  <p>둘 다 1 · 0이 나오는 건 당연하다. 계단 함수(<span class="tex">z&gt;0</span>이면 1, 아니면 0)를 쓰므로 퍼셉트론은 <b>원래 0 아니면 1만</b> 출력한다. 두 게이트의 차이는 출력값의 종류가 아니라 <b>어떤 입력에서 1이 나오느냐</b>다. 위 표의 &lsquo;확인&rsquo; 칸은 네 입력 중 두 경우만 보여 줘서 헷갈리기 쉽다 &mdash; 네 개를 모두 넣어 보면 이렇다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>입력 <span class="tex">(x_1,x_2)</span></th><th>AND: <span class="tex">x_1+x_2-1.5</span></th><th>AND 출력</th><th>OR: <span class="tex">x_1+x_2-0.5</span></th><th>OR 출력</th></tr></thead>
+    <tbody>
+      <tr><td>(0, 0)</td><td>−1.5</td><td>0</td><td><b>−0.5</b></td><td><b>0</b></td></tr>
+      <tr><td>(0, 1)</td><td>−0.5</td><td>0</td><td>+0.5</td><td>1</td></tr>
+      <tr><td>(1, 0)</td><td>−0.5</td><td>0</td><td>+0.5</td><td>1</td></tr>
+      <tr><td>(1, 1)</td><td><b>+0.5</b></td><td><b>1</b></td><td>+1.5</td><td>1</td></tr>
+    </tbody>
+  </table></div>
+  <ul class="ul">
+    <li><b>AND</b> &mdash; <b>둘 다 1일 때만</b> 1. <b>OR</b> &mdash; <b>하나라도 1이면</b> 1. 진리표 네 줄이 정의 그대로 나온다</li>
+    <li><span class="tex">x_1+x_2</span>는 &lsquo;켜진 입력의 개수&rsquo;(0 · 1 · 2)다. <b>절편이 문턱</b>을 정한다 &mdash; −1.5면 합이 1.5를 넘어야 하니 <b>2개 다</b> 켜져야 하고(AND), −0.5면 <b>1개만</b> 켜져도 넘는다(OR)</li>
+    <li>그래서 &ldquo;단층 퍼셉트론으로 AND · OR이 된다&rdquo;는 말은 <b>가중치 · 절편만 잘 고르면 퍼셉트론 하나가 진리표 네 줄을 모두 맞힌다</b>는 뜻이다. XOR은 (0,1) · (1,0)만 1이어야 하는데, 이 넷을 다 맞히는 문턱은 어떤 값으로도 만들 수 없다 &mdash; 아래 &lsquo;왜 직선 하나가 한계인가 — 한 줄 증명&rsquo;이 그 증명이다</li>
+  </ul>
 </div>
 
 <div class="pt gyo">
