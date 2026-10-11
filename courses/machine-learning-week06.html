@@ -907,6 +907,33 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   </div>
 </div>
 
+<div class="pt plus" id="cce-symbols">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>CCE 식의 N · C와 기호 읽기</h3>
+  <div class="tex-d">L=-\frac{1}{N}\sum_{i=1}^{N}\sum_{k=1}^{C}y_{ik}\ln\hat y_{ik}</div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>기호</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tex">N</span></td><td><b>데이터 샘플의 개수(또는 배치 크기)</b> &mdash; 손실을 계산할 전체 데이터 수. 맨 앞의 <span class="tex">-\frac{1}{N}</span>은 N개 데이터 각각의 오차를 모두 더한 뒤 <b>평균</b>을 내기 위한 것이다</td></tr>
+      <tr><td><span class="tex">C</span></td><td><b>클래스의 개수</b> &mdash; 모델이 판별하려는 정답 범주의 총수. 강아지 · 고양이 · 토끼를 분류하면 <span class="tex">C=3</span>이고, 안쪽 <span class="tex">\sum_{k=1}^{C}</span>은 이 3개 클래스 각각의 계산값을 모두 더한다는 뜻이다</td></tr>
+      <tr><td><span class="tex">y_{ik}</span></td><td><b>i번째 데이터가 k번째 클래스가 맞는지</b>를 나타내는 실제 정답 &mdash; 정답이면 1, 아니면 0인 <b>원-핫 벡터</b></td></tr>
+      <tr><td><span class="tex">\hat y_{ik}</span></td><td><b>i번째 데이터가 k번째 클래스일 것이라고 모델이 계산한 예측 확률</b>(소프트맥스 출력, k에 대해 더하면 1)</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>두 개의 Σ를 안쪽부터 읽는다</b> &mdash; 안쪽 <span class="tex">\sum_k</span>는 <b>샘플 하나</b>의 손실(클래스 C개를 훑기), 바깥 <span class="tex">\sum_i</span>는 그것을 <b>샘플 N개</b>에 대해 모으기다. 위 교안 식의 &lsquo;온라인 모드&rsquo;는 샘플을 하나씩 학습하는 경우, 즉 <span class="tex">N=1</span>이라 바깥 합과 <span class="tex">\frac{1}{N}</span>이 사라진 것이다.</p>
+  <div class="fx">
+    <p class="fx-lab">숫자로 따라가기 — N = 2, C = 3 (강아지 · 고양이 · 토끼)</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>샘플</th><th>정답 <span class="tex">\mathbf y_i</span></th><th>예측 <span class="tex">\hat{\mathbf y}_i</span></th><th>안쪽 합 <span class="tex">-\sum_k y_{ik}\ln\hat y_{ik}</span></th></tr></thead>
+      <tbody>
+        <tr><td>i = 1</td><td>강아지 [1, 0, 0]</td><td>[0.7, 0.2, 0.1]</td><td><span class="tex">-(1\cdot\ln0.7+0\cdot\ln0.2+0\cdot\ln0.1)=0.357</span></td></tr>
+        <tr><td>i = 2</td><td>토끼 [0, 0, 1]</td><td>[0.3, 0.4, 0.3]</td><td><span class="tex">-\ln0.3=1.204</span></td></tr>
+      </tbody>
+    </table></div>
+    <div class="tex-d">L=\frac{1}{2}(0.357+1.204)\approx0.780</div>
+    <p class="fx-note">원-핫이라 <span class="tex">y_{ik}=0</span>인 항은 곱해서 사라지고 <b>정답 클래스의 <span class="tex">-\ln\hat y</span> 하나만 남는다</b>. 그래서 C개를 더하는 식이지만 실제로 계산하는 것은 샘플마다 한 항뿐이다. 둘째 샘플처럼 정답 확률이 낮으면(0.3) 손실이 크게(1.204) 나와 평균을 끌어올린다.</p>
+  </div>
+</div>
+
 <div class="pt plus">
   <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>세 손실 함수를 고르는 기준 한 줄</h3>
   <div class="tbl-wrap">
