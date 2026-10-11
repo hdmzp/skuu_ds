@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>컴퓨터비전 | 7주차 수업내용</title>
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0c1a3a">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+@media(max-width:560px){.fl{grid-template-columns:1fr;gap:4px}}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+
+/* 주차 내비 */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* ===== 필기 표기 ===== */
+.hw{color:#b45309;font-weight:700;background:#fff7ed;border-radius:3px;padding:0 3px}
+.legend{
+  display:flex;flex-wrap:wrap;gap:9px 16px;align-items:center;
+  background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius);
+  padding:13px 15px;margin:0 0 24px;font-size:12px;color:var(--muted);line-height:1.6;
+}
+.legend i{font-style:normal;display:flex;align-items:center;gap:7px}
+.legend .legend-t{flex:0 0 100%;font-size:12.5px;font-weight:700;color:var(--ink)}
+.legend .legend-t2{flex:0 0 100%;font-size:11.5px;color:var(--muted);border-top:1px dashed var(--border);padding-top:10px;margin-top:1px}
+
+/* ===== 주차 내비 ===== */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* ===== 자료별 구분 ===== */
+.matbar{
+  background:linear-gradient(135deg,#122250,#24407f);color:#fff;border-radius:14px;
+  padding:16px 18px;margin:34px 0 18px;box-shadow:0 6px 18px rgba(18,34,80,.15);
+}
+.matbar .tagline{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--lime)}
+.matbar h2{font-size:clamp(16px,3.6vw,20px);font-weight:700;line-height:1.3;margin:5px 0 4px}
+.matbar p{font-size:12.5px;color:#c9d3ee;line-height:1.65}
+.matbar .acts{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.matbar .acts a{
+  font-size:12px;font-weight:700;text-decoration:none;border-radius:8px;padding:6px 12px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;
+}
+.matbar .acts a.primary{background:var(--lime);border-color:var(--lime);color:#16233f}
+.partbar{
+  display:flex;align-items:center;gap:10px;margin:26px 0 14px;
+  font-size:13px;font-weight:700;color:var(--accent);
+}
+.partbar::after{content:'';flex:1;height:1px;background:var(--border)}
+.partbar b{background:var(--accent-light);border:1px solid #c4d2ee;border-radius:999px;padding:4px 11px;font-size:11.5px}
+
+/* ===== 한눈에 보기 ===== */
+.mapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px;margin-top:10px}
+.mapgrid a{
+  display:block;text-decoration:none;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:9px;padding:10px 13px;transition:.15s;
+}
+.mapgrid a:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(18,34,80,.1)}
+.mapgrid b{display:block;font-size:12.5px;color:var(--ink)}
+.mapgrid span{font-size:11.5px;color:var(--muted);line-height:1.55}
+
+/* ===== 개념 하이라이트 + 툴팁 ===== */
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);
+  border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;
+  left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+
+/* ===== 행렬 ===== */
+.mtx{display:inline-flex;align-items:center;gap:4px;vertical-align:middle;margin:0 2px}
+.mtx .br{display:inline-block;width:7px;align-self:stretch;border:2px solid var(--ink);border-right:none;border-radius:3px 0 0 3px}
+.mtx .br.r{border:2px solid var(--ink);border-left:none;border-radius:0 3px 3px 0}
+.mtx .cells{display:grid;gap:2px 12px;padding:5px 2px;font-size:12.5px;text-align:center}
+.mtx .cells span{min-width:26px;line-height:1.5}
+.eq{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;justify-content:center;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 14px;margin:10px 0;
+}
+.eq .op{font-size:14px;font-weight:700;color:var(--muted)}
+/* ===== 변환 카드 ===== */
+.xf{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px}
+.xf-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:4px}
+.xf-head h4{font-size:14.5px;font-weight:700}
+.xf-head .en{font-size:11.5px;color:var(--muted)}
+.xf-dof{margin-left:auto;background:var(--accent);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.xf p{font-size:13px;color:#4b5563;line-height:1.78}
+.xf-keep{font-size:12.5px;color:#166534;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.65}
+.xf-sol{font-size:12.5px;color:#1b3f8b;background:#eef6ff;border:1px solid #c4d2ee;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.7}
+
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .st{color:#c9f24b}
+pre.code .fn{color:#7ec8ff}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 함수 카드 */
+.fnc{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:var(--radius);padding:13px 15px;margin:11px 0}
+.fnc h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fnc .sig{
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;color:#1b3f8b;
+  background:#eef2fb;border:1px solid #dbe3f5;border-radius:6px;padding:7px 10px;margin:7px 0 9px;
+  overflow-x:auto;white-space:pre;
+}
+.fnc dl{display:grid;grid-template-columns:minmax(88px,auto) 1fr;gap:5px 12px;font-size:12.5px;line-height:1.65}
+.fnc dt{font-weight:700;color:var(--ink)}
+.fnc dd{color:#4b5563}
+@media(max-width:440px){.fnc dl{grid-template-columns:1fr;gap:2px}.fnc dd{margin-bottom:6px}}
+
+/* 수식 카드 · 풀이 예제 (기계학습특론 페이지와 같은 규칙) */
+.fx{background:#f8faff;border:1px solid #cfdcf5;border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:10px 0}
+.fx-lab{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.fx-note{font-size:12px;color:#4b5563;line-height:1.7;margin-top:7px}
+.fx-note b{color:var(--ink)}
+.tex-d{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:9px 2px 5px;text-align:center}
+.tex-d .katex{font-size:1.08em}
+.ex{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin:10px 0}
+.ex-q{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.65;background:#f1f0ec;border-radius:7px;padding:9px 12px;margin-bottom:4px}
+.ex-q em{font-style:normal;color:var(--red);font-size:11px;font-weight:700;display:block;margin-bottom:3px}
+.step{display:grid;grid-template-columns:minmax(20px,auto) 1fr;gap:9px;align-items:baseline;font-size:12.5px;color:#4b5563;line-height:1.75;padding:5px 0}
+.step i{font-style:normal;font-weight:700;color:var(--accent);font-size:11.5px}
+.ex-ans{margin-top:8px;background:#f0fdf4;border:1px solid #22c55e;border-radius:8px;padding:9px 12px;font-size:12.5px;color:#14532d;line-height:1.7}
+.ex-ans b{color:var(--green)}
+.figs > .note-box{margin:0}
+/* 편집 거리 DP 표 */
+.lev table{min-width:0;width:auto;margin:0 auto;font-family:'Consolas','D2Coding',ui-monospace,monospace}
+.lev th,.lev td{text-align:center;padding:6px 10px;white-space:nowrap}
+.lev td.on{background:#fde68a;font-weight:700;color:#7c2d12}
+
+/* ===== 출처 뱃지 ===== */
+.bdg{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.02em;padding:3px 9px;border-radius:999px;white-space:nowrap;line-height:1.5}
+.bdg-gyo{background:#eef2fb;color:#1b3f8b;border:1px solid #c4d2ee}
+.bdg-flip{background:#fff7ed;color:#b45309;border:1px solid #f0c48a}
+.bdg-live{background:#fdf0f5;color:#9d174d;border:1px solid #f3bcd2}
+.bdg-plus{background:#f0fdfa;color:#0f766e;border:1px solid #99e0d6}
+.bdg-pres{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
+
+/* ===== 개념 카드 ===== */
+.pt{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin:11px 0}
+.pt-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;font-weight:700;line-height:1.45;margin-bottom:7px}
+.pt > p{font-size:13.5px;color:#3f4854;line-height:1.85}
+.pt > p + p{margin-top:9px}
+.pt > p b{color:var(--ink)}
+.pt.gyo{border-left-color:#1b3f8b}
+.pt.flip{border-left-color:#b45309}
+.pt.live{border-left-color:#9d174d}
+.pt.plus{border-left-color:#0f766e}
+.pt.pres{border-left-color:#6d28d9}
+.pit{background:#fff7ed;border:1px solid #f0c48a;border-left:4px solid #ea580c;border-radius:0 var(--radius) var(--radius) 0;padding:11px 14px;margin:12px 0}
+.pit p{font-size:13px;color:#3f4854;line-height:1.8}
+.pit p + p{margin-top:7px}
+.pit .pit-h{font-size:12.5px;font-weight:800;color:#c2410c;margin-bottom:3px}
+.pt .sub-title{margin:18px 0 8px}
+.hi{background:linear-gradient(transparent 58%,#ffe9a8 58%);font-weight:700;color:var(--ink);padding:0 1px}
+.pt pre.code{margin:9px 0}
+
+/* 커널(마스크) 격자 */
+.kmat{display:inline-grid;grid-template-columns:repeat(3,26px);border:1.5px solid #1f2937;border-radius:3px;overflow:hidden;background:#fff;font:700 12px/24px Consolas,'D2Coding',ui-monospace,monospace;text-align:center;vertical-align:middle}
+.kmat.k2{grid-template-columns:repeat(2,26px)}
+.kmat.k1{grid-template-columns:26px}
+.kmat span{border:1px solid #d6dbe3;height:24px}
+.kmat .p{background:#dbeafe;color:#1e3a8a}
+.kmat .n{background:#fee2e2;color:#991b1b}
+.kmat .z{color:#9ca3af}
+.kmat.hl{box-shadow:0 0 0 3px #f59e0b}
+.kpair{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
+.kbox{display:inline-flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--muted);line-height:1.4}
+.kbox b{font-size:11.5px;color:var(--ink)}
+.kbox em{font-style:normal;font-weight:700;color:#4b5563}
+.kbox.win em{color:#b45309}
+.ktbl td{vertical-align:middle}
+.ktbl td .kpair{justify-content:flex-start}
+.cmp{display:grid;grid-template-columns:repeat(3,auto);gap:12px 16px;justify-content:center;align-items:center;margin:12px 0}
+.cmp .mid{display:flex;align-items:center;justify-content:center}
+.dia{display:block;width:100%;max-width:580px;height:auto;margin:10px auto 4px;background:#fff;border:1px solid var(--border);border-radius:8px}
+.dia-cap{font-size:11.5px;color:var(--muted);text-align:center;line-height:1.6;margin-bottom:8px}
+.patch{display:inline-grid;grid-template-columns:repeat(3,30px);border:1.5px solid #1f2937;font:700 11px/30px Consolas,monospace;text-align:center}
+.patch span{height:30px}
+.chain{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}
+.chain span{min-width:44px;text-align:center;border-radius:6px;padding:4px 2px;font:700 12px/1.3 Consolas,monospace}
+.chain small{display:block;font:600 10px/1.3 'Pretendard',sans-serif}
+.chain .s{background:#1f2937;color:#fff}
+.chain .wk{background:#dcfce7;color:#14532d;border:1px solid #22c55e}
+.chain .wd{background:#fee2e2;color:#991b1b;border:1px dashed #ef4444}
+.pt-figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px;margin:10px 0}
+.pt-figs .sld{margin:0}
+table.acc{min-width:0}
+.acc td,.acc th{text-align:center;font-family:Consolas,monospace;padding:6px 6px;white-space:nowrap}
+.acc td.h1{background:#fef3c7}
+.acc td.h3{background:#b45309;color:#fff;font-weight:800}
+.chain .d{background:#f3f4f6;color:#9ca3af;border:1px dashed #d1d5db}
+
+/* 본문 속 짧은 보충 설명 상자 */
+.qa{background:#f0fdfa;border:1px solid #99e0d6;border-left:4px solid #0f766e;
+  border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:11px 0;
+  font-size:13px;line-height:1.85;color:#134e4a}
+.qa::before{content:'보충설명';display:table;font-size:10.5px;font-weight:800;letter-spacing:.02em;
+  padding:3px 9px;border-radius:999px;margin-bottom:7px;background:#e3f7f3;color:#0f766e;border:1px solid #99e0d6}
+.qa b{color:#0f3d3a}
+.qa .ul li{color:#134e4a}
+.qa .ul li::before{background:#0f766e;opacity:.8}
+
+/* ===== 슬라이드 모아보기 ===== */
+.deck{background:#efeeea;border:1px solid var(--border);border-radius:var(--radius);padding:12px 12px 14px;margin-bottom:20px}
+.deck-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.deck-h span{font-size:11px;font-weight:400;color:var(--muted)}
+.deck-t{font-size:12px;font-weight:700;color:var(--accent);margin:13px 0 7px;padding-left:8px;border-left:3px solid var(--accent)}
+.deck-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.sld{background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px;margin:0;cursor:zoom-in;transition:box-shadow .15s,transform .15s}
+.sld:hover{box-shadow:0 6px 16px rgba(18,34,80,.13);transform:translateY(-2px)}
+.sld img{display:block;width:100%;height:auto;border-radius:4px;background:#fff}
+.sld figcaption{font-size:11px;color:var(--muted);line-height:1.5;margin-top:6px;text-align:center}
+.sld figcaption b{color:var(--accent)}
+
+/* ===== 한 줄 요약 ===== */
+.oneline{background:#16233f;color:#e7edf9;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+.oneline > p{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--lime)}
+.oneline .ul li{color:#c5d0e8;font-size:13px}
+.oneline .ul li b{color:#fff}
+.oneline .ul li::before{background:var(--lime);opacity:.9}
+
+/* ===== 슬라이드 확대 보기 ===== */
+#lb{position:fixed;inset:0;background:rgba(9,15,31,.94);display:none;align-items:center;justify-content:center;
+  z-index:400;padding:52px 60px 64px;cursor:zoom-out;-webkit-user-select:none;user-select:none}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:80vh;border-radius:8px;background:#fff;box-shadow:0 18px 50px rgba(0,0,0,.45);cursor:default}
+#lb .cap{position:absolute;left:0;right:0;bottom:18px;text-align:center;color:#d9e1f3;font-size:12.5px;line-height:1.6;padding:0 20px;cursor:default}
+#lb .cap b{color:#fff}
+#lb .cap .num{display:block;font-size:11px;color:#9fb0d4;margin-top:4px;letter-spacing:.04em}
+#lb button{
+  position:absolute;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;
+  border-radius:50%;width:44px;height:44px;font-size:20px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .15s;
+  font-family:inherit;padding:0;
+}
+#lb button:hover{background:rgba(255,255,255,.22)}
+#lb button:disabled{opacity:.25;cursor:default}
+#lb .prev{left:12px;top:50%;transform:translateY(-50%)}
+#lb .next{right:12px;top:50%;transform:translateY(-50%)}
+#lb .x{right:12px;top:12px;width:38px;height:38px;font-size:17px}
+@media(max-width:560px){
+  #lb{padding:48px 10px 92px}
+  #lb .prev{left:50%;top:auto;bottom:16px;transform:translateX(-64px)}
+  #lb .next{right:50%;top:auto;bottom:16px;transform:translateX(64px)}
+  #lb .cap{bottom:70px}
+}
+
+.kg{display:block;width:108px;height:42px;margin:0 auto}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:640px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#map">한눈에 보기</a>
+  <a href="#fitting">01 피팅과 최소제곱</a>
+  <a href="#ransac">02 RANSAC</a>
+  <a href="#matcher">03 매처와 대응점</a>
+  <a href="#align">04 영상 정렬</a>
+  <a href="#homo">05 호모그래피</a>
+  <a href="#dlt">06 H 구하기 (DLT · SVD)</a>
+  <a href="#robust">07 RANSAC으로 H 추정</a>
+  <a href="#stitch">08 스티칭 · 블렌딩</a>
+  <a href="#summary">핵심 정리</a>
+  <a href="#next">과제 · 다음 주</a>
+</nav>
+
+<div class="wrap">
+
+<div class="weeknav">
+  <a href="computer-vision.html" class="plan">← 강의계획서</a>
+  <a href="computer-vision-week04.html">4주차 · Image Pyramids</a>
+  <a href="computer-vision-week05.html">5주차 · Local Feature Detection</a>
+  <a href="computer-vision-week06.html">6주차 · Feature Descriptors</a>
+  <span class="cur">7주차 · Feature Matching &amp; Homography</span>
+  <a href="computer-vision-assignments.html">과제 · 논문 발표</a>
+</div>
+
+<section class="hero">
+  <p class="kicker">7주차 · 10.14 · 2026-2학기</p>
+  <h1>07. 특징 매칭과 호모그래피 — 짝지은 점으로 두 사진을 겹친다</h1>
+  <p>5주차에 점을 <b>찾고(검출)</b>, 6주차에 그 점을 <b>벡터로 적었다(기술)</b>. 이번 주는 마지막 단계 &mdash; 두 사진의 벡터를 <b>짝짓고(매칭)</b>, 그 짝들이 따르는 <b>변환 하나를 추정해(피팅)</b>, 사진을 <b>겹쳐 이어 붙이는(정렬 · 스티칭)</b> 일이다. 핵심 도구는 둘이다. 틀린 짝이 섞여 있어도 견디는 <b>RANSAC</b>, 그리고 평면을 다른 평면으로 옮기는 3×3 행렬 <b>호모그래피</b>.</p>
+  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 79p</span><span class="chip">슬라이드 62장</span><span class="chip">최소제곱 · TLS</span><span class="chip">RANSAC</span><span class="chip">호모그래피 8자유도</span><span class="chip">DLT · SVD</span><span class="chip">파노라마</span></div>
+</section>
+
+<div class="legend">
+  <p class="legend-t">내용이 어디에서 왔는지 <b>뱃지</b>로 구분했습니다</p>
+  <i><span class="bdg bdg-gyo">교안</span><span>교수님 슬라이드에 있는 내용 (영어 교안을 한국어로 옮김)</span></i>
+  <i><span class="bdg bdg-plus">보충설명</span><span>교안에 없거나 짧게 지나간 부분을 따로 찾아 정리한 내용</span></i>
+  <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고, <span class="hi">노란 형광펜</span>은 <b>꼭 기억할 문장</b>, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선</span>은 누르면 뜻이 뜹니다. 쪽수는 <b>PDF 쪽수</b>이고, 슬라이드 오른쪽 아래에 찍힌 번호는 이보다 1 크다.</p>
+</div>
+
+<section class="sec" id="map">
+  <div class="sec-head"><span class="sec-badge">MAP</span><h2 class="sec-title">한눈에 보기<small>검출 → 기술 → 매칭 → 정렬, 마지막 두 칸</small></h2></div>
+
+<div class="oneline">
+  <p><b>이번 주 한 줄 요약</b></p>
+  <ul class="ul">
+    <li><b>피팅(fitting)</b>은 점 집합을 가장 잘 설명하는 모델(직선 · 변환)의 파라미터를 찾는 일이다. 기본은 <b>최소제곱</b>이지만 <b>이상치(outlier) 하나에 무너진다</b></li>
+    <li><b>RANSAC</b>은 &ldquo;<b>최소 개수만 무작위로 뽑아 모델을 세우고, 그 모델에 동의하는 점을 센다</b>&rdquo;를 여러 번 반복해 가장 많은 동의를 얻은 모델을 고른다 &mdash; 이상치가 절반이어도 견딘다</li>
+    <li><b>영상 정렬</b>은 피팅의 대상을 &lsquo;한 사진 속 점들&rsquo;에서 &lsquo;<b>두 사진 사이의 짝들</b>&rsquo;로 바꾼 것이다. 평행이동 → 어파인(6자유도) → <b>호모그래피(8자유도)</b> 순으로 표현력이 커진다</li>
+    <li>호모그래피는 <b>대응점 4쌍</b>이면 정해진다. 식을 <span class="tex">A\mathbf{h}=\mathbf{0}</span>으로 세우고 <b>SVD의 가장 작은 특이값에 해당하는 벡터</b>가 답이다(DLT)</li>
+    <li>실제로는 <b>SIFT 매칭 → 비율 검사 → RANSAC으로 H 추정 → 와핑 → 블렌딩</b>이 파노라마 스티칭의 전체 흐름이다</li>
+  </ul>
+</div>
+
+<div class="mapgrid">
+  <a href="#fitting"><b>01 피팅과 최소제곱</b><span>피팅의 네 조건 · 수직 최소제곱과 정규방정식 · 전체 최소제곱(TLS) · 이상치에 약한 이유</span></a>
+  <a href="#ransac"><b>02 RANSAC</b><span>다섯 단계 · 직선 예제 · s · t · N · d 정하기 · N 계산표 · 장단점</span></a>
+  <a href="#matcher"><b>03 매처와 대응점</b><span>Brute-Force · FLANN · 대응을 모를 때의 가설-검증 루프</span></a>
+  <a href="#align"><b>04 영상 정렬</b><span>직접 · 특징 기반 정렬 · 정렬은 피팅이다 · 어파인 6미지수 · 평행이동만으론 부족</span></a>
+  <a href="#homo"><b>05 호모그래피</b><span>평면 사영 변환 · 변환의 위계 · 와핑 응용 · 쓸 수 있는 세 경우</span></a>
+  <a href="#dlt"><b>06 H 구하기</b><span>동차 좌표 · 2×9 행렬 · Ah = 0 · SVD · 손으로 푼 예제</span></a>
+  <a href="#robust"><b>07 RANSAC으로 H 추정</b><span>LLS의 &lsquo;평균 변환&rsquo; · 평행이동 예제 · RANSAC 루프 · 비율 검사</span></a>
+  <a href="#stitch"><b>08 스티칭 · 블렌딩</b><span>SIFT → RANSAC → 와핑 · 파노라마 순서 · 이음새 · 다중 대역 · 페더링 · OpenCV 파이프라인</span></a>
+</div>
+</section>
+
+<div class="matbar">
+  <p class="tagline">7주차 강의 · Feature Matching &amp; Homography</p>
+  <h2>07. Features Matching</h2>
+  <p>79페이지 · Feature Matching(Fitting, RANSAC) → Image Alignment(Homography, Rectification, Stitching) 순서다.</p>
+  <div class="acts">
+    <a class="primary" href="pdf-viewer.html?doc=cv-w07-matching">뷰어로 보기</a>
+    <a href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week07-feature-matching.pdf" download="컴퓨터비전_7주차_Feature_Matching_Homography.pdf">⬇ 다운로드</a>
+  </div>
+</div>
+
+<!-- ===================== 01 ===================== -->
+<section class="sec" id="fitting">
+  <div class="sec-head"><span class="sec-badge">01</span><h2 class="sec-title">피팅 — 점들을 가장 잘 설명하는 모델 찾기<small>교안 3~10p · 최소제곱과 그 약점</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>3 · 5 · 6 · 7 · 8 · 10p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-03-next-matching.jpg" alt="교안 3p — 지역 특징의 세 요소 중 이번 주는 매칭"><figcaption><b>3p</b> 지역 특징의 세 요소 중 이번 주는 &lsquo;매칭&rsquo;</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-05-fitting-cond.jpg" alt="교안 5p — 피팅의 조건과 네 가지 질문"><figcaption><b>5p</b> 피팅의 조건과 네 가지 질문</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-06-least-squares.jpg" alt="교안 6p — 최소제곱 직선 피팅과 정규방정식"><figcaption><b>6p</b> 최소제곱 직선 피팅과 정규방정식</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-07-total-ls.jpg" alt="교안 7p — 전체 최소제곱 — 수직 거리를 잰다"><figcaption><b>7p</b> 전체 최소제곱 — 수직 거리를 잰다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-08-total-ls-sol.jpg" alt="교안 8p — TLS의 해는 UᵀU의 최소 고유값 고유벡터"><figcaption><b>8p</b> TLS의 해는 <span class="tex">U^\top U</span>의 최소 고유값 고유벡터</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-10-ls-outlier.jpg" alt="교안 10p — 이상치 하나에 직선이 끌려간다"><figcaption><b>10p</b> 이상치 하나에 직선이 끌려간다</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>세 요소 중 마지막 — 매칭 (3p)</h3>
+  <p>지역 특징의 세 요소를 다시 보자. <b>검출(Detection)</b> &mdash; 관심점을 찾는다(&ldquo;Find feature!&rdquo;, 5주차). <b>기술(Description)</b> &mdash; 관심점 주변에서 벡터 기술자 <span class="tex">\mathbf{x}=[x_1,\dots,x_d]</span>를 뽑는다(&ldquo;Represent feature!&rdquo;, 6주차). 그리고 <b>매칭(Matching)</b> &mdash; <span class="hi">두 시점(view)의 기술자 사이에서 대응(correspondence)을 정한다</span>(&ldquo;Match feature!&rdquo;, 이번 주). 그림의 빨간 화살표가 두 산 사진 사이의 대응이다.</p>
+  <p>그런데 기술자끼리 거리만 재서 짝지으면 <b>틀린 짝이 반드시 섞인다</b>. 그래서 이번 주는 &ldquo;짝들이 공통으로 따르는 <b>하나의 변환</b>을 찾고, 그 변환에 맞지 않는 짝은 버린다&rdquo;는 생각으로 간다. 이것이 <b>피팅</b>이다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>피팅이 다루는 상황과 네 가지 질문 (5p)</h3>
+  <p>입력은 <b>점들의 집합</b>이다. 그리고 현실의 점에는 네 가지 문제가 있다 &mdash; 측정된 특징 위치의 <b>잡음(noise)</b>, 엉뚱한 점(<b>이상치 · clutter</b>)이나 <b>여러 개의 직선</b>, 가려져서 빠진 점(<b>missing data · occlusion</b>).</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>질문</th><th>교안이 가리키는 도구</th></tr></thead>
+    <tbody>
+      <tr><td>어떤 점이 직선에 속하는지 <b>안다면</b>, &lsquo;최적&rsquo;의 직선 파라미터는?</td><td><b>최소제곱(Least squares)</b></td></tr>
+      <tr><td><b>이상치</b>가 있다면?</td><td><b>강건한 피팅(Robust fitting), RANSAC</b></td></tr>
+      <tr><td>직선이 <b>여러 개</b>라면?</td><td><b>투표 방식(Voting) &mdash; RANSAC, 허프 변환</b></td></tr>
+      <tr><td>그것이 직선인지조차 <b>확실하지 않다면</b>?</td><td><b>모델 선택(Model selection)</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>이번 주는 앞의 두 질문을 푼다. <span class="term" tabindex="0" data-tip="Hough transform — 각 점이 자신을 지날 수 있는 모든 직선(파라미터 공간의 곡선)에 한 표씩 던지고, 표가 가장 많이 모인 파라미터를 직선으로 고르는 방법. 여러 직선을 한 번에 찾을 수 있다.">허프 변환</span>은 교안에 이름만 나온다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>최소제곱 직선 피팅 — 정규방정식까지 (6p)</h3>
+  <p>데이터 <span class="tex">(x_1,y_1),\dots,(x_n,y_n)</span>에 직선 <span class="tex">y=mx+b</span>를 맞춘다. 각 점에서 직선까지의 <b>세로(수직 방향 y) 차이</b>를 제곱해 더한 것을 최소화한다.</p>
+  <div class="fx">
+    <div class="tex-d">E=\sum_{i=1}^{n}(y_i-mx_i-b)^2=\lVert Y-XB\rVert^2,\qquad Y=\begin{bmatrix}y_1\\ \vdots\\ y_n\end{bmatrix},\;X=\begin{bmatrix}x_1&amp;1\\ \vdots&amp;\vdots\\ x_n&amp;1\end{bmatrix},\;B=\begin{bmatrix}m\\ b\end{bmatrix}</div>
+    <div class="tex-d">\frac{dE}{dB}=2X^\top XB-2X^\top Y=0\quad\Longrightarrow\quad X^\top XB=X^\top Y\quad(\text{정규방정식})</div>
+    <p class="fx-note">전개하면 <span class="tex">E=Y^\top Y-2(XB)^\top Y+(XB)^\top(XB)</span>이고, B로 미분해 0으로 두면 정규방정식이 나온다. 이것이 <span class="tex">XB=Y</span>의 최소제곱 해다 &mdash; <a class="ext" href="machine-learning-week03.html">기계학습특론 3주차 선형 회귀</a>의 정규방정식과 같은 식이다.</p>
+  </div>
+  <p>교안은 이 &lsquo;수직(vertical) 최소제곱&rsquo;의 문제 둘을 짚는다 &mdash; <b>회전 불변이 아니고</b>(좌표축을 돌리면 다른 직선이 나온다), <b>수직선에서는 완전히 실패한다</b>(<span class="tex">y=mx+b</span>로는 기울기가 무한대인 직선을 쓸 수 없다).</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>전체 최소제곱(TLS) — 직선까지의 진짜 거리를 잰다 (7 · 8p)</h3>
+  <p>직선을 <span class="tex">ax+by=d</span>, 단 <span class="tex">a^2+b^2=1</span>로 쓰면 <span class="tex">N=(a,b)</span>는 <b>단위 법선 벡터</b>이고, 점 <span class="tex">(x_i,y_i)</span>에서 직선까지의 <b>수직 거리</b>는 <span class="tex">|ax_i+by_i-d|</span>다. 이 거리의 제곱합을 최소화한다.</p>
+  <div class="fx">
+    <div class="tex-d">E=\sum_{i=1}^{n}(ax_i+by_i-d)^2,\qquad \frac{\partial E}{\partial d}=0\;\Rightarrow\;d=a\bar x+b\bar y</div>
+    <div class="tex-d">E=\sum_{i}\bigl(a(x_i-\bar x)+b(y_i-\bar y)\bigr)^2=(UN)^\top(UN),\qquad U=\begin{bmatrix}x_1-\bar x&amp;y_1-\bar y\\ \vdots&amp;\vdots\\ x_n-\bar x&amp;y_n-\bar y\end{bmatrix}</div>
+    <p class="fx-note"><span class="tex">d</span>를 풀면 직선이 반드시 <b>점들의 무게중심 <span class="tex">(\bar x,\bar y)</span>을 지난다</b>는 것이 나온다. 남은 일은 <span class="tex">\lVert N\rVert^2=1</span> 조건에서 <span class="tex">(U^\top U)N=0</span>을 푸는 것이고, 해는 <b><span class="tex">U^\top U</span>의 가장 작은 고유값에 대응하는 고유벡터</b>다(동차 선형 시스템 <span class="tex">UN=0</span>의 최소제곱 해). <span class="tex">U^\top U</span>는 점들의 <b>2차 모멘트 행렬</b>이다.</p>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>왜 &lsquo;가장 작은&rsquo; 고유벡터인가 — 그리고 이것이 06절의 예고편인 이유</h3>
+  <p><span class="tex">U^\top U</span>는 점들이 무게중심 주위로 <b>어느 방향으로 얼마나 퍼져 있는지</b>를 담는다(5주차 Harris의 2차 모멘트 행렬과 같은 모양). 큰 고유값의 고유벡터는 <b>점들이 가장 길게 퍼진 방향 = 직선 방향</b>이고, 작은 고유값의 고유벡터는 그와 수직인 방향, 즉 <b>점들이 거의 퍼지지 않은 방향 = 법선 N</b>이다. 법선 방향으로의 퍼짐(=거리 제곱합)이 최소가 되도록 고르는 것이니 &lsquo;가장 작은&rsquo; 쪽이 답이다. 주성분 분석(PCA)에서 마지막 성분을 고르는 것과 같다.</p>
+  <p>그리고 <span class="hi">&ldquo;<span class="tex">\lVert\mathbf{h}\rVert=1</span> 조건에서 <span class="tex">A\mathbf{h}=0</span>의 최소제곱 해 = 가장 작은 특이값의 벡터&rdquo;</span>라는 똑같은 논리가 <a class="ext" href="#dlt">06절의 호모그래피 추정</a>에서 그대로 다시 나온다. 미리 한 번 익혀 두는 셈이다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>최소제곱은 이상치에 약하다 (9 · 10p)</h3>
+  <p>빨간 점들이 직선 위에 잘 모여 있으면 최소제곱 직선도 그 위를 정확히 지난다(9p). 그런데 <b>오른쪽에 점 하나</b>만 멀리 떨어져 있어도, 직선이 그쪽으로 크게 기울어 나머지 점 전부를 놓친다(10p). 교안의 진단 &mdash; <span class="hi">제곱 오차는 이상치에 엄청난 벌점을 준다(squared error heavily penalizes outliers).</span></p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>숫자로 보는 &lsquo;제곱&rsquo;의 횡포</h3>
+  <p>정상 점 9개는 직선에서 각각 <b>0.1</b>씩, 이상치 1개는 <b>5</b>만큼 떨어져 있다고 하자. 오차 제곱합은 <span class="tex">9\times0.01+25=25.09</span> &mdash; 전체의 <b>99.6%가 이상치 한 점</b>에서 나온다. 최소제곱은 이 25를 줄이려고 직선을 이상치 쪽으로 끌고 가고, 그 대가로 정상 점 9개의 오차가 조금씩 커지는 것을 기꺼이 감수한다. 매칭에서 틀린 짝은 보통 <b>수십 픽셀</b>씩 엇나가므로 이 문제가 훨씬 심하다. 해결책은 두 갈래다 &mdash; 오차 함수를 덜 민감하게 바꾸거나(Huber 등 강건 손실), <b>이상치를 아예 계산에서 빼 버리거나(RANSAC)</b>.</p>
+</div>
+</section>
+
+<!-- ===================== 02 ===================== -->
+<section class="sec" id="ransac">
+  <div class="sec-head"><span class="sec-badge">02</span><h2 class="sec-title">RANSAC — 무작위로 뽑고, 동의하는 점을 센다<small>교안 11~23p · Fischler &amp; Bolles, 1981</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>11 · 13 · 14 · 15 · 16 · 19 · 21 · 22 · 23p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-11-ransac-outline.jpg" alt="교안 11p — RANSAC의 개요"><figcaption><b>11p</b> RANSAC의 개요</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-13-ransac-step1.jpg" alt="교안 13p — ① 최소 부분집합을 무작위로 뽑는다"><figcaption><b>13p</b> ① 최소 부분집합(점 2개)을 무작위로</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-14-ransac-step2.jpg" alt="교안 14p — ② 모델을 가정한다"><figcaption><b>14p</b> ② 그 두 점으로 직선을 가정</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-15-ransac-step3.jpg" alt="교안 15p — ③ 오차 함수를 계산한다"><figcaption><b>15p</b> ③ 모든 점의 오차(거리) 계산</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-16-ransac-step4.jpg" alt="교안 16p — ④ 모델과 일치하는 점을 고른다"><figcaption><b>16p</b> ④ 띠 안의 점(인라이어)만 고른다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-19-ransac-best.jpg" alt="교안 19p — ⑤ 반복하다 보면 인라이어가 가장 많은 직선이 나온다"><figcaption><b>19p</b> ⑤ 반복 &mdash; 인라이어가 가장 많은 직선</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-21-ransac-repeat.jpg" alt="교안 21p — N번 반복하는 알고리즘"><figcaption><b>21p</b> N번 반복하는 알고리즘</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-22-ransac-params.jpg" alt="교안 22p — 파라미터 s, t, N, d 정하기"><figcaption><b>22p</b> 파라미터 s · t · N · d 정하기</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-23-ransac-proscons.jpg" alt="교안 23p — RANSAC의 장단점"><figcaption><b>23p</b> 장단점</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>RANdom SAmple Consensus — 무작위 표본의 합의 (11p)</h3>
+  <p>강건한 피팅은 이상치가 <b>몇 개</b> 있을 때는 버틴다. <b>RANSAC</b>은 이상치가 있는 상황에서 모델을 맞추는 <b>매우 일반적인 틀</b>이다. 개요는 네 줄이다.</p>
+  <div class="flow">
+    <div class="fl"><b>① 작은 부분집합을 무작위로 고른다</b><span>점 몇 개를 균일한 확률로 뽑는다</span></div>
+    <div class="fl"><b>② 그 부분집합에 모델을 맞춘다</b><span>뽑은 점만으로 모델을 세운다</span></div>
+    <div class="fl"><b>③ 나머지 점 중 모델에 &lsquo;가까운&rsquo; 점을 모두 찾고, 나머지는 이상치로 버린다</b><span>가까운 점 = <b>인라이어(inlier)</b></span></div>
+    <div class="fl"><b>④ 이것을 여러 번 하고 가장 좋은 모델을 고른다</b><span>&lsquo;좋다&rsquo; = 인라이어가 가장 많다</span></div>
+  </div>
+  <p>원 논문은 Fischler &amp; Bolles, &ldquo;Random Sample Consensus: A Paradigm for Model Fitting with Applications to Image Analysis and Automated Cartography&rdquo;, <i>Comm. of the ACM</i> 24, 381&ndash;395, 1981이다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>직선 예제를 단계별로 (12~20p)</h3>
+  <p>12p는 이상치가 잔뜩 섞인 점들에 최소제곱을 그냥 적용한 결과다 &mdash; 빨간 직선이 <b>점 구름의 한가운데를 가로질러</b> 실제 직선 어디에도 맞지 않는다. RANSAC은 다섯 단계를 반복한다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>단계</th><th>교안 표현</th><th>직선 예제에서는</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Randomly select <b>minimal subset</b> of points</td><td>직선은 점 <b>2개</b>로 정해지므로 빨간 점 2개를 뽑는다</td></tr>
+      <tr><td>2</td><td><b>Hypothesize</b> a model</td><td>두 점을 지나는 직선을 그린다</td></tr>
+      <tr><td>3</td><td>Compute <b>error function</b></td><td>모든 점에서 그 직선까지의 거리를 잰다(15p의 연두색 선분들)</td></tr>
+      <tr><td>4</td><td>Select points <b>consistent</b> with model</td><td>거리가 임계값 t 이내(점선 띠 안)인 점 = 인라이어(초록)</td></tr>
+      <tr><td>5</td><td>Repeat <b>hypothesize and verify</b> loop</td><td>다른 두 점으로 다시 &mdash; 17p는 인라이어 몇 개, 19p는 <b>직선 위의 점 대부분</b>이 초록이 된다</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>알고리즘 한 장 정리 (21p)</h3>
+  <pre class="code">N번 반복:
+    s개의 점을 균일하게 무작위로 뽑는다
+    이 s개의 점에 직선을 맞춘다
+    나머지 점들 중 이 직선의 인라이어를 찾는다   <span class="cm"># 직선까지 거리 &lt; t 인 점</span>
+    인라이어가 d개 이상이면 직선을 받아들이고, <b>모든 인라이어로 다시 맞춘다</b>   <span class="cm"># refit</span></pre>
+  <p>마지막 줄이 중요하다. 2개로 세운 직선은 대략적인 위치일 뿐이므로, <span class="hi">찾아낸 인라이어 전부로 최소제곱을 다시 돌려 정밀하게 다듬는다</span>. 이상치가 이미 빠졌으니 이번에는 최소제곱이 제 몫을 한다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>파라미터 네 개를 정하는 법 (22p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>파라미터</th><th>의미</th><th>정하는 법</th></tr></thead>
+    <tbody>
+      <tr><td><b>s</b> &mdash; 초기 점 수</td><td>한 번에 뽑는 점의 수</td><td>보통 모델을 정하는 데 필요한 <b>최소 개수</b>(직선 2, 어파인 3, 호모그래피 4)</td></tr>
+      <tr><td><b>t</b> &mdash; 거리 임계값</td><td>인라이어로 인정하는 최대 거리</td><td>인라이어일 확률이 p(예: 0.95)가 되게. 잡음이 평균 0 · 표준편차 σ의 가우시안이면 <b><span class="tex">t^2=3.84\sigma^2</span></b></td></tr>
+      <tr><td><b>N</b> &mdash; 표본 횟수</td><td>반복 횟수</td><td>확률 p(예: 0.99)로 <b>적어도 한 번은 이상치 없는 표본</b>을 뽑도록. 이상치 비율 e</td></tr>
+      <tr><td><b>d</b> &mdash; 합의 집합 크기</td><td>모델을 받아들이는 최소 인라이어 수</td><td><b>예상 인라이어 비율</b>에 맞춘다</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="fx">
+    <p class="fx-lab">반복 횟수 N의 공식</p>
+    <div class="tex-d">\bigl(1-(1-e)^s\bigr)^N=1-p\qquad\Longrightarrow\qquad N=\frac{\log(1-p)}{\log\bigl(1-(1-e)^s\bigr)}</div>
+    <p class="fx-note"><span class="tex">(1-e)^s</span> = 한 번 뽑은 s개가 <b>모두 인라이어일 확률</b>. <span class="tex">1-(1-e)^s</span> = 한 번의 표본이 &lsquo;오염될&rsquo; 확률. N번 모두 오염될 확률을 <span class="tex">1-p</span> 이하로 누르면 된다. 22p의 그래프는 e가 1에 가까워질수록 N이 <b>폭발적으로</b> 늘어남을 보여 준다.</p>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>N을 직접 계산해 보면 (p = 0.99)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>s (모델)</th><th>e = 10%</th><th>e = 20%</th><th>e = 30%</th><th>e = 50%</th></tr></thead>
+    <tbody>
+      <tr><td>1 (평행이동)</td><td>2</td><td>3</td><td>4</td><td>7</td></tr>
+      <tr><td>2 (직선)</td><td>3</td><td>5</td><td>7</td><td>17</td></tr>
+      <tr><td>4 (호모그래피)</td><td>5</td><td>9</td><td>17</td><td><b>72</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>예) s = 4, e = 0.5 &mdash; 네 쌍이 모두 맞는 짝일 확률은 <span class="tex">0.5^4=1/16</span>. <span class="tex">N=\log 0.01/\log(15/16)=-4.605/-0.0645\approx71.4</span> → <b>72번</b>. 짝의 절반이 틀려도 <b>72번만 뽑아 보면 99% 확률로</b> 깨끗한 표본을 한 번은 얻는다. 놀라운 점은 N이 <b>점의 총 개수와 무관</b>하다는 것이다 &mdash; 매칭이 1000쌍이든 10만 쌍이든 같다. 대신 s가 커질수록 <span class="tex">(1-e)^s</span>가 급격히 작아지므로, <span class="hi">모델에 필요한 최소 점 수가 적을수록 RANSAC이 유리하다</span>.</p>
+  <p><b><span class="tex">t^2=3.84\sigma^2</span>의 3.84는 어디서?</b> &mdash; 1차원 거리 오차가 <span class="tex">\mathcal N(0,\sigma^2)</span>이면 <span class="tex">d^2/\sigma^2</span>은 자유도 1의 카이제곱 분포를 따르고, 그 95% 분위수가 3.84다. 즉 &ldquo;진짜 인라이어의 95%가 띠 안에 들어오게&rdquo; 폭을 정한 것이다(<span class="tex">t\approx1.96\sigma</span>).</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>장점과 단점 (23p)</h3>
+  <div class="cards">
+    <div class="card2"><b>장점 (Pros)</b><ul class="ul"><li>단순하고 일반적이다</li><li>매우 다양한 문제에 적용할 수 있다</li><li>실제로 잘 작동하는 경우가 많다</li></ul></div>
+    <div class="card2"><b>단점 (Cons)</b><ul class="ul"><li>조정할 파라미터가 많다</li><li><b>인라이어 비율이 낮으면</b> 잘 안 된다 &mdash; 반복이 너무 많아지거나 완전히 실패</li><li>최소 개수의 표본만으로는 모델의 좋은 초기값을 항상 얻지는 못한다</li></ul></div>
+  </div>
+</div>
+</section>
+
+<!-- ===================== 03 ===================== -->
+<section class="sec" id="matcher">
+  <div class="sec-head"><span class="sec-badge">03</span><h2 class="sec-title">짝을 찾는 두 매처와 &lsquo;대응을 모를 때&rsquo;<small>교안 24~26p</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>24 · 25 · 26p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-24-bf-flann.jpg" alt="교안 24p — Brute-Force 매처와 FLANN 매처"><figcaption><b>24p</b> Brute-Force 매처와 FLANN 매처</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-25-corr-unknown.jpg" alt="교안 25p — 대응을 모른다면?"><figcaption><b>25p</b> 대응을 모른다면?</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-26-corr-loop.jpg" alt="교안 26p — 추출 · 잠재적 매칭 · 가설-검증 루프"><figcaption><b>26p</b> 추출 · 잠재적 매칭 · 가설-검증 루프</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>Brute-Force 매처 vs FLANN 매처 (24p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>Brute-Force 매처</th><th>FLANN 매처</th></tr></thead>
+    <tbody>
+      <tr><td>방식</td><td>① 첫 집합의 기술자 하나를 꺼내 ② 둘째 집합의 <b>모든</b> 특징과 대 보고 ③ 어떤 거리 계산으로 거리를 잰 뒤 ④ <b>가장 가까운 것</b>을 돌려준다</td><td><b>Fast Library for Approximate Nearest Neighbors</b> &mdash; 대규모 데이터 · 고차원 특징에서 빠른 최근접 이웃 탐색에 최적화된 알고리즘 모음</td></tr>
+      <tr><td>결과</td><td><b>정확한</b> 최근접 이웃</td><td><b>근사</b> 최근접 이웃</td></tr>
+      <tr><td>속도</td><td>N × M번 비교 &mdash; 느리다</td><td>대규모 데이터에서 Brute-Force보다 <b>훨씬 빠르다</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>OpenCV에서는 이렇게 쓴다 — 거리 종류를 기술자에 맞출 것</h3>
+<pre class="code">sift = cv2.SIFT_create()
+kp1, des1 = sift.detectAndCompute(img1, None)     <span class="cm"># 6주차: 검출 + 기술 (128차원 실수 벡터)</span>
+kp2, des2 = sift.detectAndCompute(img2, None)
+
+bf = cv2.BFMatcher(cv2.NORM_L2)                   <span class="cm"># SIFT·SURF → L2 거리 / ORB·BRIEF → cv2.NORM_HAMMING</span>
+knn = bf.knnMatch(des1, des2, k=2)                <span class="cm"># 점마다 가장 가까운 2개 (07절 비율 검사용)</span>
+
+flann = cv2.FlannBasedMatcher(dict(algorithm=1, trees=5), dict(checks=50))   <span class="cm"># 1 = KD-트리</span>
+knn = flann.knnMatch(des1, des2, k=2)</pre>
+  <p>6주차에서 본 대로 <b>실수 벡터(SIFT · SURF)는 유클리드(L2) 거리</b>, <b>이진 벡터(BRIEF · ORB)는 해밍 거리</b>를 쓴다(<a class="ext" href="computer-vision-week06.html#brief">6주차 05절</a>). FLANN의 KD-트리는 실수 벡터용이고, 이진 기술자에는 LSH 인덱스를 쓴다. 교안 73p의 스티칭 코드는 FLANN 줄을 주석으로 남겨 두고 실제로는 <code>cv2.BFMatcher()</code> + <code>knnMatch(k=2)</code>를 쓴다 &mdash; 두 매처가 <b>같은 자리에 갈아 끼울 수 있는 부품</b>이라는 뜻이다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>대응을 모를 때 — 가설을 세우고 검증한다 (25 · 26p)</h3>
+  <p>지금까지는 두 사진 사이의 <b>정답 대응(ground-truth correspondence)이 주어졌다고 가정</b>했다. 대응을 모른다면?</p>
+  <div class="flow">
+    <div class="fl"><b>1. 특징 추출</b><span>검출과 기술</span></div>
+    <div class="fl"><b>2. 잠재적 매칭 계산</b><span>기술자 거리로 &lsquo;후보&rsquo; 짝을 만든다 &mdash; 틀린 것이 섞여 있다</span></div>
+    <div class="fl"><b>3. 루프</b><span>(1) 변환 <span class="tex">T</span>를 <b>가정(Hypothesize)</b> &rarr; (2) 변환을 <b>검증(Verify)</b> &mdash; <span class="tex">T</span>와 일치하는 다른 매칭을 찾는다</span></div>
+  </div>
+  <p>3번이 바로 <b>RANSAC의 가정-검증 루프</b>다. 26p의 결과 그림은 두 산 사진이 비스듬히 겹쳐 하나로 이어진 모습이다 &mdash; 이번 주 후반부 전체가 이 한 장을 만드는 과정이다.</p>
+</div>
+</section>
+
+<!-- ===================== 04 ===================== -->
+<section class="sec" id="align">
+  <div class="sec-head"><span class="sec-badge">04</span><h2 class="sec-title">영상 정렬 — 정렬은 &lsquo;두 사진 사이의 피팅&rsquo;이다<small>교안 27~35p</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>27 · 28 · 29 · 30 · 32 · 33 · 34 · 35p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-27-look-past.jpg" alt="교안 27p — 과거를 들여다보기"><figcaption><b>27p</b> 과거를 들여다보기 &mdash; 옛 사진을 지금 풍경에 겹치기</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-28-align-challenge.jpg" alt="교안 28p — 정렬의 어려움"><figcaption><b>28p</b> 정렬의 어려움 &mdash; 겹침 · 가림 · 밝기</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-29-align-families.jpg" alt="교안 29p — 직접 정렬과 특징 기반 정렬"><figcaption><b>29p</b> 직접(픽셀) 정렬 vs 특징 기반 정렬</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-30-align-fitting.jpg" alt="교안 30p — 정렬은 피팅이다"><figcaption><b>30p</b> 정렬은 피팅이다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-32-affine-eq.jpg" alt="교안 32p — 어파인 변환을 선형 시스템으로"><figcaption><b>32p</b> 어파인 변환을 선형 시스템으로</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-33-affine-six.jpg" alt="교안 33p — 미지수 6개, 대응점 최소 3쌍"><figcaption><b>33p</b> 미지수 6개, 대응점 최소 3쌍</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-34-translation-fail.jpg" alt="교안 34p — 평행이동만으로는 부족하다"><figcaption><b>34p</b> 평행이동만으로는 부족하다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-35-use-homography.jpg" alt="교안 35p — 호모그래피를 쓰자"><figcaption><b>35p</b> 호모그래피를 쓰자</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>정렬이 쓰이는 곳과 어려운 점 (27 · 28p)</h3>
+  <p>27p의 &lsquo;A look into the past&rsquo;는 <b>옛 흑백 사진을 같은 장소의 현재 풍경 위에 정확히 겹친</b> 사진들이다(봉쇄 당시의 레닌그라드 등). 두 사진이 같은 장면을 보고 있다면, 한쪽을 적절히 변환해 다른 쪽에 맞출 수 있다는 것이 정렬의 출발점이다.</p>
+  <p>28p의 어려움은 세 가지다 &mdash; 두 사진의 <b>겹치는 부분이 작다</b>(Small degree of overlap), 물체가 <b>가려지거나 배경이 복잡하다</b>(Occlusion, Clutter), <b>밝기가 바뀐다</b>(Intensity changes). 전화기 · 곰 인형 · 운동화 예시는 복잡한 장면 속에서 물체를 찾아 정렬하는 경우다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>두 갈래의 접근 (29p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>직접(픽셀 기반) 정렬</th><th>특징 기반 정렬</th></tr></thead>
+    <tbody>
+      <tr><td>찾는 것</td><td><b>대부분의 픽셀이 일치</b>하는 정렬</td><td><b>추출한 특징들이 일치</b>하는 정렬</td></tr>
+      <tr><td>비고</td><td>모든 픽셀을 비교하므로 무겁고, 큰 변형에서 초기값에 민감</td><td>점 몇백 개만 다루므로 빠르고 큰 변형에 강하다. <b>결과를 픽셀 기반 정렬로 검증</b>할 수 있다</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>정렬 = 피팅 (30p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>앞부분(피팅)</th><th>정렬(alignment)</th></tr></thead>
+    <tbody>
+      <tr><td>무엇에 맞추나</td><td><b>한 영상</b>의 특징들에 모델을 맞춘다</td><td><b>두 영상의 특징 쌍(매칭)</b> 사이의 <b>변환</b>에 모델을 맞춘다</td></tr>
+      <tr><td>최소화하는 것</td><td><span class="tex">\sum_i \mathrm{residual}(x_i,M)</span>을 최소화하는 모델 <span class="tex">M</span></td><td><span class="tex">\sum_i \mathrm{residual}(T(x_i),x_i')</span>을 최소화하는 변환 <span class="tex">T</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><span class="hi">즉 01 · 02절의 도구(최소제곱 · RANSAC)를 그대로 쓰되, &lsquo;점&rsquo; 대신 &lsquo;짝&rsquo;을, &lsquo;직선&rsquo; 대신 &lsquo;변환&rsquo;을 넣으면 된다.</span></p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>어파인 변환 피팅 — 미지수 6개, 짝 3쌍 (31~33p)</h3>
+  <p>어파인 변환은 <b>단순한 피팅 절차(선형 최소제곱)</b>로 구할 수 있고, <b>대략 평면인 물체 · 대략 정사영(orthographic) 카메라</b>의 시점 변화를 근사하며, 더 복잡한 모델의 <b>초기값</b>으로도 쓰인다(31p의 장난감 기관차 &mdash; 옆면의 노란 사각형이 시점에 따라 평행사변형으로 바뀐다).</p>
+  <div class="fx">
+    <div class="tex-d">\begin{bmatrix}x_i'\\ y_i'\end{bmatrix}=\begin{bmatrix}m_1&amp;m_2\\ m_3&amp;m_4\end{bmatrix}\begin{bmatrix}x_i\\ y_i\end{bmatrix}+\begin{bmatrix}t_1\\ t_2\end{bmatrix}\quad\Longrightarrow\quad\begin{bmatrix}x_i&amp;y_i&amp;0&amp;0&amp;1&amp;0\\ 0&amp;0&amp;x_i&amp;y_i&amp;0&amp;1\end{bmatrix}\begin{bmatrix}m_1\\ m_2\\ m_3\\ m_4\\ t_1\\ t_2\end{bmatrix}=\begin{bmatrix}x_i'\\ y_i'\end{bmatrix}</div>
+    <p class="fx-note">미지수 6개의 선형 시스템이다. <b>짝 하나가 선형 독립인 식 두 개</b>를 주므로 변환 파라미터를 풀려면 <b>최소 세 쌍</b>이 필요하다(33p). 짝이 더 많으면 행을 쌓아 정규방정식으로 최소제곱 해를 구한다 &mdash; 01절과 똑같다.</p>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>평행이동만으로는 부족하다 (34 · 35p)</h3>
+  <p>아트리움 내부를 카메라를 돌려 가며 찍은 여섯 장을 <b>평행이동만으로</b> 이어 붙이면(34p), 이음새마다 난간과 창틀이 어긋난다 &mdash; &ldquo;Translation-only alignment is not enough!!&rdquo;. 같은 사진들을 <b>호모그래피</b>로 와핑해 붙이면(35p) 양옆이 사다리꼴로 휘면서 난간이 하나의 곧은 선으로 이어진다 &mdash; &ldquo;Use image homography!!&rdquo;.</p>
+</div>
+</section>
+
+<!-- ===================== 05 ===================== -->
+<section class="sec" id="homo">
+  <div class="sec-head"><span class="sec-badge">05</span><h2 class="sec-title">호모그래피 — 평면을 다른 평면으로 옮기는 변환<small>교안 36~47p</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>37 · 38 · 39 · 40 · 41 · 43 · 44 · 45 · 46 · 47p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-37-proj-plane.jpg" alt="교안 37p — 투영면 PP1을 PP2로 옮기려면 어떤 변환이 필요한가"><figcaption><b>37p</b> 투영면 PP1을 PP2로 옮기려면?</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-38-trans-affine-homo.jpg" alt="교안 38p — 평행이동 · 어파인 · 호모그래피"><figcaption><b>38p</b> 평행이동 · 어파인 · 호모그래피</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-39-street-art.jpg" alt="교안 39p — 거리 예술(착시 그림)"><figcaption><b>39p</b> 거리 예술 &mdash; 한 시점에서만 입체로 보이는 그림</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-40-floor-pattern.jpg" alt="교안 40p — 그림 속 바닥 무늬를 정면으로 펴서 복원"><figcaption><b>40p</b> 그림 속 바닥 무늬를 정면으로 펴서 복원</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-41-ambassadors.jpg" alt="교안 41p — 홀바인 대사들 속 숨은 해골"><figcaption><b>41p</b> 홀바인 「대사들」 속 숨은 해골</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-43-virtual-rotation.jpg" alt="교안 43p — 가상의 카메라 회전"><figcaption><b>43p</b> 가상의 카메라 회전</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-44-rectify-stitch.jpg" alt="교안 44p — 영상 정렬(rectification)과 이어 붙이기"><figcaption><b>44p</b> 정면화(rectification) 후 이어 붙이기</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-45-when-planar.jpg" alt="교안 45p — 쓸 수 있는 경우 1: 장면이 평면"><figcaption><b>45p</b> 쓸 수 있는 경우 ① 장면이 평면</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-46-when-far.jpg" alt="교안 46p — 쓸 수 있는 경우 2: 아주 멀거나 깊이 변화가 작다"><figcaption><b>46p</b> ② 아주 멀거나 깊이 변화가 작다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-47-when-rotation.jpg" alt="교안 47p — 쓸 수 있는 경우 3: 카메라 중심이 같다(회전만)"><figcaption><b>47p</b> ③ 카메라 중심이 같다(회전만)</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>두 투영면 사이의 변환 (37 · 38p)</h3>
+  <p>37p의 그림 &mdash; 두 카메라 중심에서 같은 장면을 본다. <b>PP3는 두 투영 중심 모두의 투영면</b>이다. 투영면 1(PP1)을 투영면 2(PP2)로 옮기려면 어떤 변환이 필요할까? 왼쪽 도식은 <a class="ext" href="computer-vision-week02-2.html">2주차</a>에서 본 변환의 위계 &mdash; 평행이동(translation) · 유클리드(Euclidean) · 닮음(similarity) · 어파인(affine) · <b>사영(projective)</b>이다. 답은 가장 일반적인 사영 변환이다.</p>
+  <p>38p는 이것을 <b>호모그래피 = 평면 사영 변환(plane projective transformation)</b>이라고 정의하고, 같은 실내 사진 두 장을 세 방식으로 겹친다. 평행이동(초록 사각형이 그대로 옮겨짐) · 어파인(평행사변형) · <b>호모그래피(임의의 사각형)</b> &mdash; 오직 호모그래피만 두 사진의 벽과 책상을 정확히 맞춘다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>변환의 위계 — 자유도 · 필요한 짝 · 보존되는 것</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>변환</th><th>행렬 꼴 (동차 좌표)</th><th>자유도</th><th>최소 짝 수</th><th>보존되는 것</th></tr></thead>
+    <tbody>
+      <tr><td>평행이동</td><td><span class="tex">\begin{bmatrix}1&amp;0&amp;t_x\\0&amp;1&amp;t_y\\0&amp;0&amp;1\end{bmatrix}</span></td><td>2</td><td><b>1</b></td><td>방향 · 길이 · 각도 전부</td></tr>
+      <tr><td>유클리드(강체)</td><td>회전 + 평행이동</td><td>3</td><td>2</td><td>길이</td></tr>
+      <tr><td>닮음</td><td>+ 균일 배율</td><td>4</td><td>2</td><td>각도 · 길이의 비</td></tr>
+      <tr><td><b>어파인</b></td><td><span class="tex">\begin{bmatrix}m_1&amp;m_2&amp;t_1\\m_3&amp;m_4&amp;t_2\\0&amp;0&amp;1\end{bmatrix}</span></td><td><b>6</b></td><td><b>3</b></td><td><b>평행성</b> · 면적의 비</td></tr>
+      <tr><td><b>호모그래피</b></td><td><span class="tex">\begin{bmatrix}h_1&amp;h_2&amp;h_3\\h_4&amp;h_5&amp;h_6\\h_7&amp;h_8&amp;h_9\end{bmatrix}</span></td><td><b>8</b></td><td><b>4</b></td><td><b>직선은 직선으로</b>(평행성은 깨진다)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>호모그래피 원소는 9개인데 자유도가 8인 이유 &mdash; <b>H 전체에 0이 아닌 상수를 곱해도 같은 변환</b>이기 때문이다(동차 좌표는 마지막에 w로 나누므로 배율이 상쇄된다). 그래서 보통 <span class="tex">h_9=1</span>로 두거나 <span class="tex">\lVert\mathbf h\rVert=1</span>로 고정한다. 어파인과의 차이는 <b>마지막 행</b> <span class="tex">(h_7,h_8)</span>이다. 이 두 원소가 0이 아니면 w가 위치마다 달라져 <b>멀리 있는 쪽이 작아지는 원근 효과</b>가 생긴다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>호모그래피로 와핑하면 생기는 일들 (39~44p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>응용</th><th>무엇을 보여 주나</th></tr></thead>
+    <tbody>
+      <tr><td><b>거리 예술</b> (39p)</td><td>바닥에 늘여 그린 그림이 <b>특정 위치에서 볼 때만</b> 수영장 · 지구본처럼 입체로 보인다. 바닥 평면 → 눈의 상 평면이 호모그래피이므로, 그림을 역변환으로 미리 찌그러뜨려 그린 것이다</td></tr>
+      <tr><td><b>기하 무늬 이해</b> (40p)</td><td>르네상스 그림 속 비스듬한 바닥을 호모그래피로 <b>정면에서 본 것처럼 펴면(rectified view)</b> 원래의 타일 무늬를 복원할 수 있다</td></tr>
+      <tr><td><b>이상한 그림</b> (41 · 42p)</td><td>홀바인의 「대사들」 아래쪽의 길쭉한 얼룩은 <b>왜상(anamorphic perspective)으로 그린 해골</b>이다. 정면화하면 해골이 드러난다. 광택 나는 숟가락에 비춰 봐도 보인다(&ldquo;DIY&rdquo;)</td></tr>
+      <tr><td><b>가상 카메라 회전</b> (43p)</td><td>상트페테르부르크 사진 한 장을 호모그래피로 와핑해 <b>카메라를 돌려 찍은 것 같은</b> 새 시점을 만든다</td></tr>
+      <tr><td><b>영상 정면화 · 이어 붙이기</b> (44p)</td><td>건물 벽을 비스듬히 찍은 두 장을 정면화한 뒤 이어 붙여 <b>한 장의 정면 사진</b>으로 만든다</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>호모그래피를 쓸 수 있는 세 경우 (45~47p)</h3>
+  <div class="cards">
+    <div class="card2"><b>① 장면이 평면이다</b><ul class="ul"><li><b>평면 표면</b>을 두 시점에서 본 사진 사이의 변환</li><li>예) 벽화(그래피티)를 정면 · 비스듬히 찍은 사진</li></ul></div>
+    <div class="card2"><b>② 장면이 아주 멀다</b><ul class="ul"><li>장면이 매우 멀거나 <b>(상대적) 깊이 변화가 작다</b> &rarr; 근사적으로 평면</li><li>예) 요세미티 계곡의 원경</li></ul></div>
+    <div class="card2"><b>③ 카메라 중심이 같다</b><ul class="ul"><li><b>같은 중심을 공유하는</b> 두 카메라(= 제자리에서 <b>회전만</b>)로 찍은 사진</li><li>장면이 평면이 아니어도 된다 &mdash; 파노라마의 원리 (출처: Hartley &amp; Zisserman)</li></ul></div>
+  </div>
+  <div class="pit"><b>③이 가장 헷갈린다 — &lsquo;평면이 아닌데도 되는&rsquo; 유일한 경우</b> &mdash; 카메라가 <b>이동(평행이동)</b>하면 가까운 물체와 먼 물체가 서로 다른 양만큼 움직인다(시차, parallax). 이것은 3×3 행렬 하나로 표현할 수 없어 호모그래피가 깨진다. 반면 카메라가 <b>제자리에서 돌기만</b> 하면 모든 광선이 같은 중심을 지나므로, 깊이와 상관없이 픽셀이 같은 규칙으로 옮겨진다. 그래서 파노라마를 찍을 때 <b>몸을 옮기지 말고 제자리에서 돌라</b>고 하는 것이다(71p의 1번 단계). 시차가 있는 경우는 9주차 스테레오 비전의 주제다.</div>
+</div>
+</section>
+
+<!-- ===================== 06 ===================== -->
+<section class="sec" id="dlt">
+  <div class="sec-head"><span class="sec-badge">06</span><h2 class="sec-title">호모그래피 구하기 — 대응점 4쌍과 SVD<small>교안 48~54p · 직접 선형 변환(DLT)</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>48 · 49 · 50 · 51 · 52 · 53 · 54p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-48-homog-coords.jpg" alt="교안 48p — 동차 좌표로 바꾸고 H를 곱하고 다시 되돌린다"><figcaption><b>48p</b> 동차 좌표 → H 곱하기 → 비동차로 되돌리기</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-49-point-corr.jpg" alt="교안 49p — 대응점 만들기"><figcaption><b>49p</b> 대응점 만들기 <span class="tex">p_i\leftrightarrow p_i'</span></figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-50-expand-scale.jpg" alt="교안 50p — 행렬 곱을 풀고 배율 α를 없앤다"><figcaption><b>50p</b> 행렬 곱을 풀고 배율 <span class="tex">\alpha</span>를 없앤다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-51-rearrange.jpg" alt="교안 51p — 항을 재배열해 A_i h = 0"><figcaption><b>51p</b> 항을 재배열해 <span class="tex">A_i\mathbf h=0</span></figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-52-stack-ah.jpg" alt="교안 52p — 여러 대응점의 제약을 쌓는다"><figcaption><b>52p</b> 여러 대응점의 제약을 쌓는다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-53-svd.jpg" alt="교안 53p — 특이값 분해"><figcaption><b>53p</b> 특이값 분해(SVD)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-54-solve-steps.jpg" alt="교안 54p — H를 푸는 다섯 단계"><figcaption><b>54p</b> H를 푸는 다섯 단계</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>점에 H를 적용하는 세 단계 (48p)</h3>
+  <div class="fx">
+    <div class="tex-d">\text{①}\;p=\begin{bmatrix}x\\ y\end{bmatrix}\Rightarrow P=\begin{bmatrix}x\\ y\\ 1\end{bmatrix}\qquad\text{②}\;P'=H\cdot P\qquad\text{③}\;P'=\begin{bmatrix}x'\\ y'\\ w'\end{bmatrix}\Rightarrow p'=\begin{bmatrix}x'/w'\\ y'/w'\end{bmatrix}</div>
+    <p class="fx-note">① <b>동차(homogeneous) 좌표</b>로 바꾸고(끝에 1을 붙인다) ② 호모그래피 행렬을 곱한 뒤 ③ <b>비동차(heterogeneous) 좌표</b>로 되돌린다(세 번째 성분으로 나눈다). ③의 나눗셈 때문에 호모그래피는 <b>선형 변환이 아니다</b> &mdash; 07절에서 이것이 문제가 된다.</p>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>대응점 하나에서 식 두 개 (49~51p)</h3>
+  <p>매칭된 특징점 집합 <span class="tex">\{p_i,p_i'\}</span>이 주어지면, <span class="tex">P'=H\cdot P</span>를 가장 잘 만족하는 H를 찾는다(49p &mdash; 원본 영상의 건물 모서리 <span class="tex">p_1\ldots p_4</span>와 목표 영상의 <span class="tex">p_1'\ldots p_4'</span>).</p>
+  <div class="fx">
+    <div class="tex-d">\begin{bmatrix}x'\\ y'\\ 1\end{bmatrix}=\alpha\begin{bmatrix}h_1&amp;h_2&amp;h_3\\ h_4&amp;h_5&amp;h_6\\ h_7&amp;h_8&amp;h_9\end{bmatrix}\begin{bmatrix}x\\ y\\ 1\end{bmatrix}\;\Rightarrow\;\begin{cases}x'=\alpha(h_1x+h_2y+h_3)\\ y'=\alpha(h_4x+h_5y+h_6)\\ 1=\alpha(h_7x+h_8y+h_9)\end{cases}</div>
+    <div class="tex-d">\text{배율 }\alpha\text{ 소거}:\quad x'(h_7x+h_8y+h_9)=h_1x+h_2y+h_3,\qquad y'(h_7x+h_8y+h_9)=h_4x+h_5y+h_6</div>
+    <div class="tex-d">\text{재배열}:\quad A_i\mathbf h=\mathbf 0,\quad A_i=\begin{bmatrix}-x&amp;-y&amp;-1&amp;0&amp;0&amp;0&amp;xx'&amp;yx'&amp;x'\\ 0&amp;0&amp;0&amp;-x&amp;-y&amp;-1&amp;xy'&amp;yy'&amp;y'\end{bmatrix},\quad\mathbf h=[h_1,\ldots,h_9]^\top</div>
+    <p class="fx-note">셋째 식에서 <span class="tex">\alpha=1/(h_7x+h_8y+h_9)</span>를 얻어 위 두 식에 넣으면 <b>알 수 없는 배율이 사라진다</b>(50p). 이항하면 h에 대해 <b>선형</b>인 두 식이 되고(51p), 이것을 행렬로 쓰면 2×9 행렬 <span class="tex">A_i</span>가 된다.</p>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>쌓고, SVD로 푼다 (52~54p)</h3>
+  <p>대응점 n개의 <span class="tex">A_i</span>를 세로로 쌓으면 <b>2n × 9 행렬 A</b>가 되고 <span class="tex">A\mathbf h=\mathbf 0</span>을 풀면 된다(52p). 자명한 해 <span class="tex">\mathbf h=\mathbf 0</span>을 피하려고 <b>단위 노름 조건</b> <span class="tex">\lVert\mathbf h\rVert=1</span>을 건다. 53p &mdash; <span class="tex">A=U\Sigma V^\top=\sum_{i=1}^{9}\sigma_i\mathbf u_i\mathbf v_i^\top</span>(U, V는 정규직교, Σ는 대각)로 분해하면, <span class="hi">해는 가장 작은 특이값에 대응하는 V의 열</span>이다.</p>
+  <div class="flow">
+    <div class="fl"><b>1.</b><span>각 대응점마다 <b>2 × 9 행렬 <span class="tex">A_i</span></b>를 만든다</span></div>
+    <div class="fl"><b>2.</b><span>이어 붙여 <b>2n × 9 행렬 A</b> 하나로</span></div>
+    <div class="fl"><b>3.</b><span><b>SVD</b> <span class="tex">A=U\Sigma V^\top</span>를 계산</span></div>
+    <div class="fl"><b>4.</b><span><b>가장 작은 특이값</b>의 특이 벡터를 저장 &mdash; <span class="tex">\mathbf h=\mathbf v_{\hat i}</span></span></div>
+    <div class="fl"><b>5.</b><span>3 × 3으로 <b>reshape</b>해 H를 얻는다</span></div>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>손으로 확인하는 예제 — 정사각형을 사다리꼴로</h3>
+  <p>단위 정사각형의 네 꼭짓점을 아랫변이 긴 사다리꼴로 보내는 H를 위 다섯 단계로 구해 보았다(NumPy로 계산).</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>점</th><th>원본 <span class="tex">p_i</span></th><th>목표 <span class="tex">p_i'</span></th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>(0, 0)</td><td>(0, 0)</td></tr>
+      <tr><td>2</td><td>(1, 0)</td><td>(2, 0)</td></tr>
+      <tr><td>3</td><td>(1, 1)</td><td>(1.5, 1)</td></tr>
+      <tr><td>4</td><td>(0, 1)</td><td>(0.5, 1)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="fx">
+    <div class="tex-d">A\in\mathbb R^{8\times9},\quad\text{특이값 }(4.77,\,2.61,\,\ldots,\,0.31,\;\mathbf{0})\;\Rightarrow\;H=\begin{bmatrix}2&amp;1&amp;0\\ 0&amp;2&amp;0\\ 0&amp;1&amp;1\end{bmatrix}\;(h_9=1\text{로 정규화})</div>
+    <p class="fx-note">대응점이 정확히 4쌍이면 A는 8 × 9라서 9번째 특이값이 <b>정확히 0</b>이다(해가 딱 하나로 정해진다). 짝이 5쌍 이상이고 잡음이 있으면 0이 아닌 &lsquo;가장 작은&rsquo; 특이값의 벡터가 <b>최소제곱 해</b>가 된다 &mdash; 01절 TLS와 같은 논리다.</p>
+  </div>
+  <p>검산 &mdash; 점 3 <span class="tex">(1,1)</span>: <span class="tex">H[1,1,1]^\top=[3,2,2]^\top\Rightarrow(3/2,\,2/2)=(1.5,1)</span> ✓.
+  <b>정사각형의 중심</b> <span class="tex">(0.5,0.5)</span>은 <span class="tex">[1.5,1,1.5]^\top\Rightarrow(1,\,0.667)</span>로 간다. 사다리꼴의 &lsquo;가운데 높이&rsquo; 0.5가 아니라 <b>0.667</b> &mdash; 위쪽(멀리 있는 쪽)이 좁아지는 원근 때문에 중점이 중점으로 가지 않는다. 어파인이었다면 중점은 반드시 중점으로 간다. <span class="tex">h_8=1</span>이 만든 차이다.</p>
+</div>
+</section>
+
+<!-- ===================== 07 ===================== -->
+<section class="sec" id="robust">
+  <div class="sec-head"><span class="sec-badge">07</span><h2 class="sec-title">RANSAC으로 호모그래피 추정하기<small>교안 55~66p · 매칭과 추정을 동시에</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>55 · 56 · 59 · 60 · 62 · 64 · 65 · 66p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-55-pipeline.jpg" alt="교안 55p — 영상 대응 파이프라인"><figcaption><b>55p</b> 영상 대응 파이프라인</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-56-matching-problem.jpg" alt="교안 56p — 선형 최소제곱의 한계"><figcaption><b>56p</b> 선형 최소제곱의 한계 &mdash; 그래서 RANSAC</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-59-lls-average.jpg" alt="교안 59p — LLS는 평균 변환을 찾는다"><figcaption><b>59p</b> LLS는 &lsquo;평균&rsquo; 변환을 찾는다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-60-one-corr.jpg" alt="교안 60p — 평행이동은 짝 하나면 된다"><figcaption><b>60p</b> 평행이동은 짝 하나면 된다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-62-two-inliers.jpg" alt="교안 62p — 짝 하나를 골라 인라이어 세기: 2개"><figcaption><b>62p</b> 짝 하나를 골라 인라이어 세기 &mdash; 2개</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-64-five-inliers.jpg" alt="교안 64p — 인라이어 5개, 가장 많은 모델을 고른다"><figcaption><b>64p</b> 인라이어 5개 &mdash; 가장 많은 모델</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-65-ransac-loop.jpg" alt="교안 65p — RANSAC 루프"><figcaption><b>65p</b> RANSAC 루프</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-66-ratio-test.jpg" alt="교안 66p — 믿을 수 없는 매칭 버리기: 비율 검사"><figcaption><b>66p</b> 믿을 수 없는 매칭 버리기 &mdash; 비율 검사</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>영상 대응 파이프라인 (55p)</h3>
+  <div class="flow">
+    <div class="fl"><b>1. 특징점 검출</b><span>코너를 찾는다(예: Harris 코너 검출기) &mdash; 5주차</span></div>
+    <div class="fl"><b>2. 특징점 기술</b><span>특징을 기술한다(예: 다중 스케일 방향 패치 기술자, MOPS) &mdash; 6주차</span></div>
+    <div class="fl"><b>3. 특징 매칭과 호모그래피 추정</b><span><b>RANSAC으로 둘을 동시에</b> 한다 &mdash; 이번 주</span></div>
+  </div>
+  <p>&lsquo;동시에&rsquo;가 핵심이다. 매칭을 먼저 완벽히 하고 나서 H를 구하는 것이 아니라, <b>H를 가정해 보는 과정에서 어떤 매칭이 맞는지가 함께 가려진다</b>.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>왜 선형 최소제곱만으로는 안 되나 (56~59p)</h3>
+  <ul class="ul">
+    <li>선형 최소제곱(LLS) 추정은 <b>변환 함수가 선형일 때만</b> 제대로 작동한다 &mdash; 호모그래피는 w로 나누기 때문에 선형이 아니다(06절의 <span class="tex">A\mathbf h=0</span>은 &lsquo;대수적 오차&rsquo;를 최소화하는 근사다)</li>
+    <li>그리고 <b>이상치를 잘 다루지 못한다</b></li>
+  </ul>
+  <p>57~59p의 예 &mdash; 두 사진에서 SIFT로 짝을 찾고 <b>평행이동 변환</b>을 구하려 한다. 매칭된 점에는 보통 <b>나쁜 대응(bad correspondence, 빨간 화살표)</b>이 섞여 있다. LLS는 좋은 짝(청록)과 나쁜 짝을 모두 평균 내므로 <b>&lsquo;평균&rsquo; 변환(노란 화살표)</b>을 찾고, 그 해는 나쁜 짝 때문에 <b>오염된다</b>.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>평행이동 예제로 보는 RANSAC (60~64p)</h3>
+  <p>평행이동 모델을 구하는 데 짝이 몇 개 필요한가? <b>하나</b>면 된다(60p, 02절의 s = 1). 그래서 &lsquo;짝 하나를 골라(Pick one correspondence) 인라이어를 센다(count inliers)&rsquo;를 반복한다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>시도</th><th>고른 짝</th><th>그 평행이동에 동의하는 짝</th></tr></thead>
+    <tbody>
+      <tr><td>61 · 62p</td><td>대각선으로 길게 그어진 짝(사실은 나쁜 짝)</td><td><b>2개</b></td></tr>
+      <tr><td>63 · 64p</td><td>짧고 수평인 짝(좋은 짝)</td><td><b>5개</b> &larr; 가장 많다</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>&ldquo;<b>인라이어가 가장 많은 모델을 고른다!</b>&rdquo;(64p). 좋은 짝들은 모두 같은 변환을 따르므로 서로 &lsquo;동의&rsquo;하고, 나쁜 짝들은 제각각이라 서로 동의하지 않는다. <span class="hi">다수결로 진짜 변환을 찾는 셈이다.</span></p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>RANSAC 루프 (65p)</h3>
+  <pre class="code"><span class="cm"># 호모그래피면 한 번에 4쌍을 뽑는다 (s = 4)</span>
+반복:
+    1. 대응점을 (무작위로) 뽑는다
+    2. H를 계산한다                    <span class="cm"># 06절의 DLT</span>
+    3. 인라이어를 센다                 <span class="cm"># ‖p' − H·p‖ &lt; t 인 짝</span>
+    4. 인라이어가 가장 많으면 그 H를 보관한다
+모든 인라이어로 H를 다시 계산한다      <span class="cm"># refit</span></pre>
+  <p>OpenCV에서는 <code>cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)</code> 한 줄이 이 루프 전체다. 마지막 인자 5.0이 <b>재투영 오차 임계값 t(픽셀)</b>이고, 함께 돌려주는 <code>mask</code>가 인라이어 표시다(교안 72p 코드 · OpenCV 튜토리얼 &lsquo;Feature Matching + Homography&rsquo;).</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>믿을 수 없는 매칭 버리기 — 비율 검사 (66p)</h3>
+  <p>경험 규칙(heuristic) &mdash; <b>가장 가까운 이웃까지의 거리</b>를 <b>두 번째로 가까운 이웃까지의 거리</b>와 비교한다. <span class="hi">변별력이 없는(not distinctive) 특징이면 이 비율이 높게(1에 가깝게) 나온다.</span> 왼쪽 그래프(Lowe, IJCV 2004)는 <b>맞는 매칭은 비율이 낮은 쪽(0.3~0.5 근처)에, 틀린 매칭은 1 근처에</b> 몰려 있음을 보여 준다. 오른쪽(Goshen &amp; Shimshoni, PAMI 2008)도 같은 경향이다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>비율 검사를 숫자로 — 왜 &lsquo;가장 가까운 것&rsquo;만으로는 부족한가</h3>
+  <div class="fx">
+    <div class="tex-d">r=\frac{d_1}{d_2}=\frac{\text{1등 이웃까지 거리}}{\text{2등 이웃까지 거리}}\qquad r&lt;0.8\;(\text{Lowe})\;\text{이면 채택}</div>
+  </div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>경우</th><th><span class="tex">d_1</span></th><th><span class="tex">d_2</span></th><th>r</th><th>판단</th></tr></thead>
+    <tbody>
+      <tr><td>산꼭대기의 독특한 코너</td><td>120</td><td>400</td><td>0.30</td><td><b>채택</b> &mdash; 1등이 압도적이다</td></tr>
+      <tr><td>건물의 반복되는 창문</td><td>110</td><td>118</td><td>0.93</td><td><b>버림</b> &mdash; 1등과 2등이 거의 같아 어느 창문인지 모른다</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>두 경우 모두 1등까지의 거리(120 vs 110)만 보면 오히려 창문 쪽이 더 &lsquo;좋은&rsquo; 매칭처럼 보인다. 하지만 창문은 <b>비슷한 후보가 여럿</b>이라 틀릴 위험이 크다. 비율 검사는 &ldquo;얼마나 가까운가&rdquo; 대신 &ldquo;<b>다른 후보보다 얼마나 확실히 가까운가</b>&rdquo;를 본다. Lowe의 실험에서 0.8 기준은 <b>틀린 매칭의 90%를 버리면서 맞는 매칭은 5% 미만만 잃었다</b>. 이렇게 걸러 낸 뒤 RANSAC에 넣으면 이상치 비율 e가 낮아져 02절의 N도 크게 줄어든다.</p>
+<pre class="code">good = [m for m, n in knn if m.distance &lt; 0.7 * n.distance]     <span class="cm"># 흔히 0.7~0.8 (교안 73p 코드는 0.03)</span>
+src = np.float32([kp1[m.queryIdx].pt for m in good]).reshape(-1, 1, 2)
+dst = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)
+H, mask = cv2.findHomography(src, dst, cv2.RANSAC, 5.0)            <span class="cm"># RANSAC + 재투영 오차 5px</span>
+print(mask.sum(), '/', len(good), '인라이어')</pre>
+</div>
+<div class="pit"><b>교안 73p 코드의 0.03은 극단적으로 엄격한 값이다</b> &mdash; 화면 속 코드는 <code>if m.distance &lt; 0.03*n.distance</code>로, 1등이 2등보다 <b>33배 이상</b> 가까워야만 남긴다. Lowe의 권장값 0.8(또는 흔히 쓰는 0.7)과 비교하면 거의 모든 매칭을 버리는 수준이라, 그 아래 <code>len(good) &gt; MIN_MATCH_COUNT</code>(10개) 조건을 통과하지 못해 호모그래피를 못 구할 수 있다. 영상 속 예제 사진처럼 거의 같은 두 장일 때나 통하는 값이므로, <b>직접 짤 때(HW2 포함)는 0.7~0.8에서 시작</b>해 결과를 보며 조정하는 것이 안전하다.</div>
+</section>
+
+<!-- ===================== 08 ===================== -->
+<section class="sec" id="stitch">
+  <div class="sec-head"><span class="sec-badge">08</span><h2 class="sec-title">스티칭 · 파노라마 · 블렌딩<small>교안 67~78p · 지금까지의 모든 것을 한 장의 사진으로</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>67 · 68 · 69 · 70 · 71 · 72 · 73 · 74 · 75 · 76 · 77 · 78p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-67-stitch-sift.jpg" alt="교안 67p — SIFT 특징 매칭"><figcaption><b>67p</b> ① SIFT 특징 매칭</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-68-stitch-ransac.jpg" alt="교안 68p — RANSAC으로 이상치 제거"><figcaption><b>68p</b> ② RANSAC으로 이상치 제거</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-69-stitch-result.jpg" alt="교안 69p — 이어 붙인 결과"><figcaption><b>69p</b> ③ 이어 붙인 결과</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-70-panorama-warp.jpg" alt="교안 70p — 기준 영상을 정하고 나머지를 와핑"><figcaption><b>70p</b> 기준 영상(빨강)을 정하고 나머지를 와핑</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-71-panorama-steps.jpg" alt="교안 71p — 파노라마를 만드는 다섯 단계"><figcaption><b>71p</b> 파노라마를 만드는 다섯 단계</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-72-opencv-register.jpg" alt="교안 72p — OpenCV로 영상 정합"><figcaption><b>72p</b> OpenCV로 영상 정합(ORB + findHomography)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-73-opencv-stitch.jpg" alt="교안 73p — OpenCV로 영상 스티칭"><figcaption><b>73p</b> OpenCV로 영상 스티칭(SIFT + FLANN)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-74-panorama-seam.jpg" alt="교안 74p — 여러 장 파노라마의 이음새"><figcaption><b>74p</b> 여러 장 파노라마와 이음새(빨간 선)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-75-vignetting.jpg" alt="교안 75p — 이음새가 생기는 이유: 비네팅과 작은 어긋남"><figcaption><b>75p</b> 이음새의 원인 &mdash; 비네팅 · 작은 어긋남</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-76-multiband.jpg" alt="교안 76p — 다중 대역 블렌딩"><figcaption><b>76p</b> 다중 대역 블렌딩</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-77-feathering.jpg" alt="교안 77p — 페더링: 투명도로 섞기"><figcaption><b>77p</b> 페더링 &mdash; 투명도로 섞기</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv7-78-cv-pipeline.jpg" alt="교안 78p — OpenCV 스티칭 파이프라인"><figcaption><b>78p</b> OpenCV 스티칭 파이프라인</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>두 장 이어 붙이기 (67~69p)</h3>
+  <p>교안 첫머리(3p)의 산 사진 두 장으로 돌아온다. ① <b>SIFT 특징을 매칭</b>하고(67p, 아래 두 장의 흰 원) ② <b>RANSAC으로 이상치를 버린 뒤</b>(68p, 남은 원이 줄었다) ③ 구한 H로 한 장을 와핑해 <b>이어 붙인다</b>(69p). 오른쪽 사진이 기울어진 사각형으로 들어가 앉은 것이 호모그래피 와핑의 흔적이다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>여러 장의 파노라마 (70 · 71p)</h3>
+  <div class="cards">
+    <div class="card2"><b>70p의 방법</b><ul class="ul"><li>① 영상 하나를 고른다(빨강, 기준)</li><li>② 나머지 영상을 그쪽으로 와핑한다(보통 한 장씩)</li><li>③ 섞는다(blend)</li></ul></div>
+    <div class="card2"><b>71p의 순서</b><ul class="ul"><li>1. <b>같은 위치</b>에서 연속으로 찍는다(카메라를 <b>광학 중심 기준으로 회전</b>)</li><li>2. 둘째 영상과 첫째 영상 사이의 변환을 계산</li><li>3. 둘째 영상을 옮겨 첫째와 겹친다</li><li>4. 둘을 섞어 <b>모자이크</b>를 만든다</li><li>5. 영상이 더 있으면 반복</li></ul></div>
+  </div>
+  <p>1번의 &lsquo;같은 위치에서 회전만&rsquo;이 <a class="ext" href="#homo">05절 세 번째 경우</a>다. 이 조건을 지켜야 장면에 깊이가 있어도 호모그래피 하나로 정확히 겹친다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>OpenCV 실습 영상 두 편 (72 · 73p)</h3>
+  <p>72p는 <b>영상 정합(registration)</b> &mdash; 원숭이 사진 두 장에 ORB(<code>cv2.ORB_create(50)</code>) 특징을 뽑고 <code>DescriptorMatcher</code>로 매칭한 뒤 <code>cv2.findHomography(points1, points2, cv2.RANSAC)</code> → <code>cv2.warpPerspective</code>로 한 장을 다른 장에 맞춘다(<a class="ext" href="https://youtu.be/cA8K8dl-E6k" target="_blank" rel="noopener">영상 ↗</a>). 73p는 <b>영상 스티칭</b> &mdash; SIFT + <code>BFMatcher</code> + <code>knnMatch(k=2)</code>로 <b>비율 검사</b>(<code>m.distance &lt; 0.03*n.distance</code>)를 한 뒤 매칭이 10개(<code>MIN_MATCH_COUNT</code>)보다 많으면 <code>findHomography(…, cv2.RANSAC, 5.0)</code>로 H를 구한다(<a class="ext" href="https://youtu.be/ToldvnUtBh0" target="_blank" rel="noopener">1부 ↗</a> · <a class="ext" href="https://youtu.be/mY5jp8KQM6g" target="_blank" rel="noopener">2부 ↗</a>). 7절에서 정리한 코드가 이 두 영상의 핵심 줄이다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>이음새 지우기 — 블렌딩 (74~77p)</h3>
+  <p>74p처럼 여러 장을 이어 붙이면 경계(빨간 선)가 눈에 띈다. 원인은 둘이다(75p) &mdash; <b>비네팅(vignetting)</b>: 센서에 들어오는 빛의 각도 의존성 때문에 디지털 카메라 사진의 <b>가장자리가 어두워지는</b> 현상, 그리고 <b>작은 어긋남(small misalignments)</b>.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>방법</th><th>어떻게</th><th>특징</th></tr></thead>
+    <tbody>
+      <tr><td><b>페더링(Feathering)</b> (77p)</td><td>각 픽셀에 <b>투명도 α</b>를 붙여 <span class="tex">I(x,y)=(\alpha R,\alpha G,\alpha B,\alpha)</span>로 인코딩하고, 겹치는 구간에서 왼쪽은 1→0, 오른쪽은 0→1로 서서히 바꿔 <span class="tex">I_{blend}=I_{left}+I_{right}</span></td><td>간단하다. 섞는 폭이 넓으면 어긋난 곳이 <b>흐릿하게 겹쳐 보이고(유령)</b>, 좁으면 <b>이음새가 남는다</b></td></tr>
+      <tr><td><b>다중 대역 블렌딩(Multi-band)</b> (76p)</td><td><b>영상 피라미드</b>를 쓰는 다중 해상도 기법 &mdash; 주파수 대역마다 다른 폭으로 섞는다</td><td><b>이음새는 감추면서 날카로운 디테일은 보존</b>한다</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>다중 대역 블렌딩은 4주차 라플라시안 피라미드의 응용이다</h3>
+  <p>페더링의 딜레마 &mdash; 하늘 같은 <b>밝기 차이(저주파)</b>는 넓게 섞어야 티가 안 나고, 나뭇잎 같은 <b>세부(고주파)</b>는 좁게 섞어야 두 겹으로 번지지 않는다. 한 가지 폭으로는 둘 다 만족시킬 수 없다.</p>
+  <div class="flow">
+    <div class="fl"><b>① 두 영상을 라플라시안 피라미드로 분해</b><span>각 층이 서로 다른 주파수 대역을 담는다 (<a class="ext" href="computer-vision-week04.html">4주차 Image Pyramids</a>)</span></div>
+    <div class="fl"><b>② 섞는 마스크를 가우시안 피라미드로 분해</b><span>아래 층(저해상도)일수록 마스크 경계가 넓고 부드러워진다</span></div>
+    <div class="fl"><b>③ 층마다 따로 섞는다</b><span>저주파 층은 넓은 경계로, 고주파 층은 좁은 경계로</span></div>
+    <div class="fl"><b>④ 피라미드를 다시 합친다(복원)</b><span>이음새 없이 디테일이 살아 있는 결과</span></div>
+  </div>
+  <p>Burt &amp; Adelson(1983)의 방법이고, OpenCV의 <code>cv2.Stitcher</code>도 기본 블렌더로 이 방식(MultiBandBlender)을 쓴다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>OpenCV 스티칭 파이프라인 (78p)</h3>
+  <div class="cards">
+    <div class="card2"><b>정합 (Registration)</b><ul class="ul"><li>중간 해상도로 축소 → <b>특징 찾기</b> → <b>특징 매칭</b></li><li>파노라마를 이룰 영상 · 매칭 부분집합 선택</li><li>카메라 파라미터를 대략 추정 → <b>전역적으로 다듬기</b>(번들 조정)</li><li>물결 보정(wave correction) · 최종 파노라마 배율 추정</li></ul></div>
+    <div class="card2"><b>합성 (Compositing)</b><ul class="ul"><li>저해상도에서 영상 와핑 → <b>이음새 마스크 찾기</b></li><li><b>노출 오차 추정 · 보정</b></li><li>원래 해상도로 마스크 확대 → 영상 와핑</li><li><b>블렌딩</b> → 최종 파노라마</li></ul></div>
+  </div>
+  <p>이번 주에 배운 것(특징 매칭 · RANSAC · 호모그래피 · 블렌딩)이 이 그림의 상자 대부분을 차지한다. OpenCV에서는 <code>cv2.Stitcher_create().stitch(images)</code> 한 줄이 이 전체를 수행한다(출처: pyimagesearch, &ldquo;OpenCV panorama stitching&rdquo;).</p>
+</div>
+</section>
+
+<!-- ===================== 정리 ===================== -->
+<section class="sec" id="summary">
+  <div class="sec-head"><span class="sec-badge">SUM</span><h2 class="sec-title">핵심 정리<small>중간고사 전에 이것만은</small></h2></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>개념</th><th>한 줄</th><th>숫자 · 식</th></tr></thead>
+  <tbody>
+    <tr><td>최소제곱 직선</td><td>세로 오차 제곱합 최소 &mdash; 회전 불변 아님, 수직선 불가</td><td><span class="tex">X^\top XB=X^\top Y</span></td></tr>
+    <tr><td>전체 최소제곱</td><td>수직 거리 제곱합 최소, 무게중심을 지난다</td><td><span class="tex">U^\top U</span>의 최소 고유값 고유벡터</td></tr>
+    <tr><td>RANSAC</td><td>최소 표본 → 가정 → 인라이어 세기 → 반복 → 최다 인라이어 모델 → 재피팅</td><td><span class="tex">N=\frac{\log(1-p)}{\log(1-(1-e)^s)}</span>, <span class="tex">t^2=3.84\sigma^2</span></td></tr>
+    <tr><td>매처</td><td>Brute-Force(정확 · 느림) vs FLANN(근사 · 빠름)</td><td>SIFT는 L2, ORB는 해밍</td></tr>
+    <tr><td>정렬</td><td>두 영상의 짝 사이 변환을 피팅</td><td><span class="tex">\min_T\sum\mathrm{residual}(T(x_i),x_i')</span></td></tr>
+    <tr><td>어파인</td><td>미지수 6개, 짝 하나에 식 2개</td><td>최소 <b>3쌍</b></td></tr>
+    <tr><td>호모그래피</td><td>평면 사영 변환, 3×3이지만 배율 자유 → 8자유도</td><td>최소 <b>4쌍</b></td></tr>
+    <tr><td>쓸 수 있는 경우</td><td>① 평면 장면 ② 아주 먼 장면 ③ <b>회전만</b>(카메라 중심 고정)</td><td>&mdash;</td></tr>
+    <tr><td>DLT</td><td>짝마다 2×9 → 2n×9 → SVD → 최소 특이값 벡터 → reshape</td><td><span class="tex">A\mathbf h=0,\;\lVert\mathbf h\rVert=1</span></td></tr>
+    <tr><td>비율 검사</td><td>1등과 2등 거리의 비가 크면 변별력 없음 → 버림</td><td><span class="tex">d_1/d_2&lt;0.8</span> (Lowe)</td></tr>
+    <tr><td>블렌딩</td><td>비네팅 · 어긋남이 이음새를 만든다 &mdash; 페더링(α) · 다중 대역(피라미드)</td><td><span class="tex">I_{blend}=I_{left}+I_{right}</span></td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
+<!-- ===================== 다음 ===================== -->
+<section class="sec" id="next">
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">과제 · 학생 발표 · 다음 주<small>HW1 리뷰 · HW2 부여 · 8주차 중간고사</small></h2></div>
+<div class="note-box"><b>이번 주 수업 일정 (강의계획서)</b> &mdash; 7주차(10.14)에 <b>HW1 리뷰</b>와 <b>HW2 부여 · 설명</b>이 예정되어 있다. HW2의 범위는 <b>5~7주차</b> &mdash; 특징 검출 · 기술 · 매칭이므로, 이번 주의 <b>비율 검사 · RANSAC · <code>findHomography</code> · 와핑</b>이 그대로 과제 코드가 될 가능성이 높다. 과제 파일이 올라오면 <a class="ext" href="computer-vision-assignments.html">과제 · 논문 발표</a> 페이지에 추가한다.</div>
+<div class="tip"><b>7주차 학생 발표</b> &mdash; 바탕화면 <code>컴_7주차/학생발표</code> 폴더가 아직 비어 있다. 발표 자료가 올라오면 6주차처럼 이 페이지 아래에 절을 추가한다.</div>
+<div class="note-box"><b>8주차(10.21) &mdash; 중간고사</b>(오프라인, 퇴계인문관 31705호). 1~7주차 범위.<br>
+<b>9주차(10.28) &mdash; Stereo Vision</b>. 이번 주의 호모그래피가 &lsquo;평면 · 회전만&rsquo;의 세계였다면, 다음은 카메라가 <b>이동</b>해 시차가 생기는 경우다 &mdash; 에피폴라 기하 · 기본 행렬 · 정류(rectification) · 시차와 깊이. 05절의 ⚠ 상자가 그 연결 고리다.</div>
+</section>
+
+<p class="src">출처 — 컴퓨터비전 07. Feature Matching &amp; Homography (2026-2학기, 79페이지)<br>
+영어 교안을 절 단위로 한국어로 옮겨 정리하고 도식 · 예시 슬라이드 <b>62장</b>을 캡처해 실었다. &lsquo;보충설명&rsquo; 뱃지가 붙은 부분(N 계산표 · 손으로 푼 호모그래피 예제 · 비율 검사 숫자 예 · OpenCV 코드 · 다중 대역 블렌딩)은 교안에 없는 내용을 따로 계산하거나 찾아 정리한 것이다.</p>
+
+</div>
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive() {
+    var cur = '';
+    sections.forEach(function (s) { if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function (t) { t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      setTimeout(function () {
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+
+  /* ---- 개념 설명 말풍선 ---- */
+  var terms = document.querySelectorAll('.term');
+  if (!terms.length) return;
+  var tip = document.createElement('div');
+  tip.id = 'tipbox';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  var current = null;
+
+  function hide() {
+    tip.classList.remove('on');
+    if (current) { current.classList.remove('on'); current = null; }
+  }
+  function show(el) {
+    tip.textContent = el.getAttribute('data-tip') || '';
+    tip.classList.add('on');
+    if (current && current !== el) current.classList.remove('on');
+    current = el;
+    el.classList.add('on');
+    var pad = 8;
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+    var top = r.top - t.height - 10;
+    if (top < pad) top = r.bottom + 10;
+    top = Math.min(top, window.innerHeight - t.height - pad);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+  terms.forEach(function (el) {
+    el.addEventListener('mouseenter', function () { show(el); });
+    el.addEventListener('mouseleave', function () { if (current === el) hide(); });
+    el.addEventListener('focus', function () { show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (current === el && tip.classList.contains('on')) hide(); else show(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el); }
+      if (e.key === 'Escape') hide();
+    });
+  });
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide);
+});
+</script>
+
+<script>
+/* 슬라이드 확대 보기 — 좌우 이동 · 닫으면 보던 자리로 */
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.sld'));
+  if (!slides.length) return;
+
+  var lb = document.createElement('div');
+  lb.id = 'lb';
+  lb.innerHTML =
+    '<button class="prev" type="button" aria-label="이전 슬라이드">&#10094;</button>' +
+    '<img alt="">' +
+    '<button class="next" type="button" aria-label="다음 슬라이드">&#10095;</button>' +
+    '<button class="x" type="button" aria-label="닫기">&#10005;</button>' +
+    '<p class="cap"></p>';
+  document.body.appendChild(lb);
+
+  var big = lb.querySelector('img'),
+      cap = lb.querySelector('.cap'),
+      bPrev = lb.querySelector('.prev'),
+      bNext = lb.querySelector('.next'),
+      bX = lb.querySelector('.x');
+
+  var idx = -1, openedIdx = -1, savedY = 0, pushed = false, prevRestore = null;
+
+  function lock() {
+    savedY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    document.body.style.position = 'fixed';
+    document.body.style.top = (-savedY) + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  /* html{scroll-behavior:smooth} 때문에 되돌아갈 때 화면이 흘러가지 않도록 잠깐 끈다 */
+  function instantly(fn) {
+    var de = document.documentElement, prev = de.style.scrollBehavior;
+    de.style.scrollBehavior = 'auto';
+    fn();
+    void de.offsetHeight;
+    de.style.scrollBehavior = prev;
+  }
+  function unlock() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    var target = (idx >= 0 && idx !== openedIdx) ? slides[idx] : null;
+    function place() {
+      instantly(function () {
+        window.scrollTo(0, savedY);
+        /* 넘겨 본 슬라이드가 있으면 그 슬라이드 자리로, 아니면 보던 자리 그대로 */
+        if (target) target.scrollIntoView({ block: 'center' });
+      });
+    }
+    place();
+    /* 기기 뒤로가기로 닫을 때 브라우저가 옛 스크롤을 덮어쓰므로 한 프레임 뒤 한 번 더 */
+    if (window.requestAnimationFrame) window.requestAnimationFrame(place);
+    setTimeout(place, 0);
+  }
+
+  function preload(i) {
+    if (i < 0 || i >= slides.length) return;
+    var im = slides[i].querySelector('img');
+    if (im) { var p = new Image(); p.src = im.currentSrc || im.src; }
+  }
+
+  function render(i) {
+    idx = i;
+    var f = slides[i], im = f.querySelector('img'), fc = f.querySelector('figcaption');
+    big.src = im.currentSrc || im.src;
+    big.alt = im.alt || '';
+    cap.innerHTML = '';
+    cap.appendChild(document.createTextNode(fc ? fc.textContent : ''));
+    var num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = (i + 1) + ' / ' + slides.length + ' · ← → 로 넘기기';
+    cap.appendChild(num);
+    bPrev.disabled = (i === 0);
+    bNext.disabled = (i === slides.length - 1);
+    preload(i + 1); preload(i - 1);
+  }
+
+  function open(i) {
+    openedIdx = i;
+    lock();
+    render(i);
+    lb.classList.add('on');
+    if (!pushed && window.history && window.history.pushState) {
+      try {
+        if ('scrollRestoration' in window.history && prevRestore === null) {
+          prevRestore = window.history.scrollRestoration;
+          window.history.scrollRestoration = 'manual';
+        }
+        window.history.pushState({ lb: 1 }, '');
+        pushed = true;
+      } catch (e) { pushed = false; }
+    }
+  }
+  function closeNow() {
+    if (!lb.classList.contains('on')) return;
+    lb.classList.remove('on');
+    unlock();
+    idx = openedIdx = -1;
+    if (prevRestore !== null) {
+      try { window.history.scrollRestoration = prevRestore; } catch (e) {}
+      prevRestore = null;
+    }
+  }
+  function closeByUser() {
+    if (pushed) { pushed = false; window.history.back(); }  /* popstate 가 닫는다 */
+    else { closeNow(); }
+  }
+  function go(step) {
+    var n = idx + step;
+    if (n < 0 || n >= slides.length) return;
+    render(n);
+  }
+
+  slides.forEach(function (f, i) {
+    f.addEventListener('click', function () { open(i); });
+  });
+
+  bPrev.addEventListener('click', function (e) { e.stopPropagation(); go(-1); });
+  bNext.addEventListener('click', function (e) { e.stopPropagation(); go(1); });
+  bX.addEventListener('click', function (e) { e.stopPropagation(); closeByUser(); });
+  big.addEventListener('click', function (e) { e.stopPropagation(); });
+  cap.addEventListener('click', function (e) { e.stopPropagation(); });
+  lb.addEventListener('click', closeByUser);
+
+  window.addEventListener('popstate', function () {
+    if (lb.classList.contains('on')) { pushed = false; closeNow(); }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('on')) return;
+    if (e.key === 'Escape') { e.preventDefault(); closeByUser(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+  });
+
+  /* 모바일 — 좌우로 쓸어 넘기기 */
+  var tx = 0, ty = 0;
+  lb.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) return;
+    tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+  }, { passive: true });
+  lb.addEventListener('touchend', function (e) {
+    if (!e.changedTouches.length) return;
+    var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
+</script>
+
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script src="../vendor/katex/katex.min.js"></script>
+<script>
+// .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.
+// KaTeX를 못 불러온 경우에는 원문이 그대로 남아 최소한 읽을 수는 있게 둔다.
+(function () {
+  if (typeof katex === 'undefined') { return; }
+  document.querySelectorAll('.tex, .tex-d').forEach(function (el) {
+    try {
+      katex.render(el.textContent.trim(), el, {
+        displayMode: el.classList.contains('tex-d'),
+        throwOnError: false,
+        strict: false
+      });
+    } catch (e) { if (window.console) { console.error('KaTeX', e, el.textContent); } }
+  });
+})();
+</script>
+
+</body>
+</html>

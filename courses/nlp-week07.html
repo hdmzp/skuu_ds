@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자연어처리 | 7주차 수업내용</title>
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0c1a3a">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+.exam{background:#fef2f2;border:2px solid var(--red);border-radius:var(--radius);padding:11px 15px;font-size:12.5px;color:#7f1d1d;line-height:1.7;margin:0 0 12px;display:flex;gap:9px;align-items:flex-start}
+.exam .tag{flex-shrink:0;background:var(--red);color:#fff;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;margin-top:1px}
+table.exam-table th{background:#fdecec}
+table.exam-table td:first-child{background:#fef7f7}
+.pipe{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:14px 0}
+.pipe .st{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:12px;font-weight:700;text-align:center;line-height:1.5;flex:1 1 100px;min-width:88px}
+.pipe .st small{display:block;font-size:10px;font-weight:400;color:var(--muted);margin-top:2px}
+.pipe .st.raw{background:#f1f0ec;color:var(--muted)}
+.pipe .st.app{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pipe .arrow{color:var(--muted);font-size:14px;flex:0 0 auto}
+.cycle{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.cyc{background:var(--accent);color:#fff;border-radius:8px;padding:12px 12px 11px;font-size:12.5px;font-weight:700;text-align:center}
+.cyc em{display:block;font-style:normal;font-size:10.5px;font-weight:400;color:#dbe4f7;margin-top:4px;line-height:1.5}
+.cyc.dim{background:#7d9ad6}
+@media(max-width:480px){.cycle{grid-template-columns:1fr 1fr}}
+.cyc-note{grid-column:1/-1;background:#fff7ed;border:1px solid #f59e0b;border-radius:8px;padding:9px 12px;font-size:11.5px;color:#78350f;text-align:center}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+
+/* 주차 내비 */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .out{color:#c9f24b}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 용어 · 약어 표 — 좁은 화면에서도 가로 스크롤 없이 읽히게 */
+#terms table{min-width:0}
+#terms td:first-child{white-space:normal;width:1%;font-size:12.5px}
+#terms td{padding:9px 11px}
+
+/* 수식 카드 · 풀이 예제 (기계학습특론 페이지와 같은 규칙) */
+.fx{background:#f8faff;border:1px solid #cfdcf5;border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:10px 0}
+.fx-lab{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.fx-note{font-size:12px;color:#4b5563;line-height:1.7;margin-top:7px}
+.fx-note b{color:var(--ink)}
+.tex-d{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:9px 2px 5px;text-align:center}
+.tex-d .katex{font-size:1.08em}
+.ex{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin:10px 0}
+.ex-q{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.65;background:#f1f0ec;border-radius:7px;padding:9px 12px;margin-bottom:4px}
+.ex-q em{font-style:normal;color:var(--red);font-size:11px;font-weight:700;display:block;margin-bottom:3px}
+.step{display:grid;grid-template-columns:20px 1fr;gap:9px;align-items:baseline;font-size:12.5px;color:#4b5563;line-height:1.75;padding:5px 0}
+.step i{font-style:normal;font-weight:700;color:var(--accent);font-size:11.5px}
+.ex-ans{margin-top:8px;background:#f0fdf4;border:1px solid #22c55e;border-radius:8px;padding:9px 12px;font-size:12.5px;color:#14532d;line-height:1.7}
+.ex-ans b{color:var(--green)}
+.figs > .note-box{margin:0}
+/* 편집 거리 DP 표 */
+.lev table{min-width:0;width:auto;margin:0 auto;font-family:'Consolas','D2Coding',ui-monospace,monospace}
+.lev th,.lev td{text-align:center;padding:6px 10px;white-space:nowrap}
+.lev td.on{background:#fde68a;font-weight:700;color:#7c2d12}
+/* ===== 개념 하이라이트(형광펜) + 툴팁 ===== */
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);
+  border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+td .term,th .term{font-weight:700}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;
+  left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+/* ===== 심화 — 한 걸음 더 ===== */
+.deep{
+  background:#f7f5ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:13px 16px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.deep::before{
+  content:'🔎 한 걸음 더 — 심화 개념';display:table;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:8px;
+}
+.deep b{color:#2e1065}
+.deep .ul li{color:#3b2a6b}
+.deep .ul li::before{background:#6d28d9;opacity:.75}
+.deep .tbl-wrap{margin:9px 0 4px;background:#fff}
+.deep pre.code{margin:9px 0}
+.deep .fx{background:#fff;border-color:#d8cdf7;border-left-color:#6d28d9;margin:9px 0}
+.deep .fx-lab{color:#6d28d9}
+.deep .term{background:#ede7ff;color:#5b21b6;border-bottom-color:#6d28d9}
+.deep .term:hover,.deep .term.on{background:#ddd2fb}
+/* ===== 오답 포인트 — 문제에서 갈린 지점 ===== */
+.pit{
+  background:#fff7ed;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:12.5px;line-height:1.8;color:#7c2d12;
+}
+.pit::before{
+  content:'⚠ 여기서 갈린다';display:table;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.pit b{color:#7c2d12}
+.pit .ul li{color:#7c2d12}
+.pit .ul li::before{background:#b45309;opacity:.8}
+.pit table{min-width:0}
+.pit .tbl-wrap{margin:8px 0 4px;background:#fff}
+
+/* ===== 필기 구분 — 실시간 강의 강조 / 내 복습 필기 ===== */
+.live{
+  background:#fffaf3;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#7c2d12;
+}
+.live::before{
+  content:'🎙 실시간 강의 강조';display:table;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.live b{color:#7c2d12}
+.live .ul li{color:#7c2d12}
+.live .ul li::before{background:#b45309;opacity:.75}
+.mynote{
+  background:#f5f3ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.mynote::before{
+  content:'📝 내 복습 필기 · 추가 개념';display:table;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.mynote b{color:#2e1065}
+.mynote .ul li{color:#3b2a6b}
+.mynote .ul li::before{background:#6d28d9;opacity:.75}
+.mynote table{min-width:0}
+.mynote .tbl-wrap{margin:8px 0 4px;background:#fff}
+.mynote pre.code{margin:9px 0}
+.mynote .fx{background:#fff;border-color:#d8cdf7;border-left-color:#6d28d9;margin:9px 0}
+/* 분류 알고리즘 바로가기 카드 */
+.algo{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:9px;margin:12px 0}
+.algo a{display:block;background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:11px 13px;text-decoration:none;color:inherit;transition:border-color .12s,transform .12s}
+.algo a:hover{border-color:var(--accent);transform:translateY(-1px)}
+.algo a b{display:block;font-size:13.5px;color:var(--ink)}
+.algo a small{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}
+.algo a span{display:block;font-size:12px;color:#4b5563;line-height:1.65}
+.algo a em{display:block;font-style:normal;font-size:11px;color:var(--accent);font-weight:700;margin-top:6px}
+/* 재현율 점 그림 */
+.dots{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0 4px}
+.dots i{width:15px;height:15px;border-radius:50%;display:inline-block}
+.dots i.tp{background:#16a34a}
+.dots i.fn{background:#fff;border:2px solid #dc2626}
+.dots i.fp{background:#f59e0b}
+.dots-lab{font-size:11.5px;color:#4b5563}
+/* 시그모이드 그림 */
+.sig{display:block;width:100%;max-width:420px;height:auto;margin:8px auto 2px;background:#fff;border:1px solid #d8cdf7;border-radius:8px}
+/* ===== 복습하기 ===== */
+.rv{background:var(--surface);border:1px solid var(--border);border-left:4px solid #0f766e;border-radius:var(--radius);margin:10px 0;overflow:hidden}
+.rv summary{cursor:pointer;list-style:none;padding:12px 15px;font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.6;display:flex;gap:9px;align-items:baseline}
+.rv summary::-webkit-details-marker{display:none}
+.rv summary i{font-style:normal;flex:none;font-size:11px;font-weight:800;color:#fff;background:#0f766e;border-radius:999px;padding:1px 8px}
+.rv summary::after{content:'답 보기 ▾';margin-left:auto;flex:none;font-size:11px;font-weight:700;color:#0f766e}
+.rv[open] summary::after{content:'접기 ▴'}
+.rv .ans{border-top:1px dashed #99e0d6;background:#f0fdfa;padding:12px 15px;font-size:13px;line-height:1.85;color:#134e4a}
+.rv .ans b{color:#0f3d3a}
+.rv .ans .ul li{color:#134e4a}
+.rv .ans .tbl-wrap{background:#fff;margin:8px 0}
+.rv .ans table{min-width:0}
+.rv .ans pre.code{margin:8px 0}
+.rv .one{display:block;background:#fff;border:1px solid #99e0d6;border-radius:7px;padding:7px 11px;margin-bottom:8px;font-weight:700;color:#0f3d3a}
+/* 범례 */
+.mark-legend{display:flex;flex-wrap:wrap;gap:8px 18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px 14px;margin:-14px 0 26px;font-size:12.5px;color:#4b5563;line-height:1.6}
+.mark-legend span{display:inline-flex;align-items:center;gap:6px}
+.hi{background:linear-gradient(transparent 58%,#ffe9a8 58%);font-weight:700;color:var(--ink);padding:0 1px}
+.mark-legend i{width:12px;height:12px;border-radius:3px;display:inline-block;flex-shrink:0}
+/* 7주차 추가: 한 줄 요약 · SVG 도식 */
+.oneline{background:#16233f;color:#e7edf9;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+.oneline > p{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:#c9f24b}
+.oneline .ul li{color:#c5d0e8;font-size:13px}
+.oneline .ul li b{color:#fff}
+.oneline .ul li::before{background:#c9f24b;opacity:.9}
+.oneline .hi{color:#16233f}
+.svgfig{padding:11px 11px 9px}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:560px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#docs">강의자료</a>
+  <a href="#goal">학습 목표</a>
+  <a href="#ner-intro">7.1.1 NER 개요</a>
+  <a href="#ner-sys">7.1.2 태그셋 · 시스템</a>
+  <a href="#ner-eval">7.1.3 NER 평가</a>
+  <a href="#bio">7.1.4 BIO 태깅</a>
+  <a href="#corpus">7.1.5 코퍼스 · 한국어</a>
+  <a href="#lm">7.2.1 언어 모델 기초</a>
+  <a href="#ngram">7.2.2 N-gram</a>
+  <a href="#logprob">7.2.3 로그 확률</a>
+  <a href="#smooth">7.2.4 희소성 · 일반화</a>
+  <a href="#ppl">7.2.5 퍼플렉서티</a>
+  <a href="#ie">7.3.1 정보 추출 개요</a>
+  <a href="#iepipe">7.3.2 하위 작업 · 흐름</a>
+  <a href="#re">7.3.3 관계 추출</a>
+  <a href="#reapp">7.3.4 접근법 · 평가</a>
+  <a href="#summary">핵심 정리</a>
+  <a href="#review">확인 질문</a>
+  <a href="#lab">실습 노트북</a>
+  <a href="#hw">과제 · 제출</a>
+  <a href="#next">다음 주 예고</a>
+</nav>
+
+<div class="wrap">
+
+<div class="weeknav">
+  <a href="nlp.html" class="plan">← 강의계획서</a>
+  <a href="nlp-week04.html">4주차 · 전처리 · 어휘 · 구문 · 의미 분석</a>
+  <a href="nlp-week05.html">5주차 · 단어 표현 · 텍스트 분류 · 유사도</a>
+  <a href="nlp-week06.html">6주차 · 요약 · 생성 · 벡터 표현</a>
+  <span class="cur">7주차 · 개체명 인식 · 언어 모델 · 정보 추출</span>
+</div>
+
+<section class="hero">
+  <p class="kicker">7주차 · 10.12 ~ 10.18 · 2026-2학기</p>
+  <h1>CHAPTER 7 — 개체명 인식, 언어 모델, 그리고 정보 추출</h1>
+  <p>핵심 질문은 &ldquo;<b>문장에서 유용한 정보를 어떻게 추출하는가?</b>&rdquo;이다. 먼저 문장 속 <b>사람 · 장소 · 기관 · 날짜</b>를 찾아 이름표를 붙이고(7.1 NER), 단어열에 <b>확률</b>을 매기는 법을 배운 뒤(7.2 n-gram 언어 모델), 찾아낸 개체 사이의 <b>관계를 (개체1, 관계, 개체2) 튜플</b>로 뽑아 지식 그래프를 만든다(7.3 정보 추출). 교안 마지막 장의 말대로 세 주제는 따로 노는 것이 아니라 <b>NER → 관계 추출 → 지식 그래프</b>로 이어지는 한 흐름이다.</p>
+  <div class="chips"><span class="chip">NER · BIO · BIOES</span><span class="chip">개체 단위 P/R/F1</span><span class="chip">연쇄 법칙 · 마르코프 가정</span><span class="chip">스무딩 · 보간 · 백오프</span><span class="chip">퍼플렉서티</span><span class="chip">관계 추출 · Hearst 패턴</span><span class="chip">교안 73p</span><span class="chip">100문제</span></div>
+</section>
+
+<div class="mark-legend">
+  <span><i style="background:#eef6ff;border:1px solid #1b3f8b"></i><b class="term" tabindex="0" data-tip="이렇게 파란 형광펜이 칠해진 말에 손을 올리거나(모바일은 탭) 하면 짧은 설명이 뜹니다.">어려운 용어</b> — 커서를 올리면(모바일은 탭) 설명이 뜹니다</span>
+  <span><i style="background:#f7f5ff;border:1px solid #6d28d9"></i><b>🔎 한 걸음 더</b> — 교안 한 줄을 끝까지 파고든 심화 설명</span>
+  <span><i style="background:#fff7ed;border:1px solid #b45309"></i><b>⚠ 여기서 갈린다</b> — 헷갈리기 쉬운 지점을 정면으로 비교</span>
+</div>
+
+<!-- ===================== 강의자료 ===================== -->
+<section class="sec" id="docs">
+  <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">7주차 강의자료<small>제목을 누르면 앱 실행 없이 화면에서 바로 열립니다</small></h2></div>
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📘</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=nlp-w07-slides">자연어처리 CHAPTER 7 — 개체명 인식, 언어 모델, 그리고 정보 추출</a>
+      <p>7.1 개체명 인식(태그셋 · 시스템 · 평가 · BIO · 코퍼스) / 7.2 언어 모델(n-gram · 로그 확률 · 스무딩 · 퍼플렉서티) / 7.3 정보 추출(파이프라인 · 관계 추출 · 접근법) · <b>73페이지</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week07-slides.pdf" download="자연어처리_7주차_개체명인식_언어모델_정보추출.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📝</span>HTML</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week07-quiz100.html" target="_blank" rel="noopener">7주차 개체명 인식 · 언어 모델 · 정보 추출 100문제 ↗</a>
+      <p>브라우저에서 바로 푸는 문제지 · 절별 문제는 아래 각 절 제목 옆 버튼으로도 열립니다 · <b>7.2.2 N-gram이 15문항으로 가장 비중이 큽니다</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week07-quiz100.html" download="자연어처리_7주차_100문제.html">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>🐍</span>IPYNB</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week07-lab.ipynb" download="7주차_실습_문제.ipynb">7주차 실습 노트북 (문제) — 이것을 풀어 제출</a>
+      <p>실습 1~3(NER · n-gram · 정보 추출) + <b>제출 과제 3문항(100점)</b> · 파이썬 표준 라이브러리만 쓰므로 설치할 것이 없습니다</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week07-lab.ipynb" download="7주차_실습_문제.ipynb">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>✅</span>IPYNB</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week07-lab-solution.ipynb" download="7주차_실습_정답.ipynb">7주차 실습 노트북 (정답)</a>
+      <p>과제 3문항의 모범 구현 · 출력이 비어 있는 상태로 올라왔으므로 <b>이 페이지의 수치는 정답 노트북을 직접 실행해 얻은 값</b>입니다</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week07-lab-solution.ipynb" download="7주차_실습_정답.ipynb">⬇ 다운로드</a>
+  </div>
+</div>
+</section>
+
+<!-- ===================== 학습 목표 ===================== -->
+<section class="sec" id="goal">
+  <div class="sec-head"><span class="sec-badge">GOAL</span><h2 class="sec-title">학습 목표<small>교안 2 · 3p · 문장에서 유용한 정보를 어떻게 추출하는가?</small></h2></div>
+<div class="cards">
+  <div class="card2"><b>7.1 개체명 인식</b>
+    <ul class="ul">
+      <li>개체명의 정의와 태그셋을 이해하고 <b>BIO 태깅</b>으로 문장을 표현한다</li>
+      <li><b>정밀도 · 재현율 · F1</b>으로 NER 시스템을 평가한다</li>
+    </ul>
+  </div>
+  <div class="card2"><b>7.2 언어 모델</b>
+    <ul class="ul">
+      <li>조건부 확률과 <b>마르코프 가정</b>으로부터 n-gram 언어 모델을 유도한다</li>
+      <li><b>스무딩 · 보간법 · 백오프</b>의 원리를 설명하고 <b>퍼플렉서티</b>로 모델을 평가한다</li>
+    </ul>
+  </div>
+  <div class="card2"><b>7.3 정보 추출</b>
+    <ul class="ul">
+      <li>비정형 텍스트에서 <b>(개체1, 관계, 개체2) 튜플</b>을 추출하는 과정을 설명한다</li>
+    </ul>
+  </div>
+</div>
+<div class="note-box"><b>앞 주차와의 연결</b> &mdash; NER은 <a class="ext" href="nlp-week04.html">4주차</a>에서 본 품사 태깅 · 의미역 결정(SRL)과 같은 <b>순차 레이블링</b> 문제이고, BIO 표기도 4주차 SRL에서 이미 한 번 나왔다. 7.2의 n-gram 언어 모델은 <a class="ext" href="nlp-week06.html#markov">6주차 6.2.1</a>에서 문장 생성용으로 만났던 모델을 이번에는 <b>확률을 매기고 평가하는 쪽</b>에서 다시 본다. 정밀도 · 재현율 · F1은 <a class="ext" href="nlp-week05.html">5주차</a>의 분류 평가와 같은 식이지만 <b>세는 단위가 토큰이 아니라 개체</b>라는 점이 다르다.</div>
+<div class="flow">
+  <div class="fl"><b>7.1 개체명 인식</b><span>개체명 · 태그셋 · NER 시스템 4가지 · 평가(strict / relaxed) · BIO · 코퍼스 · 한국어의 특수성</span></div>
+  <div class="fl"><b>7.2 언어 모델</b><span>연쇄 법칙 · MLE · n-gram과 마르코프 가정 · 로그 확률 · 희소성과 일반화 · 퍼플렉서티</span></div>
+  <div class="fl"><b>7.3 정보 추출</b><span>관계형 튜플 · 하위 작업과 파이프라인 · 관계 추출 · 규칙 / 지도 / 준지도 / 원격 지도 / Open IE · 평가와 활용</span></div>
+</div>
+</section>
+
+<!-- ===================== 7.1.1 ===================== -->
+<section class="sec" id="ner-intro">
+  <div class="sec-head"><span class="sec-badge">7.1.1</span><h2 class="sec-title">개체명 인식이란<small>교안 4~10p · 이름이 붙은 것을 찾아 이름표를 단다</small></h2></div>
+
+<div class="note-box"><b>정의</b> &mdash; <b>개체명 인식(Named Entity Recognition, NER)</b>은 텍스트에서 <b>고유한 의미를 가지는 개체(entity)를 자동으로 찾아내고 그 유형을 분류</b>하는 작업이다. 사람(Person) · 장소(Location) · 기관(Organization) · 날짜(Date)가 기본이고, 분야에 따라 <b>약물 · 임상 소견 · 시술 · 단백질</b>처럼 &lsquo;이름이 붙은(named)&rsquo; 모든 것이 대상이 된다(교안 7p).
+<span class="hi">NER은 그 자체가 최종 목적이라기보다, 상위 응용을 위한 전처리 또는 중간 표현을 만드는 기반 기술이다</span>(교안 5p) &mdash; 질의응답 · 정보 검색 · 관계 추출 · 상호참조 해결 · 토픽 모델링의 첫 단계로 쓰인다.</div>
+
+<h3 class="sub-title">예시로 보기 (교안 8 · 9p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>문장</th><th>찾은 개체</th><th>태그를 문장에 직접 표시하면</th></tr></thead>
+  <tbody>
+    <tr><td>춘향아, 9월 15일에 강남에서 홍길동과 약속이 있으니까, 늦지 말고 오도록 해!</td><td>[사람] 춘향, 홍길동<br>[날짜] 9월 15일<br>[장소] 강남</td><td>춘향<b>[PS]</b>아, 9월 15일<b>[DT]</b>에 강남<b>[LC]</b>에서 홍길동<b>[PS]</b>과 …</td></tr>
+    <tr><td>명량대첩은 1597년 음력 9월 16일 정유재란 때 이순신이 지휘하는 조선 수군 13척이 명량에서 일본 수군 130척 이상을 격퇴한 해전이었다.</td><td>[사람] 이순신<br>[날짜] 1597년, 음력 9월 16일<br>[장소] 명량<br>[사건] 명량대첩, 정유재란</td><td>명량대첩<b>[EV]</b>은 1597년<b>[DT]</b> 음력 9월 16일<b>[DT]</b> 정유재란<b>[EV]</b> 때 이순신<b>[PS]</b>이 …</td></tr>
+  </tbody>
+</table>
+</div>
+<p>첫 문장에서 <b>&lsquo;춘향아&rsquo;의 &lsquo;아&rsquo;, &lsquo;강남에서&rsquo;의 &lsquo;에서&rsquo;</b>는 개체에 포함되지 않는다는 점을 눈여겨볼 것. 조사를 떼어 내는 문제는 <a class="ext" href="#corpus">7.1.5 한국어의 특수성</a>에서 다시 나온다.</p>
+
+<div class="pit"><b>경계(boundary) 문제와 유형(type) 문제 — 정답이 하나로 정해지지 않는다 (교안 10p)</b>
+<ul class="ul">
+  <li><b>유형 문제</b> &mdash; &lsquo;정유재란&rsquo;은 날짜(시기)로 볼 수도, 하나의 사건(EV)으로 볼 수도 있다. 태그셋을 어떻게 정의하느냐에 따라 정답이 달라진다</li>
+  <li><b>경계 문제</b> &mdash; &lsquo;조선 수군&rsquo;을 기관으로 볼지, &lsquo;명량대첩&rsquo;을 통째로 하나의 개체로 볼지(아니면 &lsquo;명량&rsquo;만 장소로 볼지)는 <b>주석 지침(annotation guideline)</b>에 달려 있다</li>
+</ul>
+그래서 교안은 &ldquo;<b>NER에서는 태그셋 정의와 주석 지침이 모델 성능만큼이나 중요하다</b>&rdquo;고 정리한다. 실습 노트북의 규칙 기반 NER이 &lsquo;명량 대첩&rsquo;을 틀리는 것도 정확히 이 지점이다(<a class="ext" href="#lab">실습 1-5</a>).</div>
+
+<h3 class="sub-title">NER 시스템은 어떻게 발전했나 (교안 6p)</h3>
+<div class="flow">
+  <div class="fl"><b>① 사전과 규칙</b><span>사람이 직접 설계한 사전과 규칙에 의존 &mdash; <b>도메인이 바뀌면 규칙을 다시 만들어야</b> 하는 부담</span></div>
+  <div class="fl"><b>② 통계 기반 기계학습</b><span><b>HMM · MEMM · CRF</b> 도입 &mdash; 주석된 학습 데이터에서 규칙을 자동으로 학습하는 방향으로 전환</span></div>
+  <div class="fl"><b>③ 신경망 · 사전학습 언어 모델</b><span>어휘집이나 온톨로지 같은 <b>도메인 리소스가 필요 없어</b> 매력적 &mdash; 최근에는 사전학습 언어 모델 기반 NER이 표준</span></div>
+</div>
+<div class="tip">교안은 이번 장에서 <b>딥러닝 이전의 개념적 토대</b> &mdash; 정의 · 태깅 기법 · 평가 방법 &mdash; 를 중심으로 다룬다고 밝힌다. 딥러닝 기반 NER은 <b>13주차</b>(딥러닝 기반 형태소 · 품사 태깅 · 의미 분석 · 개체명 인식)에서 다시 나온다.</div>
+</section>
+
+<!-- ===================== 7.1.2 ===================== -->
+<section class="sec" id="ner-sys">
+  <div class="sec-head"><span class="sec-badge">7.1.2</span><h2 class="sec-title">개체명 유형과 태그셋 · NER 시스템<small>교안 11~14p · 무엇을 찾을지 정하고, 어떻게 찾을지 고른다</small></h2></div>
+
+<h3 class="sub-title">태그셋 세 계열 (교안 11p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>계열</th><th>태그</th><th>특징</th></tr></thead>
+  <tbody>
+    <tr><td><b>CoNLL 계열</b> (4종)</td><td><b>PER</b>(사람) · <b>LOC</b>(장소) · <b>ORG</b>(기관) · <b>MISC</b>(기타)</td><td>가장 널리 쓰이는 기본형</td></tr>
+    <tr><td><b>OntoNotes 계열</b> (18종)</td><td>PERSON · <span class="term" tabindex="0" data-tip="Nationalities or Religious or Political groups — 국적 · 종교 · 정치 집단. 예: 한국인, 불교도, 민주당원">NORP</span> · FAC(시설) · ORG · <span class="term" tabindex="0" data-tip="Geo-Political Entity — 국가 · 도시 · 주처럼 행정 구역이면서 정치적 실체인 장소. 산 · 강 같은 자연 지형은 LOC.">GPE</span> · LOC · PRODUCT · EVENT · WORK_OF_ART · LAW · LANGUAGE · DATE · TIME · PERCENT · MONEY · QUANTITY · ORDINAL · CARDINAL</td><td>숫자 표현(금액 · 비율 · 서수 · 기수)까지 세분화</td></tr>
+    <tr><td><b>한국어</b> (TTA 표준 · 국립국어원 계열)</td><td><b>PS</b>(사람) · <b>LC</b>(장소) · <b>OG</b>(기관) · <b>DT</b>(날짜) · <b>TI</b>(시간) · <b>QT</b>(수량)</td><td>6종이 기본, 세부 유형으로 확장하기도 한다</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>GPE와 LOC는 어떻게 다른가</b> &mdash; OntoNotes에서 <b>GPE</b>는 &lsquo;서울 · 대한민국 · 경기도&rsquo;처럼 <b>정부와 국경이 있는 행정 단위</b>이고, <b>LOC</b>는 &lsquo;한강 · 지리산 · 태평양&rsquo;처럼 <b>정치적 실체가 아닌 지리적 장소</b>다. 같은 &lsquo;장소&rsquo;라도 &ldquo;서울이 발표했다&rdquo;처럼 <b>주체로 행동할 수 있으면 GPE</b>라고 생각하면 구분이 쉽다. CoNLL 4종에서는 둘 다 LOC로 묶인다.</div>
+
+<h3 class="sub-title">NER 시스템 네 가지 (교안 12~14p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>방식</th><th>어떻게 찾나</th><th>장점</th><th>약점</th></tr></thead>
+  <tbody>
+    <tr><td><b>규칙 기반</b></td><td>정규표현식 · <span class="term" tabindex="0" data-tip="gazetteer — 개체명 목록 사전. 원래는 지명 사전을 뜻했지만 NER에서는 인명 · 기관명 목록까지 통틀어 부른다.">사전(gazetteer)</span> · 문맥 단서 어휘를 사람이 직접 설계. 예) &lsquo;(주)&rsquo; · &lsquo;㈜&rsquo; · &lsquo;대학교&rsquo; · &lsquo;병원&rsquo;으로 끝나는 어절은 기관명일 가능성이 높다</td><td><b>정밀도가 높다</b></td><td>규칙이 다루지 못하는 표현에서 <b>재현율이 낮고</b> 유지보수 비용이 크다</td></tr>
+    <tr><td><b>지식 기반</b></td><td>어휘 자원과 도메인 지식(<span class="term" tabindex="0" data-tip="온톨로지 — 개념과 개념 사이의 관계(상위 · 하위 · 부분 등)를 체계적으로 정의한 지식 구조">온톨로지</span> · <span class="term" tabindex="0" data-tip="시소러스 — 동의어 · 유의어 · 상하위어를 묶어 정리한 사전">시소러스</span>)에 의존 &mdash; <b>주석된 학습 데이터가 필요 없다</b></td><td>사전 정보가 철저하면 효과적, 정밀도가 높을 수 있다</td><td>어휘의 개방성 때문에 <b>신조어 · 신약명</b>처럼 사전에 없는 표현에서 실패 → 재현율 낮음. 도메인 전문가가 계속 개입해야 한다</td></tr>
+    <tr><td><b>비지도 · 부트스트랩</b></td><td>최소한의 학습 데이터에서 출발. <b>Collins &amp; Singer (1999)</b>는 소수의 자질만으로 <b>시드(seed)</b>에서 개체를 분류 · 확장, <b>Nadeau et al. (2006)</b>은 자동 추출 지명 사전과 공개 지명 사전을 결합</td><td>주석 비용이 적다</td><td>시드 품질에 크게 좌우된다</td></tr>
+    <tr><td><b>지도학습</b></td><td>주석된 데이터로 예측 함수를 학습 &mdash; 각 토큰에 태그를 붙이는 <b>순차 레이블링(sequence labeling)</b>으로 정식화. 대표 모델 <b>HMM · MEMM · CRF</b></td><td>사람이 만든 규칙을 대체</td><td>주석 데이터가 있어야 한다</td></tr>
+    <tr><td><b>신경망</b></td><td><b>BiLSTM-CRF</b>, 최근에는 <b>사전학습 언어 모델(BERT 계열) + CRF</b>가 표준</td><td><b>자질 공학 없이</b> 문맥 표현을 학습 → 도메인 이식성이 높다</td><td>대량 데이터 · 계산 자원</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note-box"><b>지도학습 NER의 주요 자질</b>(교안 14p) &mdash; 단어 자체, <b>접두 · 접미사</b>, <b>대소문자 패턴</b>(영어에서 대문자로 시작하면 고유명사일 확률↑), 품사, <b>사전 일치 여부</b>, 주변 문맥 단어. 신경망 방식은 이 자질들을 사람이 고르지 않고 모델이 스스로 학습한다는 점이 다르다.</div>
+<div class="pit"><b>&lsquo;정밀도는 높고 재현율은 낮다&rsquo;가 규칙 · 지식 기반의 공통점</b> &mdash; 사람이 만든 규칙 · 사전은 <b>잡았다 하면 대체로 맞지만(정밀도↑) 목록에 없는 것은 못 잡는다(재현율↓)</b>. 100문제에서 &ldquo;규칙 기반 시스템의 특징&rdquo;, &ldquo;지식 기반 시스템의 한계&rdquo;를 묻는 문항은 모두 이 한 줄로 풀린다. 반대로 &ldquo;주석 데이터가 필요 없다&rdquo;는 <b>지식 기반</b>의 특징이지 지도학습의 특징이 아니다.</div>
+</section>
+
+<!-- ===================== 7.1.3 ===================== -->
+<section class="sec" id="ner-eval">
+  <div class="sec-head"><span class="sec-badge">7.1.3</span><h2 class="sec-title">NER 평가 척도<small>교안 15~18p · 유형과 경계를 함께 맞혀야 정답이다</small></h2></div>
+
+<div class="note-box"><b>무엇을 평가하나</b> &mdash; NER에서는 <b>예측한 레이블이 올바른지</b>와 <b>개체의 경계가 올바른지</b>를 함께 평가해야 한다. 세는 단위는 토큰이 아니라 <b>개체(span)</b>다.</div>
+
+<div class="fx">
+  <p class="fx-lab">정밀도 · 재현율 · F1 (교안 15p)</p>
+  <div class="tex-d">\text{Precision}=\frac{TP}{TP+FP}\qquad \text{Recall}=\frac{TP}{TP+FN}\qquad F_1=\frac{2\cdot P\cdot R}{P+R}</div>
+  <p class="fx-note"><b>정밀도</b> = 시스템이 올바르게 예측한 개체 수 ÷ <b>시스템이 예측한 전체 개체 수</b>. <b>재현율</b> = 올바르게 예측한 개체 수 ÷ <b>사람이 주석한 정답 개체 수</b>. F1은 둘의 <b>조화 평균</b>이다.</p>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">계산 예시 (교안 18p) — 정답 8개, 예측 10개, 그중 정확히 일치 6개</p>
+  <div class="tex-d">P=\frac{6}{10}=0.60,\qquad R=\frac{6}{8}=0.75,\qquad F_1=\frac{2\times0.60\times0.75}{0.60+0.75}=\frac{0.90}{1.35}\approx0.667</div>
+  <p class="fx-note">예측을 많이 할수록 재현율은 오르지만 정밀도가 떨어진다. 그래서 <b>두 지표의 균형을 나타내는 F1을 주 지표</b>로 쓴다. 산술 평균이었다면 (0.60+0.75)/2 = 0.675로 조금 더 높게 나온다 &mdash; 조화 평균은 <b>낮은 쪽에 끌려간다</b>.</p>
+</div>
+
+<div class="pit"><b>왜 정확도(accuracy)를 쓰지 않나 (교안 16p)</b> &mdash; 실제 코퍼스에서는 <b>대부분의 토큰이 개체가 아닌 O 태그</b>라서, <b>모든 토큰을 O로 예측해도 토큰 정확도가 90%를 넘긴다</b>. 그런데 이 시스템은 개체를 하나도 찾지 못했으니 F1은 0이다.
+<div class="tbl-wrap"><table>
+  <thead><tr><th>실습 데이터(6문장 · 정답 개체 19개)에서 직접 잰 값</th><th>토큰 정확도</th><th>개체 F1</th></tr></thead>
+  <tbody>
+    <tr><td>&lsquo;전부 O&rsquo;로 예측하는 시스템</td><td><b>0.477</b></td><td><b>0.000</b></td></tr>
+  </tbody>
+</table></div>
+실습 데이터는 개체 밀도가 일부러 높게 만들어져 정확도가 0.5 수준이지만, <b>뉴스 코퍼스는 토큰의 85~90%가 O</b>라 같은 시스템의 정확도가 0.9에 가까워진다. 즉 <b>정확도는 NER 성능을 전혀 반영하지 못한다</b>.</div>
+
+<h3 class="sub-title">strict 평가 vs relaxed 평가 (교안 16 · 17p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>CoNLL 방식 엄격(strict) 평가</th><th>완화된(relaxed) 평가</th></tr></thead>
+  <tbody>
+    <tr><td>정답 조건</td><td>예측 개체의 <b>시작 위치 · 끝 위치 · 유형이 모두</b> 정답과 정확히 일치</td><td>경계가 <b>일부만 겹쳐도</b>(부분 일치) <b>유형이 맞으면</b> 정답</td></tr>
+    <tr><td>예) 정답 &lsquo;서울특별시&rsquo;(LC), 예측 &lsquo;서울&rsquo;(LC)</td><td><b>오답</b></td><td><b>정답</b>으로 인정될 수 있음</td></tr>
+    <tr><td>주로 쓰는 곳</td><td>CoNLL shared task &mdash; 정확 일치 기준의 F1</td><td>의료 · 생명과학 분야 shared task</td></tr>
+    <tr><td>실습 결과(규칙 기반 NER)</td><td>TP 16 · FP 3 · FN 3 → <b>F1 0.842</b></td><td>TP 18 · FP 1 · FN 1 → <b>F1 0.947</b></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="warn"><b>평가 시 유의 사항 (교안 17p)</b> &mdash; strict와 relaxed 결과는 <b>수 %p 이상</b> 차이가 날 수 있다(실습에서도 0.842 vs 0.947로 10%p 차이). 그래서 논문이나 보고서에는 <b>반드시 평가 기준을 명시</b>하고, <b>클래스별 F1</b>과 전체 <span class="term" tabindex="0" data-tip="micro 평균은 모든 클래스의 TP · FP · FN을 먼저 합친 뒤 P/R/F1을 계산한다(개체가 많은 클래스의 영향이 큼). macro 평균은 클래스마다 F1을 따로 구한 뒤 단순 평균한다(희귀 클래스도 같은 비중).">micro / macro 평균</span>을 함께 보고하는 것이 바람직하다.</div>
+</section>
+
+<!-- ===================== 7.1.4 ===================== -->
+<section class="sec" id="bio">
+  <div class="sec-head"><span class="sec-badge">7.1.4</span><h2 class="sec-title">BIO 태깅 기법<small>교안 19~21p · 여러 토큰에 걸친 개체와 붙어 있는 두 개체를 구분한다</small></h2></div>
+
+<div class="note-box"><b>BIO 태깅</b>은 개체명을 텍스트에서 인식하기 위한 표현 기법으로, NER을 비롯한 정보 추출 작업에서 자주 쓰인다.
+<ul class="ul">
+  <li><b>B</b> (Begin) &mdash; 개체명의 <b>시작</b> 토큰</li>
+  <li><b>I</b> (Inside) &mdash; B 또는 I 뒤에 이어지는 <b>같은 개체명</b>의 토큰</li>
+  <li><b>O</b> (Outside) &mdash; 개체명이 아닌 나머지 토큰</li>
+</ul>
+예) New York → (New, <b>B-LOC</b>), (York, <b>I-LOC</b>). 이 표현을 쓰면 <b>여러 토큰에 걸친 개체</b>와 <b>연속된 두 개체의 경계</b>를 구분할 수 있다.</div>
+
+<h3 class="sub-title">영어 · 한국어 예시 (교안 20p)</h3>
+<pre class="code">Jim    bought  300  shares  of  Acme   Corp.  in  2006 .
+B-PER  O       O    O       O   B-ORG  I-ORG  O   B-DATE     <span class="cm"># OntoNotes 계열 DATE 태그를 함께 사용</span>
+
+춘향아  9월   15일에  강남에서  홍길동과  약속이  있으니까
+B-PS    B-DT  I-DT    B-LC      B-PS      O       O            <span class="cm"># 어절 단위</span></pre>
+<p>&lsquo;9월 15일에&rsquo;는 두 토큰이 <b>하나의 날짜</b>이므로 B-DT, I-DT가 된다. 반면 &lsquo;강남에서 홍길동과&rsquo;는 붙어 있지만 <b>서로 다른 개체</b>라 둘 다 B로 시작한다 &mdash; 이것이 B가 필요한 이유다.</p>
+
+<div class="fx">
+  <p class="fx-lab">태그 개수 = 2N + 1</p>
+  <div class="tex-d">\underbrace{N}_{\text{B-유형}}+\underbrace{N}_{\text{I-유형}}+\underbrace{1}_{\text{O}}=2N+1\qquad(\text{4종이면 }9\text{개})</div>
+  <p class="fx-note">유형마다 B와 I가 하나씩 필요하고, O는 유형과 무관하게 하나뿐이다. 한국어 6종(PS · LC · OG · DT · TI · QT)이면 13개다.</p>
+</div>
+
+<h3 class="sub-title">확장된 표현 기법 (교안 21p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>기법</th><th>규칙</th><th>&lsquo;한국대학교 컴퓨터공학과 홍길동&rsquo; (OG 두 토큰 + PS 한 토큰)</th></tr></thead>
+  <tbody>
+    <tr><td><b>IOB2</b></td><td>모든 개체의 첫 토큰에 <b>항상 B</b> &mdash; 오늘날의 표준, 이번 실습의 BIO가 이 방식</td><td>B-OG · I-OG · B-PS</td></tr>
+    <tr><td><b>IOB1</b></td><td>기본은 I로 시작하고, <b>같은 유형의 개체가 바로 인접할 때만</b> 두 번째 개체에 B</td><td>I-OG · I-OG · I-PS</td></tr>
+    <tr><td><b>BIOES (BILOU)</b></td><td><b>B</b>(시작) · <b>I</b>(중간) · <b>E</b>(끝) · <b>S</b>(단일 토큰 개체) · <b>O</b>로 세분화</td><td>B-OG · E-OG · S-PS</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>BIOES가 성능을 올리는 이유</b> &mdash; BIO에서는 &lsquo;개체가 여기서 끝난다&rsquo;는 정보가 <b>다음 토큰을 봐야만</b> 드러난다(다음이 O나 B면 끝). BIOES는 끝(E)과 한 토큰짜리(S)를 <b>태그 자체에 박아 두므로</b> 모델이 경계를 명시적으로 학습한다. 대가는 태그 수 &mdash; 유형 N개일 때 <b>4N + 1</b>개로 늘어나 학습할 클래스가 많아진다. 이것이 <a class="ext" href="#hw">과제 1</a>의 설명 문항 답이다.</div>
+<div class="warn"><b>디코딩 시 제약 (교안 21p)</b> &mdash; 모델이 토큰마다 따로 태그를 고르면 <b>I-LOC이 B-LOC 없이 등장</b>하는 것 같은 <b>불법 태그열</b>이 나올 수 있다. 그래서 <b>CRF</b>(태그 사이의 전이 확률을 함께 학습해 &lsquo;O → I-LOC&rsquo; 같은 전이에 낮은 점수를 준다)나 후처리로 제약을 건다. 실습의 <code>bio_to_spans</code>도 앞에 같은 유형이 없는 I-를 B로 간주하는 방어 코드를 갖고 있다.</div>
+</section>
+
+<!-- ===================== 7.1.5 ===================== -->
+<section class="sec" id="corpus">
+  <div class="sec-head"><span class="sec-badge">7.1.5</span><h2 class="sec-title">학습 코퍼스와 한국어 개체명 인식의 특수성<small>교안 22~25p</small></h2></div>
+
+<h3 class="sub-title">대표 코퍼스 (교안 22~24p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>코퍼스 · 과제</th><th>내용</th></tr></thead>
+  <tbody>
+    <tr><td><b>MUC-6</b> (1995)</td><td>Named Entity Task가 <b>처음 정의</b>되면서 &lsquo;NER&rsquo;이라는 용어가 정착</td></tr>
+    <tr><td><b>CoNLL-2002 · 2003</b></td><td>뉴스와이어 기사, <b>스페인어 · 네덜란드어 · 영어 · 독일어</b> 4개 언어, PER · LOC · ORG · MISC 4종</td></tr>
+    <tr><td><b>OntoNotes 5.0</b></td><td>뉴스 · 방송 · 대화 · 웹 텍스트 등 다양한 장르에 <b>18종</b> 개체명을 주석한 대규모 말뭉치</td></tr>
+    <tr><td>다국어 shared task</td><td>인도어 · 아랍어 · 독일어 · 슬라브어 등. 동남아 언어 데이터는 사람 · 명칭 · 시간 표현 · 약어 · 객체 번호 · 브랜드까지 포함, 슬라브어 과제는 7개 언어</td></tr>
+    <tr><td>도메인 특화</td><td>2007년 <b>임상 노트 비식별화(de-identification)</b> &mdash; 익명화해야 할 환자 정보 찾기, 이후 임상 문제 · 검사 · 치료 개체로 확장. <b>Drug NER</b>(의약품 · 브랜드명 · 신약), 생명과학의 <b>GENIA · BC5CDR</b>(유전자 · 단백질 · 질병 · 화학물질)</td></tr>
+    <tr><td><b>한국어</b></td><td>국립국어원 <b>모두의 말뭉치</b>(개체명 분석 말뭉치), <b>KLUE-NER</b>, 네이버 × 창원대 NER 데이터셋</td></tr>
+  </tbody>
+</table>
+</div>
+<p>교안 23p의 요지는 &ldquo;<b>개체명 유형 체계는 말뭉치와 그 언어 · 도메인의 성격에 따라 크게 달라진다</b>&rdquo;는 것이다. <a class="ext" href="#ner-intro">7.1.1</a>의 &lsquo;태그셋 정의가 성능만큼 중요하다&rsquo;와 같은 이야기다.</p>
+
+<h3 class="sub-title">한국어 NER이 어려운 이유 (교안 25p)</h3>
+<div class="cards">
+  <div class="card2"><b>① 교착어 — 조사가 붙는다</b>
+    <ul class="ul">
+      <li>&lsquo;강남에서&rsquo;의 개체명은 &lsquo;강남&rsquo;, &lsquo;에서&rsquo;는 조사</li>
+      <li><b>어절 단위 태깅은 경계를 부정확하게</b> 만든다</li>
+      <li>그래서 <b>형태소 단위 또는 음절 단위</b> 태깅이 널리 쓰인다</li>
+    </ul>
+  </div>
+  <div class="card2"><b>② 띄어쓰기 · 동형이의어</b>
+    <ul class="ul">
+      <li>띄어쓰기가 불규칙하다</li>
+      <li>한자어 기반 동형이의어가 많아 <b>문맥 의존성이 크다</b></li>
+      <li>&lsquo;배&rsquo; &mdash; 과일 · 선박 · 신체 부위. <b>개체명인지 아닌지 자체가 문맥으로</b> 결정된다</li>
+    </ul>
+  </div>
+  <div class="card2"><b>③ 최근의 완화</b>
+    <ul class="ul">
+      <li><b>음절 단위 입력</b>을 쓰는 사전학습 언어 모델이 조사 결합 문제를 자연스럽게 완화한다</li>
+    </ul>
+  </div>
+</div>
+<div class="good"><b>실습에서 본 조사 문제</b> &mdash; 실습의 규칙 기반 NER은 어절 단위라서 &lsquo;홍길동은&rsquo;처럼 <b>조사가 붙은 채로</b> 개체를 잡는다. 사전 항목으로 &ldquo;시작하는지&rdquo;(<code>tok.startswith(w)</code>)를 보는 것으로 일단 잡고, 관계 추출 단계에서 <code>strip_josa()</code>로 조사를 떼어 표층형을 정규화한다. 조사를 안 떼면 지식 그래프에서 &lsquo;홍길동은&rsquo;과 &lsquo;홍길동이&rsquo;가 <b>서로 다른 노드</b>가 되기 때문이다 &mdash; 과제 3 채점 셀이 바로 이것을 검사한다.</div>
+</section>
+
+<!-- ===================== 7.2.1 ===================== -->
+<section class="sec" id="lm">
+  <div class="sec-head"><span class="sec-badge">7.2.1</span><h2 class="sec-title">언어 모델이란 · 통계적 언어 모델과 조건부 확률<small>교안 26~33p · 문장에 확률을 매긴다</small></h2></div>
+
+<div class="note-box"><b>정의 (교안 27p)</b> &mdash; <b>언어 모델</b>은 언어를 이루는 구성 요소(글자 · 형태소 · 단어 · 문장 · 문단)에 <b>확률값을 부여</b>하고, 이를 바탕으로 <b>다음 구성 요소를 예측하거나 생성</b>하는 모델이다. 크게 확률에 기초한 <b>통계적 언어 모델</b>과 인공 신경망에 기초한 <b>딥러닝 언어 모델</b>로 나뉘며, 이번 주는 통계적 언어 모델 중 <b>n-gram</b>을 다룬다.</div>
+
+<div class="cards">
+  <div class="card2"><b>언어 모델이 하는 두 가지 일 (교안 28p)</b>
+    <ul class="ul">
+      <li><b>확률 할당</b> &mdash; 단어열 <span class="tex">W=w_1w_2\cdots w_n</span>에 대해 <span class="tex">P(W)</span>를 계산</li>
+      <li><b>다음 단어 예측</b> &mdash; <span class="tex">P(w_n\mid w_1\cdots w_{n-1})</span>을 계산</li>
+    </ul>
+  </div>
+  <div class="card2"><b>활용 예</b>
+    <ul class="ul">
+      <li><b>음성 인식</b> &mdash; &lsquo;나는 밥을 먹었다&rsquo;와 &lsquo;나는 밥을 머것다&rsquo; 중 더 그럴듯한 문장 선택</li>
+      <li><b>기계 번역</b> &mdash; 후보 번역문 중 목표 언어에서 자연스러운 문장 선택</li>
+      <li>오타 교정 · <b>자동 완성</b> · 문장 생성 · 문서 요약</li>
+    </ul>
+  </div>
+</div>
+<div class="tip"><b>두 일은 사실 같은 일이다</b> &mdash; 아래 연쇄 법칙 때문에 &lsquo;문장 전체의 확률&rsquo;은 &lsquo;다음 단어 확률&rsquo;들의 곱이다. 다음 단어 확률만 잘 구하면 문장 확률은 저절로 따라온다. 스마트폰 자동 완성(교안 29p)은 다음 단어 확률이 가장 높은 후보를 보여 주는 것이다.</div>
+
+<h3 class="sub-title">연쇄 법칙으로 문장 확률을 분해한다 (교안 30 · 31p)</h3>
+<div class="fx">
+  <p class="fx-lab">조건부 확률의 연쇄 법칙 (chain rule)</p>
+  <div class="tex-d">P(w_1,w_2,\ldots,w_n)=P(w_1)\times P(w_2\mid w_1)\times P(w_3\mid w_1,w_2)\times\cdots\times P(w_n\mid w_1,\ldots,w_{n-1})</div>
+  <p class="fx-note">예) <span class="tex">P(\text{나는},\text{사과를},\text{먹는다})=P(\text{나는})\times P(\text{사과를}\mid\text{나는})\times P(\text{먹는다}\mid\text{나는},\text{사과를})</span>. 단어 대신 <b>글자나 형태소</b>로도 똑같이 쓸 수 있다.</p>
+</div>
+<div class="deep"><b>&lt;s&gt;, &lt;/s&gt;를 붙이는 이유</b> &mdash; 문장의 시작과 끝에 경계 기호를 넣어 <span class="tex">P(\langle s\rangle,\text{나는},\text{사과를},\text{먹는다},\langle /s\rangle)</span>로 확장하면 두 가지가 해결된다.
+<ul class="ul">
+  <li><b>첫 단어도 조건부로</b> &mdash; <span class="tex">P(\text{나는}\mid\langle s\rangle)</span>은 &lsquo;문장이 &ldquo;나는&rdquo;으로 시작할 확률&rsquo;이다. 그냥 <span class="tex">P(\text{나는})</span>은 문장 중간에 나온 &lsquo;나는&rsquo;까지 섞어 센다</li>
+  <li><b>문장 길이도 모델링</b> &mdash; <span class="tex">P(\langle /s\rangle\mid\text{먹는다})</span>를 곱하므로 &lsquo;여기서 끝날 확률&rsquo;이 들어간다. 이게 없으면 길이가 다른 문장끼리 확률 합이 1이 되지 않는다</li>
+</ul></div>
+
+<h3 class="sub-title">확률은 어떻게 계산하나 — 최대 우도 추정 (교안 32p)</h3>
+<div class="fx">
+  <p class="fx-lab">MLE (Maximum Likelihood Estimation) — 코퍼스에서 세어서 나눈다</p>
+  <div class="tex-d">P(\text{먹는다}\mid\text{나는},\text{사과를})=\frac{\mathrm{count}(\text{나는 사과를 먹는다})}{\mathrm{count}(\text{나는 사과를})}</div>
+  <p class="fx-note">&lsquo;나는 사과를&rsquo; 뒤에 무엇이 오는지를 코퍼스에서 세고, 그중 &lsquo;먹는다&rsquo;의 비율을 확률로 쓴다. 관측된 데이터의 가능도를 최대로 만드는 추정값이 바로 이 상대 빈도라서 <b>최대 우도 추정</b>이라 부른다.</p>
+</div>
+
+<div class="warn"><b>연쇄 법칙만으로는 계산할 수 없다 (교안 33p)</b>
+<ul class="ul">
+  <li>모든 단어 조합의 경우의 수를 세야 하므로 <b>계산 복잡도가 높고</b> 그만큼 <b>방대한 코퍼스</b>가 필요하다</li>
+  <li>인간의 언어는 <b>창조적으로 무한히 생성</b>된다 &mdash; 만들어질 수 있는 단어 조합은 사실상 무한하다</li>
+  <li>코퍼스에 &lsquo;나는 사과를&rsquo;이 한 번도 없으면 분모가 0 &rarr; 확률이 <b>0 또는 정의 불가</b>가 된다</li>
+</ul>
+즉 문장이 길어질수록 조건부(앞 단어 전체)가 길어지고, 그 긴 조건이 코퍼스에 그대로 나타날 가능성은 0에 가까워진다. 이것을 끊어 내는 장치가 다음 절의 <b>마르코프 가정</b>이다.</div>
+</section>
+
+<!-- ===================== 7.2.2 ===================== -->
+<section class="sec" id="ngram">
+  <div class="sec-head"><span class="sec-badge">7.2.2</span><h2 class="sec-title">N-gram 언어 모델과 마르코프 가정<small>교안 34~43p · 100문제에서 가장 비중이 큰 절(15문항)</small></h2></div>
+
+<div class="note-box"><b>아이디어</b> &mdash; 특정 단어의 등장 확률이 <b>바로 앞의 몇 개 단어에만 의존한다</b>고 가정해 조건부를 짧게 줄인다. 이때 몇 개를 볼지 정하는 수가 <b>N</b>이고, <b>N개의 연속된 단어열</b>을 <b>N-gram</b>이라 한다.</div>
+
+<div class="fx">
+  <p class="fx-lab">N-gram 근사 (교안 35p)</p>
+  <div class="tex-d">P(w_n\mid w_1,\ldots,w_{n-1})\;\approx\;P(w_n\mid w_{n-N+1},\ldots,w_{n-1})</div>
+  <p class="fx-note">이것을 <b>N−1차 마르코프 가정</b>이라고 한다(교안 37p). 1-gram은 앞의 <b>0개</b>를 보므로 모든 단어가 독립, 2-gram은 앞 <b>1개</b>, 3-gram은 앞 <b>2개</b>, 4-gram은 앞 <b>3개</b>를 조건으로 본다. <b>N과 &lsquo;보는 앞 단어 수&rsquo;가 하나 차이 난다</b>는 점이 자주 묻힌다.</p>
+</div>
+
+<h3 class="sub-title">N-gram 나누어 보기 (교안 36p)</h3>
+<pre class="code"><span class="cm"># 'The boy is looking at a pretty girl'  (길이 L = 8)</span>
+1-gram : The / boy / is / looking / at / a / pretty / girl                         <span class="out">→ 8개</span>
+2-gram : The boy / boy is / is looking / looking at / at a / a pretty / pretty girl  <span class="out">→ 7개</span>
+3-gram : The boy is / boy is looking / is looking at / looking at a / at a pretty / a pretty girl  <span class="out">→ 6개</span></pre>
+<div class="fx"><div class="tex-d">\text{길이 }L\text{인 문장의 N-gram 개수}=L-N+1</div><p class="fx-note">창을 한 칸씩 밀면서 자르는 것이라 끝에서 N−1개만큼 덜 만들어진다. 길이 8 문장의 3-gram은 8−3+1 = <b>6개</b>.</p></div>
+
+<div class="pit"><b>장기 의존성 — n-gram이 놓치는 것 (교안 34p)</b> &mdash; &lsquo;The <b>computer</b> which I had just put into the machine room on the fifth <b>floor</b> <b>crashed</b>&rsquo;에서 &lsquo;crashed&rsquo;는 바로 앞의 &lsquo;floor&rsquo;보다 <b>멀리 떨어진 &lsquo;computer&rsquo;와 훨씬 강하게</b> 연관된다. 2-gram은 <span class="tex">P(\text{crashed}\mid\text{floor})</span>만 보므로 &ldquo;층이 고장났다&rdquo;는 어색한 연결로 판단한다. 앞 한 단어만 보면 <b>예측 정확도가 떨어질 수 있어</b>, 보통은 주변 몇 개 단어를 함께 보는 것(N≥2)이 더 보편적이다.</div>
+
+<h3 class="sub-title">바이그램 확률 직접 계산 (교안 38p)</h3>
+<pre class="code"><span class="cm"># 학습 코퍼스 3문장</span>
+&lt;s&gt; I am Sam &lt;/s&gt;
+&lt;s&gt; Sam I am &lt;/s&gt;
+&lt;s&gt; I do not like green eggs and ham &lt;/s&gt;
+
+P(I    | &lt;s&gt;) = count(&lt;s&gt; I)   / count(&lt;s&gt;) = 2 / 3 = 0.67
+P(Sam  | &lt;s&gt;) = count(&lt;s&gt; Sam) / count(&lt;s&gt;) = 1 / 3 = 0.33
+P(am   | I)   = count(I am)    / count(I)   = 2 / 3 = 0.67
+P(Sam  | am)  = count(am Sam)  / count(am)  = 1 / 2 = 0.50
+P(&lt;/s&gt; | Sam) = count(Sam &lt;/s&gt;) / count(Sam) = 1 / 2 = 0.50
+
+P(&lt;s&gt; I am Sam &lt;/s&gt;) = (2/3) × (2/3) × (1/2) × (1/2) = <span class="out">1/9 ≈ 0.111</span></pre>
+<div class="deep"><b>분모가 왜 &lsquo;그 단어의 총 등장 횟수&rsquo;인가</b> &mdash; <span class="tex">P(\text{am}\mid\text{I})</span>의 분모 count(I)=3은 &lsquo;I&rsquo;가 <b>문맥(앞자리)으로 쓰인 횟수</b>다. I는 세 문장에 한 번씩 나오고 매번 뒤에 무언가(am · am · do)가 오므로 3이다. 뒤에 &lt;/s&gt;까지 단어로 쳐 주기 때문에, <b>어떤 단어든 문맥으로 쓰인 횟수 = 등장 횟수</b>가 된다. 실습 셀 2-3이 이 네 확률을 <code>[count=2, context count=3]</code>처럼 분자 · 분모와 함께 출력한다.</div>
+
+<h3 class="sub-title">확률값의 해석 · 한국어 · 문장 생성 (교안 39~42p)</h3>
+<div class="cards">
+  <div class="card2"><b>확률은 코퍼스에 따라 달라진다</b>
+    <ul class="ul">
+      <li>절대적인 값이 아니다 &mdash; 더 방대한 코퍼스를 쓰면 추정이 <b>안정적</b>으로 변한다</li>
+      <li>코퍼스의 <b>장르</b>(뉴스 · 대화 · 소설)와 언어에 따라 크게 달라진다</li>
+      <li>→ 학습 코퍼스와 <b>적용 도메인이 일치하는지</b> 확인해야 한다</li>
+    </ul>
+  </div>
+  <div class="card2"><b>한국어의 n-gram</b>
+    <ul class="ul">
+      <li>교착어라 <b>띄어쓰기만으로 단어를 구분할 수 없다</b></li>
+      <li>한 어근에서 수많은 어절이 파생 &rarr; 어절 단위 n-gram은 <b>어휘 수 폭발 · 희소성 심각</b></li>
+      <li>→ 형태소 분석 · 토큰화를 먼저, 최근에는 <b>서브워드 토크나이저</b>로 미등록어 문제 완화</li>
+    </ul>
+  </div>
+  <div class="card2"><b>N에 따른 생성 결과 (셰익스피어)</b>
+    <ul class="ul">
+      <li>1-gram &mdash; &lsquo;To him swallowed confess hear both. Which. Of save on …&rsquo;</li>
+      <li>2-gram &mdash; &lsquo;What means, sir. I confess she? then all sorts, he is trim …&rsquo;</li>
+      <li>4-gram &mdash; &lsquo;It cannot be but so. Will you not tell me who I am?&rsquo;</li>
+    </ul>
+  </div>
+</div>
+<p>4-gram 문장은 훨씬 자연스럽지만 <b>코퍼스에 있는 텍스트를 거의 그대로</b> 내놓아 새로운 문장이라 보기 어렵다. 1-gram은 완전히 새롭지만 매우 부자연스럽다. 셰익스피어 예시는 Jurafsky &amp; Martin, 『Speech and Language Processing』(3판) n-gram 장에서 인용한 것이다.</p>
+
+<div class="good"><b>실습 2-5에서 같은 현상을 작은 코퍼스로 재현했다</b> (10문장 코퍼스, 시드 0~3)
+<pre class="code">--- 1-gram ---  in and a is girl a are is a  /  the in and is pretty a  /  is girl at
+--- 2-gram ---  a book in the park  /  the dog is looking at a girl is looking at the park
+--- 3-gram ---  a girl are walking in the park  /  the dog are in the park</pre>
+1-gram은 단어 빈도만 반영한 무작위 나열이고, 2-gram부터 &lsquo;in the park&rsquo; 같은 국소적인 자연스러움이 생긴다. 3-gram의 &lsquo;a girl are walking&rsquo;은 코퍼스의 &lsquo;a boy and <b>a girl are walking</b>&rsquo;을 그대로 이어 붙인 결과다 &mdash; <b>앞 두 단어만 보므로 주어가 단수인지 기억하지 못한다</b>.</div>
+
+<div class="pit"><b>N을 키울수록 좋을까? — 트레이드오프 (교안 43p)</b>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>N을 늘리면</th><th>좋아지는 것</th><th>나빠지는 것</th></tr></thead>
+  <tbody>
+    <tr><td>문맥이 길어진다</td><td>단어 등장 확률 예측 정확도 ↑, 문장 형태가 자연스러워진다</td><td>생성 문장이 <b>훈련 코퍼스와 지나치게 유사</b>해진다 &mdash; 빈도 카운트 기반 모델의 근본적 한계</td></tr>
+    <tr><td>경우의 수가 커진다</td><td>&mdash;</td><td>어휘 크기 V일 때 이론적 경우의 수가 <b><span class="tex">V^N</span></b> &rarr; 대부분의 N-gram이 코퍼스에 <b>한 번도 나타나지 않는다</b>(희소성)</td></tr>
+  </tbody>
+</table></div>
+그래서 실무에서는 보통 <b>3-gram 또는 4-gram</b>을 쓴다. 어휘 1만 개면 3-gram 경우의 수가 <span class="tex">10^{12}</span>(1조) &mdash; 어떤 코퍼스도 이것을 다 채울 수 없다.</div>
+</section>
+
+<!-- ===================== 7.2.3 ===================== -->
+<section class="sec" id="logprob">
+  <div class="sec-head"><span class="sec-badge">7.2.3</span><h2 class="sec-title">로그 확률<small>교안 44 · 45p · 곱셈을 덧셈으로 바꿔 언더플로를 피한다</small></h2></div>
+
+<div class="note-box"><b>왜 로그인가</b> &mdash; n-gram 모델의 확률을 계산하려면 <b>0보다 크고 1보다 작은 값을 여러 차례 곱해야</b> 한다. 문장이 길어지면 값이 급격히 0에 가까워져, 컴퓨터가 표현할 수 있는 것보다 작은 값이 되는 <b><span class="term" tabindex="0" data-tip="underflow — 부동소수점이 표현할 수 있는 가장 작은 양수(float64는 약 1e-308)보다 결과가 작아져 0으로 처리되는 현상">언더플로(underflow)</span></b>가 생긴다. 그래서 언어 모델의 계산은 <b>로그 공간</b>에서 한다.</div>
+
+<div class="fx">
+  <p class="fx-lab">곱셈 → 덧셈 (교안 45p)</p>
+  <div class="tex-d">\log P(w_1\cdots w_n)=\log P(w_1)+\log P(w_2\mid w_1)+\cdots+\log P(w_n\mid w_1\cdots w_{n-1})</div>
+  <p class="fx-note">로그는 단조 증가 함수라 <b>확률의 대소 비교가 그대로 유지</b>된다. 필요하면 <span class="tex">\exp</span>를 취해 원래 확률로 되돌린다.</p>
+</div>
+
+<div class="deep"><b>숫자로 감 잡기</b> &mdash; 단어마다 확률이 0.01이라고 하자. 200단어 문장이면 <span class="tex">0.01^{200}=10^{-400}</span>으로 float64의 최솟값(<span class="tex">\approx10^{-308}</span>)보다 작아 <b>0이 된다</b>. 로그로 쓰면 <span class="tex">200\times\ln 0.01=200\times(-4.605)=-921.0</span> &mdash; 평범한 숫자다.
+실습의 &lsquo;I am Sam&rsquo;도 확률 0.111 대신 <b>로그 확률 −2.1972</b>로 계산한 뒤 <span class="tex">e^{-2.1972}=0.111111</span>로 되돌린다. 확률 0인 n-gram이 하나라도 있으면 <span class="tex">\log 0=-\infty</span>라서 코드가 <code>-inf</code>를 돌려준다(다음 절).</div>
+</section>
+
+<!-- ===================== 7.2.4 ===================== -->
+<section class="sec" id="smooth">
+  <div class="sec-head"><span class="sec-badge">7.2.4</span><h2 class="sec-title">희소성 문제와 일반화 — 스무딩 · 보간법 · 백오프<small>교안 46~51p</small></h2></div>
+
+<div class="note-box"><b>희소성(sparsity)</b> &mdash; 통계적 언어 모델은 코퍼스의 <b>출현 빈도(카운트)</b>로 예측하므로, 코퍼스에 없는 조합이 나오면 무력해진다. 마르코프 가정으로 어느 정도 일반화했지만 희소성은 여전히 남고, 모델은 <b>테스트 데이터가 훈련 데이터와 비슷해야만</b> 성능이 좋다(교안 46p).</div>
+
+<div class="cards">
+  <div class="card2"><b>희소성의 두 형태 (교안 47p)</b>
+    <ul class="ul">
+      <li><b>미등록어(OOV)</b> &mdash; 테스트 시점에 학습 어휘에 <b>없는 단어</b>가 등장해 확률을 정의할 수 없다</li>
+      <li><b>미관측 N-gram</b> &mdash; 각 단어는 어휘에 있지만 <b>그 조합</b>이 코퍼스에 없어 카운트가 0 &rarr; 곱셈 때문에 <b>문장 전체 확률이 0</b></li>
+    </ul>
+  </div>
+  <div class="card2"><b>실습 2-4에서 확인한 것</b>
+    <ul class="ul">
+      <li>&lsquo;Sam I like ham&rsquo; &mdash; 단어는 모두 학습 어휘에 있지만 (I, like) · (like, ham)이 미관측 &rarr; <b>logP = −inf</b></li>
+      <li>&lsquo;I like green eggs&rsquo; &mdash; 역시 <b>−inf</b></li>
+      <li>모든 언어 조합을 담은 코퍼스는 불가능 &rarr; <b>한정된 코퍼스에서 일반화 능력</b>을 높이는 기법이 필요하다</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="sub-title">① 스무딩 (Smoothing) — 본 적 없는 조합에도 확률을 조금 준다 (교안 48 · 49p)</h3>
+<div class="fx">
+  <p class="fx-lab">라플라스(add-1) 스무딩 · add-k 스무딩</p>
+  <div class="tex-d">P_{\text{Laplace}}(w_n\mid w_{n-1})=\frac{\mathrm{count}(w_{n-1}w_n)+1}{\mathrm{count}(w_{n-1})+V}\qquad P_{\text{add-}k}=\frac{\mathrm{count}(w_{n-1}w_n)+k}{\mathrm{count}(w_{n-1})+kV}</div>
+  <p class="fx-note">모든 N-gram 카운트에 1(또는 k)을 더한다. 보통 <span class="tex">0&lt;k\le1</span>. 그러면 모든 단어열이 0보다 큰 확률을 가져 <b>코퍼스에 없는 단어열 때문에 문장 전체 확률이 0이 되는 문제</b>를 막는다.</p>
+</div>
+<div class="pit"><b>분모의 V(kV)는 왜 필요한가</b> &mdash; 분자에서 어휘의 <b>모든 단어 V개</b>에 k씩 더했으니, 분모에도 kV를 더해야 <span class="tex">\sum_{w}P(w\mid w_{n-1})=1</span>이 유지된다. 분모의 kV를 빠뜨리면 <b>확률의 합이 1을 넘어</b> 확률 분포가 아니게 된다(교안 48p).
+실습 숫자로 확인 &mdash; 미니 코퍼스의 어휘 V=11(&lt;s&gt; 제외, &lt;/s&gt; 포함), count(like)=1, count(like ham)=0 이므로
+<div class="tex-d">P_{\text{Laplace}}(\text{ham}\mid\text{like})=\frac{0+1}{1+11}=\frac{1}{12}\approx0.08333</div>
+실습 셀 2-4의 출력 <code>P(ham | like) = 0.08333</code>과 일치한다.</div>
+
+<div class="warn"><b>라플라스 스무딩의 한계 (교안 49p)</b> &mdash; 관측되지 않은 조합이 <b>압도적으로 많은</b> 상황에서 확률 질량을 <b>과도하게 이동</b>시킨다. 결과적으로 실제로 관측된 N-gram의 확률이 지나치게 낮아져 성능이 떨어진다. 그래서 언어 모델에서는 단순 add-1보다 <b>보간법 · 백오프 · Kneser-Ney 스무딩</b>이 선호된다.
+<br>실습 2-4에서 &lsquo;I am Sam&rsquo;의 확률이 MLE <b>0.111</b> &rarr; add-1 <b>0.00109</b>로 <b>100배 넘게</b> 깎였다 &mdash; 미관측 조합들에게 질량을 나눠 준 대가다.</div>
+<div class="deep"><b>Kneser-Ney 스무딩의 핵심 — &lsquo;얼마나 자주&rsquo;가 아니라 &lsquo;얼마나 다양한 문맥에서&rsquo;</b> &mdash; 영어 &lsquo;Francisco&rsquo;는 자주 나오지만 거의 항상 &lsquo;San&rsquo; 뒤에만 나온다. 단순 1-gram 빈도로는 높은 확률을 받지만, <b>처음 보는 문맥</b> 뒤에 &lsquo;Francisco&rsquo;가 올 가능성은 사실 낮다. Kneser-Ney는 &ldquo;이 단어가 몇 종류의 서로 다른 앞 단어 뒤에 나왔는가&rdquo;(<b>continuation probability</b>)로 하위 차수 확률을 정한다. n-gram 언어 모델에서 <b>가장 성능이 좋은 표준 스무딩</b>으로 알려져 있다(교안 49p).</div>
+
+<h3 class="sub-title">② 보간법 (Interpolation) — 여러 차수를 섞는다 (교안 50p)</h3>
+<div class="fx">
+  <p class="fx-lab">선형 보간 (3-gram 모델의 예)</p>
+  <div class="tex-d">P(w_n\mid w_{n-2},w_{n-1})=\lambda_1 P_3(w_n\mid w_{n-2},w_{n-1})+\lambda_2 P_2(w_n\mid w_{n-1})+\lambda_3 P_1(w_n),\qquad \lambda_1+\lambda_2+\lambda_3=1</div>
+  <p class="fx-note">3-gram 확률만 보지 않고 2-gram, 1-gram 확률까지 구해 <b>가중치를 곱한 뒤 모두 더한다</b>. 카운트가 0인 3-gram에도 하위 n-gram 정보에 따라 <b>서로 다른 확률</b>을 줄 수 있다. 가중치 λ는 <b>검증(held-out) 코퍼스에서 확률을 최대화하도록</b> 학습한다.</p>
+</div>
+<div class="pit"><b>λ의 번호가 교안과 실습에서 반대다</b> &mdash; 교안 50p는 <span class="tex">\lambda_1</span>을 <b>3-gram</b>에 곱하지만, 실습 과제 2-2는 <span class="tex">\lambda_3\cdot P_3+\lambda_2\cdot P_2+\lambda_1\cdot P_1</span>으로 <b>λ3을 3-gram</b>에 곱한다(<code>InterpolatedLM((0.1, 0.3, 0.6))</code>은 1-gram 0.1 · 2-gram 0.3 · 3-gram 0.6). 기호만 다르고 의미는 같다 &mdash; <b>시험에서는 식에 쓰인 첨자를 보고 판단</b>할 것.</div>
+
+<h3 class="sub-title">③ 백오프 (Back-off) — 있으면 쓰고, 없으면 내려간다 (교안 51p)</h3>
+<div class="flow">
+  <div class="fl"><b>3-gram 빈도 &gt; 0</b><span>3-gram 확률을 쓴다</span></div>
+  <div class="fl"><b>3-gram 빈도 = 0, 2-gram 빈도 &gt; 0</b><span>2-gram 확률을 쓴다</span></div>
+  <div class="fl"><b>그마저도 없으면</b><span>1-gram 확률을 쓴다</span></div>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>보간법</th><th>백오프</th></tr></thead>
+  <tbody>
+    <tr><td>여러 차수를</td><td><b>항상 모두 섞는다</b>(가중합)</td><td><b>하나만 고른다</b>(높은 차수부터 시도)</td></tr>
+    <tr><td>확률 합 = 1 맞추기</td><td>λ 합이 1이면 자동으로 성립</td><td>상위 차수에서 확률 질량을 떼어 내는 <b>할인(discounting)</b>이 필요 → <b>Katz 백오프</b></td></tr>
+    <tr><td>실용 변형</td><td>&mdash;</td><td>대규모 코퍼스에서는 정규화를 생략한 <b>Stupid Backoff</b>(확률 합이 1이 아님을 감수하고 속도를 택함)</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="good"><b>과제 2에서 직접 비교한 결과</b> (BIG_CORPUS 10문장 학습, 미관측 bigram이 든 테스트 3문장)
+<ul class="ul">
+  <li>add-k의 k를 바꾸면 테스트 PPL이 <b>14.75(k=0.001) → 8.84 → 6.96(k=0.1) → 8.90 → 10.75(k=1.0)</b> &mdash; 가운데 <b>k=0.1</b>에서 최소</li>
+  <li>보간 모델(λ = 0.1 · 0.3 · 0.6) 테스트 PPL <b>8.72</b> vs 3-gram add-1 <b>13.90</b> &mdash; 보간이 훨씬 낫다</li>
+</ul>
+자세한 해석은 <a class="ext" href="#hw">과제 · 제출</a> 절에 있다.</div>
+</section>
+
+<!-- ===================== 7.2.5 ===================== -->
+<section class="sec" id="ppl">
+  <div class="sec-head"><span class="sec-badge">7.2.5</span><h2 class="sec-title">모델 평가와 퍼플렉서티<small>교안 52~55p · 낮을수록 덜 헷갈린다</small></h2></div>
+
+<div class="cards">
+  <div class="card2"><b>외부 평가 (extrinsic)</b>
+    <ul class="ul">
+      <li>언어 모델을 실제 응용(기계 번역 · 음성 인식)에 넣어 <b>최종 성능이 얼마나 좋아지는지</b>로 평가</li>
+      <li><b>가장 신뢰할 수 있지만</b> 비용과 시간이 많이 든다</li>
+    </ul>
+  </div>
+  <div class="card2"><b>내부 평가 (intrinsic)</b>
+    <ul class="ul">
+      <li>응용과 무관하게 <b>언어 모델 자체의 품질</b>을 측정</li>
+      <li>대표 지표가 <b>퍼플렉서티(Perplexity, PPL)</b></li>
+    </ul>
+  </div>
+</div>
+
+<div class="fx">
+  <p class="fx-lab">퍼플렉서티의 정의 (교안 53p)</p>
+  <div class="tex-d">\mathrm{PPL}(W)=P(w_1w_2\cdots w_N)^{-\frac{1}{N}}=\exp\!\left(-\frac{1}{N}\sum_{i=1}^{N}\log P(w_i\mid\text{이전 단어들})\right)</div>
+  <p class="fx-note">테스트 문장의 확률을 단어 수로 <b>정규화한 역수</b>다. 확률이 높을수록(모델이 잘 예측할수록) PPL은 낮다. <span class="hi">퍼플렉서티 점수가 낮을수록(헷갈리는 경우가 적을수록) 좋은 모델이다.</span></p>
+</div>
+
+<div class="deep"><b>&lsquo;분기 계수(branching factor)&rsquo;로 읽기 (교안 54p)</b> &mdash; PPL이 100이면 모델이 다음 단어를 고를 때 <b>평균적으로 100개의 후보 중 하나를 고르는 정도로</b> 헷갈린다는 뜻이다.
+어휘 크기 V인 <b>균등 분포 모델</b>은 모든 단어에 <span class="tex">1/V</span>을 주므로
+<div class="tex-d">\mathrm{PPL}=\left(\left(\tfrac{1}{V}\right)^{N}\right)^{-1/N}=V</div>
+정확히 V가 된다. 실습의 1-gram 모델 학습 PPL이 <b>15.63</b>인 것은 &ldquo;10문장 코퍼스의 단어들 가운데 평균 15~16개 중 하나를 찍는 수준&rdquo;이라는 뜻이고, 2-gram은 <b>2.27</b>로 거의 두 개 중 하나를 고르는 수준까지 좁혀진다.</div>
+
+<div class="good"><b>실습 2-6 퍼플렉서티 표</b> (정답 노트북 실행값)
+<div class="tbl-wrap"><table>
+  <thead><tr><th>모델</th><th>학습 PPL</th><th>테스트 PPL</th></tr></thead>
+  <tbody>
+    <tr><td>1-gram MLE</td><td>15.63</td><td>18.89</td></tr>
+    <tr><td>1-gram add-1</td><td>15.77</td><td>18.30</td></tr>
+    <tr><td>2-gram MLE</td><td>2.27</td><td><b>inf</b></td></tr>
+    <tr><td>2-gram add-1</td><td>7.29</td><td><b>10.75</b> (최저)</td></tr>
+    <tr><td>3-gram MLE</td><td><b>1.65</b> (최저)</td><td><b>inf</b></td></tr>
+    <tr><td>3-gram add-1</td><td>8.05</td><td>13.90</td></tr>
+  </tbody>
+</table></div>
+<ul class="ul">
+  <li><b>모든 모델에서 테스트 PPL &gt; 학습 PPL</b> &mdash; 두 값의 차이가 곧 일반화 격차다</li>
+  <li><b>MLE는 미관측 n-gram 하나로 inf</b> &mdash; 테스트 문장에 미관측 bigram이 3 · 3 · 1개 들어 있다</li>
+  <li><b>스무딩은 학습 PPL을 나쁘게 만든다</b>(2.27 → 7.29) &mdash; 그 대가로 테스트 PPL이 유한해진다</li>
+  <li><b>n을 키운다고 계속 좋아지지 않는다</b> &mdash; add-1 기준 1-gram 18.30 → 2-gram 10.75 → 3-gram 13.90</li>
+  <li><b>학습 PPL만 보면 정반대 결론</b> &mdash; 학습 PPL 최저(3-gram MLE 1.65) 모델의 테스트 PPL이 inf. 전형적인 <b>과적합</b></li>
+</ul></div>
+
+<div class="warn"><b>퍼플렉서티를 볼 때의 주의 사항 (교안 54p)</b>
+<ul class="ul">
+  <li><b>어휘 집합과 토큰화 방식이 다르면</b> 퍼플렉서티를 직접 비교할 수 없다 &mdash; 서브워드로 잘게 자르면 단어 수 N이 달라진다</li>
+  <li><b>미등록어 처리 방식</b>(&lt;unk&gt; 비율)에 따라 값이 크게 달라진다 &mdash; 희귀어를 전부 &lt;unk&gt;로 바꾸면 PPL이 인위적으로 낮아진다</li>
+  <li>PPL이 낮다고 반드시 <b>응용 성능이 좋은 것은 아니다</b> &mdash; 외부 평가와 함께 보는 것이 바람직하다</li>
+</ul></div>
+
+<h3 class="sub-title">N-gram 언어 모델의 한계와 신경망으로의 전환 (교안 55p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>N-gram의 한계</th><th>신경망 언어 모델의 해법</th></tr></thead>
+  <tbody>
+    <tr><td><b>장기 의존성</b>을 포착하지 못한다 (N개 이전까지만 기억)</td><td>RNN · LSTM의 은닉 상태, Transformer의 어텐션이 먼 단어까지 본다</td></tr>
+    <tr><td>단어를 <b>이산적 기호</b>로 다뤄 &lsquo;사과&rsquo;와 &lsquo;배&rsquo;가 비슷하다는 정보를 못 쓴다</td><td>단어를 <b>밀집 벡터(임베딩)</b>로 표현 &rarr; 유사한 단어가 <b>유사한 확률 분포</b>를 공유 (<a class="ext" href="nlp-week06.html#embed">6주차 6.3.3</a>)</td></tr>
+    <tr><td>N이 커지면 경우의 수가 <span class="tex">V^N</span>으로 폭증</td><td>파라미터 수가 N과 무관하게 고정된다</td></tr>
+  </tbody>
+</table>
+</div>
+<p>RNN · LSTM을 거쳐 Transformer 기반 모델로 발전한 흐름은 <b>11 · 12주차</b>(자연어처리 딥러닝 Ⅰ · Ⅱ)에서 다룬다.</p>
+</section>
+
+<!-- ===================== 7.3.1 ===================== -->
+<section class="sec" id="ie">
+  <div class="sec-head"><span class="sec-badge">7.3.1</span><h2 class="sec-title">정보 추출이란<small>교안 56~59p · 비정형 텍스트 → 구조화된 튜플</small></h2></div>
+
+<div class="note-box"><b>왜 필요한가 (교안 57p)</b> &mdash; 실세계 정보의 대부분은 <b>비정형(비구조화) 텍스트</b>로 존재한다 &mdash; 온라인 뉴스 · 정부 문서 · 진료 기록. 이 대량의 텍스트에서 중요 정보를 <b>사람이 직접 찾기에는 시간과 비용이 너무 크다</b>. 그래서 비정형 텍스트에서 유용한 정보를 자동으로 뽑는 <b>정보 추출(Information Extraction, IE)</b>이 필요하고, 그러려면 개체 간의 의미적 관계를 담은 <b>구조화된 데이터 표현</b>이 있어야 한다.</div>
+
+<div class="fx">
+  <p class="fx-lab">관계형 튜플 (relational tuple) — (개체1, 관계, 개체2) (교안 58p)</p>
+  <pre class="code">'이순신은 조선의 장군이다'           → (이순신, 직책, 장군)
+'삼성전자는 수원에 본사를 두고 있다' → (삼성전자, 본사_위치, 수원)
+'Steve Jobs founded Apple in 1976'   → (Steve Jobs, founded, Apple)</pre>
+  <p class="fx-note">추출한 튜플을 모으면 <b>지식 그래프(knowledge graph)</b>나 데이터베이스를 만들 수 있다 &mdash; 개체는 노드, 관계는 화살표(간선)가 된다.</p>
+</div>
+
+<div class="svgfig note-box">
+<div class="svg-scroll">
+<svg viewBox="0 0 640 210" role="img" aria-label="관계형 튜플을 모으면 지식 그래프가 된다">
+  <defs><marker id="ar7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1b3f8b"/></marker></defs>
+  <text x="320" y="18" text-anchor="middle" font-size="13" font-weight="700" fill="#0c1a3a">실습 3-3에서 만든 지식 그래프 (일부)</text>
+  <rect x="20" y="70" width="110" height="38" rx="19" fill="#eef6ff" stroke="#1b3f8b"/><text x="75" y="94" text-anchor="middle" font-size="13" font-weight="700" fill="#0c1a3a">홍길동</text>
+  <rect x="250" y="34" width="190" height="34" rx="17" fill="#fff7ed" stroke="#b45309"/><text x="345" y="56" text-anchor="middle" font-size="12" fill="#7c2d12">한국대학교 컴퓨터공학과</text>
+  <rect x="250" y="108" width="110" height="34" rx="17" fill="#f0fdf4" stroke="#16a34a"/><text x="305" y="130" text-anchor="middle" font-size="12" fill="#14532d">2020년</text>
+  <line x1="130" y1="82" x2="248" y2="54" stroke="#1b3f8b" stroke-width="1.6" marker-end="url(#ar7)"/><text x="186" y="58" text-anchor="middle" font-size="11" fill="#1b3f8b">소속</text>
+  <line x1="130" y1="96" x2="248" y2="122" stroke="#1b3f8b" stroke-width="1.6" marker-end="url(#ar7)"/><text x="186" y="124" text-anchor="middle" font-size="11" fill="#1b3f8b">재직_시작</text>
+  <rect x="20" y="160" width="110" height="38" rx="19" fill="#eef6ff" stroke="#1b3f8b"/><text x="75" y="184" text-anchor="middle" font-size="13" font-weight="700" fill="#0c1a3a">이순신</text>
+  <rect x="250" y="152" width="90" height="30" rx="15" fill="#f7f5ff" stroke="#6d28d9"/><text x="295" y="172" text-anchor="middle" font-size="12" fill="#2e1065">서울</text>
+  <rect x="380" y="166" width="100" height="30" rx="15" fill="#f0fdf4" stroke="#16a34a"/><text x="430" y="186" text-anchor="middle" font-size="12" fill="#14532d">1545년</text>
+  <line x1="130" y1="176" x2="248" y2="167" stroke="#1b3f8b" stroke-width="1.6" marker-end="url(#ar7)"/><text x="190" y="162" text-anchor="middle" font-size="11" fill="#1b3f8b">출생지</text>
+  <path d="M130,188 C220,206 330,206 378,186" fill="none" stroke="#1b3f8b" stroke-width="1.6" marker-end="url(#ar7)"/><text x="260" y="206" text-anchor="middle" font-size="11" fill="#1b3f8b">출생연도</text>
+  <rect x="520" y="80" width="100" height="34" rx="17" fill="#f7f5ff" stroke="#6d28d9"/><text x="570" y="102" text-anchor="middle" font-size="12" fill="#2e1065">서울</text>
+  <rect x="490" y="150" width="130" height="34" rx="17" fill="#eef6ff" stroke="#1b3f8b"/><text x="555" y="172" text-anchor="middle" font-size="12" font-weight="700" fill="#0c1a3a">국립국어원</text>
+  <line x1="555" y1="150" x2="567" y2="116" stroke="#1b3f8b" stroke-width="1.6" marker-end="url(#ar7)"/><text x="584" y="138" font-size="11" fill="#1b3f8b">위치</text>
+</svg>
+</div>
+<p class="fx-note" style="margin-top:6px">같은 &lsquo;서울&rsquo;이 두 번 그려진 것은 그림을 단순하게 하려는 것이고, 실제 지식 그래프에서는 <b>하나의 노드</b>로 합쳐져 이순신과 국립국어원이 서울을 통해 연결된다 &mdash; 조사를 떼어 표층형을 통일해야 이렇게 합쳐진다.</p>
+</div>
+
+<div class="warn"><b>정보 추출의 현실적 어려움 (교안 59p)</b> &mdash; 목적은 문서 안 개체 간의 관계를 파악해 <b>질의에 응답</b>하는 것이다. 그런데 부분 정보를 구조적으로 정확하게 모으려면 <b>도메인 지식</b>이 필요하고, 그래서 수작업 패턴이나 정보로 데이터를 구축한다. 결국 새 도메인에 적용하려면 사용자가 <b>목표 관계의 이름을 지정</b>하고 <b>수동으로 새 규칙을 만들어 주석</b>을 달아야 한다. 최근에는 적은 태깅 데이터로도 학습하는 <b>준지도 · 원격 지도</b> 방법이 활발히 연구된다.</div>
+</section>
+
+<!-- ===================== 7.3.2 ===================== -->
+<section class="sec" id="iepipe">
+  <div class="sec-head"><span class="sec-badge">7.3.2</span><h2 class="sec-title">정보 추출의 하위 작업과 파이프라인<small>교안 60 · 61p</small></h2></div>
+
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>하위 작업</th><th>하는 일</th></tr></thead>
+  <tbody>
+    <tr><td><b>NER</b></td><td>인명 · 지명 · 시간 표현 · 특정 유형의 수치 표현 등 <b>특정 유형 개체에 대한 참조</b>를 식별</td></tr>
+    <tr><td><b>상호참조 해결</b> (Coreference Resolution)</td><td>추출된 개체들 사이의 상호참조 관계를 찾아 &lsquo;그&rsquo;, &lsquo;이 회사&rsquo; 같은 표현이 <b>어떤 개체를 가리키는지</b> 연결</td></tr>
+    <tr><td><b>개체 연결</b> (Entity Linking)</td><td>추출된 개체를 <b>위키피디아 · 지식 베이스의 고유 항목</b>에 연결 &mdash; &lsquo;애플&rsquo;이 회사인지 과일인지 확정</td></tr>
+    <tr><td><b>관계 추출</b> (Relation Extraction)</td><td>개체 간의 관계를 식별해 구조화된 정보로 표현 &mdash; <b>가장 중요한 하위 작업</b></td></tr>
+    <tr><td><b>사건 추출</b> (Event Extraction)</td><td>사건과 그 <b>참여자 · 시간 · 장소</b>를 함께 추출</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="svgfig note-box">
+<div class="svg-scroll">
+<svg viewBox="0 0 700 170" role="img" aria-label="정보 추출 파이프라인">
+  <defs><marker id="ar7b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker></defs>
+  <text x="350" y="16" text-anchor="middle" font-size="13" font-weight="700" fill="#0c1a3a">정보 추출 시스템의 대표 처리 순서 (교안 61p)</text>
+  <g font-size="11.5" text-anchor="middle">
+    <rect x="8" y="34" width="78" height="40" rx="7" fill="#f1f5f9" stroke="#94a3b8"/><text x="47" y="58" fill="#334155">원시 텍스트</text>
+    <rect x="104" y="34" width="78" height="40" rx="7" fill="#f1f5f9" stroke="#94a3b8"/><text x="143" y="58" fill="#334155">문장 분리</text>
+    <rect x="200" y="34" width="78" height="40" rx="7" fill="#f1f5f9" stroke="#94a3b8"/><text x="239" y="58" fill="#334155">토큰화</text>
+    <rect x="296" y="34" width="78" height="40" rx="7" fill="#f1f5f9" stroke="#94a3b8"/><text x="335" y="58" fill="#334155">품사 태깅</text>
+    <rect x="392" y="34" width="86" height="40" rx="7" fill="#eef6ff" stroke="#1b3f8b"/><text x="435" y="58" fill="#0c1a3a" font-weight="700">개체명 인식</text>
+    <rect x="496" y="34" width="92" height="40" rx="7" fill="#eef6ff" stroke="#1b3f8b"/><text x="542" y="58" fill="#0c1a3a" font-weight="700">상호참조 해결</text>
+    <rect x="606" y="34" width="86" height="40" rx="7" fill="#fff7ed" stroke="#b45309"/><text x="649" y="58" fill="#7c2d12" font-weight="700">관계 추출</text>
+    <rect x="380" y="112" width="190" height="40" rx="7" fill="#f0fdf4" stroke="#16a34a"/><text x="475" y="136" fill="#14532d" font-weight="700">(개체1, 관계, 개체2) 튜플 목록</text>
+    <rect x="590" y="112" width="102" height="40" rx="7" fill="#f7f5ff" stroke="#6d28d9"/><text x="641" y="130" fill="#2e1065">DB / 지식</text><text x="641" y="145" fill="#2e1065">그래프 저장</text>
+  </g>
+  <g stroke="#64748b" stroke-width="1.4" marker-end="url(#ar7b)">
+    <line x1="86" y1="54" x2="102" y2="54"/><line x1="182" y1="54" x2="198" y2="54"/><line x1="278" y1="54" x2="294" y2="54"/><line x1="374" y1="54" x2="390" y2="54"/><line x1="478" y1="54" x2="494" y2="54"/><line x1="588" y1="54" x2="604" y2="54"/>
+    <path d="M649,74 L649,94 L475,94 L475,110" fill="none"/><line x1="570" y1="132" x2="588" y2="132"/>
+  </g>
+  <text x="190" y="140" text-anchor="middle" font-size="11" fill="#b91c1c">앞 단계의 오류가 뒤로 전파된다</text>
+  <text x="190" y="156" text-anchor="middle" font-size="11" fill="#b91c1c">(error propagation)</text>
+</svg>
+</div>
+</div>
+<div class="pit"><b>오류 전파 (error propagation)</b> &mdash; 파이프라인은 <b>각 단계의 오류가 다음 단계로 전파</b>된다. NER이 &lsquo;명량&rsquo;을 장소로 잘못 잡으면, 그 위의 관계 추출은 아무리 정확해도 틀린 튜플을 만든다. 이를 완화하려고 여러 단계를 한 모델로 묶어 함께 학습하는 <b>종단 간(end-to-end) 학습</b>이 연구된다. <a class="ext" href="nlp-week04.html">4주차</a>의 &lsquo;분석 계층과 오류 전파&rsquo;와 같은 이야기다.</div>
+<div class="good"><b>실습 3은 이 파이프라인을 그대로 코드로 만든다</b> &mdash; <code>tokenize_ko</code>(토큰화) → <code>rule_based_ner</code>(실습 1의 NER 재사용) → <code>extract_relations</code>(규칙 기반 관계 추출) → <code>kg</code> 딕셔너리(지식 그래프). 품사 태깅과 상호참조 해결은 건너뛴 축소판이다.</div>
+</section>
+
+<!-- ===================== 7.3.3 ===================== -->
+<section class="sec" id="re">
+  <div class="sec-head"><span class="sec-badge">7.3.3</span><h2 class="sec-title">관계 추출<small>교안 62 · 63p · 두 개체 사이에 어떤 관계가 있는가</small></h2></div>
+
+<div class="fx">
+  <p class="fx-lab">관계 추출 예시 (교안 62p)</p>
+  <pre class="code">입력   : 홍길동은 2020년부터 한국대학교 컴퓨터공학과 교수로 재직 중이다.
+개체   : 홍길동[PS], 2020년[DT], 한국대학교 컴퓨터공학과[OG]
+튜플   : (홍길동, 소속, 한국대학교 컴퓨터공학과)
+         (홍길동, 직책, 교수)
+         (홍길동, 재직_시작, 2020년)</pre>
+  <p class="fx-note">실습 3-2의 규칙 기반 추출기는 이 문장에서 <b>소속 · 재직_시작</b> 두 튜플만 뽑는다. &lsquo;교수&rsquo;는 개체명(PS · OG · DT …)이 아니라서 NER 단계에서 잡히지 않았기 때문이다 &mdash; <b>NER이 못 잡은 것은 관계 추출도 못 잡는다</b>.</p>
+</div>
+
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>대표 관계 유형 (ACE · TACRED 기준)</th><th>의미</th></tr></thead>
+  <tbody>
+    <tr><td><code>per:employee_of</code></td><td>소속 &mdash; 사람이 어떤 기관에 속함</td></tr>
+    <tr><td><code>per:city_of_birth</code></td><td>출생지</td></tr>
+    <tr><td><code>org:founded_by</code></td><td>설립자</td></tr>
+    <tr><td><code>org:city_of_headquarters</code></td><td>본사 위치</td></tr>
+    <tr><td><code>part-whole</code> · <code>is-a</code></td><td>부분-전체 · 상하위</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note-box"><b>관계 추출의 정식화 (교안 63p)</b> &mdash; 문장과 <b>두 개체(entity mention) 쌍</b>이 주어졌을 때, 사전에 정의된 관계 집합 중 <b>어느 것에 해당하는지(또는 관계 없음)</b>를 분류하는 문제다. 즉 <b>다중 클래스 분류</b>로 환원되고, 대부분의 개체 쌍은 아무 관계도 없으므로 <b>&lsquo;no_relation&rsquo; 클래스가 대부분을 차지하는 불균형 문제</b>가 생긴다.</div>
+<div class="deep"><b>개체 쌍이 왜 그렇게 많아지나</b> &mdash; 한 문장에 개체가 k개면 순서 있는 쌍이 <span class="tex">k(k-1)</span>개다. 개체 5개짜리 문장 하나에서 20쌍을 분류해야 하는데 실제 관계는 두세 개뿐이라, 나머지 17~18쌍이 모두 no_relation이다. 그래서 정확도가 아니라 <b>no_relation을 뺀 micro-F1</b>으로 평가한다(<a class="ext" href="#reapp">7.3.4</a>). NER에서 &lsquo;전부 O&rsquo;가 정확도를 부풀리는 것과 같은 구조다.</div>
+</section>
+
+<!-- ===================== 7.3.4 ===================== -->
+<section class="sec" id="reapp">
+  <div class="sec-head"><span class="sec-badge">7.3.4</span><h2 class="sec-title">정보 추출(관계 추출)의 접근법 · 평가와 활용<small>교안 64~70p</small></h2></div>
+
+<div class="note-box"><b>정보 추출 시스템의 두 가지 목표 (교안 64p)</b> &mdash; ① 비정형 텍스트에서 구조화된 정보를 뽑기 위해 <b>모든 언급(mention)을 식별</b>하고, ② 구조화된 개체와 관계를 <b>데이터베이스에 저장</b>한다. 접근 방식은 크게 <b>규칙 기반</b>과 <b>기계학습 기반</b>으로 나뉜다.</div>
+
+<h3 class="sub-title">규칙 기반 접근법 (교안 65~67p)</h3>
+<div class="fx">
+  <p class="fx-lab">Hearst 패턴 — 상하위(is-a) 관계</p>
+  <pre class="code">'NP such as NP, NP, and NP'          → 상하위 관계(is-a)
+'과일, 예를 들어 사과, 배, 감'      → (사과, is-a, 과일), (배, is-a, 과일), (감, is-a, 과일)</pre>
+  <p class="fx-note">사람이 비정형 텍스트를 언어학적으로 분석해 <b>관계 튜플의 패턴을 정의</b>하고, 그 규칙으로 튜플을 추출한다. 실습 3-4는 영어 패턴 하나와 한국어 패턴 두 개(&lsquo;A, 예를 들어 B, C&rsquo; · &lsquo;B, C 등의 A&rsquo;)를 정규식으로 구현한다.</p>
+</div>
+<div class="flow">
+  <div class="fl"><b>① 규칙 획득</b><span>학습 말뭉치의 특징과 개념을 바탕으로 <b>도메인 전문가</b>가 초기 규칙을 공식화</span></div>
+  <div class="fl"><b>② 규칙 재정의</b><span>실제 데이터에 적용하며 <b>점차 조정 · 세분화</b> &mdash; 말뭉치의 확장 · 변경 사항도 쉽게 반영</span></div>
+  <div class="fl"><b>③ 규칙 적용</b><span>추출된 규칙으로 구조화된 데이터 생성 &mdash; 출력은 도메인마다 다르지만 보통 <b>속성-값 쌍</b></span></div>
+  <div class="fl"><b>④ 구조화된 데이터 생성</b><span>속성-값 쌍을 최종 데이터베이스에 기록</span></div>
+</div>
+<div class="cards">
+  <div class="card2"><b>장점</b><ul class="ul"><li><b>정밀도가 높다</b></li><li>왜 그런 결과가 나왔는지 <b>해석이 명확</b>하다</li><li>학습 데이터 없이 <b>즉시 적용</b> 가능</li></ul></div>
+  <div class="card2"><b>단점</b><ul class="ul"><li><b>재현율이 낮다</b></li><li>규칙 작성에 많은 인력과 시간</li><li>새 도메인마다 규칙을 다시 만들어야 한다</li></ul></div>
+</div>
+
+<h3 class="sub-title">기계학습 기반 접근법 (교안 67~69p)</h3>
+<p>기계학습 알고리즘을 적용한 결과로 규칙을 자동 추출하므로 <b>자동 학습 기반 접근법</b>이라고도 한다. 많은 데이터를 분석해 <b>다양한 패턴을 수집</b>할 수 있다는 장점이 있다.</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>방식</th><th>어떻게</th><th>장점</th><th>약점</th></tr></thead>
+  <tbody>
+    <tr><td><b>지도학습</b></td><td>관계가 주석된 학습 데이터로 분류기 학습. 주요 자질 &mdash; <b>두 개체의 유형</b>, <b>두 개체 사이의 단어들</b>, <b>의존 구문 경로</b>, 개체 앞뒤의 문맥 단어</td><td>성능이 높고 평가가 명확</td><td>주석 데이터 구축 비용이 매우 크다</td></tr>
+    <tr><td><b>준지도 (부트스트래핑)</b></td><td>소수의 <b>시드 튜플</b> → 패턴 발견 → 그 패턴으로 새 튜플 → 다시 패턴 확장을 반복</td><td>적은 주석으로 시작</td><td><b>의미 표류(semantic drift)</b> &mdash; 반복할수록 잘못된 패턴이 유입될 수 있다</td></tr>
+    <tr><td><b>원격 지도</b> (Distant Supervision)</td><td>기존 지식 베이스(Freebase · DBpedia)의 관계 튜플로 <b>학습 데이터를 자동 생성</b>. 가정 &mdash; &ldquo;두 개체가 KB에서 어떤 관계면, 둘이 함께 나오는 문장은 그 관계를 표현할 가능성이 높다&rdquo;</td><td>대량의 학습 데이터를 저비용으로</td><td>가정이 성립하지 않는 문장에서 <b>잡음 레이블</b></td></tr>
+    <tr><td><b>개방형 (Open IE)</b></td><td>관계 집합을 <b>미리 정의하지 않고</b>, 텍스트에 나타난 <b>술어 표현 자체</b>를 관계로 추출</td><td>대규모 웹 텍스트에 확장 적용</td><td>같은 관계가 다른 표현으로 추출돼 <b>정규화가 필요</b></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>원격 지도의 잡음 레이블 예시</b> (교안 73p 확인 질문의 답) &mdash; KB에 (스티브 잡스, <b>설립자</b>, 애플)이 있다고 하자. 원격 지도는 두 이름이 함께 나오는 모든 문장에 &lsquo;설립자&rsquo; 레이블을 붙인다.
+<ul class="ul">
+  <li>&ldquo;스티브 잡스는 1976년 애플을 <b>창업했다</b>&rdquo; &mdash; 맞는 레이블</li>
+  <li>&ldquo;스티브 잡스는 1985년 애플에서 <b>쫓겨났다</b>&rdquo; &mdash; 관계는 &lsquo;해고&rsquo;인데 &lsquo;설립자&rsquo;로 레이블 → <b>잡음</b></li>
+  <li>&ldquo;스티브 잡스가 발표하자 애플 주가가 올랐다&rdquo; &mdash; 설립 관계를 표현하지 않는데도 &lsquo;설립자&rsquo; → <b>잡음</b></li>
+</ul>
+이 잡음을 줄이려고 &ldquo;함께 나오는 문장 중 <b>적어도 하나</b>는 그 관계를 표현한다&rdquo;로 가정을 완화한 다중 인스턴스 학습(multi-instance learning)이 뒤따랐다.</div>
+<div class="pit"><b>Open IE를 &lsquo;규칙 기반&rsquo;으로 혼동하지 말 것</b> &mdash; 실습 노트북 3-4는 Hearst 패턴을 &ldquo;관계 집합을 미리 정하지 않고 텍스트 표현 자체를 관계로 쓰는 <b>Open IE의 가장 고전적인 사례</b>&rdquo;로 소개하는 반면, 교안 65p는 Hearst 패턴을 <b>규칙 기반 접근법의 대표 예</b>로 든다. 둘 다 틀린 말은 아니다 &mdash; Hearst 패턴은 <b>사람이 쓴 규칙</b>(방법)이면서 <b>is-a라는 하나의 관계</b>만 뽑는다. 100문제는 교안 기준이므로 &ldquo;Hearst 패턴 = 규칙 기반 · is-a 관계&rdquo;로 기억하면 된다.</div>
+
+<h3 class="sub-title">평가와 활용 (교안 70p)</h3>
+<div class="cards">
+  <div class="card2"><b>평가</b>
+    <ul class="ul">
+      <li>NER과 동일하게 <b>정밀도 · 재현율 · F1</b></li>
+      <li><b>&lsquo;no_relation&rsquo;을 제외한</b> 관계들에 대한 <b>micro-F1</b>을 주 지표로 쓰는 경우가 많다</li>
+      <li>벤치마크 &mdash; <b>ACE 2005 · SemEval-2010 Task 8 · TACRED</b>, 한국어 <b>KLUE-RE</b></li>
+    </ul>
+  </div>
+  <div class="card2"><b>활용 사례</b>
+    <ul class="ul">
+      <li>지식 그래프 구축 · 검색 엔진의 <b>정보 카드</b></li>
+      <li>금융 공시 · 뉴스에서 기업 이벤트 자동 추출</li>
+      <li>의료 기록에서 <b>질병-약물-부작용</b> 관계 추출</li>
+      <li>이력서 · 계약서 등 문서 자동 구조화</li>
+    </ul>
+  </div>
+</div>
+</section>
+
+<!-- ===================== 핵심 정리 ===================== -->
+<section class="sec" id="summary">
+  <div class="sec-head"><span class="sec-badge">SUM</span><h2 class="sec-title">핵심 정리<small>교안 71 · 72p</small></h2></div>
+<div class="oneline">
+  <p><b>기억해야 할 핵심 개념 (교안 72p)</b></p>
+  <ul class="ul">
+    <li>NER은 개체의 <b>경계와 유형을 함께</b> 맞혀야 하므로 <b>BIO 표현과 개체 단위 F1</b>이 표준이다</li>
+    <li>언어 모델은 단어열에 확률을 부여하며, <b>연쇄 법칙 + 마르코프 가정</b>으로 n-gram 모델이 유도된다</li>
+    <li>n-gram의 최대 약점은 <b>희소성</b>이며, <b>스무딩 · 보간법 · 백오프</b>로 완화하고 <b>퍼플렉서티</b>로 평가한다</li>
+    <li>정보 추출은 NER 결과 위에서 개체 간 관계를 <b>(개체1, 관계, 개체2) 튜플</b>로 구조화하는 작업이다</li>
+    <li><b>세 주제는 독립적이지 않고, NER → 관계 추출 → 지식 그래프로 이어지는 하나의 흐름을 이룬다</b></li>
+  </ul>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>약어 · 용어</th><th>풀네임 · 원어</th><th>뜻</th></tr></thead>
+  <tbody>
+    <tr><td><b>NER</b></td><td>Named Entity Recognition</td><td>개체명 인식 &mdash; 개체를 찾아 유형을 분류</td></tr>
+    <tr><td><b>BIO · IOB2</b></td><td>Begin · Inside · Outside</td><td>개체의 시작 · 내부 · 바깥을 표시하는 태깅. 태그 수 2N+1</td></tr>
+    <tr><td><b>BIOES · BILOU</b></td><td>… End · Single / Last · Unit</td><td>끝과 단일 토큰 개체를 따로 표시. 태그 수 4N+1</td></tr>
+    <tr><td><b>HMM · MEMM · CRF</b></td><td>Hidden Markov Model · Maximum Entropy Markov Model · Conditional Random Field</td><td>순차 레이블링용 통계 모델 &mdash; CRF는 태그 전이 제약을 함께 학습</td></tr>
+    <tr><td><b>gazetteer</b></td><td>&mdash;</td><td>개체명 사전(목록)</td></tr>
+    <tr><td><b>MLE</b></td><td>Maximum Likelihood Estimation</td><td>최대 우도 추정 &mdash; 세어서 나눈 상대 빈도</td></tr>
+    <tr><td><b>마르코프 가정</b></td><td>Markov assumption</td><td>다음 단어는 바로 앞 N−1개 단어에만 의존</td></tr>
+    <tr><td><b>OOV</b></td><td>Out-Of-Vocabulary</td><td>학습 어휘에 없는 단어(미등록어)</td></tr>
+    <tr><td><b>Kneser-Ney</b></td><td>&mdash;</td><td>continuation probability를 쓰는 표준 스무딩</td></tr>
+    <tr><td><b>PPL</b></td><td>Perplexity</td><td>퍼플렉서티 &mdash; 확률의 단어당 기하 평균의 역수. 낮을수록 좋다</td></tr>
+    <tr><td><b>IE · RE</b></td><td>Information / Relation Extraction</td><td>정보 추출 · 관계 추출</td></tr>
+    <tr><td><b>Open IE</b></td><td>Open Information Extraction</td><td>관계 집합을 미리 정하지 않고 술어 표현을 관계로 추출</td></tr>
+    <tr><td><b>KLUE</b></td><td>Korean Language Understanding Evaluation</td><td>한국어 이해 벤치마크 &mdash; KLUE-NER · KLUE-RE 포함</td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
+<!-- ===================== 확인 질문 ===================== -->
+<section class="sec" id="review">
+  <div class="sec-head"><span class="sec-badge">Q&amp;A</span><h2 class="sec-title">확인 질문 6개 — 답까지<small>교안 73p · 눌러서 답 보기</small></h2></div>
+<details class="rv"><summary><i>Q1</i>BIO 태깅에서 태그의 총 개수가 2N+1개가 되는 이유는?</summary>
+<div class="ans">개체 유형마다 <b>시작(B-유형)과 내부(I-유형)</b> 두 가지가 필요해 2N개이고, 개체가 아닌 토큰을 나타내는 <b>O는 유형과 무관하게 하나</b>뿐이라 +1이다. 4종이면 9개, 한국어 6종이면 13개다.</div></details>
+<details class="rv"><summary><i>Q2</i>NER 평가에 정확도(accuracy) 대신 F1을 사용하는 이유는?</summary>
+<div class="ans">대부분의 토큰이 O라서 <b>전부 O로 예측해도 토큰 정확도가 90%를 넘는다</b>. 하지만 그 시스템은 개체를 하나도 못 찾았으므로 F1은 0이다. 정확도는 NER이 해야 할 일(개체 찾기)을 반영하지 못하므로 <b>개체 단위 정밀도 · 재현율 · F1</b>을 쓴다. 실습 데이터에서도 &lsquo;전부 O&rsquo;의 정확도 0.477 / F1 0.000.</div></details>
+<details class="rv"><summary><i>Q3</i>3-gram 모델이 2-gram 모델보다 항상 좋은 것은 아닌 이유는?</summary>
+<div class="ans">문맥이 길어질수록 가능한 조합이 <span class="tex">V^N</span>으로 폭증해 <b>대부분의 3-gram이 코퍼스에 한 번도 나오지 않는다(희소성)</b>. 학습 데이터는 잘 외우지만(학습 PPL ↓) 새 문장에서는 미관측 조합이 늘어 성능이 떨어진다. 실습에서도 add-1 기준 테스트 PPL이 <b>2-gram 10.75 &lt; 3-gram 13.90</b>이었고, 3-gram MLE는 학습 PPL 1.65로 가장 낮았지만 테스트 PPL은 inf였다.</div></details>
+<details class="rv"><summary><i>Q4</i>라플라스 스무딩이 실제 언어 모델에서 잘 사용되지 않는 이유는?</summary>
+<div class="ans">미관측 조합이 압도적으로 많은 상황에서 모든 조합에 1씩 더하면 <b>확률 질량이 관측되지 않은 쪽으로 과도하게 이동</b>해, 실제로 관측된 n-gram의 확률이 지나치게 낮아진다. 실습에서 &lsquo;I am Sam&rsquo;의 확률이 0.111 → 0.00109로 깎였고, 과제 2-1에서 k=1.0의 테스트 PPL(10.75)이 k=0.1(6.96)보다 훨씬 나빴다. 그래서 보간법 · 백오프 · Kneser-Ney가 선호된다.</div></details>
+<details class="rv"><summary><i>Q5</i>퍼플렉서티가 낮은 모델이 반드시 좋은 모델이라고 할 수 없는 이유는?</summary>
+<div class="ans"><ul class="ul"><li><b>어휘 집합 · 토큰화 방식</b>이 다르면 값을 직접 비교할 수 없다</li><li><b>&lt;unk&gt; 처리 방식</b>에 따라 값이 크게 달라진다 &mdash; 희귀어를 &lt;unk&gt;로 뭉치면 인위적으로 낮아진다</li><li><b>학습 데이터</b>로 잰 PPL은 과적합 모델에서 가장 낮다(3-gram MLE 1.65)</li><li>PPL이 낮아도 번역 · 음성 인식 같은 <b>응용 성능</b>이 좋다는 보장이 없어 외부 평가와 함께 봐야 한다</li></ul></div></details>
+<details class="rv"><summary><i>Q6</i>원격 지도 방식이 만들어 내는 잡음 레이블의 예를 들어 보시오.</summary>
+<div class="ans">KB에 (스티브 잡스, 설립자, 애플)이 있을 때, &ldquo;스티브 잡스는 1985년 애플에서 쫓겨났다&rdquo;처럼 <b>두 개체가 함께 나오지만 설립 관계를 표현하지 않는 문장</b>에도 &lsquo;설립자&rsquo; 레이블이 자동으로 붙는다. 한국어 예로는 KB의 (이순신, 출생지, 서울)로 &ldquo;이순신 동상은 서울 광화문에 있다&rdquo;에 &lsquo;출생지&rsquo; 레이블이 붙는 경우가 있다. 자세한 설명은 <a class="ext" href="#reapp">7.3.4</a>.</div></details>
+</section>
+
+<!-- ===================== 실습 ===================== -->
+<section class="sec" id="lab">
+  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">7주차 실습 노트북<small>표준 라이브러리만 쓰므로 설치 없이 Colab · 로컬에서 그대로 실행됩니다</small></h2></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>PART</th><th>코드로 하는 것</th><th>실행하면 나오는 값 (정답 노트북 실행)</th></tr></thead>
+  <tbody>
+    <tr><td><b>1 · 개체명 인식</b> (7.1)</td><td>6문장 한국어 NER 데이터 · <code>bio_to_spans</code> / <code>spans_to_bio</code> 왕복 변환 · 사전 + 날짜 정규식 + 기관 접미사 규칙으로 만든 <code>rule_based_ner</code> · strict / relaxed 평가 · 오류 분석</td><td>strict <b>P = R = F1 = 0.842</b>(TP 16 · FP 3 · FN 3), relaxed <b>0.947</b>, &lsquo;전부 O&rsquo; 정확도 0.477 / F1 0</td></tr>
+    <tr><td><b>2 · N-gram 언어 모델</b> (7.2)</td><td><code>NgramLM</code> 클래스(MLE · add-k · 로그 확률 · 퍼플렉서티 · 생성) · 교안 38p 바이그램 재현 · 희소성 확인 · N별 생성 비교 · PPL 표</td><td>&lsquo;I am Sam&rsquo; 로그 확률 <b>−2.1972 → 0.111111</b>, P(ham|like) add-1 = <b>0.08333</b>, PPL 표(위 7.2.5)</td></tr>
+    <tr><td><b>3 · 정보 추출</b> (7.3)</td><td>NER 결과로 개체 추출 · 6개 규칙의 패턴 기반 관계 추출 · 표와 지식 그래프로 저장 · Hearst 패턴(영어 1 · 한국어 2)</td><td>5문장에서 튜플 <b>7개</b>, 세 예문에서 is-a 튜플 각 3개</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 class="sub-title">실습 1-5 오류 분석 — 규칙 기반 NER은 어디서 틀리나</h3>
+<pre class="code">문장 : 명량 대첩은 1597년 정유재란 때 이순신이 지휘한 해전이다 .
+   [놓침 FN] '명량 대첩은' (EV)
+   [오탐 FP] '명량' (LC)          <span class="cm"># 사전을 PS→LC→OG→EV 순서로 보므로 '명량'이 장소로 먼저 걸린다</span>
+   [오탐 FP] '대첩은' (EV)        <span class="cm"># '대첩'이 사전에 따로 있어 반쪽만 사건이 된다</span>
+
+문장 : 춘향과 몽룡은 남원 광한루에서 만났다 .
+   [놓침 FN] '춘향과' (PS)
+   [놓침 FN] '몽룡은' (PS)
+   [오탐 FP] '춘향과 몽룡은' (PS)  <span class="cm"># 앞 토큰이 같은 유형이면 I-를 붙이는 규칙 때문에 두 사람이 한 개체로 합쳐진다</span></pre>
+<div class="note-box"><b>읽는 법</b> &mdash; 위가 <a class="ext" href="#ner-intro">7.1.1의 유형 · 경계 문제</a>를 실제로 보여 주는 사례다. 첫 문장은 <b>유형 충돌(장소 vs 사건)</b>과 <b>다중 어절 개체</b>, 둘째 문장은 <b>인접한 같은 유형 개체의 경계</b> 문제다. 그런데 relaxed 평가에서는 &lsquo;명량 대첩은&rsquo;(EV)과 &lsquo;대첩은&rsquo;(EV)이 겹치고 유형도 같아 정답으로 인정되므로 FN · FP가 줄어 <b>0.947</b>이 된다 &mdash; strict와 relaxed의 차이가 어디서 오는지 그대로 보인다.</div>
+</section>
+
+<!-- ===================== 과제 ===================== -->
+<section class="sec" id="hw">
+  <div class="sec-head"><span class="sec-badge">HW</span><h2 class="sec-title">제출 과제 (총 100점) — 무엇을 풀어 내나<small>과제 1 BIOES 30 · 과제 2 스무딩 · 보간 40 · 과제 3 관계 추출 30</small></h2></div>
+
+<div class="warn"><b>제출 방법 정리</b>
+<ul class="ul">
+  <li><b>풀 파일</b> &mdash; <code>week07-lab.ipynb</code>(문제본, 폴더의 <code>7주차_실습_문제.ipynb</code>). <code>raise NotImplementedError(...)</code> 줄을 지우고 코드를 채운다. 정답본은 확인용이다</li>
+  <li><b>제출 대상</b> &mdash; 노트북 뒷부분 <b>[과제] 3문항</b>. 실습 1~3 셀은 위에서부터 실행만 하면 된다(과제가 실습의 변수 · 함수를 그대로 쓴다)</li>
+  <li><b>저장 상태</b> &mdash; <b>모든 셀을 위에서부터 실행해 출력이 보이는 상태</b>로 저장. 각 과제 아래 <b>채점 셀이 <code>통과!</code></b>를 출력해야 정답으로 인정된다</li>
+  <li><b>평가 기준</b> &mdash; 코드의 정확한 동작 <b>60%</b> · 결과 해석과 설명 <b>40%</b>. <b>코드만 있고 설명 셀이 비어 있으면 감점</b>된다</li>
+  <li><b>파일명</b> &mdash; 노트북 첫 셀은 <code>7주차_실습_학번_이름.ipynb</code>, 과제 셀은 <code>7주차_과제_학번_이름.ipynb</code>로 <b>서로 다르게</b> 적혀 있다. 지난주까지처럼 <code>7주차_실습_2026711051_박민지.ipynb</code>로 내되, 헷갈리면 교수님께 한 번 확인하는 것이 안전하다</li>
+</ul></div>
+
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>과제</th><th>구현할 것</th><th>채점 셀이 확인하는 것</th><th>정답 노트북 결과</th></tr></thead>
+  <tbody>
+    <tr><td><b>1 (30)</b><br>BIOES 변환기<br><small>7.1절</small></td><td><code>bio_to_bioes(tags)</code> &mdash; <code>bio_to_spans</code>로 스팬을 구한 뒤 한 토큰이면 <b>S-</b>, 여러 토큰이면 <b>B- … I- … E-</b><br><code>bioes_to_bio(tags)</code> &mdash; S-→B-, E-→I-, 나머지 그대로</td><td>테스트 5종(길이 유지 · 입력 그대로 반환 차단 · 4토큰 개체의 B/I/I/E) + GOLD_DATA 6문장 <b>왕복 변환</b></td><td><code>통과! 테스트 5종 + GOLD_DATA 6 문장의 왕복 변환까지 확인 완료</code></td></tr>
+    <tr><td><b>2-1 (40 중)</b><br>add-k 스윕<br><small>7.2절</small></td><td><code>sweep_add_k</code> &mdash; k ∈ {0.001, 0.01, 0.1, 0.5, 1.0}마다 <b>새로</b> <code>NgramLM(n=2, k=k)</code>를 학습해 학습 · 테스트 PPL 표 출력 · 반환</td><td>학습 PPL이 k에 따라 <b>단조 증가</b>, 테스트 PPL 최소가 <b>양 끝이 아닌 가운데</b></td><td>아래 표 · 최적 <b>k = 0.1</b></td></tr>
+    <tr><td><b>2-2</b><br>선형 보간<br><small>7.2절</small></td><td><code>InterpolatedLM.prob</code> &mdash; <code>self.tri.prob(word, context)</code> · <code>self.bi.prob(word, context[-1:])</code> · <code>self.uni.prob(word, ())</code>를 λ로 가중합</td><td>한 문맥에서 <b>어휘 전체 확률 합 = 1</b>(상수 반환 같은 가짜 구현 차단) · 문맥이 바뀌면 분포도 바뀜 · λ가 반영됨 · 3-gram 항이 살아 있음</td><td>P(boy | &lt;s&gt; the) = <b>0.43971</b>, 보간 PPL <b>8.72</b> vs 3-gram add-1 <b>13.90</b></td></tr>
+    <tr><td><b>3 (30)</b><br>관계 튜플 추출<br><small>7.3절</small></td><td><code>extend_rules()</code> &mdash; HOMEWORK_DOCS의 개체명을 GAZETTEER에, 새 규칙을 RELATION_RULES에 추가<br><code>extract_all(docs)</code> &mdash; 문장마다 <code>extract_relations</code></td><td>튜플 <b>6개 이상</b> · 중복 없음 · 관계 <b>3종류 이상</b> · 주어 <b>4개 이상</b> · 모두 RELATION_RULES에 있는 관계명 · 손으로 적은 튜플 금지 · <b>조사 제거</b></td><td>튜플 <b>9개 · 관계 9종</b> (아래)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 class="sub-title">과제 2-1 결과 표와 설명 셀에 쓸 내용</h3>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>k</th><th>0.001</th><th>0.01</th><th><b>0.1</b></th><th>0.5</th><th>1.0 (라플라스)</th></tr></thead>
+  <tbody>
+    <tr><td>학습 PPL</td><td>2.28</td><td>2.36</td><td><b>3.06</b></td><td>5.33</td><td>7.29</td></tr>
+    <tr><td>테스트 PPL</td><td>14.75</td><td>8.84</td><td><b>6.96</b></td><td>8.90</td><td>10.75</td></tr>
+  </tbody>
+</table></div>
+<div class="deep"><b>테스트 PPL이 U자가 되는 이유</b> &mdash; k가 <b>너무 작으면</b> 미관측 bigram에 확률이 거의 배정되지 않아 그 한 단어의 <span class="tex">-\log P</span>가 매우 커지고(과소 평활), k가 <b>너무 크면</b> 관측된 조합의 확률까지 균등 쪽으로 뭉개진다(과대 평활). 학습 PPL은 k가 커질수록 계속 나빠진다 &mdash; 학습 문장의 bigram은 모두 관측된 것이라 질량을 빼앗기기만 하기 때문이다. <b>라플라스(k=1)</b>는 이 코퍼스에서 최적 k의 10배라 테스트 PPL이 6.96 → 10.75로 1.5배 나빠진다 &mdash; 확인 질문 Q4의 숫자 근거다.</div>
+<div class="deep"><b>과제 2-2 — 보간이 3-gram add-1보다 나은 이유와 λ3 실험</b> &mdash; 3-gram add-1은 미관측 3-gram마다 확률을 <b>어휘 전체에 균등하게</b> 나눠 준다. 보간은 미관측 3-gram이라도 2-gram · 1-gram이 아는 정보(&lsquo;the 뒤에는 명사가 온다&rsquo;, &lsquo;park는 흔한 단어다&rsquo;)로 <b>단어마다 다른 확률</b>을 준다. 그래서 8.72 vs 13.90.
+<b>λ3를 키우면</b>(예: 0.05 · 0.15 · 0.8) 관측된 3-gram이 많은 학습 문장은 더 잘 맞지만, 미관측 3-gram이 섞인 테스트 문장에서는 하위 차수의 도움이 줄어 PPL이 다시 올라갈 것으로 예상된다 &mdash; 설명 셀에 &ldquo;직접 실험해 확인&rdquo;하라고 했으므로 <code>InterpolatedLM((0.05, 0.15, 0.8))</code> 등을 한 줄 돌려 숫자를 적으면 된다.</div>
+
+<h3 class="sub-title">과제 3 — 정답 노트북이 추가한 사전 · 규칙과 결과</h3>
+<pre class="code"><span class="cm"># GAZETTEER 추가</span>
+PS: 세종대왕 · 이해진 · 김소월     OG: 네이버 · 카카오     LC: 제주 · 평안북도 · 한산도
+<span class="cm"># RELATION_RULES 추가 (개체1, 개체2, 단서, 관계명)</span>
+(PS, DT, [창제], 창제연도)   (OG, PS, [설립], 설립자)    (OG, DT, [설립], 설립연도)
+(PS, DT, [태어난], 출생연도) (PS, LC, [태어난], 출생지)  <span class="cm"># 기존 '태어났'은 '태어난'에 안 걸린다</span>
+(PS, DT, [승리, 거두], 활동연도)   (PS, LC, [승리, 거두], 활동지)
+
+<span class="out">('세종대왕', '창제연도', '1443년')
+('네이버', '설립연도', '1999년')   ('네이버', '설립자', '이해진')
+('카카오', '본사_위치', '제주')
+('김소월', '출생연도', '1902년')   ('김소월', '출생지', '평안북도')
+('한국대학교', '위치', '서울')
+('이순신', '활동연도', '1592년')   ('이순신', '활동지', '한산도')
+통과!  관계 튜플 9개, 관계 종류 9개</span></pre>
+<div class="pit"><b>설명 셀에 쓸 FP · FN 거리</b>
+<ul class="ul">
+  <li><b>놓친 관계(FN)</b> &mdash; (세종대왕, <b>창제</b>, 훈민정음)은 못 잡는다. &lsquo;훈민정음&rsquo;이 어떤 유형의 사전에도 없어 <b>NER 단계에서 개체가 아니기</b> 때문이다. 기존 규칙만으로는 &lsquo;태어난 시인이다&rsquo;의 출생지 · 출생연도도 못 잡는다(<b>어미 변화</b> 태어났 ≠ 태어난)</li>
+  <li><b>오탐 가능성(FP)</b> &mdash; 과제 문장에서는 FP가 나오지 않지만, 단서가 <b>문장 어디에 있어도</b> 발동하므로 &ldquo;이순신은 서울에서 태어나 한산도에서 승리를 거두었다&rdquo;처럼 장소가 둘이면 (이순신, 활동지, <b>서울</b>)이라는 틀린 튜플까지 나온다. &lsquo;세종대왕&rsquo;이 잡힌 것도 사실은 사전의 <b>&lsquo;세종&rsquo;으로 시작</b>해서다 &mdash; 같은 규칙이면 &lsquo;세종시&rsquo;도 사람이 된다</li>
+  <li><b>어순에 따른 FN</b> &mdash; 개체1이 개체2보다 <b>앞에 나올 때만</b>(<code>s1 &lt; s2</code>) 튜플을 만들므로, &ldquo;이해진이 1999년 설립한 네이버&rdquo;처럼 사람이 기관보다 먼저 나오면 (OG, PS, [설립]) 규칙이 발동하지 않는다</li>
+  <li><b>정밀도는 높고 재현율은 낮은 이유</b> &mdash; 규칙에 맞는 문장만 잡으니 잡은 것은 대체로 맞지만, 사전에 없는 개체 · 처음 보는 어미 · 새 관계는 전부 놓친다(<a class="ext" href="#reapp">7.3.4</a>)</li>
+</ul></div>
+</section>
+
+<!-- ===================== 다음 주 ===================== -->
+<section class="sec" id="next">
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>8주차 — 중간고사 (10.19 ~ 10.25)</small></h2></div>
+<div class="note-box"><b>8주차는 중간고사</b>다. 1~7주차 범위이고, 이번 주 내용 중에서는 <b>BIO 태그 수 · 개체 단위 P/R/F1 계산 · N-gram 개수(L−N+1) · 마르코프 가정의 차수 · 바이그램 확률 계산 · add-k 분모 · 퍼플렉서티의 의미</b>가 손계산 문제로 나오기 좋다.
+<ul class="ul">
+  <li><b>9주차</b> &mdash; 질의 응답, 기계 번역, 그리고 대화 시스템. 이번 주의 NER과 정보 추출이 <b>질의응답의 첫 단계</b>로, 언어 모델이 <b>번역 후보의 자연스러움 판단</b>으로 다시 쓰인다</li>
+  <li><b>13주차</b> &mdash; 딥러닝 기반 개체명 인식(BiLSTM-CRF · BERT)으로 7.1이 이어진다</li>
+</ul></div>
+</section>
+
+<p class="src">자연어처리 7주차 (CHAPTER 7) 강의자료 정리 · 2026학년도 2학기<br>
+원본 교안 73페이지를 절 단위로 정리하고, <b>7주차 실습 정답 노트북을 직접 실행해 얻은 실제 출력값</b>을 각 절에 붙였다. 100문제의 절 구분(7.1.1 ~ 7.3.4)과 같은 번호를 사용해, 절 제목 옆 버튼으로 해당 절의 문제를 바로 풀 수 있다.</p>
+
+</div>
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive(){
+    var cur = '';
+    sections.forEach(function(s){ if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function(t){ t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      setTimeout(function(){
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+
+  /* ---- 개념 설명 말풍선 (형광펜 용어) ---- */
+  var terms = document.querySelectorAll('.term');
+  if (!terms.length) return;
+  var tip = document.createElement('div');
+  tip.id = 'tipbox';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  var current = null;
+
+  function hide() {
+    tip.classList.remove('on');
+    if (current) { current.classList.remove('on'); current = null; }
+  }
+  function show(el) {
+    tip.textContent = el.getAttribute('data-tip') || '';
+    tip.classList.add('on');
+    if (current && current !== el) current.classList.remove('on');
+    current = el;
+    el.classList.add('on');
+    var pad = 8;
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+    var top = r.top - t.height - 10;
+    if (top < pad) top = r.bottom + 10;
+    top = Math.min(top, window.innerHeight - t.height - pad);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+  terms.forEach(function (el) {
+    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+    el.addEventListener('mouseenter', function () { show(el); });
+    el.addEventListener('mouseleave', function () { if (current === el) hide(); });
+    el.addEventListener('focus', function () { show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (current === el && tip.classList.contains('on')) hide(); else show(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el); }
+      if (e.key === 'Escape') hide();
+    });
+  });
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide);
+});
+</script>
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script src="../vendor/katex/katex.min.js"></script>
+<script>
+// .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.
+// KaTeX를 못 불러온 경우에는 원문이 그대로 남아 최소한 읽을 수는 있게 둔다.
+(function () {
+  if (typeof katex === 'undefined') { return; }
+  document.querySelectorAll('.tex, .tex-d').forEach(function (el) {
+    try {
+      katex.render(el.textContent.trim(), el, {
+        displayMode: el.classList.contains('tex-d'),
+        throwOnError: false,
+        strict: false
+      });
+    } catch (e) { if (window.console) { console.error('KaTeX', e, el.textContent); } }
+  });
+})();
+</script>
+
+<script src="quiz/nlp-w07.js?v=1"></script>
+<script src="quiz/inline-quiz.js?v=2"></script>
+
+</body>
+</html>

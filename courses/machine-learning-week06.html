@@ -408,6 +408,53 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .svg-scroll svg{display:block;width:100%;min-width:560px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
 .figs > .note-box{margin:0}
+/* 7주차 추가: 심화 · 함정 · 복습 상자 (자연어처리 페이지와 같은 모양) */
+.deep{
+  background:#f7f5ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:13px 16px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.deep::before{
+  content:'🔎 한 걸음 더 — 심화 개념';display:table;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:8px;
+}
+.deep b{color:#2e1065}
+.deep .ul li{color:#3b2a6b}
+.deep .ul li::before{background:#6d28d9;opacity:.75}
+.deep .tbl-wrap{margin:9px 0 4px;background:#fff}
+.deep pre.code{margin:9px 0}
+.deep .fx{background:#fff;border-color:#d8cdf7;border-left-color:#6d28d9;margin:9px 0}
+.deep .fx-lab{color:#6d28d9}
+.deep .term{background:#ede7ff;color:#5b21b6;border-bottom-color:#6d28d9}
+.deep .term:hover,.deep .term.on{background:#ddd2fb}
+.pit{
+  background:#fff7ed;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:12.5px;line-height:1.8;color:#7c2d12;
+}
+.pit::before{
+  content:'⚠ 여기서 갈린다';display:table;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.pit b{color:#7c2d12}
+.pit .ul li{color:#7c2d12}
+.pit .ul li::before{background:#b45309;opacity:.8}
+.pit table{min-width:0}
+.pit .tbl-wrap{margin:8px 0 4px;background:#fff}
+.rv{background:var(--surface);border:1px solid var(--border);border-left:4px solid #0f766e;border-radius:var(--radius);margin:10px 0;overflow:hidden}
+.rv summary{cursor:pointer;list-style:none;padding:12px 15px;font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.6;display:flex;gap:9px;align-items:baseline}
+.rv summary::-webkit-details-marker{display:none}
+.rv summary i{font-style:normal;flex:none;font-size:11px;font-weight:800;color:#fff;background:#0f766e;border-radius:999px;padding:1px 8px}
+.rv summary::after{content:'답 보기 ▾';margin-left:auto;flex:none;font-size:11px;font-weight:700;color:#0f766e}
+.rv[open] summary::after{content:'접기 ▴'}
+.rv .ans{border-top:1px dashed #99e0d6;background:#f0fdfa;padding:12px 15px;font-size:13px;line-height:1.85;color:#134e4a}
+.rv .ans b{color:#0f3d3a}
+.rv .ans .ul li{color:#134e4a}
+.rv .ans .tbl-wrap{background:#fff;margin:8px 0}
+.rv .ans table{min-width:0}
+.rv .ans pre.code{margin:8px 0}
+.rv .one{display:block;background:#fff;border:1px solid #99e0d6;border-radius:7px;padding:7px 11px;margin-bottom:8px;font-weight:700;color:#0f3d3a}
+
 </style>
 </head>
 <body id="top">
@@ -422,6 +469,8 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <a href="#loss">6.4 데이터와 손실 함수</a>
   <a href="#backprop">6.5 오차 역전파</a>
   <a href="#procedure">6.6 학습 절차와 평가</a>
+  <a href="#v2-structure">개정① 구조</a>
+  <a href="#v2-train">개정② 학습</a>
   <a href="#lab">실습 노트북</a>
   <a href="#summary">핵심 정리</a>
   <a href="#next">다음 주 예고</a>
@@ -436,13 +485,14 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <a href="machine-learning-week04.html">4주차 · 로지스틱 회귀</a>
   <a href="machine-learning-week05.html">5주차 · 퍼셉트론</a>
   <span class="cur">6주차 · 다층 퍼셉트론</span>
+  <a href="machine-learning-week07.html">7주차 · K-NN · XAI</a>
 </div>
 
 <section class="hero">
   <p class="kicker">6주차 · 10.8 · 2026-2학기</p>
   <h1>06. 다층 퍼셉트론 — 은닉층 하나가 바꾼 것</h1>
   <p>5주차의 퍼셉트론은 <b>직선 하나로 공간을 가르는 기계</b>였고, 그래서 XOR 앞에서 멈췄다. 이번 주는 그 사이에 <b>은닉층</b>을 넣어 비선형 경계를 만들고, <b>손실 함수 → 오차 역전파 → 경사하강</b>으로 그 층들을 어떻게 학습시키는지를 식으로 따라간다.</p>
-  <div class="chips"><span class="chip">최승호 교수</span><span class="chip">구조 22p · 학습 19p</span><span class="chip">슬라이드 35장</span><span class="chip">100문제 6.1~6.6</span><span class="chip">MNIST · Fashion-MNIST</span><span class="chip">ReLU · Softmax</span><span class="chip">역전파</span></div>
+  <div class="chips"><span class="chip">최승호 교수</span><span class="chip">구조 29p · 학습 31p (10/11 개정판)</span><span class="chip">슬라이드 35장</span><span class="chip">100문제 6.1~6.6</span><span class="chip">MNIST · Fashion-MNIST</span><span class="chip">ReLU · Softmax</span><span class="chip">역전파</span></div>
 </section>
 
 <div class="legend">
@@ -452,8 +502,15 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고(← → 로 넘기기), <span class="hi">노란 형광펜</span>은 꼭 기억할 문장, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선</span>은 누르면 뜻이 뜹니다.</p>
 </div>
 
+<div class="warn"><b>10/11 교안 · 실습 개정판이 올라왔다</b> &mdash; 두 교안이 &lsquo;<b>2026-2학기 · PyTorch 2.x 기준 개정판</b>&rsquo;으로 바뀌었다(구조와 개념 22p → <b>29p</b>, 학습 19p → <b>31p</b>). 실습도 TensorFlow판에서 <b>PyTorch판 두 개 + 정답 해설 README</b>로 교체되었다.
+<ul class="ul">
+  <li><b>6.1 ~ 6.6</b>은 구판을 바탕으로 정리한 내용이라 그대로 두었다 &mdash; 개념(XOR · 순전파 · 손실 · 역전파)은 개정판에서도 같다. 절 제목 옆 쪽수는 <b>구판 기준</b>이다</li>
+  <li>개정판에서 <b>새로 들어온 내용</b>은 <a class="ext" href="#v2-structure">개정① 구조</a> · <a class="ext" href="#v2-train">개정② 학습</a> 두 절에 모았다 &mdash; 활성화 함수 비교 · 보편 근사 정리 · 초기화 · 잔차 블록 · FFN/MoE/MLP-Mixer/KAN · 데이터 분할 · 미니배치 · 모멘텀/Adam/AdamW · 학습률 스케줄 · BN/LN · 드롭아웃 · AMP · 실습 결과</li>
+  <li>100문제는 바뀌지 않았다(파일 동일)</li>
+</ul></div>
+
 <section class="sec" id="map">
-  <div class="sec-head"><span class="sec-badge">MAP</span><h2 class="sec-title">한눈에 보기<small>교안 두 개 — &lsquo;구조와 개념&rsquo;(22p) + &lsquo;학습&rsquo;(19p)</small></h2></div>
+  <div class="sec-head"><span class="sec-badge">MAP</span><h2 class="sec-title">한눈에 보기<small>교안 두 개 — &lsquo;구조와 개념&rsquo; + &lsquo;학습&rsquo; · 10/11 PyTorch 2.x 개정판(29p + 31p)</small></h2></div>
 
 <div class="oneline">
   <p><b>이번 주 한 줄 요약</b></p>
@@ -473,7 +530,9 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <a href="#loss"><b>6.4 데이터와 손실 함수</b><span>MSE · BCE · CCE를 언제 쓰는가</span></a>
   <a href="#backprop"><b>6.5 오차 역전파</b><span>연쇄법칙 · Local Gradient · 가중치 갱신</span></a>
   <a href="#procedure"><b>6.6 학습 절차와 평가</b><span>순전파 → 손실 → 역전파 반복 · R² · 혼동 행렬</span></a>
-  <a href="#lab"><b>실습 노트북</b><span>MLP 실습 1 · 2</span></a>
+  <a href="#v2-structure"><b>개정① 구조와 개념</b><span>MNIST 784-600-500-10 · GELU/SiLU · UAT · He 초기화 · 잔차 블록 · FFN · MoE · Mixer · KAN</span></a>
+  <a href="#v2-train"><b>개정② 학습</b><span>데이터 분할 · 미니배치 · 소실/폭주 · AdamW · OneCycle · BN/LN · 드롭아웃 · AMP · 98.52%</span></a>
+  <a href="#lab"><b>실습 노트북</b><span>PyTorch 실습 1(XOR) · 2(MNIST) · TODO 정답표</span></a>
   <a href="#summary"><b>핵심 정리</b><span>시험 전에 이것만은</span></a>
 </div>
 </section>
@@ -484,18 +543,18 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <div class="doc">
     <div class="doc-ico"><span>📘</span>PDF</div>
     <div class="doc-main">
-      <a class="doc-open" href="pdf-viewer.html?doc=ml-w06-structure">다층 퍼셉트론의 구조와 개념</a>
-      <p>퍼셉트론 복습 · XOR 게이트 · MLP의 구조와 순전파 · 입력층/은닉층/출력층 · ReLU · Softmax · <b>22페이지</b></p>
+      <a class="doc-open" href="pdf-viewer.html?doc=ml-w06-structure-v2">다층 퍼셉트론의 구조와 개념 — 개정판</a>
+      <p>퍼셉트론 → XOR → MLP → 순전파 · 활성화 함수 · 최신 MLP 구조(FFN/MoE · MLP-Mixer · KAN) · <b>29페이지</b> · <a class="ext" href="pdf-viewer.html?doc=ml-w06-structure">구판 22p</a></p>
     </div>
-    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-mlp-structure.pdf" download="기계학습특론_6주차_다층퍼셉트론_구조와개념.pdf">⬇ 다운로드</a>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-mlp-structure-v2.pdf" download="기계학습특론_6주차_다층퍼셉트론_구조와개념_개정판.pdf">⬇ 다운로드</a>
   </div>
   <div class="doc">
     <div class="doc-ico"><span>📗</span>PDF</div>
     <div class="doc-main">
-      <a class="doc-open" href="pdf-viewer.html?doc=ml-w06-training">다층 퍼셉트론의 학습</a>
-      <p>학습 데이터 · 손실 함수(MSE · BCE · CCE) · 오차 역전파와 연쇄법칙 · 학습 절차 · 성능 평가 지표 · <b>19페이지</b></p>
+      <a class="doc-open" href="pdf-viewer.html?doc=ml-w06-training-v2">다층 퍼셉트론의 학습 — 개정판</a>
+      <p>데이터 · 손실 함수 · 경사하강법 · 오차 역전파 · 최적화와 정규화 · 성능 평가 지표 · PyTorch 실습 · <b>31페이지</b> · <a class="ext" href="pdf-viewer.html?doc=ml-w06-training">구판 19p</a></p>
     </div>
-    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-mlp-training.pdf" download="기계학습특론_6주차_다층퍼셉트론_학습.pdf">⬇ 다운로드</a>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-mlp-training-v2.pdf" download="기계학습특론_6주차_다층퍼셉트론_학습_개정판.pdf">⬇ 다운로드</a>
   </div>
   <div class="doc">
     <div class="doc-ico"><span>📝</span>HTML</div>
@@ -508,18 +567,26 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <div class="doc">
     <div class="doc-ico"><span>🐍</span>IPYNB</div>
     <div class="doc-main">
-      <a class="doc-open" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab1-mlp.ipynb" download="MLP_실습1.ipynb">MLP 실습 1</a>
-      <p>다층 퍼셉트론 구현 실습 — 폴더에는 <b>7주차</b> 이름으로 올라와 있지만 6주차 내용과 이어집니다</p>
+      <a class="doc-open" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab1-xor-pytorch.ipynb" download="6주차_MLP_실습1_XOR_PyTorch.ipynb">MLP 실습 1 — XOR (PyTorch)</a>
+      <p>NAND · OR · AND 손 연결 · 순전파 · 역전파 손 구현 · autograd 검증 · nn.Sequential · 초기화 비교 · <b>정답본</b>(실행 결과 포함)</p>
     </div>
-    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab1-mlp.ipynb" download="MLP_실습1.ipynb">⬇ 다운로드</a>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab1-xor-pytorch.ipynb" download="6주차_MLP_실습1_XOR_PyTorch.ipynb">⬇ 다운로드</a>
   </div>
   <div class="doc">
     <div class="doc-ico"><span>🐍</span>IPYNB</div>
     <div class="doc-main">
-      <a class="doc-open" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab2-mlp.ipynb" download="MLP_실습2.ipynb">MLP 실습 2</a>
-      <p>이어지는 실습 (9.6MB — 실행 결과 포함)</p>
+      <a class="doc-open" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab2-mnist-pytorch.ipynb" download="6주차_MLP_실습2_MNIST_PyTorch.ipynb">MLP 실습 2 — MNIST (PyTorch)</a>
+      <p>784-600-500-10 · AdamW + OneCycle · 혼동 행렬 · 구성 비교 A~D · AMP · <b>정답본</b>(실행 결과 포함, 테스트 98.52%)</p>
     </div>
-    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab2-mlp.ipynb" download="MLP_실습2.ipynb">⬇ 다운로드</a>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab2-mnist-pytorch.ipynb" download="6주차_MLP_실습2_MNIST_PyTorch.ipynb">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>✅</span>MD</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab-solution-readme.md" download="6주차_실습_정답_README.md">실습 정답 해설 README</a>
+      <p>TODO마다 정답 · 채점 포인트 · 흔한 오답 &mdash; <a class="ext" href="#lab">실습 절</a>에 표로 옮겨 두었다 · 구버전 TensorFlow 노트북도 실습 절에 있다</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab-solution-readme.md" download="6주차_실습_정답_README.md">⬇ 다운로드</a>
   </div>
 </div>
 </section>
@@ -906,15 +973,352 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </div>
 </section>
 
+<!-- ===================== 개정판 ① 구조 ===================== -->
+<section class="sec" id="v2-structure">
+  <div class="sec-head"><span class="sec-badge">개정①</span><h2 class="sec-title">개정판에서 새로 들어온 내용 ① — 구조와 개념<small>구조 개정판 12~27p · 활성화 비교 · 깊이와 이론 · 현대 MLP 블록 · 최신 동향</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">개정판 슬라이드 모아보기 <span>12 · 13 · 14 · 15 · 16 · 17 · 18 · 19 · 20 · 21 · 22 · 23 · 24 · 25 · 26 · 27p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-a12-mnist-mlp.jpg" alt="구조 개정판 12p — MNIST 분류 MLP 784-600-500-10"><figcaption><b>개정 12p</b> MNIST MLP 784 → 600 → 500 → 10</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-a13-input-layer.jpg" alt="구조 개정판 13p — 입력층: 이미지를 벡터로, 레이블을 원-핫으로"><figcaption><b>개정 13p</b> 입력층 &mdash; 펼치기 · 표준화 · 원-핫</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-a14-hidden-node.jpg" alt="구조 개정판 14p — 은닉층 노드 하나의 동작"><figcaption><b>개정 14p</b> 은닉층 노드 하나의 동작</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-a15-act-compare.jpg" alt="구조 개정판 15p — 활성화 함수 비교: 고전 vs 현대"><figcaption><b>개정 15p</b> 활성화 함수 &mdash; 고전 vs 현대</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-a16-vanishing.jpg" alt="구조 개정판 16p — 활성화 함수의 도함수와 기울기 소실"><figcaption><b>개정 16p</b> 도함수와 기울기 소실</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-a17-softmax.jpg" alt="구조 개정판 17p — 출력층 소프트맥스"><figcaption><b>개정 17p</b> 출력층 &mdash; 소프트맥스</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-a18-onehot-result.jpg" alt="구조 개정판 18p — 원-핫과 분류 결과 해석"><figcaption><b>개정 18p</b> 원-핫과 분류 결과 해석</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-a19-deep-mlp.jpg" alt="구조 개정판 19p — 다수의 은닉층과 파라미터 수"><figcaption><b>개정 19p</b> 깊이 · 폭과 파라미터 수</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-a20-uat.jpg" alt="구조 개정판 20p — 보편 근사 정리"><figcaption><b>개정 20p</b> 보편 근사 정리</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-a21-init.jpg" alt="구조 개정판 21p — 가중치 초기화 Xavier He"><figcaption><b>개정 21p</b> 가중치 초기화 &mdash; Xavier · He</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-a22-residual-block.jpg" alt="구조 개정판 22p — 잔차 연결 · 정규화 · 드롭아웃을 갖춘 MLP 블록"><figcaption><b>개정 22p</b> 잔차 · 정규화 · 드롭아웃 MLP 블록</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-a23-ffn-swiglu.jpg" alt="구조 개정판 23p — 트랜스포머 안의 MLP FFN과 SwiGLU"><figcaption><b>개정 23p</b> 트랜스포머 안의 MLP &mdash; FFN · SwiGLU</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-a24-moe.jpg" alt="구조 개정판 24p — 전문가 혼합 MoE"><figcaption><b>개정 24p</b> 전문가 혼합(MoE)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-a25-mlp-mixer.jpg" alt="구조 개정판 25p — MLP-Mixer"><figcaption><b>개정 25p</b> MLP-Mixer</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-a26-kan.jpg" alt="구조 개정판 26p — KAN"><figcaption><b>개정 26p</b> KAN</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-a27-lab1-guide.jpg" alt="구조 개정판 27p — 실습 1 안내 PyTorch XOR"><figcaption><b>개정 27p</b> 실습 1 안내 &mdash; PyTorch XOR</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>MNIST MLP의 입력층 · 은닉층 · 출력층 (12~14 · 17 · 18p)</h3>
+  <p>구판의 MNIST 예시가 <b>784 → 600 → 500 → 10</b>(실습 2와 같은 구조)으로 구체화되었다.</p>
+  <div class="tex-d">\text{파라미터 수}=784\cdot600+600\;+\;600\cdot500+500\;+\;500\cdot10+10=776{,}510</div>
+  <ul class="ul">
+    <li><b>입력층</b> &mdash; 28×28 이미지를 784차원 벡터로 <b>펼친다(flatten)</b>. 이때 <b>픽셀의 2차원 위치 정보는 버려진다</b>(CNN이 해결, 10주차). 픽셀을 255로 나눈 뒤 MNIST 평균 0.1307 · 표준편차 0.3081로 <b>표준화</b>하면 가중합의 크기가 안정돼 학습이 빨라진다. 입력층은 계산하지 않고 값을 <b>전달만</b> 한다</li>
+    <li><b>은닉층 노드 하나</b> &mdash; <span class="tex">z_j=\sum_i w_{ji}h_i+b_j</span> 뒤에 활성화(주로 <b>ReLU 계열</b>). 노드 수(폭)는 하이퍼파라미터 &mdash; 넓을수록 표현력 ↑, 파라미터 · 과적합 위험 ↑</li>
+    <li><b>출력층</b> &mdash; 소프트맥스로 10개 클래스 확률 → argmax로 분류. 회귀 → 항등, 이진 → 시그모이드, 다중 → 소프트맥스. <span class="hi">PyTorch의 <code>nn.CrossEntropyLoss</code>는 로짓을 받아 내부에서 log-softmax를 계산하므로, 모델 끝에 Softmax를 두지 않는다</span>(수치 안정성 · 이중 소프트맥스 방지)</li>
+    <li><b>원-핫과 결과 해석</b>(18p) &mdash; 정답 확률 0.80이면 손실 <span class="tex">-\ln0.80\approx0.22</span>(확신 있게 맞춤), 정답 확률 0.30에 argmax가 8이면 <span class="tex">-\ln0.30\approx1.20</span>(1과 8을 혼동). 학습의 목표 = 정답 클래스 확률 <span class="tex">\hat y_y</span>를 1에 가깝게 = <span class="tex">-\ln\hat y_y</span> 최소화</li>
+  </ul>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>활성화 함수 — 고전 vs 현대, 그리고 기울기 소실 (15 · 16p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>함수</th><th>식</th><th>특징 / 주 사용처</th></tr></thead>
+    <tbody>
+      <tr><td>Sigmoid</td><td><span class="tex">1/(1+e^{-z})</span></td><td>출력 (0, 1) &mdash; 이진 분류 출력층</td></tr>
+      <tr><td>tanh</td><td><span class="tex">(e^z-e^{-z})/(e^z+e^{-z})</span></td><td>출력 (−1, 1) &mdash; RNN 게이트</td></tr>
+      <tr><td><b>ReLU</b></td><td><span class="tex">\max(0,z)</span></td><td><b>은닉층 기본값</b> &mdash; dying ReLU 문제</td></tr>
+      <tr><td>LeakyReLU</td><td><span class="tex">\max(\alpha z,z)</span></td><td>음수 영역에 작은 기울기 α</td></tr>
+      <tr><td><b>GELU</b></td><td><span class="tex">z\cdot\Phi(z)</span></td><td>BERT · GPT-2/3 · ViT</td></tr>
+      <tr><td><b>SiLU / Swish</b></td><td><span class="tex">z\cdot\sigma(z)</span></td><td>EfficientNet · LLaMA(SwiGLU)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>시그모이드 · tanh는 <span class="tex">|z|</span>가 크면 기울기가 0에 가까워지는 <b>포화</b> 때문에 깊은 망에서 학습이 정체된다. 역전파는 도함수를 층마다 곱하는데 <span class="tex">\sigma'(z)\le1/4</span>이면 10층만 지나도 <span class="tex">(1/4)^{10}\approx10^{-6}</span> &mdash; 이것이 <b>기울기 소실</b>이고, 1990~2000년대 &lsquo;깊은 신경망은 학습이 안 된다&rsquo;의 주범이었다. 해결은 <b>ReLU(2011) · 초기화(2010/2015) · BatchNorm(2015) · 잔차 연결(2015)</b>. <span class="tex">\mathrm{ReLU}'(z)\in\{0,1\}</span>이라 활성 노드는 기울기를 그대로 통과시키고, GELU는 음수 영역에서도 0이 아닌 기울기로 dying ReLU를 완화한다 &mdash; 실습 1 §3에서 <b>GELU 10/10 성공, ReLU 6/10</b>.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>깊이와 폭, 그리고 보편 근사 정리 (19 · 20p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>구조 (MNIST)</th><th>파라미터 수</th><th>비고</th></tr></thead>
+    <tbody>
+      <tr><td>784-10 (로지스틱 회귀)</td><td>7,850</td><td>선형 분류기, 약 92%</td></tr>
+      <tr><td><b>784-600-500-10</b></td><td><b>776,510</b></td><td>실습 2 기본, 약 98.5%</td></tr>
+      <tr><td>784-1024-1024-10</td><td>1,863,690</td><td>폭 확장</td></tr>
+      <tr><td>784-256×8-10</td><td>664,074</td><td>깊이 확장(8층) &mdash; 파라미터는 더 적다</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>층 사이 파라미터 수 = <span class="tex">n_{k-1}\cdot n_k+n_k</span>. 깊이의 이점은 <b>같은 파라미터로 더 복잡한 함수(계층적 특징)</b>를 표현하는 것(낮은 층은 단순 패턴, 높은 층은 조합), 어려움은 <b>기울기 소실 · 폭주와 최적화 난이도</b>다.</p>
+  <div class="fx">
+    <p class="fx-lab">보편 근사 정리 (Universal Approximation Theorem, 20p)</p>
+    <div class="tex-d">\forall\varepsilon&gt;0\;\;\exists N,\mathbf W,\mathbf b:\;\sup_{\mathbf x\in K}\Bigl|g(\mathbf x)-\sum_{j=1}^{N}v_j\,f(\mathbf w_j^\top\mathbf x+b_j)\Bigr|&lt;\varepsilon</div>
+    <p class="fx-note"><b>은닉층 1개짜리 MLP도 충분히 넓으면</b> 콤팩트 집합 위의 임의의 연속 함수를 원하는 정밀도로 근사할 수 있다. 고전 결과 &mdash; Cybenko(1989, 시그모이드) · Hornik(1991, 임의의 비상수 · 유계 · 연속 활성화) · Leshno 외(1993, 비다항식 활성화면 충분, ReLU 포함).</p>
+  </div>
+  <div class="cards">
+    <div class="card2"><b>정리가 말하지 않는 것</b><ul class="ul"><li>필요한 폭 N이 얼마나 큰가 &mdash; 최악의 경우 차원에 <b>지수적</b></li><li>그 가중치를 경사하강법이 <b>찾을 수 있는가</b>(최적화)</li><li>새 데이터에 <b>일반화</b>되는가</li></ul></div>
+    <div class="card2"><b>깊이의 이점 (현대 결과)</b><ul class="ul"><li><b>깊이 분리 정리</b>(Telgarsky 2016; Eldan &amp; Shamir 2016) &mdash; 어떤 함수는 깊은 망은 작게, 얕은 망은 지수적으로 넓어야 표현</li><li>폭 제한 UAT &mdash; 폭 ≥ d+1이면 깊이만으로도 보편 근사(Lu 외 2017은 d+4, 최소 폭 d+1은 Park 외 2021)</li></ul></div>
+  </div>
+  <p><span class="hi">결론: &lsquo;표현할 수 있다&rsquo;(UAT)와 &lsquo;학습해서 잘 맞춘다&rsquo;(최적화 + 일반화)는 다른 문제다</span> &mdash; 학습 교안(6-2)이 후자를 다룬다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>현대 기법 ① 가중치 초기화 — Xavier · He (21p)</h3>
+  <div class="tex-d">w\sim\mathcal N\!\left(0,\tfrac{2}{n_{in}}\right)\;(\text{He}),\qquad w\sim\mathcal U\!\left(\pm\sqrt{\tfrac{6}{n_{in}+n_{out}}}\right)\;(\text{Xavier})</div>
+  <ul class="ul">
+    <li><b>Xavier/Glorot(2010)</b> &mdash; 시그모이드 · tanh용, 입력 · 출력 노드 수의 평균으로 분산 조절</li>
+    <li><b>He/Kaiming(2015)</b> &mdash; ReLU는 절반을 0으로 만들므로 분산을 2배로 &rarr; <span class="tex">\mathrm{Var}(w)=2/n_{in}</span></li>
+    <li>PyTorch &mdash; <code>nn.init.kaiming_normal_(W, nonlinearity='relu')</code>, <code>nn.init.xavier_uniform_(W)</code>. <code>nn.Linear</code> 기본값은 Kaiming-uniform(a=√5) 변형</li>
+    <li><b>0으로 초기화는 절대 금지</b> &mdash; 모든 노드가 같은 값 · 같은 기울기를 가져 &lsquo;대칭&rsquo;이 깨지지 않는다</li>
+  </ul>
+  <p>실습 1 §3의 막대그래프 &mdash; 같은 구조에서 XOR 학습 성공률(10개 시드)이 <b>Sigmoid+기본 50% · Sigmoid+Xavier 100% · ReLU+He+SGD 60% · ReLU+He+Adam 50% · GELU+He+AdamW 100%</b>. 초기화 · 활성화 · 최적화기에 따라 <b>50% ↔ 100%</b>로 갈린다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>He 초기화의 &lsquo;2&rsquo;는 어디서 오나</h3>
+  <p>층을 지날 때 신호의 분산이 유지되려면 <span class="tex">n_{in}\cdot\mathrm{Var}(w)\cdot\mathbb E[h^2]\approx\mathrm{Var}(z_{\text{이전}})</span>이어야 한다. 입력이 평균 0인 대칭 분포일 때 ReLU를 통과하면 <b>음수 절반이 0</b>이 되어 <span class="tex">\mathbb E[h^2]=\tfrac12\mathrm{Var}(z)</span>로 반토막 난다. 이것을 메우려면 <span class="tex">n_{in}\cdot\mathrm{Var}(w)\cdot\tfrac12=1</span>, 즉 <span class="tex">\mathrm{Var}(w)=2/n_{in}</span>. 784 입력이면 표준편차 <span class="tex">\sqrt{2/784}\approx0.0505</span>다. 이 값보다 크면 층마다 신호가 커져 <b>폭주</b>, 작으면 줄어 <b>소실</b>한다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>현대 기법 ② 잔차 · 정규화 · 드롭아웃을 갖춘 MLP 블록 (22p)</h3>
+  <p>&lsquo;깊게 쌓아도 학습되는&rsquo; 블록 &mdash; ResNet(2015)과 트랜스포머(2017)가 정착시킨 표준 설계다. 입력 h → <b>LayerNorm/BatchNorm</b> → <b>Linear(n → 4n)</b> → <b>GELU/SiLU</b> → <b>Dropout(p)</b> → <b>Linear(4n → n)</b> → <b>⊕ 잔차 합 h + F(h)</b>.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>부품</th><th>하는 일</th></tr></thead>
+    <tbody>
+      <tr><td><b>잔차 연결</b> (2015)</td><td><span class="tex">h_{k+1}=h_k+F(h_k)</span> &mdash; 기울기가 <b>항등 경로로 직접</b> 전달돼 100층 이상도 학습. 블록은 &lsquo;변화량&rsquo;만 배우면 된다</td></tr>
+      <tr><td><b>정규화</b> (BN 2015 · LN 2016)</td><td>각 층 입력 분포를 평균 0 · 분산 1로 재조정 &mdash; 큰 학습률에도 안정, 초기화 민감도 ↓. 트랜스포머는 <b>Pre-LN</b> 배치가 표준</td></tr>
+      <tr><td><b>드롭아웃</b> (2014)</td><td>학습 시 노드를 확률 p로 무작위로 끈다 &mdash; 특정 노드 의존을 막아 과적합 완화. 추론 시 모든 노드 사용(<code>model.eval()</code>)</td></tr>
+      <tr><td><b>확장 비율 4×</b></td><td>중간 폭을 4배로 넓혔다 줄이는 &lsquo;역병목(inverted bottleneck)&rsquo; &mdash; GPT 계열 FFN이 정확히 이 형태(LLaMA는 SwiGLU 변형). 파라미터의 약 2/3가 여기에 있다</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>실습 2 §6 실험 D(GELU + BatchNorm + Dropout 0.2 + AdamW)는 <b>3에폭 만에 검증 정확도 98.0%</b>.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>최신 동향 — 모두 &lsquo;선형 + 비선형 블록&rsquo;의 변주 (23~26p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>동향</th><th>핵심</th></tr></thead>
+    <tbody>
+      <tr><td><b>트랜스포머의 FFN · SwiGLU</b> (23p)</td><td>LLM 파라미터의 약 2/3는 어텐션이 아니라 토큰별로 독립 적용되는 <b>위치별 MLP(FFN)</b>에 있다. 원래 <span class="tex">\mathrm{FFN}(x)=W_2\,\mathrm{ReLU}(W_1x+b_1)+b_2</span>, 은닉 폭 4·d_model → GELU(BERT 2018 · GPT-2 2019) → <b>GLU 변형</b>(Shazeer 2020): 두 선형 변환의 원소별 곱(게이트). SwiGLU는 PaLM · LLaMA 1~3 · Qwen · Mistral의 표준. 행렬이 3개라 폭을 8/3·d 안팎으로 줄인다(LLaMA-3 8B는 d=4096, FFN 14336 = 3.5d). 해석 &mdash; FFN은 <b>키-값 메모리</b>(Geva 외 2021)</td></tr>
+      <tr><td><b>전문가 혼합 MoE</b> (24p)</td><td>FFN을 여러 개(전문가) 두고 <b>라우터(softmax)가 토큰마다 Top-k(k=2)만</b> 계산 &mdash; 파라미터는 크게, 계산량은 작게(<b>희소 활성화</b>). Mixtral 8×7B는 총 47B · 활성 13B. Switch Transformer · GLaM(2021), Mixtral(2023), DeepSeek-V2/V3(2024), Llama 4(2025). 이슈 &mdash; 부하 불균형(보조 손실 · DeepSeek의 손실 없는 균형), 이산 라우팅은 미분 불가 → top-k 게이트값으로 우회 학습. 본질은 &lsquo;MLP 여러 개 + 가중합&rsquo;</td></tr>
+      <tr><td><b>MLP-Mixer</b> (25p)</td><td>Tolstikhin 외(NeurIPS 2021) &mdash; 이미지를 16×16 패치 S개로 나눠 S × C 행렬로 만들고, <b>Token-mixing MLP</b>(전치 후 패치 축, 공간 정보 혼합)와 <b>Channel-mixing MLP</b>(채널 축 = 1×1 합성곱)를 번갈아 적용. 합성곱 · 어텐션 없이 ImageNet에서 경쟁력. 시사점 &mdash; 대규모 데이터에서는 귀납 편향보다 &lsquo;단순한 구조 + 스케일&rsquo;이 중요할 수 있다. 한계 &mdash; 해상도(패치 수) 고정, 소규모 데이터에서는 CNN · ViT에 뒤짐</td></tr>
+      <tr><td><b>KAN</b> (26p)</td><td>Liu 외(2024) Kolmogorov–Arnold Networks &mdash; 노드가 아니라 <b>엣지에 학습 가능한 1차원 함수(B-스플라인)</b>를 두고 노드는 합만 한다. 근거는 UAT 대신 <b>Kolmogorov–Arnold 표현 정리</b>. 장점: 매개변수 효율 · 해석 가능성(기호 회귀), 단점: 학습이 느리고 대규모 과제 우위 불확실 &mdash; &lsquo;KAN or MLP: A Fairer Comparison&rsquo;(Yu 외 2024)은 기호 회귀 외에는 MLP 우세를 보고</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>26p의 교훈 &mdash; <span class="hi">&lsquo;어디에 비선형성을 두는가&rsquo;는 여전히 열린 설계 문제이고, 6주차의 MLP 정의를 정확히 이해해야 이런 변형을 읽고 평가할 수 있다.</span></p>
+</div>
+</section>
+
+<!-- ===================== 개정판 ② 학습 ===================== -->
+<section class="sec" id="v2-train">
+  <div class="sec-head"><span class="sec-badge">개정②</span><h2 class="sec-title">개정판에서 새로 들어온 내용 ② — 학습<small>학습 개정판 4 · 6 · 11 · 13 · 18~29p · 데이터 분할부터 최신 동향까지</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">개정판 슬라이드 모아보기 <span>4 · 6 · 11 · 13 · 18 · 19 · 20 · 21 · 22 · 23 · 24 · 25 · 26 · 27 · 28 · 29p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-b04-erm.jpg" alt="학습 개정판 4p — 경험적 위험 최소화"><figcaption><b>개정 4p</b> 학습 = 경험적 위험 최소화</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-b06-split.jpg" alt="학습 개정판 6p — 데이터 분할과 전처리"><figcaption><b>개정 6p</b> 훈련 · 검증 · 테스트 분할</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-b11-loss-exercise.jpg" alt="학습 개정판 11p — 손실 함수 연습 문제"><figcaption><b>개정 11p</b> 손실 함수 연습 문제</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-b13-minibatch.jpg" alt="학습 개정판 13p — 미니배치 SGD"><figcaption><b>개정 13p</b> 미니배치 SGD</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-b18-autograd.jpg" alt="학습 개정판 18p — autograd 일치 확인"><figcaption><b>개정 18p</b> 손계산 vs autograd</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-b19-vanish-explode.jpg" alt="학습 개정판 19p — 기울기 소실과 폭주"><figcaption><b>개정 19p</b> 기울기 소실과 폭주</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-b20-momentum.jpg" alt="학습 개정판 20p — 모멘텀"><figcaption><b>개정 20p</b> 모멘텀</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-b21-adam.jpg" alt="학습 개정판 21p — Adam과 AdamW"><figcaption><b>개정 21p</b> Adam과 AdamW</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-b22-lr-schedule.jpg" alt="학습 개정판 22p — 학습률 스케줄"><figcaption><b>개정 22p</b> 학습률 스케줄</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-b23-norm.jpg" alt="학습 개정판 23p — 배치 정규화 · 레이어 정규화"><figcaption><b>개정 23p</b> BatchNorm · LayerNorm</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-b24-overfit.jpg" alt="학습 개정판 24p — 과적합 제어"><figcaption><b>개정 24p</b> 과적합 제어</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-b25-clip-amp.jpg" alt="학습 개정판 25p — 기울기 클리핑 · 혼합 정밀도 · torch.compile"><figcaption><b>개정 25p</b> 클리핑 · AMP · torch.compile</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-b26-metrics.jpg" alt="학습 개정판 26p — 평가 지표"><figcaption><b>개정 26p</b> 평가 지표 · 보정</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-b27-lab2-result.jpg" alt="학습 개정판 27p — 실습 2 결과"><figcaption><b>개정 27p</b> 실습 2 결과 &mdash; 98.52%</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-b28-train-loop.jpg" alt="학습 개정판 28p — PyTorch 학습 루프"><figcaption><b>개정 28p</b> PyTorch 학습 루프 한 화면</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml6v2-b29-trends.jpg" alt="학습 개정판 29p — 학습 알고리즘 연구의 현재"><figcaption><b>개정 29p</b> 최신 동향</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>학습 = 경험적 위험 최소화 · 데이터 분할 (3 · 4 · 6p)</h3>
+  <p>학습은 <b>훈련 데이터의 평균 손실</b> <span class="tex">W^*=\arg\min_W\frac1N\sum_i\ell(y_i,\hat y_i)</span>를 최소화하는 파라미터를 찾는 일이고, 세 요소로 나뉜다 &mdash; <b>① 데이터</b>(분할 · 표준화 · 증강) <b>② 모델 + 손실 함수</b>(미분 가능해야 함) <b>③ 최적화 알고리즘</b>(경사하강, 기울기는 역전파). 2-2-2 예시의 파라미터는 12개, MNIST MLP는 776,510개다.</p>
+  <ul class="ul">
+    <li>훈련 손실이 작아도 새 데이터에서 잘 맞는다는 보장은 없다(<b>일반화</b>) &rarr; 검증 데이터로 감시, 정규화 · 조기 종료로 제어</li>
+    <li>MLP의 손실 지형은 <b>비볼록</b> &rarr; 전역 최적 보장은 없지만 실제로는 &lsquo;충분히 좋은&rsquo; 국소해에 잘 도달한다(초기화 · 최적화기가 중요)</li>
+  </ul>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>MNIST 실습 2 분할</th><th>정하는 것</th><th>주의</th></tr></thead>
+    <tbody>
+      <tr><td><b>훈련 54,000</b></td><td>파라미터 W</td><td>매 에폭 섞어서(shuffle) 미니배치 구성. 손실이 계속 내려가는 것이 정상</td></tr>
+      <tr><td><b>검증 6,000</b></td><td>하이퍼파라미터(학습률 · 층수 · 드롭아웃), 조기 종료 시점</td><td>여러 번 들여다보므로 &lsquo;약간 오염&rsquo;된다</td></tr>
+      <tr><td><b>테스트 10,000</b></td><td>최종 보고용 &mdash; <b>단 한 번만</b> 평가</td><td>테스트로 모델을 고르면 성능이 과대평가(<b>테스트 누수</b>)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>표준화 통계량(평균 0.1307 · 표준편차 0.3081)은 <b>훈련 데이터로만</b> 계산한다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>손실 함수 연습 문제 (11p · 원본 강의 연습 문제 개정)</h3>
+  <p>다섯 클래스 분류에서 6번째 샘플의 출력층 가중합이 <span class="tex">\mathbf z=[2.0,\,0.5,\,1.0,\,0.1,\,-1.0]^\top</span>, 정답은 클래스 3이다.</p>
+  <div class="tex-d">e^{\mathbf z}=[7.39,\,1.65,\,2.72,\,1.11,\,0.37],\;\textstyle\sum=13.23\;\Rightarrow\;\hat{\mathbf y}=[0.56,\,0.12,\,0.21,\,0.08,\,0.03]\;\Rightarrow\;L=-\ln0.21\approx1.56</div>
+  <ul class="ul">
+    <li>argmax <span class="tex">\hat y</span> = 클래스 1 ≠ 정답 3 &rarr; 오답. 손실 1.56은 &lsquo;정답 확률 21%&rsquo;를 뜻한다</li>
+    <li><span class="tex">z_3</span>을 1.0 → 3.0으로 올리면 <span class="tex">\hat y_3\approx0.66</span>, <span class="tex">L\approx0.42</span> · 정답이 클래스 1이었다면 <span class="tex">-\ln0.56\approx0.58</span></li>
+    <li>무작위 추측(모든 <span class="tex">\hat y_k=0.2</span>)의 손실 <span class="tex">-\ln0.2\approx1.61</span> &mdash; <b>학습 초기 손실의 기준선</b></li>
+  </ul>
+  <p class="fx-note">반올림하지 않고 계산하면 <span class="tex">\hat y_3=2.718/13.23=0.2055</span>, <span class="tex">L=1.58</span>이다. 교안의 1.56은 0.21로 반올림한 뒤 로그를 취한 값이라 0.02 차이가 난다 &mdash; 시험에서 보기와 맞지 않으면 반올림 위치를 의심할 것.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>미니배치 SGD (12 · 13p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>방식</th><th>배치 크기</th><th>특징</th></tr></thead>
+    <tbody>
+      <tr><td>배치 GD</td><td>N (전체)</td><td>정확한 기울기, 메모리 부담, 국소 최소에 갇히기 쉬움</td></tr>
+      <tr><td>SGD (순수)</td><td>1</td><td>잡음 큼 &rarr; 탈출 효과, GPU 병렬성 활용 못함</td></tr>
+      <tr><td><b>미니배치 SGD</b></td><td>32 ~ 1024</td><td><b>표준</b>. 잡음이 &lsquo;암묵적 정규화&rsquo; 역할(일반화에 유리)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>용어 &mdash; <b>1 iteration(step)</b> = 미니배치 1개로 갱신 1회, <b>1 epoch</b> = 훈련 데이터 전체를 한 번 통과. MNIST 훈련 54,000, B = 128이면 <span class="tex">\lceil54000/128\rceil=</span> <b>422 step</b>. 배치를 키우면 학습률도 함께 키운다(선형 스케일링 규칙, Goyal 외 2017). 학습률은 <b>가장 중요한 하이퍼파라미터</b>(보통 <span class="tex">10^{-4}\sim10^{-1}</span>, 로그 스케일로 탐색)이고, 헤시안(77만 × 77만)이 너무 커서 뉴턴법 같은 2차 방법은 실용적이지 않다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>역전파 일반식 · autograd 검증 (16~18p)</h3>
+  <div class="tex-d">\delta^{(L)}=\frac{\hat{\mathbf y}-\mathbf y}{N},\qquad\frac{\partial L}{\partial W^{(k)}}=\delta^{(k+1)}\mathbf h^{(k)\top},\qquad\delta^{(k)}=\bigl(W^{(k)\top}\delta^{(k+1)}\bigr)\odot f'(\mathbf z^{(k)})</div>
+  <p>순전파 1회 비용의 <b>약 2배</b>로 모든 파라미터의 편미분을 얻는다(수치 미분은 77만 배 느림). 순전파의 <span class="tex">z^{(k)},h^{(k)}</span>를 저장해야 하므로 메모리 사용량이 &lsquo;깊이 × 배치&rsquo;에 비례한다. 실습 1 §2에서 같은 가중치로 NumPy 손계산과 <code>loss.backward()</code>를 돌리면 최대 오차가 <b>dW0 3.84e-9 · db0 3.24e-9 · dW1 7.98e-9 · db1 1.44e-8</b> &mdash; float32 반올림 수준으로 일치한다. <span class="hi">손으로 유도한 역전파가 정확함을 &lsquo;실행으로&rsquo; 증명한 것이다.</span></p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>기울기 소실과 폭주 · 다섯 가지 해결책 (19p)</h3>
+  <p><span class="tex">\delta^{(k)}=(W^{(k)\top}\delta^{(k+1)})\odot f'(z^{(k)})</span>를 L번 반복하면 &lsquo;W의 크기 × f'의 크기&rsquo;가 L제곱으로 누적된다. <b>소실</b> &mdash; 시그모이드 <span class="tex">\sigma'\le0.25</span>, 10층이면 <span class="tex">10^{-6}</span>. <b>폭주</b> &mdash; <span class="tex">\lVert W\rVert&gt;1</span>이 누적되면 기울기 ∞, 손실 NaN(RNN · 매우 깊은 망).</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>해결책</th><th>연도</th><th>원리</th></tr></thead>
+    <tbody>
+      <tr><td>ReLU 계열 활성화</td><td>2011</td><td><span class="tex">f'\in\{0,1\}</span> &rarr; 감쇠 없음</td></tr>
+      <tr><td>Xavier / He 초기화</td><td>2010 / 2015</td><td><span class="tex">\lVert W\rVert</span>의 기대값을 1 근처로</td></tr>
+      <tr><td>배치 · 레이어 정규화</td><td>2015 / 2016</td><td>각 층 입력 분포 재조정</td></tr>
+      <tr><td>잔차 연결</td><td>2015</td><td>항등 경로로 기울기 직접 전달</td></tr>
+      <tr><td>기울기 클리핑</td><td>2013</td><td><span class="tex">\lVert\nabla\rVert&gt;c</span>이면 c로 축소</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>2010년 이전 &lsquo;3층 이상은 학습 안 된다&rsquo; → 이 다섯의 조합으로 2015년 152층(ResNet), 현재 수백 층 트랜스포머까지. 실습 2 §6 실험 A(시그모이드 + SGD) <b>91%</b> vs D(GELU + BN + AdamW) <b>98%</b>.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>현대 최적화 — 모멘텀 · Adam · AdamW · 학습률 스케줄 (20~22p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>기법</th><th>원리</th><th>PyTorch · 권장</th></tr></thead>
+    <tbody>
+      <tr><td><b>모멘텀</b></td><td>기울기를 &lsquo;속도&rsquo;에 누적(β ≈ 0.9, 최근 ~10스텝의 지수 이동 평균) &mdash; 좁고 긴 골짜기에서 진동 성분은 상쇄, 골짜기 방향은 가속. Nesterov는 &lsquo;먼저 관성 방향으로 가 본 뒤&rsquo;의 기울기 사용</td><td><code>SGD(lr=0.1, momentum=0.9, nesterov=True, weight_decay=5e-4)</code> &mdash; CNN 이미지 분류의 강력한 기본기. 실습 1은 <code>SGD(lr=0.5, momentum=0.9)</code>로 XOR 3000에폭 수렴</td></tr>
+      <tr><td><b>Adam</b></td><td>1차 모멘트 <span class="tex">m_t</span>(기울기 EMA, β₁ = 0.9 = 모멘텀 역할, 편향 보정 <span class="tex">\hat m=m/(1-\beta_1^t)</span>) + 2차 모멘트 <span class="tex">v_t</span>(기울기 제곱 EMA, β₂ = 0.999) &mdash; <span class="tex">\sqrt v</span>로 나눠 <b>파라미터별 학습률</b> 자동 조절, 드물게 갱신되는 파라미터에 큰 스텝</td><td>lr 1e-3 &mdash; 빠른 프로토타이핑 · RNN · GAN</td></tr>
+      <tr><td><b>AdamW</b></td><td>L2 정규화를 기울기에 섞지 않고 &lsquo;감쇠&rsquo; <span class="tex">\lambda W_t</span>로 <b>분리</b>(Loshchilov &amp; Hutter 2019) &mdash; Adam + L2는 적응 스케일에 왜곡된다</td><td>lr 1e-4 ~ 3e-3, weight_decay 0.01 ~ 0.1 &mdash; 트랜스포머 · 미세조정 · <b>실습 2 기본</b></td></tr>
+      <tr><td><b>학습률 스케줄</b></td><td><b>warm-up</b>(초기 가중치 · Adam의 <span class="tex">v_t</span> 추정이 불안정할 때 큰 학습률은 발산 → 처음 수백~수천 스텝은 작게) + <b>감쇠</b>(미니배치 잡음 때문에 고정 학습률로는 최소점 주변을 맴돈다 → 줄여서 정착)</td><td>StepLR · CosineAnnealingLR(현대 표준) · <b>OneCycleLR</b>(warm-up + cosine, 실습 2: max_lr 2e-3으로 5에폭 98.5%) · ReduceLROnPlateau. OneCycle은 <b>매 step마다</b> <code>scheduler.step()</code>, StepLR · Cosine은 매 epoch</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>현대 학습 기법 — 정규화 · 과적합 제어 · 실무 도구 (23~25p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>BatchNorm (2015)</th><th>LayerNorm (2016)</th></tr></thead>
+    <tbody>
+      <tr><td>통계 계산 축</td><td>미니배치 내 샘플들(특징별)</td><td>샘플 하나의 특징들(샘플별)</td></tr>
+      <tr><td>배치 크기 의존</td><td>있음 &mdash; 작은 배치에서 불안정</td><td>없음</td></tr>
+      <tr><td>학습 / 추론 차이</td><td>추론 시 이동 평균 μ, σ 사용 &rarr; <b><code>model.eval()</code> 필수</b></td><td>없음(동일 계산)</td></tr>
+      <tr><td>주 사용처</td><td>CNN(ResNet 등)</td><td>트랜스포머 · RNN · LLM(RMSNorm 변형)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <ul class="ul">
+    <li>정규화 층이 있으면 그 앞 Linear의 <b>바이어스는 불필요</b>(Norm이 평균을 빼므로 상쇄) &rarr; <code>nn.Linear(..., bias=False)</code>. RMSNorm(평균 빼기 생략, LLaMA · Gemma)은 PyTorch 2.4+ <code>nn.RMSNorm</code></li>
+    <li><b>드롭아웃</b> &mdash; <span class="tex">\tilde h_j=\frac{m_j}{1-p}h_j,\;m_j\sim\mathrm{Bernoulli}(1-p)</span>. 학습 시 1/(1−p)로 기대값을 보정하는 <b>inverted dropout</b>이라 추론 시에는 그대로 전체를 쓴다</li>
+    <li><b>가중치 감쇠(L2)</b> &mdash; 손실에 <span class="tex">(\lambda/2)\lVert W\rVert^2</span> 추가 ≡ 매 스텝 W를 <span class="tex">(1-\eta\lambda)</span>배로 축소 &rarr; 부드러운 함수</li>
+    <li><b>조기 종료</b> &mdash; 검증 손실이 patience 에폭 동안 개선되지 않으면 멈추고 <b>최고 검증 성능 시점</b>의 가중치 복원 &mdash; 가장 싸고 효과적인 정규화. 그 밖에 <b>데이터 증강(가장 효과 큼)</b> · 레이블 스무딩 · 미니배치 잡음 · 작은 모델</li>
+    <li><b>기울기 클리핑</b> <code>clip_grad_norm_(params, 1.0)</code>(트랜스포머 표준값) · <b>혼합 정밀도(AMP)</b> &mdash; 행렬곱은 float16/bfloat16, 누적 · 가중치는 float32, 메모리 ½ · 속도 2~3배, float16은 GradScaler 필요 · <b><code>torch.compile</code></b> &mdash; 커널 융합, 첫 호출 컴파일 후 1.3~2배</li>
+  </ul>
+  <p>25p가 정리한 <b>한 스텝의 표준 순서</b> &mdash; 순전파(autocast) → 손실 → <code>zero_grad</code> → <code>backward</code> → (unscale) → <b>클리핑</b> → <code>step</code> → 스케줄러.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>평가 · 실습 2 결과 · 최신 동향 (26~29p)</h3>
+  <ul class="ul">
+    <li><b>손실은 학습용, 지표는 보고용</b> &mdash; 정확도 · F1은 미분 불가라 직접 최적화하지 못한다. 회귀는 R² · RMSE · MAE, 분류는 정확도(클래스 균형일 때만) · 정밀도(오경보 비용 ↑) · 재현율(놓침 비용 ↑, 질병 선별) · F1(macro/micro) · ROC-AUC · PR-AUC</li>
+    <li><b>보정(calibration)</b> &mdash; 소프트맥스 확률 0.9가 실제로 90% 맞는가? 현대 신경망은 <b>과신 경향</b>(Guo 외 2017) &rarr; 온도 스케일링, ECE 지표</li>
+    <li><b>실습 2 결과</b>(27p) &mdash; 5에폭, AdamW + OneCycle, CPU 약 13초/에폭, <b>테스트 정확도 98.52% · 오분류 148/10,000</b>. 남은 오류는 4↔9 · 7↔2 · 4↔6 · 3↔5처럼 <b>모양이 비슷한 쌍</b>에 집중, 클래스별 정확도 97.7%(8) ~ 99.3%(1). 실험 A→B(ReLU + 모멘텀) <b>+6%p</b>, B→C(AdamW + 스케줄) <b>+1%p</b>, C→D(BN + Dropout)는 초반 수렴을 빠르게(1에폭 +0.6%p). MLP의 한계 &mdash; 픽셀 위치 이동에 취약, 같은 예산의 CNN(10주차)은 99.3%+</li>
+    <li><b>최신 동향</b>(29p) &mdash; 스케일링 법칙(Kaplan 2020 · Chinchilla 2022) · 새 최적화기(Lion 2023 · Muon 2024~25 · Shampoo/SOAP) · 메모리 효율(8-bit Adam · ZeRO/FSDP · LoRA/QLoRA · 그래디언트 체크포인팅) · 역전파의 대안(Forward-Forward, Hinton 2022 · Direct Feedback Alignment &mdash; 아직 대규모 성능은 못 미침) · 이론(평탄 최솟값과 SAM · 이중 하강 · NTK)</li>
+  </ul>
+</div>
+</section>
+
 <!-- ===================== 실습 ===================== -->
 <section class="sec" id="lab">
-  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">MLP 실습 노트북<small>폴더에는 7주차 이름으로 올라와 있지만 6주차 내용의 실습입니다</small></h2></div>
+  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">MLP 실습 노트북 — PyTorch 개정판<small>10/11 새로 올라온 실습 1(XOR) · 실습 2(MNIST)와 정답 해설 README</small></h2></div>
 <div class="link-list">
-  <a href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab1-mlp.ipynb" download="MLP_실습1.ipynb">MLP 실습 1 내려받기 →<small>다층 퍼셉트론 구현 (1.3MB)</small></a>
-  <a href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab2-mlp.ipynb" download="MLP_실습2.ipynb">MLP 실습 2 내려받기 →<small>이어지는 실습 · 실행 결과 포함 (9.6MB)</small></a>
-  <a href="machine-learning-week05.html#lab">5주차 실습 (퍼셉트론 → MLP) →<small>XOR에서 단층 0.50 vs MLP 1.00 을 확인했던 그 노트북</small></a>
+  <a href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab1-xor-pytorch.ipynb" download="6주차_MLP_실습1_XOR_PyTorch.ipynb">실습 1 — XOR 문제와 다층 퍼셉트론 (PyTorch) →<small>NAND · OR · AND 손 연결 · 순전파 · 역전파 손 구현 · autograd 검증 · nn.Sequential · 초기화 비교 (178KB, 실행 결과 포함)</small></a>
+  <a href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab2-mnist-pytorch.ipynb" download="6주차_MLP_실습2_MNIST_PyTorch.ipynb">실습 2 — MNIST 손글씨 분류 MLP (PyTorch) →<small>784-600-500-10 · AdamW + OneCycle · 혼동 행렬 · 구성 비교 A~D · AMP (244KB, 실행 결과 포함)</small></a>
+  <a href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab-solution-readme.md" download="6주차_실습_정답_README.md">정답 해설 README →<small>문제본의 TODO(n)마다 정답 · 채점 포인트 · 흔한 오답</small></a>
 </div>
-<div class="tip"><b>5주차 실습과 이어서 보면 좋다</b> — 5주차 파트 4에서 <code>nn.Linear(2,1)</code>(단층)과 <code>nn.Sequential(Linear(2,2), Tanh, Linear(2,1))</code>(MLP)의 XOR 학습을 비교했다. 그때 단층이 <b>손실 0.6931에서 멈추고 정확도 0.50</b>이었던 이유가 바로 이번 주 <a class="ext" href="#xor">6.1의 증명</a>이다.</div>
+
+<div class="warn"><b>폴더에 올라온 파일에 대하여</b> &mdash; <code>6주차_MLP_실습1_XOR_PyTorch</code> · <code>6주차_MLP_실습2_MNIST_PyTorch</code> 폴더의 노트북은 <code>6주차_실습_정답</code> 폴더의 두 노트북과 <b>완전히 같은 파일</b>이다(해시값 일치). 즉 이번에 올라온 것은 <b>정답본</b>이고, README가 가리키는 <b>빈칸이 뚫린 문제본(<code>../problem/</code>)은 아직 올라오지 않았다</b>. 문제본이 따로 배포되면 그것의 <code>TODO(1)~(10)</code> · <code>TODO(1)~(8)</code>을 채워 실행 결과가 보이는 상태로 <code>6주차_실습_2026711051_박민지.ipynb</code>처럼 내면 된다. 아래 표가 각 TODO의 답과 채점 기준이다.</div>
+
+<h3 class="sub-title">실습 1 — XOR (TODO 10개)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>TODO</th><th>채울 것</th><th>채점 포인트 · 흔한 오답</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>NAND · OR · AND의 가중치 · 바이어스 &mdash; <code>[-2,-2],3</code> · <code>[2,2],-1</code> · <code>[1,1],-1</code></td><td>값이 같을 필요는 없고 <code>z &gt; 0</code> 판정이 진리표를 만족하면 정답. AND 바이어스를 −2로 두면 (1,1)에서 z = 0 → 항상 0(<b>&gt; 인지 &gt;= 인지</b> 확인)</td></tr>
+    <tr><td>2</td><td><code>XOR = lambda x1, x2: AND(NAND(x1, x2), OR(x1, x2))</code></td><td>은닉층(NAND, OR)의 출력이 출력층(AND)의 입력. <code>OR(NAND, AND)</code>처럼 층 역할을 섞으면 틀림</td></tr>
+    <tr><td>3</td><td><code>forward()</code> &mdash; <code>Z1 = X @ W0 + b0; H1 = sigmoid(Z1); Z2 = H1 @ W1 + b1; Y_hat = sigmoid(Z2)</code></td><td>네 값 모두 반환, shape (4,2) · (4,2) · (4,1) · (4,1). <code>W0 @ X</code>는 shape 오류 &mdash; 슬라이드의 열 벡터 표기를 <b>행 벡터 규약(X @ W)</b>으로 옮긴 것</td></tr>
+    <tr><td>4</td><td><code>bce()</code> &mdash; <code>-np.mean(Y*np.log(Y_hat+eps) + (1-Y)*np.log(1-Y_hat+eps))</code></td><td><code>mean</code>(=1/N) · <code>eps</code>. <code>np.sum</code>이면 손실이 4배라 TODO 5의 /N과 어긋나 autograd 검증 실패</td></tr>
+    <tr><td>5</td><td><code>backward()</code> &mdash; <code>d2 = (Y_hat-Y)/N</code>, <code>dW1 = H1.T @ d2</code>, <code>d1 = (d2 @ W1.T) * dsigmoid(Z1)</code>, <code>dW0 = X.T @ d1</code>, 바이어스는 <code>sum(0, keepdims=True)</code></td><td>시그모이드 + BCE 결합 미분 <span class="tex">(\hat y-y)/N</span>. <b>시그모이드 미분을 한 번 더 곱하는 실수</b>, <code>dsigmoid(H1)</code>(정답은 입력 Z1), 전치 방향 뒤집기</td></tr>
+    <tr><td>6</td><td>autograd 검증 &mdash; <code>H = torch.sigmoid(Xt @ tW0 + tb0)</code> … <code>loss.backward()</code></td><td>네 항목 모두 <code>✔ 일치</code>(&lt; 1e-5). <code>backward()</code> 누락 → grad가 None. <code>..._with_logits</code>에 확률을 넣으면 시그모이드 이중 적용</td></tr>
+    <tr><td>7</td><td>NumPy 경사하강 루프 &mdash; forward → bce → backward → <b>네 파라미터 모두</b> <code>-= lr * d…</code></td><td>5000에폭 후 손실 ≈ 0.01 이하(노트북 0.0021). 바이어스 갱신 누락 · <code>+=</code>(경사 상승) · forward 재사용</td></tr>
+    <tr><td>8</td><td><code>nn.Sequential(nn.Linear(2,2), nn.Sigmoid(), nn.Linear(2,1))</code></td><td>파라미터 <b>9개</b>(2·2+2 + 2·1+1). 출력층 뒤에 시그모이드가 <b>없어야</b> 함(<code>BCEWithLogitsLoss</code>와 이중 적용)</td></tr>
+    <tr><td>9</td><td>학습 루프 &mdash; <code>logits = model(Xt)</code> → <code>loss = criterion(logits, Yt)</code> → <code>zero_grad()</code> → <code>backward()</code> → <code>step()</code></td><td>5단계 순서, 예측 [0, 1, 1, 0]. <code>zero_grad()</code> 누락 → 기울기 누적으로 발산</td></tr>
+    <tr><td>10</td><td>결정 경계 &mdash; <code>with torch.no_grad(): zz = torch.sigmoid(model(grid)).numpy().reshape(xx.shape)</code></td><td>로짓이므로 시그모이드, (200, 200)으로 reshape. <code>no_grad</code> 없이 <code>.numpy()</code> → RuntimeError</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="good"><b>실습 1의 실제 출력</b> &mdash; 초기 손실 <b>0.7353</b> → NumPy 루프 5000에폭 후 <b>0.0021</b>, 예측 확률 [0.002, 0.997, 0.998, 0.002]. autograd와의 최대 오차 3.84e-09 · 3.24e-09 · 7.98e-09 · 1.44e-08. <code>nn.Sequential</code> 3000에폭 → [0.001, 0.999, 0.999, 0.001]. §3 비교(은닉 4노드 · 10시드 · 1000에폭) &mdash; Sigmoid+SGD <b>50%</b>(손실 0.3988) · Sigmoid+Xavier <b>100%</b>(0.0801) · ReLU+He+SGD <b>60%</b>(0.2020) · ReLU+He+Adam <b>50%</b>(0.2344) · GELU+He+AdamW <b>100%</b>(0.0002). README의 주의 &mdash; <b>실습 1은 시드에 민감</b>하므로 노트북의 <code>set_seed(2)</code>를 그대로 둘 것.</div>
+
+<h3 class="sub-title">실습 2 — MNIST (TODO 8개)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>TODO</th><th>채울 것</th><th>채점 포인트 · 흔한 오답</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><code>MLP.__init__</code> &mdash; 은닉층마다 <code>Linear → (BatchNorm1d) → act() → (Dropout)</code>, 마지막 <code>Linear(h2, n_classes)</code></td><td>파라미터 <b>776,510</b>. 출력층에 <code>Softmax</code> 금지(이중 소프트맥스) · <code>act</code>는 클래스라 <code>act()</code>로 인스턴스화 · <code>nn.Flatten()</code> 누락 시 shape 오류</td></tr>
+    <tr><td>2</td><td>He 초기화 &mdash; <code>nn.Linear</code>만 골라 <code>kaiming_normal_(…, nonlinearity="relu")</code>, 바이어스 0</td><td>BatchNorm 가중치는 건드리지 않는다. <code>parameters()</code> 전체에 적용하면 1차원 바이어스에서 오류</td></tr>
+    <tr><td>3</td><td><code>evaluate()</code> &mdash; <code>F.cross_entropy(…, reduction="sum")</code> 누적, <code>argmax(1)</code>로 정답 수</td><td>배치 &lsquo;평균&rsquo;을 누적하면 마지막 배치 크기가 달라 어긋남</td></tr>
+    <tr><td>4</td><td>손실 · 최적화기 · 스케줄러 &mdash; <code>CrossEntropyLoss</code> · <code>AdamW(lr, weight_decay)</code> · <code>OneCycleLR(…, steps_per_epoch=len(train_loader))</code></td><td>OneCycle은 &lsquo;스텝&rsquo; 단위 &mdash; 데이터 &lsquo;개수&rsquo;를 주거나 에폭 끝에만 <code>step()</code>하면 ValueError</td></tr>
+    <tr><td>5</td><td>학습 루프 &mdash; 순전파 → 손실 → <code>zero_grad(set_to_none=True)</code> → <code>backward()</code> → <code>clip_grad_norm_(…, 1.0)</code> → <code>optimizer.step()</code> → <code>scheduler.step()</code></td><td>클리핑은 backward 뒤 step 앞. 5에폭 후 검증 정확도 0.97 이상</td></tr>
+    <tr><td>6</td><td>혼동 행렬 &mdash; <code>for t, p in zip(trues, preds): cm[t, p] += 1</code></td><td>합 10000, <b>행 = 실제 · 열 = 예측</b>. <code>cm[p, t]</code>는 해석이 반대</td></tr>
+    <tr><td>7</td><td>클래스별 재현율 &mdash; <code>cm.diagonal() / cm.sum(1)</code></td><td>분모가 <b>행 합(실제 개수)</b>이어야 재현율. 열 합이면 정밀도</td></tr>
+    <tr><td>8</td><td>구성 비교 A~D &mdash; 네 구성 모두 <code>set_seed(1)</code>로 시작</td><td>활성화(A→B) · 최적화기(B→C) · 정규화(C→D)의 기여를 <b>분리해 설명</b>. 이전 모델의 <code>parameters()</code>를 넘기는 실수 · <code>.to(device)</code> 누락</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="good"><b>실습 2의 실제 출력</b> &mdash; 분할 train 54000 / val 6000 / test 10000, 배치 (128, 1, 28, 28).
+<pre class="code">epoch 1/5  train_loss=0.3610  val_loss=0.1729  val_acc=0.9487
+epoch 2/5  train_loss=0.1417  val_loss=0.1096  val_acc=0.9657
+epoch 3/5  train_loss=0.0693  val_loss=0.0909  val_acc=0.9728
+epoch 4/5  train_loss=0.0241  val_loss=0.0594  val_acc=0.9830
+epoch 5/5  train_loss=0.0072  val_loss=0.0569  val_acc=0.9828
+<span class="out">테스트 손실 = 0.0552, 테스트 정확도 = 0.9852 · 오분류 148 / 10000</span>
+A: Sigmoid + SGD                 val acc = [0.8827 0.9103 0.9107]
+B: ReLU + SGD(momentum)          val acc = [0.9568 0.963  0.9697]
+C: ReLU + AdamW + OneCycle       val acc = [0.9568 0.9723 0.9797]
+D: GELU + BN + Dropout + AdamW   val acc = [0.963  0.973  0.9798]</pre>
+5에폭째에 훈련 손실은 0.0072로 계속 내려가는데 검증 손실은 0.0569로 거의 멈췄다 &mdash; 개정② 24p의 &lsquo;외우기 시작하는 지점&rsquo;이 여기다. §7(AMP · <code>torch.compile</code>)과 실습 1 §3은 README대로 <b>빈칸이 없는 참고 셀</b>이라 실행만 되면 된다.</div>
+
+<details class="rv"><summary><i>구버전</i>10/4에 &lsquo;7주차_MLP_실습1 · 2&rsquo; 이름으로 올라왔던 TensorFlow판 노트북</summary>
+<div class="ans"><p>이번 개정판 이전의 실습 노트북이다(노트북 첫머리에 &lsquo;이전 버전(TensorFlow 2.x)을 PyTorch 2.x 기준으로 전면 개정&rsquo;이라고 적혀 있다). 비교용으로 남겨 둔다.</p>
+<div class="link-list">
+  <a href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab1-mlp.ipynb" download="MLP_실습1_구버전.ipynb">MLP 실습 1 (구버전) →<small>1.3MB</small></a>
+  <a href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week06-lab2-mlp.ipynb" download="MLP_실습2_구버전.ipynb">MLP 실습 2 (구버전) →<small>9.6MB · 실행 결과 포함</small></a>
+</div></div></details>
+<div class="tip"><b>5주차 실습과 이어서 보면 좋다</b> — 5주차 파트 4에서 <code>nn.Linear(2,1)</code>(단층)과 <code>nn.Sequential(Linear(2,2), Tanh, Linear(2,1))</code>(MLP)의 XOR 학습을 비교했다. 그때 단층이 <b>손실 0.6931에서 멈추고 정확도 0.50</b>이었던 이유가 바로 이번 주 <a class="ext" href="#xor">6.1의 증명</a>이고, 개정판 11p가 같은 현상을 &lsquo;<code>nn.Sigmoid()</code>를 제거하면 손실이 ln 2 근처에서 정체&rsquo;로 다시 짚는다.</div>
 </section>
 
 <!-- ===================== 정리 ===================== -->
@@ -937,11 +1341,13 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <ul class="ul">
   <li><b>K-최근접 이웃(K-NN)</b> — 가중치를 학습하는 대신 <b>가까운 이웃 k개의 다수결</b>로 분류한다</li>
   <li>거리 척도(유클리디언 · 맨해튼)가 그대로 쓰인다 — <a class="ext" href="nlp-week05.html#euclid">자연어처리 5주차</a>에서 본 그 거리들</li>
+  <li>함께 <b>XAI(설명 가능한 AI)</b> 강의가 붙었다 &mdash; 이번 주 <b>MLP가 왜 &lsquo;설명하기 어려운 모델&rsquo;인지</b>가 거기서 나온다</li>
 </ul></div>
+<div class="link-list"><a href="machine-learning-week07.html">7주차 수업내용 — K-NN · XAI →<small>k 최근접 이웃 23p · XAI 24p · KNN 실습</small></a></div>
 </section>
 
 <p class="src">기계학습특론 6주차 강의자료 정리 · 2026학년도 2학기<br>
-교안 두 권(<b>구조와 개념 22p · 학습 19p</b>)을 절 단위로 정리하고 슬라이드 <b>35장</b>을 캡처해 실었다. 100문제의 절 구분(6.1~6.6)과 같은 번호를 사용해, 절 제목 옆 버튼으로 해당 절의 문제를 바로 풀 수 있다.</p>
+교안 두 권(<b>구조와 개념 22p · 학습 19p</b>)을 절 단위로 정리하고 슬라이드 <b>35장</b>을 캡처해 실었다. 10/11 올라온 <b>PyTorch 2.x 개정판(29p · 31p)</b>에서 새로 들어온 내용은 &lsquo;개정①②&rsquo; 두 절에 슬라이드 <b>32장</b>과 함께 덧붙였고, 실습 절은 새 PyTorch 노트북과 정답 해설 README 기준으로 바꿨다. 100문제의 절 구분(6.1~6.6)과 같은 번호를 사용해, 절 제목 옆 버튼으로 해당 절의 문제를 바로 풀 수 있다.</p>
 
 </div>
 
