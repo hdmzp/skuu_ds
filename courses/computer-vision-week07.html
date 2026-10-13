@@ -960,6 +960,36 @@ knn = flann.knnMatch(des1, des2, k=2)</pre>
 </div>
 
 <div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>DLT 다섯 단계를 풀어서 — 단계마다 &lsquo;왜&rsquo;가 있다</h3>
+  <p>호모그래피는 한 평면의 점들을 다른 평면으로 옮기는 <b>3 × 3 행렬</b>이다. 48~54p는 매칭된 대응점들로 이 H를 <b>수식으로 구하는 과정</b>(DLT, Direct Linear Transform)이고, 흐름을 다섯 단계로 나누면 각 단계가 앞 단계의 문제를 하나씩 해결한다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>단계</th><th>하는 일</th><th>왜 필요한가</th></tr></thead>
+    <tbody>
+      <tr><td><b>① 방정식 만들기</b></td><td>셋째 식으로 배율 <span class="tex">\alpha</span>를 구해 나머지 두 식에 대입 → h에 대한 <b>선형 방정식 2개</b> → 짝 하나당 <b>2 × 9 행렬 <span class="tex">A_i</span></b></td><td><span class="tex">\alpha</span>는 점마다 다른 &lsquo;알 수 없는 배율&rsquo;이다. 그대로 두면 미지수가 짝마다 하나씩 늘어나고 식이 h에 대해 선형이 아니다. 소거하면 미지수는 h의 9개뿐</td></tr>
+      <tr><td><b>② 쌓기 (Stacking)</b></td><td>n개 짝의 <span class="tex">A_i</span>를 세로로 이어 <b>2n × 9 행렬 A</b></td><td>짝 하나는 식 2개뿐인데 H의 자유도는 8이다(9개 원소 − 전체 배율 1). 그래서 <b>최소 4쌍</b>(식 8개)이 필요하고, 실제로는 더 많이 쌓아 잡음을 평균 낸다</td></tr>
+      <tr><td><b>③ 조건 걸기</b></td><td><span class="tex">A\mathbf h=\mathbf 0</span>을 풀되 <span class="tex">\lVert\mathbf h\rVert=1</span></td><td><span class="tex">\mathbf h=\mathbf 0</span>은 언제나 식을 만족하는 <b>쓸모없는 해(자명한 해)</b>다. 또 H와 <span class="tex">kH</span>는 같은 변환이라(③의 나눗셈에서 k가 약분) 길이를 1로 고정해도 <b>잃는 것이 없다</b></td></tr>
+      <tr><td><b>④ SVD로 최적해</b></td><td><span class="tex">A=U\Sigma V^\top</span>, <b>가장 작은 특이값</b>에 대응하는 V의 열</td><td>잡음이 있으면 <span class="tex">A\mathbf h</span>가 정확히 0이 될 수 없다. 그래서 &ldquo;<span class="tex">\lVert A\mathbf h\rVert</span>를 <b>가장 작게</b>&rdquo;로 바꾸고, 그 답이 이 벡터다(아래 유도)</td></tr>
+      <tr><td><b>⑤ 되돌리기 (Reshape)</b></td><td>9차원 벡터 h를 3 × 3으로 재배열 → H</td><td>①에서 계산 편의상 H를 한 줄로 폈을 뿐이므로 원래 모양으로 되돌린다. 보기 좋게 <span class="tex">h_9=1</span>이 되도록 나누기도 한다</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>④가 왜 &lsquo;가장 작은 특이값의 벡터&rsquo;인가</b> &mdash; 한 줄씩 따라가 보자.</p>
+  <div class="fx">
+    <div class="tex-d">\lVert A\mathbf h\rVert^2=\lVert U\Sigma V^\top\mathbf h\rVert^2=\lVert\Sigma V^\top\mathbf h\rVert^2\qquad(U\text{는 길이를 바꾸지 않는 회전})</div>
+    <div class="tex-d">\mathbf c=V^\top\mathbf h\text{ 로 두면}\quad\lVert A\mathbf h\rVert^2=\sigma_1^2c_1^2+\sigma_2^2c_2^2+\cdots+\sigma_9^2c_9^2,\qquad c_1^2+\cdots+c_9^2=1</div>
+    <div class="tex-d">\sigma_1\ge\sigma_2\ge\cdots\ge\sigma_9\;\Rightarrow\;\text{최소는 }c_9=1,\ \text{나머지 }0\;\Rightarrow\;\mathbf h=V\mathbf c=\mathbf v_9,\quad\lVert A\mathbf h\rVert^2=\sigma_9^2</div>
+    <p class="fx-note">둘째 줄 &mdash; V도 회전이라 <span class="tex">\mathbf c</span>의 길이는 h와 같은 1이다. 그러면 문제는 &ldquo;합이 1인 몫 <span class="tex">c_i^2</span>를 가중치 <span class="tex">\sigma_i^2</span>들에 나눠 줄 때 합을 최소로&rdquo;가 되고, 당연히 <b>가장 작은 가중치 <span class="tex">\sigma_9^2</span>에 몰아주는 것</b>이 답이다. 남는 오차가 <span class="tex">\sigma_9^2</span>이므로, 정확히 4쌍이면 <span class="tex">\sigma_9=0</span>(오차 0), 잡음 섞인 여러 쌍이면 <span class="tex">\sigma_9&gt;0</span>(최소 오차)이 된다.</p>
+  </div>
+  <pre class="code">A = np.vstack([A_i(p, q) for p, q in pairs])   <span class="cm"># ①② 짝마다 2×9를 만들어 세로로 쌓기 → (2n, 9)</span>
+U, S, Vt = np.linalg.svd(A)                     <span class="cm"># ④ SVD. NumPy는 V가 아니라 Vᵀ를 돌려준다</span>
+h = Vt[-1]                                      <span class="cm">#    특이값은 큰 순서로 정렬 → 마지막 행 = 가장 작은 특이값의 벡터</span>
+H = h.reshape(3, 3)                             <span class="cm"># ⑤ 9개를 3×3으로</span>
+H = H / H[2, 2]                                 <span class="cm">#    h9 = 1로 정규화 (같은 변환, 보기만 깔끔하게)</span></pre>
+  <p>주의할 줄은 셋째 줄이다. <code>np.linalg.svd</code>는 V의 <b>전치</b>를 돌려주므로 &lsquo;V의 마지막 <b>열</b>&rsquo;이 코드에서는 <code>Vt</code>의 마지막 <b>행</b>이 된다. <span class="hi">한 줄 요약 &mdash; 대응점들로 행렬을 쌓고, SVD를 계산해, 오차가 가장 작은 마지막 벡터를 3 × 3으로 접는다.</span></p>
+</div>
+
+<div class="pt plus">
   <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>손으로 확인하는 예제 — 정사각형을 사다리꼴로</h3>
   <p>단위 정사각형의 네 꼭짓점을 아랫변이 긴 사다리꼴로 보내는 H를 위 다섯 단계로 구해 보았다(NumPy로 계산).</p>
   <div class="tbl-wrap">
@@ -1010,6 +1040,23 @@ knn = flann.knnMatch(des1, des2, k=2)</pre>
   <p>&lsquo;동시에&rsquo;가 핵심이다. 매칭을 먼저 완벽히 하고 나서 H를 구하는 것이 아니라, <b>H를 가정해 보는 과정에서 어떤 매칭이 맞는지가 함께 가려진다</b>.</p>
 </div>
 
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>&lsquo;동시에&rsquo;란 무슨 뜻인가 — 닭이 먼저냐 달걀이 먼저냐</h3>
+  <p>매칭과 H는 서로가 서로를 필요로 한다. <b>맞는 매칭만 알면</b> 06절 DLT로 H를 바로 구할 수 있고, 거꾸로 <b>H만 알면</b> 각 매칭이 H를 따르는지 보고 맞는지 틀린지 판정할 수 있다. 문제는 처음에는 <b>둘 다 모른다</b>는 것이다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>순차적으로 (안 되는 방식)</th><th>동시에 (RANSAC)</th></tr></thead>
+    <tbody>
+      <tr><td>순서</td><td>매칭을 완벽하게 확정 → 그 결과로 H 계산</td><td>후보 매칭 중 4쌍으로 H를 <b>가정</b> → 그 H로 모든 후보를 검사 → 반복</td></tr>
+      <tr><td>매칭의 정답 판정</td><td>기술자 거리만으로 해야 한다 &mdash; 반복 패턴 앞에서 한계가 있다</td><td>&ldquo;<b>가장 많은 짝이 동의하는 H를 따르는가</b>&rdquo;로 판정 &mdash; 기하학적 일관성</td></tr>
+      <tr><td>틀린 매칭이 섞이면</td><td>H가 통째로 오염된다(59p의 &lsquo;평균 변환&rsquo;)</td><td>틀린 짝은 서로 동의하지 않으므로 다수결에서 자연히 밀려난다</td></tr>
+      <tr><td>결과물</td><td>H</td><td><b>H와 인라이어 목록(=맞는 매칭)</b>이 한꺼번에</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>그래서 RANSAC이 끝나면 <code>findHomography</code>가 H와 함께 <code>mask</code>를 돌려준다 &mdash; mask가 곧 &lsquo;최종적으로 맞다고 판정된 매칭&rsquo;이다. 1 · 2단계(검출 · 기술)가 만든 것은 <b>후보</b>일 뿐이고, 매칭이 <b>확정</b>되는 순간은 3단계에서 H와 함께다.</p>
+</div>
+
 <div class="pt gyo">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>왜 선형 최소제곱만으로는 안 되나 (56~59p)</h3>
   <ul class="ul">
@@ -1049,6 +1096,32 @@ knn = flann.knnMatch(des1, des2, k=2)</pre>
 <div class="pt gyo">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>믿을 수 없는 매칭 버리기 — 비율 검사 (66p)</h3>
   <p>경험 규칙(heuristic) &mdash; <b>가장 가까운 이웃까지의 거리</b>를 <b>두 번째로 가까운 이웃까지의 거리</b>와 비교한다. <span class="hi">변별력이 없는(not distinctive) 특징이면 이 비율이 높게(1에 가깝게) 나온다.</span> 왼쪽 그래프(Lowe, IJCV 2004)는 <b>맞는 매칭은 비율이 낮은 쪽(0.3~0.5 근처)에, 틀린 매칭은 1 근처에</b> 몰려 있음을 보여 준다. 오른쪽(Goshen &amp; Shimshoni, PAMI 2008)도 같은 경향이다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>비율 검사(Ratio Test)의 세 단계와 걸러지는 두 부류</h3>
+  <p>66p의 &lsquo;믿을 수 없는 매칭을 버리는 휴리스틱&rsquo;은 SIFT 논문(Lowe)이 제안한 <b>거리 비율 검사</b>다. 기술자 공간에서 이웃들이 어떻게 놓여 있는지를 보고 <b>확실한 짝만</b> 남긴다.</p>
+  <div class="flow">
+    <div class="fl"><b>1. 이웃 두 개 찾기</b><span>기준 영상의 특징점 하나에 대해 대상 영상에서 기술자 거리가 <b>가장 가까운 점(1순위)</b>과 <b>두 번째로 가까운 점(2순위)</b>을 찾는다 &mdash; OpenCV의 <code>knnMatch(k=2)</code></span></div>
+    <div class="fl"><b>2. 비율 계산</b><span><span class="tex">r=d_1/d_2</span> (1순위까지 거리 ÷ 2순위까지 거리). 항상 <span class="tex">0\le r\le1</span></span></div>
+    <div class="fl"><b>3. 임계값 판별</b><span>r이 임계값(보통 <b>0.7~0.8</b>)보다 <b>작을 때만</b> 매칭으로 인정, 넘으면 기각</span></div>
+  </div>
+  <div class="cards">
+    <div class="card2"><b>정상 매칭 → r이 낮다</b><ul class="ul"><li>확실한 짝이 하나 있으므로 1순위는 매우 가깝다</li><li>2순위는 그냥 &lsquo;다른 점&rsquo;이라 확연히 멀다</li><li>→ <span class="tex">d_1\ll d_2</span>, r이 0에 가깝다</li></ul></div>
+    <div class="card2"><b>오매칭 → r이 1에 가깝다</b><ul class="ul"><li><b>반복 패턴</b>(나뭇잎 · 벽돌 · 창문) &mdash; 비슷한 기술자가 밀집해 1 · 2순위가 거의 같은 거리</li><li><b>짝이 아예 없는 점</b>(가려졌거나 화면 밖) &mdash; 1순위도 2순위도 &lsquo;엉뚱한 점&rsquo;이라 둘 다 비슷하게 멀다</li><li>→ <span class="tex">d_1\approx d_2</span>, 쉽게 걸러진다</li></ul></div>
+  </div>
+  <p>둘째 부류가 특히 중요하다. 짝이 없는 점은 1순위 거리 <span class="tex">d_1</span> <b>하나만</b> 보고 &ldquo;충분히 가까운가&rdquo;로 판정하려 하면 기준을 정하기 어렵다(영상마다 거리의 크기가 다르다). 비율은 <b>그 점 주변의 밀도</b>로 스스로 눈금을 맞추므로 영상이 바뀌어도 같은 기준(0.8)이 통한다.</p>
+  <p><b>RANSAC에 주는 효과</b> &mdash; 02절의 반복 횟수 공식 <span class="tex">N=\log(1-p)/\log(1-(1-e)^s)</span>에 호모그래피 <span class="tex">s=4</span>, <span class="tex">p=0.99</span>를 넣어 보면 이상치 비율 e가 얼마나 결정적인지 보인다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>이상치 비율 e</th><th>4쌍이 모두 맞을 확률 <span class="tex">(1-e)^4</span></th><th>필요한 반복 N</th></tr></thead>
+    <tbody>
+      <tr><td>비율 검사 없이 (예)</td><td>0.7</td><td>0.0081</td><td>약 <b>567</b>번</td></tr>
+      <tr><td>비율 검사 후 (예)</td><td>0.3</td><td>0.2401</td><td>약 <b>17</b>번</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="fx-note">계산 &mdash; <span class="tex">\log 0.01=-4.605</span>. e = 0.7이면 <span class="tex">\log(1-0.0081)=-0.00813</span>이라 <span class="tex">N=4.605/0.00813\approx566.2\to567</span>. e = 0.3이면 <span class="tex">\log(1-0.2401)=-0.2746</span>이라 <span class="tex">N\approx16.8\to17</span>. e 값은 설명을 위한 가정이다. 모호한 짝을 미리 대거 버려 두면 RANSAC은 <span class="hi">30배 넘게 적게 돌고도 같은 99% 확신</span>을 얻고, 남은 인라이어로 다시 맞춘 H도 더 정확해진다.</p>
 </div>
 
 <div class="pt plus">
