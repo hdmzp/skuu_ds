@@ -357,6 +357,8 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .pt.live{border-left-color:#9d174d}
 .pt.plus{border-left-color:#0f766e}
 .pt.pres{border-left-color:#6d28d9}
+.deep{background:#f5f3ff;border:1px solid #c4b5fd;border-left:4px solid #7c3aed;border-radius:0 var(--radius) var(--radius) 0;padding:11px 14px;margin:12px 0;font-size:13px;color:#3f4854;line-height:1.8}
+.deep b:first-child{color:#6d28d9}
 .pit{background:#fff7ed;border:1px solid #f0c48a;border-left:4px solid #ea580c;border-radius:0 var(--radius) var(--radius) 0;padding:11px 14px;margin:12px 0}
 .pit p{font-size:13px;color:#3f4854;line-height:1.8}
 .pit p + p{margin-top:7px}
@@ -1173,6 +1175,31 @@ print(mask.sum(), '/', len(good), '인라이어')</pre>
 <div class="pt gyo">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>두 장 이어 붙이기 (67~69p)</h3>
   <p>교안 첫머리(3p)의 산 사진 두 장으로 돌아온다. ① <b>SIFT 특징을 매칭</b>하고(67p, 아래 두 장의 흰 원) ② <b>RANSAC으로 이상치를 버린 뒤</b>(68p, 남은 원이 줄었다) ③ 구한 H로 한 장을 와핑해 <b>이어 붙인다</b>(69p). 오른쪽 사진이 기울어진 사각형으로 들어가 앉은 것이 호모그래피 와핑의 흔적이다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>&ldquo;매칭 → RANSAC → 와핑 → 이어 붙이기&rdquo; 한 줄을 네 단계로 풀기</h3>
+  <p>위 한 문장이 두 장 이상의 사진을 하나의 넓은 파노라마로 잇는 <b>이미지 스티칭의 전체 파이프라인</b>이다. 단계마다 앞 단계가 남긴 문제를 하나씩 해결한다.</p>
+  <div class="flow">
+    <div class="fl"><b>1. SIFT 특징 매칭</b><span>두 사진에서 코너 같은 특징점을 찾고 기술자로 적은 뒤, 가장 닮은 점끼리 짝을 맺는다. SIFT는 <b>회전 · 크기가 달라도</b> 같은 점을 같은 벡터로 적으므로 시점이 조금 다른 두 사진에 적합하다(6주차). <a class="ext" href="#robust">07절의 비율 검사</a>로 모호한 짝을 <b>1차로</b> 걸러 내는 것도 이 단계다</span></div>
+    <div class="fl"><b>2. RANSAC으로 이상치 제거 → H</b><span>비율 검사를 통과해도 틀린 짝은 남는다. 4쌍을 무작위로 뽑아 H를 세우고 나머지 짝이 동의하는지 세기를 반복해, <b>가장 많은 짝(인라이어)이 지지하는 H</b>를 고른다. 그 H에 동의하지 않는 짝(이상치)은 이후 계산에서 빠진다</span></div>
+    <div class="fl"><b>3. 한 장을 와핑</b><span>H는 &lsquo;A 사진의 좌표를 B 사진의 좌표로 옮기는 공식&rsquo;이다. A의 모든 픽셀에 적용하면 A가 B의 시점 · 원근에 맞게 <b>사다리꼴로 휘어진다</b> &mdash; 이 기하학적 변형이 와핑(warping)이다</span></div>
+    <div class="fl"><b>4. 이어 붙이기 · 블렌딩</b><span>와핑된 A와 원래의 B를 한 캔버스에 겹쳐 놓는다. 그대로 두면 노출 · 비네팅 차이로 경계선이 보이므로, 겹치는 부분을 <b>그러데이션처럼 섞는다</b>(아래 74~77p의 페더링 · 다중 대역)</span></div>
+  </div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>단계</th><th>들어가는 것</th><th>나오는 것</th><th>이 단계가 없으면</th></tr></thead>
+    <tbody>
+      <tr><td>1. 매칭</td><td>사진 두 장</td><td>후보 짝 목록(틀린 짝 포함)</td><td>무엇과 무엇이 같은 지점인지 모른다</td></tr>
+      <tr><td>2. RANSAC</td><td>후보 짝 목록</td><td><b>H 하나</b> + 인라이어 표시</td><td>틀린 짝이 H를 오염시켜 사진이 엉뚱하게 휜다(59p의 &lsquo;평균 변환&rsquo;)</td></tr>
+      <tr><td>3. 와핑</td><td>A 사진 + H</td><td>B 시점으로 변형된 A</td><td>평행이동만으로 붙인 34p처럼 이음새마다 난간이 어긋난다</td></tr>
+      <tr><td>4. 블렌딩</td><td>와핑된 A + B</td><td>최종 파노라마</td><td>밝기 차이로 경계선이 또렷하게 남는다(74p)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="deep"><b>🔎 한 걸음 더 &mdash; 와핑은 실제로 &lsquo;거꾸로&rsquo; 계산한다.</b> A의 픽셀을 H로 하나씩 <b>보내면</b>(정방향) 결과 좌표가 소수점이라 캔버스에 <b>구멍</b>이 숭숭 생긴다. 그래서 <code>cv2.warpPerspective</code>는 반대로, 결과 캔버스의 <b>각 픽셀마다</b> <span class="tex">H^{-1}</span>로 &ldquo;A의 어디에서 왔는가&rdquo;를 계산하고 그 주변 픽셀을 보간해 색을 가져온다(역방향 와핑). 캔버스 크기는 A의 네 꼭짓점을 H로 옮겨 보고 B와 함께 다 들어가도록 정한다.</div>
+  <p class="fx-note">덧붙임 &mdash; RANSAC이 이상치를 &lsquo;수학적으로 완전히&rsquo; 버리는 것은 아니다. 인라이어/이상치는 <b>임계값 t(예: 5픽셀) 안에 드느냐</b>로 갈리는 판정이고, 반복 횟수 N도 &ldquo;99% 확률로&rdquo; 좋은 표본을 얻는 수준으로 정한다(02절). 그래서 OpenCV도 결과와 함께 <code>mask</code>를 돌려줘 사람이 인라이어 수를 확인하게 한다.</p>
+  <p><span class="hi">한 줄 요약 &mdash; 두 사진의 공통 특징을 찾아 확실한 짝만 남기고, 그 짝으로 구한 H로 한쪽 사진의 시점을 비틀어 다른 쪽에 자연스럽게 이어 붙인다.</span></p>
 </div>
 
 <div class="pt gyo">
