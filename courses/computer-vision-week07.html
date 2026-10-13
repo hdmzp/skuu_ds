@@ -1214,6 +1214,20 @@ print(mask.sum(), '/', len(good), '인라이어')</pre>
 <div class="pt gyo">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>OpenCV 실습 영상 두 편 (72 · 73p)</h3>
   <p>72p는 <b>영상 정합(registration)</b> &mdash; 원숭이 사진 두 장에 ORB(<code>cv2.ORB_create(50)</code>) 특징을 뽑고 <code>DescriptorMatcher</code>로 매칭한 뒤 <code>cv2.findHomography(points1, points2, cv2.RANSAC)</code> → <code>cv2.warpPerspective</code>로 한 장을 다른 장에 맞춘다(<a class="ext" href="https://youtu.be/cA8K8dl-E6k" target="_blank" rel="noopener">영상 ↗</a>). 73p는 <b>영상 스티칭</b> &mdash; SIFT + <code>BFMatcher</code> + <code>knnMatch(k=2)</code>로 <b>비율 검사</b>(<code>m.distance &lt; 0.03*n.distance</code>)를 한 뒤 매칭이 10개(<code>MIN_MATCH_COUNT</code>)보다 많으면 <code>findHomography(…, cv2.RANSAC, 5.0)</code>로 H를 구한다(<a class="ext" href="https://youtu.be/ToldvnUtBh0" target="_blank" rel="noopener">1부 ↗</a> · <a class="ext" href="https://youtu.be/mY5jp8KQM6g" target="_blank" rel="noopener">2부 ↗</a>). 7절에서 정리한 코드가 이 두 영상의 핵심 줄이다.</p>
+  <h3 class="sub-title">교안의 YouTube 영상 (72 · 73p)</h3>
+  <div class="link-list">
+    <a href="https://youtu.be/cA8K8dl-E6k" target="_blank" rel="noopener">Image registration by OpenCV with Python ↗<small>YouTube · 교안 72p · ORB 특징 → 매칭 → findHomography(RANSAC) → warpPerspective</small></a>
+    <a href="https://youtu.be/ToldvnUtBh0" target="_blank" rel="noopener">Image stitching by OpenCV with Python — Part 1 ↗<small>YouTube · 교안 73p · SIFT + BFMatcher · knnMatch(k=2) · 비율 검사</small></a>
+    <a href="https://youtu.be/mY5jp8KQM6g" target="_blank" rel="noopener">Image stitching by OpenCV with Python — Part 2 ↗<small>YouTube · 교안 73p · findHomography(…, RANSAC, 5.0) → 와핑해 이어 붙이기</small></a>
+  </div>
+  <h3 class="sub-title">교안의 다른 참고 링크</h3>
+  <div class="link-list">
+    <a href="https://docs.opencv.org/master/dc/dc3/tutorial_py_matcher.html" target="_blank" rel="noopener">Feature Matching ↗<small>docs.opencv.org · 교안 24p · Brute-Force · FLANN 매처 (03절)</small></a>
+    <a href="https://docs.opencv.org/master/da/d6e/tutorial_py_geometric_transformations.html" target="_blank" rel="noopener">Geometric Transformations of Images ↗<small>docs.opencv.org · 교안 37p · warpAffine · warpPerspective (04절)</small></a>
+    <a href="https://docs.opencv.org/master/d1/de0/tutorial_py_feature_homography.html" target="_blank" rel="noopener">Feature Matching + Homography to find Objects ↗<small>docs.opencv.org · 교안 65p · 비율 검사 + findHomography (07절)</small></a>
+    <a href="http://pages.cs.wisc.edu/~csverma/CS766_09/ImageMosaic/imagemosaic.html" target="_blank" rel="noopener">Image Mosaic (CS766) ↗<small>pages.cs.wisc.edu · 교안 77p · 블렌딩 예시</small></a>
+    <a href="https://www.pyimagesearch.com/2016/01/11/opencv-panorama-stitching/" target="_blank" rel="noopener">OpenCV panorama stitching ↗<small>pyimagesearch · 교안 78p · 파노라마 스티칭 파이프라인</small></a>
+  </div>
 </div>
 
 <div class="pt gyo">
