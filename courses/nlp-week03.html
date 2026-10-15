@@ -527,6 +527,23 @@ print(len(sentences))   <span class="cm"># 4 ← A.I. 뒤에서 잘림</span>
 </div>
 <div class="good">한국어에서는 <b>SentencePiece(Unigram/BPE)</b>가 사실상 <b>표준</b>으로 사용된다.</div>
 
+<h3 class="sub-title">보충 — BPE 한 번 더 풀어 보기</h3>
+<div class="note-box"><b>① BPE를 한 문장으로</b>
+<ul class="ul">
+  <li>&ldquo;<b>자주 함께 붙어 나오는 글자들을 합쳐 하나의 조각(서브워드)으로 만드는 방식</b>&rdquo;이다</li>
+  <li>원래는 <b>데이터 압축 알고리즘</b>이다(게이지(Gage), 1994) &mdash; 가장 자주 나오는 바이트 쌍을 아직 쓰지 않은 바이트 하나로 바꿔 파일을 줄였다. 이것을 2016년 센리히(Sennrich) 등이 기계 번역에 가져와, <b>어휘 사전 크기를 효율적으로 관리</b>하고 <b>OOV 문제를 해결</b>하는 토큰화 방법으로 쓰기 시작했다</li>
+</ul></div>
+
+<div class="note-box" style="margin-top:10px"><b>② BPE는 어떻게 동작하나 &mdash; &lsquo;합치기&rsquo; 방식</b><br>
+글자에서 출발해 점점 큰 조각으로 합쳐 가므로, 결과는 앞서 본 <b>단어 단위와 문자 단위 토큰화의 중간</b>에 놓인다.
+<div class="flow">
+  <div class="fl"><div class="fl-n">1</div><div><h4>가장 작은 단위(글자)로 쪼개서 시작한다</h4><p><code>low</code> · <code>lower</code> · <code>new</code> · <code>newer</code>가 있으면, 처음에는 모두 글자 단위로 쪼갠다 &mdash; <code>l o w</code> · <code>l o w e r</code> · <code>n e w</code> · <code>n e w e r</code>. 이때 사전에는 글자들(<code>l o w e r n</code>)만 들어 있다.</p></div></div>
+  <div class="fl"><div class="fl-n">2</div><div><h4>가장 자주 나란히 나오는 두 조각(쌍)을 찾는다</h4><p>데이터 안에서 <code>e</code>와 <code>r</code>이 가장 자주 붙어 나온다면, 둘을 하나로 묶는다 &rarr; 새 조각 <code>er</code>이 생긴다.</p></div></div>
+  <div class="fl"><div class="fl-n">3</div><div><h4>사전에 추가하고 반복한다</h4><p>새 조각 <code>er</code>을 어휘 사전에 등록하고, 그다음으로 자주 붙어 나오는 쌍을 또 찾아 합친다(예: <code>l</code>+<code>o</code> &rarr; <code>lo</code>, <code>lo</code>+<code>w</code> &rarr; <code>low</code>, <code>low</code>+<code>er</code> &rarr; <code>lower</code>). 이 과정을 <b>원하는 사전 크기(vocabulary size)에 도달할 때까지</b> 반복한다.</p></div></div>
+</div></div>
+<div class="tip"><b>처음 보는 단어는 어떻게 처리하나</b> &mdash; 학습이 끝나면 &lsquo;어떤 쌍을 어떤 순서로 합쳤는지&rsquo;라는 <b>병합 규칙 목록</b>이 남는다. 새 단어가 오면 글자로 쪼갠 뒤 이 규칙을 <b>배운 순서대로</b> 적용한다. 예를 들어 학습 때 없던 <code>lowest</code>도 <code>low</code> + <code>e</code> + <code>s</code> + <code>t</code>처럼 아는 조각으로 나뉘어 [UNK]가 되지 않는다. 최악의 경우에도 글자 단위까지는 내려가므로, 글자만 사전에 있으면 OOV가 생기지 않는다.<br>
+또 실제 구현은 단어 끝에 <code>&lt;/w&gt;</code> 같은 표시를 붙여, 단어 끝의 <code>er</code>(lower의 er)과 단어 중간의 <code>er</code>(eraser의 er)을 구분하기도 한다.</div>
+
 <h3 class="sub-title">한국어 토큰화 — 어절 ≠ 단어</h3>
 <figure class="fig"><img width="1405" height="614" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp-06-korean-eojeol.png" alt="교안 20p — 한국어 토큰화: 공백(어절) 기준 분리와 형태소 기준 분리 비교, 교착어의 특성"><figcaption>교안 20p — &ldquo;나는 학교에서 책을 읽었다&rdquo; : <b>공백(어절) 기준</b>은 ['나는','학교에서','책을','읽었다']로 <b>조사 · 어미가 붙어 어휘 폭발</b>, <b>형태소 기준</b>은 ['나','는','학교','에서','책','을','읽','었','다']로 <b>어휘 축소</b></figcaption></figure>
 <div class="note-box"><b>왜 이런 차이가 생기나 — 한국어는 교착어(agglutinative language)</b>
