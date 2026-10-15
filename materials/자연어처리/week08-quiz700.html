@@ -248,6 +248,7 @@ function renderChips(){
     b.dataset.k = k; lr.append(b);
   });
   const bmN = Object.keys(st.bm).length;
+  $("#fStar").hidden = STAR_N===0;
   $("#fStar").textContent = "★ 8주차 중점 "+base.filter(q=>q.s).length;
   $("#fBm").textContent = "북마크 "+bmN;
   [["#fStar","star"],["#fBm","bmOnly"],["#fWrong","wrong"],["#fTodo","todo"],["#fReveal","reveal"]]
