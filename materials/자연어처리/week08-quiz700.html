@@ -102,7 +102,14 @@ h1{font-size:26px;line-height:1.3;margin:0;letter-spacing:-.02em;text-wrap:balan
 .opt.wrong{border-color:var(--no);background:var(--no-soft)}
 .opt.wrong .n{background:var(--no);color:var(--surface)}
 .exp{margin-top:10px;padding:10px 13px;border-radius:9px;background:var(--sunk);font-size:14px}
-.exp b{font-size:12px;color:var(--muted);display:block;margin-bottom:2px;letter-spacing:.03em}
+.exp{border-left:3px solid var(--accent);background:var(--accent-soft)}
+.exp h4{margin:0 0 4px;font-size:13px;letter-spacing:.02em;color:var(--accent)}
+.exp p{margin:0}
+.exp .ref{display:block;margin-top:6px;font-size:12px;color:var(--muted)}
+.exp.ok{border-left-color:var(--ok);background:var(--ok-soft)} .exp.ok h4{color:var(--ok)}
+.exp.no{border-left-color:var(--no);background:var(--no-soft)} .exp.no h4{color:var(--no)}
+.opt .mark{margin-left:auto;flex:none;padding-left:8px;font-size:12.5px;font-weight:700}
+.opt.correct .mark{color:var(--ok)} .opt.wrong .mark{color:var(--no)}
 .qfoot{display:flex;gap:8px;justify-content:flex-end;align-items:center;margin-top:8px}
 .link{background:none;border:none;padding:2px 4px;font-size:12.5px;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .link:hover{color:var(--accent)}
@@ -184,6 +191,7 @@ h1{font-size:26px;line-height:1.3;margin:0;letter-spacing:-.02em;text-wrap:balan
 
   <main id="list"></main>
   <section id="memoView" hidden>
+    <button class="memo-ref" id="memoBack" hidden>← 풀던 문제로 돌아가기</button>
     <div class="memo-head">
       <p>공부하다 떠오른 것을 적어 두세요. 입력하는 대로 저장되고, 문제 카드의 &lsquo;메모&rsquo; 버튼으로 그 문제에 대한 메모를 바로 시작할 수 있습니다.</p>
       <button class="btn-new" id="memoAdd">새 메모</button>
@@ -213,7 +221,7 @@ try{
   if (s.lv) st.lv = new Set(s.lv);
 }catch(e){}
 
-let cloud = null, cloudReady = false, writing = false, dirty = false, wt;
+let cloud = null, cloudReady = false, writing = false, dirty = false, wt, localAt = 0;
 function saveLocal(){
   try{ localStorage.setItem(KEY, JSON.stringify({ans:st.ans, bm:st.bm, memos:st.memos, weeks:[...st.weeks], lv:[...st.lv]})); }catch(e){}
 }
@@ -221,12 +229,13 @@ function syncMsg(cl, txt){ const s=$("#sync"); s.className="sync "+cl; s.lastEle
 async function flush(){
   if (!cloud || !cloudReady || writing) return;
   writing = true; dirty = false;
-  try{ await cloud.set({ans:st.ans, bm:st.bm, memos:st.memos, at:Date.now()}); syncMsg("on","계정에 저장됨 · 다른 기기에서도 이어서 풀 수 있어요"); }
+  try{ await cloud.set({ans:st.ans, bm:st.bm, memos:st.memos, at:localAt||Date.now()}); syncMsg("on","계정에 저장됨 · 다른 기기에서도 이어서 풀 수 있어요"); }
   catch(e){ syncMsg("err","계정 저장 실패 · 이 브라우저에는 저장됨"); }
   writing = false;
   if (dirty) flush();
 }
 function saveProgress(){
+  localAt = Date.now();
   saveLocal();
   if (!cloud || !cloudReady) return;
   dirty = true; syncMsg("","저장 중…");
@@ -252,6 +261,7 @@ async function initCloud(){
       st.bm = Object.assign({}, st.bm, d.bm||{});
       st.memos = mergeMemos(st.memos, d.memos||[]);
     }
+    localAt = Math.max(localAt, (snap.data()||{}).at||0, Date.now());
     cloudReady = true;
     const sd = snap.data() || {};
     if (!snap.exists || !same({ans:st.ans, bm:st.bm, memos:st.memos},{ans:sd.ans||{}, bm:sd.bm||{}, memos:sd.memos||[]})) { dirty = true; flush(); }
@@ -260,6 +270,8 @@ async function initCloud(){
     cloud.onSnapshot(s=>{
       if (!s.exists || s.metadata?.hasPendingWrites || writing || dirty) return;
       const d = s.data() || {};
+      if ((d.at||0) <= localAt) return;   // 내 기록보다 오래된 스냅샷은 무시
+      localAt = d.at;
       if (same(d.ans||{}, st.ans) && same(d.bm||{}, st.bm) && same(d.memos||[], st.memos)) return;
       st.ans = d.ans || {}; st.bm = d.bm || {}; st.memos = d.memos || [];
       saveLocal(); if (document.activeElement?.tagName !== "TEXTAREA") update();
@@ -345,7 +357,7 @@ function renderStatus(list){
 /* ---------- cards ---------- */
 const N = ["1","2","3","4","5"];
 const BM_SVG = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';
-function refresh(c,q){ c.replaceWith(card(q)); renderStatus(visible()); }
+function refresh(c,q){ c.replaceWith(card(q)); const l=visible(); renderStatus(l); renderMini(l); }
 function card(q){
   const k = qkey(q), a = st.ans[k], ex = !!q.x;
   const shown = ex || a!=null || st.reveal;
@@ -372,8 +384,8 @@ function card(q){
     b.append(el("span","n",N[i])); b.append(el("span","t",t));
     if (shown){
       b.disabled = true;
-      if (i===q.a) b.classList.add("correct");
-      else if (a===i) b.classList.add("wrong");
+      if (i===q.a){ b.classList.add("correct"); b.append(el("span","mark","정답")); }
+      else if (a===i){ b.classList.add("wrong"); b.append(el("span","mark","내 선택")); }
     } else {
       b.onclick = ()=>{ st.ans[k]=i; saveProgress(); refresh(c,q); };
     }
@@ -381,7 +393,14 @@ function card(q){
   });
   c.append(opts);
   if (shown){
-    const e = el("div","exp"); e.append(el("b",null,"해설 · 정답 "+N[q.a]+"번")); e.append(q.e); c.append(e);
+    const e = el("div","exp");
+    const graded = !ex && a!=null, good = a===q.a;
+    const h = el("h4",null, graded ? (good ? "✓ 정답입니다" : "✕ 다시 확인해 보세요 · 정답 "+N[q.a]+"번") : "해설 · 정답 "+N[q.a]+"번");
+    if (graded) e.classList.add(good ? "ok" : "no");
+    e.append(h, el("p",null,q.e));
+    const w = DATA.weeks[q.w-1];
+    e.append(el("span","ref","관련 단원 · "+q.sec+" "+(w.secs[q.sec]||"")));
+    c.append(e);
   }
   const f = el("div","qfoot");
   const mb = el("button","qmemo","메모"); mb.type="button"; mb.onclick=()=>newMemo(q);
@@ -440,7 +459,7 @@ function renderMini(list){
 const bar = $("#bar"); let lastY = window.scrollY, pinOpen = false, anchorY = 0;
 function setCollapsed(on){ bar.classList.toggle("is-collapsed", on); }
 window.addEventListener("scroll", ()=>{
-  const y = window.scrollY, top = $("#list").offsetTop - 120;
+  const y = window.scrollY, top = $(".views").offsetTop + $(".views").offsetHeight + 80;
   if (Date.now() < quietUntil){ anchorY = lastY = y; return; }
   if (st.view!=="quiz" || y < top){ setCollapsed(false); pinOpen=false; lastY=y; return; }
   if (pinOpen){ if (y - anchorY > 60){ pinOpen=false; setCollapsed(true); } }
@@ -461,11 +480,29 @@ function setView(v){
   $("#bar").hidden = v!=="quiz"; $("#list").hidden = v!=="quiz"; $("#memoView").hidden = v!=="memo";
   setCollapsed(false);
 }
+let backTo = null;   // {y, key} 메모로 넘어가기 전 문제 화면 위치
+function rememberQuiz(q){ if (st.view==="quiz") backTo = {y:window.scrollY, key:q?qkey(q):null}; }
+function backToQuiz(){
+  setView("quiz");
+  const b = backTo; backTo = null; renderBack();
+  if (!b) return;
+  const c = b.key && document.getElementById("q"+b.key);
+  if (c){ c.scrollIntoView({block:"center"}); c.classList.add("flash"); setTimeout(()=>c.classList.remove("flash"),1600); }
+  else window.scrollTo({top:b.y});
+}
+function renderBack(){ $("#memoBack").hidden = !backTo; }
+function goMemo(q){
+  rememberQuiz(q);
+  try{ history.pushState({memo:1}, ""); }catch(e){}
+  setView("memo"); renderBack(); window.scrollTo({top:0});
+}
+window.addEventListener("popstate", ()=>{ if (st.view==="memo") backToQuiz(); });
 function newMemo(q){
   const m = {id:Date.now().toString(36)+Math.random().toString(36).slice(2,6), t:"", at:Date.now()};
   if (q){ m.ref = qkey(q); m.t = "["+q.w+"주차 "+q.id+"번] "; }
-  st.memos.unshift(m); saveProgress(); setView("memo"); renderMemos();
-  window.scrollTo({top:0});
+  st.memos.unshift(m); saveProgress();
+  if (st.view==="quiz") goMemo(q);
+  renderMemos();
   const ta = $("#memoList textarea"); if (ta){ ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }
 }
 let confirmDel = null;
@@ -502,13 +539,16 @@ function renderMemos(){
   });
 }
 function gotoQ(q){
-  st.weeks.clear(); st.lv.clear(); st.star=st.bmOnly=st.wrong=st.todo=false; st.text=""; $("#q").value="";
-  setView("quiz"); update();
-  const c = document.getElementById("q"+qkey(q));
-  if (c){ c.scrollIntoView({block:"center"}); c.classList.add("flash"); setTimeout(()=>c.classList.remove("flash"),1600); }
+  backTo = {y:0, key:qkey(q)};
+  if (!document.getElementById("q"+qkey(q))){   // 지금 필터에 안 보이는 문제면 필터를 풀어서 보여 줌
+    st.weeks.clear(); st.lv.clear(); st.star=st.bmOnly=st.wrong=st.todo=false; st.text=""; $("#q").value=""; update();
+  }
+  if (history.state && history.state.memo){ try{ history.back(); return; }catch(e){} }
+  backToQuiz();
 }
-$("#vQuiz").onclick=()=>{ setView("quiz"); update(); };
-$("#vMemo").onclick=()=>{ setView("memo"); renderMemos(); };
+$("#vQuiz").onclick=()=>{ if (st.view==="memo"){ if (history.state && history.state.memo){ try{ history.back(); return; }catch(e){} } backToQuiz(); } };
+$("#vMemo").onclick=()=>{ if (st.view!=="memo"){ goMemo(null); renderMemos(); } };
+$("#memoBack").onclick=()=>$("#vQuiz").onclick();
 $("#memoAdd").onclick=()=>newMemo(null);
 
 $("#fStar").onclick=()=>{ st.star=!st.star; update(); };
