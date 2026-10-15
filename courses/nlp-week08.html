@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자연어처리 | 8주차 수업내용</title>
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0c1a3a">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+.exam{background:#fef2f2;border:2px solid var(--red);border-radius:var(--radius);padding:11px 15px;font-size:12.5px;color:#7f1d1d;line-height:1.7;margin:0 0 12px;display:flex;gap:9px;align-items:flex-start}
+.exam .tag{flex-shrink:0;background:var(--red);color:#fff;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;margin-top:1px}
+table.exam-table th{background:#fdecec}
+table.exam-table td:first-child{background:#fef7f7}
+.pipe{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:14px 0}
+.pipe .st{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:12px;font-weight:700;text-align:center;line-height:1.5;flex:1 1 100px;min-width:88px}
+.pipe .st small{display:block;font-size:10px;font-weight:400;color:var(--muted);margin-top:2px}
+.pipe .st.raw{background:#f1f0ec;color:var(--muted)}
+.pipe .st.app{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pipe .arrow{color:var(--muted);font-size:14px;flex:0 0 auto}
+.cycle{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.cyc{background:var(--accent);color:#fff;border-radius:8px;padding:12px 12px 11px;font-size:12.5px;font-weight:700;text-align:center}
+.cyc em{display:block;font-style:normal;font-size:10.5px;font-weight:400;color:#dbe4f7;margin-top:4px;line-height:1.5}
+.cyc.dim{background:#7d9ad6}
+@media(max-width:480px){.cycle{grid-template-columns:1fr 1fr}}
+.cyc-note{grid-column:1/-1;background:#fff7ed;border:1px solid #f59e0b;border-radius:8px;padding:9px 12px;font-size:11.5px;color:#78350f;text-align:center}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+
+/* 주차 내비 */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .out{color:#c9f24b}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 용어 · 약어 표 — 좁은 화면에서도 가로 스크롤 없이 읽히게 */
+#terms table{min-width:0}
+#terms td:first-child{white-space:normal;width:1%;font-size:12.5px}
+#terms td{padding:9px 11px}
+
+/* 수식 카드 · 풀이 예제 (기계학습특론 페이지와 같은 규칙) */
+.fx{background:#f8faff;border:1px solid #cfdcf5;border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:10px 0}
+.fx-lab{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.fx-note{font-size:12px;color:#4b5563;line-height:1.7;margin-top:7px}
+.fx-note b{color:var(--ink)}
+.tex-d{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:9px 2px 5px;text-align:center}
+.tex-d .katex{font-size:1.08em}
+.ex{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin:10px 0}
+.ex-q{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.65;background:#f1f0ec;border-radius:7px;padding:9px 12px;margin-bottom:4px}
+.ex-q em{font-style:normal;color:var(--red);font-size:11px;font-weight:700;display:block;margin-bottom:3px}
+.step{display:grid;grid-template-columns:20px 1fr;gap:9px;align-items:baseline;font-size:12.5px;color:#4b5563;line-height:1.75;padding:5px 0}
+.step i{font-style:normal;font-weight:700;color:var(--accent);font-size:11.5px}
+.ex-ans{margin-top:8px;background:#f0fdf4;border:1px solid #22c55e;border-radius:8px;padding:9px 12px;font-size:12.5px;color:#14532d;line-height:1.7}
+.ex-ans b{color:var(--green)}
+.figs > .note-box{margin:0}
+/* 편집 거리 DP 표 */
+.lev table{min-width:0;width:auto;margin:0 auto;font-family:'Consolas','D2Coding',ui-monospace,monospace}
+.lev th,.lev td{text-align:center;padding:6px 10px;white-space:nowrap}
+.lev td.on{background:#fde68a;font-weight:700;color:#7c2d12}
+/* ===== 개념 하이라이트(형광펜) + 툴팁 ===== */
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);
+  border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+td .term,th .term{font-weight:700}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;
+  left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+/* ===== 심화 — 한 걸음 더 ===== */
+.deep{
+  background:#f7f5ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:13px 16px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.deep::before{
+  content:'🔎 한 걸음 더 — 심화 개념';display:table;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:8px;
+}
+.deep b{color:#2e1065}
+.deep .ul li{color:#3b2a6b}
+.deep .ul li::before{background:#6d28d9;opacity:.75}
+.deep .tbl-wrap{margin:9px 0 4px;background:#fff}
+.deep pre.code{margin:9px 0}
+.deep .fx{background:#fff;border-color:#d8cdf7;border-left-color:#6d28d9;margin:9px 0}
+.deep .fx-lab{color:#6d28d9}
+.deep .term{background:#ede7ff;color:#5b21b6;border-bottom-color:#6d28d9}
+.deep .term:hover,.deep .term.on{background:#ddd2fb}
+/* ===== 오답 포인트 — 문제에서 갈린 지점 ===== */
+.pit{
+  background:#fff7ed;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:12.5px;line-height:1.8;color:#7c2d12;
+}
+.pit::before{
+  content:'⚠ 여기서 갈린다';display:table;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.pit b{color:#7c2d12}
+.pit .ul li{color:#7c2d12}
+.pit .ul li::before{background:#b45309;opacity:.8}
+.pit table{min-width:0}
+.pit .tbl-wrap{margin:8px 0 4px;background:#fff}
+
+/* ===== 필기 구분 — 실시간 강의 강조 / 내 복습 필기 ===== */
+.live{
+  background:#fffaf3;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#7c2d12;
+}
+.live::before{
+  content:'🎙 실시간 강의 강조';display:table;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.live b{color:#7c2d12}
+.live .ul li{color:#7c2d12}
+.live .ul li::before{background:#b45309;opacity:.75}
+.mynote{
+  background:#f5f3ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.mynote::before{
+  content:'📝 내 복습 필기 · 추가 개념';display:table;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.mynote b{color:#2e1065}
+.mynote .ul li{color:#3b2a6b}
+.mynote .ul li::before{background:#6d28d9;opacity:.75}
+.mynote table{min-width:0}
+.mynote .tbl-wrap{margin:8px 0 4px;background:#fff}
+.mynote pre.code{margin:9px 0}
+.mynote .fx{background:#fff;border-color:#d8cdf7;border-left-color:#6d28d9;margin:9px 0}
+/* 분류 알고리즘 바로가기 카드 */
+.algo{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:9px;margin:12px 0}
+.algo a{display:block;background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:11px 13px;text-decoration:none;color:inherit;transition:border-color .12s,transform .12s}
+.algo a:hover{border-color:var(--accent);transform:translateY(-1px)}
+.algo a b{display:block;font-size:13.5px;color:var(--ink)}
+.algo a small{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}
+.algo a span{display:block;font-size:12px;color:#4b5563;line-height:1.65}
+.algo a em{display:block;font-style:normal;font-size:11px;color:var(--accent);font-weight:700;margin-top:6px}
+/* 재현율 점 그림 */
+.dots{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0 4px}
+.dots i{width:15px;height:15px;border-radius:50%;display:inline-block}
+.dots i.tp{background:#16a34a}
+.dots i.fn{background:#fff;border:2px solid #dc2626}
+.dots i.fp{background:#f59e0b}
+.dots-lab{font-size:11.5px;color:#4b5563}
+/* 시그모이드 그림 */
+.sig{display:block;width:100%;max-width:420px;height:auto;margin:8px auto 2px;background:#fff;border:1px solid #d8cdf7;border-radius:8px}
+/* ===== 복습하기 ===== */
+.rv{background:var(--surface);border:1px solid var(--border);border-left:4px solid #0f766e;border-radius:var(--radius);margin:10px 0;overflow:hidden}
+.rv summary{cursor:pointer;list-style:none;padding:12px 15px;font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.6;display:flex;gap:9px;align-items:baseline}
+.rv summary::-webkit-details-marker{display:none}
+.rv summary i{font-style:normal;flex:none;font-size:11px;font-weight:800;color:#fff;background:#0f766e;border-radius:999px;padding:1px 8px}
+.rv summary::after{content:'답 보기 ▾';margin-left:auto;flex:none;font-size:11px;font-weight:700;color:#0f766e}
+.rv[open] summary::after{content:'접기 ▴'}
+.rv .ans{border-top:1px dashed #99e0d6;background:#f0fdfa;padding:12px 15px;font-size:13px;line-height:1.85;color:#134e4a}
+.rv .ans b{color:#0f3d3a}
+.rv .ans .ul li{color:#134e4a}
+.rv .ans .tbl-wrap{background:#fff;margin:8px 0}
+.rv .ans table{min-width:0}
+.rv .ans pre.code{margin:8px 0}
+.rv .one{display:block;background:#fff;border:1px solid #99e0d6;border-radius:7px;padding:7px 11px;margin-bottom:8px;font-weight:700;color:#0f3d3a}
+/* 범례 */
+.mark-legend{display:flex;flex-wrap:wrap;gap:8px 18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px 14px;margin:-14px 0 26px;font-size:12.5px;color:#4b5563;line-height:1.6}
+.mark-legend span{display:inline-flex;align-items:center;gap:6px}
+.hi{background:linear-gradient(transparent 58%,#ffe9a8 58%);font-weight:700;color:var(--ink);padding:0 1px}
+.mark-legend i{width:12px;height:12px;border-radius:3px;display:inline-block;flex-shrink:0}
+/* 7주차 추가: 한 줄 요약 · SVG 도식 */
+.oneline{background:#16233f;color:#e7edf9;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+.oneline > p{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:#c9f24b}
+.oneline .ul li{color:#c5d0e8;font-size:13px}
+.oneline .ul li b{color:#fff}
+.oneline .ul li::before{background:#c9f24b;opacity:.9}
+.oneline .hi{color:#16233f}
+.svgfig{padding:11px 11px 9px}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:560px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#docs">강의자료</a>
+  <a href="#quiz700">중간고사 700제</a>
+  <a href="#goal">복습 우선순위</a>
+  <a href="#formula">필수 수식</a>
+  <a href="#calc">예상 문제 · 계산</a>
+  <a href="#essay">예상 문제 · 서술</a>
+  <a href="#pitfall">자주 틀리는 지점</a>
+  <a href="#check">자가 점검</a>
+  <a href="#next">다음 주 예고</a>
+</nav>
+
+<div class="wrap">
+
+<div class="weeknav">
+  <a href="nlp.html" class="plan">← 강의계획서</a>
+  <a href="nlp-week05.html">5주차 · 단어 표현 · 텍스트 분류 · 유사도</a>
+  <a href="nlp-week06.html">6주차 · 요약 · 생성 · 벡터 표현</a>
+  <a href="nlp-week07.html">7주차 · 개체명 인식 · 언어 모델 · 정보 추출</a>
+  <span class="cur">8주차 · 중간 정리 · 중간고사</span>
+</div>
+
+<section class="hero">
+  <p class="kicker">8주차 · 10.19 ~ 10.25 · 2026-2학기</p>
+  <h1>CHAPTER 8 — 중간 정리</h1>
+  <p>1~7주차를 한 문장으로 줄이면 &ldquo;<b>텍스트를 어떻게 숫자로 바꾸고, 그 숫자로 무엇을 예측할 것인가</b>&rdquo;이다. 관통하는 축은 <b>문자열 → 토큰 → 벡터 → 확률 → 예측</b>. 이 페이지는 8주차 중간 정리 교안의 복습 우선순위 · 필수 수식 · 예상 문제 · 자주 틀리는 지점을 모으고, 1~7주차 100문제 일곱 세트를 <b>한 페이지 700제</b>로 묶어 둔다.</p>
+  <div class="chips"><span class="chip">전처리 순서</span><span class="chip">TF-IDF · 유사도</span><span class="chip">N-gram · 스무딩</span><span class="chip">HMM · BIO</span><span class="chip">P · R · F1 · PPL</span><span class="chip">교안 29p</span><span class="chip">700문제</span></div>
+</section>
+
+<!-- ===================== 강의자료 ===================== -->
+<section class="sec" id="docs">
+  <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">8주차 강의자료<small>제목을 누르면 앱 실행 없이 화면에서 바로 열립니다</small></h2></div>
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📘</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=nlp-w08-slides">자연어처리 CHAPTER 8 — 중간 정리</a>
+      <p>1~7주차 핵심 요약(PART 1~4) / 중간고사 대비(필수 수식 · 예상 문제 10개 · 자가 점검 · 자주 틀리는 지점 ①~⑨) · <b>29페이지</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week08-slides.pdf" download="자연어처리_8주차_중간정리.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📝</span>HTML</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week08-quiz700.html" target="_blank" rel="noopener">1~7주차 중간고사 700제 ↗</a>
+      <p>주차 · 분류(초급/중급/심화/제외) 복수 선택 · <b>★ 8주차 중점 212문제</b> · 북마크 · 틀린 문제만 보기 · 기록은 이 브라우저에 저장</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week08-quiz700.html" download="자연어처리_1-7주차_700제.html">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>🔄</span>LINK</div>
+    <div class="doc-main">
+      <a class="doc-open" href="https://claude.ai/artifact/XRFm6dRUWJwAEvizzXNYQt" target="_blank" rel="noopener">700제 — 기기 간 동기화 버전 (Claude) ↗</a>
+      <p>내용은 같고, 푼 기록과 북마크가 <b>Claude 계정에 저장</b>되어 휴대폰 · PC 어디서 열어도 이어진다 · 본인 계정으로 로그인해야 열린다</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ===================== 700제 ===================== -->
+<section class="sec" id="quiz700">
+  <div class="sec-head"><span class="sec-badge">QUIZ</span><h2 class="sec-title">중간고사 700제 — 어떻게 쓰나<small>1~7주차 100문제 일곱 세트를 한 페이지로</small></h2></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>주차</th><th>주제</th><th>초급</th><th>중급</th><th>심화</th><th>제외</th><th>★ 8주차 중점</th></tr></thead>
+  <tbody>
+    <tr><td><b>1</b></td><td>자연어처리 개요</td><td>31</td><td>48</td><td>12</td><td>9</td><td>11</td></tr>
+    <tr><td><b>2</b></td><td>수학과 언어학</td><td>25</td><td>51</td><td>19</td><td>5</td><td>40</td></tr>
+    <tr><td><b>3</b></td><td>토큰화 · 품사 태깅 · 정규화</td><td>17</td><td>49</td><td>26</td><td>8</td><td>28</td></tr>
+    <tr><td><b>4</b></td><td>전처리 · 어휘 · 구문 · 의미 분석</td><td>26</td><td>45</td><td>21</td><td>8</td><td>38</td></tr>
+    <tr><td><b>5</b></td><td>단어 표현 · 분류 · 유사도</td><td>24</td><td>36</td><td>10</td><td>30</td><td>33</td></tr>
+    <tr><td><b>6</b></td><td>요약 · 생성 · 벡터 표현</td><td>15</td><td>39</td><td>17</td><td>29</td><td>32</td></tr>
+    <tr><td><b>7</b></td><td>NER · 언어 모델 · 정보 추출</td><td>22</td><td>42</td><td>15</td><td>21</td><td>30</td></tr>
+    <tr><td><b>계</b></td><td></td><td><b>160</b></td><td><b>310</b></td><td><b>120</b></td><td><b>110</b></td><td><b>212</b></td></tr>
+  </tbody>
+</table>
+</div>
+<ul class="ul">
+  <li><b>분류</b> &mdash; 각 주차 100문제의 난이도(기초 → 초급 · 중급 · 심화)를 그대로 쓰고, &lsquo;강의자료가 제시한 ~&rsquo; · &lsquo;비교표&rsquo; · &lsquo;위 예시에서&rsquo; · &lsquo;실습 노트북&rsquo;처럼 <b>교안 · 표 · 그림 · 실습 코드가 있어야 풀 수 있는 문제는 제외</b>로 따로 묶었다. 제외 문제는 목록에 남기되 처음부터 정답과 해설이 펼쳐져 있다</li>
+  <li><b>★ 8주차 중점</b> &mdash; 8주차 교안이 콕 집은 개념(복습 우선순위 · 시험 포인트 · 필수 수식 · 예상 문제 · 자주 틀리는 지점)이 <b>문제 본문에 직접 나오는</b> 문제. 어떤 개념 때문인지 카드에 함께 적혀 있다. 제외 문제에는 붙이지 않았다</li>
+  <li><b>골라 보기</b> &mdash; 주차와 분류는 여러 개를 함께 고를 수 있고, ★ 8주차 중점 · 북마크 · 틀린 문제만 · 안 푼 문제만 · 검색과 겹쳐 쓸 수 있다</li>
+</ul>
+</section>
+
+<!-- ===================== 복습 우선순위 ===================== -->
+<section class="sec" id="goal">
+  <div class="sec-head"><span class="sec-badge">GOAL</span><h2 class="sec-title">학습 목표와 복습 우선순위<small>교안 2~3p</small></h2></div>
+<div class="note-box"><b>무엇을 하는 시간인가</b>
+<ul class="ul">
+  <li>1~7주차에서 배운 개념을 <b>하나의 흐름</b>으로 다시 연결한다</li>
+  <li>주차별 핵심 용어 · 수식 · 평가지표를 표로 정리해 <b>암기 지점</b>을 명확히 한다</li>
+  <li>예상 문제와 자가 점검 체크리스트로 중간고사를 대비한다</li>
+</ul></div>
+<div class="tip"><b>복습 우선순위</b> &mdash; ① 전처리 파이프라인 순서 &nbsp;② TF-IDF · 유사도 계산 &nbsp;③ N-gram 언어모델과 스무딩 &nbsp;④ 품사 태깅(HMM)과 BIO 태깅 &nbsp;⑤ 정밀도 · 재현율 · F1 · 퍼플렉서티</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>주차</th><th>한 줄 요약</th></tr></thead>
+  <tbody>
+    <tr><td><a class="ext" href="nlp-week01.html">1주차</a></td><td>자연어처리란 무엇인가 &mdash; 정의 · 역사 · 난점 · 응용 · 파이프라인</td></tr>
+    <tr><td><a class="ext" href="nlp-week02.html">2주차</a></td><td>수학과 언어학의 기초 &mdash; 확률 · 정보이론 · 선형대수 / 형태론 · 통사론 · 의미론</td></tr>
+    <tr><td><a class="ext" href="nlp-week03.html">3주차</a></td><td>전처리 &mdash; 토큰화 · 품사 태깅 · 불용어 제거 · 정규화</td></tr>
+    <tr><td><a class="ext" href="nlp-week04.html">4주차</a></td><td>유니코드 정규화 · 띄어쓰기/맞춤법 교정 · 서브워드, 형태소 분석, 구구조/의존 구문, 중의성 해소</td></tr>
+    <tr><td><a class="ext" href="nlp-week05.html">5주차</a></td><td>원핫 · BoW · TF-IDF, 분류 평가, 텍스트 유사도</td></tr>
+    <tr><td><a class="ext" href="nlp-week06.html">6주차</a></td><td>TextRank, 마르코프 체인, 임베딩</td></tr>
+    <tr><td><a class="ext" href="nlp-week07.html">7주차</a></td><td>BIO, N-gram LM, 관계 추출</td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
+<!-- ===================== 필수 수식 ===================== -->
+<section class="sec" id="formula">
+  <div class="sec-head"><span class="sec-badge">TeX</span><h2 class="sec-title">반드시 외워야 할 수식<small>교안 22p</small></h2></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>주제</th><th>수식</th><th>주차</th></tr></thead>
+  <tbody>
+    <tr><td>베이즈 정리</td><td><span class="tex">P(A|B) = \dfrac{P(B|A)\,P(A)}{P(B)}</span></td><td>2</td></tr>
+    <tr><td>엔트로피 / 퍼플렉서티</td><td><span class="tex">H = -\sum P\log_2 P,\quad PPL = 2^{H}</span></td><td>2 · 7</td></tr>
+    <tr><td>코사인 유사도</td><td><span class="tex">\dfrac{A\cdot B}{\lVert A\rVert\,\lVert B\rVert}</span></td><td>5</td></tr>
+    <tr><td>자카드 유사도</td><td><span class="tex">\dfrac{|A\cap B|}{|A\cup B|}</span></td><td>5</td></tr>
+    <tr><td><b>TF-IDF (시험 기준 · sklearn)</b></td><td><span class="tex">TF_{\text{원시 빈도}} \times \left[\log\dfrac{1+N}{1+DF} + 1\right]</span></td><td>5</td></tr>
+    <tr><td>TF-IDF (6주차 판 · 비교용)</td><td><span class="tex">TF_{\text{상대 빈도}} \times \left[\log\dfrac{N}{1+DF} + 1\right]</span></td><td>6</td></tr>
+    <tr><td>F1 점수</td><td><span class="tex">\dfrac{2PR}{P+R}</span></td><td>5 · 7</td></tr>
+    <tr><td>바이그램 확률</td><td><span class="tex">\dfrac{C(w_{-1},w)}{C(w_{-1})}</span></td><td>7</td></tr>
+    <tr><td>라플라스 스무딩</td><td><span class="tex">\dfrac{C+1}{C(w_{-1})+V}</span></td><td>7</td></tr>
+    <tr><td>ROUGE-N</td><td>(참조와 겹치는 n-gram 수) / (참조의 n-gram 수)</td><td>6</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="warn"><b>시험 출제는 5주차 · sklearn 식</b> &mdash; 6주차 식은 비교용이다. 일반 교재의 <span class="tex">\log(N/DF)</span>와도 다르다. 끝의 <b>+1</b>이 없으면 모든 문서에 나오는 단어(DF = N)의 IDF가 0이 되어 TF-IDF가 통째로 사라지므로, +1로 최솟값을 1로 유지한다.</div>
+</section>
+
+<!-- ===================== 예상 문제 · 계산 ===================== -->
+<section class="sec" id="calc">
+  <div class="sec-head"><span class="sec-badge">CALC</span><h2 class="sec-title">예상 문제 (1) — 계산<small>교안 23p · 시험 포인트 예제 포함 · 눌러서 답 보기</small></h2></div>
+<details class="rv"><summary><i>문제 1</i>문서 3개 중 단어 t가 2개 문서에 등장한다. sklearn 기본식으로 IDF(t)를 구하시오.</summary>
+<div class="ans"><span class="tex">\log\dfrac{1+3}{1+2} + 1 = \log\dfrac{4}{3} + 1 \approx 1.288</span> (자연로그)</div></details>
+<details class="rv"><summary><i>문제 2</i>|A| = 10, |B| = 8, |A∩B| = 4일 때 자카드 유사도는?</summary>
+<div class="ans">합집합은 <span class="tex">|A|+|B|-|A\cap B| = 10+8-4 = 14</span>이므로 <span class="tex">4/14 \approx 0.286</span>. 교집합을 두 번 빼거나 아예 안 빼는 실수가 잦다.</div></details>
+<details class="rv"><summary><i>문제 3</i>C(&lsquo;나는&rsquo;) = 6, C(&lsquo;나는&rsquo;,&lsquo;밥을&rsquo;) = 3일 때 P(밥을 | 나는)은?</summary>
+<div class="ans">MLE: <span class="tex">3/6 = 0.5</span>. 라플라스(V = 100)이면 <span class="tex">(3+1)/(6+100) = 4/106 \approx 0.038</span>.</div></details>
+<details class="rv"><summary><i>문제 4</i>TP = 30, FP = 10, FN = 20일 때 정밀도 · 재현율 · F1은?</summary>
+<div class="ans"><span class="tex">P = 30/40 = 0.75,\; R = 30/50 = 0.60,\; F1 = \dfrac{2(0.75)(0.6)}{1.35} \approx 0.667</span></div></details>
+<details class="rv"><summary><i>편집 거리</i>kitten → sitting의 Levenshtein 거리는?</summary>
+<div class="ans">k→s 대체 1 · e→i 대체 1 · g 삽입 1 → <b>3</b>. 인접 문자 전치(transposition)까지 허용하면 Damerau-Levenshtein이고, teh → the는 전치 1회라 거리 1이다.</div></details>
+<details class="rv"><summary><i>ROUGE-L</i>참조 &lsquo;the cat is on the mat&rsquo;, 후보 &lsquo;the cat sat on mat&rsquo;의 ROUGE-L P · R · F1은?</summary>
+<div class="ans">LCS = &lsquo;the cat on mat&rsquo;(길이 4, 연속일 필요는 없고 순서만 유지). <span class="tex">R = 4/6 = 0.667,\; P = 4/5 = 0.800,\; F1 \approx 0.727</span></div></details>
+</section>
+
+<!-- ===================== 예상 문제 · 서술 ===================== -->
+<section class="sec" id="essay">
+  <div class="sec-head"><span class="sec-badge">Q&amp;A</span><h2 class="sec-title">예상 문제 (2) — 서술<small>교안 24p · 답의 뼈대는 교안 요약 슬라이드에서</small></h2></div>
+<details class="rv"><summary><i>문제 5</i>불용어 제거를 품사 태깅보다 먼저 하면 어떤 문제가 생기나? (오류 전파 포함)</summary>
+<div class="ans">품사 태거는 주변 단어를 문맥으로 쓰는데, 불용어를 먼저 지우면 문맥이 깨져 <b>태깅이 틀어진다</b>. 그 오류는 품사 정보를 쓰는 표제어 추출 같은 <b>뒤 단계로 그대로 전파</b>된다. 그래서 표준 순서는 정제 → 정규화 → 토큰화 → <b>품사 태깅 → 불용어 제거</b> → 표제어 추출이다. <a class="ext" href="nlp-week03.html">3주차</a></div></details>
+<details class="rv"><summary><i>문제 6</i>원-핫 인코딩과 분산 표현의 차이를 유사도 계산 관점에서 설명하시오.</summary>
+<div class="ans">원-핫은 모든 단어 벡터가 서로 <b>직교</b>해 어떤 두 단어의 코사인 유사도도 0이다. 분산 표현은 예측/공기 통계로 학습한 <b>밀집 벡터</b>라 비슷한 문맥의 단어끼리 유사도가 높게 나온다. 다만 정적 임베딩은 다의어를 한 벡터로 뭉갠다. <a class="ext" href="nlp-week05.html">5주차</a></div></details>
+<details class="rv"><summary><i>문제 7</i>BIO 태깅이 필요한 이유 두 가지 이상과 예문 태깅</summary>
+<div class="ans">① <b>여러 토큰에 걸친 개체</b>를 하나로 묶고 ② <b>연속된 두 개체의 경계</b>를 구분하기 위해. 예: New/B-LOC York/I-LOC City/I-LOC is/O big/O. 태그 수는 <span class="tex">2N+1</span>. <a class="ext" href="nlp-week07.html#bio">7주차 7.1.4</a></div></details>
+<details class="rv"><summary><i>문제 8</i>N-gram에서 N을 키울 때의 장단점 (희소성 관점)</summary>
+<div class="ans">장점은 더 긴 문맥을 반영한다는 것. 단점은 경우의 수가 <span class="tex">V^N</span>으로 늘어 <b>대부분의 n-gram이 관측되지 않는다</b>(희소성)는 것이다. 미관측 n-gram이 하나라도 있으면 MLE의 PPL은 무한대가 되므로 스무딩 · 보간 · 백오프가 필요하다. <a class="ext" href="nlp-week07.html#smooth">7주차 7.2.4</a></div></details>
+<details class="rv"><summary><i>문제 9</i>TextRank가 단순 빈도 요약보다 나은 점 (PageRank의 재귀성)</summary>
+<div class="ans">PageRank의 핵심은 링크 개수가 아니라 &ldquo;<b>중요한 노드가 가리키면 더 중요해진다</b>&rdquo;는 재귀성이다. 문장을 노드, 유사도를 에지로 두면 다른 중요한 문장들과 많이 닮은 문장이 높은 점수를 받는다. 고른 문장은 점수 순이 아니라 <b>원문 순서</b>로 배열한다. <a class="ext" href="nlp-week06.html">6주차</a></div></details>
+<details class="rv"><summary><i>문제 10</i>정밀도와 재현율이 상충하는 사례와 우선할 지표</summary>
+<div class="ans">스팸 필터는 정상 메일을 스팸으로 버리는 <b>오탐 비용</b>이 커서 정밀도를, 질병 · 위험 탐지는 놓치는 <b>누락 비용</b>이 커서 재현율을 우선한다. 불균형 데이터에서는 둘의 조화평균인 F1을 기본으로 보고, 다중 분류에서는 매크로/마이크로 F1을 구분한다.</div></details>
+</section>
+
+<!-- ===================== 자주 틀리는 지점 ===================== -->
+<section class="sec" id="pitfall">
+  <div class="sec-head"><span class="sec-badge">PIT</span><h2 class="sec-title">자주 틀리는 지점 ①~⑨<small>교안 26~27p</small></h2></div>
+<div class="pit"><b>⚠ 여기서 갈린다</b>
+<ul class="ul">
+  <li><b>① IDF 공식</b> &mdash; 교재의 <span class="tex">\log(N/DF)</span>가 아니라 sklearn 기본식 <span class="tex">\log\frac{1+N}{1+DF}+1</span>이 기준</li>
+  <li><b>② 자카드 합집합</b> &mdash; <span class="tex">|A\cup B| = |A|+|B|-|A\cap B|</span></li>
+  <li><b>③ 불용어 목록 맹신</b> &mdash; NLTK 영어 불용어는 179개이고 &lsquo;one&rsquo;은 없다. 감성 분석에서 not · no · never를 지우면 의미가 뒤집힌다. BERT 같은 사전학습 모델에서는 보통 지우지 않는다</li>
+  <li><b>④ 전처리 순서</b> &mdash; 품사 태깅 전에 불용어를 지우면 태깅이 틀어지고 오류가 전파된다</li>
+  <li><b>⑤ 의존 에지 방향</b> &mdash; 지배소(head) → 의존소(dependent)</li>
+  <li><b>⑥ GloVe의 분류</b> &mdash; Word2Vec · FastText는 예측 기반, GloVe는 전역 공기 행렬을 분해하는 <b>카운트 기반</b></li>
+  <li><b>⑦ 어간 추출 결과</b> &mdash; Porter는 규칙만 적용해 &lsquo;battling → battl&rsquo; 같은 비단어가 나온다. 정확한 기본형은 품사를 준 표제어 추출(&lsquo;was&rsquo; + v → &lsquo;be&rsquo;)</li>
+  <li><b>⑧ 관용 표현</b> &mdash; &lsquo;미역국을 먹다&rsquo;는 복합어가 아니라 관용구</li>
+  <li><b>⑨ 관형사</b> &mdash; 이 · 그 · 새 · 헌은 한국어 고유 품사인 관형사. 영어 &lsquo;old&rsquo;는 형용사의 한정적 용법</li>
+</ul></div>
+</section>
+
+<!-- ===================== 자가 점검 ===================== -->
+<section class="sec" id="check">
+  <div class="sec-head"><span class="sec-badge">CHECK</span><h2 class="sec-title">자가 점검 체크리스트<small>교안 25p</small></h2></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>구분</th><th>점검 항목</th></tr></thead>
+  <tbody>
+    <tr><td><b>개념</b><br><small>설명할 수 있는가</small></td><td>NLP 역사 4단계(규칙 → 통계 → 신경망 → 사전학습 · LLM)와 대표 기법 · 중의성 3유형(어휘적 · 구조적 · 화용적) · MLE와 MAP의 차이와 스무딩 · 형태소 · 어절 · 한국어 9품사 · 구구조 vs 의존 문법 · 분포 가설이 임베딩의 근거인 이유</td></tr>
+    <tr><td><b>계산</b><br><small>손으로 풀 수 있는가</small></td><td>TF-IDF 행렬 · 자카드 · 코사인 · 편집 거리(Levenshtein / Damerau-Levenshtein) · 바이그램 확률과 라플라스 스무딩 · 퍼플렉서티 · 혼동행렬에서 P · R · F1 · ROUGE-1 / ROUGE-L</td></tr>
+    <tr><td><b>구현</b><br><small>코드를 읽고 쓸 수 있는가</small></td><td>전처리 파이프라인 함수 · TF-IDF 직접 구현 · TextRank · N-gram LM · 규칙 기반 NER</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="good"><b>복습 자료</b> &mdash; 교안의 권고대로 각 주차 <b>실습 노트북을 다시 실행</b>해 보는 것이 가장 효과적이다. 문제로 점검할 때는 <a class="ext" href="#quiz700">700제</a>에서 ★ 8주차 중점부터 풀고, 틀린 문제만 다시 보기로 돌리면 된다.</div>
+</section>
+
+<!-- ===================== 다음 주 ===================== -->
+<section class="sec" id="next">
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">9주차 이후 미리보기<small>교안 29p</small></h2></div>
+<div class="note-box">
+<ul class="ul">
+  <li><b>9~10주차</b> &mdash; 질의응답 · 기계번역 · 대화 / 토픽 모델링 · 감성 분석 · 기계 독해</li>
+  <li><b>11~12주차</b> &mdash; 딥러닝 기초 · Word2Vec · CNN / RNN · LSTM · Seq2Seq · 어텐션</li>
+  <li><b>13~14주차</b> &mdash; 딥러닝 기반 형태소 분석 · NER / 트랜스포머 기반 번역 · 생성</li>
+  <li><b>15주차</b> 기말 정리 &nbsp;·&nbsp; <b>16주차</b> 자연어처리의 미래와 연구 방향</li>
+</ul></div>
+</section>
+
+<p class="src">자연어처리 8주차 (CHAPTER 8 중간 정리) 강의자료 정리 · 2026학년도 2학기<br>
+교안 29페이지의 요약 · 필수 수식 · 예상 문제 · 자주 틀리는 지점을 옮기고, 1~7주차 100문제 일곱 세트를 묶은 700제를 함께 실었다.</p>
+
+</div>
+
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive(){
+    var cur = '';
+    sections.forEach(function(s){ if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function(t){ t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      setTimeout(function(){
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+
+  /* ---- 개념 설명 말풍선 (형광펜 용어) ---- */
+  var terms = document.querySelectorAll('.term');
+  if (!terms.length) return;
+  var tip = document.createElement('div');
+  tip.id = 'tipbox';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  var current = null;
+
+  function hide() {
+    tip.classList.remove('on');
+    if (current) { current.classList.remove('on'); current = null; }
+  }
+  function show(el) {
+    tip.textContent = el.getAttribute('data-tip') || '';
+    tip.classList.add('on');
+    if (current && current !== el) current.classList.remove('on');
+    current = el;
+    el.classList.add('on');
+    var pad = 8;
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+    var top = r.top - t.height - 10;
+    if (top < pad) top = r.bottom + 10;
+    top = Math.min(top, window.innerHeight - t.height - pad);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+  terms.forEach(function (el) {
+    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+    el.addEventListener('mouseenter', function () { show(el); });
+    el.addEventListener('mouseleave', function () { if (current === el) hide(); });
+    el.addEventListener('focus', function () { show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (current === el && tip.classList.contains('on')) hide(); else show(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el); }
+      if (e.key === 'Escape') hide();
+    });
+  });
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide);
+});
+</script>
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script src="../vendor/katex/katex.min.js"></script>
+<script>
+// .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.
+// KaTeX를 못 불러온 경우에는 원문이 그대로 남아 최소한 읽을 수는 있게 둔다.
+(function () {
+  if (typeof katex === 'undefined') { return; }
+  document.querySelectorAll('.tex, .tex-d').forEach(function (el) {
+    try {
+      katex.render(el.textContent.trim(), el, {
+        displayMode: el.classList.contains('tex-d'),
+        throwOnError: false,
+        strict: false
+      });
+    } catch (e) { if (window.console) { console.error('KaTeX', e, el.textContent); } }
+  });
+})();
+</script>
+
+</body>
+</html>
