@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>컴퓨터비전 | 8주차 중간고사 서술형 대비 자료집</title>
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0c1a3a">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+@media(max-width:560px){.fl{grid-template-columns:1fr;gap:4px}}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+
+/* 주차 내비 */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* ===== 필기 표기 ===== */
+.hw{color:#b45309;font-weight:700;background:#fff7ed;border-radius:3px;padding:0 3px}
+.legend{
+  display:flex;flex-wrap:wrap;gap:9px 16px;align-items:center;
+  background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius);
+  padding:13px 15px;margin:0 0 24px;font-size:12px;color:var(--muted);line-height:1.6;
+}
+.legend i{font-style:normal;display:flex;align-items:center;gap:7px}
+.legend .legend-t{flex:0 0 100%;font-size:12.5px;font-weight:700;color:var(--ink)}
+.legend .legend-t2{flex:0 0 100%;font-size:11.5px;color:var(--muted);border-top:1px dashed var(--border);padding-top:10px;margin-top:1px}
+
+/* ===== 주차 내비 ===== */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* ===== 자료별 구분 ===== */
+.matbar{
+  background:linear-gradient(135deg,#122250,#24407f);color:#fff;border-radius:14px;
+  padding:16px 18px;margin:34px 0 18px;box-shadow:0 6px 18px rgba(18,34,80,.15);
+}
+.matbar .tagline{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--lime)}
+.matbar h2{font-size:clamp(16px,3.6vw,20px);font-weight:700;line-height:1.3;margin:5px 0 4px}
+.matbar p{font-size:12.5px;color:#c9d3ee;line-height:1.65}
+.matbar .acts{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.matbar .acts a{
+  font-size:12px;font-weight:700;text-decoration:none;border-radius:8px;padding:6px 12px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;
+}
+.matbar .acts a.primary{background:var(--lime);border-color:var(--lime);color:#16233f}
+.partbar{
+  display:flex;align-items:center;gap:10px;margin:26px 0 14px;
+  font-size:13px;font-weight:700;color:var(--accent);
+}
+.partbar::after{content:'';flex:1;height:1px;background:var(--border)}
+.partbar b{background:var(--accent-light);border:1px solid #c4d2ee;border-radius:999px;padding:4px 11px;font-size:11.5px}
+
+/* ===== 한눈에 보기 ===== */
+.mapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px;margin-top:10px}
+.mapgrid a{
+  display:block;text-decoration:none;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:9px;padding:10px 13px;transition:.15s;
+}
+.mapgrid a:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(18,34,80,.1)}
+.mapgrid b{display:block;font-size:12.5px;color:var(--ink)}
+.mapgrid span{font-size:11.5px;color:var(--muted);line-height:1.55}
+
+/* ===== 개념 하이라이트 + 툴팁 ===== */
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);
+  border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;
+  left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+
+/* ===== 행렬 ===== */
+.mtx{display:inline-flex;align-items:center;gap:4px;vertical-align:middle;margin:0 2px}
+.mtx .br{display:inline-block;width:7px;align-self:stretch;border:2px solid var(--ink);border-right:none;border-radius:3px 0 0 3px}
+.mtx .br.r{border:2px solid var(--ink);border-left:none;border-radius:0 3px 3px 0}
+.mtx .cells{display:grid;gap:2px 12px;padding:5px 2px;font-size:12.5px;text-align:center}
+.mtx .cells span{min-width:26px;line-height:1.5}
+.eq{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;justify-content:center;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 14px;margin:10px 0;
+}
+.eq .op{font-size:14px;font-weight:700;color:var(--muted)}
+/* ===== 변환 카드 ===== */
+.xf{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px}
+.xf-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:4px}
+.xf-head h4{font-size:14.5px;font-weight:700}
+.xf-head .en{font-size:11.5px;color:var(--muted)}
+.xf-dof{margin-left:auto;background:var(--accent);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.xf p{font-size:13px;color:#4b5563;line-height:1.78}
+.xf-keep{font-size:12.5px;color:#166534;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.65}
+.xf-sol{font-size:12.5px;color:#1b3f8b;background:#eef6ff;border:1px solid #c4d2ee;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.7}
+
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .st{color:#c9f24b}
+pre.code .fn{color:#7ec8ff}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 함수 카드 */
+.fnc{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:var(--radius);padding:13px 15px;margin:11px 0}
+.fnc h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fnc .sig{
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;color:#1b3f8b;
+  background:#eef2fb;border:1px solid #dbe3f5;border-radius:6px;padding:7px 10px;margin:7px 0 9px;
+  overflow-x:auto;white-space:pre;
+}
+.fnc dl{display:grid;grid-template-columns:minmax(88px,auto) 1fr;gap:5px 12px;font-size:12.5px;line-height:1.65}
+.fnc dt{font-weight:700;color:var(--ink)}
+.fnc dd{color:#4b5563}
+@media(max-width:440px){.fnc dl{grid-template-columns:1fr;gap:2px}.fnc dd{margin-bottom:6px}}
+
+/* 수식 카드 · 풀이 예제 (기계학습특론 페이지와 같은 규칙) */
+.fx{background:#f8faff;border:1px solid #cfdcf5;border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:10px 0}
+.fx-lab{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.fx-note{font-size:12px;color:#4b5563;line-height:1.7;margin-top:7px}
+.fx-note b{color:var(--ink)}
+.tex-d{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:9px 2px 5px;text-align:center}
+.tex-d .katex{font-size:1.08em}
+.ex{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin:10px 0}
+.ex-q{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.65;background:#f1f0ec;border-radius:7px;padding:9px 12px;margin-bottom:4px}
+.ex-q em{font-style:normal;color:var(--red);font-size:11px;font-weight:700;display:block;margin-bottom:3px}
+.step{display:grid;grid-template-columns:minmax(20px,auto) 1fr;gap:9px;align-items:baseline;font-size:12.5px;color:#4b5563;line-height:1.75;padding:5px 0}
+.step i{font-style:normal;font-weight:700;color:var(--accent);font-size:11.5px}
+.ex-ans{margin-top:8px;background:#f0fdf4;border:1px solid #22c55e;border-radius:8px;padding:9px 12px;font-size:12.5px;color:#14532d;line-height:1.7}
+.ex-ans b{color:var(--green)}
+.figs > .note-box{margin:0}
+/* 편집 거리 DP 표 */
+.lev table{min-width:0;width:auto;margin:0 auto;font-family:'Consolas','D2Coding',ui-monospace,monospace}
+.lev th,.lev td{text-align:center;padding:6px 10px;white-space:nowrap}
+.lev td.on{background:#fde68a;font-weight:700;color:#7c2d12}
+
+/* ===== 출처 뱃지 ===== */
+.bdg{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.02em;padding:3px 9px;border-radius:999px;white-space:nowrap;line-height:1.5}
+.bdg-gyo{background:#eef2fb;color:#1b3f8b;border:1px solid #c4d2ee}
+.bdg-flip{background:#fff7ed;color:#b45309;border:1px solid #f0c48a}
+.bdg-live{background:#fdf0f5;color:#9d174d;border:1px solid #f3bcd2}
+.bdg-plus{background:#f0fdfa;color:#0f766e;border:1px solid #99e0d6}
+.bdg-pres{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
+
+/* ===== 개념 카드 ===== */
+.pt{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin:11px 0}
+.pt-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;font-weight:700;line-height:1.45;margin-bottom:7px}
+.pt > p{font-size:13.5px;color:#3f4854;line-height:1.85}
+.pt > p + p{margin-top:9px}
+.pt > p b{color:var(--ink)}
+.pt.gyo{border-left-color:#1b3f8b}
+.pt.flip{border-left-color:#b45309}
+.pt.live{border-left-color:#9d174d}
+.pt.plus{border-left-color:#0f766e}
+.pt.pres{border-left-color:#6d28d9}
+.deep{background:#f5f3ff;border:1px solid #c4b5fd;border-left:4px solid #7c3aed;border-radius:0 var(--radius) var(--radius) 0;padding:11px 14px;margin:12px 0;font-size:13px;color:#3f4854;line-height:1.8}
+.deep b:first-child{color:#6d28d9}
+.pit{background:#fff7ed;border:1px solid #f0c48a;border-left:4px solid #ea580c;border-radius:0 var(--radius) var(--radius) 0;padding:11px 14px;margin:12px 0}
+.pit p{font-size:13px;color:#3f4854;line-height:1.8}
+.pit p + p{margin-top:7px}
+.pit .pit-h{font-size:12.5px;font-weight:800;color:#c2410c;margin-bottom:3px}
+.pt .sub-title{margin:18px 0 8px}
+.hi{background:linear-gradient(transparent 58%,#ffe9a8 58%);font-weight:700;color:var(--ink);padding:0 1px}
+.pt pre.code{margin:9px 0}
+
+/* 커널(마스크) 격자 */
+.kmat{display:inline-grid;grid-template-columns:repeat(3,26px);border:1.5px solid #1f2937;border-radius:3px;overflow:hidden;background:#fff;font:700 12px/24px Consolas,'D2Coding',ui-monospace,monospace;text-align:center;vertical-align:middle}
+.kmat.k2{grid-template-columns:repeat(2,26px)}
+.kmat.k1{grid-template-columns:26px}
+.kmat span{border:1px solid #d6dbe3;height:24px}
+.kmat .p{background:#dbeafe;color:#1e3a8a}
+.kmat .n{background:#fee2e2;color:#991b1b}
+.kmat .z{color:#9ca3af}
+.kmat.hl{box-shadow:0 0 0 3px #f59e0b}
+.kpair{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
+.kbox{display:inline-flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--muted);line-height:1.4}
+.kbox b{font-size:11.5px;color:var(--ink)}
+.kbox em{font-style:normal;font-weight:700;color:#4b5563}
+.kbox.win em{color:#b45309}
+.ktbl td{vertical-align:middle}
+.ktbl td .kpair{justify-content:flex-start}
+.cmp{display:grid;grid-template-columns:repeat(3,auto);gap:12px 16px;justify-content:center;align-items:center;margin:12px 0}
+.cmp .mid{display:flex;align-items:center;justify-content:center}
+.dia{display:block;width:100%;max-width:580px;height:auto;margin:10px auto 4px;background:#fff;border:1px solid var(--border);border-radius:8px}
+.dia-cap{font-size:11.5px;color:var(--muted);text-align:center;line-height:1.6;margin-bottom:8px}
+.patch{display:inline-grid;grid-template-columns:repeat(3,30px);border:1.5px solid #1f2937;font:700 11px/30px Consolas,monospace;text-align:center}
+.patch span{height:30px}
+.chain{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}
+.chain span{min-width:44px;text-align:center;border-radius:6px;padding:4px 2px;font:700 12px/1.3 Consolas,monospace}
+.chain small{display:block;font:600 10px/1.3 'Pretendard',sans-serif}
+.chain .s{background:#1f2937;color:#fff}
+.chain .wk{background:#dcfce7;color:#14532d;border:1px solid #22c55e}
+.chain .wd{background:#fee2e2;color:#991b1b;border:1px dashed #ef4444}
+.pt-figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px;margin:10px 0}
+.pt-figs .sld{margin:0}
+table.acc{min-width:0}
+.acc td,.acc th{text-align:center;font-family:Consolas,monospace;padding:6px 6px;white-space:nowrap}
+.acc td.h1{background:#fef3c7}
+.acc td.h3{background:#b45309;color:#fff;font-weight:800}
+.chain .d{background:#f3f4f6;color:#9ca3af;border:1px dashed #d1d5db}
+
+/* 본문 속 짧은 보충 설명 상자 */
+.qa{background:#f0fdfa;border:1px solid #99e0d6;border-left:4px solid #0f766e;
+  border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:11px 0;
+  font-size:13px;line-height:1.85;color:#134e4a}
+.qa::before{content:'보충설명';display:table;font-size:10.5px;font-weight:800;letter-spacing:.02em;
+  padding:3px 9px;border-radius:999px;margin-bottom:7px;background:#e3f7f3;color:#0f766e;border:1px solid #99e0d6}
+.qa b{color:#0f3d3a}
+.qa .ul li{color:#134e4a}
+.qa .ul li::before{background:#0f766e;opacity:.8}
+
+/* ===== 슬라이드 모아보기 ===== */
+.deck{background:#efeeea;border:1px solid var(--border);border-radius:var(--radius);padding:12px 12px 14px;margin-bottom:20px}
+.deck-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.deck-h span{font-size:11px;font-weight:400;color:var(--muted)}
+.deck-t{font-size:12px;font-weight:700;color:var(--accent);margin:13px 0 7px;padding-left:8px;border-left:3px solid var(--accent)}
+.deck-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.sld{background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px;margin:0;cursor:zoom-in;transition:box-shadow .15s,transform .15s}
+.sld:hover{box-shadow:0 6px 16px rgba(18,34,80,.13);transform:translateY(-2px)}
+.sld img{display:block;width:100%;height:auto;border-radius:4px;background:#fff}
+.sld figcaption{font-size:11px;color:var(--muted);line-height:1.5;margin-top:6px;text-align:center}
+.sld figcaption b{color:var(--accent)}
+
+/* ===== 한 줄 요약 ===== */
+.oneline{background:#16233f;color:#e7edf9;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+.oneline > p{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--lime)}
+.oneline .ul li{color:#c5d0e8;font-size:13px}
+.oneline .ul li b{color:#fff}
+.oneline .ul li::before{background:var(--lime);opacity:.9}
+
+/* ===== 슬라이드 확대 보기 ===== */
+#lb{position:fixed;inset:0;background:rgba(9,15,31,.94);display:none;align-items:center;justify-content:center;
+  z-index:400;padding:52px 60px 64px;cursor:zoom-out;-webkit-user-select:none;user-select:none}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:80vh;border-radius:8px;background:#fff;box-shadow:0 18px 50px rgba(0,0,0,.45);cursor:default}
+#lb .cap{position:absolute;left:0;right:0;bottom:18px;text-align:center;color:#d9e1f3;font-size:12.5px;line-height:1.6;padding:0 20px;cursor:default}
+#lb .cap b{color:#fff}
+#lb .cap .num{display:block;font-size:11px;color:#9fb0d4;margin-top:4px;letter-spacing:.04em}
+#lb button{
+  position:absolute;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;
+  border-radius:50%;width:44px;height:44px;font-size:20px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .15s;
+  font-family:inherit;padding:0;
+}
+#lb button:hover{background:rgba(255,255,255,.22)}
+#lb button:disabled{opacity:.25;cursor:default}
+#lb .prev{left:12px;top:50%;transform:translateY(-50%)}
+#lb .next{right:12px;top:50%;transform:translateY(-50%)}
+#lb .x{right:12px;top:12px;width:38px;height:38px;font-size:17px}
+@media(max-width:560px){
+  #lb{padding:48px 10px 92px}
+  #lb .prev{left:50%;top:auto;bottom:16px;transform:translateX(-64px)}
+  #lb .next{right:50%;top:auto;bottom:16px;transform:translateX(64px)}
+  #lb .cap{bottom:70px}
+}
+
+.kg{display:block;width:108px;height:42px;margin:0 auto}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:640px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+
+/* ===== 8주차 서술형 자료집 ===== */
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;margin:-8px 0 26px}
+.ctrl button{font:700 12.5px/1 'Noto Sans KR',system-ui,sans-serif;border:1px solid var(--border);background:var(--surface);color:var(--accent);padding:9px 14px;border-radius:999px;cursor:pointer}
+.ctrl button:hover{background:var(--accent-light)}
+.q{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--ink);border-radius:var(--radius);padding:15px 16px 13px;margin:16px 0}
+.q-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px}
+.q-no{display:inline-block;background:var(--ink);color:#fff;font-size:11.5px;font-weight:800;letter-spacing:.03em;padding:4px 9px;border-radius:6px;line-height:1.3}
+.q-star{color:#d97706;font-size:12.5px;letter-spacing:1px;font-weight:700}
+.q-wk{font-size:11.5px;font-weight:700;color:#6d28d9;background:#f5f0fd;border:1px solid #d6c7f5;border-radius:999px;padding:2px 9px}
+.q-src{margin-left:auto;font-size:11.5px;font-weight:600;color:var(--accent);text-decoration:none;border:1px solid #c4d2ee;background:var(--accent-light);border-radius:999px;padding:3px 10px}
+.q-src:hover{background:#dce9fb}
+.q-txt{font-size:14.5px;font-weight:700;line-height:1.7;color:var(--ink)}
+.part{background:linear-gradient(transparent 55%,#ffe9a8 55%);padding:0 1px}
+.kw{display:flex;flex-wrap:wrap;gap:5px;margin:11px 0 2px;align-items:center}
+.kw b,.kwt{font-size:10.5px;font-weight:800;color:#0f766e;background:#e3f7f3;border:1px solid #99e0d6;border-radius:999px;padding:2px 9px;margin-right:2px}
+.kw span{font-size:11.5px;color:#1b3f8b;background:#eef2fb;border:1px solid #c4d2ee;border-radius:999px;padding:2px 9px;line-height:1.5}
+details.ans{margin-top:11px;border-top:1px dashed var(--border);padding-top:9px}
+details.ans > summary{cursor:pointer;font-size:12.5px;font-weight:800;color:var(--green);list-style:none;display:inline-flex;align-items:center;gap:6px;user-select:none}
+details.ans > summary::-webkit-details-marker{display:none}
+details.ans > summary::before{content:'▸';display:inline-block;transition:transform .15s}
+details.ans[open] > summary::before{transform:rotate(90deg)}
+details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러서 확인';font-weight:500;color:var(--muted);font-size:11.5px}
+.ans p{font-size:13.5px;line-height:1.9;color:#2d3748;margin-top:8px}
+.ans p b{color:var(--ink)}
+.q .deep,.q .pit{margin-bottom:2px}
+@media print{
+  @page{size:A4;margin:13mm 11mm 15mm}
+  html{scroll-behavior:auto}
+  body{background:#fff;font-size:13px}
+  .tab-bar,.top-btn,.weeknav,.ctrl,.matbar .acts,.q-src{display:none!important}
+  .wrap{max-width:none;padding:0}
+  .hero,.matbar,.oneline,.q-no,.sec-badge,.kw span,.kw b,.part,.tip,.pit,.deep,.good,th,td:first-child{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hero,.matbar{box-shadow:none}
+  .sec.pb{break-before:page}
+  .sec-head,.sub-title,.q-h,.q-txt{break-after:avoid}
+  .kw,.fl,.card2,tr{break-inside:avoid}
+  .ans p{orphans:3;widows:3}
+  details.ans > summary::before{content:''}
+  a{color:inherit}
+}
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#guide">시험 안내 · 답안 쓰는 법</a>
+  <a href="#flow">1~7주차 한 줄로</a>
+  <a href="#w1">1주차</a>
+  <a href="#w2">2주차 카메라 모델</a>
+  <a href="#w3">3주차 선형 필터</a>
+  <a href="#w4">4주차 피라미드</a>
+  <a href="#w5">5주차 특징 검출</a>
+  <a href="#w6">6주차 기술자</a>
+  <a href="#w7">7주차 매칭 · 호모그래피</a>
+  <a href="#cross">주차를 넘나드는 문제</a>
+  <a href="#pairs">헷갈리는 짝</a>
+  <a href="#check">시험 직전 체크</a>
+</nav>
+
+<div class="wrap">
+
+<div class="weeknav">
+  <a href="computer-vision.html" class="plan">← 강의계획서</a>
+  <a href="computer-vision-week05.html">5주차 · Local Feature Detection</a>
+  <a href="computer-vision-week06.html">6주차 · Feature Descriptors</a>
+  <a href="computer-vision-week07.html">7주차 · Feature Matching &amp; Homography</a>
+  <span class="cur">8주차 · 중간고사 대비 자료집</span>
+</div>
+
+<section class="hero">
+  <p class="kicker">8주차 · 10.21 (수) · 중간고사 · 2026-2학기</p>
+  <h1>08. 중간고사 서술형 대비 자료집 — 1~7주차를 &lsquo;말로 풀어 쓰는&rsquo; 연습</h1>
+  <p>시험은 <b>서술형만</b> 나오고, <b>수식은 묻지 않으며</b>, <b>개념을 잘 이해했는지</b>를 본다. 부분점수가 있으니 <b>아는 것을 전부, 최대한 풀어서</b> 쓰는 것이 전략이다. 이 자료집은 2~7주차 교안의 개념을 <b>&lsquo;어떤 부분이 있고 → 그 부분이 어떻게 쓰이는가&rsquo;</b> 구조로 다시 묶고, 예상 문제마다 그대로 옮겨 써도 되는 <b>모범 답안</b>을 붙였다. 실습(Python · OpenCV 코드) 내용은 범위에서 뺐다.</p>
+  <div class="chips"><span class="chip">오프라인 · 퇴계인문관 31705호</span><span class="chip">범위 1~7주차</span><span class="chip">서술형 · 부분점수</span><span class="chip">수식 ✕ · 개념 ○</span><span class="chip">실습 제외</span><span class="chip">예상 문제 58개 + 모범 답안</span></div>
+</section>
+
+<div class="matbar">
+  <p class="tagline">자료집 PDF · 인쇄 · 오프라인용</p>
+  <h2>컴퓨터비전 중간고사 서술형 대비 자료집</h2>
+  <p>이 페이지 전체(예상 문제 · 모범 답안 · 비교표 · 체크리스트)를 A4로 묶은 PDF다. 시험장 가는 길에 휴대폰으로 보거나 출력해서 손으로 써 보는 연습용으로 쓰면 된다.</p>
+  <div class="acts">
+    <a class="primary" href="pdf-viewer.html?doc=cv-w08-review">뷰어로 보기</a>
+    <a href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week08-midterm-review.pdf" download="컴퓨터비전_중간고사_서술형_대비자료집.pdf">⬇ PDF 다운로드</a>
+  </div>
+</div>
+
+<div class="legend">
+  <p class="legend-t">이 자료집을 읽는 법</p>
+  <i><span class="q-no">Q5-3</span><span>5주차의 3번째 예상 문제. 오른쪽 위 링크를 누르면 그 개념을 정리한 주차 페이지 절로 간다</span></i>
+  <i><span class="q-star">★★★</span><span>출제 가능성 · 비중 (교안에서 분량이 크고 다른 주차와 이어지는 개념일수록 별이 많다)</span></i>
+  <i><span class="kwt">채점 키워드</span><span>답안에 <b>반드시 들어가야 할 단어</b>. 부분점수는 대개 이 단어들이 정확히 쓰였는지로 갈린다</span></i>
+  <p class="legend-t2"><b>모범 답안</b>은 누르면 접히고 펴진다 &mdash; 문제만 보고 먼저 써 본 뒤 펴서 비교하자. 보라색 <b>🔎 +α</b> 상자는 교안 밖의 보충 · 심화로, 시간이 남을 때 덧붙이면 가산 요소가 되는 내용이다.</p>
+</div>
+
+<div class="ctrl">
+  <button type="button" id="fold-all">모범 답안 모두 접기 (연습 모드)</button>
+  <button type="button" id="open-all">모두 펴기</button>
+</div>
+
+<!-- ===================== 시험 안내 ===================== -->
+<section class="sec" id="guide">
+  <div class="sec-head"><span class="sec-badge">GUIDE</span><h2 class="sec-title">시험 안내와 서술형 답안 쓰는 법<small>교수님이 알려 준 출제 방식 · 부분점수를 받는 답안의 뼈대</small></h2></div>
+
+<div class="info">
+  <div class="info-row"><div class="info-key">일시 · 장소</div><div class="info-val">8주차 <b>10월 21일(수)</b> · 오프라인 시험 · <b>퇴계인문관 31705호</b></div></div>
+  <div class="info-row"><div class="info-key">범위</div><div class="info-val">1~7주차 교안 &mdash; 오리엔테이션, Geometric Camera Models, Linear Filters, Image Pyramids, Local Feature Detection, Feature Descriptors, Feature Matching &amp; Homography</div></div>
+  <div class="info-row"><div class="info-key">형식</div><div class="info-val"><b>서술형만</b> 출제 · <b>부분점수 있음</b> &rarr; &ldquo;최대한 자세하게 적으라&rdquo;</div></div>
+  <div class="info-row"><div class="info-key">수식</div><div class="info-val"><b>묻지 않는다</b> &mdash; 개념을 잘 이해하면 된다. 식을 외우는 대신 &ldquo;그 값이 <b>무엇을 재는지</b>, <b>왜 그렇게 설계했는지</b>&rdquo;를 말로 쓸 수 있으면 된다</div></div>
+  <div class="info-row"><div class="info-key">제외</div><div class="info-val"><b>실습 내용</b>(Python · OpenCV 코드, 함수 사용법) &mdash; 이 자료집에서도 뺐다. 학생 논문 발표도 교안이 아니므로 다루지 않았다</div></div>
+</div>
+
+<h3 class="sub-title">교수님이 알려 준 출제 방식 &mdash; &lsquo;부분&rsquo;과 &lsquo;활용&rsquo;을 묻는다</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>처음 예시</th><td>&ldquo;RANSAC에 대해서 설명하시오.&rdquo;</td></tr>
+  <tr><th>정정해 준 예시</th><td><b>&ldquo;RANSAC에 어떤 부분이 있는데, 그 부분은 어떻게 활용이 될까요?&rdquo;</b></td></tr>
+  <tr><th>해석</th><td>알고리즘 전체의 정의를 외워 쓰는 문제가 아니라, <b>알고리즘 속 특정 구성 요소(단계 · 파라미터 · 아이디어)</b>를 짚어 주고 <b>그 요소가 하는 일 · 필요한 이유 · 실제 쓰임</b>을 묻는다. 그래서 개념마다 &ldquo;<b>부분 → 하는 일 → 없으면 생기는 문제 → 어디에 쓰이나</b>&rdquo;를 한 묶음으로 준비해 두어야 한다.</td></tr>
+</table></div>
+
+<div class="pit">
+  <p class="pit-h">⚠ 여기서 갈린다 &mdash; 정의만 쓴 답안 vs 부분점수를 다 받는 답안</p>
+  <p>&ldquo;RANSAC은 무작위로 표본을 뽑아 모델을 추정하는 방법이다&rdquo;로 끝나면 정의 점수만 받는다. 같은 문제에서 <b>① 그 부분이 무엇인지 ② 왜 필요한지(없으면 어떻게 되는지) ③ 어떤 순서로 동작하는지 ④ 실제로 어디에 쓰이는지(예: 파노라마의 호모그래피 추정) ⑤ 한계</b>까지 쓰면 채점자가 줄 수 있는 점수를 모두 줄 근거가 생긴다. 서술형 채점은 보통 <b>키워드가 있는가</b>와 <b>논리의 연결이 맞는가</b>를 본다.</p>
+</div>
+
+<h3 class="sub-title">답안의 뼈대 &mdash; 6단 틀</h3>
+<div class="flow">
+  <div class="fl"><div class="fl-n">1</div><div><h4>한 줄 정의 (영어 용어 병기)</h4><p>&ldquo;RANSAC(RANdom SAmple Consensus)은 이상치(outlier)가 섞인 데이터에서 모델을 강건하게 추정하는 방법이다.&rdquo; &mdash; 영어 원어를 함께 쓰면 용어를 정확히 안다는 증거가 된다.</p></div></div>
+  <div class="fl"><div class="fl-n">2</div><div><h4>그 부분이 푸는 문제 &mdash; &ldquo;없으면 어떻게 되나&rdquo;</h4><p>&ldquo;최소제곱은 오차를 제곱하므로 이상치 하나에 직선 전체가 끌려간다. 그래서…&rdquo; &mdash; 동기를 쓰면 &lsquo;이해했다&rsquo;는 점수를 받는다.</p></div></div>
+  <div class="fl"><div class="fl-n">3</div><div><h4>동작 방식 &mdash; 단계를 번호로</h4><p>①②③으로 나눠 쓰면 채점자가 키워드를 찾기 쉽다. 각 단계에 &lsquo;무엇을 입력받아 무엇을 내놓는지&rsquo;를 한 마디씩.</p></div></div>
+  <div class="fl"><div class="fl-n">4</div><div><h4>활용 &mdash; 구체적인 예 하나 이상</h4><p>파노라마 스티칭, 객체 인식, 모션 추적(AR), 3차원 복원, 문서 정면화 같은 예를 &lsquo;그 부분이 거기서 무슨 역할을 하는지&rsquo;와 함께.</p></div></div>
+  <div class="fl"><div class="fl-n">5</div><div><h4>장점 · 한계 · 맞바꿈(trade-off)</h4><p>&ldquo;σ를 키우면 잡음에는 강하지만 엣지가 뭉개진다&rdquo;처럼 양쪽을 다 쓰면 깊이 이해한 답안이 된다.</p></div></div>
+  <div class="fl"><div class="fl-n">6</div><div><h4>다른 주차와 연결</h4><p>&ldquo;이 원리는 5주차 Harris의 2차 모멘트 행렬과 같다&rdquo;, &ldquo;4주차 라플라시안 피라미드가 7주차 블렌딩에 쓰인다&rdquo; &mdash; 시간이 남으면 덧붙이는 가산 요소.</p></div></div>
+</div>
+
+<div class="tip"><b>부분점수를 늘리는 작은 습관</b><br>
+· <b>수식 대신 숫자 사실</b>은 써도 좋다 &mdash; &ldquo;호모그래피는 자유도 8이라 대응점 4쌍이 필요하다&rdquo;, &ldquo;SIFT는 4×4 셀 × 8방향 = 128차원&rdquo;. 식이 아니라 개념의 일부다.<br>
+· <b>비교 표현</b>을 쓴다 &mdash; &ldquo;평균 필터와 달리&rdquo;, &ldquo;SIFT보다 빠르지만 정밀도는 낮다&rdquo;.<br>
+· <b>그림 한 장</b>이 문장 다섯 줄을 대신한다 &mdash; 창을 밀어 보는 코너 판정, 파라미터 공간의 교점, 피라미드 층 같은 것은 간단히 그려도 된다.<br>
+· <b>모르는 부분이 나와도 비우지 않는다</b> &mdash; 그 부분의 앞뒤 단계(무엇을 받아 무엇을 넘기는지)를 쓰면 흐름 점수를 받을 수 있다.<br>
+· 문제가 <b>&ldquo;어떤 부분&rdquo;</b>을 지정하면 그 부분을 중심에 두되, <b>전체 알고리즘 속 위치</b>를 먼저 한두 줄로 깔아 준다.</div>
+
+<h3 class="sub-title">예시 문제를 직접 풀어 보면</h3>
+<article class="q" id="q-ex">
+  <div class="q-h"><span class="q-no">예시</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week07.html#ransac">7주차 02 RANSAC</a></div>
+  <p class="q-txt">RANSAC에는 <span class="part">최소한의 점을 무작위로 뽑아 모델을 세우는 부분(가설)</span>과 <span class="part">그 모델에 동의하는 점을 세는 부분(검증)</span>이 있다. 각 부분이 무엇이며, 실제로 어떻게 활용되는지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>RANdom SAmple Consensus</span><span>이상치(outlier)</span><span>최소 표본</span><span>가설-검증(hypothesize-and-verify)</span><span>인라이어(inlier)</span><span>임계값 t</span><span>합의 집합</span><span>반복</span><span>최다 인라이어</span><span>재추정(최소제곱)</span><span>호모그래피 · 파노라마</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 정의와 동기.</b> RANSAC(RANdom SAmple Consensus, Fischler &amp; Bolles 1981)은 <b>이상치(outlier)가 많이 섞인 데이터</b>에서 모델을 강건하게 추정하는 방법이다. 최소제곱은 모든 점의 오차를 제곱해 더하므로 멀리 떨어진 이상치 하나가 오차의 대부분을 차지하고, 추정된 모델이 이상치 쪽으로 끌려가 버린다. 특징 매칭 결과에는 틀린 짝이 반드시 섞이므로 이런 방법이 필요하다.</p>
+    <p><b>② 가설 부분 &mdash; 최소 표본으로 모델 세우기.</b> 데이터 전체가 아니라 <b>모델을 정하는 데 필요한 최소 개수(s)</b>만 무작위로 뽑아 모델을 세운다. 직선이면 점 2개, 어파인 변환이면 대응점 3쌍, 호모그래피면 4쌍이다. 굳이 최소 개수만 뽑는 이유는, 뽑은 점이 <b>모두 인라이어일 확률</b>을 최대로 하기 위해서다. 뽑는 점이 많을수록 그중 하나라도 이상치가 섞일 확률이 커지고, 이상치가 하나라도 섞이면 그 가설은 틀린 모델이 된다.</p>
+    <p><b>③ 검증 부분 &mdash; 동의하는 점(인라이어) 세기.</b> 세운 모델로 나머지 모든 점의 오차(예: 직선까지의 거리, 변환 후 위치 차이)를 계산하고, 오차가 <b>임계값 t 이내</b>인 점을 인라이어로 센다. 이 인라이어들의 모임이 <b>합의 집합(consensus set)</b>이다. 맞는 모델이라면 진짜 데이터가 대부분 동의하고, 틀린 모델에는 몇 개만 우연히 동의한다. 즉 <b>다수결</b>로 모델의 좋고 나쁨을 판정한다.</p>
+    <p><b>④ 반복과 마무리.</b> 가설-검증을 N번 반복해 <b>인라이어가 가장 많은 모델</b>을 고른다. N은 &ldquo;적어도 한 번은 이상치 없는 표본을 뽑을 확률&rdquo;(예: 99%)이 되도록 이상치 비율과 s로 정한다. 마지막으로 최종 인라이어 <b>전부로 최소제곱을 다시</b> 돌려 모델을 정밀하게 다듬는다 &mdash; 이상치가 빠졌으니 이번에는 최소제곱이 제 역할을 한다.</p>
+    <p><b>⑤ 활용.</b> 대표적인 쓰임은 <b>파노라마 스티칭에서 호모그래피 추정</b>이다. SIFT 등으로 두 사진의 후보 짝을 만든 뒤, RANSAC이 4쌍씩 뽑아 호모그래피를 가정하고 다른 짝들이 그 변환을 따르는지 센다. 결과로 <b>호모그래피와 &lsquo;맞는 매칭 목록(인라이어)&rsquo;을 동시에</b> 얻는다 &mdash; 매칭 확정과 변환 추정이 한 번에 끝나는 것이다. 이 밖에 직선 · 원 피팅, 영상 정합, 3차원 복원의 기하 추정 등 거의 모든 &lsquo;이상치가 섞인 피팅&rsquo;에 쓰인다.</p>
+    <p><b>⑥ 장점과 한계.</b> 단순하고 일반적이며 실제로 잘 동작하고, 이상치가 절반이어도 견딘다. 반면 임계값 · 반복 횟수 등 <b>조정할 파라미터가 많고</b>, <b>인라이어 비율이 낮으면</b> 필요한 반복이 폭발적으로 늘거나 실패하며, 최소 표본만으로는 좋은 초기 모델을 항상 얻지는 못한다.</p>
+  </details>
+  <div class="deep"><b>🔎 +α</b> 반복 횟수는 점의 총 개수와 무관하다 &mdash; 매칭이 1000쌍이든 10만 쌍이든 같다. 대신 s가 커지면 &lsquo;s개가 모두 인라이어일 확률&rsquo;이 급격히 작아지므로, 필요한 최소 점 수가 적은 모델일수록 RANSAC이 유리하다. 예를 들어 호모그래피(s = 4)에서 짝의 절반이 틀려도 약 72번이면 99% 확률로 깨끗한 표본을 한 번은 얻는다.</div>
+</article>
+</section>
+
+<!-- ===================== 큰 그림 ===================== -->
+<section class="sec" id="flow">
+  <div class="sec-head"><span class="sec-badge">MAP</span><h2 class="sec-title">1~7주차를 한 줄로 꿰기<small>답안 마지막에 &lsquo;다른 주차와 연결&rsquo;을 쓰려면 이 지도가 머리에 있어야 한다</small></h2></div>
+
+<div class="oneline">
+  <p><b>학기 전반부의 이야기 한 줄</b></p>
+  <ul class="ul">
+    <li><b>2주차</b> &mdash; 카메라가 3차원 세계를 2차원 영상으로 <b>투영</b>하는 기하(카메라 행렬)와, 영상 좌표를 옮기는 <b>2D 변환의 위계</b>(평행이동 → … → 호모그래피)</li>
+    <li><b>3주차</b> &mdash; 영상의 <b>값</b>을 다듬는 필터링: 주변 화소의 가중합(컨볼루션)으로 잡음을 줄이고, 같은 도구를 미분으로 바꿔 <b>엣지</b>를 찾는다</li>
+    <li><b>4주차</b> &mdash; 영상의 <b>크기</b>를 바꾸는 법: 블러 후 축소(에일리어싱 방지) → 가우시안 · 라플라시안 <b>피라미드</b>, 키울 때의 <b>보간</b></li>
+    <li><b>5주차</b> &mdash; 다른 사진에서도 다시 찾을 수 있는 점을 <b>검출</b>: 엣지 → 직선(허프) → 코너(Harris) → 블롭(LoG · DoG, 크기까지)</li>
+    <li><b>6주차</b> &mdash; 찾은 점 주변을 <b>숫자 벡터(기술자)</b>로: SIFT · SURF · HOG · BRIEF · ORB &mdash; 불변성과 변별력의 절충</li>
+    <li><b>7주차</b> &mdash; 기술자로 <b>짝을 짓고</b>, 틀린 짝을 <b>RANSAC</b>으로 걸러 <b>호모그래피</b>를 추정해 두 사진을 <b>정렬 · 스티칭</b>한다 &mdash; 2주차의 변환이 다시 돌아온다</li>
+  </ul>
+</div>
+
+<h3 class="sub-title">학기 내내 반복해서 등장하는 도구 &mdash; 연결 문장의 재료</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>도구 · 아이디어</th><th>어디에 나왔나</th><th>답안에 쓸 연결 문장</th></tr>
+  <tr><td>가우시안</td><td>3주차 스무딩 · 4주차 피라미드(축소 전 블러) · 5주차 Canny · LoG · 6주차 SIFT 스케일 공간 · BRIEF 사전 스무딩</td><td>&ldquo;미분이나 축소 전에 고주파 잡음을 눌러 두는 저역 통과 필터로, σ가 곧 &lsquo;보는 스케일&rsquo;이 된다&rdquo;</td></tr>
+  <tr><td>미분 · 그래디언트</td><td>3주차 엣지 · 5주차 Canny · Harris · 6주차 SIFT · HOG 방향 히스토그램</td><td>&ldquo;절대 밝기 대신 변화를 보므로 조명이 통째로 바뀌어도 안정적이다&rdquo;</td></tr>
+  <tr><td>2차 모멘트 · 고윳값</td><td>5주차 Harris · 아핀 적응 · 6주차 SIFT 엣지 제거 · 7주차 전체 최소제곱(TLS)</td><td>&ldquo;영역 안 변화가 어느 방향으로 얼마나 퍼져 있는지를 두 고윳값으로 읽는다&rdquo;</td></tr>
+  <tr><td>투표 · 히스토그램</td><td>5주차 허프 변환 · 6주차 SIFT 방향 할당 · HOG · 7주차 RANSAC의 합의</td><td>&ldquo;개별 값은 잡음에 흔들려도 여러 표가 모이면 진짜가 드러나고, 잡음 표는 흩어진다&rdquo;</td></tr>
+  <tr><td>스케일(크기)</td><td>4주차 피라미드 · 5주차 LoG 특성 스케일 · 6주차 SIFT DoG · SURF 필터 키우기 · ORB 피라미드</td><td>&ldquo;창 크기는 고정이므로 영상을 줄이거나 필터를 키워 여러 크기에서 본다&rdquo;</td></tr>
+  <tr><td>변환의 위계 · 자유도</td><td>2주차 2D 변환 · 7주차 정렬 · 어파인 · 호모그래피</td><td>&ldquo;자유도가 곧 필요한 대응점 수를 정한다 &mdash; 짝 하나가 식 두 개&rdquo;</td></tr>
+  <tr><td>잡음 · 이상치에 강해지기</td><td>3주차 미디언 · 5주차 이력 임계값 · 허프 투표 · 7주차 비율 검사 · RANSAC</td><td>&ldquo;극단값을 평균에 섞지 않고 걸러 내는 장치&rdquo;</td></tr>
+  <tr><td>공변 vs 불변</td><td>5주차 검출 · 6주차 SIFT(검출은 공변, 기술은 불변)</td><td>&ldquo;위치 · 크기 · 방향은 영상을 따라가야 하고, 그 틀 안에서 적은 벡터는 그대로여야 한다&rdquo;</td></tr>
+</table></div>
+</section>
+
+<!-- ===================== 1주차 ===================== -->
+<section class="sec pb" id="w1">
+  <div class="sec-head"><span class="sec-badge">W1</span><h2 class="sec-title">1주차 · 컴퓨터 비전이란<small>오리엔테이션 · 서론형 문제나 다른 문제의 도입부로 쓰인다</small></h2></div>
+
+<article class="q" id="q1-1">
+  <div class="q-h"><span class="q-no">Q1-1</span><span class="q-star">★</span><a class="q-src" href="computer-vision-week01.html#goal">1주차 교과목 목표</a></div>
+  <p class="q-txt">컴퓨터 비전이 무엇인지 정의하고, 컴퓨터가 영상을 &lsquo;이해&rsquo;해 나가는 방식과 대표 응용을 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>인간 시각 시스템</span><span>인식 → 분류 → 이해</span><span>특징(조각)부터 읽기</span><span>분류 · 위치 찾기 · 분할 · 식별 · 생성</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 정의.</b> 컴퓨터 비전은 인간 시각 시스템이 하는 복잡한 처리 과정을 컴퓨터에 옮겨, 사람의 뇌처럼 영상과 비디오 속 물체를 <b>인식하고 처리</b>하게 하는 컴퓨터과학 분야다.</p>
+    <p><b>② 이해하는 방식.</b> 컴퓨터 비전이 하려는 일은 <b>인식 → 분류 → 이해</b>의 순서로 나아간다. 컴퓨터는 영상 전체를 한 번에 이해하지 못하므로, 먼저 엣지 · 코너 · 블롭 같은 <b>작은 특징(조각)</b>을 읽고 그 조각들을 모아 전체를 이해한다. 이 학기 전반부의 흐름이 바로 이 과정이다 &mdash; 필터로 잡음을 줄이고 엣지를 찾고(3주차), 다시 찾을 수 있는 특징점을 검출하고(5주차), 그 점을 벡터로 기술하고(6주차), 사진끼리 짝지어 정렬한다(7주차).</p>
+    <p><b>③ 대표 응용.</b> 영상 분류(classification), 물체 위치 찾기(localization), 개체 분할(instance segmentation), 물체 식별(identification), 영상 생성(generation)이 대표적이다. 이 학기 내용과 직접 이어지는 응용으로는 파노라마 정합, 3차원 복원, 증강현실의 모션 추적, 이미지 검색, 로봇 내비게이션이 있다.</p>
+  </details>
+  <div class="deep"><b>🔎 +α</b> 컴퓨터 비전을 공부하려면 선형대수(행렬 · 벡터 · 변환), 기초 확률과 통계, 구현을 위한 프로그래밍이 바탕이 된다. 교과목 목표도 &ldquo;전통적인 비전 이론을 익혀 최신 연구를 이해할 기본기를 갖춘다&rdquo;이다 &mdash; 서론에 한 줄 덧붙이기 좋다.</div>
+</article>
+</section>
+
+<!-- ===================== 2주차 ===================== -->
+<section class="sec pb" id="w2">
+  <div class="sec-head"><span class="sec-badge">W2</span><h2 class="sec-title">2주차 · Geometric Camera Models<small>이미지 변환(동차 좌표 · 변환 4가지) · 카메라 모델(핀홀 · 렌즈 · 카메라 행렬 · 왜곡)</small></h2></div>
+
+<h3 class="sub-title">부분 → 활용 한 장 정리</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>부분</th><th>하는 일</th><th>어떻게 쓰이나</th></tr>
+  <tr><td>동차 좌표</td><td>좌표 끝에 1을 붙여 평행이동까지 행렬 곱으로 바꾼다</td><td>여러 변환을 한 행렬로 합성 · 원근 투영의 나눗셈을 마지막으로 미룸 · 카메라 행렬과 호모그래피의 바탕</td></tr>
+  <tr><td>자유도</td><td>변환이 가진 &lsquo;조절 손잡이&rsquo; 개수</td><td>필요한 대응점 수를 정한다 (아핀 3쌍, 투영 4쌍)</td></tr>
+  <tr><td>내부 파라미터</td><td>초점거리 · 주점 · 픽셀 배율 · 비틀림(skew)</td><td>카메라 고유 성질 &mdash; 캘리브레이션 · 왜곡 보정</td></tr>
+  <tr><td>외부 파라미터</td><td>세계 좌표계에 대한 카메라의 회전 · 이동</td><td>카메라 위치 · 자세 &mdash; 여러 카메라 통합 · 3차원 복원</td></tr>
+  <tr><td>조리개</td><td>들어오는 빛의 양과 착란원 크기 조절</td><td>피사계 심도 조절 (작게 조이면 깊고 어두움)</td></tr>
+  <tr><td>초점거리</td><td>렌즈에서 초점까지의 거리</td><td>화각 결정 (짧으면 광각, 길면 망원)</td></tr>
+</table></div>
+
+<article class="q" id="q2-1">
+  <div class="q-h"><span class="q-no">Q2-1</span><span class="q-star">★★</span><a class="q-src" href="computer-vision-week02-2.html#factors">2주차 00 이미지 형성의 네 요소</a></div>
+  <p class="q-txt">이미지가 만들어질 때 관여하는 네 가지 요소를 쓰고, 그중 <span class="part">Radiometry와 Photometry</span>가 어떻게 다른지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>Geometry · Radiometry · Photometry · Digitization</span><span>물리적인 빛의 양 · 방향</span><span>사람이 느끼는 빛의 세기</span><span>아날로그 → 디지털</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 기하(Geometry).</b> 3차원 세계의 점과 영상에 맺힌 점 사이의 위치 관계다. 카메라 모델은 이 관계를 수학으로 적은 것이다.</p>
+    <p><b>② 복사 측정(Radiometry).</b> 물체에서 반사된 <b>물리적인 빛의 방향과 양</b>을 기계로 잰다. 표면에서 나온 빛과 영상에 도달한 빛의 관계를 다루며, 사람 눈에 보이지 않는 적외선 · 자외선까지 포함한다.</p>
+    <p><b>③ 측광(Photometry).</b> <b>사람이 눈으로 느끼는 빛의 양</b>, 곧 빛의 세기(intensity)를 다룬다. 복사 측정 가운데 사람 눈이 감지하는 범위만 본다.</p>
+    <p><b>④ 디지털화(Digitization).</b> 현실의 연속적인 아날로그 신호를 컴퓨터가 계산할 수 있는 이산적인 디지털 값으로 바꾸는 과정이다. 공간을 격자로 자르는 <b>샘플링</b>과 밝기를 단계로 끊는 <b>양자화</b>가 여기서 일어난다.</p>
+    <p><b>⑤ 두 개념의 차이.</b> 복사 측정은 기계가 재는 물리량이고, 측광은 사람의 지각 기준이다. 같은 물리적 세기의 빛이라도 사람 눈은 파장에 따라 다르게 밝다고 느끼기 때문에 두 개념을 나눈다.</p>
+  </details>
+  <div class="deep"><b>🔎 +α</b> 디지털화 단계는 뒤 주차와 이어진다 &mdash; 샘플링이 촘촘하지 않으면 4주차의 에일리어싱이 생기고, 양자화 오차는 3주차에서 말하는 노이즈의 원인 중 하나다.</div>
+</article>
+
+<article class="q" id="q2-2">
+  <div class="q-h"><span class="q-no">Q2-2</span><span class="q-star">★★</span><a class="q-src" href="computer-vision-week02-2.html#warp">2주차 01 이미지 변환의 두 갈래</a></div>
+  <p class="q-txt">이미지 변환에는 <span class="part">필터링(filtering)</span>과 <span class="part">워핑(warping)</span>이 있다. 각각 영상의 무엇을 바꾸는지 비교하고 예를 드시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>화소값(range) 변경</span><span>좌표 · 형태(domain) 변경</span><span>주변 화소</span><span>기하학적 변환</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 필터링.</b> 영상의 <b>화소값</b>(값의 범위, range)을 바꾼다. 화소 하나의 새 값을 정하려고 그 주변 화소를 함께 보며, 결과적으로 영상이 받아들인 빛의 양을 조절하는 셈이다. 블러, 샤프닝, 엣지 검출이 여기에 속하고 3주차에서 본격적으로 다룬다.</p>
+    <p><b>② 워핑.</b> 영상의 <b>형태</b>(좌표, domain)를 바꾼다. 변환 함수로 각 화소를 다른 위치로 옮기는 기하학적 변환이며, 화소의 값은 그대로 두고 자리만 바꾼다. 회전, 크기 변경, 아핀 · 원근 변환이 여기에 속한다.</p>
+    <p><b>③ 한 줄 비교.</b> 필터링은 &ldquo;무엇이 보이는가(값)&rdquo;를, 워핑은 &ldquo;어디에 보이는가(위치)&rdquo;를 바꾼다. 7주차 파노라마에서 한 사진을 다른 사진의 시점에 맞게 휘는 단계가 바로 워핑이고, 이음새를 섞는 블렌딩은 값을 다루는 쪽이다.</p>
+  </details>
+</article>
+
+<article class="q" id="q2-3">
+  <div class="q-h"><span class="q-no">Q2-3</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week02-2.html#homog">2주차 02 동차 좌표</a></div>
+  <p class="q-txt">영상 변환에서 <span class="part">동차 좌표(homogeneous coordinates)</span>를 쓴다. 동차 좌표가 무엇이며, 왜 필요하고 어떻게 활용되는지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>평행이동은 선형 연산이 아님</span><span>좌표에 1 추가</span><span>모든 변환을 행렬 곱으로</span><span>변환 합성</span><span>마지막 성분으로 나눔</span><span>스케일 무의미</span><span>카메라 행렬 · 호모그래피</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 문제.</b> 크기 변경 · 회전 · 대칭 · 전단은 2×2 행렬 곱으로 쓸 수 있지만, <b>평행이동은 좌표에 상수를 더하는 연산</b>이라 2×2 행렬 곱으로 쓸 수 없다. 엄밀히 말해 평행이동은 선형 연산이 아니다.</p>
+    <p><b>② 해결.</b> 2차원 좌표 (x, y)에 성분 하나를 더 붙여 <b>(x, y, 1)</b>로 쓰는 것이 동차 좌표다. 그러면 평행이동도 3×3 행렬 곱 하나로 표현된다. 원래 좌표로 돌아올 때는 마지막 성분 w로 앞의 두 성분을 나눈다.</p>
+    <p><b>③ 왜 곱셈이 중요한가.</b> 모든 변환이 곱으로 표현되면, 이동 · 회전 · 크기 변경을 여러 번 이어 적용해도 <b>미리 행렬 하나로 합쳐 둘 수 있다</b>. 그러면 화소마다 곱셈 한 번으로 끝나 연산이 빨라진다. 덧셈이 섞이면 변환을 이을 때마다 항이 계속 늘어난다.</p>
+    <p><b>④ 원근 투영에서의 활용.</b> 원근 투영에는 깊이 z로 나누는 연산이 들어가 일반 행렬 곱으로 쓸 수 없다. 동차 좌표에서는 나눗셈을 마지막 성분에 담아 두고 <b>맨 끝에 한 번만 나누면</b> 되므로, 투영 전체가 행렬 곱 하나가 된다. 그래서 3차원 점을 영상으로 보내는 <b>카메라 행렬 P</b>와 7주차의 <b>호모그래피</b>가 모두 동차 좌표 위에서 정의된다.</p>
+    <p><b>⑤ 스케일 무의미.</b> 동차 좌표에서는 (x, y, 1)과 (2x, 2y, 2)가 같은 점이다. 마지막에 w로 나누면 배율이 약분되기 때문이다. 이 성질 때문에 3×3 호모그래피의 원소는 9개이지만 자유도는 8이다.</p>
+  </details>
+</article>
+
+<article class="q" id="q2-4">
+  <div class="q-h"><span class="q-no">Q2-4</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week02-2.html#table">2주차 03 · 04 변환 4가지와 정리표</a></div>
+  <p class="q-txt">2차원 영상 변환을 자유도가 커지는 순서로 나열하고, 각 변환이 <span class="part">보존하는 성질</span>과 <span class="part">자유도</span>가 실제로 어떻게 쓰이는지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>평행이동 2 · 강체 3 · 유사 4 · 아핀 6 · 투영 8</span><span>방향 · 길이 · 각도 · 평행성 · 직선</span><span>포함 관계</span><span>대응점 1쌍 = 식 2개</span><span>아핀 3쌍 · 투영 4쌍</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 평행이동(translation) &mdash; 자유도 2.</b> 이동량 가로 · 세로 두 개뿐이다. 방향 · 길이 · 각도 · 평행성 · 직선을 모두 보존한다.</p>
+    <p><b>② 강체(Euclidean, rigid) 변환 &mdash; 자유도 3.</b> 평행이동에 회전이 더해진다. 방향은 바뀌지만 <b>길이</b>와 그 아래 성질을 보존한다.</p>
+    <p><b>③ 유사(similarity) 변환 &mdash; 자유도 4.</b> 여기에 균일한 크기 변경이 더해진다. 길이는 바뀌지만 <b>각도</b>와 모양, 길이의 비를 보존한다.</p>
+    <p><b>④ 아핀(affine) 변환 &mdash; 자유도 6.</b> 가로 · 세로를 따로 늘이거나 기울일 수 있어 정사각형이 평행사변형이 된다. 각도와 길이는 바뀌지만 <b>평행성</b>과 같은 직선 위 길이의 비를 보존한다. 선형 변환에 평행이동을 더한 것이다.</p>
+    <p><b>⑤ 투영(projective) 변환 = 호모그래피 &mdash; 자유도 8.</b> 원근 효과까지 표현해 정사각형이 임의의 사각형이 된다. 평행선이 소실점에서 만나므로 평행성도 깨지고 <b>직선이 직선으로 간다는 것</b>만 남는다. 3×3 원소 9개 중 전체 배율이 의미가 없어 자유도는 8이다.</p>
+    <p><b>⑥ 포함 관계.</b> 평행이동 ⊂ 강체 ⊂ 유사 ⊂ 아핀 ⊂ 투영 순으로, 앞의 변환은 뒤 변환의 특수한 경우다. 자유도가 커질수록 표현력은 커지고 보존되는 성질은 하나씩 사라진다.</p>
+    <p><b>⑦ 자유도의 활용.</b> 대응점 한 쌍은 가로 · 세로 식 두 개를 주므로, <b>필요한 대응점 수 = 자유도 ÷ 2</b>다. 아핀 변환은 3쌍, 투영 변환은 4쌍이면 정해진다. 그래서 두 사진을 합칠 때 아핀이면 같은 지점 3쌍, 원근(호모그래피)이면 4쌍을 찾아 변환 행렬을 구하고, 한 사진을 다른 사진 좌표로 워핑한다. 장면에 맞는 가장 단순한 변환을 고르면 필요한 대응점이 적어 추정이 안정적이다.</p>
+  </details>
+</article>
+
+<article class="q" id="q2-5">
+  <div class="q-h"><span class="q-no">Q2-5</span><span class="q-star">★★</span><a class="q-src" href="computer-vision-week02-2.html#proj">2주차 06 투영의 성질</a></div>
+  <p class="q-txt">3차원 세계가 2차원 영상으로 <span class="part">투영(projection)</span>될 때 잃는 것과 지켜지는 것을 서술하고, <span class="part">소실점(vanishing point)</span>이 무엇인지 설명하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>many-to-one</span><span>각도 · 길이 · 깊이 손실</span><span>직선 · 교차 보존</span><span>소실점 · 소실선</span><span>영상 평면과 평행한 직선</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 차원 축소.</b> 투영은 3차원을 2차원으로 줄이는 과정이라 <b>여러 점이 한 점으로 간다(many-to-one)</b>. 같은 광선 위에 있는 점들은 깊이가 달라도 영상에서 같은 위치에 찍힌다.</p>
+    <p><b>② 잃는 것.</b> <b>깊이</b>, 그리고 실제 <b>길이(거리)</b>와 <b>각도</b>를 잃는다. 멀리 있는 물체는 작게, 가까운 물체는 크게 찍혀 길이를 그대로 잴 수 없고, 직각도 비스듬히 보면 직각이 아니게 찍힌다.</p>
+    <p><b>③ 지켜지는 것.</b> <b>직선은 직선으로</b>, 점은 점으로 간다. 선들이 서로 만나는 관계(교차 · 결합)도 유지된다. 단, 광학 중심을 지나는 직선은 한 점으로 찍힌다.</p>
+    <p><b>④ 소실점.</b> 3차원에서 평행한 직선들이 영상에서는 더 이상 평행하지 않고 한 점으로 모이는데, 그 점이 소실점이다. 방향마다 자기 소실점이 있고, 같은 평면 위 여러 방향의 소실점을 이으면 <b>소실선(horizon line)</b>이 된다. 단, 영상 평면과 평행한 직선들은 투영 뒤에도 평행하다.</p>
+    <p><b>⑤ 활용.</b> 투영 변환이 평행성은 깨지만 직선은 지킨다는 사실이 호모그래피의 성질이 되고, 비스듬히 찍혀 모이는 평행선을 다시 평행하게 펴는 원근 보정(rectification)의 근거가 된다.</p>
+  </details>
+</article>
+
+<article class="q" id="q2-6">
+  <div class="q-h"><span class="q-no">Q2-6</span><span class="q-star">★★</span><a class="q-src" href="computer-vision-week02-2.html#pinhole">2주차 07 · 08 핀홀과 렌즈</a></div>
+  <p class="q-txt">핀홀 카메라에서 <span class="part">장벽(barrier)과 구멍(aperture)</span>은 어떤 역할을 하며, 구멍 크기에는 어떤 딜레마가 있는가? 렌즈가 이를 어떻게 해결하는지도 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>필름만으로는 상이 맺히지 않음</span><span>한 점 ↔ 한 점 대응</span><span>역상</span><span>크면 흐림 · 작으면 어둡고 회절</span><span>렌즈 = 빛을 모아 초점</span><span>얇은 렌즈 공식</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 장벽의 역할.</b> 물체의 한 점에서 나온 빛은 사방으로 퍼지므로, 필름만 두면 모든 점의 빛이 필름 곳곳에 겹쳐 아무 상도 맺히지 않는다. 그래서 작은 구멍을 뚫은 장벽을 둔다. 대부분의 빛은 장벽에 막히고 구멍을 지나는 빛만 필름에 닿아 <b>물체의 한 점과 필름의 한 점이 대응</b>하면서 또렷한 상이 생긴다. 광선이 구멍에서 교차하므로 상은 위아래가 뒤집힌 <b>역상</b>이 된다. 계산할 때는 영상 평면을 구멍 앞쪽 초점거리 위치로 옮긴 가상 영상(virtual image)을 쓴다.</p>
+    <p><b>② 구멍 크기의 딜레마.</b> 구멍이 크면 여러 방향의 빛이 한 점에 섞여 영상이 흐려진다. 반대로 너무 작으면 들어오는 빛의 양이 부족해 어둡고, 회절까지 겹쳐 다시 흐려진다. 그래서 작은 구멍으로 노출을 오래 주어야 하는 문제가 생긴다.</p>
+    <p><b>③ 렌즈의 해결.</b> 렌즈는 퍼지는 빛을 굴절시켜 <b>한 점으로 모아 준다</b>. 그래서 많은 빛을 받으면서도 선명한 상을 얻는다. 렌즈 중심을 지나는 광선은 꺾이지 않으므로 핀홀 모델의 투영 관계는 그대로 쓸 수 있다.</p>
+    <p><b>④ 렌즈의 대가.</b> 얇은 렌즈 공식(물체 거리 · 상 거리 · 초점거리의 관계)을 만족하는 거리에 있는 물체만 정확히 초점이 맞는다. 렌즈와 센서 사이 거리를 바꿔 초점을 맞추는 것이 카메라의 포커싱이고, 사람 눈도 수정체 두께를 바꿔 같은 일을 한다.</p>
+  </details>
+</article>
+
+<article class="q" id="q2-7">
+  <div class="q-h"><span class="q-no">Q2-7</span><span class="q-star">★★</span><a class="q-src" href="computer-vision-week02-2.html#dof">2주차 09 · 10 심도와 화각</a></div>
+  <p class="q-txt">카메라의 <span class="part">조리개</span>와 <span class="part">초점거리</span>는 각각 영상의 어떤 성질을 조절하는가? 피사계 심도와 화각의 개념을 들어 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>착란원(circle of confusion)</span><span>피사계 심도(depth of field)</span><span>조리개 작게 → 깊은 심도 · 어두움</span><span>아웃포커스</span><span>화각(field of view)</span><span>광각 · 망원</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 피사계 심도.</b> 얇은 렌즈 공식을 정확히 만족하는 거리는 하나뿐이지만, 그 거리에서 조금 벗어난 점도 흐려진 원(<b>착란원</b>)이 센서 화소보다 작으면 여전히 점으로 보인다. 그래서 초점이 맞아 보이는 거리의 <b>범위</b>가 생기는데, 이것이 피사계 심도다.</p>
+    <p><b>② 조리개가 조절하는 것 &mdash; 심도와 밝기.</b> 조리개를 <b>작게 조이면</b> 렌즈 가장자리로 들어오는 광선이 잘려 착란원이 작아지고, 선명한 거리 범위가 넓어진다(심도가 깊어진다). 대신 빛이 적어 어두워진다. 조리개를 <b>크게 열면</b> 빛은 많이 들어오지만 착란원이 커져 심도가 얕아지고, 배경이 흐려지는 아웃포커스가 된다. 물체가 멀수록 심도는 대체로 깊어진다.</p>
+    <p><b>③ 초점거리가 조절하는 것 &mdash; 화각.</b> 화각은 초점거리와 센서 크기로 정해지며 초점거리에 반비례한다. 초점거리가 <b>짧으면</b> 넓은 범위가 한정된 센서에 들어와 <b>광각</b>이 되고, <b>길면</b> 좁은 영역이 크게 확대되는 <b>망원</b>이 된다. 망원에서는 배경이 크롭되는 효과가 있어 시점을 조금만 옮겨도 배경이 크게 바뀐다.</p>
+  </details>
+</article>
+
+<article class="q" id="q2-8">
+  <div class="q-h"><span class="q-no">Q2-8</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week02-2.html#pmat">2주차 05 · 11 카메라 파라미터 · 카메라 행렬</a></div>
+  <p class="q-txt">카메라 모델에는 <span class="part">내부 파라미터(intrinsic)</span>와 <span class="part">외부 파라미터(extrinsic)</span>가 있다. 3차원 점이 영상의 화소가 되기까지의 단계를 따라 각 파라미터의 역할을 쓰고, 이 모델이 어떻게 활용되는지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>세계 → 카메라 → 센서 → 화소</span><span>회전 R · 이동 t</span><span>초점거리 · 주점 · 픽셀 배율 · skew</span><span>3×4 카메라 행렬 P 하나로 합성</span><span>내부 5 + 외부 6 = 11</span><span>캘리브레이션</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 목표.</b> 카메라 모델을 안다는 것은 그 카메라가 사진을 찍을 당시 3차원 정보를 2차원으로 어떻게 투영했는지 안다는 뜻이다. 이 과정은 세 단계로 나뉜다.</p>
+    <p><b>② 세계 좌표 → 카메라 좌표 (외부 파라미터).</b> 세계 좌표계에 놓인 점을 카메라 기준 좌표로 옮긴다. 카메라가 어디에 있고 어느 방향을 보는지를 나타내는 <b>회전(3자유도)과 이동(3자유도)</b>이 쓰인다. 카메라를 옮기거나 돌리면 이 값이 바뀐다.</p>
+    <p><b>③ 카메라 좌표 → 센서 평면.</b> 닮은 삼각형 관계로 점을 깊이로 나누고 <b>초점거리</b>만큼 배율을 준다. 이것이 핀홀 투영이다.</p>
+    <p><b>④ 센서 평면 → 화소 좌표 (내부 파라미터).</b> 센서 좌표의 원점은 광학축이 지나는 가운데지만, 영상 화소의 원점은 보통 왼쪽 위다. 그래서 <b>주점(principal point)</b>만큼 원점을 옮기고, 가로 · 세로 <b>픽셀 크기 차이</b>에 따른 배율과 축이 비뚤어진 정도(<b>skew</b>)를 보정한다. 이 값들은 카메라를 어디에 두든 변하지 않는 카메라 고유의 성질이다.</p>
+    <p><b>⑤ 카메라 행렬.</b> 동차 좌표를 쓰면 세 단계가 모두 행렬 곱이므로 미리 곱해 <b>3×4 카메라 행렬 P 하나</b>로 합칠 수 있다. 앞부분이 내부 파라미터, 뒷부분이 외부 파라미터이고, 어떤 3차원 점이든 곱셈 한 번으로 영상 위치가 나온다. 내부 5개와 외부 6개를 합한 11개가 3×4 원소 12개에서 전체 배율 하나를 뺀 수와 같다.</p>
+    <p><b>⑥ 활용.</b> 반대로 여러 사진에서 이 파라미터를 역추정하는 작업이 <b>카메라 캘리브레이션</b>이다. 파라미터를 알면 렌즈 왜곡을 보정하고, 화면 속 위치를 실제 거리로 환산하고, 여러 대의 CCTV 영상을 하나의 좌표계에서 이어 보고, 두 카메라로 깊이를 구하는 스테레오 · 3차원 복원을 할 수 있다.</p>
+  </details>
+</article>
+
+<article class="q" id="q2-9">
+  <div class="q-h"><span class="q-no">Q2-9</span><span class="q-star">★★</span><a class="q-src" href="computer-vision-week02-2.html#apps">2주차 12 왜곡과 보정</a></div>
+  <p class="q-txt"><span class="part">원근 왜곡(perspective distortion)</span>과 <span class="part">방사 왜곡(radial distortion)</span>의 원인과 모습, 보정 방법을 비교하여 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>수직선이 모임(converging verticals)</span><span>시프트 렌즈</span><span>원근 보정(rectification) · 호모그래피</span><span>렌즈의 불완전함 · 가장자리</span><span>배럴(술통) · 핀쿠션</span><span>왜곡 계수 추정</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 원근 왜곡.</b> 높은 건물을 담으려고 카메라를 위로 기울이면 영상 평면이 건물 벽과 평행하지 않게 되어, 실제로는 평행한 수직선들이 <b>위로 갈수록 모인다</b>. 카메라를 수평으로 두면 왜곡은 없지만 건물 아랫부분만 담긴다. 하드웨어로는 카메라를 수평으로 둔 채 렌즈만 위로 평행이동하는 <b>시프트 렌즈</b>로 해결하고, 소프트웨어로는 <b>호모그래피로 원근 보정</b>을 해 모인 선을 다시 평행하게 편다.</p>
+    <p><b>② 방사 왜곡.</b> 렌즈가 완벽하지 않아 생기며, <b>가장자리를 지나는 광선일수록</b> 휘는 정도가 커서 영상 가장자리의 직선이 곡선이 된다. 가장자리가 밖으로 부풀면 <b>배럴(술통) 왜곡</b>으로 광각 · 어안 렌즈에서 흔하고, 안으로 오목하게 당겨지면 <b>핀쿠션 왜곡</b>으로 망원 쪽에서 나타난다. 반지름 방향의 왜곡 계수를 추정해 직선이 직선이 되도록 당기고 늘려 되돌린다.</p>
+    <p><b>③ 비교.</b> 원근 왜곡은 렌즈가 정상이어도 <b>카메라 자세(기울기)</b> 때문에 생기는 기하 현상이고, 방사 왜곡은 <b>렌즈 자체의 결함</b>이다. 둘 다 결국 영상에 대한 변환이므로 카메라 파라미터와 변환(호모그래피)을 이용해 보정한다.</p>
+  </details>
+</article>
+</section>
+
+<!-- ===================== 3주차 ===================== -->
+<section class="sec pb" id="w3">
+  <div class="sec-head"><span class="sec-badge">W3</span><h2 class="sec-title">3주차 · Linear Filters<small>선형 시불변 필터 · 평균 · 가우시안 · 미디언 · 컨볼루션 · 엣지 검출</small></h2></div>
+
+<h3 class="sub-title">부분 → 활용 한 장 정리</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>부분</th><th>하는 일</th><th>어떻게 쓰이나</th></tr>
+  <tr><td>커널(마스크)</td><td>주변 화소에 곱할 가중치 표</td><td>커널만 바꾸면 블러 · 샤프닝 · 미분이 된다</td></tr>
+  <tr><td>패딩</td><td>가장자리 바깥에 값을 채움</td><td>출력을 입력과 같은 크기(same)로 유지</td></tr>
+  <tr><td>가우시안의 σ</td><td>가중치가 퍼지는 폭</td><td>흐림 정도 조절 · 4~6주차에서는 &lsquo;보는 스케일&rsquo;</td></tr>
+  <tr><td>분리 가능성</td><td>2차원 커널을 가로 1차원 × 세로 1차원으로 분해</td><td>연산량을 크게 줄인다</td></tr>
+  <tr><td>미디언(중앙값)</td><td>이웃을 정렬해 가운데 값</td><td>소금 · 후추 잡음 제거, 잡음을 퍼뜨리지 않음</td></tr>
+  <tr><td>필터 뒤집기</td><td>컨볼루션과 교차 상관을 가르는 차이</td><td>대칭 커널이면 결과 같음 · 상관은 유사도(템플릿 매칭)</td></tr>
+  <tr><td>결합법칙</td><td>필터 두 개를 미리 하나로 합침</td><td>스무딩 + 미분을 한 커널로 (가우시안의 미분)</td></tr>
+</table></div>
+
+<article class="q" id="q3-1">
+  <div class="q-h"><span class="q-no">Q3-1</span><span class="q-star">★★</span><a class="q-src" href="computer-vision-week03.html#image">3주차 00 이미지란</a></div>
+  <p class="q-txt">디지털 이미지를 <span class="part">함수</span>로 보는 관점을 설명하고, 영상에 <span class="part">노이즈</span>가 생기는 원인과 필터링이 필요한 이유를 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>f(x, y) = 위치의 밝기</span><span>공간 이산화(샘플링) · 밝기 이산화(양자화)</span><span>센서 품질 · 빛의 불균일 · 양자화 효과</span><span>노이즈 감소 · 특징 추출</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 함수로 보기.</b> 흑백 이미지는 2차원 좌표 (x, y)를 넣으면 그 위치의 밝기 값 하나가 나오는 함수 f로 볼 수 있다. 디지털 이미지는 이 함수를 두 방향으로 이산화한 것이다 &mdash; 공간을 격자로 잘라 샘플링하고(공간 영역), 밝기를 0~255 같은 단계로 끊는다(밝기 영역). 이렇게 보면 이후의 모든 처리는 &lsquo;함수 값을 연산해 새 함수를 만드는 일&rsquo;이 된다.</p>
+    <p><b>② 노이즈의 원인.</b> 센서의 품질 한계, 빛이 고르지 않게 들어오는 것, 연속적인 밝기를 단계로 끊을 때 생기는 양자화 오차가 노이즈를 만든다.</p>
+    <p><b>③ 필터링이 필요한 이유.</b> 필터링은 원래 화소들을 조합해 새 화소 값을 만드는 연산으로, 두 가지 질문에 답한다. 첫째, <b>노이즈를 어떻게 줄일 것인가</b>(디노이징). 둘째, <b>유용한 특징을 어떻게 찾을 것인가</b>(엣지 · 코너 · 블롭). 그 밖에 저해상도를 고해상도로 바꾸는 초해상도, 지워진 부분을 채우는 인페인팅처럼 영상의 성질을 향상하는 데도 쓰인다.</p>
+  </details>
+</article>
+
+<article class="q" id="q3-2">
+  <div class="q-h"><span class="q-no">Q3-2</span><span class="q-star">★</span><a class="q-src" href="computer-vision-week03.html#types">3주차 01 필터링의 종류</a></div>
+  <p class="q-txt"><span class="part">포인트 연산</span>과 <span class="part">이웃 연산(필터)</span>을 비교하고, 포인트 연산만으로는 안 되는 작업이 무엇인지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>같은 위치의 값만 사용</span><span>주변 화소 함께 사용</span><span>스무딩 · 샤프닝 불가</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 포인트 연산.</b> 새 화소 값이 <b>같은 위치의 원래 값 하나</b>와 매핑 함수에만 의존한다. 영상의 크기 · 기하 · 국소 구조는 바꾸지 않고 값만 바꾼다(예: 밝기 · 대비 조절, 감마 보정).</p>
+    <p><b>② 이웃 연산.</b> 바꾸려는 화소의 <b>주변 화소까지 함께</b> 보고 새 값을 정한다. 필터링이 여기에 속한다.</p>
+    <p><b>③ 포인트 연산의 한계.</b> 스무딩(부드럽게)이나 샤프닝(날카롭게)은 &ldquo;이 화소가 주변과 얼마나 다른가&rdquo;를 알아야 할 수 있다. 화소 하나만 보는 포인트 연산은 그 정보를 갖지 못하므로, 주변의 밝기를 함께 쓰는 이웃 연산이 필요하다.</p>
+  </details>
+</article>
+
+<article class="q" id="q3-3">
+  <div class="q-h"><span class="q-no">Q3-3</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week03.html#props">3주차 02 · 05 선형 시불변 필터</a></div>
+  <p class="q-txt"><span class="part">선형 시불변(linear shift-invariant) 필터</span>에서 &lsquo;선형&rsquo;과 &lsquo;시불변&rsquo;은 각각 무엇을 뜻하는가? 커널을 바꾸면 어떤 효과들을 얻을 수 있는지 예와 함께 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>이웃의 선형 결합(가중합)</span><span>커널이 위치에 따라 바뀌지 않음</span><span>모든 선형 시불변 연산 = 컨볼루션</span><span>항등 · 이동 · 박스 블러 · 샤프닝</span><span>언샤프 마스킹</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 정의.</b> 각 화소를 이웃 화소들의 <b>선형 결합(가중합)</b>으로 바꾸는 필터이며, 가중치를 정해 둔 작은 표가 <b>커널(마스크)</b>이다.</p>
+    <p><b>② 선형성.</b> 두 입력을 더해 필터링한 결과가 각각 필터링해 더한 결과와 같고, 입력을 상수배하면 결과도 같은 배수가 된다. 그래서 필터를 합치고 나누는 계산이 자유롭다.</p>
+    <p><b>③ 시불변성.</b> 같은 커널이 영상의 모든 위치로 옮겨 가며 똑같이 적용된다. 화소가 움직이지 않는다는 뜻이 아니라, <b>어느 위치에서든 같은 가중치로 같게 동작한다</b>는 뜻이다. 따라서 입력을 이동한 뒤 필터링한 결과와 필터링한 뒤 이동한 결과가 같다.</p>
+    <p><b>④ 이론적 결과.</b> 모든 선형 시불변 연산은 <b>컨볼루션</b>으로 표현할 수 있다. 즉 &ldquo;어떤 커널을 쓰느냐&rdquo;만으로 필터의 성격이 정해진다.</p>
+    <p><b>⑤ 커널에 따른 효과.</b> 가운데만 1인 커널은 원본을 그대로 내놓고(항등), 한쪽만 1이면 영상이 한 칸 이동한다. 모든 칸이 같은 값이면 국소 평균이 되어 흐려진다(박스 블러). 원본을 두 배 한 것에서 블러를 빼면 &ldquo;원본 + (원본 − 흐린 것)&rdquo;, 곧 원본에 세부를 한 번 더 얹어 <b>샤프닝</b>된다 &mdash; 언샤프 마스킹의 원리다. 미분 모양의 커널을 쓰면 엣지가 드러난다.</p>
+  </details>
+</article>
+
+<article class="q" id="q3-4">
+  <div class="q-h"><span class="q-no">Q3-4</span><span class="q-star">★</span><a class="q-src" href="computer-vision-week03.html#size">3주차 04 출력 크기 · 06 마스크 크기</a></div>
+  <p class="q-txt">필터링 결과의 <span class="part">출력 크기(full · same · valid)</span>와 <span class="part">마스크 크기</span>가 결과에 주는 영향을 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>full = 가장 큼</span><span>same = 패딩으로 원본 크기</span><span>valid = 완전히 겹치는 곳만</span><span>stride</span><span>클수록 더 흐리고 · 잡음 분산 감소 · 비용 증가</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 출력 크기.</b> <b>full</b>은 커널이 한 칸이라도 영상과 겹치는 모든 위치를 계산해 출력이 가장 크다. <b>same</b>은 가장자리 바깥에 값을 채우는 <b>패딩</b>으로 출력을 입력과 같은 크기로 맞춘다. <b>valid</b>는 커널이 영상 안에 완전히 들어오는 위치만 계산해 출력이 줄어든다(예: 10×10 영상에 3×3 커널이면 8×8). 필터가 한 번에 움직이는 거리인 <b>stride</b>를 키우면 출력은 더 작아진다.</p>
+    <p><b>② 마스크 크기.</b> 마스크(보통 3×3, 5×5, 7×7)가 커지면 더 많은 이웃이 결과에 기여한다. 평균 내는 표본이 많아져 <b>출력의 잡음 분산은 줄지만</b>, 한 점의 잡음이 더 넓게 번지고, 영상이 <b>더 흐려지며</b>, <b>계산 비용</b>이 커진다. 즉 잡음 제거와 디테일 보존 · 속도 사이의 맞바꿈이다.</p>
+  </details>
+</article>
+
+<article class="q" id="q3-5">
+  <div class="q-h"><span class="q-no">Q3-5</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week03.html#gauss">3주차 03 · 07 · 08 평균 → 가우시안 · 분리 가능성</a></div>
+  <p class="q-txt">평균(박스) 필터에는 어떤 문제가 있으며, <span class="part">가우시안 필터</span>는 이를 어떻게 개선하는가? 가우시안 필터의 장점, 특히 <span class="part">σ</span>와 <span class="part">분리 가능성(separability)</span>이 어떻게 활용되는지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>거리와 무관한 같은 가중치</span><span>네모 자국 · 격자</span><span>중심일수록 큰 가중치</span><span>회전 대칭</span><span>σ로 흐림 정도 통제</span><span>가우시안끼리 합성해도 가우시안</span><span>가로 × 세로 1차원으로 분리 · 연산량 감소</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 평균 필터의 문제.</b> 평균 필터는 정사각형 창 안의 모든 화소를 <b>중심에서의 거리와 무관하게 같은 가중치</b>로 평균 낸다. 그래서 블러된 결과에 정사각형 창의 모양이 새겨져 네모난 자국이나 격자 무늬가 보인다.</p>
+    <p><b>② 가우시안 필터.</b> 2차원 가우시안(종 모양)의 값을 가중치로 쓰는 평균 필터다. <b>중심에는 큰 가중치, 멀어질수록 작은 가중치</b>를 주어 원형을 유지하며 부드럽게 흐린다.</p>
+    <p><b>③ 장점.</b> 첫째, <b>회전 대칭</b>이라 어느 방향으로든 똑같이 흐려지므로 네모 자국이 사라진다. 둘째, 중심에서 멀어질수록 가중치가 <b>단조롭게 줄어</b> 중심 화소를 가장 중시한다. 셋째, 표준편차 <b>σ 하나로 흐림 정도를 직관적으로 통제</b>한다 &mdash; σ가 클수록 더 넓은 범위를 섞어 더 흐려진다. 넷째, <b>가우시안을 가우시안과 합성하면 또 가우시안</b>이 되어, 작은 블러를 여러 번 거는 것과 큰 블러 한 번이 같다.</p>
+    <p><b>④ 분리 가능성의 활용.</b> 2차원 가우시안은 가로 방향 1차원 가우시안과 세로 방향 1차원 가우시안의 곱으로 정확히 쪼개진다. 그래서 2차원 커널을 한 번 거는 대신 <b>가로로 한 번, 세로로 한 번</b> 1차원 필터를 걸면 같은 결과가 나온다. k×k 커널이면 화소당 연산이 k²번에서 2k번으로 줄어, 큰 커널일수록 이득이 크다.</p>
+    <p><b>⑤ 학기 전체에서의 쓰임.</b> 엣지 검출 전 잡음 제거(3 · 5주차), 축소 전 에일리어싱 방지와 피라미드(4주차), Canny의 첫 단계와 LoG(5주차), SIFT의 스케일 공간과 BRIEF의 사전 스무딩(6주차)이 모두 가우시안을 쓴다.</p>
+  </details>
+</article>
+
+<article class="q" id="q3-6">
+  <div class="q-h"><span class="q-no">Q3-6</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week03.html#nonlinear">3주차 09 비선형 필터</a></div>
+  <p class="q-txt"><span class="part">미디언 필터</span>가 소금 · 후추(salt-and-pepper) 잡음에 효과적인 이유를 선형 필터와 비교해 서술하고, 한계도 쓰시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>소금 · 후추 · 임펄스 · 가우시안 잡음</span><span>평균은 이상치를 반영해 번짐</span><span>정렬 후 중앙값</span><span>비선형</span><span>잡음을 퍼뜨리지 않음</span><span>정렬 비용</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 잡음의 종류.</b> 소금 · 후추 잡음은 검은 점과 흰 점이 무작위로, 임펄스 잡음은 흰 점이 무작위로 튀어나오는 잡음이다. 가우시안 잡음은 밝기가 정규분포를 따라 조금씩 흔들리는 잡음이다.</p>
+    <p><b>② 선형 필터가 실패하는 이유.</b> 평균 · 가우시안 같은 선형 필터는 이웃 값을 가중 평균한다. 그런데 평균은 튀는 값(이상치)을 그대로 반영하므로, 255짜리 흰 점 하나가 주변 화소의 평균을 끌어올려 <b>잡음이 이웃으로 번진다</b>. 점이 사라지지 않고 뿌연 얼룩이 될 뿐이다.</p>
+    <p><b>③ 미디언 필터.</b> 이웃 화소를 정렬해 <b>가운데 값(중앙값)</b>으로 바꾼다. 극단적인 값은 정렬의 맨 끝으로 밀려나 선택되지 않으므로, 스파이크 같은 잡음이 결과에 반영되지 않고 <b>잡음을 퍼뜨리지 않는다</b>. 평균 필터보다 이상치에 덜 민감하다. 가중합으로 쓸 수 없으므로 <b>비선형</b> 필터다.</p>
+    <p><b>④ 한계.</b> 매 화소마다 이웃을 정렬해야 해서 <b>계산 비용이 크다</b>. 또 잡음이 가우시안처럼 고르게 퍼진 경우에는 가우시안 필터가 더 알맞다. 즉 잡음의 종류에 따라 필터를 골라야 한다.</p>
+  </details>
+  <div class="deep"><b>🔎 +α</b> 미디언 필터는 실제로 존재하던 값 중 하나를 고르므로 계단 모양 경계가 평균처럼 뭉개지지 않고 비교적 보존된다. 딥러닝의 최대 풀링(max pooling)도 가중합이 아닌 &lsquo;골라내기&rsquo;라는 점에서 같은 비선형 계열이다.</div>
+</article>
+
+<article class="q" id="q3-7">
+  <div class="q-h"><span class="q-no">Q3-7</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week03.html#conv">3주차 10 컨볼루션</a></div>
+  <p class="q-txt"><span class="part">컨볼루션(convolution)</span>과 <span class="part">교차 상관(cross-correlation)</span>의 차이를 설명하고, 컨볼루션의 성질이 실제로 어떻게 활용되는지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>필터를 상하좌우로 뒤집음</span><span>필터링 연산 vs 유사도 측정</span><span>가장 잘 일치하는 곳에서 최대</span><span>대칭 커널이면 같음</span><span>교환 · 결합 · 분배 · 미분</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 연산 차이.</b> 교차 상관은 커널을 그대로 영상 위에 겹쳐 곱하고 더한다. 컨볼루션은 커널을 <b>위아래 · 좌우로 뒤집은 뒤</b> 같은 계산을 한다.</p>
+    <p><b>② 의미 차이.</b> 컨볼루션은 한 함수가 다른 함수 위를 이동할 때 겹치는 양을 나타내며, 신호 처리에서 시스템의 응답을 구하는 <b>필터링 연산</b>이다. 교차 상관은 두 신호를 이동시키며 <b>얼마나 닮았는지(유사도)</b>를 재는 연산으로, 두 신호가 가장 잘 맞는 위치에서 값이 최대가 된다 &mdash; 템플릿 매칭이 이 원리다.</p>
+    <p><b>③ 같아지는 경우.</b> 박스 · 가우시안처럼 커널이 대칭이면 뒤집어도 같은 커널이라 두 결과가 같다. 딥러닝의 &lsquo;합성곱&rsquo; 층도 실제로는 교차 상관을 계산하는데, 가중치를 학습으로 정하므로 뒤집을 이유가 없기 때문이다.</p>
+    <p><b>④ 성질과 활용.</b> <b>교환법칙</b> &mdash; 영상과 커널의 역할을 바꿔도 된다. <b>결합법칙</b> &mdash; 필터 두 개를 미리 하나로 합쳐 한 번만 적용할 수 있다. 그래서 &ldquo;가우시안으로 스무딩 → 미분&rdquo;을 &ldquo;미리 미분한 가우시안 하나&rdquo;로 대신하고, 2차원 필터를 1차원 둘로 나누는 분리 가능성도 같은 근거를 갖는다. <b>분배법칙</b> &mdash; 필터의 합을 적용한 결과는 각 결과의 합이다(선형성). <b>미분과의 교환</b> &mdash; 미분을 영상이 아니라 커널 쪽에 미리 적용할 수 있어 연산 한 번을 아낀다.</p>
+  </details>
+</article>
+
+<article class="q" id="q3-8">
+  <div class="q-h"><span class="q-no">Q3-8</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week03.html#edge">3주차 11 에지 검출</a></div>
+  <p class="q-txt">엣지 검출에서 <span class="part">미분 전에 스무딩을 하는 부분</span>은 왜 필요하며, Prewitt · Sobel · 가우시안의 미분(DoG) · LoG는 이 문제를 각각 어떻게 다루는지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>표면 · 깊이 · 색 · 조명의 불연속</span><span>미분은 잡음을 증폭</span><span>[1 1 1] 스무딩 × [−1 0 1] 미분</span><span>Sobel 가운데 가중치 2</span><span>결합법칙 · 미리 미분한 가우시안</span><span>2차 미분 영교차 · 이중선 · 분리 불가</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 엣지가 생기는 이유.</b> 엣지는 물체의 형상을 설명한다. 표면 방향, 깊이, 표면 색, 조명이 <b>불연속</b>하게 바뀌는 곳이 영상에서 밝기가 급히 변하는 엣지로 나타난다.</p>
+    <p><b>② 스무딩이 필요한 이유.</b> 엣지는 밝기의 변화이므로 미분(이웃 화소 차이)으로 찾는다. 그런데 잡음은 이웃끼리 제멋대로 튀는 성분이라, 차이를 구하면 <b>잡음이 오히려 증폭</b>된다. 그래서 먼저 잡음을 스무딩으로 누르고 미분한다.</p>
+    <p><b>③ Prewitt.</b> 한 방향으로는 [1 1 1]로 평균(스무딩)하고 다른 방향으로는 [−1 0 1]로 차분(미분)한다. 즉 <b>잡음 제거와 엣지 검출을 한 마스크에</b> 담았다. 가로 · 세로 방향 마스크를 따로 걸어 세로 엣지와 가로 엣지를 찾는다.</p>
+    <p><b>④ Sobel.</b> 스무딩 부분이 [1 2 1]로, 가운데 줄에 가중치를 더 준다. 가까운 화소를 더 믿는 가우시안에 가까운 스무딩이라 Prewitt보다 <b>잡음에 조금 더 강하다</b>.</p>
+    <p><b>⑤ 가우시안의 미분(Derivative of Gaussian).</b> 스무딩도 미분도 컨볼루션이고 컨볼루션은 결합법칙을 만족하므로, 영상을 블러한 뒤 미분하는 대신 <b>가우시안을 미리 미분해 둔 필터를 한 번만</b> 적용하면 된다. 연산이 한 번 줄고, σ로 잡음 억제 정도를 조절할 수 있다.</p>
+    <p><b>⑥ LoG(Laplacian of Gaussian).</b> 가우시안의 2차 미분이다. 1차 미분의 극값 대신 <b>2차 미분이 0을 지나는 곳(영교차)</b>을 엣지로 본다. 2차 미분은 엣지 양쪽에 부호가 반대인 봉우리를 만들어 결과가 <b>이중선</b>처럼 보이며, 그 사이 0을 지나는 자리가 진짜 엣지다. 하나의 커널로는 가로 · 세로 1차원 필터로 분리되지 않아 같은 크기라도 계산량이 많다.</p>
+  </details>
+  <div class="pit"><p class="pit-h">⚠ 약어 주의 &mdash; DoG의 두 뜻</p><p>3주차 교안의 DoG는 <b>Derivative of Gaussian(가우시안의 1차 미분)</b>이다. 5 · 6주차의 블롭 검출과 SIFT에 나오는 DoG는 <b>Difference of Gaussians(σ가 다른 두 가우시안 블러의 차)</b>로 LoG의 근사다. 답안에서 DoG를 쓸 때는 반드시 풀네임을 함께 적어 어느 쪽인지 밝히자.</p></div>
+</article>
+</section>
+
+<!-- ===================== 4주차 ===================== -->
+<section class="sec pb" id="w4">
+  <div class="sec-head"><span class="sec-badge">W4</span><h2 class="sec-title">4주차 · Image Pyramids<small>에일리어싱 · 가우시안 · 라플라시안 · 웨이블릿 · 보간</small></h2></div>
+
+<h3 class="sub-title">부분 → 활용 한 장 정리</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>부분</th><th>하는 일</th><th>어떻게 쓰이나</th></tr>
+  <tr><td>축소 전 블러</td><td>새 해상도가 표현 못 할 고주파를 미리 제거</td><td>에일리어싱(계단 · 모아레) 방지</td></tr>
+  <tr><td>가우시안 피라미드</td><td>블러 + 절반 축소 반복</td><td>스케일 불변 검출 · 대충 먼저 정밀하게 나중에(coarse-to-fine) · 연산 절감</td></tr>
+  <tr><td>라플라시안 피라미드</td><td>층과 &lsquo;위층을 키운 예측&rsquo;의 차이 저장</td><td>원본 복원 · 다중 대역 블렌딩 · 압축 · 디테일 조작</td></tr>
+  <tr><td>웨이블릿</td><td>근사 + 가로 · 세로 · 대각 디테일로 분해</td><td>JPEG 2000 압축 · 잡음 제거</td></tr>
+  <tr><td>재구성 필터</td><td>샘플 사이를 이어 연속 신호로</td><td>보간 방식 결정 (최근접 · 바이리니어 · 바이큐빅)</td></tr>
+</table></div>
+
+<article class="q" id="q4-1">
+  <div class="q-h"><span class="q-no">Q4-1</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week04.html#down">4주차 01 다운샘플링 · 에일리어싱</a></div>
+  <p class="q-txt">영상을 줄일 때 생기는 <span class="part">에일리어싱(aliasing)</span>의 정의와 원인을 쓰고, 이를 막기 위한 <span class="part">&lsquo;블러 후 축소&rsquo;</span>가 어떻게 작동하는지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>샘플이 충분히 촘촘하지 않음</span><span>다른 신호로 둔갑(가짜 무늬)</span><span>계단 · 모아레 · 마차 바퀴 효과</span><span>나이퀴스트(최고 주파수의 2배 이상)</span><span>오버샘플링</span><span>블러 → 축소 순서</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 다운샘플링.</b> 영상의 해상도를 줄이는 것으로, 데이터와 연산량을 줄이고, 세부를 걷어내 큰 구조를 보고, 피라미드를 만들기 위해 한다. 가장 단순한 방법은 행과 열을 하나씩 건너뛰며 버리는 것이다.</p>
+    <p><b>② 에일리어싱의 정의.</b> 연속 신호를 띄엄띄엄 샘플링할 때 샘플이 충분히 촘촘하지 않아 <b>원래와 다른 신호로 둔갑</b>하는 왜곡이다(alias = 가명). 영상에서는 가는 줄무늬나 경계가 계단처럼 깨지고, 원래 없던 물결무늬(<b>모아레</b>)가 생긴다. 중요한 것은 단순히 흐려지는 것이 아니라 <b>틀린 무늬가 새로 생긴다</b>는 점이다. 바퀴가 거꾸로 도는 듯 보이는 마차 바퀴 효과는 시간축에서 생기는 에일리어싱이다.</p>
+    <p><b>③ 원인 &mdash; 나이퀴스트 조건.</b> 신호가 한 번 오르내리는 동안 최소 두 번은 찍어야 그 변화가 기록에 남는다. 즉 샘플링 주파수가 신호의 최고 주파수의 <b>2배 이상</b>이어야 한다. 이보다 성기게 찍으면 촘촘한 무늬(고주파)가 굵은 무늬(저주파)로 둔갑해 섞이고, 한번 섞이면 되돌릴 수 없다.</p>
+    <p><b>④ 해결.</b> 찍는 단계라면 더 촘촘히 찍으면 된다(오버샘플링). 이미 찍힌 영상을 줄일 때는 <b>먼저 가우시안 블러로 새 해상도가 표현하지 못할 고주파를 지운 뒤</b> 행과 열을 솎아낸다. 디테일은 잃지만 가짜 무늬가 생기는 것보다 낫다.</p>
+    <p><b>⑤ 순서가 핵심.</b> 줄인 뒤 블러하면 소용이 없다. 이미 가짜 무늬가 생긴 뒤라 그 가짜 무늬가 흐려질 뿐이다. 반드시 <b>블러 → 축소</b> 순서여야 하며, 이 원칙이 가우시안 피라미드를 만드는 방법 그 자체다.</p>
+  </details>
+</article>
+
+<article class="q" id="q4-2">
+  <div class="q-h"><span class="q-no">Q4-2</span><span class="q-star">★★</span><a class="q-src" href="computer-vision-week04.html#freq">4주차 02 이미지와 주파수</a></div>
+  <p class="q-txt">영상에서 <span class="part">저주파</span>와 <span class="part">고주파</span>는 각각 무엇을 뜻하며, 블러 · 엣지 검출 · 피라미드와 어떻게 연결되는지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>밝기가 얼마나 빨리 변하나</span><span>넓고 매끄러운 영역 · 에너지 대부분</span><span>엣지 · 질감 · 노이즈</span><span>저역 통과 · 고역 통과</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 정의.</b> 영상의 주파수는 화면에서 몇 화소 만에 밝기가 바뀌는지, 곧 <b>공간적으로 값이 얼마나 빨리 변하는지</b>를 뜻한다. <b>저주파</b>는 하늘 · 벽처럼 천천히 변하는 넓은 영역과 전체적인 밝기 분포로, 영상 에너지의 대부분이 여기 있다. <b>고주파</b>는 엣지 · 질감 · 머리카락처럼 짧은 거리에서 확 바뀌는 부분이며, <b>노이즈도 고주파</b>에 속한다.</p>
+    <p><b>② 필터와의 관계.</b> 블러 · 가우시안은 고주파를 잘라 내는 <b>저역 통과 필터</b>라 큰 구조만 남기고, 샤프닝 · 엣지 검출은 저주파를 잘라 내는 <b>고역 통과 필터</b>라 윤곽선만 남긴다.</p>
+    <p><b>③ 이번 주와의 연결.</b> 축소 전에 블러하는 이유는 새 해상도가 표현 못 할 고주파를 미리 지우려는 것이고, 가우시안 피라미드는 위로 갈수록 고주파가 빠져 저주파만 남는 구조이며, 라플라시안 피라미드는 빠져나간 고주파(디테일)를 층별로 모아 둔 것이다. 노이즈도 고주파이므로 디노이징은 &lsquo;고주파 중 진짜 엣지만 남기는 일&rsquo;이 된다.</p>
+  </details>
+</article>
+
+<article class="q" id="q4-3">
+  <div class="q-h"><span class="q-no">Q4-3</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week04.html#gpyr">4주차 03 가우시안 피라미드</a></div>
+  <p class="q-txt"><span class="part">가우시안 피라미드</span>를 만드는 방법을 쓰고, 이것이 컴퓨터 비전에서 어떻게 활용되는지, 또 어떤 한계가 있는지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>블러 + 1/2 축소 반복</span><span>저장 공간 약 4/3배</span><span>위층 = 큰 구조(숲)</span><span>고정된 창 · 스케일 불변 검출</span><span>coarse-to-fine</span><span>연산량 절감</span><span>고주파 손실 · 복원 불가</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 만드는 법.</b> 원본(맨 아래 층)에 가우시안 블러를 걸고 가로 · 세로를 절반으로 줄여 다음 층을 만들고, 이를 반복해 여러 해상도를 쌓는다. 한 층 올라갈 때마다 화소 수가 1/4이 되므로 전부 더해도 원본의 <b>약 4/3배</b>밖에 되지 않는다.</p>
+    <p><b>② 층의 의미.</b> 위로 갈수록 가는 무늬 · 질감 · 작은 물체가 지워지고 크고 균일한 영역만 남는다. 나무를 지우고 숲만 남긴 셈이라, 위층에서는 전체 배치와 큰 구조를 디테일에 방해받지 않고 빠르게 파악하고, 아래층에서는 세밀한 정보를 얻는다.</p>
+    <p><b>③ 활용 1 &mdash; 스케일 불변 검출.</b> 같은 물체도 거리에 따라 크기가 다른데, 검출기의 창 크기는 고정이다. 창을 키우는 대신 <b>영상을 줄여</b> 층마다 같은 창을 돌리면 모든 크기의 물체가 어느 층에서든 창에 맞게 걸린다. 슬라이딩 윈도우 얼굴 검출과 SIFT의 스케일 공간이 이 원리다.</p>
+    <p><b>④ 활용 2 &mdash; 대충 먼저, 정밀하게 나중에.</b> 큰 움직임을 찾는 문제(옵티컬 플로우, 영상 정합, 스테레오 매칭)는 영상을 줄이면 움직임도 같은 비율로 작아진다. 가장 작은 층에서 대략의 답을 구하고, 그 답을 다음 층의 출발값으로 써서 남은 오차만 보정하며 원본까지 내려온다.</p>
+    <p><b>⑤ 활용 3 &mdash; 연산 절감.</b> 비싼 계산을 작은 층에서 먼저 하고 큰 층에서는 좁은 범위만 확인한다.</p>
+    <p><b>⑥ 한계.</b> 블러로 지운 고주파는 어디에도 남지 않으므로 위층만으로는 <b>원본을 되살릴 수 없다</b>(손실). 이 잃어버린 차이를 따로 저장하자는 생각에서 라플라시안 피라미드가 나온다.</p>
+  </details>
+</article>
+
+<article class="q" id="q4-4">
+  <div class="q-h"><span class="q-no">Q4-4</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week04.html#lpyr">4주차 04 라플라시안 피라미드</a></div>
+  <p class="q-txt"><span class="part">라플라시안 피라미드</span>의 각 층에는 무엇이 저장되는가? 이를 이용해 원본을 복원하는 방법과, 블렌딩 · 압축 등에 활용되는 원리를 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>위층을 키운 예측과의 차이(잔차)</span><span>고주파 · 디테일</span><span>맨 위 작은 영상 + 잔차들</span><span>키우고 더하기 반복 → 정확 복원</span><span>0 근처 값 → 압축</span><span>다중 대역 블렌딩(저주파 넓게 · 고주파 좁게)</span><span>DoG ≈ LoG</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 저장하는 것.</b> 한 층 위의 가우시안 영상을 다시 키우면 원래 층의 <b>예측</b>이 된다. 블러로 지워진 디테일이 없으니 원래 층과 조금 다르고, 그 <b>차이(예측 오차 · 잔차)</b>가 라플라시안 층이다. 즉 각 층은 그 크기대의 <b>고주파 디테일</b>을 담는다.</p>
+    <p><b>② 복원.</b> 맨 위의 작은 근사 영상 한 장과 층마다의 잔차만 저장해 두면, 위에서부터 &ldquo;<b>키우고 → 잔차를 더하기</b>&rdquo;를 반복해 원본을 정확히 되살릴 수 있다. 가우시안 피라미드만으로는 불가능했던 복원이 잔차 덕분에 가능해진다.</p>
+    <p><b>③ 이름의 이유.</b> 원본 − 블러는 흐림 정도가 다른 두 가우시안의 차이이고, 이것은 LoG(라플라시안 오브 가우시안)의 근사다. 그래서 잔차 영상이 엣지 검출 결과처럼 보인다.</p>
+    <p><b>④ 활용 1 &mdash; 블렌딩.</b> 두 사진을 마스크로 그냥 붙이면 이음새가 보이고, 넓게 섞으면 겹쳐 보인다. 해답은 <b>저주파(밝기 · 색)는 넓게, 고주파(엣지 · 질감)는 좁게</b> 섞는 것이다. 두 영상을 라플라시안 피라미드로, 마스크를 가우시안 피라미드로 분해해 층마다 섞은 뒤 복원하면 이음새 없이 디테일도 살아 있는 합성이 된다(사과 + 오렌지, 7주차 파노라마의 다중 대역 블렌딩).</p>
+    <p><b>⑤ 활용 2 &mdash; 압축.</b> 잔차는 평탄한 곳에서 대부분 0 근처라 값의 분포가 0에 뾰족하게 몰린다. 이런 데이터는 적은 비트로 담을 수 있어, 샘플 수는 4/3배로 늘어도 압축 이득이 더 크다. 라플라시안 피라미드가 처음 제안된 목적(Burt &amp; Adelson, 1983)이 압축이었다.</p>
+    <p><b>⑥ 그 밖의 활용.</b> 특정 층에 상수를 곱해 그 크기대의 디테일만 강조하거나 줄일 수 있고(디테일 강화 · HDR 톤 매핑), 작은 계수를 0으로 만들어 잡음을 줄일 수도 있다.</p>
+  </details>
+</article>
+
+<article class="q" id="q4-5">
+  <div class="q-h"><span class="q-no">Q4-5</span><span class="q-star">★★</span><a class="q-src" href="computer-vision-week04.html#wavelet">4주차 05 웨이블릿 변환</a></div>
+  <p class="q-txt"><span class="part">웨이블릿 변환</span>은 영상을 어떻게 분해하는가? 라플라시안 피라미드와 비교하고, 왜 저주파(근사) 쪽만 반복해서 분해하는지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>근사(LL) + 가로 · 세로 · 대각 디테일</span><span>근사만 반복 분해</span><span>계수 수 = 원본과 같음(피라미드는 4/3배)</span><span>에너지가 저주파에 집중</span><span>디테일은 0 근처 → 압축</span><span>JPEG 2000 · 링잉</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 분해 방식.</b> 한 번 분해하면 영상이 네 덩어리가 된다. 저주파는 원본을 절반으로 줄인 듯한 <b>근사(LL)</b>로 가고, 고주파는 방향에 따라 <b>가로 · 세로 · 대각 디테일</b> 셋으로 나뉜다. 그리고 근사 쪽만 같은 과정을 반복한다. DCT처럼 블록으로 자르지 않는 부호화 방식으로, JPEG 2000이 대표 예다.</p>
+    <p><b>② 라플라시안 피라미드와 비교.</b> 웨이블릿 계수는 모두 합쳐도 <b>원본 화소 수와 똑같다</b>. 라플라시안 피라미드가 4/3배로 늘어나는 것과 달리 정보를 잃지도 늘리지도 않는 표현이다. 또 디테일을 방향별로 나눠 담는다.</p>
+    <p><b>③ 근사만 다시 쪼개는 이유.</b> 첫째, 자연 영상은 이웃 화소 변화가 완만해 <b>에너지 대부분이 저주파에 몰려 있다</b>. 둘째, 디테일 쪽은 경계 · 질감 말고는 이미 0에 가깝지만 근사는 큰 값이 빽빽해 압축이 어렵다. 근사를 계속 쪼개야 0에 가까운 계수를 대량으로 얻어 압축이 잘 된다. 셋째, 사람 눈은 고주파의 미세한 손실보다 저주파(윤곽 · 밝기 분포)의 변화에 민감하므로 저주파를 세밀하게 나누는 것이 효율적이다.</p>
+    <p><b>④ 한계.</b> 고주파 계수를 많이 버릴수록 용량은 줄지만 경계 주변에 원래 없던 잔물결(<b>링잉</b>)이 생긴다.</p>
+  </details>
+</article>
+
+<article class="q" id="q4-6">
+  <div class="q-h"><span class="q-no">Q4-6</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week04.html#interp">4주차 06 보간</a></div>
+  <p class="q-txt">영상을 키울 때 쓰는 <span class="part">보간(interpolation)</span>을 &lsquo;재구성 필터&rsquo;의 관점에서 설명하고, 최근접 이웃 · 바이리니어 · 바이큐빅을 비교하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>키울 때 생긴 빈칸 채우기</span><span>재구성 필터 = 샘플 사이를 잇는 함수</span><span>sinc 이상적 · 무한 · 링잉</span><span>1점 · 4점 · 16점</span><span>계단 · 흐림 · 선명하지만 느림</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 보간이 하는 일.</b> 영상을 키우면 없던 자리에 새 화소가 생긴다(2배면 네 칸 중 세 칸이 빈칸). 원래의 연속적인 장면을 알면 어떤 해상도로든 다시 만들 수 있지만, 가진 것은 찍힌 화소 값뿐이다. 그래서 샘플 사이를 어떤 모양의 함수로 이어 붙일지 정하는데, 그 함수가 <b>재구성 필터</b>이고 함수의 모양이 곧 보간 방법이다. 공간에서 보면 주변 화소의 가중합이고, 주파수에서 보면 키우며 생긴 군더더기 고주파를 깎는 저역 통과 필터다.</p>
+    <p><b>② 이상적인 필터 sinc.</b> 필요한 저주파는 다 통과시키고 고주파는 완전히 막는 이상적인 필터지만, 좌우로 무한히 출렁여 실제로 쓸 수 없고 링잉이 생긴다. 실용적인 보간은 이를 유한하게 근사한다.</p>
+    <p><b>③ 최근접 이웃.</b> 가장 가까운 화소 값 <b>하나</b>를 그대로 복사한다(박스 모양 필터). 가장 빠르지만 <b>계단(블록) 현상</b>이 심하다.</p>
+    <p><b>④ 바이리니어.</b> 주변 <b>4점</b>을 써서, 가로로 두 번 직선 보간하고 그 결과를 세로로 한 번 더 보간한다. 가까운 점에 더 큰 가중치를 준다(삼각형 모양 필터). 계단은 사라지지만 연결점에서 기울기가 꺾여 <b>경계가 뿌옇게 흐려진다</b>.</p>
+    <p><b>⑤ 바이큐빅.</b> 주변 <b>16점(4×4)</b>을 3차 곡선으로 잇는다. 기울기까지 매끄럽게 이어지고, 바깥쪽에 음수 가중치가 있어 경계를 선명하게 살린다. 대신 <b>계산량이 크고</b> 급한 경계에서 값이 살짝 튀는 오버슈트(링잉)가 생길 수 있다.</p>
+    <p><b>⑥ 활용.</b> 보간은 영상 확대뿐 아니라 피라미드를 키우는 단계, 7주차의 워핑(변환된 좌표가 소수점일 때 주변 화소로 색을 가져오는 단계)에서도 쓰인다. 줄일 때는 보간보다 영역 평균처럼 에일리어싱을 줄이는 방식이 알맞다.</p>
+  </details>
+</article>
+</section>
+
+<!-- ===================== 5주차 ===================== -->
+<section class="sec pb" id="w5">
+  <div class="sec-head"><span class="sec-badge">W5</span><h2 class="sec-title">5주차 · Local Feature Detection<small>로컬 특징 · 엣지 · Canny · 허프 변환 · 코너(Harris) · 불변성 · 블롭(LoG · DoG) · 공변/불변</small></h2></div>
+
+<h3 class="sub-title">부분 → 활용 한 장 정리</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>알고리즘</th><th>부분</th><th>하는 일 → 쓰임</th></tr>
+  <tr><td>Canny</td><td>가우시안의 미분</td><td>스무딩과 미분을 한 번에 → 잡음에 강한 그래디언트</td></tr>
+  <tr><td></td><td>그래디언트 방향</td><td>비최대 억제에서 앞뒤 비교 상대를 고른다</td></tr>
+  <tr><td></td><td>비최대 억제(NMS)</td><td>두꺼운 엣지 띠를 한 화소 두께로 깎는다</td></tr>
+  <tr><td></td><td>이력 임계값</td><td>높은 값으로 시작, 낮은 값으로 이어 붙임 → 끊김과 잡음을 함께 해결</td></tr>
+  <tr><td>허프 변환</td><td>파라미터 공간</td><td>점 하나 = 직선 목록 → 교점이 찾는 직선</td></tr>
+  <tr><td></td><td>누적 배열 투표</td><td>최다 득표 칸 = 직선 · 잡음 표는 흩어진다</td></tr>
+  <tr><td></td><td>(ρ, θ) 표현</td><td>수직선의 무한 기울기 문제 회피 · 배열 크기가 유한</td></tr>
+  <tr><td>Harris</td><td>창을 밀어 본 변화량</td><td>평탄 · 엣지 · 코너 구분의 기준</td></tr>
+  <tr><td></td><td>2차 모멘트 행렬</td><td>창 안 그래디언트 분포 → 한 번 계산으로 모든 방향의 변화 예측</td></tr>
+  <tr><td></td><td>고윳값 · 응답 R</td><td>두 방향 모두 변해야 코너 → 임계값 + 국소 최대</td></tr>
+  <tr><td>블롭(LoG)</td><td>σ 바꿔 가며 응답</td><td>최대 응답의 σ = 블롭 크기(특성 스케일)</td></tr>
+  <tr><td></td><td>스케일 정규화</td><td>큰 σ의 응답이 작아지는 것을 보정해 공정 비교</td></tr>
+  <tr><td></td><td>DoG 근사</td><td>블러 두 장의 차로 LoG를 싸게 → SIFT</td></tr>
+</table></div>
+
+<article class="q" id="q5-1">
+  <div class="q-h"><span class="q-no">Q5-1</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week05.html#local">5주차 01 로컬 특징이란</a></div>
+  <p class="q-txt"><span class="part">로컬 특징(local feature)</span>이 필요한 이유와 이를 다루는 <span class="part">세 단계</span>, 로컬 특징의 장점과 종류를 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>추출 → 매칭 → 정렬</span><span>검출 · 기술 · 매칭</span><span>국소성 · 다량 · 변별력 · 효율</span><span>엣지 · 직선 · 코너 · 블롭</span><span>반복성 · 변별력</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 필요한 이유.</b> 두 사진을 이어 붙이려면(파노라마) 같은 지점을 가리키는 짝을 찾아야 한다. 화소 전체를 하나하나 비교하면 느리고 밝기가 조금만 달라도 실패한다. 그래서 각 사진에서 눈에 띄는 지점을 뽑고(추출) → 지점끼리 짝을 짓고(매칭) → 그 짝으로 사진을 맞춘다(정렬). 이 방식은 이미지 매칭, 파노라마, 3차원 복원, 증강현실의 모션 추적, 물체 인식, 이미지 검색, 로봇 내비게이션에 두루 쓰인다.</p>
+    <p><b>② 세 단계.</b> <b>검출(detection)</b> &mdash; 어디를 볼지, 관심점의 위치를 찾는다(5주차). <b>기술(description)</b> &mdash; 그곳이 어떻게 생겼는지 주변을 숫자 벡터로 요약한다(6주차). <b>매칭(matching)</b> &mdash; 두 사진의 벡터를 비교해 같은 지점끼리 짝짓는다(7주차).</p>
+    <p><b>③ 장점 네 가지.</b> <b>국소성(locality)</b> &mdash; 작은 영역에만 의존하므로 물체 일부가 가려지거나 배경이 복잡해도 나머지 특징은 살아남는다. <b>다량(quantity)</b> &mdash; 한 장에서 수백~수천 개가 나와 몇 개가 틀려도 결과가 버틴다. <b>변별력(distinctiveness)</b> &mdash; 각 특징이 충분히 구별되어 큰 데이터베이스에서도 물체를 식별한다. <b>효율(efficiency)</b> &mdash; 계산이 가벼워 실시간 처리가 가능하다.</p>
+    <p><b>④ 네 종류.</b> <b>엣지</b>(밝기가 급히 변하는 경계, 미분으로 찾음), <b>직선</b>(엣지 점들이 일직선으로 늘어선 것, Canny · 허프 변환), <b>코너</b>(어느 방향으로 움직여도 밝기가 크게 변하는 점, Harris), <b>블롭</b>(주변과 구별되는 덩어리, 위치와 크기를 함께 찾음, LoG · DoG).</p>
+    <p><b>⑤ 좋은 특징의 기준.</b> 다른 각도 · 밝기 · 거리에서 찍어도 같은 지점이 다시 검출되는 <b>반복성</b>, 그리고 주변 모습이 다른 지점과 충분히 달라 헷갈리지 않는 <b>변별력</b>이다. 평탄한 곳이나 엣지 위의 점이 아니라 코너가 좋은 특징인 이유가 여기서 나온다.</p>
+  </details>
+</article>
+
+<article class="q" id="q5-2">
+  <div class="q-h"><span class="q-no">Q5-2</span><span class="q-star">★★</span><a class="q-src" href="computer-vision-week05.html#edge">5주차 02 엣지 검출</a></div>
+  <p class="q-txt">엣지 검출에서 <span class="part">그래디언트의 크기와 방향</span>은 각각 무엇을 뜻하는가? 엣지 검출의 세 단계와 차분 연산자(Prewitt · Sobel · Roberts)를 함께 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>1차 미분의 극값</span><span>차분 = 옆 화소 빼기 = 커널</span><span>x 방향 미분은 세로 엣지</span><span>크기 = 엣지 세기 · 방향 = 엣지에 수직</span><span>필터링 → 강조 → 검출</span><span>엣지 세기와 잡음 제거의 맞바꿈</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 원리.</b> 엣지는 이웃한 화소 사이의 밝기 변화가 큰 곳이다. 변화량을 재는 도구가 미분이므로, 밝기를 미분해 <b>극값이 되는 곳</b>을 엣지로 본다. 디지털 영상은 정수 위치에만 화소가 있으므로 미분을 &ldquo;옆 화소 − 현재 화소&rdquo;로 근사하고(유한 차분), 이 빼기 규칙을 작은 표로 적은 것이 커널이다.</p>
+    <p><b>② 두 방향의 편미분.</b> 가로 방향 미분은 가로로 움직이며 변화를 재므로 <b>세로로 선 엣지</b>에 반응하고, 세로 방향 미분은 가로로 누운 엣지에 반응한다. 미분 방향과 찾아지는 선의 방향은 90° 어긋난다.</p>
+    <p><b>③ 크기와 방향.</b> 두 편미분을 묶은 벡터가 그래디언트로, 밝기가 가장 빠르게 커지는 방향을 가리킨다. <b>크기</b>는 그 화소에서 밝기가 얼마나 세게 변하는지, 곧 <b>엣지의 세기</b>다. <b>방향</b>은 엣지 선과 나란한 쪽이 아니라 <b>엣지를 가로지르는 쪽(수직)</b>이며, 어느 쪽이 밝은지를 담는다.</p>
+    <p><b>④ 세 단계.</b> 미분은 잡음까지 키우므로 ① <b>필터링</b> &mdash; 스무딩으로 잡음을 누르고, ② <b>강조</b> &mdash; 차분 연산자로 변화가 큰 화소를 도드라지게 하고, ③ <b>검출</b> &mdash; 임계값을 넘는 강한 엣지만 남긴다. 블러를 세게 하면 잡음은 잘 지워지지만 엣지도 무뎌지고 위치가 흐려지는 <b>맞바꿈</b>이 있고, 임계값은 사진과 연산자에 따라 다시 정해야 한다.</p>
+    <p><b>⑤ 차분 연산자.</b> <b>Prewitt</b>은 세 줄의 차분을 같은 무게로 평균해 단순하고 빠르다. <b>Sobel</b>은 가운데 줄에 가중치 2를 주어 약한 가우시안 스무딩이 섞인 셈이라 잡음에 더 강하고 가장 널리 쓰인다. <b>Roberts</b>는 2×2 대각선 차분으로 가장 작고 빠르지만 평균이 없어 잡음에 약하다(응답이 작아 임계값도 낮게 잡는다). 결국 차분 연산자는 필터링(평균)과 강조(차분)를 한 마스크에 합친 것이다.</p>
+  </details>
+  <div class="deep"><b>🔎 +α</b> 나침반 8방향에 맞춘 마스크 8개를 모두 걸어 가장 큰 응답을 크기로, 그 마스크의 방향을 엣지 방향으로 삼는 컴퍼스 마스크도 있다. 곱셈 · 제곱근 없이 최댓값 고르기로 끝나지만 방향이 45° 단위로만 나온다.</div>
+</article>
+
+<article class="q" id="q5-3">
+  <div class="q-h"><span class="q-no">Q5-3</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week05.html#canny">5주차 03 Canny 엣지</a></div>
+  <p class="q-txt">Canny 엣지 검출기에는 <span class="part">비최대 억제(non-maximum suppression)</span>와 <span class="part">이력 임계값(hysteresis thresholding)</span> 단계가 있다. Canny 전체 흐름 속에서 이 두 부분이 무엇을 하고 왜 필요한지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>Canny가 푸는 세 문제</span><span>가우시안 미분 → 크기 · 방향 → NMS → 이력 임계값</span><span>그래디언트 방향의 앞뒤 화소와 비교</span><span>한 화소 두께</span><span>높은 임계값으로 시작 · 낮은 임계값으로 이어감</span><span>강한 엣지에 연결된 약한 엣지만</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① Canny가 푸는 문제.</b> 단순한 그래디언트 엣지에는 세 가지 문제가 있다 &mdash; 어느 스케일(σ)을 고를지, 그래디언트가 큰 영역이 <b>두꺼운 띠</b>로 나오는데 그중 어디가 진짜 엣지인지, 남은 점들을 어떻게 <b>이어서</b> 곡선으로 만들지.</p>
+    <p><b>② 네 단계.</b> ① 가우시안의 미분으로 스무딩과 미분을 한 번에 하고, ② 각 화소의 그래디언트 크기와 방향을 구하고, ③ 비최대 억제로 띠를 가늘게 깎고, ④ 이력 임계값으로 엣지를 확정하며 잇는다.</p>
+    <p><b>③ 비최대 억제가 하는 일.</b> 실제 경계는 한 화소에서 딱 끝나지 않고 몇 화소에 걸쳐 완만히 변하므로, 세기가 큰 화소가 경계를 가로질러 여러 개 나란히 나온다. 여기에 임계값만 걸면 엣지가 여러 화소 두께의 띠가 된다. 비최대 억제는 각 화소를 <b>그래디언트 방향으로 앞뒤에 있는 두 화소</b>와 비교해, 둘보다 크면(능선의 꼭대기면) 남기고 아니면 0으로 지운다. 그래서 엣지가 <b>한 화소 두께</b>의 선이 된다. 비교를 엣지를 <b>가로질러</b> 하는 것이 핵심이다 &mdash; 엣지를 따라 비교하면 같은 선 위 이웃끼리 서로 지워 선이 끊긴다. ②에서 구한 방향이 바로 이 비교 상대를 고르는 데 쓰인다.</p>
+    <p><b>④ 이력 임계값이 하는 일.</b> 임계값을 하나만 쓰면, 높게 잡을 때 잡음은 사라지지만 그림자처럼 잠깐 약해진 진짜 경계에서 선이 끊기고, 낮게 잡을 때 끊기지는 않지만 잡음까지 엣지가 된다. 그래서 기준을 두 개 둔다. <b>높은 임계값 이상</b>이면 확실한 엣지로 채택하고 곡선의 시작점으로 삼는다. <b>낮은 임계값 미만</b>이면 버린다. <b>그 사이</b>의 약한 엣지는 강한 엣지와 이웃을 통해 <b>이어져 있을 때만</b> 살리고 고립되어 있으면 버린다. 진짜 경계는 길게 이어지고 잡음은 뚝 떨어진 점으로 나타나므로, &lsquo;연결되어 있는가&rsquo;가 진짜와 잡음을 가르는 기준이 된다. 결과는 강한 엣지의 깨끗함과 약한 엣지의 연결성을 함께 가진다.</p>
+    <p><b>⑤ 이름.</b> 같은 세기의 화소라도 강한 엣지에 이어졌느냐(과거 이력)에 따라 엣지가 되기도 하고 버려지기도 하므로 &lsquo;이력&rsquo;이라는 이름이 붙었다.</p>
+  </details>
+</article>
+
+<article class="q" id="q5-4">
+  <div class="q-h"><span class="q-no">Q5-4</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week05.html#hough">5주차 04 허프 변환</a></div>
+  <p class="q-txt">허프 변환(Hough transform)에서 <span class="part">파라미터 공간과 투표</span>는 어떻게 직선을 찾게 해 주는가? 직선을 <span class="part">(ρ, θ)</span>로 표현하는 이유와 이 방법이 잡음에 강한 이유도 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>흩어진 엣지 점 → 직선</span><span>이미지의 점 ↔ 파라미터 공간의 직선(곡선)</span><span>교점 = 찾는 직선</span><span>누적 배열(accumulator)에 투표</span><span>국소 최대</span><span>수직선은 기울기 무한대</span><span>범위가 유한</span><span>잡음 표는 흩어짐 · 끊겨도 됨</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 문제.</b> 엣지 검출 결과는 점들이 여기저기 끊긴 조각으로 나오고 잡음 점도 섞여 있다. 이 중 일직선 위에 놓인 점들의 무리를 찾고 싶다. 점 두 개씩 짝지어 직선을 긋고 확인하는 방법은 점이 많으면 조합이 폭발한다.</p>
+    <p><b>② 발상의 전환.</b> 허프 변환은 &ldquo;직선이 점을 고르는&rdquo; 대신 &ldquo;<b>점이 자기가 속할 수 있는 직선에 투표</b>&rdquo;하게 한다. 직선은 숫자 두 개(예: 기울기와 절편)로 정해지므로 직선 하나는 <b>파라미터 공간</b>의 점 하나다. 반대로 이미지의 점 하나를 지나는 직선은 무수히 많아서, 그 목록이 파라미터 공간에서 <b>직선(곡선) 하나</b>로 그려진다. 같은 직선 위의 점들이 만든 목록은 모두 한 점에서 만나고, 그 <b>교점이 찾는 직선</b>이다.</p>
+    <p><b>③ 투표.</b> 컴퓨터는 교점을 방정식으로 풀지 않는다. 파라미터 공간을 칸으로 나눈 <b>누적 배열</b>을 0으로 채우고, 엣지 점마다 자기 목록이 지나는 칸에 한 표씩 더한다. 투표가 끝나면 표가 주변보다 뚜렷하게 많은 칸(<b>국소 최대</b>) 하나하나가 영상 속 직선 하나다.</p>
+    <p><b>④ (ρ, θ)를 쓰는 이유.</b> 기울기-절편 표현은 세로선의 기울기가 <b>무한대</b>라 적을 수 없고, 거의 수직인 선도 기울기가 너무 커져 배열 범위를 정할 수 없다. 그래서 직선을 <b>원점에서 직선까지의 거리 ρ와 그 수직선의 각도 θ</b>로 적는다. θ는 0~180°, ρ는 영상 대각선 길이 안에만 있으므로 <b>누적 배열이 항상 유한</b>하다. 이 표현에서는 점 하나의 목록이 사인 곡선 모양이 된다.</p>
+    <p><b>⑤ 잡음 · 가림에 강한 이유.</b> 잡음 점도 똑같이 표를 던지지만 서로 다른 칸에 한 표씩 <b>흩어져</b> 1등 칸을 흔들지 못한다. 또 직선의 점 몇 개가 가려져 빠져도 나머지 점들의 표로 여전히 1등이 된다.</p>
+    <p><b>⑥ 한계와 활용.</b> 칸을 너무 잘게 나누면 같은 직선의 표가 이웃 칸으로 흩어지고, 너무 굵게 나누면 다른 직선이 한 칸에 뭉친다 &mdash; 해상도 설정이 성패를 가른다. 원 등 다른 모양에도 같은 방식을 쓸 수 있고, 차선 · 건물 윤곽 · 문서의 직선 찾기에 쓰인다.</p>
+  </details>
+</article>
+
+<article class="q" id="q5-5">
+  <div class="q-h"><span class="q-no">Q5-5</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week05.html#harris">5주차 05 · 06 코너와 Harris</a></div>
+  <p class="q-txt">Harris 코너 검출기에는 <span class="part">창 안의 그래디언트로 만든 2차 모멘트 행렬과 그 고윳값을 보는 부분</span>이 있다. 이 부분이 무엇을 판정하며 어떻게 활용되는지, 코너가 좋은 특징인 이유와 함께 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>작은 창을 사방으로 밀어 봄</span><span>평탄 · 엣지 · 코너</span><span>구멍 문제(aperture problem)</span><span>밀었을 때의 변화량(SSD)</span><span>작은 이동 가정 · 한 번의 필터링</span><span>두 고윳값 = 두 방향의 변화 세기</span><span>행렬식 · 대각합으로 응답 R</span><span>임계값 + 국소 최대</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 코너의 판정 기준.</b> 점 주변에 작은 창을 씌우고 이리저리 밀어 본다. <b>평탄</b>한 곳은 어느 방향으로 밀어도 변화가 없어 위치를 특정할 수 없다. <b>엣지</b>는 엣지를 따라 밀면 변화가 없고 가로질러 밀 때만 변해, 선을 따라 미끄러지므로 한 방향의 위치가 불확실하다(<b>구멍 문제</b>). <b>코너</b>는 모든 방향으로 크게 변해 위치가 한 점으로 고정된다. 그래서 코너는 다른 사진에서도 헷갈리지 않고 짝을 찾을 수 있는 좋은 특징이다.</p>
+    <p><b>② 변화량을 행렬로.</b> 창을 조금 밀었을 때 안의 밝기가 얼마나 바뀌는지를 차이의 제곱합(SSD)으로 잴 수 있지만, 모든 화소에서 모든 이동량마다 계산하면 너무 느리다. 이동이 작다고 가정하면 이 변화량은 창 안 화소들의 <b>그래디언트(가로 · 세로 미분)만으로 만든 2×2 행렬</b>로 근사된다. 이것이 <b>2차 모멘트 행렬</b>로, 창 안 그래디언트가 어느 방향으로 얼마나 퍼져 있는지를 담는다. 한 번의 필터링으로 이 행렬을 구해 두면 어떤 방향으로 밀었을 때의 변화든 바로 예측할 수 있다.</p>
+    <p><b>③ 고윳값으로 판정.</b> 행렬의 두 고윳값은 <b>두 주방향으로 밀었을 때의 변화 세기</b>이고, 고유벡터는 그 방향이다. 둘 다 작으면 평탄, 하나만 크면 엣지, <b>둘 다 크고 비슷하면 코너</b>다. 모든 방향에서 변화가 커야 하므로 결국 <b>작은 쪽 고윳값이 커야</b> 코너다.</p>
+    <p><b>④ 응답 함수.</b> 화소마다 고윳값을 직접 구하는 것은 비쌌으므로, Harris는 행렬식(두 고윳값의 곱)과 대각합(두 고윳값의 합)만으로 &lsquo;둘 다 큰가&rsquo;를 판정하는 점수 R을 설계했다. R이 크면 코너, 음수면 엣지, 0 근처면 평탄이다. Shi-Tomasi는 작은 고윳값 자체를 점수로 쓴다.</p>
+    <p><b>⑤ 마무리와 활용.</b> 점수가 임계값을 넘는 점 중 <b>국소 최대</b>만 남겨 한 코너가 여러 번 검출되는 것을 막는다. 정리하면 그래디언트 계산 → 행렬 구성 → 고윳값(점수) → 임계값의 네 단계다. Harris 점수는 매칭 · 추적에 쓸 점을 고르는 데 쓰이고, 6주차 ORB가 FAST 후보 중 좋은 코너를 고를 때, SIFT가 엣지 위의 점을 버릴 때도 같은 고윳값 원리를 쓴다.</p>
+  </details>
+</article>
+
+<article class="q" id="q5-6">
+  <div class="q-h"><span class="q-no">Q5-6</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week05.html#invariance">5주차 07 Harris의 불변성</a></div>
+  <p class="q-txt">Harris 코너 검출기는 <span class="part">밝기 변화 · 이동 · 회전 · 크기 변화</span> 각각에 대해 불변인가? 크기 변화에 약한 이유와 해결 방향을 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>밝기 덧셈 불변(미분이 상수 제거)</span><span>곱셈은 부분적 · 상대 임계값</span><span>이동 · 회전 공변(고윳값 보존)</span><span>확대하면 코너가 엣지로</span><span>위치와 스케일 모두에서 극대</span><span>피라미드 · 블롭</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 밝기 변화.</b> 영상 전체에 상수를 <b>더하는</b> 변화는 미분하면 사라지므로 완전히 불변이다. 상수를 <b>곱하는</b> 대비 변화는 그래디언트도 함께 커져 점수 값이 바뀐다. 다만 어느 점이 더 큰가의 순서는 유지되므로 <b>부분적으로만 불변</b>이다. 고정 임계값을 쓰면 검출 개수가 크게 바뀌므로 실무에서는 최댓값의 몇 % 같은 상대 임계값을 쓴다.</p>
+    <p><b>② 이동.</b> 창도 함께 움직이므로 코너 위치가 영상을 따라 그대로 움직인다(공변).</p>
+    <p><b>③ 회전.</b> 2차 모멘트 행렬이 나타내는 타원은 영상과 함께 돌지만 모양, 곧 <b>고윳값은 그대로</b>다. 그래서 점수도 같고 같은 코너가 다시 검출된다.</p>
+    <p><b>④ 크기 변화 &mdash; 약점.</b> 같은 물체를 확대해 찍으면, 원래 뾰족했던 모서리가 고정된 크기의 창 안에서는 완만한 곡선으로 보인다. 창 크기는 그대로인데 무늬만 커졌으므로 <b>모든 점이 엣지로 분류</b>되어 코너를 놓친다. 즉 Harris는 스케일 불변이 아니다.</p>
+    <p><b>⑤ 해결 방향.</b> 위치뿐 아니라 <b>스케일 축에서도</b> 응답이 국소 최대가 되는 스케일을 찾아, 그 물체에 맞는 창 크기를 자동으로 고른다. 창을 키워 가는 대신 영상을 줄여 가며(4주차 가우시안 피라미드) 같은 창으로 훑으면 싸게 같은 효과를 얻는다. 이 생각이 블롭 검출(LoG · DoG)과 SIFT로 이어진다. 시점이 비스듬히 바뀌는 아핀 변화도 Harris만으로는 대응하지 못해 아핀 적응이 필요하다.</p>
+  </details>
+</article>
+
+<article class="q" id="q5-7">
+  <div class="q-h"><span class="q-no">Q5-7</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week05.html#blob">5주차 08 블롭 검출</a></div>
+  <p class="q-txt">블롭 검출에서 <span class="part">LoG의 σ를 바꿔 가며 응답을 비교하는 부분</span>과 <span class="part">스케일 정규화</span>는 각각 어떻게 활용되는가? 실제 구현에서 LoG 대신 <span class="part">DoG(Difference of Gaussians)</span>를 쓰는 이유도 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>블롭 = 주변과 다른 덩어리</span><span>LoG = 가우시안 + 2차 미분 · 멕시코 모자</span><span>σ가 블롭 크기와 맞을 때 최대</span><span>특성 스케일(characteristic scale)</span><span>σ가 클수록 응답이 작아짐 → σ² 보정</span><span>스케일 공간의 극값</span><span>DoG ≈ 정규화 LoG · 블러 두 장의 차 · 싸다</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 블롭과 LoG.</b> 블롭은 주변과 밝기가 다른 덩어리 영역(점, 얼룩, 둥근 물체)이다. LoG는 가우시안으로 부드럽게 만든 뒤 <b>2차 미분(라플라시안)</b>을 거는 연산자로, 단면이 가운데가 움푹하고 주변이 솟은 멕시코 모자 모양이라 블롭과 닮았고 원형 대칭이라 방향에 무관하다. 2차 미분은 잡음에 민감하므로 가우시안으로 먼저 스무딩한다.</p>
+    <p><b>② σ를 바꿔 가며 보는 부분의 활용 &mdash; 크기 찾기.</b> 엣지 하나에 라플라시안을 걸면 잔물결 하나가 생기고, 블롭은 가까이 붙은 엣지 두 개이므로 잔물결 두 개가 겹쳐 가운데에 큰 극값을 만든다. 단, 이 일은 <b>σ가 블롭 크기와 맞을 때만</b> 일어난다. σ가 너무 작으면 가장자리만 걸리고, 너무 크면 블롭이 뭉개져 약해진다. 그래서 같은 위치에 σ를 키워 가며 응답을 보고 <b>최대 응답을 주는 σ</b>를 고르면, 그것이 곧 블롭의 크기(<b>특성 스케일</b>)다. 사진이 확대되면 최대 응답의 σ도 그만큼 커진다.</p>
+    <p><b>③ 스케일 정규화의 활용 &mdash; 공정한 비교.</b> σ가 커질수록 가우시안이 넓고 납작해져 라플라시안 응답 자체가 작아진다. 그대로 비교하면 <b>항상 작은 σ가 이겨</b> 큰 블롭을 놓친다. 그래서 응답에 σ²을 곱해 자연 감소분을 되돌려 놓는다. 정규화 뒤에는 블롭 크기와 상관없이 봉우리 높이가 같아지고, 봉우리 위치만 블롭 크기를 따라간다.</p>
+    <p><b>④ 검출 절차.</b> 여러 σ의 정규화 LoG를 영상에 적용해 (가로, 세로, 스케일) 3차원 공간을 만들고, 그 안에서 <b>위치와 스케일 모두에서 극값</b>인 점을 블롭으로 검출한다. Harris가 &lsquo;어디&rsquo;만 답한다면 블롭 검출은 &lsquo;어디 + 얼마나 큰지&rsquo;를 답한다.</p>
+    <p><b>⑤ DoG를 쓰는 이유.</b> σ가 조금 다른 두 가우시안 블러 영상의 차(DoG)는 스케일 정규화된 LoG와 모양이 거의 같다(상수배 차이). 그리고 계산이 훨씬 싸다 &mdash; LoG를 직접 쓰려면 σ마다 큰 커널을 새로 만들어야 하지만, 가우시안 블러는 피라미드를 만들 때 어차피 층마다 해 두는 작업이고 분리 가능하며 앞 결과에 이어 만들 수 있다. 이웃한 블러 두 장을 <b>빼기만 하면</b> 되고 정규화도 덤으로 들어간다. SIFT가 바로 이 DoG 피라미드에서 극값을 찾는다.</p>
+    <p><b>⑥ 활용.</b> 검출된 σ에 비례하는 크기로 주변 패치를 잘라 기술자를 만들면, 사진이 커지든 작아지든 같은 내용의 패치를 보게 된다 &mdash; 이것이 스케일 불변 기술자의 출발점이다.</p>
+  </details>
+</article>
+
+<article class="q" id="q5-8">
+  <div class="q-h"><span class="q-no">Q5-8</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week05.html#covariant">5주차 09 공변 · 불변 · 아핀 적응</a></div>
+  <p class="q-txt"><span class="part">공변(covariant)</span>과 <span class="part">불변(invariant)</span>의 차이를 설명하고, 왜 &ldquo;검출기는 공변, 기술자는 불변&rdquo;이어야 하는지 서술하시오. 아핀 적응도 간단히 쓰시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>변환하고 검출 = 검출하고 변환</span><span>변환해도 값이 그대로</span><span>위치 · 크기 · 방향은 따라 변해야</span><span>설명하는 숫자는 같아야 비교 가능</span><span>2차 모멘트 타원 → 원으로 정규화</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 공변.</b> 영상을 변환한 뒤 특징을 뽑은 결과가, 특징을 뽑은 뒤 그 결과를 같은 방식으로 변환한 것과 같다. 즉 결과가 영상을 <b>따라 변한다</b>. 예: 사진을 2배로 키우면 검출된 블롭의 위치도 크기(σ)도 2배가 된다.</p>
+    <p><b>② 불변.</b> 영상을 변환해도 뽑아낸 값이 <b>전혀 바뀌지 않는다</b>. 예: 블롭 중심의 정규화 LoG 응답값은 사진을 키워도 같고, Harris 점수는 회전해도 같다.</p>
+    <p><b>③ 검출기가 공변이어야 하는 이유.</b> 사진을 돌리거나 키웠는데 검출된 좌표가 그대로라면 엉뚱한 자리를 가리키는 것이다. 같은 지점 · 같은 크기의 영역을 잡으려면 위치 · 크기 · 방향이 영상의 변화만큼 <b>정확히 따라가야</b> 한다.</p>
+    <p><b>④ 기술자가 불변이어야 하는 이유.</b> 두 사진에서 같은 지점을 짝지으려면, 그 영역을 숫자로 요약했을 때 <b>두 사진에서 같은 숫자</b>가 나와야 비교할 수 있다. 검출기가 따라 움직여 준 틀(크기 · 방향) 안에서 내용을 적기 때문에 기술자 값이 그대로 유지된다. 흔히 &ldquo;SIFT는 스케일 불변&rdquo;이라 하지만 엄밀히는 검출된 위치 · 크기는 공변이고, 그 크기에 맞춰 잘라 낸 영역의 기술자가 불변이다.</p>
+    <p><b>⑤ 아핀 적응.</b> 평면에 가까운 물체를 비스듬한 시점에서 보면 그 변화는 아핀 변환으로 근사된다. 이때 블롭을 담은 창의 2차 모멘트 행렬을 타원으로 그리면 그 영역의 특성 모양이 보인다. 시점이 다른 두 영역은 서로 아핀 관계라 그대로는 모양이 달라 비교할 수 없으므로, 각 타원 영역을 <b>같은 크기의 원으로 펴서(정규화)</b> 비교한다. 이것이 공변 검출에서 불변 기술로 넘어가는 다리이며 6주차 기술자의 전제다.</p>
+  </details>
+</article>
+</section>
+
+<!-- ===================== 6주차 ===================== -->
+<section class="sec pb" id="w6">
+  <div class="sec-head"><span class="sec-badge">W6</span><h2 class="sec-title">6주차 · Feature Descriptors<small>기술자의 조건 · SIFT · SURF · HOG · BRIEF · BRISK · ORB · 비교</small></h2></div>
+
+<h3 class="sub-title">부분 → 활용 한 장 정리</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>기술자</th><th>부분</th><th>하는 일 → 쓰임</th></tr>
+  <tr><td>SIFT</td><td>DoG 스케일 공간 극값</td><td>위치 + 크기 검출 → 스케일 불변의 바탕</td></tr>
+  <tr><td></td><td>정밀화 · 엣지 제거</td><td>위치를 소수점까지 · 엣지 위 불안정한 점 제거</td></tr>
+  <tr><td></td><td>방향 할당(36칸, 80%)</td><td>기준 방향으로 돌려 놓기 → 회전 불변</td></tr>
+  <tr><td></td><td>4×4 셀 × 8방향 = 128</td><td>그래디언트 분포 + 대략의 배치 → 변별력과 강인함</td></tr>
+  <tr><td></td><td>길이 1 정규화 · 0.2 자르기</td><td>조명 · 대비 변화, 카메라 포화 흡수</td></tr>
+  <tr><td>SURF</td><td>적분 영상</td><td>어떤 크기의 사각형 합도 네 칸 읽기 → 속도</td></tr>
+  <tr><td></td><td>헤시안 행렬식 + 박스 필터</td><td>블롭 검출 · 엣지 자동 배제</td></tr>
+  <tr><td></td><td>필터 키우기</td><td>영상은 그대로 두고 스케일 탐색</td></tr>
+  <tr><td></td><td>라플라시안 부호</td><td>밝은/어두운 블롭을 미리 갈라 매칭 가속</td></tr>
+  <tr><td>HOG</td><td>셀 히스토그램 · 블록 정규화</td><td>창 전체의 모양 → 분류기(SVM)로 사람 검출</td></tr>
+  <tr><td>BRIEF</td><td>이진 비교 · 해밍 거리</td><td>작고 빠른 기술 · 매칭</td></tr>
+  <tr><td>ORB</td><td>FAST + Harris 순위</td><td>빠른 코너 검출 후 좋은 것만</td></tr>
+  <tr><td></td><td>밝기 중심 방향</td><td>덧셈 몇 번으로 방향 → 회전 보정</td></tr>
+  <tr><td></td><td>steered · rBRIEF</td><td>비교 쌍을 돌리고, 상관 낮은 쌍을 학습으로 선택</td></tr>
+</table></div>
+
+<article class="q" id="q6-1">
+  <div class="q-h"><span class="q-no">Q6-1</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week06.html#why">6주차 01 기술자란</a></div>
+  <p class="q-txt">특징점을 검출한 뒤 <span class="part">기술자(descriptor)</span>가 왜 필요한가? 좋은 특징(기술자)이 갖춰야 할 조건을 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>좌표만으로는 짝을 알 수 없음</span><span>주변을 숫자 벡터로 · 벡터 거리로 비교</span><span>반복성 · 변별력(saliency) · 간결성과 효율 · 국소성</span><span>불변(invariant) + 변별력(distinctive)</span><span>검출기 = 어디 · 기술자 = 어떻게 생겼나</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 필요한 이유.</b> 5주차 검출기로 사진마다 수백 개의 점을 찾았지만, 좌표만으로는 왼쪽 사진의 37번 점과 오른쪽 사진의 112번 점이 같은 곳인지 알 수 없다. 그래서 각 점 주변의 생김새를 <b>고정 길이의 숫자 벡터</b>로 요약해 붙이고, 두 점이 같은 곳인지를 <b>벡터 사이의 거리</b>로 판정한다. 기술자는 매칭을 가능하게 만드는 부품이다.</p>
+    <p><b>② 좋은 특징의 네 조건.</b> <b>반복성(repeatability)</b> &mdash; 기하 · 광학 변화를 겪어도 같은 특징이 다시 발견된다. <b>변별력(saliency)</b> &mdash; 각 특징이 뚜렷이 구별된다. <b>간결성과 효율(compactness &amp; efficiency)</b> &mdash; 특징의 수가 화소 수보다 훨씬 적어 계산이 감당 가능하다. <b>국소성(locality)</b> &mdash; 좁은 영역만 차지해 가림과 복잡한 배경에 강하다.</p>
+    <p><b>③ 기술자에 대한 요구.</b> 교안은 두 단어로 요약한다. <b>불변</b> &mdash; 같은 점을 다른 조건(조명 · 각도 · 크기)에서 찍어도 벡터가 같아야 짝을 놓치지 않는다. <b>변별력</b> &mdash; 다른 점끼리는 벡터가 확실히 달라야 엉뚱한 곳과 짝지어지지 않는다. 지문에 비유하면, 같은 사람의 지문은 늘 같고 다른 사람과는 달라야 한다.</p>
+    <p><b>④ 검출기와 비교.</b> 검출기는 &ldquo;어디가 특징적인가&rdquo;에 답하고 좌표 · 스케일 · 방향을 내놓으며 <b>공변</b>이어야 한다. 기술자는 &ldquo;그곳이 어떻게 생겼나&rdquo;에 답하고 벡터를 내놓으며 <b>불변</b>이어야 한다.</p>
+  </details>
+</article>
+
+<article class="q" id="q6-2">
+  <div class="q-h"><span class="q-no">Q6-2</span><span class="q-star">★★</span><a class="q-src" href="computer-vision-week06.html#why">6주차 01 템플릿 매칭</a></div>
+  <p class="q-txt">점 주변을 잘라 그대로 비교하는 <span class="part">템플릿 매칭</span>은 크기 변화 · 회전 · 원근 · 조명 변화에 견딜 수 있는가? 각각의 이유를 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>크기 · 회전 · 원근은 불가</span><span>조명은 경우에 따라(depends)</span><span>정해진 칸 순서대로 비교</span><span>정규화 상관(NCC)</span><span>고르지 않은 조명은 불가</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 방식.</b> 특징점 주변을 잘라 템플릿으로 두고, 다른 사진의 모든 위치에 대 보며 점수가 가장 높은 자리를 찾는다.</p>
+    <p><b>② 크기 변화 &mdash; 안 된다.</b> 잘라 둔 조각의 크기가 고정이라 확대된 사진에서는 같은 부위를 덮지 못한다.</p>
+    <p><b>③ 회전 &mdash; 안 된다.</b> 템플릿은 &ldquo;몇 번째 칸에 무슨 값&rdquo;을 순서대로 비교하는데, 조금만 돌아가도 칸의 배치가 어긋난다.</p>
+    <p><b>④ 원근 &mdash; 안 된다.</b> 정사각형이 사다리꼴로 찌그러져 대응이 깨진다.</p>
+    <p><b>⑤ 조명 &mdash; 경우에 따라 다르다.</b> 점수를 차이의 제곱합으로 매기면 밝기가 바뀌는 즉시 무너진다. 하지만 <b>정규화 상관(NCC)</b>을 쓰면 평균을 빼서 밝기가 통째로 더해진 것을, 길이로 나눠 통째로 곱해진 것(대비)을 지우므로 영상 전체가 고르게 밝아지는 변화는 견딘다. 그림자가 패치 절반만 덮는 식의 <b>고르지 않은 변화</b>는 지우지 못한다.</p>
+    <p><b>⑥ 결론.</b> 칸의 배치를 바꾸는 변형에는 원리적으로 약하므로, 변형에 불변하면서 변별력 있는 기술자가 필요하다.</p>
+  </details>
+</article>
+
+<article class="q" id="q6-3">
+  <div class="q-h"><span class="q-no">Q6-3</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week06.html#why">6주차 01 세 가지 시도</a></div>
+  <p class="q-txt">기술자로 <span class="part">화소 패치 · 그래디언트 · 컬러 히스토그램</span>을 쓰면 각각 무엇에 강하고 무엇이 문제인가? 이 비교에서 드러나는 기술자 설계의 핵심 긴장과, SIFT가 그 답을 어떻게 찾았는지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>패치: 절대 밝기에 민감</span><span>그래디언트: 밝기 불변 · 변형에 민감</span><span>히스토그램: 크기 · 회전 불변 · 위치 정보 상실</span><span>불변성 ↔ 변별력 맞바꿈</span><span>그래디언트 방향의 히스토그램 + 셀 배치</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 화소 패치.</b> 패치의 화소값을 한 줄로 이어 쓴다. 기하와 외형이 전혀 변하지 않았다면 가장 정확하지만, <b>절대 밝기 값에 민감</b>해 조명이 조금만 바뀌어도 벡터 거리가 크게 벌어진다.</p>
+    <p><b>② 그래디언트.</b> 화소값 대신 이웃과의 차이를 쓴다. 밝기가 통째로 더해져도 차이는 그대로라 <b>절대 밝기에 불변</b>이다. 하지만 여전히 &ldquo;몇 번째 칸의 차이&rdquo;를 순서대로 적은 것이라, 물체가 살짝 휘거나 늘어나는 <b>변형에 민감</b>하다.</p>
+    <p><b>③ 컬러 히스토그램.</b> 색마다 개수만 센다. &lsquo;어디에&rsquo;를 버리고 &lsquo;얼마나&rsquo;만 남기므로 <b>크기와 회전에 불변</b>이다. 그러나 위치 정보를 통째로 버려 <b>전혀 다른 그림이 같은 히스토그램</b>을 가질 수 있다(체스판과 반반 그림). 변별력을 잃는다.</p>
+    <p><b>④ 핵심 긴장.</b> 정보를 많이 버릴수록 변형에 강해지지만(불변성↑) 서로 다른 것을 구분하지 못하고(변별력↓), 정보를 그대로 두면 잘 구분하지만 조금만 바뀌어도 값이 달라진다. 모든 기술자는 이 저울의 어디에 설지를 다르게 답한 결과다.</p>
+    <p><b>⑤ SIFT의 답.</b> &ldquo;<b>그래디언트를 히스토그램으로 세되, 위치를 완전히 버리지는 말자</b>.&rdquo; 밝기 대신 변화(그래디언트)를 보아 조명에 강하고, 정확한 위치 대신 방향의 분포를 세어 작은 변형에 강하며, 패치를 4×4 셀로 나눠 셀마다 히스토그램을 만들어 대략적인 배치는 남겨 변별력을 지킨다.</p>
+  </details>
+</article>
+
+<article class="q" id="q6-4">
+  <div class="q-h"><span class="q-no">Q6-4</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week06.html#sift">6주차 02 SIFT</a></div>
+  <p class="q-txt">SIFT의 단계를 순서대로 쓰고, 각 단계가 어떤 불변성(또는 성질)을 만드는 데 활용되는지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>Scale Invariant Feature Transform (Lowe)</span><span>스케일 공간 · DoG 극값 · 26개 이웃</span><span>정밀화 · 저대비 · 엣지 제거</span><span>방향 할당 → 회전 불변</span><span>16×16 → 4×4 셀 × 8방향 = 128차원</span><span>정규화 → 조명 불변</span><span>검출 = 공변 · 기술 = 불변</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 목표.</b> SIFT(Scale Invariant Feature Transform, Lowe 1999/2004)는 영상의 내용을 <b>이동 · 회전 · 크기 변화 등에 영향받지 않는 좌표계로 옮겨 적는</b> 방법이다. 크게 검출(①②)과 기술(③④) 네 단계다.</p>
+    <p><b>② 스케일 공간 극값 검출 &rarr; 스케일 불변.</b> 같은 영상을 σ를 조금씩 키운 가우시안으로 여러 번 블러하고, 이웃한 두 장을 빼 DoG를 만든다(4주차 피라미드처럼 σ가 두 배가 되면 영상을 절반으로 줄여 다음 옥타브). DoG에서 한 화소가 <b>같은 스케일의 이웃 8개 + 위아래 스케일의 9개씩, 총 26개</b>보다 모두 크거나 작으면 후보로 삼는다. 위아래 스케일까지 비교하므로 &ldquo;이 크기에서 가장 두드러진다&rdquo;는 조건이 함께 걸려, <b>위치와 크기</b>가 동시에 정해진다.</p>
+    <p><b>③ 키포인트 정밀화 &rarr; 안정성.</b> 격자 위 후보는 실제 극값과 살짝 어긋나므로 주변에 곡면을 맞춰 위치를 소수점 단위로 구한다. 그리고 주변과 차이가 거의 없는 <b>저대비 점</b>과, 라플라시안 계열이 강하게 반응하지만 선을 따라 미끄러지는 <b>엣지 위의 점</b>을 버린다. 엣지 판정은 Harris처럼 2차 미분 행렬의 고윳값 비율로 한다.</p>
+    <p><b>④ 방향 할당 &rarr; 회전 불변.</b> 키포인트의 스케일에 맞는 블러 영상에서 주변 화소의 그래디언트 방향을 <b>36칸(10°씩) 히스토그램</b>에 크기만큼 투표하고, 가장 높은 칸을 기준 방향으로 삼는다. 최고 봉우리의 <b>80% 이상</b>인 다른 봉우리가 있으면 그 방향으로도 키포인트를 하나 더 만든다.</p>
+    <p><b>⑤ 기술자 생성 &rarr; 변별력 + 강인함.</b> 키포인트 주변 16×16 화소를 기준 방향으로 돌린 틀 위에서 4×4 = 16개 셀로 나누고, 셀마다 <b>8방향</b> 그래디언트 히스토그램을 만들어 이어 붙인다. 16 × 8 = <b>128차원</b>이다. 방향은 기준 방향을 뺀 상대 각도로 세므로 영상이 돌아가도 히스토그램이 같다.</p>
+    <p><b>⑥ 정규화 &rarr; 조명 불변.</b> 128차원 벡터를 길이 1로 정규화하면 대비가 2배가 되어 그래디언트가 모두 커져도 같은 벡터가 된다. 큰 값을 잘라 다시 정규화해 햇빛 반사 같은 국소적 포화가 벡터 전체를 좌우하지 못하게 한다.</p>
+    <p><b>⑦ 정리와 평가.</b> <b>검출은 공변</b>(위치 · 크기 · 방향이 영상을 따라감), <b>기술은 불변</b>(그 틀 안에서 적은 벡터는 그대로)이다. 평면 밖 회전 약 60°까지의 시점 변화, 낮과 밤 같은 조명 변화에도 견딜 만큼 강건하지만, 상대적으로 느리고 무거워 SURF · ORB가 나온 동기가 되었다.</p>
+  </details>
+</article>
+
+<article class="q" id="q6-5">
+  <div class="q-h"><span class="q-no">Q6-5</span><span class="q-star">★★</span><a class="q-src" href="computer-vision-week06.html#sift">6주차 02 SIFT 방향 할당</a></div>
+  <p class="q-txt">SIFT에는 <span class="part">방향 할당(orientation assignment)</span> 부분이 있다. 이 부분은 어떻게 회전 불변성을 만들며, &lsquo;80% 규칙&rsquo;은 왜 필요한가? 방향 할당이 검출이 아니라 기술 쪽에 속하는 이유도 쓰시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>36칸 방향 히스토그램 · 크기만큼 투표</span><span>최고 칸 = 기준 방향</span><span>기준 방향을 빼고 기술</span><span>80% 이상 봉우리 → 키포인트 추가</span><span>1 · 2등이 뒤바뀔 위험</span><span>패치를 어느 쪽으로 돌려 적을지</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 하는 일.</b> 같은 지점을 다른 각도에서 찍으면 패치가 돌아간다. &ldquo;이 패치의 정면은 여기&rdquo;라는 기준 방향을 정할 수 있다면, 항상 그 방향으로 돌려놓고 기술자를 만들면 된다. SIFT는 키포인트 주변 화소의 그래디언트 방향을 36칸 히스토그램에 크기만큼 투표하고(먼 화소는 가우시안으로 표를 줄임) <b>가장 표가 많은 방향</b>을 기준으로 삼는다.</p>
+    <p><b>② 회전 불변이 생기는 원리.</b> 사진 전체가 30° 돌면 모든 그래디언트 방향이 30° 커지고 기준 방향도 30° 커진다. 기술자는 각 방향에서 기준 방향을 뺀 상대 각도로 세므로 결과가 원래와 같다. 셀 배치도 기준 방향으로 돌린 격자 위에서 잡으므로 함께 맞춰진다.</p>
+    <p><b>③ 80% 규칙.</b> 최고 봉우리를 100%로 두고 그 80% 이상인 다른 봉우리가 있으면, <b>같은 위치 · 같은 스케일에 방향만 다른 키포인트를 하나 더</b> 만든다. 두 봉우리가 비슷하면 사진이 조금만 바뀌어도 1등과 2등이 뒤바뀌어, 다른 사진에서는 반대 방향을 골라 패치가 엉뚱한 각도로 돌아갈 수 있기 때문이다. 애매하면 둘 다 만들어 두는 보험이며, 이런 점은 약 15%뿐이지만 매칭 안정성에 크게 기여한다.</p>
+    <p><b>④ 기술 쪽에 속하는 이유.</b> 방향은 &ldquo;어디가 특징적인가(검출)&rdquo;를 정하는 데는 필요 없고, &ldquo;패치를 어느 쪽으로 돌려 놓고 적을까(기술)&rdquo;를 정하는 데 쓰인다. 같은 이유로 ORB는 남의 검출기(FAST)를 빌리면서도 방향 계산은 자기 쪽에 따로 붙인다.</p>
+  </details>
+</article>
+
+<article class="q" id="q6-6">
+  <div class="q-h"><span class="q-no">Q6-6</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week06.html#surf">6주차 03 SURF</a></div>
+  <p class="q-txt">SURF는 SIFT를 어떻게 빠르게 만들었는가? <span class="part">적분 영상</span>, <span class="part">헤시안 행렬식과 박스 필터</span>, <span class="part">필터 키우기</span>가 각각 어떻게 활용되는지 중심으로 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>Speeded-Up Robust Features</span><span>적분 영상 · 사각형 합을 네 칸으로</span><span>헤시안 행렬식 → 블롭 · 엣지 자동 배제</span><span>2차 미분을 박스 필터로 근사</span><span>영상은 그대로 필터를 키움</span><span>Haar 응답 · 60° 창</span><span>64차원 (Σdx, Σdy, Σ|dx|, Σ|dy|)</span><span>라플라시안 부호</span><span>3~7배 빠름 · 시점 · 조명에 약함</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 동기.</b> SIFT는 좋지만 느리다. SURF(Speeded-Up Robust Features, 2006)는 단계 구성은 SIFT와 거의 같게 두고 <b>각 단계를 더 싼 계산으로 갈아 끼워</b> SIFT보다 3~7배 빠르면서 비슷한 매칭 성능을 낸다.</p>
+    <p><b>② 적분 영상 &mdash; 속도의 비밀.</b> 각 칸에 &ldquo;원점부터 그 칸까지 직사각형 안 화소값의 합&rdquo;을 저장한 영상이다. 영상을 한 번만 훑어 만들 수 있고, 이후에는 <b>어떤 크기의 사각형이든 네 귀퉁이 값만 읽어</b> 덧셈 · 뺄셈 몇 번으로 합을 구한다. 사각형이 3×3이든 99×99이든 비용이 같다. SURF는 모든 필터를 &lsquo;사각형의 합&rsquo;으로 바꿔 이 성질을 활용한다.</p>
+    <p><b>③ 헤시안 행렬식 &mdash; 검출.</b> 가로 · 세로 · 대각 2차 미분으로 만든 헤시안 행렬의 <b>행렬식이 국소 최대</b>인 곳을 관심점으로 삼는다. 행렬식은 두 방향이 같은 쪽으로 함께 휘어 있을 때(블롭)만 크고, 한 방향으로만 변하는 엣지에서는 작아지므로 <b>엣지가 자동으로 걸러진다</b>. 위치와 스케일을 모두 이 값 하나로 고른다.</p>
+    <p><b>④ 박스 필터 &mdash; 근사.</b> 가우시안 2차 미분 필터를 흑백 직사각형 몇 개로 뭉뚱그린 박스 필터로 근사한다. 직사각형마다 적분 영상 네 칸만 읽으면 되므로 필터 크기와 무관하게 빠르다.</p>
+    <p><b>⑤ 필터 키우기 &mdash; 스케일 탐색.</b> SIFT는 필터를 두고 영상을 흐리고 줄여 가지만, SURF는 <b>영상은 원본 그대로 두고 필터를 키워 간다</b>. 적분 영상 덕분에 큰 필터도 비용이 같기 때문이다. &ldquo;확대된 물체를 작은 필터로 보기&rdquo;와 &ldquo;원래 물체를 큰 필터로 보기&rdquo;는 같은 일이다. 극값 찾기와 위치 보간은 SIFT와 같다.</p>
+    <p><b>⑥ 방향과 기술자.</b> 검출된 스케일에 비례하는 원 안에서 가로 · 세로 Haar 응답(밝기 차이)을 구해 점으로 찍고, <b>60° 부채꼴 창</b>을 돌려 가며 창 안 응답을 더한 벡터가 가장 긴 방향을 주방향으로 삼는다. 기술자는 주방향으로 돌린 정사각형을 4×4 영역으로 나눠 영역마다 응답의 합과 <b>절댓값의 합</b> 네 개를 적어 <b>64차원</b>이다. 합은 변화의 쏠림(방향성)을, 절댓값 합은 변화의 양(줄무늬처럼 부호가 번갈아 바뀌어 상쇄되는 경우)을 담아 둘 다 있어야 서로 다른 무늬가 구별된다. 마지막에 길이 1로 정규화해 대비 변화에 불변하게 한다.</p>
+    <p><b>⑦ 매칭 가속과 평가.</b> 헤시안 대각합(라플라시안)의 <b>부호</b>로 밝은 블롭과 어두운 블롭을 구분해, 부호가 다르면 거리 계산 없이 건너뛴다(추가 비용 없음). 결과적으로 블러와 회전에는 강하지만 <b>시점 변화와 조명 변화에는 SIFT보다 약하다</b>.</p>
+  </details>
+</article>
+
+<article class="q" id="q6-7">
+  <div class="q-h"><span class="q-no">Q6-7</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week06.html#hog">6주차 04 HOG</a></div>
+  <p class="q-txt">HOG(Histogram of Oriented Gradients)의 단계를 쓰고, 그중 <span class="part">블록 정규화</span>가 어떻게 활용되는지 서술하시오. SIFT와 HOG의 차이도 비교하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>사람 검출(Dalal &amp; Triggs)</span><span>64×128 창 전체를 벡터 하나로</span><span>8×8 셀 · 9칸(0~180°)</span><span>두 칸에 나눠 투표</span><span>2×2 셀 블록 · 겹침 · 대비 정규화</span><span>3780차원</span><span>SVM 분류</span><span>회전 맞추지 않음</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 목적.</b> HOG는 <b>사람 검출</b>을 위해 제안됐다(Dalal &amp; Triggs, 2005). SIFT처럼 키포인트마다 벡터를 붙여 매칭하는 것이 아니라, 정해진 크기의 창(64×128) <b>전체를 벡터 하나</b>로 만들어 분류기(선형 SVM)에 넣고 &ldquo;이 창에 사람이 있나&rdquo;를 판정한다. 큰 사진에서는 창을 위치와 크기를 바꿔 가며 미끄러뜨린다.</p>
+    <p><b>② 그래디언트 계산.</b> 단순한 [−1 0 1] 차분으로 화소마다 크기와 방향을 구한다. 미리 블러하지 않는데, 블러하면 사람 윤곽 같은 가는 경계가 뭉개지기 때문이다. 방향은 0~180°(부호 없는 방향)로 접어, 어두운 옷이 밝은 배경 앞에 있든 반대든 같은 윤곽으로 본다.</p>
+    <p><b>③ 셀 히스토그램.</b> 8×8 화소 셀마다 20° 간격 <b>9칸</b> 히스토그램에 그래디언트 크기만큼 투표한다. 칸 사이에 걸리면 가까운 정도에 따라 두 칸에 나눠 던져, 각도가 조금 흔들려도 값이 뚝 바뀌지 않게 한다. 64화소가 숫자 9개로 압축되면서 화소가 한두 칸 밀려도 거의 같은 값이 나온다.</p>
+    <p><b>④ 블록 정규화의 활용.</b> 그래디언트 크기는 그 동네의 밝기 대비에 그대로 끌려다닌다 &mdash; 햇빛 받은 어깨와 그늘진 다리는 같은 윤곽이어도 값의 규모가 다르다. 그래서 2×2 셀을 묶은 블록(36개 값)을 그 크기로 나눠 &ldquo;얼마나 센 변화인가&rdquo;는 지우고 &ldquo;<b>그 동네 안에서 어느 방향이 상대적으로 우세한가</b>&rdquo;만 남긴다. 블록은 한 셀씩 겹치며 이동해, 한 셀이 여러 블록에서 다른 이웃과 함께 정규화된다. 길이는 늘지만 블록 경계에서 값이 끊기지 않아 성능이 오른다.</p>
+    <p><b>⑤ 최종 벡터.</b> 가로 7 × 세로 15 = 105개 블록 × 36 = <b>3780차원</b> 벡터가 SVM에 들어간다. 시각화하면 셀마다 방향 선분이 사람 윤곽을 따라 늘어서, HOG가 &lsquo;모양&rsquo;을 방향 분포로 적었음을 보여 준다.</p>
+    <p><b>⑥ SIFT와 비교.</b> 셀로 나눠 방향 히스토그램을 세고 정규화한다는 뼈대는 같다. 다르게는 SIFT는 <b>키포인트 주변 작은 패치</b>, HOG는 <b>창 전체</b>를 적는다. SIFT는 주방향으로 돌려 회전 불변을 만들지만, HOG는 서 있는 사람은 늘 세로이므로 <b>회전을 맞추지 않는다</b>. 정규화도 SIFT는 벡터 전체를 한 번, HOG는 겹치는 블록마다 한다. 쓰임도 SIFT는 <b>매칭(거리 비교)</b>, HOG는 <b>분류(검출)</b>다.</p>
+  </details>
+</article>
+
+<article class="q" id="q6-8">
+  <div class="q-h"><span class="q-no">Q6-8</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week06.html#brief">6주차 05 BRIEF · BRISK</a></div>
+  <p class="q-txt">BRIEF에는 <span class="part">두 점의 밝기를 비교하는 이진 테스트</span>와 <span class="part">해밍 거리로 비교하는 부분</span>이 있다. 각 부분이 무엇이고 어떻게 활용되는지, BRIEF의 약점은 무엇인지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>Binary Robust Independent Elementary Features</span><span>어느 쪽이 더 밝은가 → 1비트</span><span>비교 전 스무딩</span><span>미리 정한 고정 패턴</span><span>256비트 · 작은 메모리</span><span>XOR + 1의 개수</span><span>매칭이 N×N이라 비교 속도가 중요</span><span>검출기 없음</span><span>회전 · 크기 변화에 약함</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 이진 테스트.</b> 패치 안의 두 점을 골라 밝기를 비교해, 뒤쪽이 더 밝으면 1, 아니면 0을 적는다. <b>밝기 값 자체는 버리고 대소 관계 1비트</b>만 남긴다. 이를 128 · 256 · 512번 해서 비트를 한 줄로 늘어놓은 것이 기술자다. 256비트면 32바이트로, SIFT의 128개 실수(512바이트)의 1/16 크기다.</p>
+    <p><b>② 사전 스무딩과 고정 패턴.</b> 화소 하나의 잡음이 대소 관계를 뒤집으면 비트가 통째로 바뀌므로 <b>비교 전에 반드시 패치를 부드럽게</b> 한다. 비교할 점 쌍은 <b>미리 정해 둔 고정 패턴</b>이어야 모든 키포인트에서 i번째 비트끼리 견줄 수 있다. 쌍을 뽑는 여러 방식 중 패치 중심 주변에서 가우시안 분포로 뽑는 방식이 가장 좋았는데, 중심 가까운 화소가 특징을 가장 잘 담고 가장자리일수록 위치 오차의 영향이 크기 때문이다.</p>
+    <p><b>③ 해밍 거리.</b> 실수 벡터는 유클리드 거리로 비교하지만 이진 기술자는 <b>서로 다른 비트의 개수(해밍 거리)</b>로 비교한다. 두 비트열을 <b>XOR</b>하면 다른 자리만 1이 남고, 그 1의 개수를 세면 된다. CPU는 64비트를 한 번에 XOR하고 1의 개수도 전용 명령어로 세므로 매우 빠르다.</p>
+    <p><b>④ 왜 비교 속도가 중요한가.</b> 키포인트가 1000개씩이면 기술자 계산은 2000번이지만, 가장 가까운 짝을 찾는 매칭은 1000 × 1000 = 100만 번의 거리 계산이다. 전체 시간은 거리 계산 한 번의 비용이 좌우하므로, BRIEF는 &lsquo;빨리 만드는 것&rsquo;만큼 &lsquo;빨리 비교되는 형식&rsquo;을 고른 것이 핵심이다.</p>
+    <p><b>⑤ 장점과 약점.</b> 작고 계산이 쉽고 변별력이 높으며 매칭이 빠르다. 하지만 BRIEF는 <b>기술자일 뿐 검출기가 없어</b> 다른 검출기의 점에 붙여 쓰고, 비교 쌍이 고정 좌표라 영상이 돌아가면 엉뚱한 화소를 비교해 비트가 대거 뒤집힌다 &mdash; <b>평면 내 회전과 크기 변화에 약하다</b>. 이를 BRISK(스케일 공간 검출 + 동심원 패턴 + 방향)와 ORB가 보완한다.</p>
+  </details>
+</article>
+
+<article class="q" id="q6-9">
+  <div class="q-h"><span class="q-no">Q6-9</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week06.html#orb">6주차 06 ORB</a></div>
+  <p class="q-txt">ORB(Oriented FAST and Rotated BRIEF)는 FAST와 BRIEF의 약점을 어떻게 보완했는가? <span class="part">밝기 중심(intensity centroid)</span>과 <span class="part">rBRIEF</span> 부분을 중심으로 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>SIFT · SURF의 효율적 대안 · 특허 부담 없음</span><span>영상 피라미드</span><span>FAST: 원 위 16화소 · 연속 n개</span><span>Harris 점수로 N개 선택</span><span>밝기 중심 방향 → 공변</span><span>steered BRIEF: 비교 쌍 회전</span><span>rBRIEF: 분산 크고 상관 낮은 256쌍 학습</span><span>해밍 거리</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 목표.</b> ORB(2011)는 SIFT · SURF를 대신할 <b>빠르고 회전에 강하며 특허 부담이 없는</b> 대안이다. 이름 그대로 방향을 붙인 FAST 검출기와 회전시킨 BRIEF 기술자를 결합했다.</p>
+    <p><b>② 스케일 대응.</b> FAST와 BRIEF는 크기 변화를 다루지 못하므로 영상 피라미드를 만들고 층마다 아래 과정을 한다.</p>
+    <p><b>③ FAST로 위치 찾기.</b> FAST는 가운데 화소 둘레 원 위의 16화소를 보고, 가운데보다 확실히 밝거나 어두운 화소가 <b>원을 따라 연속으로 n개(예: 9개) 이상</b> 있으면 코너로 판정한다. 코너 끝에서는 원의 한쪽 호 전체가 배경에 걸치기 때문이다. 미분 없이 밝기 비교만 하고 4점 사전 검사로 대부분 화소를 바로 탈락시켜 매우 빠르다.</p>
+    <p><b>④ Harris로 N개 고르기.</b> FAST는 코너인지 아닌지만 말하고 얼마나 좋은 코너인지는 말하지 않으며 엣지에서도 반응한다. 그래서 후보를 넉넉히 뽑은 뒤 <b>Harris 점수로 줄을 세워 상위 N개</b>만 남긴다.</p>
+    <p><b>⑤ 밝기 중심으로 방향 붙이기 (Oriented).</b> 패치의 밝기를 질량으로 보고 <b>무게중심</b>을 구한 뒤, 패치 중심에서 무게중심으로 향하는 방향을 그 점의 방향으로 삼는다. 패치가 돌면 밝은 부분도 무게중심도 함께 돌므로 방향이 회전을 그대로 따라간다(공변). SIFT의 36칸 히스토그램보다 정밀도는 조금 낮지만 덧셈 몇 번이면 끝난다.</p>
+    <p><b>⑥ 비교 쌍 회전 (Rotated, steered BRIEF).</b> BRIEF의 비교 쌍 좌표에 그 방향만큼의 회전을 적용해 패턴 전체를 같이 돌린다. 사진이 돌아가도 물체 위의 같은 두 점을 비교하게 되어 회전에 강해진다. 각도를 몇 단계로 나눠 회전된 패턴을 미리 표로 만들어 두어 효율적이다.</p>
+    <p><b>⑦ rBRIEF &mdash; 비교 쌍을 데이터로 고르기.</b> 패턴을 방향에 맞춰 돌리면 비슷한 코너들이 같은 방향으로 정렬되어, 어떤 비트는 거의 늘 1이 되고 어떤 비트끼리는 늘 같이 움직여 변별력이 떨어진다. 그래서 많은 키포인트에서 후보 쌍을 시험해 <b>0과 1이 반반 나오고(분산이 크고) 이미 고른 쌍과 상관이 낮은</b> 쌍을 탐욕적으로 256개 고른다. 사람이 설계하던 자리에 데이터를 끌어들인 일종의 학습이다.</p>
+    <p><b>⑧ 결과와 활용.</b> 점마다 256비트 기술자를 해밍 거리로 비교한다. BRIEF의 속도에 회전 강인성을 더했지만 SIFT보다 정밀도는 낮다. 모바일, 로봇의 SLAM, 실시간 추적처럼 속도가 우선인 곳에 쓰인다.</p>
+  </details>
+</article>
+
+<article class="q" id="q6-10">
+  <div class="q-h"><span class="q-no">Q6-10</span><span class="q-star">★★</span><a class="q-src" href="computer-vision-week06.html#compare">6주차 07 비교</a></div>
+  <p class="q-txt">SIFT · SURF · HOG · BRIEF · ORB를 형식 · 거리 · 강점 · 약점 · 쓰임새 측면에서 비교하고, 상황에 따라 무엇을 고를지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>실수 128 · 64 · 3780 / 이진 256비트</span><span>유클리드 vs 해밍</span><span>정확 · 무거움 ↔ 거침 · 가벼움</span><span>정합 · 3D 복원 / 실시간 · 모바일 / 물체 검출</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① SIFT.</b> 실수 128차원, 유클리드 거리. 스케일 · 회전 · 조명에 가장 안정적이라 정확도의 기준이지만 느리고 무겁다 &rarr; 정합 · 3차원 복원처럼 정확도가 우선일 때.</p>
+    <p><b>② SURF.</b> 실수 64차원, 유클리드 거리. SIFT보다 3~7배 빠르고 블러 · 회전에 강하지만 시점 · 조명 변화에 약하고 라이선스 문제가 있다 &rarr; 속도와 정확도의 절충이 필요할 때.</p>
+    <p><b>③ HOG.</b> 실수 3780차원(64×128 창), 분류기가 처리. 사람 · 차량처럼 형태가 정형화된 물체 검출에 강하고 키포인트 매칭에는 쓰지 않는다 &rarr; 물체 검출 · 분류.</p>
+    <p><b>④ BRIEF.</b> 이진 256비트, 해밍 거리. 메모리가 작고 매칭이 매우 빠르지만 회전 · 크기 변화에 약하다 &rarr; 변형이 작은 실시간 상황.</p>
+    <p><b>⑤ ORB.</b> 이진 256비트, 해밍 거리. BRIEF의 속도에 회전 강인성을 더하고 특허 부담이 없지만 정밀도는 SIFT보다 낮다 &rarr; 모바일 · SLAM · 실시간 추적.</p>
+    <p><b>⑥ 관통하는 축.</b> 실수 기술자 쪽으로 갈수록 정확하고 무겁고, 이진 기술자 쪽으로 갈수록 거칠고 가볍다. 매칭할 때 거리 종류를 기술자에 맞춰야 한다 &mdash; 실수 벡터는 유클리드, 이진 벡터는 해밍.</p>
+  </details>
+</article>
+</section>
+
+<!-- ===================== 7주차 ===================== -->
+<section class="sec pb" id="w7">
+  <div class="sec-head"><span class="sec-badge">W7</span><h2 class="sec-title">7주차 · Feature Matching &amp; Homography<small>피팅 · 최소제곱 · RANSAC · 매처 · 영상 정렬 · 호모그래피 · DLT · 비율 검사 · 스티칭 · 블렌딩</small></h2></div>
+
+<h3 class="sub-title">부분 → 활용 한 장 정리</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>대상</th><th>부분</th><th>하는 일 → 쓰임</th></tr>
+  <tr><td>RANSAC</td><td>최소 표본 s</td><td>모델을 정하는 최소 개수만 뽑아 깨끗한 표본일 확률을 높인다</td></tr>
+  <tr><td></td><td>거리 임계값 t</td><td>인라이어 판정 기준 · 잡음 크기에 맞춘다</td></tr>
+  <tr><td></td><td>반복 횟수 N</td><td>원하는 확률로 한 번은 이상치 없는 표본을 뽑도록</td></tr>
+  <tr><td></td><td>합의 집합 크기 d</td><td>모델을 받아들일 최소 인라이어 수</td></tr>
+  <tr><td></td><td>재추정</td><td>최종 인라이어 전부로 최소제곱 → 정밀화</td></tr>
+  <tr><td>매칭</td><td>Brute-Force · FLANN</td><td>정확하지만 느림 · 근사지만 빠름</td></tr>
+  <tr><td></td><td>비율 검사</td><td>1등과 2등 거리가 비슷한 모호한 짝 제거 → 이상치 비율 감소</td></tr>
+  <tr><td>호모그래피</td><td>8자유도 · 4쌍</td><td>평면 · 먼 장면 · 회전만 한 카메라의 두 영상 관계</td></tr>
+  <tr><td></td><td>DLT · SVD</td><td>대응점들로 H를 최소 오차로 구한다</td></tr>
+  <tr><td>스티칭</td><td>워핑</td><td>H로 한 영상을 다른 시점에 맞게 휜다</td></tr>
+  <tr><td></td><td>페더링 · 다중 대역</td><td>이음새(비네팅 · 어긋남)를 감춘다</td></tr>
+</table></div>
+
+<article class="q" id="q7-1">
+  <div class="q-h"><span class="q-no">Q7-1</span><span class="q-star">★★</span><a class="q-src" href="computer-vision-week07.html#fitting">7주차 01 피팅</a></div>
+  <p class="q-txt"><span class="part">피팅(fitting)</span>이란 무엇이며, 현실의 데이터 점에는 어떤 문제가 있는가? 상황별로 어떤 도구를 쓰는지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>점 집합을 가장 잘 설명하는 모델</span><span>잡음 · 이상치 · 여러 모델 · 빠진 점</span><span>최소제곱 · 강건한 피팅 · RANSAC · 투표 · 모델 선택</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 정의.</b> 피팅은 점들의 집합을 가장 잘 설명하는 모델(직선, 변환 등)의 파라미터를 찾는 일이다. 매칭에서는 기술자 거리만으로 짝을 지으면 틀린 짝이 반드시 섞이므로, &ldquo;짝들이 공통으로 따르는 변환 하나를 찾고 거기 맞지 않는 짝은 버린다&rdquo;는 생각으로 피팅을 쓴다.</p>
+    <p><b>② 현실 데이터의 문제.</b> 측정된 특징 위치에는 <b>잡음</b>이 있고, 엉뚱한 점(<b>이상치 · 잡동사니</b>)이 섞이며, 직선이 <b>여러 개</b>일 수 있고, 가려져서 <b>빠진 점</b>도 있다.</p>
+    <p><b>③ 상황별 도구.</b> 어떤 점이 모델에 속하는지 안다면 <b>최소제곱</b>으로 최적 파라미터를 구한다. 이상치가 있으면 <b>강건한 피팅 · RANSAC</b>을 쓴다. 모델이 여러 개라면 <b>투표 방식</b>(RANSAC, 허프 변환)을 쓴다. 그것이 직선인지조차 확실하지 않으면 <b>모델 선택</b>의 문제가 된다.</p>
+  </details>
+</article>
+
+<article class="q" id="q7-2">
+  <div class="q-h"><span class="q-no">Q7-2</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week07.html#fitting">7주차 01 최소제곱 · TLS</a></div>
+  <p class="q-txt">직선 피팅에서 <span class="part">세로 방향 최소제곱</span>과 <span class="part">전체 최소제곱(TLS)</span>은 오차를 각각 어떻게 재는가? 두 방법의 차이와, 최소제곱이 이상치에 약한 이유를 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>세로(y) 차이의 제곱합</span><span>회전 불변 아님 · 수직선 불가</span><span>직선까지의 수직 거리</span><span>무게중심을 지남</span><span>점이 가장 덜 퍼진 방향 = 법선</span><span>제곱 오차가 이상치에 큰 벌점</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 세로 방향 최소제곱.</b> 각 점과 직선 사이의 <b>세로(y 방향) 차이</b>를 제곱해 더한 값을 최소화한다. 식이 간단해 한 번에 풀리지만 두 가지 문제가 있다. 좌표축을 돌리면 다른 직선이 나와 <b>회전 불변이 아니고</b>, 기울기로 직선을 적으므로 <b>수직선에서는 완전히 실패</b>한다.</p>
+    <p><b>② 전체 최소제곱(TLS).</b> 각 점에서 직선까지의 <b>진짜 수직 거리</b>를 제곱해 더한 값을 최소화한다. 이렇게 풀면 최적 직선은 반드시 점들의 <b>무게중심</b>을 지나고, 직선의 법선은 점들이 무게중심 주위로 <b>가장 덜 퍼진 방향</b>이 된다(점 분포를 담은 2×2 행렬의 작은 고윳값 방향). 축의 방향과 무관하고 수직선도 다룬다. 5주차 Harris의 2차 모멘트 행렬, 7주차 호모그래피의 &ldquo;가장 작은 특이값 벡터&rdquo;와 같은 논리다.</p>
+    <p><b>③ 이상치에 약한 이유.</b> 두 방법 모두 <b>오차를 제곱</b>하므로 멀리 떨어진 점에 엄청난 벌점을 준다. 예를 들어 정상 점 9개가 0.1씩, 이상치 1개가 5만큼 떨어져 있으면 오차 합의 99% 이상이 이상치 하나에서 나온다. 최소제곱은 이 큰 오차를 줄이려고 직선을 이상치 쪽으로 끌고 가 나머지 정상 점을 모두 놓친다.</p>
+    <p><b>④ 해결 방향.</b> 오차 함수를 덜 민감하게 바꾸거나(강건한 손실), 이상치를 아예 계산에서 빼 버리는(RANSAC) 방법이 있다.</p>
+  </details>
+</article>
+
+<article class="q" id="q7-3">
+  <div class="q-h"><span class="q-no">Q7-3</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week07.html#ransac">7주차 02 RANSAC 파라미터</a></div>
+  <p class="q-txt">RANSAC에는 <span class="part">초기 점 수 s, 거리 임계값 t, 반복 횟수 N, 합의 집합 크기 d</span>라는 네 파라미터가 있다. 각 파라미터가 알고리즘의 어느 부분에서 쓰이고 어떻게 정하는지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>s = 모델을 정하는 최소 개수(직선 2 · 아핀 3 · 호모그래피 4)</span><span>t = 인라이어 판정 · 잡음 크기 기준</span><span>N = 확률 p로 깨끗한 표본 한 번 · 이상치 비율이 크면 폭증</span><span>N은 점의 총수와 무관</span><span>d = 모델 수용 기준</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 알고리즘 속 위치.</b> RANSAC은 ① 최소 부분집합 무작위 선택 → ② 모델 가정 → ③ 오차 계산 → ④ 모델과 일치하는 점(인라이어) 선택 → ⑤ 반복의 가정-검증 루프다. 네 파라미터는 이 루프의 각 자리에서 쓰인다.</p>
+    <p><b>② s &mdash; 한 번에 뽑는 점의 수 (①②에서).</b> 보통 모델을 정하는 데 필요한 <b>최소 개수</b>로 한다(직선 2, 어파인 3, 호모그래피 4). 많이 뽑을수록 그중 이상치가 섞일 확률이 커지므로, 최소로 뽑아야 &lsquo;모두 인라이어인 표본&rsquo;을 얻을 확률이 커진다.</p>
+    <p><b>③ t &mdash; 인라이어로 인정하는 최대 거리 (④에서).</b> 진짜 인라이어가 높은 확률(예: 95%)로 이 범위 안에 들어오도록 잡음의 크기(표준편차)에 맞춰 정한다. 너무 작으면 진짜 인라이어를 놓치고, 너무 크면 이상치까지 인라이어로 센다.</p>
+    <p><b>④ N &mdash; 반복 횟수 (⑤에서).</b> 원하는 확률(예: 99%)로 <b>적어도 한 번은 이상치 없는 표본</b>을 뽑도록 정한다. 이상치 비율이 클수록, s가 클수록 한 번에 깨끗한 표본을 뽑을 확률이 급격히 작아져 N이 폭발적으로 늘어난다. 예로 호모그래피(s = 4)에서 이상치가 절반이면 약 72번이 필요하다. 놀랍게도 N은 <b>점의 총 개수와 무관</b>하다.</p>
+    <p><b>⑤ d &mdash; 합의 집합 크기 (최종 판정에서).</b> 모델을 받아들이기 위한 최소 인라이어 수로, 예상 인라이어 비율에 맞춘다. 인라이어가 이만큼 모이면 그 모델을 믿을 만하다고 본다.</p>
+    <p><b>⑥ 활용 예.</b> 파노라마에서 호모그래피를 추정할 때 s = 4쌍, t는 몇 화소의 재투영 오차, N은 매칭 중 틀린 짝 비율로 정한다. 비율 검사로 틀린 짝을 미리 줄이면 이상치 비율이 낮아져 N이 크게 줄어든다.</p>
+  </details>
+</article>
+
+<article class="q" id="q7-4">
+  <div class="q-h"><span class="q-no">Q7-4</span><span class="q-star">★★</span><a class="q-src" href="computer-vision-week07.html#ransac">7주차 02 RANSAC 장단점</a></div>
+  <p class="q-txt">RANSAC의 마지막에 있는 <span class="part">인라이어 전체로 다시 맞추는 부분</span>은 왜 필요한가? RANSAC의 장점과 한계를 함께 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>최소 표본 모델은 대략적</span><span>이상치가 빠진 뒤의 최소제곱</span><span>단순 · 일반적 · 잘 작동</span><span>파라미터 많음 · 인라이어 비율 낮으면 실패</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 재추정이 필요한 이유.</b> 최소 개수(예: 점 2개)로 세운 모델은 그 몇 점의 잡음을 그대로 담은 <b>대략적인 위치</b>일 뿐이다. 가장 좋은 모델을 고른 뒤 그 모델의 <b>인라이어 전부로 최소제곱을 다시</b> 돌리면 많은 점의 잡음이 평균되어 정밀해진다. 이상치는 이미 빠졌으므로 이번에는 최소제곱이 제 역할을 한다. 즉 RANSAC은 &lsquo;누가 이상치인가&rsquo;를 가리고, 최소제곱이 &lsquo;정확한 값&rsquo;을 낸다 &mdash; 두 방법의 장점을 이어 붙인 구조다.</p>
+    <p><b>② 장점.</b> 단순하고 일반적이라 직선 · 원 · 변환 · 카메라 기하 등 매우 다양한 문제에 적용되고, 실제로 잘 작동하며, 이상치 비율이 높아도 견딘다.</p>
+    <p><b>③ 한계.</b> 임계값 · 반복 횟수 등 <b>조정할 파라미터가 많다</b>. <b>인라이어 비율이 낮으면</b> 반복이 너무 많아지거나 완전히 실패한다. 최소 표본만으로는 좋은 초기 모델을 항상 얻지는 못한다. 또 무작위성 때문에 &ldquo;99% 확률로&rdquo; 좋은 결과를 얻는 것이지 항상 보장되지는 않는다.</p>
+  </details>
+</article>
+
+<article class="q" id="q7-5">
+  <div class="q-h"><span class="q-no">Q7-5</span><span class="q-star">★★</span><a class="q-src" href="computer-vision-week07.html#matcher">7주차 03 매처와 대응점</a></div>
+  <p class="q-txt">기술자를 짝짓는 <span class="part">Brute-Force 매처</span>와 <span class="part">FLANN 매처</span>를 비교하고, 정답 대응을 모를 때 매칭을 어떤 흐름으로 확정하는지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>모든 쌍 비교 · 정확한 최근접 · 느림</span><span>근사 최근접 이웃 · 대규모 · 고차원 · 빠름</span><span>거리 종류는 기술자에 맞춤(유클리드 · 해밍)</span><span>후보 매칭 → 변환 가정 → 검증</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① Brute-Force 매처.</b> 첫 집합의 기술자 하나를 꺼내 둘째 집합의 <b>모든 기술자와 거리를 재고</b> 가장 가까운 것을 돌려준다. 결과는 <b>정확한 최근접 이웃</b>이지만, 특징이 N개 · M개면 N × M번 비교해야 해 느리다.</p>
+    <p><b>② FLANN 매처.</b> 대규모 데이터와 고차원 특징에서 빠르게 최근접 이웃을 찾도록 최적화된 알고리즘 모음이다. <b>근사 최근접 이웃</b>을 돌려주는 대신 대규모 데이터에서 훨씬 빠르다.</p>
+    <p><b>③ 거리 종류.</b> 어느 매처든 거리를 기술자에 맞춰야 한다. SIFT · SURF 같은 실수 벡터는 유클리드 거리, BRIEF · ORB 같은 이진 벡터는 해밍 거리를 쓴다.</p>
+    <p><b>④ 정답 대응을 모를 때.</b> ① 두 영상에서 특징을 추출(검출 + 기술)하고 → ② 기술자 거리로 <b>후보</b> 짝을 만든다(틀린 짝 포함) → ③ 루프를 돈다: 변환을 <b>가정</b>하고, 그 변환과 일치하는 다른 매칭이 얼마나 되는지 <b>검증</b>한다. ③이 바로 RANSAC의 가정-검증 루프다. 즉 매칭은 기술자 거리만으로 확정되지 않고, <b>기하학적으로 일관된가</b>를 함께 따져 확정된다.</p>
+  </details>
+</article>
+
+<article class="q" id="q7-6">
+  <div class="q-h"><span class="q-no">Q7-6</span><span class="q-star">★★</span><a class="q-src" href="computer-vision-week07.html#align">7주차 04 영상 정렬</a></div>
+  <p class="q-txt"><span class="part">영상 정렬(image alignment)</span>이 &lsquo;피팅&rsquo;과 같은 문제라는 것은 무슨 뜻인가? 직접 정렬과 특징 기반 정렬을 비교하고, 어파인 변환과 평행이동만으로는 부족한 이유를 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>작은 겹침 · 가림 · 밝기 변화</span><span>화소 기반 vs 특징 기반</span><span>점 대신 짝 · 직선 대신 변환</span><span>어파인 6미지수 · 3쌍 · 쌍이 많으면 최소제곱</span><span>평행이동만으로는 어긋남 → 호모그래피</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 정렬과 어려움.</b> 같은 장면을 본 두 사진이라면 한쪽을 적절히 변환해 다른 쪽에 맞출 수 있다. 다만 두 사진의 겹치는 부분이 작을 수 있고, 가림 · 복잡한 배경이 있고, 밝기가 바뀌기도 한다.</p>
+    <p><b>② 두 접근.</b> <b>직접(화소 기반) 정렬</b>은 대부분의 화소가 일치하는 정렬을 찾는다 &mdash; 모든 화소를 비교하므로 무겁고 큰 변형에서는 초기값에 민감하다. <b>특징 기반 정렬</b>은 추출한 특징들이 일치하는 정렬을 찾는다 &mdash; 점 몇백 개만 다뤄 빠르고 큰 변형에 강하며, 결과를 화소 기반으로 검증할 수도 있다.</p>
+    <p><b>③ 정렬 = 피팅.</b> 앞부분의 피팅은 한 영상 속 점들에 모델(직선)을 맞췄다. 정렬은 <b>두 영상의 짝들 사이의 변환</b>에 모델을 맞춘다 &mdash; 변환한 점과 대응점 사이의 오차가 최소가 되는 변환을 찾는다. 그래서 최소제곱 · RANSAC을 그대로 쓰되 &lsquo;점&rsquo; 대신 &lsquo;짝&rsquo;을, &lsquo;직선&rsquo; 대신 &lsquo;변환&rsquo;을 넣으면 된다.</p>
+    <p><b>④ 어파인 변환 피팅.</b> 어파인은 미지수 6개의 선형 문제라 단순한 최소제곱으로 풀린다. 짝 하나가 식 두 개를 주므로 <b>최소 3쌍</b>이 필요하고, 더 많으면 쌓아서 최소제곱 해를 구한다. 대략 평면인 물체를 멀리서 본 시점 변화를 근사하고, 더 복잡한 모델의 초기값으로 쓰인다.</p>
+    <p><b>⑤ 평행이동만으로는 부족한 이유.</b> 카메라를 돌려 찍은 여러 장을 평행이동만으로 이으면 원근이 맞지 않아 이음새마다 난간과 창틀이 어긋난다. 같은 사진을 호모그래피로 와핑하면 양옆이 사다리꼴로 휘면서 선이 하나로 곧게 이어진다.</p>
+  </details>
+</article>
+
+<article class="q" id="q7-7">
+  <div class="q-h"><span class="q-no">Q7-7</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week07.html#homo">7주차 05 호모그래피</a></div>
+  <p class="q-txt"><span class="part">호모그래피(homography)</span>는 무엇이며 몇 쌍의 대응점으로 정해지는가? 호모그래피로 두 영상의 관계를 나타낼 수 있는 <span class="part">세 가지 경우</span>와 활용 예를 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>평면 사영 변환 · 3×3</span><span>배율 무의미 → 8자유도 · 4쌍</span><span>직선 보존 · 평행성 깨짐</span><span>평면 장면 · 아주 먼 장면 · 카메라 중심 고정(회전만)</span><span>시차(parallax)</span><span>정면화 · 파노라마 · 가상 회전</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 정의.</b> 호모그래피는 한 평면을 다른 평면으로 옮기는 <b>평면 사영 변환</b>이며, 2주차 변환의 위계에서 가장 일반적인 투영 변환이다. 동차 좌표의 3×3 행렬로 쓰며, 정사각형을 임의의 사각형으로 바꿀 수 있다. 직선은 직선으로 가지만 평행성은 깨진다.</p>
+    <p><b>② 자유도와 대응점 수.</b> 원소는 9개이지만 행렬 전체에 상수를 곱해도 같은 변환이므로(동차 좌표는 마지막에 나누어 배율이 약분됨) 자유도는 <b>8</b>이다. 대응점 한 쌍이 식 두 개를 주므로 <b>최소 4쌍</b>이 필요하다. 어파인과 다른 점은 마지막 행으로, 이 값 때문에 위치마다 나누는 값이 달라져 먼 쪽이 작아지는 원근 효과가 생긴다.</p>
+    <p><b>③ 쓸 수 있는 세 경우.</b> 첫째, <b>장면이 평면</b>일 때 &mdash; 벽화를 정면과 비스듬히 찍은 두 사진. 둘째, <b>장면이 아주 멀어</b> 상대적 깊이 변화가 작을 때 &mdash; 근사적으로 평면이다(먼 계곡 풍경). 셋째, <b>두 카메라의 중심이 같을 때</b>, 곧 제자리에서 회전만 하며 찍을 때 &mdash; 이때는 장면이 평면이 아니어도 된다.</p>
+    <p><b>④ 셋째 경우가 중요한 이유.</b> 카메라가 이동하면 가까운 물체와 먼 물체가 서로 다른 양만큼 움직이는 <b>시차</b>가 생겨 3×3 행렬 하나로 표현할 수 없다. 반면 제자리에서 돌기만 하면 모든 광선이 같은 중심을 지나 깊이와 상관없이 같은 규칙으로 옮겨진다. 그래서 파노라마를 찍을 때 몸을 옮기지 말고 제자리에서 돌아야 한다.</p>
+    <p><b>⑤ 활용.</b> 비스듬히 찍은 건물 벽 · 그림 속 바닥을 정면에서 본 것처럼 펴는 <b>정면화(원근 보정)</b>, 사진 한 장으로 카메라를 돌린 듯한 새 시점 만들기, 여러 장을 이어 붙이는 <b>파노라마</b>, 특정 위치에서만 입체로 보이는 거리 예술(역변환으로 미리 찌그러뜨려 그림), 왜상으로 그린 그림의 복원 등에 쓰인다.</p>
+  </details>
+</article>
+
+<article class="q" id="q7-8">
+  <div class="q-h"><span class="q-no">Q7-8</span><span class="q-star">★★</span><a class="q-src" href="computer-vision-week07.html#dlt">7주차 06 H 구하기</a></div>
+  <p class="q-txt">대응점들로부터 호모그래피를 구하는 <span class="part">직접 선형 변환(DLT)</span>의 과정을 수식 없이 단계별로 설명하시오. 각 단계가 왜 필요한지도 쓰시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>동차 좌표 → H 곱 → 마지막 성분으로 나눔</span><span>짝마다 미지 배율 소거 → 선형식 2개</span><span>쌓기 · 최소 4쌍</span><span>자명한 해(0) 배제 · 길이 1</span><span>SVD · 가장 작은 특이값의 벡터</span><span>3×3으로 되돌리기</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 점에 H를 적용하는 법.</b> 점을 동차 좌표로 바꾸고(끝에 1을 붙임), H를 곱한 뒤, 세 번째 성분으로 나눠 다시 2차원 좌표로 돌린다. 마지막 나눗셈 때문에 호모그래피는 선형 변환이 아니다.</p>
+    <p><b>② 방정식 만들기.</b> 대응점 한 쌍마다 H를 곱한 결과는 대응점과 <b>알 수 없는 배율</b>만큼 차이 난다. 세 번째 식으로 그 배율을 구해 나머지 두 식에 넣으면 배율이 사라지고, H의 원소 9개에 대한 <b>선형식 두 개</b>가 남는다. 배율을 그대로 두면 짝마다 미지수가 하나씩 늘어나기 때문에 소거한다.</p>
+    <p><b>③ 쌓기.</b> 짝 하나는 식 두 개뿐이고 H의 자유도는 8이므로 <b>최소 4쌍</b>이 필요하다. 실제로는 더 많은 짝의 식을 세로로 쌓아 잡음을 평균 낸다.</p>
+    <p><b>④ 조건 걸기.</b> 모든 원소가 0인 H는 언제나 식을 만족하는 쓸모없는 해다. 또 H에 상수를 곱해도 같은 변환이므로, <b>H의 길이를 1로 고정</b>해 자명한 해를 막아도 잃는 것이 없다.</p>
+    <p><b>⑤ SVD로 최적해.</b> 잡음이 있으면 식을 정확히 0으로 만들 수 없으므로 &ldquo;식의 오차를 가장 작게&rdquo;로 바꾼다. 쌓은 행렬을 특이값 분해(SVD)하면, <b>가장 작은 특이값에 대응하는 벡터</b>가 그 답이다. 정확히 4쌍이면 오차 0인 해가 하나로 정해지고, 잡음 섞인 여러 쌍이면 최소 오차 해가 된다. 전체 최소제곱(TLS)에서 가장 작은 고윳값 방향을 고른 것과 같은 논리다.</p>
+    <p><b>⑥ 되돌리기.</b> 계산 편의상 한 줄로 폈던 9개 원소를 3×3으로 재배열해 H를 얻는다.</p>
+    <p><b>⑦ 한계.</b> 이 방식은 실제 화소 거리 대신 식의 오차(대수적 오차)를 줄이는 근사이고, 틀린 짝이 섞이면 결과가 오염된다. 그래서 RANSAC과 함께 쓴다.</p>
+  </details>
+</article>
+
+<article class="q" id="q7-9">
+  <div class="q-h"><span class="q-no">Q7-9</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week07.html#robust">7주차 07 RANSAC으로 H 추정 · 비율 검사</a></div>
+  <p class="q-txt">호모그래피 추정에서 <span class="part">선형 최소제곱만 쓰면 생기는 문제</span>를 설명하고, RANSAC이 &lsquo;매칭과 추정을 동시에&rsquo; 한다는 것의 의미와 <span class="part">비율 검사(ratio test)</span>가 어떻게 활용되는지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>비선형(나눗셈) · 이상치에 약함</span><span>나쁜 짝까지 평균 낸 &lsquo;평균 변환&rsquo;</span><span>4쌍으로 H 가정 → 인라이어 세기 → 최다 → 재추정</span><span>H와 맞는 매칭 목록을 함께</span><span>1등 · 2등 거리의 비</span><span>반복 패턴 · 짝 없는 점</span><span>이상치 비율 ↓ → 반복 횟수 ↓</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 선형 최소제곱의 문제.</b> 선형 최소제곱은 변환이 선형일 때만 제대로 작동하는데 호모그래피는 나눗셈 때문에 선형이 아니다. 더 큰 문제는 <b>이상치</b>다. 매칭 결과에는 나쁜 짝이 섞이고, 최소제곱은 좋은 짝과 나쁜 짝을 모두 평균 내 &lsquo;<b>평균 변환</b>&rsquo;을 찾으므로 결과가 나쁜 짝 때문에 오염된다.</p>
+    <p><b>② 파이프라인.</b> 영상 대응은 ① 특징점 검출(5주차) → ② 기술(6주차) → ③ <b>특징 매칭과 호모그래피 추정을 RANSAC으로 동시에</b> 하는 순서다.</p>
+    <p><b>③ &lsquo;동시에&rsquo;의 의미.</b> 맞는 매칭만 알면 H를 바로 구할 수 있고, H만 알면 각 매칭이 맞는지 판정할 수 있지만, 처음에는 둘 다 모른다. RANSAC은 후보 매칭 중 4쌍을 무작위로 뽑아 H를 가정하고, 그 H로 모든 후보를 검사해 따르는 짝(인라이어)을 센다. 이를 반복해 <b>인라이어가 가장 많은 H</b>를 고르고 그 인라이어 전부로 다시 추정한다. 좋은 짝들은 모두 같은 변환을 따라 서로 &lsquo;동의&rsquo;하고 나쁜 짝들은 제각각이라 다수결에서 밀려난다. 그래서 결과로 <b>H와 &lsquo;맞는 매칭 목록&rsquo;을 한꺼번에</b> 얻는다. 평행이동 모델이라면 짝 하나만 골라 동의하는 짝을 세는 것으로 같은 원리를 볼 수 있다.</p>
+    <p><b>④ 비율 검사.</b> 한 특징에 대해 가장 가까운 후보(1등)와 두 번째 후보(2등)까지의 거리 비를 구해, 비가 임계값(Lowe는 0.8)보다 작을 때만 매칭으로 인정한다. 확실한 짝이 있으면 1등은 매우 가깝고 2등은 확연히 멀어 비가 작다. 반면 나뭇잎 · 벽돌 · 창문 같은 <b>반복 패턴</b>은 비슷한 후보가 여럿이라 비가 1에 가깝고, 가려지거나 화면 밖이라 <b>짝이 아예 없는 점</b>도 1등 · 2등이 모두 엉뚱해 비가 1에 가까워 걸러진다. &ldquo;얼마나 가까운가&rdquo; 대신 &ldquo;다른 후보보다 얼마나 확실히 가까운가&rdquo;를 보므로 영상이 바뀌어도 같은 기준이 통한다. Lowe의 실험에서 틀린 매칭의 90%를 버리면서 맞는 매칭은 5% 미만만 잃었다.</p>
+    <p><b>⑤ 두 장치의 협력.</b> 비율 검사로 모호한 짝을 먼저 버리면 RANSAC에 들어가는 <b>이상치 비율이 낮아져</b> 필요한 반복 횟수가 크게 줄고, 남은 인라이어로 맞춘 H도 더 정확해진다. 비율 검사가 1차 거름망, RANSAC이 기하학적 최종 판정이다.</p>
+  </details>
+</article>
+
+<article class="q" id="q7-10">
+  <div class="q-h"><span class="q-no">Q7-10</span><span class="q-star">★★★</span><a class="q-src" href="computer-vision-week07.html#stitch">7주차 08 스티칭 · 블렌딩</a></div>
+  <p class="q-txt">파노라마 스티칭의 전체 과정을 단계별로 쓰고, 마지막 <span class="part">블렌딩</span> 단계에서 이음새가 생기는 원인과 <span class="part">페더링 · 다중 대역 블렌딩</span>이 각각 어떻게 활용되는지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>SIFT 매칭 → RANSAC으로 H → 워핑 → 블렌딩</span><span>기준 영상 · 제자리 회전</span><span>비네팅 · 작은 어긋남</span><span>페더링: 투명도 그러데이션 · 유령 vs 이음새</span><span>다중 대역: 라플라시안 피라미드 · 저주파 넓게 · 고주파 좁게</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 특징 매칭.</b> 두 사진에서 SIFT 같은 특징을 검출 · 기술하고 가장 닮은 점끼리 짝을 맺는다. SIFT는 회전 · 크기가 달라도 같은 벡터를 내므로 시점이 조금 다른 사진에 알맞다. 비율 검사로 모호한 짝을 1차로 거른다.</p>
+    <p><b>② RANSAC으로 이상치 제거 · H 추정.</b> 비율 검사를 통과해도 틀린 짝은 남는다. 4쌍씩 뽑아 H를 세우고 동의하는 짝을 세는 과정을 반복해, 가장 많은 짝이 지지하는 H를 고른다. 이 단계가 없으면 틀린 짝이 H를 오염시켜 사진이 엉뚱하게 휜다.</p>
+    <p><b>③ 워핑.</b> H로 한 사진을 다른 사진의 시점 · 원근에 맞게 휜다. 결과 캔버스의 각 화소마다 &ldquo;원래 사진의 어디에서 왔는가&rdquo;를 거꾸로 계산하고 그 주변 화소를 보간해 색을 가져와 구멍이 생기지 않게 한다(4주차 보간).</p>
+    <p><b>④ 여러 장일 때.</b> 기준 영상 하나를 고르고 나머지를 그쪽으로 한 장씩 와핑해 섞는다. 사진은 <b>같은 위치에서 회전만 하며</b> 찍어야 장면에 깊이가 있어도 호모그래피 하나로 정확히 겹친다.</p>
+    <p><b>⑤ 이음새의 원인.</b> 그대로 겹치면 경계가 눈에 띈다. 빛의 각도 때문에 사진 가장자리가 어두워지는 <b>비네팅</b>과, 정렬의 <b>작은 어긋남</b>이 원인이다.</p>
+    <p><b>⑥ 페더링.</b> 각 화소에 투명도를 붙여, 겹치는 구간에서 한쪽은 1→0, 다른 쪽은 0→1로 서서히 바꿔 더한다. 간단하지만 섞는 폭이 <b>넓으면</b> 어긋난 곳이 흐릿하게 두 겹으로 보이고(유령), <b>좁으면</b> 이음새가 남는다. 하늘 같은 밝기 차이(저주파)는 넓게, 나뭇잎 같은 세부(고주파)는 좁게 섞어야 하는데 폭 하나로는 둘 다 만족시킬 수 없다.</p>
+    <p><b>⑦ 다중 대역 블렌딩.</b> 4주차 <b>라플라시안 피라미드</b>의 응용이다. 두 영상을 라플라시안 피라미드로, 섞는 마스크를 가우시안 피라미드로 분해하면 아래 층(저해상도)일수록 마스크 경계가 넓고 부드럽다. 층마다 따로 섞어 <b>저주파는 넓게, 고주파는 좁게</b> 섞은 뒤 피라미드를 복원하면, 이음새는 감추면서 날카로운 디테일은 보존된다.</p>
+  </details>
+</article>
+</section>
+
+<!-- ===================== 통합 문제 ===================== -->
+<section class="sec pb" id="cross">
+  <div class="sec-head"><span class="sec-badge">MIX</span><h2 class="sec-title">주차를 넘나드는 문제<small>한 주제가 여러 주차에 걸쳐 어떻게 다뤄졌는지 묻는 유형 &mdash; 각 문단 앞에 주차를 표시했다</small></h2></div>
+
+<article class="q" id="qx-1">
+  <div class="q-h"><span class="q-no">QX-1</span><span class="q-star">★★★</span><span class="q-wk">2 · 3 · 4 · 5 · 6 · 7주차</span></div>
+  <p class="q-txt">두 장의 사진으로 파노라마 한 장을 만들기까지, 이번 학기 1~7주차에 배운 개념이 각 단계에서 어떻게 쓰이는지 순서대로 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>제자리 회전 촬영 · 호모그래피 조건</span><span>가우시안 스무딩 · 스케일 공간</span><span>검출(블롭 · 코너)</span><span>기술(SIFT)</span><span>비율 검사 · RANSAC</span><span>호모그래피 · 워핑 · 보간</span><span>다중 대역 블렌딩</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 촬영 &mdash; 2 · 7주차.</b> 카메라는 3차원 장면을 투영해 영상을 만든다(카메라 행렬). 두 사진을 호모그래피 하나로 이으려면 <b>카메라 중심을 고정하고 회전만</b> 하며 찍어야 한다. 이동하면 시차가 생겨 3×3 변환 하나로 맞출 수 없다.</p>
+    <p><b>② 전처리와 스케일 공간 &mdash; 3 · 4주차.</b> 미분은 잡음을 키우므로 <b>가우시안 필터</b>로 먼저 부드럽게 한다. 같은 물체가 사진마다 다른 크기로 찍힐 수 있어, σ를 키운 블러 영상과 절반씩 줄인 영상으로 <b>가우시안 피라미드(스케일 공간)</b>를 만든다. 줄이기 전에 블러해 에일리어싱을 막는다.</p>
+    <p><b>③ 특징 검출 &mdash; 5 · 6주차.</b> 이웃한 블러 영상의 차(DoG)로 <b>블롭</b>을 찾아 위치와 크기(특성 스케일)를 정하고, Harris와 같은 원리(2차 미분 행렬의 고윳값 비율)로 엣지 위의 불안정한 점을 버린다. 검출 결과는 영상을 따라 움직이는 <b>공변</b>이다.</p>
+    <p><b>④ 기술 &mdash; 6주차.</b> SIFT로 그래디언트 방향 히스토그램을 만들어 기준 방향을 정하고, 그 방향과 크기에 맞춘 패치를 4×4 셀 × 8방향의 128차원 벡터로 적고 정규화한다. 이 벡터는 크기 · 회전 · 조명 변화에 <b>불변</b>이다.</p>
+    <p><b>⑤ 매칭 &mdash; 7주차.</b> 두 사진의 기술자를 거리로 비교해 후보 짝을 만들고, <b>비율 검사</b>로 1등과 2등이 비슷한 모호한 짝을 버린다.</p>
+    <p><b>⑥ 변환 추정 &mdash; 2 · 7주차.</b> 남은 짝에서 4쌍씩 뽑아 <b>호모그래피</b>(2주차의 투영 변환, 8자유도)를 DLT로 세우고, <b>RANSAC</b>으로 가장 많은 짝이 동의하는 H를 고른 뒤 인라이어 전부로 다시 추정한다.</p>
+    <p><b>⑦ 워핑 &mdash; 2 · 4 · 7주차.</b> H로 한 사진을 다른 사진 시점에 맞게 휜다(<b>워핑</b> = 좌표 변환). 변환된 좌표가 소수점이므로 <b>보간</b>으로 화소 값을 가져온다.</p>
+    <p><b>⑧ 블렌딩 &mdash; 4 · 7주차.</b> 비네팅과 작은 어긋남으로 생기는 이음새를 <b>라플라시안 피라미드 기반 다중 대역 블렌딩</b>으로 지운다 &mdash; 저주파는 넓게, 고주파는 좁게 섞는다.</p>
+  </details>
+</article>
+
+<article class="q" id="qx-2">
+  <div class="q-h"><span class="q-no">QX-2</span><span class="q-star">★★★</span><span class="q-wk">4 · 5 · 6주차</span></div>
+  <p class="q-txt">같은 물체가 사진마다 다른 <span class="part">크기(스케일)</span>로 찍히는 문제를 이번 학기에 배운 방법들은 각각 어떻게 해결하는지 비교하여 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>창 크기는 고정</span><span>가우시안 피라미드(영상 줄이기)</span><span>LoG 특성 스케일 · 스케일 정규화</span><span>SIFT DoG 스케일 공간</span><span>SURF 필터 키우기</span><span>ORB 영상 피라미드</span><span>Harris · BRIEF는 스케일에 약함</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 문제의 본질.</b> 검출기와 기술자는 정해진 크기의 창으로 영상을 본다. 물체가 확대되면 고정된 창 안에서 모서리가 완만해져 Harris는 코너를 엣지로 오인하고, BRIEF는 고정된 패치 크기 때문에 다른 범위를 비교하게 된다.</p>
+    <p><b>② 4주차 &mdash; 가우시안 피라미드.</b> 창을 키우는 대신 <b>영상을 블러 후 절반씩 줄여</b> 층마다 같은 창으로 훑는다. 큰 물체는 위층에서, 작은 물체는 아래층에서 창에 맞게 걸린다.</p>
+    <p><b>③ 5주차 &mdash; LoG 특성 스케일.</b> σ를 바꿔 가며 LoG 응답을 보고, <b>응답이 최대가 되는 σ를 그 블롭의 크기</b>로 삼는다. σ가 클수록 응답이 작아지는 것을 σ²으로 보정(스케일 정규화)해야 공정하게 비교된다. 위치와 스케일 모두에서 극값인 점을 찾는다.</p>
+    <p><b>④ 6주차 &mdash; SIFT.</b> σ를 조금씩 키운 블러 영상들의 차(DoG)로 LoG를 싸게 근사하고, 같은 스케일과 위아래 스케일의 26개 이웃과 비교해 극값을 찾는다. 찾은 σ에 비례하는 크기로 패치를 잘라 기술하므로 사진이 커져도 같은 내용을 본다.</p>
+    <p><b>⑤ 6주차 &mdash; SURF.</b> 영상은 원본 크기로 두고 <b>박스 필터를 키워 가며</b> 스케일을 훑는다. 적분 영상 덕분에 큰 필터도 비용이 같다. 방향 · 기술자 영역도 검출 스케일에 비례해 잡는다.</p>
+    <p><b>⑥ 6주차 &mdash; ORB.</b> FAST와 BRIEF 자체는 스케일을 다루지 못하므로 <b>영상 피라미드</b>를 만들어 층마다 검출 · 기술한다.</p>
+    <p><b>⑦ 공통점.</b> 모든 방법이 &ldquo;영상을 줄이든 필터를 키우든, <b>물체에 맞는 크기를 찾아 그 크기의 영역을 본다</b>&rdquo;는 같은 생각이다. 검출된 크기는 공변, 그 크기로 적은 기술자는 불변이 된다.</p>
+  </details>
+</article>
+
+<article class="q" id="qx-3">
+  <div class="q-h"><span class="q-no">QX-3</span><span class="q-star">★★</span><span class="q-wk">5 · 6주차</span></div>
+  <p class="q-txt">특징이 <span class="part">회전</span>에 강해지도록 각 방법이 쓰는 장치를 비교하시오. (Harris, SIFT, SURF, BRIEF, ORB, HOG)</p>
+  <div class="kw"><b>채점 키워드</b><span>Harris: 고윳값 보존</span><span>SIFT: 36칸 히스토그램 · 80%</span><span>SURF: Haar 응답 · 60° 창</span><span>BRIEF: 없음 → 약함</span><span>ORB: 밝기 중심 · 비교 쌍 회전</span><span>HOG: 일부러 안 함</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 5주차 Harris.</b> 영상을 돌리면 2차 모멘트 행렬의 타원도 함께 돌지만 고윳값(모양)은 그대로라 점수가 유지되고 같은 코너가 다시 검출된다(위치는 공변).</p>
+    <p><b>② 6주차 SIFT.</b> 주변 그래디언트 방향을 36칸 히스토그램에 투표해 가장 높은 방향을 기준 방향으로 삼고, 기술할 때 그 방향을 빼 상대 각도로 센다. 80% 이상인 두 번째 봉우리가 있으면 그 방향으로도 키포인트를 만든다.</p>
+    <p><b>③ 6주차 SURF.</b> 원 안의 가로 · 세로 Haar 응답을 점으로 찍고 60° 부채꼴 창을 돌려 가며 합 벡터가 가장 긴 방향을 주방향으로 삼는다. 기술자 영역을 그 방향으로 돌려 놓는다.</p>
+    <p><b>④ 6주차 BRIEF.</b> 방향을 구하는 단계가 없고 비교 쌍이 고정 좌표라 영상이 돌면 엉뚱한 화소를 비교한다 &mdash; 회전에 약하다.</p>
+    <p><b>⑤ 6주차 ORB.</b> 패치 밝기의 무게중심으로 방향을 구하고(덧셈 몇 번), BRIEF의 비교 쌍을 그 방향만큼 돌린다. 돌린 뒤에도 변별력이 유지되도록 상관이 낮은 쌍을 학습으로 골랐다.</p>
+    <p><b>⑥ 6주차 HOG.</b> 서 있는 사람은 늘 세로이므로 <b>일부러 방향을 맞추지 않는다</b> &mdash; 오히려 방향 정보가 사람 모양을 구별하는 단서다. 목적(분류)에 따라 불변성을 고른 예다.</p>
+    <p><b>⑦ 공통 원리.</b> &ldquo;기준 방향을 검출(공변)하고, 그 방향으로 돌려 놓은 틀 안에서 기술(불변)한다.&rdquo; 방향을 구하는 비용과 정밀도에서 방법들이 갈린다.</p>
+  </details>
+</article>
+
+<article class="q" id="qx-4">
+  <div class="q-h"><span class="q-no">QX-4</span><span class="q-star">★★</span><span class="q-wk">3 · 5 · 7주차</span></div>
+  <p class="q-txt">잡음이나 이상치에 흔들리지 않게 하려고 이번 학기에 쓰인 장치들을 찾아, 각각 어떤 원리로 강건해지는지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>가우시안 스무딩(평균으로 상쇄)</span><span>미디언(극단값 무시)</span><span>이력 임계값(연결성)</span><span>허프 투표(흩어지는 표)</span><span>비율 검사(상대적 확실성)</span><span>RANSAC(다수결 · 제외)</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 3주차 가우시안 스무딩.</b> 무작위 잡음은 이웃끼리 평균 내면 서로 상쇄된다. 미분 전에 걸어 잡음 증폭을 막는다. 대신 엣지도 함께 무뎌지는 맞바꿈이 있다.</p>
+    <p><b>② 3주차 미디언 필터.</b> 평균은 극단값을 반영해 번지게 하지만, 중앙값은 극단값을 정렬 끝으로 밀어내 아예 고르지 않는다. 소금 · 후추 잡음에 강하다.</p>
+    <p><b>③ 5주차 Canny 이력 임계값.</b> 진짜 경계는 길게 이어지고 잡음은 고립된 점이라는 성질을 써서, 강한 엣지에 <b>연결된</b> 약한 엣지만 살린다.</p>
+    <p><b>④ 5주차 허프 변환.</b> 잡음 점도 투표하지만 표가 여러 칸에 흩어져 진짜 직선 칸의 1등을 흔들지 못하고, 일부 점이 가려져도 나머지 표로 1등이 유지된다.</p>
+    <p><b>⑤ 7주차 비율 검사.</b> 1등 후보가 2등보다 <b>확실히</b> 가까울 때만 짝으로 인정해 반복 패턴과 짝 없는 점의 오매칭을 버린다.</p>
+    <p><b>⑥ 7주차 RANSAC.</b> 최소 표본으로 가설을 세우고 동의하는 데이터 수로 판정해, 서로 동의하지 않는 이상치는 다수결에서 밀려나 최종 계산에서 <b>제외</b>된다.</p>
+    <p><b>⑦ 공통점.</b> 극단값을 평균에 그대로 섞지 않고, 연결 · 다수결 · 상대 비교처럼 <b>여러 데이터의 일관성</b>을 근거로 진짜와 가짜를 가른다.</p>
+  </details>
+</article>
+
+<article class="q" id="qx-5">
+  <div class="q-h"><span class="q-no">QX-5</span><span class="q-star">★★</span><span class="q-wk">5 · 6 · 7주차</span></div>
+  <p class="q-txt">&lsquo;<span class="part">투표(voting)</span>&rsquo; 또는 &lsquo;<span class="part">히스토그램</span>&rsquo;이라는 아이디어가 이번 학기 여러 알고리즘에서 어떻게 쓰였는지 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>허프 누적 배열</span><span>SIFT 방향 할당 · 기술자</span><span>HOG 셀 히스토그램</span><span>RANSAC 합의 집합</span><span>개별 값의 흔들림 → 모으면 안정</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 5주차 허프 변환.</b> 엣지 점마다 자기가 속할 수 있는 직선들의 칸에 한 표씩 던지고, 최다 득표 칸을 직선으로 삼는다.</p>
+    <p><b>② 6주차 SIFT 방향 할당.</b> 주변 화소가 자기 그래디언트 방향 칸에 크기만큼 투표해 가장 높은 칸이 기준 방향이 된다.</p>
+    <p><b>③ 6주차 SIFT 기술자 · HOG.</b> 셀마다 그래디언트 방향 히스토그램을 만든다. 정확한 위치 대신 분포를 세므로 화소가 한두 칸 밀려도 값이 거의 변하지 않는다(작은 변형에 강함). HOG는 칸 사이에 걸린 표를 두 칸에 나눠 던져 각도 흔들림에도 안정적이다.</p>
+    <p><b>④ 7주차 RANSAC.</b> 가설 모델마다 데이터가 동의하는지 &lsquo;투표&rsquo;해 가장 많은 지지를 얻은 모델을 고른다.</p>
+    <p><b>⑤ 공통 원리.</b> 개별 값은 잡음 · 변형에 흔들리지만, 많은 표가 모이면 진짜 구조가 봉우리로 드러나고 잡음 표는 흩어진다. 다만 칸(해상도)을 어떻게 나누느냐에 따라 정밀도와 안정성이 맞바뀐다.</p>
+  </details>
+</article>
+
+<article class="q" id="qx-6">
+  <div class="q-h"><span class="q-no">QX-6</span><span class="q-star">★★</span><span class="q-wk">3 · 4 · 5 · 6 · 7주차</span></div>
+  <p class="q-txt"><span class="part">가우시안</span>이 이번 학기 각 주차에서 어떤 역할로 쓰였는지 정리하여 서술하시오.</p>
+  <div class="kw"><b>채점 키워드</b><span>잡음 제거 · 회전 대칭 · 분리 가능</span><span>축소 전 저역 통과 · 피라미드</span><span>Canny · LoG</span><span>σ = 스케일 · DoG</span><span>BRIEF 사전 스무딩</span><span>가중치 맵 피라미드</span></div>
+  <details class="ans" open><summary>모범 답안</summary>
+    <p><b>① 3주차 &mdash; 잡음 제거 필터.</b> 중심일수록 큰 가중치를 주는 회전 대칭 필터로 박스 필터의 네모 자국 없이 부드럽게 흐린다. σ로 흐림 정도를 조절하고, 가로 · 세로로 분리해 빠르게 계산한다. 가우시안을 미리 미분한 필터로 스무딩과 엣지 검출을 한 번에 한다.</p>
+    <p><b>② 4주차 &mdash; 저역 통과 필터.</b> 축소 전에 고주파를 지워 에일리어싱을 막고, 블러 + 축소를 반복해 가우시안 피라미드를 만든다. 라플라시안 피라미드도 가우시안 층의 차이로 만든다.</p>
+    <p><b>③ 5주차 &mdash; 검출의 바탕.</b> Canny의 첫 단계(가우시안 미분), 블롭 검출의 LoG(가우시안 + 라플라시안)와 그 근사 DoG(가우시안 둘의 차)에 쓰인다. 여기서 σ는 &lsquo;<b>보는 스케일</b>&rsquo;이 된다.</p>
+    <p><b>④ 6주차 &mdash; 스케일 공간과 가중치.</b> SIFT는 σ를 키운 가우시안 블러로 스케일 공간을 만들고, 방향 히스토그램에서 먼 화소의 표를 가우시안으로 줄인다. BRIEF는 비교 전에 가우시안으로 스무딩해 화소 하나의 잡음이 비트를 뒤집지 않게 한다.</p>
+    <p><b>⑤ 7주차 &mdash; 블렌딩.</b> 다중 대역 블렌딩에서 섞는 마스크를 가우시안 피라미드로 분해해 아래 층일수록 경계를 넓고 부드럽게 만든다.</p>
+    <p><b>⑥ 왜 하필 가우시안인가.</b> 흐리면서 없던 구조를 새로 만들지 않고, 가우시안끼리 이어 걸면 다시 가우시안이 되어 작은 블러를 쌓아 큰 블러를 싸게 만들 수 있기 때문이다.</p>
+  </details>
+</article>
+</section>
+
+<!-- ===================== 헷갈리는 짝 ===================== -->
+<section class="sec pb" id="pairs">
+  <div class="sec-head"><span class="sec-badge">PAIR</span><h2 class="sec-title">헷갈리는 짝 비교표<small>&ldquo;A와 B를 비교하시오&rdquo; 유형 대비 &mdash; 주차를 함께 적었다</small></h2></div>
+<div class="tbl-wrap"><table>
+  <tr><th>짝</th><th>주차</th><th>A</th><th>B</th></tr>
+  <tr><td>Radiometry vs Photometry</td><td>2</td><td>기계가 재는 물리적인 빛의 방향 · 양 (적외선 · 자외선 포함)</td><td>사람이 눈으로 느끼는 빛의 세기</td></tr>
+  <tr><td>필터링 vs 워핑</td><td>2 · 3</td><td>화소값(range)을 바꾼다 &mdash; 블러 · 엣지</td><td>좌표(domain)를 바꾼다 &mdash; 회전 · 원근</td></tr>
+  <tr><td>아핀 vs 호모그래피</td><td>2 · 7</td><td>6자유도 · 3쌍 · 평행성 보존</td><td>8자유도 · 4쌍 · 직선만 보존(원근)</td></tr>
+  <tr><td>내부 vs 외부 파라미터</td><td>2</td><td>초점거리 · 주점 · 픽셀 배율 · skew (카메라 고유)</td><td>회전 · 이동 (카메라 위치 · 자세)</td></tr>
+  <tr><td>원근 왜곡 vs 방사 왜곡</td><td>2</td><td>카메라 기울기 때문에 수직선이 모임 &rarr; 시프트 렌즈 · 호모그래피</td><td>렌즈 결함 · 가장자리 휨(배럴 · 핀쿠션) &rarr; 왜곡 계수</td></tr>
+  <tr><td>컨볼루션 vs 교차 상관</td><td>3</td><td>필터를 뒤집어 겹침 &mdash; 필터링</td><td>뒤집지 않음 &mdash; 유사도 · 템플릿 매칭</td></tr>
+  <tr><td>평균 vs 가우시안 필터</td><td>3</td><td>같은 가중치 &rarr; 네모 자국</td><td>중심 가중 · 회전 대칭 · σ로 조절</td></tr>
+  <tr><td>가우시안 vs 미디언 필터</td><td>3</td><td>선형 · 가우시안 잡음에 적합 · 이상치를 번지게 함</td><td>비선형 · 소금 · 후추 잡음에 적합 · 정렬 비용</td></tr>
+  <tr><td>DoG (3주차) vs DoG (5 · 6주차)</td><td>3 · 5 · 6</td><td>Derivative of Gaussian &mdash; 가우시안의 1차 미분, 엣지</td><td>Difference of Gaussians &mdash; 블러 두 장의 차, LoG 근사 · 블롭 · SIFT</td></tr>
+  <tr><td>가우시안 vs 라플라시안 피라미드</td><td>4</td><td>블러 + 축소 반복 &mdash; 저주파 · 복원 불가 · 검출에 활용</td><td>층 사이 차이(잔차) &mdash; 고주파 · 정확 복원 · 블렌딩 · 압축</td></tr>
+  <tr><td>라플라시안 피라미드 vs 웨이블릿</td><td>4</td><td>계수 약 4/3배 · 방향 구분 없음</td><td>계수 원본과 같음 · 가로 · 세로 · 대각 디테일</td></tr>
+  <tr><td>바이리니어 vs 바이큐빅</td><td>4</td><td>4점 · 직선 · 흐림 · 빠름</td><td>16점 · 곡선 · 선명 · 느림 · 오버슈트</td></tr>
+  <tr><td>1차 미분 vs 2차 미분 엣지</td><td>3 · 5</td><td>극값 = 엣지 (Sobel · Canny)</td><td>영교차 = 엣지 · 이중선 · 잡음에 더 민감 (LoG)</td></tr>
+  <tr><td>Harris vs 블롭(LoG)</td><td>5</td><td>&lsquo;어디&rsquo;만 &mdash; 스케일에 약함</td><td>&lsquo;어디 + 얼마나 큰지&rsquo; &mdash; 특성 스케일</td></tr>
+  <tr><td>Harris vs Shi-Tomasi</td><td>5</td><td>행렬식과 대각합으로 만든 점수</td><td>작은 고윳값 자체를 점수로</td></tr>
+  <tr><td>공변 vs 불변</td><td>5 · 6</td><td>결과가 영상을 따라 변함 &mdash; 검출기</td><td>결과가 그대로 &mdash; 기술자</td></tr>
+  <tr><td>검출기 vs 기술자</td><td>5 · 6</td><td>어디가 특징적인가 &rarr; 좌표 · 스케일 · 방향</td><td>어떻게 생겼나 &rarr; 고정 길이 벡터</td></tr>
+  <tr><td>SIFT vs SURF</td><td>6</td><td>DoG · 영상을 줄임 · 36칸 방향 · 128차원</td><td>헤시안 행렬식 · 필터를 키움 · 60° 창 · 64차원 · 3~7배 빠름</td></tr>
+  <tr><td>SIFT vs HOG</td><td>6</td><td>키포인트 패치 · 회전 맞춤 · 매칭</td><td>창 전체 · 회전 안 맞춤 · 블록 정규화 · 분류(SVM)</td></tr>
+  <tr><td>BRIEF vs ORB</td><td>6</td><td>검출기 없음 · 회전 · 크기에 약함</td><td>FAST + 방향 + 피라미드 · 비교 쌍 회전 · rBRIEF 학습</td></tr>
+  <tr><td>유클리드 vs 해밍 거리</td><td>6 · 7</td><td>실수 벡터 (SIFT · SURF)</td><td>이진 벡터 (BRIEF · ORB) · XOR로 빠름</td></tr>
+  <tr><td>세로 최소제곱 vs TLS</td><td>7</td><td>세로 차이 · 회전 불변 아님 · 수직선 불가</td><td>수직 거리 · 무게중심 통과 · 작은 고윳값 방향이 법선</td></tr>
+  <tr><td>Brute-Force vs FLANN</td><td>7</td><td>모든 쌍 비교 · 정확 · 느림</td><td>근사 최근접 · 대규모에서 빠름</td></tr>
+  <tr><td>직접 정렬 vs 특징 기반 정렬</td><td>7</td><td>모든 화소 비교 · 무거움 · 초기값에 민감</td><td>특징 몇백 개 · 빠름 · 큰 변형에 강함</td></tr>
+  <tr><td>페더링 vs 다중 대역 블렌딩</td><td>7</td><td>폭 하나의 투명도 그러데이션 &mdash; 유령 또는 이음새</td><td>피라미드 층마다 다른 폭 &mdash; 이음새 없이 디테일 보존</td></tr>
+</table></div>
+</section>
+
+<!-- ===================== 체크리스트 ===================== -->
+<section class="sec pb" id="check">
+  <div class="sec-head"><span class="sec-badge">CHECK</span><h2 class="sec-title">시험 직전 체크리스트<small>각 키워드를 보고 30초 동안 말로 설명할 수 있으면 통과</small></h2></div>
+<div class="cards">
+  <div class="card2"><h4>2주차 <em>Camera Models</em></h4><p>네 요소(기하 · 복사 측정 · 측광 · 디지털화) · 필터링 vs 워핑 · 동차 좌표의 이유 · 변환 위계와 자유도(2 · 3 · 4 · 6 · 8) · 대응점 수 · 투영이 잃는 것과 지키는 것 · 소실점 · 핀홀 구멍 딜레마 · 렌즈 · 심도와 조리개 · 화각과 초점거리 · 카메라 행렬(내부 5 + 외부 6) · 캘리브레이션 · 원근 · 방사 왜곡</p></div>
+  <div class="card2"><h4>3주차 <em>Linear Filters</em></h4><p>이미지 = 함수 · 노이즈 원인 · 포인트 vs 이웃 연산 · 선형성 · 시불변성 · 출력 크기와 패딩 · 마스크 크기의 맞바꿈 · 평균 필터의 네모 자국 · 가우시안 장점 · 분리 가능성 · 미디언 · 컨볼루션 vs 상관 · 결합법칙 · Prewitt · Sobel · 가우시안의 미분 · LoG 영교차</p></div>
+  <div class="card2"><h4>4주차 <em>Image Pyramids</em></h4><p>에일리어싱 · 나이퀴스트 · 블러 → 축소 순서 · 저주파 vs 고주파 · 가우시안 피라미드와 활용 3가지 · 4/3 · 라플라시안 피라미드(잔차 · 복원 · 블렌딩 · 압축) · 웨이블릿(LL · LH · HL · HH) · 재구성 필터 · 최근접 · 바이리니어 · 바이큐빅</p></div>
+  <div class="card2"><h4>5주차 <em>Feature Detection</em></h4><p>검출 · 기술 · 매칭 · 장점 4가지 · 엣지 · 직선 · 코너 · 블롭 · 그래디언트 크기와 방향 · 엣지 검출 3단계 · Canny 4단계(NMS · 이력 임계값) · 허프(파라미터 공간 · 투표 · ρθ) · 창 밀기 · 구멍 문제 · Harris(2차 모멘트 · 고윳값 · 응답) · 불변성 표 · LoG · 특성 스케일 · 스케일 정규화 · DoG · 공변 vs 불변 · 아핀 적응</p></div>
+  <div class="card2"><h4>6주차 <em>Feature Descriptors</em></h4><p>기술자가 필요한 이유 · 좋은 특징 4조건 · 불변 + 변별력 · 템플릿 매칭의 한계 · 패치 · 그래디언트 · 히스토그램의 실패 · SIFT 4단계 · 26 이웃 · 엣지 제거 · 80% 규칙 · 128차원 · 정규화 · SURF(적분 영상 · 헤시안 · 박스 필터 · 필터 키우기 · 60° · 64차원 · 라플라시안 부호) · HOG(9칸 · 블록 정규화 · 3780 · SVM) · BRIEF(이진 테스트 · 해밍) · ORB(FAST · Harris · 밝기 중심 · steered · rBRIEF)</p></div>
+  <div class="card2"><h4>7주차 <em>Matching &amp; Homography</em></h4><p>피팅의 4문제 · 최소제곱 vs TLS · 이상치에 약한 이유 · RANSAC 단계와 s · t · N · d · 재추정 · 장단점 · BF vs FLANN · 가정-검증 · 직접 vs 특징 정렬 · 정렬 = 피팅 · 어파인 3쌍 · 호모그래피 8자유도 4쌍 · 쓸 수 있는 세 경우 · DLT · SVD · 평균 변환 문제 · 동시에 · 비율 검사 · 스티칭 4단계 · 비네팅 · 페더링 vs 다중 대역</p></div>
+</div>
+<div class="good"><b>마지막 한 줄</b> &mdash; 어떤 &lsquo;부분&rsquo;을 물어도 <b>정의 → 없으면 생기는 문제 → 동작 → 활용 예 → 한계 → 다른 주차와 연결</b> 순서로 쓰면, 내용이 조금 빠져도 흐름 점수는 남는다. 수식은 쓰지 않아도 된다 &mdash; 대신 &ldquo;그 값이 무엇을 재는지&rdquo;를 문장으로.</div>
+</section>
+
+<p class="src">출처 — 컴퓨터비전 1~7주차 교안(2026-2학기, 최재영 교수)과 이 사이트의 주차별 정리 페이지<br>
+예상 문제와 모범 답안은 교안 내용을 바탕으로 서술형 시험 대비용으로 새로 쓴 것이다. 🔎 +α 상자는 교안 밖의 보충 내용이다.</p>
+
+</div>
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive() {
+    var cur = '';
+    sections.forEach(function (s) { if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function (t) { t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      setTimeout(function () {
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+
+  /* ---- 개념 설명 말풍선 ---- */
+  var terms = document.querySelectorAll('.term');
+  if (!terms.length) return;
+  var tip = document.createElement('div');
+  tip.id = 'tipbox';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  var current = null;
+
+  function hide() {
+    tip.classList.remove('on');
+    if (current) { current.classList.remove('on'); current = null; }
+  }
+  function show(el) {
+    tip.textContent = el.getAttribute('data-tip') || '';
+    tip.classList.add('on');
+    if (current && current !== el) current.classList.remove('on');
+    current = el;
+    el.classList.add('on');
+    var pad = 8;
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+    var top = r.top - t.height - 10;
+    if (top < pad) top = r.bottom + 10;
+    top = Math.min(top, window.innerHeight - t.height - pad);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+  terms.forEach(function (el) {
+    el.addEventListener('mouseenter', function () { show(el); });
+    el.addEventListener('mouseleave', function () { if (current === el) hide(); });
+    el.addEventListener('focus', function () { show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (current === el && tip.classList.contains('on')) hide(); else show(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el); }
+      if (e.key === 'Escape') hide();
+    });
+  });
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide);
+});
+</script>
+
+<script>
+/* 모범 답안 접기 · 펴기 (연습 모드) — 인쇄할 때는 항상 모두 편다 */
+(function () {
+  var all = document.querySelectorAll('details.ans');
+  function setAll(open) { all.forEach(function (d) { d.open = open; }); }
+  var f = document.getElementById('fold-all'), o = document.getElementById('open-all');
+  if (f) f.addEventListener('click', function () { setAll(false); });
+  if (o) o.addEventListener('click', function () { setAll(true); });
+  window.addEventListener('beforeprint', function () { setAll(true); });
+})();
+</script>
+
+</body>
+</html>
