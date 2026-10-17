@@ -681,11 +681,13 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   <div class="sec-head"><span class="sec-badge">W3</span><h2 class="sec-title">3주차 · Linear Filters<small>What is an image → Cross-correlation → Convolution → Edge detecting</small></h2></div>
 
 <article class="q">
-  <div class="q-h"><span class="q-no">3-1</span><a class="q-src" href="computer-vision-week03.html#image">3주차 00</a></div>
-  <p class="q-txt">Q. 디지털 이미지란 무엇이며, 필터링이 왜 필요한지 설명하시오.</p>
+  <div class="q-h"><span class="q-no">3-1</span><span class="mine">직접 정리 + 다듬음</span><a class="q-src" href="computer-vision-week03.html#image">3주차 00</a></div>
+  <p class="q-txt">Q. 이미지와 필터링이란 무엇인가</p>
   <details class="ans" open><summary>답</summary>
-    <p>영상은 현실 세계에 있는 것을 카메라라는 입력장치를 통해 구현한 것이다. 빛을 통해 반사된 컬러의 값을 영상 센서가 인식해 화소로 이어 주고, 디지털 이미지의 픽셀 하나는 값을 가진다. 그레이스케일 이미지는 2차원에서 1차원으로 가는 함수 f로 볼 수 있는데, 2차원은 좌표 (x, y)이고 1차원의 값은 그 좌표에서의 밝기(intensity)다. 디지털 이미지는 공간적인 측면(spatial domain)에서 격자로 샘플링되고, 밝기 측면(brightness domain)에서 0~255처럼 단계로 양자화되는 두 가지 이산화를 거친다.</p>
-    <p>이 과정에서 센서 퀄리티, 빛의 불균일한 발산, 양자화 효과 때문에 노이즈가 발생한다. 그래서 필터링이 던지는 질문은 어떻게 노이즈를 줄일 것인가, 그리고 어떻게 유용한 특징을 찾을 것인가 두 가지다. 필터링은 기존 원 이미지의 픽셀을 조합해서 새로운 값의 픽셀을 만드는 것으로, 에지 · 코너 · 블롭 같은 특징을 추출하거나 de-noising, super-resolution, in-painting처럼 영상의 속성을 향상 · 수정하는 데 쓰인다. 지난주의 warping과 달리, 요소들은 그대로 두고 빛(값)의 변화를 다루는 쪽이다.</p>
+    <p>이미지의 정의는 두 가지로 나눌 수 있다. 첫째, 현실 세계에 있는 것을 카메라라는 입력 장치를 통해 구현한 것이다. 둘째, 그래픽적 요소들을 포함해 상상으로 표현한 것이다. 컴퓨터비전은 이러한 영상 속 피사체를 인식(recognition)하고, 분류(classification)한 다음, 이해(understanding)한다. 이를 위해 전체를 한 번에 보기보다는 각각의 특징과 요소들을 먼저 읽고, 조각조각 모아 가면서 전체를 이해한다.</p>
+    <p class="add">컴퓨터가 읽는 것은 디지털 이미지다. 빛을 통해 반사된 컬러의 값을 영상 센서가 인식해 화소로 이어 주므로, 그레이스케일 이미지는 좌표 (x, y)를 넣으면 그 위치의 밝기(intensity) 하나가 나오는, 2차원에서 1차원으로 가는 함수 f로 볼 수 있다. 이때 연속적인 장면은 두 번 이산화된다. 공간적인 측면(spatial domain)에서는 격자로 잘라 샘플링하고, 밝기 측면(brightness domain)에서는 0~255처럼 단계로 끊어 양자화한다. 그래서 이후의 모든 처리는 화소의 값을 연산해서 이해시키는 일이 된다.</p>
+    <p>이 조각을 읽기 위해, 기존 원 이미지에서 픽셀을 조합해 새로운 값의 픽셀을 만드는 것을 필터링이라 할 수 있다. 지난주의 와핑이 형태(좌표)를 건드렸다면, 필터링은 요소들은 그대로 두고 화소값, 즉 빛의 변화를 다룬다.</p>
+    <p>그런데 디지털 이미지에는 노이즈가 섞인다. 센서 퀄리티가 좋지 않거나, 빛이 균일하지 않게 반사되거나, 연속적인 밝기를 단계로 끊을 때 오차가 생기는(양자화 효과, quantization effects) 등 다양한 경우에 노이즈가 발생한다. 그래서 필터링이 던지는 질문은 &lsquo;어떻게 노이즈를 줄일 것인가&rsquo;와 &lsquo;어떻게 유용한 특징을 찾을 것인가&rsquo; 두 가지다. 필터링은 노이즈를 제거해서 피사체를 더 정확하게 인식하기 위해 활용되며, 에지, 코너, 블롭 등 유용한 피처(feature)를 추출하기도 하고, de-noising(노이즈 제거), super-resolution(저해상도를 고해상도로), in-painting(복원) 등 영상의 속성을 향상 · 수정하기도 한다.</p>
   </details>
 </article>
 
@@ -1070,7 +1072,7 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
 
 
 <p class="src">출처 — 컴퓨터비전 1~7주차 교안(2026-2학기, 최재영 교수)과 이 사이트의 주차별 정리 페이지<br>
-2주차의 &lsquo;직접 정리&rsquo; 답은 직접 적은 답이고, 연한 초록 테두리 문단은 그 답에 교안 내용을 이어 붙인 부분이다.</p>
+&lsquo;직접 정리&rsquo; 표시가 붙은 답은 직접 적은 답이고, 연한 초록 테두리 문단은 그 답에 교안 내용을 이어 붙인 부분이다.</p>
 
 </div>
 
