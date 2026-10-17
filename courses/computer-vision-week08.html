@@ -693,26 +693,45 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
 </article>
 
 <article class="q">
-  <div class="q-h"><span class="q-no">3-2</span><a class="q-src" href="computer-vision-week03.html#lsi">3주차 01 · 02 · 05</a></div>
-  <p class="q-txt">Q. 포인트 연산과 이웃 연산을 비교하고, 선형 시불변 필터에 대해 설명하시오.</p>
+  <div class="q-h"><span class="q-no">3-2</span><a class="q-src" href="computer-vision-week03.html#lsi">3주차 01 · 02</a></div>
+  <p class="q-txt">Q. 포인트 연산과 이웃 연산을 비교하고, 선형 시불변 필터가 무엇인지 설명하시오.</p>
   <details class="ans" open><summary>답</summary>
-    <p><span class="lab">[포인트 vs 이웃 연산]</span>포인트 연산(point operation)은 이미지의 크기 · 기하 · 국소 구조를 바꾸지 않고 화소 값만 매핑하는 것으로, 새 값은 같은 위치의 이전 값과 매핑 함수에만 의존한다. 그런데 하나의 화소를 가지고 처리하는 데는 한계가 있어 샤프닝이나 스무딩 같은 작업은 해낼 수 없고, 주변을 봐야 한다. 그래서 바꾸고자 하는 픽셀의 주변 요소들까지 고려하는 이웃 연산(neighborhood operation), 즉 필터가 필요하다.</p>
-    <p><span class="lab">[선형 시불변 필터]</span>선형 시불변(Linear Shift-Invariant) 필터는 각 픽셀을 이웃들의 선형 결합으로 바꾸며, 그 결합을 결정하는 것이 커널(kernel, 마스크)이다. 같은 커널이 모든 픽셀 위치로 이동(shift)하므로 모든 픽셀이 같은 가중치 조합을 쓰는데, 화소가 움직이지 않는다는 뜻이 아니라 어느 위치에서든 같은 가중치로 같게 동작한다는 의미라 shift invariant라고 한다. 선형성은 필터의 합을 적용한 결과가 각각 적용한 결과의 합과 같다는 것이고, 시불변성은 이동한 뒤 필터링한 것과 필터링한 뒤 이동한 것이 같다는 것이다. 이론적으로 모든 선형 시불변 연산자는 컨볼루션으로 표현할 수 있다. 커널을 바꾸면 결과가 달라져, 평균 커널은 블러를, 원본을 두 배로 키운 것에서 흐린 버전을 뺀 커널은 원본에 디테일을 한 번 더 얹는 샤프닝(언샤프 마스킹)을 만든다.</p>
+    <p><span class="lab">[포인트 연산 vs 이웃 연산]</span>포인트 연산(point operation)은 이미지의 크기 · 기하 · 국소 구조를 바꾸지 않고 화소 값만 매핑하는 것으로, 새 값은 같은 위치의 이전 값과 매핑 함수에만 의존한다. 그런데 하나의 화소를 가지고 처리하는 데는 한계가 있어 샤프닝이나 스무딩 같은 작업은 해낼 수 없고, 주변을 봐야 한다. 그래서 바꾸고자 하는 픽셀의 주변 요소들까지 고려하는 이웃 연산(neighborhood operation), 즉 필터가 필요하다.</p>
+    <p><span class="lab">[선형 시불변 필터]</span>선형 시불변(Linear Shift-Invariant) 필터는 각 픽셀을 이웃들의 선형 결합으로 바꾸며, 그 결합을 결정하는 것이 커널(kernel, 마스크)이다. 커널의 각 칸을 그 자리에 겹쳐지는 이미지 값과 곱해 모두 더한 값이 출력 한 칸이 된다(f = 입력 이미지, h = 커널, g = 출력 이미지). 같은 커널이 모든 픽셀 위치로 이동(shift)하므로 모든 픽셀이 같은 가중치 조합을 쓰는데, 이를 위치에 따라 변동이 없다는 뜻에서 shift invariant라고 한다.</p>
   </details>
 </article>
 
 <article class="q">
-  <div class="q-h"><span class="q-no">3-3</span><a class="q-src" href="computer-vision-week03.html#mean">3주차 03 · 04 · 06</a></div>
-  <p class="q-txt">Q. 평균 필터와 출력 크기, 마스크 크기에 대해 설명하시오.</p>
+  <div class="q-h"><span class="q-no">3-3</span><a class="q-src" href="computer-vision-week03.html#mean">3주차 03 · 04</a></div>
+  <p class="q-txt">Q. 평균 필터와 필터링 결과의 출력 크기에 대해 설명하시오.</p>
   <details class="ans" open><summary>답</summary>
-    <p><span class="lab">[평균 필터]</span>평균 필터(square mean filter)는 각 픽셀을 주변의 값들을 평균 낸 국소 평균(local average)으로 바꾸며, 결과는 흐릿하게 변하는 스무딩(블러링) 효과다. 한 번에 필터가 움직이는 거리를 stride라 하고, 기본값 1칸에서 stride를 키우면 출력이 더 작아진다.</p>
-    <p><span class="lab">[출력 크기]</span>출력 크기는 세 가지다. Full은 커널이 한 칸이라도 겹치는 모든 위치를 계산해 출력이 가장 크고, Same은 패딩(pad)을 넣어 입력과 같은 크기로 맞추며, Valid는 커널이 완전히 이미지 안에 들어오는 위치만 계산해 크기가 줄어든다(10×10에 3×3 커널이면 8×8).</p>
-    <p><span class="lab">[마스크 크기]</span>마스크는 보통 3×3, 5×5, 7×7을 사용한다. 마스크가 커지면 가져오는 주변 화소가 많아져 출력의 노이즈 분산은 감소하지만, 한 점의 노이즈가 더 넓게 번지고, 더 흐릿해지며, 연산이 더 부담이 된다. 또 평균 필터는 블러링되면서 격자가 살짝 보이는 문제가 생기는데, 정사각형 창 안의 모든 화소를 거리와 무관하게 똑같은 가중치로 평균 내 네모 영역의 모양이 결과에 새겨지기 때문이다. 이 문제의 해법이 중심에 가까운 정도에 따라 가중치를 주는 가우시안 필터다.</p>
+    <p><span class="lab">[평균 필터]</span>평균 필터(square mean filter)는 각 픽셀을 주변의 값들을 평균 낸 국소 평균(local average)으로 바꾸며, 결과는 흐릿하게 변하는 스무딩(블러링) 효과다. 한 번에 필터가 움직이는 거리를 stride라 하고, 기본값 1칸에서 stride를 키우면 출력이 그만큼 더 작아진다.</p>
+    <p><span class="lab">[출력 크기]</span>출력 크기는 세 가지다. Full은 커널이 한 칸이라도 겹치는 모든 위치를 계산해 출력이 가장 크고(f와 h 크기의 합), Same은 패딩(pad)을 넣어 입력 f와 같은 크기로 맞추며, Valid는 커널이 완전히 이미지 안에 들어오는 위치만 계산해 크기가 줄어든다(f와 h 크기의 차). 예를 들어 10×10 이미지에 3×3 커널을 valid로 적용하면 8×8이 되고, same으로 두려면 한 칸씩 패딩을 넣는다.</p>
+  </details>
+</article>
+<article class="q">
+  <div class="q-h"><span class="q-no">3-4</span><span class="mine">질문 구성 직접</span><a class="q-src" href="computer-vision-week03.html#props">3주차 05</a></div>
+  <p class="q-txt">Q. 선형필터의 주요 성질을 설명하시오.</p>
+  <details class="ans" open><summary>답</summary>
+    <p><span class="lab">[선형성 Linearity]</span>두 필터를 더해서 적용한 결과는 각 필터를 따로 적용해 더한 결과와 같다. 즉 filter(h1 + h2) = filter(h1) + filter(h2)로 선형성이 보장된다. 출력이 이웃 화소의 가중합이기 때문에 성립하며, 덕분에 필터를 더하고 나누는 계산을 자유롭게 할 수 있다. 원본을 여러 배 하거나 블러를 빼는 식의 커널 조합이 가능한 것도 이 성질 덕분이다.</p>
+    <p><span class="lab">[시불변성 Shift invariance]</span>픽셀 위치와 무관하게 같은 동작을 한다. 이미지를 이동한 뒤 필터링한 것과 필터링한 뒤 이동한 것이 같다(filter(shift(h)) = shift(filter(h))). 화소가 움직이지 않는다는 뜻이 아니라, 같은 커널이 모든 위치로 옮겨 가며 어느 위치에서든 같은 가중치로 같게 동작한다는 의미다. 이 두 성질을 만족하는 모든 선형 시불변 연산자는 컨볼루션으로 표현할 수 있다는 것이 이론적 결과다.</p>
+    <p><span class="lab">[커널에 따른 효과]</span>그래서 커널만 바꾸면 결과가 달라진다. 가운데만 1인 커널은 원본을 그대로 내놓고, 한쪽으로 치우친 1은 이미지를 한 칸 이동시키며, 모든 칸이 같은 값인 박스 커널은 국소 평균이 되어 흐려진다.</p>
+    <p><span class="lab">[샤프닝]</span>샤프닝 커널은 원본을 두 배로 키운 것에서 흐린 버전(박스 블러)을 뺀 것이다. 이는 원본 + (원본 − 흐린 것)과 같아서, 원본에 세부(디테일)를 한 번 더 얹는 셈이 된다. 원본 − 흐린 것은 블러가 지운 경계 · 질감, 즉 디테일만 남긴 것이므로, 이를 더하면 경계가 또렷해진다.</p>
+    <p><span class="lab">[언샤프 마스킹]</span>이것이 언샤프 마스킹(unsharp masking)의 원리다. 흐린, 즉 &lsquo;unsharp&rsquo;한 버전을 마스크로 만들어 원본에서 빼서 디테일을 얻고, 그 디테일을 다시 원본에 더해 선명하게 만든다는 뜻에서 붙은 이름이다. 이름과 달리 결과는 샤프닝이며, 선형성 덕분에 이 과정 전체(원본 두 배 − 블러)를 커널 하나로 합쳐 한 번에 적용할 수 있다.</p>
+  </details>
+</article>
+<article class="q">
+  <div class="q-h"><span class="q-no">3-5</span><span class="mine">질문 구성 직접</span><a class="q-src" href="computer-vision-week03.html#mask">3주차 06</a></div>
+  <p class="q-txt">Q. 마스크 크기는 어느 정도로 설정해야 하는가?</p>
+  <details class="ans" open><summary>답</summary>
+    <p><span class="lab">[마스크가 커지면]</span>마스크(mask)는 커널과 같은 말로, 보통 3×3, 5×5, 7×7을 사용한다. 마스크가 커지면 가져오는 주변 화소들이 많아져 더 많은 이웃이 결과에 기여한다. 평균 내는 표본이 많아지므로 출력의 노이즈 분산은 감소해 결과가 안정되지만, 대신 한 점의 노이즈가 더 넓게 번지고(bigger noise spread), 이미지가 더 흐릿해지며(more blurring), 마스크가 클수록 연산이 더 부담이 되는 문제가 발생한다. 즉 크게 하면 노이즈는 잘 줄지만 디테일과 속도를 잃고, 작게 하면 디테일은 살지만 노이즈가 덜 줄어드는 맞바꿈이 있어 정답인 크기는 없다.</p>
+    <p><span class="lab">[박스 필터의 격자 문제]</span>또 평균 필터로 블러링하면 격자가 살짝 보이는 문제가 생길 수 있다. 네모 영역에 해당하는 값들을 가져오다 보니 네모 블러가 생기는 것인데, 박스 필터가 중심에서 멀든 가깝든 창 안의 모든 화소를 거리와 무관하게 똑같은 가중치로 평균 내기 때문이다(박스 필터는 정사각형 창 안의 화소를 모두 같은 가중치로 더해 평균 내는 평균 필터를 의미한다). 중심에서의 거리를 반영하지 않으므로 정사각형 창의 모양이 결과에 그대로 새겨지고, 마스크가 클수록 이 자국이 더 뚜렷해진다.</p>
+    <p><span class="lab">[그래서]</span>그래서 마스크는 노이즈 제거와 디테일 · 연산량 사이에서 목적에 맞게 크기를 정하되, 단순히 키우기보다 중심에 가까운 정도에 따라 가중치를 줘야 한다. 이것이 센터에는 가중치를 많이 두고 멀어질수록 줄이는 가우시안 필터이며, 가우시안은 표준편차 σ로 활용 거리를 통제하므로 마스크 크기도 σ에 맞춰(가중치가 의미 있는 범위만큼) 정하면 된다.</p>
   </details>
 </article>
 
 <article class="q">
-  <div class="q-h"><span class="q-no">3-4</span><a class="q-src" href="computer-vision-week03.html#gauss">3주차 07 · 08</a></div>
+  <div class="q-h"><span class="q-no">3-6</span><a class="q-src" href="computer-vision-week03.html#gauss">3주차 07 · 08</a></div>
   <p class="q-txt">Q. 가우시안 필터의 특징과 장점을 설명하시오.</p>
   <details class="ans" open><summary>답</summary>
     <p><span class="lab">[가우시안 필터]</span>가우시안 필터는 평균 필터의 특수한 경우로, 계수가 2D 가우시안의 표본이다. 센터로부터 원형 형태를 유지하면서 최대한 부드럽게 만드는데, 센터에는 가중치를 많이 두고 가장자리로 갈수록 weight를 줄인다. 표준편차 σ를 이용해서 거리를 통제하며, 표준편차가 클수록 활용 거리가 넓어져 더 흐려진다.</p>
@@ -722,7 +741,7 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
 </article>
 
 <article class="q">
-  <div class="q-h"><span class="q-no">3-5</span><a class="q-src" href="computer-vision-week03.html#nonlinear">3주차 09</a></div>
+  <div class="q-h"><span class="q-no">3-7</span><a class="q-src" href="computer-vision-week03.html#nonlinear">3주차 09</a></div>
   <p class="q-txt">Q. 비선형 필터링, 특히 미디언 필터에 대해 설명하시오.</p>
   <details class="ans" open><summary>답</summary>
     <p><span class="lab">[노이즈와 선형 필터의 한계]</span>노이즈에는 검은 점과 흰 점이 무작위로 나타나는 Salt and pepper, 흰 점이 무작위로 나타나는(peak noise) Impulse, 밝기 변동이 정규분포에서 뽑히는 Gaussian이 있다. 이런 노이즈가 있을 때 선형 필터를 쓰면, 평균이 튀는 값(outlier)을 그대로 반영하기 때문에 점 하나의 극단적인 값이 이웃 전체로 번져 나가 노이즈 영향이 퍼진다. 그래서 비선형 필터링으로 노이즈를 제거한다.</p>
@@ -731,7 +750,7 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
 </article>
 
 <article class="q">
-  <div class="q-h"><span class="q-no">3-6</span><a class="q-src" href="computer-vision-week03.html#conv">3주차 10</a></div>
+  <div class="q-h"><span class="q-no">3-8</span><a class="q-src" href="computer-vision-week03.html#conv">3주차 10</a></div>
   <p class="q-txt">Q. Convolution과 Cross-correlation을 비교하고, 컨볼루션의 성질을 설명하시오.</p>
   <details class="ans" open><summary>답</summary>
     <p><span class="lab">[컨볼루션 vs 상관]</span>컨볼루션은 필터를 두 방향 모두 뒤집은 뒤(위가 아래로, 좌가 우로, flip the filter in both dimensions) cross-correlation을 적용하는 것이다. 개념적으로 컨볼루션은 한 함수가 다른 함수 위를 이동할 때 발생하는 겹침의 양을 표현하는 필터링 연산으로, 필터를 거친 결과(시스템 응답)를 계산한다. 반면 cross-correlation은 뒤집기 없이 원형 그대로 겹쳐 두 신호가 이동하면서 나타나는 유사도(measure of similarity)를 계산하며, 두 신호가 가장 잘 일치하는 지점에서 최댓값에 도달한다. 박스나 가우시안처럼 커널이 대칭이면 뒤집어도 같아 두 연산의 결과가 같다.</p>
@@ -740,7 +759,7 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
 </article>
 
 <article class="q">
-  <div class="q-h"><span class="q-no">3-7</span><a class="q-src" href="computer-vision-week03.html#edge">3주차 11</a></div>
+  <div class="q-h"><span class="q-no">3-9</span><a class="q-src" href="computer-vision-week03.html#edge">3주차 11</a></div>
   <p class="q-txt">Q. 에지 검출에 대해 설명하시오. (Prewitt, Sobel, DoG, LoG)</p>
   <details class="ans" open><summary>답</summary>
     <p><span class="lab">[에지와 스무딩]</span>에지들은 물체의 형상을 설명한다. surface(표면), depth(깊이), surface color(표면 색), illumination(조명)의 discontinuity가 모두 에지로 나타난다. 에지는 밝기의 변화이므로 미분으로 찾는데, 미분은 노이즈까지 키우기 때문에 노이즈 필터를 적용하고 에지 감지를 적용한다. 스무딩과 미분이 둘 다 컨볼루션이고 결합법칙을 만족하므로 두 마스크를 미리 하나로 합쳐 한 번에 돌릴 수 있다.</p>
