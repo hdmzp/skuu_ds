@@ -504,6 +504,31 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
 }
 
 .mine{display:inline-block;font-size:10.5px;font-weight:800;color:#166534;background:#f0fdf4;border:1px solid #86efac;border-radius:999px;padding:2px 9px}
+.fbar{position:relative;z-index:90;background:var(--bg);border-bottom:1px solid var(--border);padding:9px 0 8px;margin:-6px 0 22px;display:flex;flex-direction:column;gap:6px}
+@media(min-width:720px){.fbar{position:sticky;top:44px}}
+.frow{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.flbl{font-size:11.5px;font-weight:800;color:var(--muted);width:30px;flex:none}
+#wkchips{display:contents}
+.chip{font:600 12.5px/1 'Noto Sans KR',system-ui,sans-serif;border:1px solid var(--border);background:var(--surface);color:var(--ink);padding:6px 11px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.chip .c{font-size:11px;color:var(--muted);margin-left:4px}
+.chip:hover{border-color:var(--accent)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip[aria-pressed="true"] .c{color:#dbe6ff}
+.tool{font:600 12px/1 'Noto Sans KR',system-ui,sans-serif;border:1px solid var(--border);background:transparent;color:var(--muted);padding:6px 10px;border-radius:8px;cursor:pointer}
+.tool:hover{color:var(--ink);border-color:var(--ink)}
+.tool[aria-pressed="true"]{color:var(--accent);border-color:var(--accent);background:var(--accent-light)}
+#fStar[aria-pressed="true"]{color:#713f12;border-color:#eab308;background:#fef9c3}
+.fstat{font-size:11.5px;color:var(--muted);margin-left:auto}
+.fempty{font-size:12.5px;color:var(--muted);padding:2px 0}
+.bm{margin-left:auto;flex:none;border:1px solid var(--border);background:transparent;border-radius:8px;width:32px;height:28px;display:grid;place-items:center;cursor:pointer;color:var(--muted)}
+.q-src + .bm{margin-left:0}
+.bm svg{width:15px;height:15px}
+.bm:hover{border-color:var(--accent);color:var(--accent)}
+.bm[aria-pressed="true"]{color:var(--accent);border-color:var(--accent);background:var(--accent-light)}
+.bm[aria-pressed="true"] svg path{fill:currentColor}
+.q.is-bm{box-shadow:inset 3px 0 0 var(--accent)}
+.sec[hidden],.q[hidden]{display:none!important}
+@media print{.fbar,.bm{display:none!important}}
 .star{display:inline-block;transform:rotate(-4deg);background:#fde047;color:#713f12;border:1.5px solid #eab308;font-size:11px;font-weight:900;padding:3px 9px;border-radius:6px;box-shadow:1px 2px 0 #ca8a04;letter-spacing:.02em}
 .q:has(.q-h .star){border-top-color:#eab308}
 .cand{margin:9px 0 2px;background:#fafaf7;border:1px dashed #d6d3c9;border-radius:8px;padding:9px 12px}
@@ -558,9 +583,16 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </div>
 </div>
 
-<div class="ctrl">
-  <button type="button" id="fold-all">답 모두 접기 (써 보기 연습)</button>
-  <button type="button" id="open-all">모두 펴기</button>
+<div class="fbar" id="fbar">
+  <div class="frow"><span class="flbl">주차</span><span id="wkchips"></span></div>
+  <div class="frow"><span class="flbl">보기</span>
+    <button type="button" class="tool" id="fStar" aria-pressed="false">★ 중요만</button>
+    <button type="button" class="tool" id="fBm" aria-pressed="false">북마크</button>
+    <button type="button" class="tool" id="fold-all">답 접기</button>
+    <button type="button" class="tool" id="open-all">답 펴기</button>
+    <span class="fstat" id="fstat"></span>
+  </div>
+  <p class="fempty" id="fempty" hidden>아직 북마크한 문항이 없습니다. 문항 오른쪽 위의 책갈피 버튼을 눌러 추가하세요.</p>
 </div>
 
 <section class="sec" id="guide">
@@ -579,8 +611,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
 <section class="sec pb" id="w2">
   <div class="sec-head"><span class="sec-badge">W2</span><h2 class="sec-title">2주차 · Geometric Camera Models<small>Part 1 Image Transformation · Part 2 Geometric Camera Model</small></h2></div>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">2-1</span><span class="mine">직접 정리</span><a class="q-src" href="computer-vision-week02-2.html#factors">2주차 00</a></div>
+<article class="q" data-k="2-1" data-w="2">
+  <div class="q-h"><span class="q-no">2-1</span><span class="mine">직접 정리</span><a class="q-src" href="computer-vision-week02-2.html#factors">2주차 00</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 이미지 형성의 네 요소에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 이미지 형성의 네 요소를 설명하고, Radiometry와 Photometry의 차이를 서술하시오.</li><li>Q. Digitization 과정에서 일어나는 두 가지 이산화(공간 · 밝기)를 설명하고, 이것이 노이즈 · 에일리어싱과 어떻게 이어지는지 서술하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -591,8 +623,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">2-2</span><span class="mine">직접 정리</span><a class="q-src" href="computer-vision-week02-2.html#warp">2주차 01</a></div>
+<article class="q" data-k="2-2" data-w="2">
+  <div class="q-h"><span class="q-no">2-2</span><span class="mine">직접 정리</span><a class="q-src" href="computer-vision-week02-2.html#warp">2주차 01</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 이미지 변환의 두 종류를 차이점 중심으로 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 필터링과 와핑의 차이를 설명하고, 각각이 어떤 기법(블러 · 에지 검출 / 호모그래피 · 파노라마)에 쓰이는지 서술하시오.</li><li>Q. 와핑에서 변환 함수가 하는 역할을 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -602,8 +634,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">2-3</span><span class="mine">직접 정리</span><a class="q-src" href="computer-vision-week02-2.html#warp">2주차 01</a></div>
+<article class="q" data-k="2-3" data-w="2">
+  <div class="q-h"><span class="q-no">2-3</span><span class="mine">직접 정리</span><a class="q-src" href="computer-vision-week02-2.html#warp">2주차 01</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 선형 변환의 성질을 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 선형 변환의 성질을 쓰고, 평행이동이 선형 연산이 아닌 이유를 설명하시오.</li><li>Q. 변환의 합성을 곱으로 표현하는 것이 왜 효율적인지 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -612,8 +644,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">2-4</span><span class="star">★ 중요</span><span class="mine">직접 정리</span><a class="q-src" href="computer-vision-week02-2.html#homog">2주차 02</a></div>
+<article class="q" data-k="2-4" data-w="2" data-star="1">
+  <div class="q-h"><span class="q-no">2-4</span><span class="star">★ 중요</span><span class="mine">직접 정리</span><a class="q-src" href="computer-vision-week02-2.html#homog">2주차 02</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 동차 좌표의 개념과 쓰이는 상황에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 동차 좌표가 평행이동 문제를 어떻게 해결하는지 설명하고, 원근 투영과 카메라 행렬에서 어떻게 활용되는지 서술하시오.</li><li>Q. 동차 좌표에서 (x, y, 1)과 (2x, 2y, 2)가 같은 점인 이유를 설명하고, 이것이 호모그래피의 자유도 8과 어떤 관계인지 서술하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -621,8 +653,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">2-5</span><span class="star">★ 중요</span><span class="mine">직접 정리 + 보완</span><a class="q-src" href="computer-vision-week02-2.html#table">2주차 03 · 04</a></div>
+<article class="q" data-k="2-5" data-w="2" data-star="1">
+  <div class="q-h"><span class="q-no">2-5</span><span class="star">★ 중요</span><span class="mine">직접 정리 + 보완</span><a class="q-src" href="computer-vision-week02-2.html#table">2주차 03 · 04</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 이미지 변환의 종류를 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 2D 이미지 변환을 자유도 순서로 나열하고, 각 변환이 보존하는 성질을 설명하시오.</li><li>Q. 아핀 변환과 투영 변환의 차이를 설명하고, 각각 대응점이 몇 쌍 필요한지 이유와 함께 서술하시오.</li><li>Q. 자유도가 필요한 대응점 수를 결정하는 이유를 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -633,8 +665,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">2-6</span><a class="q-src" href="computer-vision-week02-2.html#camera">2주차 05 · 06</a></div>
+<article class="q" data-k="2-6" data-w="2">
+  <div class="q-h"><span class="q-no">2-6</span><a class="q-src" href="computer-vision-week02-2.html#camera">2주차 05 · 06</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 카메라 모델이 무엇을 설명하는지, 그리고 3D에서 2D로의 투영에서 무엇을 잃고 무엇을 지키는지 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 카메라의 내부 파라미터와 외부 파라미터를 구분하고, 카메라 캘리브레이션이 무엇인지 설명하시오.</li><li>Q. 3D에서 2D로 투영될 때 잃는 것과 지키는 것을 쓰고, 소실점과 소실선을 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -643,8 +675,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">2-7</span><span class="mine">직접 정리 + 보완</span><a class="q-src" href="computer-vision-week02-2.html#pinhole">2주차 07~10</a></div>
+<article class="q" data-k="2-7" data-w="2">
+  <div class="q-h"><span class="q-no">2-7</span><span class="mine">직접 정리 + 보완</span><a class="q-src" href="computer-vision-week02-2.html#pinhole">2주차 07~10</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 핀홀 카메라 모델에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 핀홀 카메라에서 구멍 크기의 딜레마를 설명하고, 렌즈가 이를 어떻게 해결하는지 서술하시오.</li><li>Q. 피사계 심도의 개념을 설명하고, 조리개 크기가 심도와 밝기에 주는 영향을 서술하시오.</li><li>Q. 초점거리가 화각에 미치는 영향을 광각 · 망원으로 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -658,8 +690,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">2-8</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week02-2.html#pmat">2주차 11</a></div>
+<article class="q" data-k="2-8" data-w="2" data-star="1">
+  <div class="q-h"><span class="q-no">2-8</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week02-2.html#pmat">2주차 11</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 카메라 행렬 P가 만들어지는 과정을 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 카메라 행렬 P가 만들어지는 세 단계를 설명하고, 각 단계에 쓰이는 파라미터를 서술하시오.</li><li>Q. 카메라 행렬에서 동차 좌표가 하는 역할과, 자유도가 11인 이유를 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -669,8 +701,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">2-9</span><a class="q-src" href="computer-vision-week02-2.html#apps">2주차 12</a></div>
+<article class="q" data-k="2-9" data-w="2">
+  <div class="q-h"><span class="q-no">2-9</span><a class="q-src" href="computer-vision-week02-2.html#apps">2주차 12</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 카메라 영상에서 생기는 왜곡의 종류와 보정 방법을 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 원근 왜곡과 방사 왜곡의 원인을 비교하고, 각각의 보정 방법을 서술하시오.</li><li>Q. perspective rectification이 무엇이며 어떤 변환을 이용하는지 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -684,8 +716,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
 <section class="sec pb" id="w3">
   <div class="sec-head"><span class="sec-badge">W3</span><h2 class="sec-title">3주차 · Linear Filters<small>What is an image → Cross-correlation → Convolution → Edge detecting</small></h2></div>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">3-1</span><span class="mine">직접 정리 + 다듬음</span><a class="q-src" href="computer-vision-week03.html#image">3주차 00</a></div>
+<article class="q" data-k="3-1" data-w="3">
+  <div class="q-h"><span class="q-no">3-1</span><span class="mine">직접 정리 + 다듬음</span><a class="q-src" href="computer-vision-week03.html#image">3주차 00</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 이미지와 필터링이란 무엇인가</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 디지털 이미지를 함수로 보는 관점과 두 가지 이산화를 설명하고, 노이즈의 원인을 서술하시오.</li><li>Q. 필터링의 두 가지 목적(노이즈 감소 · 특징 추출)을 예와 함께 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -696,8 +728,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">3-2</span><a class="q-src" href="computer-vision-week03.html#lsi">3주차 01 · 02</a></div>
+<article class="q" data-k="3-2" data-w="3">
+  <div class="q-h"><span class="q-no">3-2</span><a class="q-src" href="computer-vision-week03.html#lsi">3주차 01 · 02</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 포인트 연산과 이웃 연산을 비교하고, 선형 시불변 필터가 무엇인지 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 포인트 연산으로 스무딩 · 샤프닝을 할 수 없는 이유를 설명하시오.</li><li>Q. 선형 시불변 필터에서 커널의 역할과 shift invariant의 의미를 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -706,8 +738,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">3-3</span><a class="q-src" href="computer-vision-week03.html#mean">3주차 03 · 04</a></div>
+<article class="q" data-k="3-3" data-w="3">
+  <div class="q-h"><span class="q-no">3-3</span><a class="q-src" href="computer-vision-week03.html#mean">3주차 03 · 04</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 평균 필터와 필터링 결과의 출력 크기에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 출력 크기 full · same · valid를 비교하고, 패딩과 stride의 역할을 설명하시오.</li><li>Q. 평균 필터의 동작과 결과를 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -715,8 +747,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
     <p><span class="lab">[출력 크기]</span>출력 크기는 세 가지다. <b>Full</b>은 <b>커널</b>이 한 칸이라도 겹치는 모든 위치를 계산해 출력이 가장 크고(f와 h 크기의 합), <b>Same</b>은 <b>패딩</b>(pad)을 넣어 입력 f와 같은 크기로 맞추며, <b>Valid</b>는 커널이 완전히 이미지 안에 들어오는 위치만 계산해 크기가 줄어든다(f와 h 크기의 차). 예를 들어 10×10 이미지에 3×3 커널을 valid로 적용하면 8×8이 되고, same으로 두려면 한 칸씩 패딩을 넣는다.</p>
   </details>
 </article>
-<article class="q">
-  <div class="q-h"><span class="q-no">3-4</span><span class="mine">질문 구성 직접</span><a class="q-src" href="computer-vision-week03.html#props">3주차 05</a></div>
+<article class="q" data-k="3-4" data-w="3">
+  <div class="q-h"><span class="q-no">3-4</span><span class="mine">질문 구성 직접</span><a class="q-src" href="computer-vision-week03.html#props">3주차 05</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 선형필터의 주요 성질을 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 선형 필터의 선형성과 시불변성을 설명하고, 모든 선형 시불변 연산이 컨볼루션으로 표현된다는 의미를 서술하시오.</li><li>Q. 샤프닝 커널이 만들어지는 원리를 언샤프 마스킹과 연결해 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -727,8 +759,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
     <p><span class="lab">[언샤프 마스킹]</span>이것이 <b>언샤프 마스킹</b>(<b>unsharp masking</b>)의 원리다. 흐린, 즉 &lsquo;unsharp&rsquo;한 버전을 마스크로 만들어 원본에서 빼서 디테일을 얻고, 그 디테일을 다시 원본에 더해 선명하게 만든다는 뜻에서 붙은 이름이다. 이름과 달리 결과는 <b>샤프닝</b>이며, <b>선형성</b> 덕분에 이 과정 전체(원본 두 배 − 블러)를 <b>커널</b> 하나로 합쳐 한 번에 적용할 수 있다.</p>
   </details>
 </article>
-<article class="q">
-  <div class="q-h"><span class="q-no">3-5</span><span class="mine">질문 구성 직접</span><a class="q-src" href="computer-vision-week03.html#mask">3주차 06</a></div>
+<article class="q" data-k="3-5" data-w="3">
+  <div class="q-h"><span class="q-no">3-5</span><span class="mine">질문 구성 직접</span><a class="q-src" href="computer-vision-week03.html#mask">3주차 06</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 마스크 크기는 어느 정도로 설정해야 하는가?</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 마스크 크기가 커질 때의 장단점을 설명하시오.</li><li>Q. 박스 필터에서 격자(네모) 자국이 생기는 이유와, 가우시안 필터가 이를 해결하는 방식을 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -738,8 +770,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">3-6</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week03.html#gauss">3주차 07 · 08</a></div>
+<article class="q" data-k="3-6" data-w="3" data-star="1">
+  <div class="q-h"><span class="q-no">3-6</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week03.html#gauss">3주차 07 · 08</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 가우시안 필터의 특징과 장점을 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 가우시안 필터의 장점을 쓰고, σ가 결과에 어떤 영향을 주는지 설명하시오.</li><li>Q. 분리 가능성(separability)이 무엇이며 연산량을 어떻게 줄이는지 설명하시오.</li><li>Q. 가우시안 필터가 이후 피라미드 · 에지 검출 · SIFT에서 어떻게 쓰이는지 서술하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -749,8 +781,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">3-7</span><a class="q-src" href="computer-vision-week03.html#nonlinear">3주차 09</a></div>
+<article class="q" data-k="3-7" data-w="3">
+  <div class="q-h"><span class="q-no">3-7</span><a class="q-src" href="computer-vision-week03.html#nonlinear">3주차 09</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 비선형 필터링, 특히 미디언 필터에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 소금 · 후추 노이즈에 선형 필터가 실패하는 이유와 미디언 필터가 효과적인 이유를 비교하시오.</li><li>Q. 미디언 필터가 비선형인 이유와 단점을 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -759,8 +791,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">3-8</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week03.html#conv">3주차 10</a></div>
+<article class="q" data-k="3-8" data-w="3" data-star="1">
+  <div class="q-h"><span class="q-no">3-8</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week03.html#conv">3주차 10</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. Convolution과 Cross-correlation을 비교하고, 컨볼루션의 성질을 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 컨볼루션과 교차 상관의 차이를 설명하고, 두 결과가 같아지는 경우를 쓰시오.</li><li>Q. 컨볼루션의 결합법칙이 에지 검출(가우시안의 미분)에 어떻게 활용되는지 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -769,8 +801,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">3-9</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week03.html#edge">3주차 11</a></div>
+<article class="q" data-k="3-9" data-w="3" data-star="1">
+  <div class="q-h"><span class="q-no">3-9</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week03.html#edge">3주차 11</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 에지 검출에 대해 설명하시오. (Prewitt, Sobel, DoG, LoG)</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 에지 검출에서 미분 전에 스무딩을 하는 이유를 설명하고, Prewitt와 Sobel의 차이를 서술하시오.</li><li>Q. DoG(Derivative of Gaussian)와 LoG를 비교하고, LoG에서 이중선이 나타나는 이유를 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -785,8 +817,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
 <section class="sec pb" id="w4">
   <div class="sec-head"><span class="sec-badge">W4</span><h2 class="sec-title">4주차 · Image Pyramids<small>Aliasing → Gaussian · Laplacian · Wavelet → Interpolation</small></h2></div>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">4-1</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week04.html#down">4주차 01</a></div>
+<article class="q" data-k="4-1" data-w="4" data-star="1">
+  <div class="q-h"><span class="q-no">4-1</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week04.html#down">4주차 01</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 다운샘플링 시 발생하는 에일리어싱과 그 해결 방법을 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 에일리어싱의 정의와 원인을 나이퀴스트 조건으로 설명하고, 해결 방법을 서술하시오.</li><li>Q. 다운샘플링에서 블러와 축소의 순서가 중요한 이유를 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -795,8 +827,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">4-2</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week04.html#gpyr">4주차 03</a></div>
+<article class="q" data-k="4-2" data-w="4" data-star="1">
+  <div class="q-h"><span class="q-no">4-2</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week04.html#gpyr">4주차 03</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 가우시안 피라미드에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 가우시안 피라미드의 구성 방법과 활용을 설명하시오.</li><li>Q. 가우시안 피라미드가 스케일 불변 검출에 어떻게 쓰이는지 설명하시오.</li><li>Q. 가우시안 피라미드만으로 원본을 복원할 수 없는 이유를 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -805,8 +837,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">4-3</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week04.html#lpyr">4주차 04</a></div>
+<article class="q" data-k="4-3" data-w="4" data-star="1">
+  <div class="q-h"><span class="q-no">4-3</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week04.html#lpyr">4주차 04</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 라플라시안 피라미드에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 라플라시안 피라미드의 각 층에 저장되는 것과 복원 과정을 설명하시오.</li><li>Q. 라플라시안 피라미드가 이미지 블렌딩 · 압축에 쓰이는 원리를 설명하시오.</li><li>Q. 가우시안 피라미드와 라플라시안 피라미드를 비교하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -815,8 +847,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">4-4</span><a class="q-src" href="computer-vision-week04.html#wavelet">4주차 05</a></div>
+<article class="q" data-k="4-4" data-w="4">
+  <div class="q-h"><span class="q-no">4-4</span><a class="q-src" href="computer-vision-week04.html#wavelet">4주차 05</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 웨이블릿 변환에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 웨이블릿 변환의 분해 방식을 설명하고, 라플라시안 피라미드와 비교하시오.</li><li>Q. 웨이블릿에서 근사(저주파)만 반복 분해하는 이유를 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -825,8 +857,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">4-5</span><a class="q-src" href="computer-vision-week04.html#interp">4주차 06</a></div>
+<article class="q" data-k="4-5" data-w="4">
+  <div class="q-h"><span class="q-no">4-5</span><a class="q-src" href="computer-vision-week04.html#interp">4주차 06</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 보간(Interpolation)에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 보간을 재구성 필터의 관점에서 설명하시오.</li><li>Q. 최근접 이웃 · 바이리니어 · 바이큐빅 보간을 비교하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -840,8 +872,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
 <section class="sec pb" id="w5">
   <div class="sec-head"><span class="sec-badge">W5</span><h2 class="sec-title">5주차 · Local Feature Detection<small>Local Features → Edge → Line(Hough) → Corner(Harris) → Blob(LoG · DoG)</small></h2></div>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">5-1</span><a class="q-src" href="computer-vision-week05.html#local">5주차 01</a></div>
+<article class="q" data-k="5-1" data-w="5">
+  <div class="q-h"><span class="q-no">5-1</span><a class="q-src" href="computer-vision-week05.html#local">5주차 01</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 로컬 특징이 무엇이며 왜 필요한지 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 로컬 특징을 다루는 세 단계(검출 · 기술 · 매칭)를 설명하고, 로컬 특징의 장점을 서술하시오.</li><li>Q. 로컬 특징의 네 종류(엣지 · 직선 · 코너 · 블롭)를 비교하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -850,8 +882,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">5-2</span><a class="q-src" href="computer-vision-week05.html#edge">5주차 02</a></div>
+<article class="q" data-k="5-2" data-w="5">
+  <div class="q-h"><span class="q-no">5-2</span><a class="q-src" href="computer-vision-week05.html#edge">5주차 02</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 엣지 검출의 원리와 과정을 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 그래디언트의 크기와 방향이 의미하는 것을 설명하시오.</li><li>Q. 엣지 검출의 세 단계(Filtering · Enhancement · Detection)와 그 사이의 trade-off를 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -860,8 +892,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">5-3</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week05.html#canny">5주차 03</a></div>
+<article class="q" data-k="5-3" data-w="5" data-star="1">
+  <div class="q-h"><span class="q-no">5-3</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week05.html#canny">5주차 03</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. Canny 엣지 검출기에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. Canny 엣지 검출의 네 단계를 설명하시오.</li><li>Q. Canny에서 비최대 억제는 무엇이며 왜 필요한지 설명하시오.</li><li>Q. 이력 임계값에서 임계값을 두 개 쓰는 이유를 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -870,8 +902,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">5-4</span><a class="q-src" href="computer-vision-week05.html#hough">5주차 04</a></div>
+<article class="q" data-k="5-4" data-w="5">
+  <div class="q-h"><span class="q-no">5-4</span><a class="q-src" href="computer-vision-week05.html#hough">5주차 04</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 허프 변환에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 허프 변환에서 파라미터 공간과 투표가 직선을 찾는 원리를 설명하시오.</li><li>Q. 직선을 (a, b) 대신 (ρ, θ)로 표현하는 이유를 설명하시오.</li><li>Q. 허프 변환이 잡음과 끊김에 강한 이유를 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -880,8 +912,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">5-5</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week05.html#harris">5주차 05 · 06</a></div>
+<article class="q" data-k="5-5" data-w="5" data-star="1">
+  <div class="q-h"><span class="q-no">5-5</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week05.html#harris">5주차 05 · 06</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 코너의 개념과 Harris 코너 검출기에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 창을 밀어 보는 방식으로 평탄 · 엣지 · 코너를 구분하고, 코너가 좋은 특징인 이유를 설명하시오.</li><li>Q. Harris에서 2차 모멘트 행렬의 고윳값으로 코너를 판정하는 원리를 설명하시오.</li><li>Q. Harris 코너 검출의 네 단계를 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -890,8 +922,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">5-6</span><a class="q-src" href="computer-vision-week05.html#invariance">5주차 07</a></div>
+<article class="q" data-k="5-6" data-w="5">
+  <div class="q-h"><span class="q-no">5-6</span><a class="q-src" href="computer-vision-week05.html#invariance">5주차 07</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. Harris 코너 검출기의 불변성에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. Harris 코너 검출기가 밝기 · 이동 · 회전에는 강하고 스케일에는 약한 이유를 설명하시오.</li><li>Q. Harris의 스케일 문제를 해결하는 방향을 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -900,8 +932,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">5-7</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week05.html#blob">5주차 08</a></div>
+<article class="q" data-k="5-7" data-w="5" data-star="1">
+  <div class="q-h"><span class="q-no">5-7</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week05.html#blob">5주차 08</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 블롭 검출에 대해 설명하시오. (LoG, 스케일 정규화, DoG)</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. LoG로 블롭의 크기(특성 스케일)를 찾는 원리를 설명하시오.</li><li>Q. 스케일 정규화가 필요한 이유를 설명하시오.</li><li>Q. 블롭 검출에서 LoG 대신 DoG를 쓰는 이유를 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -910,8 +942,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">5-8</span><a class="q-src" href="computer-vision-week05.html#covariant">5주차 09</a></div>
+<article class="q" data-k="5-8" data-w="5">
+  <div class="q-h"><span class="q-no">5-8</span><a class="q-src" href="computer-vision-week05.html#covariant">5주차 09</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 공변(covariant)과 불변(invariant)을 구분하고, 아핀 적응에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 공변과 불변을 구분하고, 검출기와 기술자에 각각 요구되는 이유를 설명하시오.</li><li>Q. 아핀 적응(정규화)이 무엇인지 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -925,8 +957,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
 <section class="sec pb" id="w6">
   <div class="sec-head"><span class="sec-badge">W6</span><h2 class="sec-title">6주차 · Feature Descriptors<small>Feature Description → SIFT · SURF · HOG → BRIEF · ORB</small></h2></div>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">6-1</span><a class="q-src" href="computer-vision-week06.html#why">6주차 01</a></div>
+<article class="q" data-k="6-1" data-w="6">
+  <div class="q-h"><span class="q-no">6-1</span><a class="q-src" href="computer-vision-week06.html#why">6주차 01</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 특징 기술자가 왜 필요하며, 좋은 특징의 조건은 무엇인지 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 특징 기술자가 필요한 이유와 좋은 특징의 네 가지 조건을 설명하시오.</li><li>Q. 기술자가 불변이면서 변별력이 있어야 하는 이유를 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -935,8 +967,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">6-2</span><a class="q-src" href="computer-vision-week06.html#why">6주차 01</a></div>
+<article class="q" data-k="6-2" data-w="6">
+  <div class="q-h"><span class="q-no">6-2</span><a class="q-src" href="computer-vision-week06.html#why">6주차 01</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 템플릿 매칭의 한계와, 기술자로 쓸 수 있는 세 가지 방법(Image patch, Image gradients, Color histogram)의 문제를 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 템플릿 매칭이 크기 · 회전 · 원근 · 조명 변화에 견딜 수 있는지 각각 설명하시오.</li><li>Q. Image patch, Image gradients, Color histogram의 장단점을 비교하고, SIFT가 이를 어떻게 절충했는지 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -945,8 +977,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">6-3</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week06.html#sift">6주차 02</a></div>
+<article class="q" data-k="6-3" data-w="6" data-star="1">
+  <div class="q-h"><span class="q-no">6-3</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week06.html#sift">6주차 02</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. SIFT에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. SIFT의 네 단계를 설명하고, 각 단계가 어떤 불변성을 만드는지 서술하시오.</li><li>Q. SIFT의 방향 할당과 80% 규칙을 설명하시오.</li><li>Q. SIFT 기술자가 128차원이 되는 과정과 정규화의 역할을 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -956,8 +988,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">6-4</span><a class="q-src" href="computer-vision-week06.html#surf">6주차 03</a></div>
+<article class="q" data-k="6-4" data-w="6">
+  <div class="q-h"><span class="q-no">6-4</span><a class="q-src" href="computer-vision-week06.html#surf">6주차 03</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. SURF에 대해 SIFT와 비교하여 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. SURF가 SIFT보다 빠른 이유를 적분 영상과 박스 필터 중심으로 설명하시오.</li><li>Q. SURF가 스케일 공간을 만드는 방식을 SIFT와 비교하시오.</li><li>Q. SURF 기술자에서 합과 절댓값의 합을 함께 쓰는 이유를 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -967,8 +999,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">6-5</span><a class="q-src" href="computer-vision-week06.html#hog">6주차 04</a></div>
+<article class="q" data-k="6-5" data-w="6">
+  <div class="q-h"><span class="q-no">6-5</span><a class="q-src" href="computer-vision-week06.html#hog">6주차 04</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. HOG에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. HOG의 단계를 설명하고, 블록 정규화의 역할을 서술하시오.</li><li>Q. HOG와 SIFT를 비교하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -977,8 +1009,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">6-6</span><a class="q-src" href="computer-vision-week06.html#brief">6주차 05</a></div>
+<article class="q" data-k="6-6" data-w="6">
+  <div class="q-h"><span class="q-no">6-6</span><a class="q-src" href="computer-vision-week06.html#brief">6주차 05</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. BRIEF와 BRISK에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. BRIEF의 이진 테스트와 해밍 거리 비교를 설명하시오.</li><li>Q. BRIEF가 회전 · 스케일에 약한 이유와 이를 보완한 방법을 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -987,8 +1019,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">6-7</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week06.html#orb">6주차 06</a></div>
+<article class="q" data-k="6-7" data-w="6" data-star="1">
+  <div class="q-h"><span class="q-no">6-7</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week06.html#orb">6주차 06</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. ORB에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. ORB가 FAST와 BRIEF의 약점을 보완한 방법을 설명하시오.</li><li>Q. ORB에서 밝기 중심(Intensity Centroid)으로 방향을 구하는 방법과 그 역할을 설명하시오.</li><li>Q. rBRIEF에서 비교 쌍을 학습으로 고르는 이유를 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -998,8 +1030,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">6-8</span><a class="q-src" href="computer-vision-week06.html#compare">6주차 07</a></div>
+<article class="q" data-k="6-8" data-w="6">
+  <div class="q-h"><span class="q-no">6-8</span><a class="q-src" href="computer-vision-week06.html#compare">6주차 07</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. SIFT, SURF, HOG, BRIEF, ORB를 비교하여 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 실수 기술자와 이진 기술자를 비교하고, 상황에 따라 무엇을 고를지 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -1012,8 +1044,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
 <section class="sec pb" id="w7">
   <div class="sec-head"><span class="sec-badge">W7</span><h2 class="sec-title">7주차 · Feature Matching &amp; Homography<small>Fitting · RANSAC → Image Alignment · Homography · Stitching</small></h2></div>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">7-1</span><a class="q-src" href="computer-vision-week07.html#fitting">7주차 01</a></div>
+<article class="q" data-k="7-1" data-w="7">
+  <div class="q-h"><span class="q-no">7-1</span><a class="q-src" href="computer-vision-week07.html#fitting">7주차 01</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 피팅이 무엇이며, 최소제곱 피팅과 그 한계를 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 피팅이 무엇이며, 최소제곱이 이상치에 약한 이유를 설명하시오.</li><li>Q. 세로 방향 최소제곱과 전체 최소제곱(TLS)을 비교하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -1022,8 +1054,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">7-2</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week07.html#ransac">7주차 02</a></div>
+<article class="q" data-k="7-2" data-w="7" data-star="1">
+  <div class="q-h"><span class="q-no">7-2</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week07.html#ransac">7주차 02</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. RANSAC에 대해 설명하시오. (단계, 파라미터, 장단점)</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. RANSAC의 단계를 설명하고, 각 파라미터(s, t, N, d)가 어떻게 활용되는지 서술하시오.</li><li>Q. RANSAC에서 최소 개수의 표본만 뽑는 이유를 설명하시오.</li><li>Q. RANSAC의 장단점과 마지막 재추정 단계의 의미를 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -1032,8 +1064,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">7-3</span><a class="q-src" href="computer-vision-week07.html#matcher">7주차 03 · 04</a></div>
+<article class="q" data-k="7-3" data-w="7">
+  <div class="q-h"><span class="q-no">7-3</span><a class="q-src" href="computer-vision-week07.html#matcher">7주차 03 · 04</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 매처의 종류와 영상 정렬(image alignment)에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. Brute-Force 매처와 FLANN 매처를 비교하시오.</li><li>Q. 영상 정렬이 피팅과 같은 문제인 이유와, 어파인 변환 피팅에 필요한 대응점 수를 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -1042,8 +1074,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">7-4</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week07.html#homo">7주차 05 · 06</a></div>
+<article class="q" data-k="7-4" data-w="7" data-star="1">
+  <div class="q-h"><span class="q-no">7-4</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week07.html#homo">7주차 05 · 06</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 호모그래피가 무엇이며, 어떤 경우에 쓸 수 있고 어떻게 구하는지 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 호모그래피의 정의와 자유도, 필요한 대응점 수를 설명하시오.</li><li>Q. 호모그래피를 쓸 수 있는 세 가지 경우를 설명하시오.</li><li>Q. DLT로 호모그래피를 구하는 과정을 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -1053,8 +1085,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">7-5</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week07.html#robust">7주차 07</a></div>
+<article class="q" data-k="7-5" data-w="7" data-star="1">
+  <div class="q-h"><span class="q-no">7-5</span><span class="star">★ 중요</span><a class="q-src" href="computer-vision-week07.html#robust">7주차 07</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. RANSAC으로 호모그래피를 추정하는 과정과 비율 검사에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 선형 최소제곱으로 호모그래피를 구할 때의 문제와 RANSAC이 이를 해결하는 방식을 설명하시오.</li><li>Q. 비율 검사가 무엇이며 RANSAC과 함께 어떻게 쓰이는지 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -1063,8 +1095,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">7-6</span><a class="q-src" href="computer-vision-week07.html#stitch">7주차 08</a></div>
+<article class="q" data-k="7-6" data-w="7">
+  <div class="q-h"><span class="q-no">7-6</span><a class="q-src" href="computer-vision-week07.html#stitch">7주차 08</a><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 이미지 스티칭(파노라마)과 블렌딩에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 파노라마 스티칭의 과정을 설명하시오.</li><li>Q. 이음새가 생기는 원인을 쓰고, 페더링과 다중 대역 블렌딩을 비교하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -1078,8 +1110,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
 <section class="sec pb" id="cross">
   <div class="sec-head"><span class="sec-badge">MIX</span><h2 class="sec-title">주차를 엮는 문제<small>한 주제를 여러 주차의 교안으로 이어 쓰기</small></h2></div>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">X-1</span><span class="q-wk">2 · 3 · 4 · 5 · 6 · 7주차</span></div>
+<article class="q" data-k="X-1" data-w="X">
+  <div class="q-h"><span class="q-no">X-1</span><span class="q-wk">2 · 3 · 4 · 5 · 6 · 7주차</span><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 두 장의 사진으로 파노라마를 만드는 과정을 지금까지 배운 내용과 엮어 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 파노라마 한 장이 만들어지기까지 각 주차의 개념이 어떻게 쓰이는지 설명하시오.</li><li>Q. 가우시안이 각 주차에서 어떤 역할로 쓰였는지 설명하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -1088,8 +1120,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
   </details>
 </article>
 
-<article class="q">
-  <div class="q-h"><span class="q-no">X-2</span><span class="q-wk">4 · 5 · 6주차</span></div>
+<article class="q" data-k="X-2" data-w="X">
+  <div class="q-h"><span class="q-no">X-2</span><span class="q-wk">4 · 5 · 6주차</span><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 크기(스케일) 변화에 대응하는 방법들을 엮어 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 스케일 변화에 대응하는 방법들을 비교하시오.</li><li>Q. 회전 변화에 대응하는 방법들(SIFT · SURF · ORB)을 비교하시오.</li></ul></div>
   <details class="ans" open><summary>답</summary>
@@ -1212,14 +1244,71 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <script>
-/* 답 접기 · 펴기 (연습 모드) — 인쇄할 때는 항상 모두 편다 */
+/* 주차 슬라이서 · ★ 중요 · 북마크 (이 브라우저에 저장) · 답 접기 — 인쇄할 때는 모두 펴고 필터를 무시한다 */
 (function () {
+  var KEY = 'cv-mid-essay-v1';
+  var st = { weeks: [], star: false, bmOnly: false, bm: {} };
+  try { var sv = JSON.parse(localStorage.getItem(KEY) || '{}');
+    if (sv.bm) st.bm = sv.bm; if (Array.isArray(sv.weeks)) st.weeks = sv.weeks; } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify({ bm: st.bm, weeks: st.weeks })); } catch (e) {} }
+  var cards = [].slice.call(document.querySelectorAll('article.q[data-k]'));
+  var WEEKS = [['2','2주차'],['3','3주차'],['4','4주차'],['5','5주차'],['6','6주차'],['7','7주차'],['X','엮는 문제']];
+  var bar = document.getElementById('fbar'), tab = document.getElementById('tabbar');
+  function place() { bar.style.top = window.innerWidth >= 720 ? (tab ? tab.offsetHeight : 0) + 'px' : ''; }
+  place(); window.addEventListener('resize', place);
+  function chip(label, n, on, fn) {
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'chip';
+    b.textContent = label; if (n != null) { var c = document.createElement('span'); c.className = 'c'; c.textContent = n; b.appendChild(c); }
+    b.setAttribute('aria-pressed', on); b.onclick = fn; return b;
+  }
+  function count(w) { return cards.filter(function (c) { return (!w || c.dataset.w === w) && (!st.star || c.dataset.star) && (!st.bmOnly || st.bm[c.dataset.k]); }).length; }
+  function render() {
+    var box = document.getElementById('wkchips'); box.innerHTML = '';
+    box.appendChild(chip('전체', count(null), st.weeks.length === 0, function () { st.weeks = []; update(); }));
+    WEEKS.forEach(function (w) {
+      box.appendChild(chip(w[1], count(w[0]), st.weeks.indexOf(w[0]) >= 0, function () {
+        var i = st.weeks.indexOf(w[0]); if (i >= 0) st.weeks.splice(i, 1); else st.weeks.push(w[0]); update(); }));
+    });
+    document.getElementById('fStar').setAttribute('aria-pressed', st.star);
+    document.getElementById('fBm').setAttribute('aria-pressed', st.bmOnly);
+    document.getElementById('fBm').textContent = '북마크 ' + Object.keys(st.bm).length;
+  }
+  function apply() {
+    var shown = 0, filtering = st.weeks.length || st.star || st.bmOnly;
+    cards.forEach(function (c) {
+      var on = (!st.weeks.length || st.weeks.indexOf(c.dataset.w) >= 0) && (!st.star || c.dataset.star) && (!st.bmOnly || st.bm[c.dataset.k]);
+      c.hidden = !on; if (on) shown++;
+      var b = c.querySelector('.bm'), m = !!st.bm[c.dataset.k];
+      b.setAttribute('aria-pressed', m); b.title = m ? '북마크 해제' : '북마크'; b.setAttribute('aria-label', b.title);
+      c.classList.toggle('is-bm', m);
+    });
+    document.querySelectorAll('.sec').forEach(function (s) {
+      var qs = s.querySelectorAll('article.q[data-k]');
+      if (qs.length) s.hidden = ![].some.call(qs, function (c) { return !c.hidden; });
+      else s.hidden = !!filtering;           /* 안내 · 비교표는 필터를 쓰는 동안 숨긴다 */
+    });
+    document.getElementById('fstat').textContent = shown + ' / ' + cards.length + '문항 표시';
+    document.getElementById('fempty').hidden = !(st.bmOnly && !Object.keys(st.bm).length);
+  }
+  function update() { save(); render(); apply(); }
+  cards.forEach(function (c) {
+    c.querySelector('.bm').addEventListener('click', function (e) {
+      e.stopPropagation(); var k = c.dataset.k;
+      if (st.bm[k]) delete st.bm[k]; else st.bm[k] = 1; update();
+    });
+  });
+  document.getElementById('fStar').onclick = function () { st.star = !st.star; update(); };
+  document.getElementById('fBm').onclick = function () { st.bmOnly = !st.bmOnly; update(); };
   var all = document.querySelectorAll('details.ans');
   function setAll(open) { all.forEach(function (d) { d.open = open; }); }
-  var f = document.getElementById('fold-all'), o = document.getElementById('open-all');
-  if (f) f.addEventListener('click', function () { setAll(false); });
-  if (o) o.addEventListener('click', function () { setAll(true); });
-  window.addEventListener('beforeprint', function () { setAll(true); });
+  document.getElementById('fold-all').onclick = function () { setAll(false); };
+  document.getElementById('open-all').onclick = function () { setAll(true); };
+  window.addEventListener('beforeprint', function () {
+    setAll(true);
+    document.querySelectorAll('.sec[hidden], article.q[hidden]').forEach(function (x) { x.hidden = false; });
+  });
+  window.addEventListener('afterprint', apply);
+  update();
 })();
 </script>
 
