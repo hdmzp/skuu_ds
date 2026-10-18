@@ -519,6 +519,12 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
 .tool[aria-pressed="true"]{color:var(--accent);border-color:var(--accent);background:var(--accent-light)}
 #fStar[aria-pressed="true"]{color:#713f12;border-color:#eab308;background:#fef9c3}
 .fstat{font-size:11.5px;color:var(--muted);margin-left:auto}
+.sync{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);margin:0}
+.sync i{width:7px;height:7px;border-radius:50%;background:#b6b0a5;flex:none}
+.sync.on i{background:#16a34a}
+.sync.err i{background:#dc2626}
+.sync a{color:var(--accent);font-weight:700;text-decoration:none}
+.sync a:hover{text-decoration:underline}
 .fempty{font-size:12.5px;color:var(--muted);padding:2px 0}
 .bm{margin-left:auto;flex:none;border:1px solid var(--border);background:transparent;border-radius:8px;width:32px;height:28px;display:grid;place-items:center;cursor:pointer;color:var(--muted)}
 .q-src + .bm{margin-left:0}
@@ -529,8 +535,8 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
 .q.is-bm{box-shadow:inset 3px 0 0 var(--accent)}
 .sec[hidden],.q[hidden]{display:none!important}
 @media print{.fbar,.bm{display:none!important}}
-.star{display:inline-block;transform:rotate(-4deg);background:#fde047;color:#713f12;border:1.5px solid #eab308;font-size:11px;font-weight:900;padding:3px 9px;border-radius:6px;box-shadow:1px 2px 0 #ca8a04;letter-spacing:.02em}
-.q:has(.q-h .star){border-top-color:#eab308}
+.star{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;color:#92400e;background:#fef3c7;border:1px solid #fcd34d;border-radius:999px;padding:2px 9px 2px 7px;line-height:1.45;white-space:nowrap}
+.q:has(.q-h .star){border-top-color:#f2b53c}
 .cand{margin:9px 0 2px;background:#fafaf7;border:1px dashed #d6d3c9;border-radius:8px;padding:9px 12px}
 .cand b{display:block;font-size:11.5px;font-weight:800;color:var(--muted);margin-bottom:3px}
 .cand ul{list-style:none;display:flex;flex-direction:column;gap:3px}
@@ -592,6 +598,7 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
     <button type="button" class="tool" id="open-all">답 펴기</button>
     <span class="fstat" id="fstat"></span>
   </div>
+  <p class="sync" id="sync"><i></i><span>북마크는 이 브라우저에 저장됩니다</span></p>
   <p class="fempty" id="fempty" hidden>아직 북마크한 문항이 없습니다. 문항 오른쪽 위의 책갈피 버튼을 눌러 추가하세요.</p>
 </div>
 
@@ -1247,10 +1254,56 @@ document.addEventListener('DOMContentLoaded', function () {
 /* 주차 슬라이서 · ★ 중요 · 북마크 (이 브라우저에 저장) · 답 접기 — 인쇄할 때는 모두 펴고 필터를 무시한다 */
 (function () {
   var KEY = 'cv-mid-essay-v1';
-  var st = { weeks: [], star: false, bmOnly: false, bm: {} };
+  var CLAUDE_URL = 'https://claude.ai/artifact/RjSFL46Th1dr9GDapSkPFb';   /* 계정 동기화 버전(claude.ai) */
+  var st = { weeks: [], star: false, bmOnly: false, bm: {}, pending: false };
   try { var sv = JSON.parse(localStorage.getItem(KEY) || '{}');
-    if (sv.bm) st.bm = sv.bm; if (Array.isArray(sv.weeks)) st.weeks = sv.weeks; } catch (e) {}
-  function save() { try { localStorage.setItem(KEY, JSON.stringify({ bm: st.bm, weeks: st.weeks })); } catch (e) {} }
+    if (sv.bm) st.bm = sv.bm; if (Array.isArray(sv.weeks)) st.weeks = sv.weeks; st.pending = !!sv.pending; } catch (e) {}
+  function saveLocal() { try { localStorage.setItem(KEY, JSON.stringify({ bm: st.bm, weeks: st.weeks, pending: st.pending })); } catch (e) {} }
+
+  /* ---- Claude 계정 저장소: claude.ai에서 열었을 때만 연결된다 ---- */
+  var ref = null, writing = false, again = false;
+  function syncMsg(cls, txt, link) {
+    var el = document.getElementById('sync'); el.className = 'sync ' + (cls || '');
+    var t = el.querySelector('span'); t.textContent = txt;
+    var old = el.querySelector('a'); if (old) old.remove();
+    if (link) { var a = document.createElement('a'); a.href = link[1]; a.target = '_blank'; a.rel = 'noopener'; a.textContent = link[0]; el.appendChild(a); }
+  }
+  async function push() {
+    if (!ref) return;
+    if (writing) { again = true; return; }
+    writing = true; again = false; syncMsg('', '저장 중…');
+    try { await ref.set({ bm: st.bm, at: Date.now() }); st.pending = false; saveLocal();
+      syncMsg('on', 'Claude 계정에 저장됨 · 다른 기기에서도 같은 북마크'); }
+    catch (e) { syncMsg('err', '계정 저장 실패 · 이 브라우저에는 저장됨'); }
+    writing = false; if (again) push();
+  }
+  async function initCloud() {
+    var hasClaude = window.claude && typeof window.claude.use === 'function';
+    if (!hasClaude) {
+      if (CLAUDE_URL.indexOf('http') === 0) syncMsg('', '북마크는 이 브라우저에 저장됩니다 ·', ['기기 간 동기화 버전(Claude 로그인) 열기 ↗', CLAUDE_URL]);
+      return;
+    }
+    syncMsg('', 'Claude 계정에 연결하는 중…');
+    try {
+      var db = await window.claude.use('db'), user = await window.claude.use('user');
+      var id = user && await user.id();
+      if (!db || !id) { syncMsg('', 'Claude에 로그인하면 북마크가 계정에 저장됩니다 · 지금은 이 브라우저에만 저장'); return; }
+      ref = db.doc('data/users/' + id + '/bookmarks');
+      var snap = await ref.get(), d = snap.exists ? (snap.data() || {}) : {};
+      var cloudBm = d.bm || {};
+      /* 계정 기록이 기준. 이 브라우저에서 연결 전에 바꾼 것이 있으면 합친다 */
+      var merged = st.pending ? Object.assign({}, cloudBm, st.bm) : Object.assign({}, cloudBm);
+      var changed = JSON.stringify(merged) !== JSON.stringify(cloudBm);
+      st.bm = merged; saveLocal(); render(); apply();
+      if (changed || !snap.exists) push(); else syncMsg('on', 'Claude 계정에 저장됨 · 다른 기기에서도 같은 북마크');
+      ref.onSnapshot(function (s) {
+        if (!s.exists || s.metadata.hasPendingWrites || writing) return;
+        var bm = (s.data() || {}).bm || {};
+        if (JSON.stringify(bm) === JSON.stringify(st.bm)) return;
+        st.bm = Object.assign({}, bm); saveLocal(); render(); apply();
+      }, function () { syncMsg('err', '실시간 동기화가 끊김 · 새로고침하면 다시 연결됩니다'); });
+    } catch (e) { syncMsg('err', '계정 저장소에 연결하지 못함 · 이 브라우저에는 저장됨'); }
+  }
   var cards = [].slice.call(document.querySelectorAll('article.q[data-k]'));
   var WEEKS = [['2','2주차'],['3','3주차'],['4','4주차'],['5','5주차'],['6','6주차'],['7','7주차'],['X','엮는 문제']];
   var bar = document.getElementById('fbar'), tab = document.getElementById('tabbar');
@@ -1290,11 +1343,12 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('fstat').textContent = shown + ' / ' + cards.length + '문항 표시';
     document.getElementById('fempty').hidden = !(st.bmOnly && !Object.keys(st.bm).length);
   }
-  function update() { save(); render(); apply(); }
+  function update() { saveLocal(); render(); apply(); }
   cards.forEach(function (c) {
     c.querySelector('.bm').addEventListener('click', function (e) {
       e.stopPropagation(); var k = c.dataset.k;
-      if (st.bm[k]) delete st.bm[k]; else st.bm[k] = 1; update();
+      if (st.bm[k]) delete st.bm[k]; else st.bm[k] = 1;
+      if (!ref) st.pending = true; update(); push();
     });
   });
   document.getElementById('fStar').onclick = function () { st.star = !st.star; update(); };
@@ -1309,6 +1363,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   window.addEventListener('afterprint', apply);
   update();
+  initCloud();
 })();
 </script>
 
