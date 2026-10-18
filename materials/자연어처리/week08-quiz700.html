@@ -139,6 +139,7 @@ h1{font-size:26px;line-height:1.3;margin:0;letter-spacing:-.02em;text-wrap:balan
 .bar .mini{display:none;align-items:center;gap:10px;font-size:13px;color:var(--muted);min-width:0}
 .bar .mini span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bar .mini b{color:var(--ink);font-family:var(--f-mono);font-weight:600}
+.bar .fold{justify-self:end}
 .bar.is-collapsed{padding-block:7px}
 .bar.is-collapsed .rows{display:none}
 .bar.is-collapsed .mini{display:flex}
@@ -191,6 +192,7 @@ h1{font-size:26px;line-height:1.3;margin:0;letter-spacing:-.02em;text-wrap:balan
         <input class="search" id="q" type="search" placeholder="문제·보기 검색" aria-label="문제 검색">
       </div>
       <div class="status" id="status"></div>
+      <button class="tool fold" id="collapse" aria-label="필터 접기" hidden>필터 접기 ▴</button>
     </div>
   </div>
 
@@ -480,11 +482,11 @@ function renderMini(list){
   const b = el("b",null,list.length+"문제"); t.append(b, " · 풀이 "+done+"/"+solv.length);
 }
 const bar = $("#bar"); let lastY = window.scrollY, pinOpen = false, anchorY = 0;
-function setCollapsed(on){ bar.classList.toggle("is-collapsed", on); }
+function setCollapsed(on){ bar.classList.toggle("is-collapsed", on); $("#collapse").hidden = on || !pinOpen; }
 window.addEventListener("scroll", ()=>{
   const y = window.scrollY, top = $(".views").offsetTop + $(".views").offsetHeight + 80;
   if (Date.now() < quietUntil){ anchorY = lastY = y; return; }
-  if (st.view!=="quiz" || y < top){ setCollapsed(false); pinOpen=false; lastY=y; return; }
+  if (st.view!=="quiz" || y < top){ pinOpen=false; setCollapsed(false); lastY=y; return; }
   if (pinOpen){ if (y - anchorY > 60){ pinOpen=false; setCollapsed(true); } }
   else if (y > lastY + 6) setCollapsed(true);
   lastY = y;
@@ -492,6 +494,10 @@ window.addEventListener("scroll", ()=>{
 let quietUntil = 0;
 $("#expand").onclick = ()=>{
   pinOpen = true; setCollapsed(false); quietUntil = Date.now()+400;
+  requestAnimationFrame(()=>{ anchorY = lastY = window.scrollY; });
+};
+$("#collapse").onclick = ()=>{
+  pinOpen = false; setCollapsed(true); quietUntil = Date.now()+400;
   requestAnimationFrame(()=>{ anchorY = lastY = window.scrollY; });
 };
 
