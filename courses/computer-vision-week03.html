@@ -317,6 +317,33 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .fnc dt{font-weight:700;color:var(--ink)}
 .fnc dd{color:#4b5563}
 @media(max-width:440px){.fnc dl{grid-template-columns:1fr;gap:2px}.fnc dd{margin-bottom:6px}}
+
+/* ===== 슬라이드 확대 보기 ===== */
+#lb{position:fixed;inset:0;background:rgba(9,15,31,.94);display:none;align-items:center;justify-content:center;
+  z-index:400;padding:52px 60px 64px;cursor:zoom-out;-webkit-user-select:none;user-select:none}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:80vh;border-radius:8px;background:#fff;box-shadow:0 18px 50px rgba(0,0,0,.45);cursor:default}
+#lb .cap{position:absolute;left:0;right:0;bottom:18px;text-align:center;color:#d9e1f3;font-size:12.5px;line-height:1.6;padding:0 20px;cursor:default}
+#lb .cap b{color:#fff}
+#lb .cap .num{display:block;font-size:11px;color:#9fb0d4;margin-top:4px;letter-spacing:.04em}
+#lb button{
+  position:absolute;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;
+  border-radius:50%;width:44px;height:44px;font-size:20px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .15s;
+  font-family:inherit;padding:0;
+}
+#lb button:hover{background:rgba(255,255,255,.22)}
+#lb button:disabled{opacity:.25;cursor:default}
+#lb .prev{left:12px;top:50%;transform:translateY(-50%)}
+#lb .next{right:12px;top:50%;transform:translateY(-50%)}
+#lb .x{right:12px;top:12px;width:38px;height:38px;font-size:17px}
+@media(max-width:560px){
+  #lb{padding:48px 10px 92px}
+  #lb .prev{left:50%;top:auto;bottom:16px;transform:translateX(-64px)}
+  #lb .next{right:50%;top:auto;bottom:16px;transform:translateX(64px)}
+  #lb .cap{bottom:70px}
+}
+figure.fig img{cursor:zoom-in}
 </style>
 </head>
 <body id="top">
@@ -615,8 +642,8 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 
 <div class="note-box"><ul class="ul">
   <li>평균 필터의 <b>특수한 경우</b> — 계수가 <b>2D 가우시안의 표본</b>이다</li>
-  <li>필기 : <span class="hw">필터를 사용하되 센터로부터 원형 형태를 유지하면서 최대한 부드럽게</span> 만든다.
-    <span class="hw">센터에는 가중치를 많이 두고 멀어질수록 가중치를 적게 두며, 가장자리로 갈수록 weight가 줄어든다</span></li>
+  <li>필기 : <span class="hw">필터를 사용하되 중심(센터)으로부터 원형 형태를 유지하면서 최대한 부드럽게</span> 만든다.
+    <span class="hw">중심에는 가중치를 많이 두고 멀어질수록 가중치를 적게 두며, 가장자리로 갈수록 가중치가 줄어든다</span></li>
   <li><b>표준편차 σ</b>가 스무딩의 정도를 결정한다 — 필기 : <span class="hw">표준편차를 이용해서 거리를 통제한다. 표준편차가 클수록 활용 거리가 넓어진다.</span></li>
 </ul></div>
 <figure class="fig"><img width="1333" height="683" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-19-gaussian-kernel.jpg" alt="교안 31p — 2D 가우시안 수식과 σ=2, σ=5일 때의 커널을 3차원 곡면으로 그린 그래프"><figcaption>교안 31p — <b>f(i, j) = (1 / 2πσ²) · e<sup>−(i²+j²)/2σ²</sup></b> · σ = 2와 σ = 5인 30×30 필터의 모양 비교</figcaption></figure>
@@ -770,7 +797,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <figure class="fig"><img width="992" height="545" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-36-prewitt-v.png" alt="교안 54p — 세로 에지를 찾는 Prewitt 마스크"><figcaption>교안 54p — <b>(vertical) Prewitt</b> : 박스 필터 [1 1 1]<sup>T</sup>와 [−1 0 1]의 <b>외적</b></figcaption></figure>
   <figure class="fig"><img width="1038" height="545" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-37-prewitt-h.png" alt="교안 55p — 가로 에지를 찾는 Prewitt 마스크"><figcaption>교안 55p — <b>(horizontal) Prewitt</b> : 방향을 90° 돌린 같은 구조</figcaption></figure>
 </div>
-<div class="note-box">필기에서 <span class="hw">vertical과 horizontal을 나눠서 설명</span>한 그대로다.
+<div class="note-box">필기에서 <span class="hw">세로(vertical)와 가로(horizontal)를 나눠서 설명</span>한 그대로다.
 한 축으로는 <b>[1 1 1] 스무딩</b>이, 다른 축으로는 <b>[−1 0 1] 미분</b>이 동시에 일어난다 — 이것이 &ldquo;노이즈 제거 + 에지 검출&rdquo;을 한 마스크에 담은 형태다.</div>
 
 <h3 class="sub-title">Sobel 에지 검출기</h3>
@@ -854,7 +881,7 @@ Prewitt의 [1 1 1] 스무딩이 Sobel에서는 <b>[1 2 1]</b>이 된다. 가운�
 </div>
 <div class="tip"><b>주의</b> — <code>cv2.filter2D()</code>는 이름과 달리 <b>컨볼루션이 아니라 교차 상관</b>을 계산한다.
 진짜 컨볼루션이 필요하면 커널을 <code>cv2.flip(kernel, -1)</code>로 <b>상하좌우 뒤집어</b> 넣어야 한다 — 교안 44p의 &ldquo;flip the filter in both dimensions&rdquo; 그대로다.
-<span style="color:#6b7280">(위 정리는 링크의 튜토리얼 내용을 교안 개념에 맞춰 요약한 것이다. 실제 코드와 결과 이미지는 링크에서 확인하세요.)</span></div>
+<span style="color:#6b7280">(위 정리는 링크의 튜토리얼 내용을 교안 개념에 맞춰 요약한 것이다. 실제 코드와 결과 이미지는 링크에서 확인할 수 있다.)</span></div>
 </section>
 
 <!-- ==================================================================== -->
@@ -986,7 +1013,7 @@ img[dst &gt; 0.01*dst.max()] = [0, 0, 255]           <span class="cm"># 코너 �
   <thead><tr><th>인자</th><th>뜻</th></tr></thead>
   <tbody>
     <tr><td><code>blockSize</code> = 2</td><td>코너인지 판단할 때 함께 보는 <b>주변부 창 크기</b>. 크면 넓은 영역의 구조를 보므로 잔코너가 줄어든다</td></tr>
-    <tr><td><code>ksize</code> = 3</td><td>내부에서 gradient를 구할 때 쓰는 <b>Sobel 커널 크기</b> — 교안 11의 Sobel이 그대로 쓰인다</td></tr>
+    <tr><td><code>ksize</code> = 3</td><td>내부에서 그래디언트를 구할 때 쓰는 <b>Sobel 커널 크기</b> — 교안 11의 Sobel이 그대로 쓰인다</td></tr>
     <tr><td><code>k</code> = 0.04</td><td>Harris 응답식의 <b>자유 파라미터</b>(보통 0.04~0.06). 작을수록 코너를 후하게 잡는다</td></tr>
     <tr><td>반환 <code>dst</code></td><td>좌표 목록이 아니라 <b>픽셀마다의 &lsquo;코너 점수&rsquo; 이미지</b>. 그래서 직접 임계값을 정해 걸러야 한다</td></tr>
   </tbody>
@@ -1330,6 +1357,160 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('scroll', hide, { passive: true });
   window.addEventListener('resize', hide);
 });
+</script>
+
+<script>
+/* 슬라이드 확대 보기 — 좌우 이동 · 닫으면 보던 자리로 */
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.sld, figure.fig'));
+  if (!slides.length) return;
+
+  var lb = document.createElement('div');
+  lb.id = 'lb';
+  lb.innerHTML =
+    '<button class="prev" type="button" aria-label="이전 슬라이드">&#10094;</button>' +
+    '<img alt="">' +
+    '<button class="next" type="button" aria-label="다음 슬라이드">&#10095;</button>' +
+    '<button class="x" type="button" aria-label="닫기">&#10005;</button>' +
+    '<p class="cap"></p>';
+  document.body.appendChild(lb);
+
+  var big = lb.querySelector('img'),
+      cap = lb.querySelector('.cap'),
+      bPrev = lb.querySelector('.prev'),
+      bNext = lb.querySelector('.next'),
+      bX = lb.querySelector('.x');
+
+  var idx = -1, openedIdx = -1, savedY = 0, pushed = false, prevRestore = null;
+
+  function lock() {
+    savedY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    document.body.style.position = 'fixed';
+    document.body.style.top = (-savedY) + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  /* html{scroll-behavior:smooth} 때문에 되돌아갈 때 화면이 흘러가지 않도록 잠깐 끈다 */
+  function instantly(fn) {
+    var de = document.documentElement, prev = de.style.scrollBehavior;
+    de.style.scrollBehavior = 'auto';
+    fn();
+    void de.offsetHeight;
+    de.style.scrollBehavior = prev;
+  }
+  function unlock() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    var target = (idx >= 0 && idx !== openedIdx) ? slides[idx] : null;
+    function place() {
+      instantly(function () {
+        window.scrollTo(0, savedY);
+        /* 넘겨 본 슬라이드가 있으면 그 슬라이드 자리로, 아니면 보던 자리 그대로 */
+        if (target) target.scrollIntoView({ block: 'center' });
+      });
+    }
+    place();
+    /* 기기 뒤로가기로 닫을 때 브라우저가 옛 스크롤을 덮어쓰므로 한 프레임 뒤 한 번 더 */
+    if (window.requestAnimationFrame) window.requestAnimationFrame(place);
+    setTimeout(place, 0);
+  }
+
+  function preload(i) {
+    if (i < 0 || i >= slides.length) return;
+    var im = slides[i].querySelector('img');
+    if (im) { var p = new Image(); p.src = im.currentSrc || im.src; }
+  }
+
+  function render(i) {
+    idx = i;
+    var f = slides[i], im = f.querySelector('img'), fc = f.querySelector('figcaption');
+    big.src = im.currentSrc || im.src;
+    big.alt = im.alt || '';
+    cap.innerHTML = '';
+    cap.appendChild(document.createTextNode(fc ? fc.textContent : ''));
+    var num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = (i + 1) + ' / ' + slides.length + ' · ← → 로 넘기기';
+    cap.appendChild(num);
+    bPrev.disabled = (i === 0);
+    bNext.disabled = (i === slides.length - 1);
+    preload(i + 1); preload(i - 1);
+  }
+
+  function open(i) {
+    openedIdx = i;
+    lock();
+    render(i);
+    lb.classList.add('on');
+    if (!pushed && window.history && window.history.pushState) {
+      try {
+        if ('scrollRestoration' in window.history && prevRestore === null) {
+          prevRestore = window.history.scrollRestoration;
+          window.history.scrollRestoration = 'manual';
+        }
+        window.history.pushState({ lb: 1 }, '');
+        pushed = true;
+      } catch (e) { pushed = false; }
+    }
+  }
+  function closeNow() {
+    if (!lb.classList.contains('on')) return;
+    lb.classList.remove('on');
+    unlock();
+    idx = openedIdx = -1;
+    if (prevRestore !== null) {
+      try { window.history.scrollRestoration = prevRestore; } catch (e) {}
+      prevRestore = null;
+    }
+  }
+  function closeByUser() {
+    if (pushed) { pushed = false; window.history.back(); }  /* popstate 가 닫는다 */
+    else { closeNow(); }
+  }
+  function go(step) {
+    var n = idx + step;
+    if (n < 0 || n >= slides.length) return;
+    render(n);
+  }
+
+  slides.forEach(function (f, i) {
+    f.addEventListener('click', function () { open(i); });
+  });
+
+  bPrev.addEventListener('click', function (e) { e.stopPropagation(); go(-1); });
+  bNext.addEventListener('click', function (e) { e.stopPropagation(); go(1); });
+  bX.addEventListener('click', function (e) { e.stopPropagation(); closeByUser(); });
+  big.addEventListener('click', function (e) { e.stopPropagation(); });
+  cap.addEventListener('click', function (e) { e.stopPropagation(); });
+  lb.addEventListener('click', closeByUser);
+
+  window.addEventListener('popstate', function () {
+    if (lb.classList.contains('on')) { pushed = false; closeNow(); }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('on')) return;
+    if (e.key === 'Escape') { e.preventDefault(); closeByUser(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+  });
+
+  /* 모바일 — 좌우로 쓸어 넘기기 */
+  var tx = 0, ty = 0;
+  lb.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) return;
+    tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+  }, { passive: true });
+  lb.addEventListener('touchend', function (e) {
+    if (!e.changedTouches.length) return;
+    var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
 </script>
 
 </body>

@@ -498,7 +498,7 @@ table.acc{min-width:0}
   <i><span class="bdg bdg-gyo">교안</span><span>교수님 슬라이드에 있는 내용</span></i>
   <i><span class="bdg bdg-flip">플립러닝</span><span>사전 강의(1 · 2부)에서 말로 설명한 내용 — 제목에 교안 뱃지와 함께 붙은 곳은 둘을 하나로 이어 풀어 쓴 것</span></i>
   <i><span class="bdg bdg-plus">보충설명</span><span>교안에 없지만 이해 · 시험을 위해 따로 찾아 정리한 내용</span></i>
-  <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선</span>이 있는 말은 누르면 뜻이 뜹니다.</p>
+  <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜬다.">파란 점선</span>이 있는 말은 누르면 뜻이 뜬다.</p>
 </div>
 
 <section class="sec" id="map">
@@ -1106,7 +1106,7 @@ table.acc{min-width:0}
     <div class="step"><i>4</i><span>90 · 85는 약한 구간이지만 강한 엣지까지 <b>low 이상으로 이어지는 길이 없다</b>(40에서 끊김) → <b>버림</b></span></div>
     <div class="ex-ans">결과: 앞의 7개가 하나의 끊기지 않은 엣지로 남는다. 임계값 150 하나만 썼다면 210 · 170 · 180만 남아 <b>세 조각으로 끊겼을 것</b>이고, 60 하나만 썼다면 90 · 85 같은 잡음까지 남았을 것이다.</div>
   </div>
-  <p><b>29p 결과 읽기</b> — strong edges만 쓴 그림은 깨끗하지만 선이 군데군데 끊겨 있고, weak edges까지 다 쓴 그림은 잡동사니가 많다. hysteresis 결과는 <b>strong의 깨끗함 + weak의 연결성</b>을 함께 가진다.</p>
+  <p><b>29p 결과 읽기</b> — 강한 엣지(strong edges)만 쓴 그림은 깨끗하지만 선이 군데군데 끊겨 있고, 약한 엣지(weak edges)까지 다 쓴 그림은 잡동사니가 많다. 이력 임계값(hysteresis) 결과는 <b>강한 엣지의 깨끗함 + 약한 엣지의 연결성</b>을 함께 가진다.</p>
 </div>
 
 <div class="pt plus">
@@ -2233,7 +2233,7 @@ keypoints = detector.detect(gray)</pre>
   <h3 class="pt-h"><span class="bdg bdg-live">교수님 코멘트</span>이 논문의 킬러 포인트를 어떻게 보여 줄 것인가</h3>
   <p>&ldquo;SIFT는 10년 전 알고리즘인데도 비교군에 넣었고, 그럼에도 성능 차이가 크게 안 났어요. SuperPoint와는 <b>비슷한 시기에 발표되어 가장 가까운 비교 대상</b>이 된 거고요. 위쪽 표는 비등비등합니다.
   <b>그런데 아래가 이 논문의 진짜 키포인트예요</b> &mdash; 1차 · 2차 미분, 헤시안 행렬로 <b>특징이라 할 만한 것을 사전에 넣어 뒀기 때문에</b> 필터링을 처음부터 다시 학습할 필요가 없고, <b>최소한의 학습 필터만으로</b> 된다는 주장이죠.&rdquo;</p>
-  <p>그리고 발표 자체에 대한 조언 &mdash; <b>&ldquo;단순히 파라미터가 적대요가 아니라, 왜 적어졌는지를 앞의 내용과 연결해서 설명해야 한다&rdquo;</b>, <b>&ldquo;논문을 쓸 때도 내 킬러 아이템을 어떻게 도드라지게 보일지, 비교군과 대조군을 어떻게 설계할지의 고민이 이런 표로 나타난다&rdquo;</b>.</p>
+  <p>그리고 발표 자체를 두고 한 조언 &mdash; <b>&ldquo;단순히 파라미터가 적대요가 아니라, 왜 적어졌는지를 앞의 내용과 연결해서 설명해야 한다&rdquo;</b>, <b>&ldquo;논문을 쓸 때도 내 킬러 아이템을 어떻게 도드라지게 보일지, 비교군과 대조군을 어떻게 설계할지의 고민이 이런 표로 나타난다&rdquo;</b>.</p>
 </div>
 
 <!-- ---------- ③ LoFTR ---------- -->
@@ -2267,7 +2267,7 @@ keypoints = detector.detect(gray)</pre>
   <p>&ldquo;<b>SfM(Structure from Motion)</b>의 대표적인 예가 콜로세움이에요. 관광객들이 사방에서 찍은 사진을 구글이 모아서 엮었더니 <b>콜로세움 전체가 3차원으로 복원</b>된 거죠. <b>SLAM</b>은 자율주행에서 쓰는 방식이고요 &mdash; 주변 특징점으로 <b>자기 위치를 계속 갱신</b>하며 갑니다. 어느 쪽이든 <b>특징점이 우선</b>이라는 이야기입니다.&rdquo;</p>
   <p>&ldquo;기존 방법은 &lsquo;엣지면 됐지, 기준점을 넘으면 특징일 거야&rsquo;라고 찾습니다. 그런데 방바닥처럼 <b>고만고만한 것뿐</b>이면 그중 하나를 특징이라 해도 다른 영상에서 같은 점이라 확신할 수 없어요.
   그래서 LoFTR은 <b>굵직굵직하게 잘라 토큰으로 넣고</b>(ViT의 발상 &mdash; 12주차에 배웁니다) <b>비교해 가며 그 안에서 특징이 무엇인지 찾아내는</b> 기법이라고 이해하면 됩니다.&rdquo;</p>
-  <p>표기에 대한 지적도 있었다 &mdash; <b><span class="tex">O(N^2)</span>의 O는 &ldquo;오&rdquo;가 아니라 &ldquo;빅 오(Big-O)&rdquo;</b>로 읽고, 논문 첫 장에 <b>링크를 달아 두라</b>는 것.</p>
+  <p>표기를 두고도 지적이 있었다 &mdash; <b><span class="tex">O(N^2)</span>의 O는 &ldquo;오&rdquo;가 아니라 &ldquo;빅 오(Big-O)&rdquo;</b>로 읽고, 논문 첫 장에 <b>링크를 달아 두라</b>는 것.</p>
 </div>
 
 <!-- ---------- ④ SiLK ---------- -->
@@ -2319,7 +2319,7 @@ keypoints = detector.detect(gray)</pre>
 <h3 class="sub-title">네 발표를 교안과 나란히 놓고 보기</h3>
 
 <div class="pt plus">
-  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>같은 질문에 대한 네 가지 대답</h3>
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>같은 질문, 네 가지 대답</h3>
   <div class="tbl-wrap">
   <table>
     <thead><tr><th>질문</th><th>교안 (Harris · LoG)</th><th>SuperPoint</th><th>Key.Net</th><th>LoFTR</th><th>SiLK</th></tr></thead>

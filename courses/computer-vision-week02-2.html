@@ -391,7 +391,7 @@ a.ext:hover{border-bottom-color:var(--accent)}
   <div class="sec-head"><span class="sec-badge">01</span><h2 class="sec-title">이미지 변환의 두 갈래<small>필터링은 값(range)을, 워핑은 좌표(domain)를 바꾼다</small></h2></div>
 <div class="cards">
   <div class="card2"><h4>Image <span class="term" tabindex="0" data-tip="이미지의 값(range)을 바꾸는 연산. g(x) = h(f(x)). 한 화소의 값을 정하기 위해 주변 화소를 함께 본다 (블러·샤프닝 등).">Filtering</span><em>g(x) = h( f(x) )</em></h4>
-    <p><span class="hw">화소값을 건든다 — 픽셀 화소에 대한 처리.</span> 이미지의 <span class="hw">range를 변화</span>시키며, 실제로 이미지가 받아들이는 <span class="hw">빛의 양을 조절</span>하는 셈이다. 화소 하나의 값을 정하기 위해 <span class="hw">주변을 다 파악</span>한다. 블러·샤프닝·에지 검출이 여기에 속한다.</p></div>
+    <p><span class="hw">화소값을 건든다 — 픽셀 화소를 처리한다.</span> 이미지의 <span class="hw">값의 범위(range)를 변화</span>시키며, 실제로 이미지가 받아들이는 <span class="hw">빛의 양을 조절</span>하는 셈이다. 화소 하나의 값을 정하기 위해 <span class="hw">주변을 다 파악</span>한다. 블러·샤프닝·에지 검출이 여기에 속한다.</p></div>
   <div class="card2"><h4>Image <span class="term" tabindex="0" data-tip="이미지의 좌표(domain)를 바꾸는 연산. g(x) = f(h(x)). 화소 값은 그대로 두고 위치를 옮긴다 (이동·회전·원근 변환 등).">Warping</span><em>g(x) = f( h(x) )</em></h4>
     <p><span class="hw">형태를 건든다.</span> <span class="hw">변환 함수를 활용해</span> 다른 위치, 다른 형태로 바꾼다. 각 화소의 기하학적 관계를 파악해 알맞게 옮기는 <span class="hw">기하학적 변환</span>이며, <b>이번 주차에서 다루는 쪽</b>이 바로 이것이다.</p></div>
 </div>
@@ -491,7 +491,7 @@ a.ext:hover{border-bottom-color:var(--accent)}
   <div class="xf-head"><h4>4) <span class="term" tabindex="0" data-tip="투영 변환 · 호모그래피라고도 한다. 3D를 2D 평면에 투영할 때의 원근 효과를 표현하며, 직선은 유지되지만 평행선은 소실점에서 만난다. 자유도 8.">Perspective(투영) 변환</span> — 원근</h4><span class="en">= Projective = <span class="term" tabindex="0" data-tip="두 평면 사이의 투영 대응을 나타내는 3×3 행렬. 스케일 배수만큼 자유가 없어 자유도는 8이고, 대응점 4쌍으로 추정한다.">Homography</span></span><span class="xf-dof"><span class="term" tabindex="0" data-tip="Degrees of Freedom. 그 변환을 완전히 결정하는 데 필요한 독립적인 매개변수의 개수. 클수록 자유롭게 변형할 수 있고, 추정에 필요한 대응점도 많아진다.">DoF</span> 8</span></div>
   <p><span class="hw">3D 공간에서 2D 공간으로 투영</span>시킬 때 주로 사용하는 방법 — 원근법을 생각하면 된다.
   <span class="hw">2개의 서로 다른 이미지를 합성</span>할 때도 사용한다(모아지거나, 벌어지거나 — 파노라마).
-  아핀에 projective warps가 더해진 것으로 <span class="hw">라인은 라인으로 되지만(lines map to lines) 평행도는 바뀐다</span>.
+  아핀에 사영 와핑(projective warps)이 더해진 것으로 <span class="hw">라인은 라인으로 되지만(lines map to lines) 평행도는 바뀐다</span>.
   3×3의 9개 원소 중 전체 스케일은 의미가 없어 자유도는 8이고, 대응점 4쌍이면 구할 수 있다.</p>
   <div class="eq"><span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x&prime;</span><span>y&prime;</span><span>1</span></span><span class="br r"></span></span> <span class="op">=</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>a</span><span>b</span><span>e</span><span>c</span><span>d</span><span>f</span><span>g</span><span>h</span><span>i</span></span><span class="br r"></span></span> <span class="op">·</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(1,auto)"><span>x</span><span>y</span><span>1</span></span><span class="br r"></span></span></div>
   <div class="xf-keep"><b>보존</b> — 직선(straight lines)만 <span style="color:#6b7280">— 평행선은 <span class="term" tabindex="0" data-tip="실제로는 평행한 직선들이 투영된 이미지에서 만나는 점. 방향마다 자신의 소실점을 갖는다.">소실점(vanishing point)</span>에서 만난다</span></div>
@@ -538,7 +538,7 @@ translation ⊂ rigid ⊂ similarity ⊂ affine ⊂ projective 순서로 포함 
     <p>초점거리 f · <span class="term" tabindex="0" data-tip="광학축이 이미지 평면과 만나는 점 (oₓ, o_y). 픽셀 좌표의 원점은 보통 이미지 왼쪽 위라서, 센서 좌표를 픽셀 좌표로 옮길 때 이 값을 더한다.">주점(principal point)</span> (o<sub>x</sub>, o<sub>y</sub>) · 픽셀 크기 · <span class="term" tabindex="0" data-tip="픽셀의 가로축과 세로축이 정확히 직교하지 않을 때 생기는 비틀림. 보정 항 f·s_θ 로 모델에 넣는다.">skew(비대칭)</span>. 카메라를 어디에 두든 변하지 않는다.
     <span class="hw">이 시간에 설명할 내용은 카메라의 내부 요소가 대부분</span>이다.</p></div>
   <div class="card2"><h4><span class="term" tabindex="0" data-tip="카메라가 세계 어디에 어떤 자세로 놓여 있는지 — 회전 R(3)과 이동 t(3). 카메라를 옮기면 바뀐다.">Extrinsic</span><em>외부 요소</em></h4>
-    <p>세계 좌표계에 대한 카메라의 <b>회전 R</b>과 <b>이동 t</b>. 카메라를 옮기거나 돌리면 바뀐다.</p></div>
+    <p>세계 좌표계를 기준으로 한 카메라의 <b>회전 R</b>과 <b>이동 t</b>. 카메라를 옮기거나 돌리면 바뀐다.</p></div>
 </div>
 <div class="tip"><b>"이걸 다 모아서 camera matrix로 만들어 놓는다"가 무슨 뜻인가</b><br>
 3D 점을 2D로 옮기는 과정은 사실 <b>세 단계</b>다 — ① 세계 좌표 → 카메라 좌표(위치·자세 보정) ② 카메라 좌표 → 센서 평면(초점거리로 나누는 투영)
@@ -572,7 +572,7 @@ translation ⊂ rigid ⊂ similarity ⊂ affine ⊂ projective 순서로 포함 
   <div class="sec-head"><span class="sec-badge">07</span><h2 class="sec-title">핀홀 카메라 모델<small>Pinhole camera model — 가장 단순한 카메라</small></h2></div>
 <div class="flow">
   <div class="fl"><div class="fl-n">1</div><div><h4>문제 — 필름만 두면 상이 맺히지 않는다</h4>
-    <p>하나의 객체에서 나오는 여러 빛은 <span class="hw">방사(사방으로 퍼짐)하기 때문에 film의 여러 곳에 닿는다</span>. 모든 점의 빛이 겹쳐 아무 상도 생기지 않는다.</p></div></div>
+    <p>하나의 객체에서 나오는 여러 빛은 <span class="hw">방사(사방으로 퍼짐)하기 때문에 필름(film)의 여러 곳에 닿는다</span>. 모든 점의 빛이 겹쳐 아무 상도 생기지 않는다.</p></div></div>
   <div class="fl"><div class="fl-n">2</div><div><h4>해결 — <span class="hw">barrier(장벽)를 설치</span>한다</h4>
     <p><span class="hw">대부분의 빛은 장벽에서 차단되고, 어떤 하나의 빛 정도만 통과</span>해 필름에 맺힌다. 물체의 한 점 ↔ 필름의 한 점이 대응되어 또렷한 상이 생긴다.</p></div></div>
   <div class="fl"><div class="fl-n">3</div><div><h4>결과 — 역상, 그리고 <span class="term" tabindex="0" data-tip="빛이 통과하는 구멍의 크기. 핀홀에서는 구멍 자체, 렌즈 카메라에서는 조리개다. 크면 밝지만 흐려지고, 작으면 선명하지만 어둡다.">조리개(aperture)</span></h4>
@@ -658,7 +658,7 @@ z로 나누는 연산 때문에 <span class="hw">선형 변환이라고 말할 �
 <div class="eq"><span class="op">즉,&nbsp; x = P · X ,&nbsp; P = K [ R | t ]&nbsp; (3×4)</span></div></div>
 
 <h3 class="sub-title">⑤ More General Camera Model</h3>
-<div class="note-box"><span class="hw">다르게 scaling해야 할 수도 있어서 이때 자유도가 증가</span>할 수 있고(<span class="term" tabindex="0" data-tip="픽셀이 정사각형이 아닐 때 가로·세로 방향의 배율이 달라지는 것. K에서 f·sₓ 와 f·s_y 로 나뉘어 표현된다.">픽셀 종횡비</span>),
+<div class="note-box"><span class="hw">가로·세로 배율(scaling)을 다르게 줘야 할 수도 있어서 이때 자유도가 증가</span>할 수 있고(<span class="term" tabindex="0" data-tip="픽셀이 정사각형이 아닐 때 가로·세로 방향의 배율이 달라지는 것. K에서 f·sₓ 와 f·s_y 로 나뉘어 표현된다.">픽셀 종횡비</span>),
 <span class="hw">뒤틀려 있을 수도 있어서 skew를 보정하기 위한 보상값</span>이 포함된다(<span class="term" tabindex="0" data-tip="픽셀의 가로축과 세로축이 정확히 직교하지 않을 때 생기는 비틀림. 보정 항 f·s_θ 로 모델에 넣는다.">skew(비대칭)</span>).
 <div class="eq"><span class="op">K =</span> <span class="mtx"><span class="br"></span><span class="cells" style="grid-template-columns:repeat(3,auto)"><span>f&thinsp;s<sub>x</sub></span><span>f&thinsp;s<sub>θ</sub></span><span>o<sub>x</sub></span><span>0</span><span>f&thinsp;s<sub>y</sub></span><span>o<sub>y</sub></span><span>0</span><span>0</span><span>1</span></span><span class="br r"></span></span></div>
 <ul class="ul">
@@ -675,7 +675,7 @@ z로 나누는 연산 때문에 <span class="hw">선형 변환이라고 말할 �
   <div class="xf-head"><h4>1) <span class="term" tabindex="0" data-tip="카메라를 위로 기울여 찍으면 건물의 수직선들이 위로 갈수록 모이는 왜곡. 원근 투영 자체의 성질이라 렌즈 결함이 아니다.">Perspective distortion</span></h4><span class="en">원근 왜곡 · converging verticals</span></div>
   <p><b>건축 사진의 고질적인 문제</b> — 높은 건물을 담으려고 카메라를 위로 기울이면 이미지 평면이 건물 벽과 평행하지 않게 되어
   <span class="hw">위는 좁게, 아래는 넓게</span> 수직선들이 모인다. 카메라를 수평으로 유지하면 왜곡은 없지만 건물 아랫부분만 담긴다.</p>
-  <div class="xf-sol"><b>해결 ① 하드웨어</b> — <span class="hw">camera lens가 shifting</span>(시프트 렌즈). 카메라는 수평인 채로 렌즈만 위로 평행 이동시켜 건물 전체를 담는다<br>
+  <div class="xf-sol"><b>해결 ① 하드웨어</b> — <span class="hw">렌즈만 평행 이동하는(shifting)</span>(시프트 렌즈). 카메라는 수평인 채로 렌즈만 위로 평행 이동시켜 건물 전체를 담는다<br>
   <b>해결 ② 우리가 배운 것</b> — <span class="term" tabindex="0" data-tip="왜곡된 이미지에 호모그래피를 적용해, 모여 버린 평행선을 다시 평행하게 되돌리는 보정.">Perspective rectification</span>. <span class="term" tabindex="0" data-tip="두 평면 사이의 투영 대응을 나타내는 3×3 행렬. 스케일 배수만큼 자유가 없어 자유도는 8이고, 대응점 4쌍으로 추정한다.">호모그래피</span>로 <span class="hw">왜곡된 평행선을 평행하게 바꿔 준다</span></div>
 </div>
 
@@ -693,7 +693,7 @@ z로 나누는 연산 때문에 <span class="hw">선형 변환이라고 말할 �
   </table>
   </div>
   <div class="xf-sol"><b>보정</b> — <span class="hw">평행선을 유지하게끔 당기고 늘리고 줄여서</span> 맞춘다. 반지름 방향 왜곡 계수를 추정해 되돌리며,
-  <span class="hw">homography와도 같이 고려</span>한다. 결국 이것도 이미지에 대한 transformation이고, <span class="hw">왜곡 효과는 카메라의 파라미터를 활용해 보정</span>한다</div>
+  <span class="hw">호모그래피(homography)와 함께 고려</span>한다. 결국 이것도 이미지 변환(transformation)이고, <span class="hw">왜곡 효과는 카메라의 파라미터를 활용해 보정</span>한다</div>
 </div>
 </section>
 
