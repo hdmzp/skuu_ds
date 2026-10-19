@@ -1396,6 +1396,17 @@ H=\sum_W \begin{bmatrix} I_x^2 & I_x I_y \\ I_x I_y & I_y^2 \end{bmatrix}</div>
 </div>
 
 <div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>국소 최대만 남기기 — 비최대 억제(Non-maximum suppression)</h3>
+  <p>임계값만 적용하면 코너 하나 주변에 점수가 높은 픽셀이 <b>여러 개 뭉쳐</b> 나온다. 같은 코너를 여러 번 잡는 셈이다. 비최대 억제는 이 뭉치마다 <b>한 점만</b> 남긴다.</p>
+  <div class="flow">
+    <div class="fl"><span class="fl-n">1</span><div><h4>창 씌우기</h4><p>임계값을 넘은 픽셀을 가운데 두고 3×3이나 5×5 크기의 작은 창을 씌운다.</p></div></div>
+    <div class="fl"><span class="fl-n">2</span><div><h4>주변과 비교</h4><p>가운데 픽셀의 코너 점수가 창 안에서 가장 높은지(<b>국소 최대</b>, local maximum) 확인한다.</p></div></div>
+    <div class="fl"><span class="fl-n">3</span><div><h4>1등만 남기기</h4><p>창 안에서 1등이면 남긴다. 더 높은 이웃이 있으면 0으로 지운다.</p></div></div>
+  </div>
+  <p>쉽게 말해 <b>동네에서 1등인 픽셀만</b> 진짜 코너로 인정하고, 2·3등은 지운다. 교안 58p 왼쪽의 흰 뭉치(R &gt; threshold)가 오른쪽에서 점 하나씩으로 줄어든 것(Find local maxima of R)이 바로 이 단계다. <a class="ext" href="#canny">Canny의 비최대 억제</a>도 같은 생각인데, 창 전체가 아니라 그래디언트 방향의 앞뒤 두 이웃과만 비교한다는 점이 다르다.</p>
+</div>
+
+<div class="pt plus">
   <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>왜 det와 trace로 바꿔 쓰나 — 고윳값을 직접 구하지 않으려고</h3>
   <p>2×2 행렬의 고윳값은 이차방정식을 풀면 나오지만, <b>픽셀마다 제곱근을 계산</b>하는 것은 1988년 기준으로 비쌌다. 그런데</p>
   <div class="fx">
