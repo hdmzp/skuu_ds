@@ -318,6 +318,19 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .fnc dd{color:#4b5563}
 @media(max-width:440px){.fnc dl{grid-template-columns:1fr;gap:2px}.fnc dd{margin-bottom:6px}}
 
+.deep{background:#f5f3ff;border:1px solid #c4b5fd;border-left:4px solid #7c3aed;border-radius:0 var(--radius) var(--radius) 0;padding:11px 14px;margin:12px 0;font-size:13px;color:#3f4854;line-height:1.8}
+.deep b:first-child{color:#6d28d9}
+.deep p + p{margin-top:8px}
+.pit{background:#fff7ed;border:1px solid #f0c48a;border-left:4px solid #ea580c;border-radius:0 var(--radius) var(--radius) 0;padding:11px 14px;margin:12px 0}
+.pit p{font-size:13px;color:#3f4854;line-height:1.8}
+.pit p + p{margin-top:7px}
+.pit .pit-h{font-size:12.5px;font-weight:800;color:#c2410c;margin-bottom:3px}
+/* 패딩 방식 한 줄 예시 */
+.padrow{display:inline-flex;gap:2px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;vertical-align:middle}
+.padrow i{font-style:normal;display:inline-block;min-width:24px;padding:2px 0;text-align:center;border-radius:4px;background:#dbeafe;color:#1e3a8a;font-weight:700}
+.padrow i.p{background:#fde68a;color:#78350f}
+.padrow i.s{background:none;min-width:6px;color:#9ca3af}
+
 /* ===== 슬라이드 확대 보기 ===== */
 #lb{position:fixed;inset:0;background:rgba(9,15,31,.94);display:none;align-items:center;justify-content:center;
   z-index:400;padding:52px 60px 64px;cursor:zoom-out;-webkit-user-select:none;user-select:none}
@@ -581,6 +594,30 @@ figure.fig img{cursor:zoom-in}
 <div class="good"><b>필기의 계산 짚어 보기</b> — <span class="hw">10 × 10 픽셀을 8 × 8로 줄이는</span> 예는 필기에 커널 크기가 적혀 있지 않지만,
 <b>3 × 3 커널을 stride 1로 valid 적용</b>한 경우로 보면 정확히 맞아떨어진다.
 3 × 3 커널이면 <b>gs = 10 − 3 + 1 = 8</b>. 같은 상황에서 <b>same</b>으로 두고 싶다면 <b>ps = (3 − 1) / 2 = 1</b>칸씩 패딩을 넣으면 된다.</div>
+<h3 class="sub-title">패딩 — 테두리 바깥을 무엇으로 채울 것인가</h3>
+<div class="deep"><b>🔎 한 걸음 더 — 패딩이 왜 필요하고, 어떻게 채우는가</b> <span style="color:#6b7280">(교안에는 &ldquo;same이면 pad가 필요하다&rdquo;까지만 나온다. 아래는 이해를 돕기 위해 보탠 내용이다)</span>
+<p><b>왜 필요한가.</b> 커널은 가운데 화소의 <b>이웃</b>을 함께 본다. 그런데 맨 가장자리 화소는 바깥쪽 이웃이 없다. 3 × 3 커널을 왼쪽 위 모서리 화소에 올리면 9칸 중 <b>5칸이 이미지 밖</b>으로 삐져나간다. 이 칸을 계산하지 않고 건너뛰면 테두리 화소의 결과가 빠지고, 그만큼 출력이 줄어든다 — 이것이 <b>valid</b>다. 10 × 10에 3 × 3을 쓰면 8 × 8이 되고, 필터를 여러 번 거칠수록 이미지는 계속 작아진다.</p>
+<p><b>그래서 덧댄다.</b> 이미지 바깥에 <b>ps = (3 − 1) / 2 = 1</b>칸씩 값을 덧대 12 × 12로 만든 뒤 3 × 3을 valid로 돌리면, 12 − 3 + 1 = <b>10 × 10</b>, 곧 입력과 <b>같은(same)</b> 크기가 나온다. 이렇게 덧대는 일이 <b>패딩(padding)</b>이다. 남은 질문은 하나다 — <b>덧댄 칸에 어떤 값을 넣을까?</b></p>
+</div>
+<figure class="fig"><img width="1408" height="768" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-12b-padding-modes.jpg" alt="패딩 방식 개념도 — 원본 이미지와 3×3 커널, 패딩 없이 컨볼루션할 때 커널이 테두리에서 벗어나는 문제, 그리고 제로 패딩·가장자리 값 복제·거울 반사 세 가지 채우기 방식"><figcaption><b>참고 개념도 (교안 아님)</b> — ① 원본과 3 × 3 커널 ② 패딩이 없으면 커널이 테두리에서 벗어나 <b>테두리 정보가 손실</b>된다 ③ <b>제로 패딩</b> ④ <b>가장자리 값 복제</b> ⑤ <b>거울 반사</b>. 그림 속 칸의 숫자·문자는 원본과 정확히 맞지 않으니 <b>채우는 방식</b>만 보자 — 정확한 값은 아래 표로 확인한다</figcaption></figure>
+<p style="font-size:13px;color:#4b5563;margin:10px 0 6px">한 줄짜리 이미지 <b>[1 2 3 4]</b>의 양쪽에 <b>2칸씩</b> 덧대 보면 방식 차이가 또렷하다 (노란 칸이 덧댄 값).</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>방식</th><th>덧댄 결과</th><th>채우는 규칙과 특징</th></tr></thead>
+  <tbody>
+    <tr><td><b>제로 패딩</b><br><small>zero / constant</small></td><td><span class="padrow"><i class="p">0</i><i class="p">0</i><i class="s">|</i><i>1</i><i>2</i><i>3</i><i>4</i><i class="s">|</i><i class="p">0</i><i class="p">0</i></span></td><td>바깥을 <b>0(검정)</b>으로 채운다. 가장 단순하지만, 블러를 걸면 테두리에 0이 섞여 <b>가장자리가 어두워진다</b>.</td></tr>
+    <tr><td><b>가장자리 값 복제</b><br><small>replicate / copy edge</small></td><td><span class="padrow"><i class="p">1</i><i class="p">1</i><i class="s">|</i><i>1</i><i>2</i><i>3</i><i>4</i><i class="s">|</i><i class="p">4</i><i class="p">4</i></span></td><td>맨 끝 화소 값을 <b>그대로 늘려</b> 붙인다. 밝기가 갑자기 바뀌지 않아 어두운 테두리가 생기지 않는다.</td></tr>
+    <tr><td><b>거울 반사</b><br><small>reflect / symmetric</small></td><td><span class="padrow"><i class="p">2</i><i class="p">1</i><i class="s">|</i><i>1</i><i>2</i><i>3</i><i>4</i><i class="s">|</i><i class="p">4</i><i class="p">3</i></span><br><span class="padrow"><i class="p">3</i><i class="p">2</i><i class="s">|</i><i>1</i><i>2</i><i>3</i><i>4</i><i class="s">|</i><i class="p">3</i><i class="p">2</i></span></td><td>테두리를 거울 삼아 <b>안쪽 값을 대칭으로</b> 비춘다. 윗줄은 경계 화소까지 비추는 방식(symmetric), 아랫줄은 경계 화소는 빼고 비추는 방식(reflect)이다. 무늬와 밝기 변화가 자연스럽게 이어져 <b>가장 많이 쓴다</b>.</td></tr>
+    <tr><td><b>둘러 감기</b><br><small>wrap around</small></td><td><span class="padrow"><i class="p">3</i><i class="p">4</i><i class="s">|</i><i>1</i><i>2</i><i>3</i><i>4</i><i class="s">|</i><i class="p">1</i><i class="p">2</i></span></td><td>이미지가 <b>반복된다고 보고</b> 반대편 값을 가져온다. 왼쪽 바깥에 오른쪽 끝 값이 붙는다. 주기적인 신호에는 맞지만 보통 사진에서는 엉뚱한 값이 섞인다.</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="pit"><p class="pit-h">⚠ 패딩 방식이 결과를 바꾸는 순간 — 모서리 화소 하나로 계산해 보기</p>
+<p>밝기가 전부 <b>200</b>인 회색 이미지에 3 × 3 <b>박스 필터</b>(9칸 평균)를 걸고, 왼쪽 위 <b>모서리</b> 화소만 보자. 커널 9칸 중 이미지 안에 있는 칸은 4칸, 덧댄 칸은 5칸이다.</p>
+<p>· <b>제로 패딩</b> : (200 × 4 + 0 × 5) ÷ 9 ≈ <b>89</b> — 원래 200이던 곳이 절반 이하로 어두워진다. 테두리를 따라 <b>검은 띠</b>가 생기는 이유다.<br>
+· <b>복제 · 반사</b> : 덧댄 칸도 200이므로 (200 × 9) ÷ 9 = <b>200</b> — 원래 밝기가 그대로 유지된다.</p>
+<p>즉 패딩은 출력 <b>크기</b>만 맞추는 장치가 아니라 테두리 근처의 <b>값</b>까지 바꾼다. 그래서 크기를 맞출 때는 &ldquo;몇 칸 덧대나(ps)&rdquo;와 함께 &ldquo;<b>무엇으로</b> 덧대나&rdquo;를 같이 정해야 한다.</p></div>
+<div class="tip"><b>OpenCV에서는</b> — 필터 함수의 <code>borderType</code> 인자가 바로 이 선택이다. <code>cv2.BORDER_CONSTANT</code>(상수, 0이면 제로 패딩) · <code>cv2.BORDER_REPLICATE</code>(복제) · <code>cv2.BORDER_REFLECT</code>(경계 포함 반사) · <code>cv2.BORDER_REFLECT_101</code>(경계 빼고 반사) · <code>cv2.BORDER_WRAP</code>(둘러 감기). <code>cv2.GaussianBlur</code>·<code>cv2.filter2D</code> 등은 따로 지정하지 않으면 <b>BORDER_REFLECT_101</b>을 쓴다. 직접 덧대 보고 싶다면 <code>cv2.copyMakeBorder(img, 1, 1, 1, 1, cv2.BORDER_REPLICATE)</code>처럼 위·아래·왼쪽·오른쪽 칸 수를 주면 된다.</div>
 <div class="note-box"><b>g · f · h의 약속</b> — 필기에서 헷갈렸던 기호를 정리해 두자.
 <b>f = 입력 이미지</b>, <b>h = 커널(필터)</b>, <b>g = 출력 이미지</b>. 교안 전체가 이 표기를 그대로 쓴다.</div>
 </section>
