@@ -558,6 +558,10 @@ details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러�
 .ans p.add{border-left:3px solid #86efac;padding-left:10px;background:#f7fdf9}
 @media print{.mine,.ans p.add{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 
+/* 형광펜 — 장단점 · 비교 · 특장점 · 쓰임 */
+mark.hl{background:linear-gradient(transparent 52%,#fde047 52%);color:inherit;padding:0 1px;border-radius:2px}
+body.no-hl mark.hl{background:none}
+@media print{mark.hl{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 /* 문항별 교안 그림 — 펼치기 · 접기 */
 details.viz{margin-top:10px;border:1px solid var(--border);border-radius:10px;background:var(--surface);padding:7px 11px}
 details.viz > summary{cursor:pointer;font-size:12.5px;font-weight:800;color:#6d28d9;list-style:none;display:inline-flex;align-items:center;gap:6px;user-select:none}
@@ -649,6 +653,7 @@ details.viz[open] > summary::before{transform:rotate(90deg)}
     <button type="button" class="tool" id="fold-all">답 접기</button>
     <button type="button" class="tool" id="open-all">답 펴기</button>
     <button type="button" class="tool" id="fig-toggle" aria-pressed="true">교안 그림 접기</button>
+    <button type="button" class="tool" id="hl-toggle" aria-pressed="true">형광펜 끄기</button>
     <span class="fstat" id="fstat"></span>
   </div>
   <p class="sync" id="sync"><i></i><span>북마크는 이 브라우저에 저장됩니다</span></p>
@@ -665,6 +670,7 @@ details.viz[open] > summary::before{transform:rotate(90deg)}
 </div>
 <div class="note-box"><b>답 쓰는 방식</b> &mdash; 개념 하나를 따로 외우지 않고, 교안에서 <b>앞뒤로 이어지는 개념을 엮어</b> 한 흐름으로 쓴다. 예를 들어 핀홀 카메라를 물으면 구멍 크기의 딜레마 → 그래서 렌즈 → 렌즈의 대가인 초점 → 피사계 심도와 조리개 → 화각과 초점거리까지 이어 쓴다. 용어는 <b>영어 원어와 우리말을 함께</b> 적는다. <span class="mine">직접 정리</span> 표시가 붙은 답은 내가 직접 적은 답이다.</div>
 <div class="tip"><b>6~7문항이라면</b> &mdash; 주차당 한 문제 꼴이라 정말 중요한 것만 나온다. <span class="star">★ 중요</span> 스티커가 붙은 17문항을 먼저 본다. 또 부분점수가 있다는 것은 한 문제 안에서 <b>상위 개념과 하위 개념을 함께</b> 물을 가능성이 크다는 뜻이다 &mdash; 문제마다 아래에 적은 <b>&lsquo;이렇게도 나올 수 있다&rsquo;</b> 후보를 보며, 같은 답을 다른 각도의 질문에 맞춰 꺼내 쓰는 연습을 하자.</div>
+<div class="note-box"><b>지난 학기 후기로 본 출제 경향</b> &mdash; 같은 교수님 강의의 2023년 후기에 따르면, 서술형은 각 기법의 <b>장단점</b>, <b>다른 기법과의 비교</b>, <b>특장점</b>, <b>어디에 쓰이는지</b>를 묻고 생각보다 디테일하게 나온다. 그래서 답에서 이 네 가지에 해당하는 구절과 핵심 정의에 <mark class="hl">형광펜</mark>을 칠했다. 형광펜 친 부분은 키워드만 외우지 말고 <b>문장째</b> 쓸 수 있게 익혀 두자. 비교 문제는 맨 아래 <a class="ext" href="#pairs">헷갈리는 짝 비교표</a>로 한 번 더 정리할 수 있다. 위쪽의 &lsquo;형광펜 끄기&rsquo; 버튼으로 끄고 켤 수 있다.</div>
 </section>
 
 <!-- ===================== 2주차 ===================== -->
@@ -1641,6 +1647,16 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   figBtn.onclick = function () { setFigs(figBtn.getAttribute('aria-pressed') !== 'true'); };
   try { if (localStorage.getItem('cv-mid-essay-figs') === '0') setFigs(false); } catch (e) {}
+  /* 형광펜 켜기 · 끄기 — 이 기기에만 기억 */
+  var hlBtn = document.getElementById('hl-toggle');
+  function setHl(on) {
+    document.body.classList.toggle('no-hl', !on);
+    hlBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    hlBtn.textContent = on ? '형광펜 끄기' : '형광펜 켜기';
+    try { localStorage.setItem('cv-mid-essay-hl', on ? '1' : '0'); } catch (e) {}
+  }
+  hlBtn.onclick = function () { setHl(hlBtn.getAttribute('aria-pressed') !== 'true'); };
+  try { if (localStorage.getItem('cv-mid-essay-hl') === '0') setHl(false); } catch (e) {}
   window.addEventListener('beforeprint', function () {
     setAll(true);
     vizs.forEach(function (d) { d.open = true; });
