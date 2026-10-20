@@ -830,13 +830,16 @@ details.viz[open] > summary::before{transform:rotate(90deg)}
 <article class="q" id="q-3-1" data-k="3-1" data-w="3">
   <div class="q-h"><span class="q-no">3-1</span><span class="mine">직접 정리</span><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
   <p class="q-txt">Q. 이미지와 필터링이란 무엇인가</p>
-  <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 필터링의 두 가지 목적을 예와 함께 설명하시오.</li></ul></div>
+  <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 필터링의 두 가지 목적을 설명하시오.</li><li>Q. 디지털 이미지가 만들어지는 두 번의 이산화를 설명하고, 이것이 노이즈와 어떻게 이어지는지 서술하시오.</li></ul></div>
   <div class="go"><b>개념 바로가기</b><a class="go-a" href="computer-vision-week03.html#image">이미지란</a><a class="go-a" href="computer-vision-week02-2.html#warp">필터링 vs 와핑</a></div>
   <details class="viz" open><summary>교안 그림 <small>2장</small></summary><div class="qf-g"><figure class="qf"><img width="1315" height="693" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-02-intensity-grid.png" alt="3주차 교안 5p — 이미지를 0~255 밝기 값이 격자로 배열된 행렬로 표현한 그림"><figcaption><b>3주차 교안 5p </b>— 이미지를 0~255 밝기 값이 격자로 배열된 행렬로 표현한 그림</figcaption></figure><figure class="qf"><img width="1214" height="593" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-03-image-as-function.jpg" alt="3주차 교안 6p — 눈 이미지 패치와 그 밝기 값을 3차원 곡면으로 그린 그래프"><figcaption><b>3주차 교안 6p </b>— 눈 이미지 패치와 그 밝기 값을 3차원 곡면으로 그린 그래프</figcaption></figure></div></details>
   <details class="ans" open><summary>답</summary>
-    <p><span class="lab">[① 이미지와 컴퓨터비전]</span>이미지의 정의는 두 가지로 나눌 수 있다. 첫째, 현실 세계에 있는 것을 카메라라는 입력 장치를 통해 구현한 것이다. 둘째, 그래픽 요소들을 포함해 상상으로 표현한 것이다. 컴퓨터비전은 영상 속 피사체를 인식하고, 분류하고, 이해한다(Recognition → Classification → Understanding). 이때 전체를 한 번에 보기보다는 각각의 특징과 요소를 먼저 읽고, 조각조각 모아 가며 전체를 이해한다.</p>
-    <p><span class="lab">[② 디지털 이미지]</span>컴퓨터가 읽는 것은 <b>디지털 이미지</b>다. 빛을 통해 반사된 컬러값을 영상 센서가 인식해 화소로 이어 준다. 이때 연속적인 장면은 공간 측면에서 <b>샘플링</b>, 밝기 측면에서 <b>양자화</b>되며 두 번의 이산화 과정을 거친다.</p>
-    <p><span class="lab">[③ 필터링]</span>이 조각을 읽기 위해 기존 원 이미지에서 픽셀을 조합해 새로운 값의 픽셀을 만드는 것이 <b>필터링</b>이다. 필터링은 요소들은 그대로 두고 화소값, 즉 빛의 변화를 다룬다. 그런데 디지털 이미지에는 <b>노이즈</b>가 섞인다. 센서 품질, 빛의 균일하지 않은 반사 등 다양한 경우에 노이즈가 생긴다. 필터링은 노이즈를 제거해 피사체를 더 정확하게 인식하기 위해 쓰이며, 에지 · 코너 · 블롭 등 유용한 <b>피처</b>를 추출하기도 하고, 노이즈 제거 · super-resolution · in-painting처럼 영상의 속성을 수정하기도 한다.</p>
+    <p><span class="lab">[① 이미지와 컴퓨터비전]</span>이미지의 정의는 두 가지로 나눌 수 있다. 첫째, 현실 세계에 있는 피사체를 카메라라는 입력 장치를 통해 구현한 것이다. 둘째, 그래픽 요소들을 포함해 상상으로 표현한 것이다. 컴퓨터비전은 이러한 영상 속 피사체를 <b>인식</b>하고, <b>분류</b>하고, <b>이해</b>한다(Recognition → Classification → Understanding). 이를 위해 전체보다 각각의 특징과 요소를 먼저 읽고, 조각조각 모아 전체를 이해한다.</p>
+    <p><span class="lab">[② 두 번의 이산화]</span>연속적인 장면은 두 번의 이산화 과정을 거쳐 <b>디지털 이미지</b>가 된다. 첫째, 공간 측면(spatial)에서는 장면을 격자로 잘라 <b>샘플링</b>한다. 둘째, 밝기 측면에서는 연속적인 밝기를 0~255처럼 단계로 끊어 <b>양자화</b>한다. 이를 거치면 이미지는 숫자 값들이 놓인 격자가 된다.</p>
+    <p><span class="lab">[③ 노이즈]</span>디지털 이미지에는 <b>노이즈</b>가 섞인다. 센서 품질이 좋지 않거나, 빛이 균일하지 않게 반사되거나, 밝기를 단계로 끊을 때 오차가 생기는 등 다양한 경우에 노이즈가 발생한다. 이때 활용하는 것이 필터링이다.</p>
+    <p><span class="lab">[④ 필터링의 두 가지 목적]</span><b>필터링</b>은 기존 원 이미지에서 픽셀을 조합해 새로운 값의 픽셀을 만든다. 첫째, 노이즈를 제거하고 유용한 <b>feature</b>를 찾아 피사체를 더 정확하게 인식한다. Edge · Corner · Blob 등 유용한 feature를 추출하는 것이 여기에 속한다. 둘째, de-noising · super-resolution · in-painting 등 영상의 속성을 수정한다.</p>
+    <p><span class="lab">[⑤ 평균 필터]</span><b>평균 필터</b>(square mean filter)는 각 픽셀을 주변 값들의 평균으로 바꾼다. 이웃 값들이 평균으로 섞이므로 급한 밝기 변화가 줄어든다. 그래서 이미지가 블러링되는 효과가 있다.</p>
+    <p><span class="lab">[⑥ 선형 필터]</span><b>선형 필터</b>는 입출력 관계가 선형성을 띠는 필터다. filter(h<sub>1</sub> + h<sub>2</sub>) = filter(h<sub>1</sub>) + filter(h<sub>2</sub>)인 것이다. 원본을 스칼라배하거나 블러를 빼서 <b>샤프닝</b>을 하는 식의 커널 조합이 가능한 것도 선형성 덕분이다.</p>
   </details>
 </article>
 
@@ -894,28 +897,32 @@ details.viz[open] > summary::before{transform:rotate(90deg)}
 
 <article class="q" id="q-3-6" data-k="3-6" data-w="3" data-star="1">
   <div class="q-h"><span class="q-no">3-6</span><span class="star">★ 중요</span><span class="mine">직접 정리</span><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
-  <p class="q-txt">Q. 가우시안 필터의 특징과 장점을 설명하시오.</p>
+  <p class="q-txt">Q. 가우시안 필터의 특징과 장점을 설명하고, 이것이 이후 피라미드 · 에지 검출 · SIFT에 어떻게 쓰이는지 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 가우시안 필터의 장점을 쓰고, σ가 결과에 어떤 영향을 주는지 설명하시오.</li><li>Q. separability가 무엇이며 연산량을 어떻게 줄이는지 설명하시오.</li><li>Q. 가우시안 필터가 이후 피라미드 · 에지 검출 · SIFT에서 어떻게 쓰이는지 서술하시오.</li></ul></div>
   <div class="go"><b>개념 바로가기</b><a class="go-a" href="computer-vision-week03.html#gauss">가우시안 필터</a><a class="go-a" href="computer-vision-week03.html#sep">분리 가능성</a><a class="go-a" href="computer-vision-week04.html#down">블러 후 축소</a><a class="go-a" href="computer-vision-week06.html#sift-scale">SIFT 스케일 공간</a></div>
   <details class="viz" open><summary>교안 그림 <small>2장</small></summary><div class="qf-g"><figure class="qf"><img width="1132" height="551" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-21-gaussian-smoothing.jpg" alt="3주차 교안 34p — 박스 필터와 가우시안 필터의 스무딩 결과 비교"><figcaption><b>3주차 교안 34p </b>— 박스 필터와 가우시안 필터의 스무딩 결과 비교</figcaption></figure><figure class="qf"><img width="1270" height="575" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-22-separability.png" alt="3주차 교안 35p — 2D 가우시안을 가로 1D 필터와 세로 1D 필터로 분리해 적용하는 그림"><figcaption><b>3주차 교안 35p </b>— 2D 가우시안을 가로 1D 필터와 세로 1D 필터로 분리해 적용하는 그림</figcaption></figure></div></details>
   <details class="ans" open><summary>답</summary>
-    <p><span class="lab">[① 가우시안 필터]</span><b>가우시안 필터</b>는 가우시안 분포(정규분포)의 확률밀도함수를 커널로 사용해 신호 · 이미지의 노이즈를 제거하고 부드럽게 만드는(blurring) 선형 공간 필터다. 중심에서 원형을 유지하면서 부드럽게 만드는데, 중심에 가중치를 많이 두고 가장자리로 갈수록 가중치를 줄인다. 표준편차 <b>σ</b>로 범위를 조절하며, σ가 클수록 평균 내는 범위가 넓어져 더 흐려진다.</p>
-    <p><span class="lab">[② 장점]</span>어떤 방향이든 똑같은 <b>회전 대칭</b>(symmetric)이라 <b>박스 필터</b>의 네모 자국이 사라진다. σ 하나로 흐림 정도가 정해져서 간단하고 직관적이다. 또 가우시안끼리 컨볼루션하면 또 다른 가우시안이 된다.</p>
-    <p><span class="lab">[③ 분리 가능성과 쓰임]</span>합성이 가능한 동시에 <b>분리 가능</b>(separable)하다는 장점이 있다. 2D 가우시안은 x 방향 가우시안과 y 방향 가우시안으로 정확히 쪼개지므로, k × k 필터를 쓸 때 픽셀당 k²이던 계산이 2k로 줄어든다. 가우시안은 이후 <b>Canny</b>, <b>LoG</b>, <b>SIFT</b>의 스케일 공간, 가우시안 피라미드 등에서 계속 쓰인다.</p>
+    <p><span class="lab">[① 가우시안 필터]</span><b>가우시안 필터</b>는 가중 평균 필터의 일종으로, 필터의 계수가 2D 가우시안(정규분포)의 표본이다. 중심에 가중치를 크게 두고, 가장자리로 갈수록 가중치를 줄인다.</p>
+    <p><span class="lab">[② σ의 역할]</span>가우시안 필터는 표준편차 <b>σ</b>로 가중치가 미치는 거리를 조절한다. σ가 클수록 더 멀리까지 가중치를 받고, 더 넓은 범위의 값이 평균에 섞이면서 이미지가 더 흐려진다.</p>
+    <p><span class="lab">[③ 장점 — 회전 대칭]</span>가우시안 필터는 <b>회전 대칭</b>이다. 어느 방향으로도 대칭이라, 네모난 <b>박스 필터</b>에서 생기던 네모 자국이 사라진다.</p>
+    <p><span class="lab">[④ 장점 — 간단 · 직관]</span>간단하고 직관적이다. 흐림 정도가 σ 값 하나로 정해진다.</p>
+    <p><span class="lab">[⑤ 장점 — 가우시안끼리 컨볼루션]</span>가우시안끼리 <b>컨볼루션</b>하면 또 가우시안이 된다. 그래서 σ<sub>1</sub> 가우시안과 σ<sub>2</sub> 가우시안을 잇달아 적용할 필요 없이, 더 큰 가우시안을 한 번 적용하면 된다.</p>
+    <p><span class="lab">[⑥ 장점 — 분리 가능]</span>또 <b>분리</b>도 가능하다(separable). 2D 가우시안은 x 방향 가우시안과 y 방향 가우시안으로 쪼개져서, 2D k × k 필터의 k² 연산을 1D 필터 두 번, 즉 2k번까지 줄일 수 있다.</p>
+    <p><span class="lab">[⑦ 이후의 쓰임]</span>가우시안은 축소 전 블러하기(<b>가우시안 피라미드</b>), <b>Canny</b>, <b>LoG</b>, <b>SIFT</b>의 스케일 공간 등에 계속 쓰인다.</p>
   </details>
 </article>
 
 <article class="q" id="q-3-7" data-k="3-7" data-w="3">
-  <div class="q-h"><span class="q-no">3-7</span><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
-  <p class="q-txt">Q. 비선형 필터링, 특히 미디언 필터에 대해 설명하시오.</p>
+  <div class="q-h"><span class="q-no">3-7</span><span class="mine">직접 정리</span><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
+  <p class="q-txt">Q. 비선형 필터와 노이즈에 대해 설명하시오.</p>
   <div class="cand"><b>이렇게도 나올 수 있다</b><ul><li>Q. 소금 · 후추 노이즈에 선형 필터가 실패하는 이유와 미디언 필터가 효과적인 이유를 비교하시오.</li><li>Q. 미디언 필터가 비선형인 이유와 단점을 설명하시오.</li></ul></div>
   <div class="go"><b>개념 바로가기</b><a class="go-a" href="computer-vision-week03.html#nonlinear">비선형 · 미디언</a></div>
   <details class="viz" open><summary>교안 그림 <small>2장</small></summary><div class="qf-g"><figure class="qf"><img width="1348" height="613" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-25-median-advantage.jpg" alt="3주차 교안 41p — 소금·후추 노이즈 이미지와 미디언 필터 결과, 한 행의 밝기 그래프 비교"><figcaption><b>3주차 교안 41p </b>— 소금·후추 노이즈 이미지와 미디언 필터 결과, 한 행의 밝기 그래프 비교</figcaption></figure><figure class="qf"><img width="1332" height="675" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-26-gaussian-vs-median.jpg" alt="3주차 교안 42p — 가우시안 필터와 미디언 필터 결과 비교"><figcaption><b>3주차 교안 42p </b>— 가우시안 필터와 미디언 필터 결과 비교</figcaption></figure></div></details>
   <details class="ans" open><summary>답</summary>
-    <p><span class="lab">[노이즈 종류]</span><b>노이즈</b>에는 세 종류가 있다. <b>Salt and pepper</b>는 검은 점과 흰 점이 무작위로 나타난다. <b>Impulse</b>는 흰 점이 무작위로 나타난다(peak noise). Gaussian은 밝기 변동이 정규분포에서 뽑힌다.</p>
-    <p><span class="lab">[선형 필터의 한계]</span>이런 노이즈에 선형 필터를 쓰면 문제가 생긴다. 선형 필터는 이웃 값의 평균을 내는데, 평균은 튀는 값(<b>outlier</b>)까지 그대로 반영한다. 그래서 점 하나의 극단적인 값이 주변 화소들의 결과에 모두 섞인다. 결국 노이즈가 사라지지 않고 이웃 전체로 번져 퍼진다. 그래서 이런 노이즈는 <b>비선형</b> <b>필터링</b>으로 제거한다.</p>
-    <p><span class="lab">[미디언 필터]</span><b>미디언 필터</b>는 각 픽셀을 이웃 화소들의 <b>중앙값</b>(median)으로 바꾼다. 중앙값은 가중합으로 나타낼 수 없으므로 미디언 필터는 <b>비선형</b> 필터다. 튀는 값 하나는 정렬하면 맨 끝으로 밀려나 중앙값을 바꾸지 못한다. 그래서 Mean 필터보다 <b>outlier</b>에 덜 민감하다. 이 덕분에 <b>노이즈</b>를 퍼뜨리지 않고(does not spread the noise) 스파이크 노이즈를 제거한다. 그래서 임펄스 노이즈와 소금 · 후추 노이즈에 좋다.</p>
-    <p><span class="lab">[단점]</span>단점은 실행 비용이 비싸다는 것이다. 픽셀마다 이웃 값을 정렬해야 하기 때문이다.</p>
+    <p><span class="lab">[① 노이즈 종류]</span><b>노이즈</b>에는 세 종류가 있다. <b>Salt and pepper</b>는 검은 점과 흰 점이 무작위로 나타난다. <b>Impulse</b>는 흰 점이 무작위로 나타난다. <b>가우시안 노이즈</b>는 영상이 거칠고 흐릿해 보이는 밝기 변동 노이즈다.</p>
+    <p><span class="lab">[② 선형 필터의 한계]</span>이런 노이즈에 선형 필터를 쓰면 문제가 생긴다. 선형 필터는 이웃 값의 평균을 내는데, 평균은 튀는 값(<b>outlier</b>)까지 그대로 반영한다. 그래서 점 하나의 극단적인 값이 주변 화소들의 결과에 모두 섞인다. 결국 노이즈가 사라지지 않고 이웃 전체로 번져 퍼진다. 그래서 이런 노이즈는 <b>비선형</b> <b>필터링</b>으로 제거한다.</p>
+    <p><span class="lab">[③ 미디언 필터]</span><b>미디언 필터</b>는 각 픽셀을 이웃 화소들의 <b>중앙값</b>(median)으로 바꾼다. 중앙값은 가중합으로 나타낼 수 없으므로 미디언 필터는 <b>비선형</b> 필터다. 튀는 값 하나는 정렬하면 맨 끝으로 밀려나 중앙값을 바꾸지 못한다. 그래서 Mean 필터보다 <b>outlier</b>에 덜 민감하다. 이 덕분에 <b>노이즈</b>를 퍼뜨리지 않고(does not spread the noise) 스파이크 노이즈를 제거한다. 그래서 임펄스 노이즈와 소금 · 후추 노이즈에 좋다.</p>
+    <p><span class="lab">[④ 단점]</span>단점은 실행 비용이 비싸다는 것이다. 픽셀마다 이웃 값을 정렬해야 하기 때문이다.</p>
   </details>
 </article>
 
@@ -940,10 +947,10 @@ details.viz[open] > summary::before{transform:rotate(90deg)}
   <div class="go"><b>개념 바로가기</b><a class="go-a" href="computer-vision-week03.html#edge">에지 검출(3주차)</a><a class="go-a" href="computer-vision-week05.html#edge">엣지 검출(5주차)</a><a class="go-a" href="computer-vision-week05.html#blob">LoG · 블롭</a></div>
   <details class="viz" open><summary>교안 그림 <small>2장</small></summary><div class="qf-g"><figure class="qf"><img width="1309" height="655" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-35-noise-clean-edge.jpg" alt="3주차 교안 53p — 스무딩 필터와 미분 필터를 결합해 노이즈를 제거하고 에지를 찾는 그림"><figcaption><b>3주차 교안 53p </b>— 스무딩 필터와 미분 필터를 결합해 노이즈를 제거하고 에지를 찾는 그림</figcaption></figure><figure class="qf"><img width="1455" height="607" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv3-43-dog-vs-log.jpg" alt="3주차 교안 62p — DoG와 LoG의 결과 이미지 비교 및 LoG 커널과 컨볼루션 결과 그래프"><figcaption><b>3주차 교안 62p </b>— DoG와 LoG의 결과 이미지 비교 및 LoG 커널과 컨볼루션 결과 그래프</figcaption></figure></div></details>
   <details class="ans" open><summary>답</summary>
-    <p><span class="lab">[① 에지와 스무딩]</span><b>에지</b>는 물체의 형상을 설명한다. 표면 · 깊이 · 색 · 조명의 불연속이 모두 에지로 나타난다. 에지는 밝기의 급격한 변화이므로 미분으로 찾는데, 미분은 <b>노이즈</b>까지 키우기 때문에 노이즈 필터를 먼저 적용한다.</p>
+    <p><span class="lab">[① 에지와 스무딩]</span><b>에지</b>는 물체의 형상을 설명한다. 표면 · 깊이 · 표면 색 · 조명이 급변하는, 끊기는 곳이 모두 에지로 나타난다. 에지는 밝기의 급격한 변화이므로 미분으로 찾는데, 미분은 <b>노이즈</b>까지 키우기 때문에 노이즈 필터를 먼저 적용한다.</p>
     <p><span class="lab">[② 마스크 합치기]</span>스무딩과 미분이 둘 다 <b>컨볼루션</b>이고 결합법칙을 만족하므로, 두 마스크를 미리 합쳐 한 번에 실행할 수 있다.</p>
     <p><span class="lab">[③ Prewitt]</span><b>Prewitt</b>(프리윗) 에지 검출기는 세로와 가로를 나눠 마스크를 따로 적용한다. 마스크의 한 축으로는 [1 1 1] 스무딩이, 다른 축으로는 [−1 0 1] 미분이 동시에 일어나, 노이즈 제거와 에지 검출을 한 마스크에 담는다.</p>
-    <p><span class="lab">[④ Sobel]</span><b>Sobel</b>은 스무딩 가중치를 [1 2 1]로 두어 중심 화소를 더 강조한다. 그래서 가우시안에 가까운 부드러운 스무딩이 되어 노이즈에 더 강하다.</p>
+    <p><span class="lab">[④ Sobel]</span><b>Sobel</b>은 스무딩 가중치를 [1 2 1]로 두어 가운데 화소에 더 힘을 싣는다. 그래서 가우시안에 가까운 부드러운 스무딩이 되어 노이즈에 더 강하다.</p>
     <p><span class="lab">[⑤ DoG]</span><b>DoG</b>는 &lt;가우시안의 1차 미분&gt;(Derivative of Gaussian)이다. 스무딩 후 미분하는 대신, 가우시안을 미리 미분해 둔 필터를 한 번만 적용해 연산을 아낀다.</p>
     <p><span class="lab">[⑥ LoG]</span><b>LoG</b>는 &lt;가우시안의 2차 미분&gt;(Laplacian of Gaussian)으로, 1차 미분의 극값 대신 2차 미분의 <b>영교차</b>(0을 지나는 지점)로 에지를 찾는다. 2차 미분은 에지 양쪽에 부호가 반대인 봉우리를 만들어 선이 두 줄로 보이는 <b>이중선</b>이 나타나고, 그 사이에서 0을 지나는 점이 진짜 에지다. LoG는 분리가 어렵기 때문에 연산량이 많다.</p>
     <p><span class="lab">[⑦ 두 DoG 구분]</span>참고로 블롭 검출과 SIFT에서 쓰는 DoG는 <b>Difference of Gaussians</b>를 뜻하므로 구분해서 이해한다.</p>
