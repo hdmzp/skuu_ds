@@ -623,6 +623,7 @@ details.viz[open] > summary::before{transform:rotate(90deg)}
   <a href="#w6">6주차 기술자</a>
   <a href="#w7">7주차 매칭 · 호모그래피</a>
   <a href="#cross">주차를 엮는 문제</a>
+  <a href="#mine">개인정리</a>
   <a href="#pairs">헷갈리는 짝</a>
 </nav>
 
@@ -1423,6 +1424,82 @@ details.viz[open] > summary::before{transform:rotate(90deg)}
   </details>
 </article>
 </section>
+<!-- ===================== 개인정리 ===================== -->
+<section class="sec pb" id="mine">
+  <div class="sec-head"><span class="sec-badge">MINE</span><h2 class="sec-title">개인정리<small>내가 외우기 쉽게 다시 묶어 쓴 서술형 &mdash; 여러 문항을 한 질문으로 엮었다</small></h2></div>
+
+<article class="q" id="q-P-1" data-k="P-1" data-w="P">
+  <div class="q-h"><span class="q-no">P-1</span><span class="q-wk">2주차</span><span class="mine">개인정리</span><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
+  <p class="q-txt">Q. 동차좌표의 정의와 이미지 변환의 종류를 자유도와 엮어 설명하시오.</p>
+  <details class="ans" open><summary>답</summary>
+    <p>○ 동차좌표는 평행이동을 덧셈이 아닌 곱의 표현으로 나타내기 위해 좌표를 하나 더 붙이는 것이다. 컴퓨터비전에서는 원근에 강력히 사용되며, 이동·회전·크기·원근을 순서대로 곱해 하나의 행렬로 만들 수 있다.</p>
+    <p>○ 이미지 변환은 자유도가 커지는 순서로 rigid, similarity, affine, projective 네 가지가 있다.<br>rigid는 translation(평행이동)과 Euclidean(이동+회전)으로 나뉘는데 자유도는 각각 2와 3이다.<br>유사 변환은 이동, 회전, 크기 변화가 더해져 자유도가 4이다. 각도, 모양, 길이비는 보존된다.<br>아핀 변환은 가로·세로가 모두 변할 수 있어 매개변수가 6개다. 선형변환에 평행이동을 더한 것으로, 각도, 길이는 바뀌지만 평행성, 길이비는 보존한다.<br>투영 변환은 원근 변환이자 homography로, 3D를 2D로 투영할 때나 두 이미지를 합성할 때 쓴다. 3×3 원소 중 전체 스케일은 의미가 없어서 자유도는 8이다. 직선은 유지되고, 평행선은 유지되지 않아 두 직선은 소실점에서 만난다. 길이비와 각도도 유지되지 않는다.<br>대응점 한 쌍이 식 2개를 주므로 자유도가 곧 필요한 대응점 수를 정해 준다. 아핀은 3쌍, 투영은 4쌍이면 변환 행렬을 구할 수 있다.</p>
+  </details>
+</article>
+
+<article class="q" id="q-P-2" data-k="P-2" data-w="P">
+  <div class="q-h"><span class="q-no">P-2</span><span class="q-wk">3주차</span><span class="mine">개인정리</span><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
+  <p class="q-txt">Q. 가우시안 필터의 특장점을 설명하고, 시그마가 결과에 어떻게 영향을 주는지 설명하시오.</p>
+  <details class="ans" open><summary>답</summary>
+    <p>○ 가우시안은 가중 평균필터의 일종으로, 필터의 계수가 2D 가우시안(정규분포)의 표본이다. 중심에 가중치를 크게 두고 가장자리로 갈수록 가중치를 줄인다. 가우시안 필터는 표준편차 σ로 가중치가 미치는 거리를 조정한다. σ가 클수록 더 멀리까지 가중치를 받고, 더 넓은 범위의 값들이 평균에 포함되기 때문에 이미지가 더 흐려진다.</p>
+    <p>○ 가우시안 필터는 회전 대칭이다. 어느 방향으로도 대칭이라, 네모난 박스필터에 생기던 박스 자국들이 사라진다. 또한 σ의 크기로 흐림 정도를 정하기에 간단하고 직관적이다. 그리고 가우시안끼리 컨볼루션할 수 있어 σ1 가우시안과 σ2 가우시안을 연달아 적용할 필요 없이, 더 큰 가우시안을 한 번 적용하면 된다.<br>분리도 가능하다. 2D 가우시안은 x방향 가우시안과 y방향 가우시안으로 쪼개져서, 2D k×k 필터의 k² 연산을 1D 필터 두 번, 즉 2k번까지 줄일 수 있다.</p>
+  </details>
+</article>
+
+<article class="q" id="q-P-3" data-k="P-3" data-w="P">
+  <div class="q-h"><span class="q-no">P-3</span><span class="q-wk">3주차</span><span class="mine">개인정리</span><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
+  <p class="q-txt">Q. 엣지 검출에서 미분 전에 스무딩을 하는 이유와 검출기 종류를 비교설명하시오.</p>
+  <details class="ans" open><summary>답</summary>
+    <p>○ 엣지는 물체의 형상을 설명한다. 표면, 깊이, 색, 조명이 급변하는 곳이 모두 엣지로 나타난다. 이처럼 엣지는 밝기의 급격한 변화로, 밝기를 미분해서 찾는다. 다만 미분은 노이즈까지 키우기 때문에 먼저 노이즈 필터를 적용하여 스무딩을 한 다음에 에지 감지를 적용한다. 스무딩과 미분 모두 컨볼루션이라 결합법칙을 만족하므로, 두 마스크를 미리 하나로 합칠 수 있다.</p>
+    <p>○ 대표적인 에지 검출기는 Prewitt과 Sobel이다. Prewitt 에지검출기는 세로와 가로를 나눠 마스크를 따로 적용한다. 마스크 한쪽에서는 스무딩이, 다른 한쪽에서는 미분이 동시에 일어난다.<br>반면 Sobel은 가중치를 [1 2 1]로 두어 중심 화소에 더 힘을 싣는다. 가우시안에 가까운 부드러운 스무딩이 되어 노이즈에 강하다.</p>
+    <p>○ DoG(Derivative of Gaussian)는 Prewitt, Sobel과 마찬가지로 스무딩과 1차 미분을 하나의 마스크로 합쳐 에지를 찾는 기법이다. 다만 스무딩에 진짜 가우시안을 쓴다는 점이 다르다. 가우시안을 미리 미분해 둔 필터를 한 번만 적용하므로 연산을 아낄 수 있고, σ로 스무딩 정도를 조절할 수 있다. 스무딩이 Prewitt([1 1 1]) → Sobel([1 2 1]) → DoG(가우시안) 순으로 가우시안에 가까워질수록 노이즈에 강해지며, Sobel은 DoG를 3×3으로 근사한 셈이다.</p>
+    <p>○ 반면 LoG(Laplacian of Gaussian)는 가우시안의 2차 미분으로, 1차 미분의 극값 대신 2차 미분의 영교차(zero-crossing) 지점으로 에지를 찾는다. 에지 양쪽에 부호가 반대인 봉우리가 생겨 이중선이 나타나고, 분리가 어려워 연산량이 많다.</p>
+  </details>
+</article>
+
+<article class="q" id="q-P-4" data-k="P-4" data-w="P">
+  <div class="q-h"><span class="q-no">P-4</span><span class="q-wk">4주차</span><span class="mine">개인정리</span><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
+  <p class="q-txt">Q. 에일리어싱의 정의와 원인, 해결방법을 서술하시오. 이어서 가우시안 피라미드의 구성방법과 활용도 설명하시오. 가우시안 피라미드와 라플라시안 피라미드를 비교설명하시오.</p>
+  <details class="ans" open><summary>답</summary>
+    <p>○ 에일리어싱은 다운샘플링 과정에서 발생한다. 다운샘플링은 이미지의 해상도를 줄이는 것으로, 세부를 걷어내 큰 구조만 보고 데이터와 연산량을 줄이는 과정이다. 이때 신호를 원래보다 더 낮은 주파수로 샘플링하면서 고주파 성분이 저주파 성분으로 왜곡되는 '에일리어싱' 현상이 나타날 수 있다. 원래 없던 줄무늬가 생기거나, 경계가 계단 모양으로 깨지거나, 원래 없던 모아레가 나타난다. 단순히 흐려지는 것이 아니라 무늬가 새로 생긴다. 거꾸로 도는 듯 보이는 마차 바퀴 효과도 시간축에서의 에일리어싱 현상이다.</p>
+    <p>○ 원인은 나이퀴스트 이론으로 설명한다. 샘플링 주파수가 신호의 최대 주파수의 2배 이상이어야 한다는 이론으로, 이를 만족하지 못하면 샘플링으로 복제된 스펙트럼끼리 겹쳐서 원래 신호를 찾을 수가 없다. 즉 샘플이 원래 신호가 아닌 엉뚱한 신호를 대표하게 되어 에일리어싱이 발생한다. 이를 극복하려면 좀 더 촘촘히 신호를 찍는 오버샘플링을 하거나, 이미 찍혔으면 가우시안 블러로 고주파를 먼저 지운 후에 다운샘플링을 한다. 이때 반드시 순서를 지켜 &lt;블러 후 축소&gt;를 해야 하며, 이를 반복한 게 가우시안 피라미드다.</p>
+    <p>○ 가우시안 피라미드는 한 장의 이미지에 &lt;블러 후 축소&gt;를 반복하며 여러 해상도 버전을 쌓아 둔 피라미드다. 원본을 맨 아래에 두고, 작아진 것을 위로 쌓으면 피라미드 모양이 된다. 위로 올라갈수록 해상도와 픽셀 수가 줄어들고, 전부 더해도 원본의 4/3배밖에 되지 않는다. 또 위로 갈수록 가는 무늬, 질감, 작은 물체들이 지워지기에 크고 균일한 영역만 남는다. 위층에서는 전체 배치와 큰 구조를 빠르게 파악하고, 아래층에서는 세밀한 정보를 얻는다.</p>
+    <p>○ 즉, 가우시안 피라미드는 크기를 바꿔 가며 보는 도구로, SIFT의 스케일 불변 특징 검출이나, coarse-to-fine 탐색, 연산량 절감 등에 쓰인다. SIFT의 스케일 불변 특징 검출은 가우시안 피라미드를 쌓고 DoG(Difference of Gaussians)를 이용해서 특징점을 검출하는 방식이다. coarse-to-fine 탐색은 축소된 이미지에서 대략적인 위치와 움직임을 빠르게 찾고, 점차 원본 해상도로 올라오며 정밀한 위치를 조정하는 방식이다.</p>
+    <p>○ 가우시안 피라미드의 한계는 블러로 지워 버린 고주파가 어느 층에도 남지 않는다는 것이다. 그래서 위층만으로 원본을 되살릴 수가 없다. 그래서 잃어버린 고주파를 따로 보관한 개념이 '라플라시안 피라미드'다.</p>
+    <p>○ 라플라시안 피라미드는 가우시안 피라미드를 만드는 과정에서 고주파 정보만 따로 모아 둔 잔차 피라미드다. 잃어버린 디테일을 갖고 있으니 이미지 복원과 압축에 쓰이며, 특히 경계선을 부드럽게 이어 주는 이미지 블렌딩에 핵심적으로 쓰인다. 저주파 성분이 제거되어서 시각적으로는 회색 배경에 엣지(경계선)만 남은 형태로 보인다. 저장하는 것은 맨 위의 작은 이미지 한 장과, 층마다의 잔차다. 맨 위에서부터 키우고 잔차 더하기를 반복하면 원본으로 돌아온다.</p>
+  </details>
+</article>
+
+<article class="q" id="q-P-5" data-k="P-5" data-w="P">
+  <div class="q-h"><span class="q-no">P-5</span><span class="q-wk">5주차</span><span class="mine">개인정리</span><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
+  <p class="q-txt">Q. 로컬 특징을 다루는 세 단계(detection / description / matching)를 설명하고, 로컬 특징의 장점을 서술하시오. 로컬 특징의 네 종류를 비교하시오.</p>
+  <details class="ans" open><summary>답</summary>
+    <p>○ 로컬 특징이 필요한 대표적 예로 파노라마가 있다. 파노라마를 만들려면 두 사진에서 같은 지점을 가리키는 짝을 찾아야 한다. 픽셀 전체를 하나하나 비교하면 계산이 느리고, 사진의 밝기가 조금만 달라도 픽셀값이 달라져 비교가 어렵다. 그래서 사진마다 눈에 띄는 지점만 추출해서 그 지점끼리 짝을 짓는다. 그 짝을 기준으로 사진을 정렬한다. 이미지 매칭, 파노라마, 3차원 복원, 모션 추적, 물체 인식, 이미지 검색, 로봇 내비게이션 등이 모두 로컬 특징을 기반으로 한다.</p>
+    <p>○ 로컬 특징의 대표적 장점은 Locality, Quantity, Distinctiveness, Efficiency다. 첫째, Locality로 특징 하나가 작은 영역에 의존하기 때문에 물체 일부가 가려지거나 배경이 복잡해도 나머지 특징은 살아남는다. 둘째는 Quantity로 한 장에서 특징이 수백, 수천 개가 나오므로 몇 개가 틀려도 전체 결과는 강건하다. 셋째는 Distinctiveness(구별성)로, 대규모 데이터베이스에서도 특징끼리 구별된다. 넷째는 Efficiency로, 실시간으로 처리가 가능하다.</p>
+    <p>○ 로컬 특징은 세 단계로 다룬다.<br>먼저 Detection 단계에서 관심점을 찾는다(Find feature).<br>Description 단계에서는 관심점 주변을 벡터로 요약한다(Represent feature).<br>마지막 Matching 단계에서 두 기술자를 비교해 짝을 찾는다(Match feature).</p>
+    <p>○ 로컬 특징의 종류는 엣지, 라인, 코너, 블롭의 네 가지다.<br>엣지는 밝기가 급변하는 점이다.<br>직선은 엣지 점들이 일직선으로 늘어선 것이다.<br>코너는 어느 방향으로 움직이든 밝기가 크게 변하는 점이다.<br>블롭은 주변과 구별되는 덩어리다.<br>점 → 선 → 모서리 → 덩어리로 갈수록 다른 사진에서도 다시 찾을 수 있는 좋은 특징에 가깝다.</p>
+  </details>
+</article>
+
+<article class="q" id="q-P-6" data-k="P-6" data-w="P">
+  <div class="q-h"><span class="q-no">P-6</span><span class="q-wk">5주차</span><span class="mine">개인정리</span><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
+  <p class="q-txt">Q. 엣지 검출의 원리와 과정을 설명하시오. 엣지 검출의 세 단계를 서술하고, 그중 Canny 엣지 검출의 네 단계를 설명하시오.</p>
+  <details class="ans" open><summary>답</summary>
+    <p>○ 엣지는 이웃한 점 사이에서 밝기가 급변하는 지점이며, 미분을 활용해 변화량을 잰다. 따라서 엣지는 1차 미분이 극값이 되는 곳이다. 이미지는 2차원이므로 x, y 방향으로 각각 편미분한다. 두 편미분을 묶은 벡터가 그래디언트인데, 그래디언트의 크기(magnitude)가 엣지의 세기이고, 그래디언트의 방향이 엣지를 가로지르는 방향이다.</p>
+    <p>○ 엣지 검출의 세 단계는 Filtering → Enhancement → Detection이다. 실제 사진은 노이즈가 있기 때문에 미분하면 노이즈가 더 극단적으로 뒤섞인다. 그래서 먼저 Filtering에서 스무딩, 블러링으로 노이즈를 누른다. 다음 Enhancement에서 차분 연산자로 변화가 큰 픽셀을 도드라지게 한다. 마지막 Detection에서 임계값을 넘는 강한 엣지만 남긴다.</p>
+    <p>○ 차분 연산자로 Prewitt, Sobel, Roberts가 있다.</p>
+  </details>
+</article>
+
+<article class="q" id="q-P-7" data-k="P-7" data-w="P">
+  <div class="q-h"><span class="q-no">P-7</span><span class="q-wk">5주차</span><span class="mine">개인정리</span><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
+  <p class="q-txt">Q. 평탄 / 엣지 / 코너를 구분하고, 해리스 코너 검출기와 단계를 설명하시오. 해리스에서 2차 모멘트 행렬의 고윳값으로 코너를 판정하는 원리를 설명하시오.</p>
+  <details class="ans" open><summary>답</summary>
+    <p>○ 코너는 이미지 안에서 서로 다른 방향의 에지가 만나는 지점이다. (작성 중)</p>
+  </details>
+</article>
+</section>
+
 <!-- ===================== 헷갈리는 짝 ===================== -->
 <section class="sec pb" id="pairs">
   <div class="sec-head"><span class="sec-badge">PAIR</span><h2 class="sec-title">헷갈리는 짝 비교표<small>&ldquo;A와 B를 비교하시오&rdquo; 유형 대비 &mdash; 주차를 함께 적었다</small></h2></div>
@@ -1591,7 +1668,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch (e) { syncMsg('err', '계정 저장소에 연결하지 못함 · 이 브라우저에는 저장됨'); }
   }
   var cards = [].slice.call(document.querySelectorAll('article.q[data-k]'));
-  var WEEKS = [['2','2주차'],['3','3주차'],['4','4주차'],['5','5주차'],['6','6주차'],['7','7주차'],['X','엮는 문제']];
+  var WEEKS = [['2','2주차'],['3','3주차'],['4','4주차'],['5','5주차'],['6','6주차'],['7','7주차'],['X','엮는 문제'],['P','개인정리']];
   var bar = document.getElementById('fbar'), tab = document.getElementById('tabbar');
   function place() { bar.style.top = window.innerWidth >= 720 ? (tab ? tab.offsetHeight : 0) + 'px' : ''; }
   place(); window.addEventListener('resize', place);
@@ -1715,7 +1792,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
   function backToQuestion() {
-    var m = /^#q-([0-9X]+-[0-9]+)$/.exec(location.hash); if (!m) return;
+    var m = /^#q-([0-9XP]+-[0-9]+)$/.exec(location.hash); if (!m) return;
     var c = document.getElementById('q-' + m[1]); if (!c) return;
     if (c.hidden) { st.weeks = []; st.star = false; st.bmOnly = false; st.ck = []; update(); }
     requestAnimationFrame(function () {
