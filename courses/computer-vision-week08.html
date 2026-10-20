@@ -746,13 +746,13 @@ details.viz[open] > summary::before{transform:rotate(90deg)}
   <div class="go"><b>개념 바로가기</b><a class="go-a" href="computer-vision-week02-2.html#types">변환 4가지</a><a class="go-a" href="computer-vision-week02-2.html#table">정리표 · 자유도</a><a class="go-a" href="computer-vision-week07.html#align">어파인 피팅 3쌍</a><a class="go-a" href="computer-vision-week07.html#homo">호모그래피 4쌍</a></div>
   <details class="viz" open><summary>교안 그림 <small>1장</small></summary><div class="qf-g one"><figure class="qf"><img width="1100" height="631" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv2-17-hierarchy.jpg" alt="2주차 교안 17p — 평행이동 → 강체(Euclidean) → 유사 → 아핀 → 투영으로 갈수록 바뀌는 성질이 늘어난다"><figcaption><b>2주차 교안 17p </b>— 평행이동 → 강체(Euclidean) → 유사 → 아핀 → 투영으로 갈수록 바뀌는 성질이 늘어난다</figcaption></figure></div></details>
   <details class="ans" open><summary>답</summary>
-    <p><span class="lab">[① 자유도 순서]</span>이미지 변환은 <b>자유도</b>가 커지는 순서로 <b>translation</b>, <b>rigid</b>(유클리디안), <b>similarity</b>, <b>affine</b>, <b>projective</b>가 있다. 자유도는 몇 개가 바뀌느냐의 개수다.</p>
-    <p><span class="lab">[② 평행이동]</span><b>평행이동</b>(translation)은 원래 영상을 새로운 위치로 옮기는 것으로, 이동량 두 개가 전부라 자유도는 2다. 모양 · 크기 · 방향이 그대로이며, 세부적으로는 방향 · 길이 · 각도 · 평행성 · 직선을 모두 보존한다.</p>
-    <p><span class="lab">[③ 강체]</span><b>rigid</b>(강체, 유클리디안) 변환은 이동에 θ만큼의 회전이 더해져 자유도가 3이고, 길이를 보존한다.</p>
+    <p><span class="lab">[① 네 가지 변환]</span>이미지 변환은 <b>자유도</b>가 커지는 순서로 <b>rigid</b>(강체), <b>similarity</b>(유사), <b>affine</b>(아핀), <b>projective</b>(투영)의 네 가지가 있다. 이 가운데 강체 변환은 다시 <b>translation</b>(평행이동)과 <b>Euclidean</b>(유클리드, 이동 + 회전)으로 나뉜다. 자유도는 몇 개가 바뀌느냐의 개수다.</p>
+    <p><span class="lab">[② 강체 — 평행이동]</span>강체 변환 중 <b>평행이동</b>(translation)은 원래 영상을 새로운 위치로 옮기는 것으로, 이동량 두 개가 전부라 자유도는 2다. 모양 · 크기 · 방향이 그대로이며, 세부적으로는 방향 · 길이 · 각도 · 평행성 · 직선을 모두 보존한다.</p>
+    <p><span class="lab">[③ 강체 — 유클리드]</span>강체 변환 중 <b>Euclidean</b>(유클리드) 변환은 이동에 θ만큼의 회전이 더해져 자유도가 3(회전 1 + 이동 2)이고, 길이 · 각도 · 평행성 · 직선을 보존한다.</p>
     <p><span class="lab">[④ 유사]</span><b>similarity</b>(유사 변환)는 이동과 회전에 크기 변화까지 더해져 자유도가 4이며, 길이는 바뀌지만 각도와 모양, 길이의 비를 보존한다.</p>
     <p><span class="lab">[⑤ 아핀]</span><b>affine</b>(아핀) 변환은 가로 · 세로가 모두 변할 수 있어 매개변수가 6개다. <b>선형 변환</b>에 <b>평행이동</b>을 더한 것으로, 원점을 원점에 매핑할 필요가 없다. 각도와 길이는 바뀌지만 평행성과 길이의 비는 보존한다.</p>
     <p><span class="lab">[⑥ 투영]</span><b>projective</b>(투영) 변환은 <b>원근</b> 변환이자 <b>homography</b>로, 3D를 2D로 투영할 때나 두 이미지를 합성할 때(<b>파노라마</b>) 쓴다. 3×3 원소 중 전체 스케일은 의미가 없어서 자유도는 8이다. 직선은 그대로 직선으로 유지되지만 평행선은 유지되지 않아, 두 직선이 <b>소실점</b>(vanishing point)에서 만나게 된다. 길이의 비나 각도 역시 보존되지 않는다.</p>
-    <p><span class="lab">[⑦ 포함 관계와 대응점]</span>translation → rigid → similarity → affine → projective의 포함 관계가 있고, 자유도가 2 → 3 → 4 → 6 → 8로 늘어날수록 보존되는 성질은 하나씩 사라진다. 대응점 한 쌍이 식 2개를 주므로 자유도가 곧 필요한 대응점 수를 정해, 아핀은 3쌍, 투영은 4쌍이면 변환 행렬을 구할 수 있다.</p>
+    <p><span class="lab">[⑦ 포함 관계와 대응점]</span>강체(translation → Euclidean) → similarity → affine → projective의 포함 관계가 있고, 자유도가 2 → 3 → 4 → 6 → 8로 늘어날수록 보존되는 성질은 하나씩 사라진다. 대응점 한 쌍이 식 2개를 주므로 자유도가 곧 필요한 대응점 수를 정해, 아핀은 3쌍, 투영은 4쌍이면 변환 행렬을 구할 수 있다.</p>
   </details>
 </article>
 
