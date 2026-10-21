@@ -190,9 +190,8 @@ h1{font-size:26px;line-height:1.3;margin:0;letter-spacing:-.02em;text-wrap:balan
       <div class="row" id="lvRow"><span class="lbl">분류</span></div>
       <div class="row">
         <span class="lbl">보기</span>
-        <button class="tool t-star" id="fStar" aria-pressed="false">★ 8주차 중점</button>
+        <button class="tool t-star" id="fStar" aria-pressed="false">★ 중요</button>
         <button class="tool" id="fBm" aria-pressed="false">북마크</button>
-        <button class="tool t-imp" id="fImp" aria-pressed="false">중요</button>
         <button class="tool" id="fWrong" aria-pressed="false">틀린 문제만</button>
         <button class="tool" id="fTodo" aria-pressed="false">안 푼 문제만</button>
         <button class="tool" id="fReveal" aria-pressed="false">정답 모두 보기</button>
@@ -226,9 +225,9 @@ const cls = q => q.x ? "제외" : q.d;
 const qkey = q => q.w + "-" + q.id;
 const STAR_N = DATA.qs.filter(q=>q.s).length;
 
-const st = { weeks:new Set(), lv:new Set(), star:false, bmOnly:false, impOnly:false, wrong:false, todo:false, reveal:false, text:"", ans:{}, bm:{}, imp:{}, memos:[], view:"quiz", viewAt:0 };
+const st = { weeks:new Set(), lv:new Set(), star:false, bmOnly:false, wrong:false, todo:false, reveal:false, text:"", ans:{}, bm:{}, imp:{}, memos:[], view:"quiz", viewAt:0 };
 /* 필터 상태(주차 · 분류 · 보기 버튼 · 정답 모두 보기)도 저장해 다시 열어도 그대로 */
-const VIEW_KEYS = ["star","bmOnly","impOnly","wrong","todo","reveal"];
+const VIEW_KEYS = ["star","bmOnly","wrong","todo","reveal"];
 function viewObj(){ const v = {weeks:[...st.weeks], lv:[...st.lv]}; VIEW_KEYS.forEach(k=>v[k]=!!st[k]); return v; }
 function applyView(v){
   if (!v) return;
@@ -335,10 +334,9 @@ function renderChips(){
   });
   const bmN = Object.keys(st.bm).length;
   $("#fStar").hidden = STAR_N===0;
-  $("#fStar").textContent = "★ 8주차 중점 "+base.filter(q=>q.s).length;
+  $("#fStar").textContent = "★ 중요 "+base.filter(q=>q.s).length;
   $("#fBm").textContent = "북마크 "+bmN;
-  $("#fImp").textContent = "중요 "+Object.keys(st.imp).length;
-  [["#fStar","star"],["#fBm","bmOnly"],["#fImp","impOnly"],["#fWrong","wrong"],["#fTodo","todo"],["#fReveal","reveal"]]
+  [["#fStar","star"],["#fBm","bmOnly"],["#fWrong","wrong"],["#fTodo","todo"],["#fReveal","reveal"]]
     .forEach(([id,k])=>$(id).setAttribute("aria-pressed", st[k]));
 }
 function toggle(set,v){ set.has(v) ? set.delete(v) : set.add(v); }
@@ -351,7 +349,6 @@ function visible(){
     if (st.lv.size && !st.lv.has(cls(q))) return false;
     if (st.star && !q.s) return false;
     if (st.bmOnly && !st.bm[qkey(q)]) return false;
-    if (st.impOnly && !st.imp[qkey(q)]) return false;
     const a = st.ans[qkey(q)];
     if (st.wrong && !(a!=null && a!==q.a)) return false;
     if (st.todo && (q.x || a!=null)) return false;
@@ -395,7 +392,7 @@ function refresh(c,q){ c.replaceWith(card(q)); const l=visible(); renderStatus(l
 function card(q){
   const k = qkey(q), a = st.ans[k], ex = !!q.x;
   const shown = ex || a!=null || st.reveal;
-  const c = el("article","q"+(ex?" is-ex":"")+(q.s?" is-star":"")+(st.imp[k]?" is-imp":"")); c.id = "q"+k;
+  const c = el("article","q"+(ex?" is-ex":"")+(q.s?" is-star":"")); c.id = "q"+k;
   const meta = el("div","meta");
   meta.append(el("span","num", q.w+"주차 · "+q.id+"번"));
   meta.append(el("span","badge b-"+cls(q), cls(q)));
@@ -404,11 +401,6 @@ function card(q){
   const w = DATA.weeks[q.w-1];
   meta.append(el("span","sec", q.sec+" "+(w.secs[q.sec]||"")));
   if (!ex && a!=null) meta.append(el("span","res "+(a===q.a?"ok":"no"), a===q.a?"정답":"오답"));
-  const im = el("button","imp","중요"); im.type="button";
-  const io_ = !!st.imp[k];
-  im.setAttribute("aria-pressed", io_); im.title = io_ ? "중요 표시 해제" : "중요 표시";
-  im.onclick = ()=>{ if (st.imp[k]) delete st.imp[k]; else st.imp[k]=1; saveProgress(); renderChips(); refresh(c,q); };
-  meta.append(im);
   const bm = el("button","bm"); bm.type="button"; bm.innerHTML = BM_SVG;
   const on = !!st.bm[k];
   bm.setAttribute("aria-pressed", on); bm.setAttribute("aria-label", on?"북마크 해제":"북마크");
@@ -470,9 +462,7 @@ function card(q){
 function renderList(list){
   const root = $("#list"); root.innerHTML = "";
   if (!list.length){
-    root.append(el("p","empty", st.impOnly && !Object.keys(st.imp).length
-      ? "아직 중요 표시한 문제가 없습니다. 문제 오른쪽 위의 '중요' 버튼을 눌러 추가하세요."
-      : st.bmOnly && !Object.keys(st.bm).length
+    root.append(el("p","empty", st.bmOnly && !Object.keys(st.bm).length
       ? "아직 북마크한 문제가 없습니다. 문제 오른쪽 위의 책갈피 버튼을 눌러 추가하세요."
       : "조건에 맞는 문제가 없습니다. 분류나 주차 선택을 바꿔 보세요."));
     return;
@@ -508,7 +498,7 @@ function renderMini(list){
   const parts = [];
   parts.push(st.weeks.size ? [...st.weeks].sort((a,b)=>a-b).join("·")+"주차" : "전체 주차");
   if (st.lv.size) parts.push([...st.lv].join("·"));
-  if (st.star) parts.push("★ 중점"); if (st.bmOnly) parts.push("북마크"); if (st.impOnly) parts.push("중요");
+  if (st.star) parts.push("★ 중요"); if (st.bmOnly) parts.push("북마크");
   if (st.reveal) parts.push("정답 보기");
   if (st.wrong) parts.push("틀린 문제"); if (st.todo) parts.push("안 푼 문제");
   const solv = list.filter(q=>!q.x), done = solv.filter(q=>st.ans[qkey(q)]!=null).length;
@@ -604,7 +594,7 @@ function renderMemos(){
 function gotoQ(q){
   backTo = {y:0, key:qkey(q)};
   if (!document.getElementById("q"+qkey(q))){   // 지금 필터에 안 보이는 문제면 필터를 풀어서 보여 줌
-    st.weeks.clear(); st.lv.clear(); st.star=st.bmOnly=st.impOnly=st.wrong=st.todo=false; st.text=""; $("#q").value=""; update();
+    st.weeks.clear(); st.lv.clear(); st.star=st.bmOnly=st.wrong=st.todo=false; st.text=""; $("#q").value=""; update();
   }
   if (history.state && history.state.memo){ try{ history.back(); return; }catch(e){} }
   backToQuiz();
@@ -616,7 +606,6 @@ $("#memoAdd").onclick=()=>newMemo(null);
 
 $("#fStar").onclick=()=>{ st.star=!st.star; update(); };
 $("#fBm").onclick=()=>{ st.bmOnly=!st.bmOnly; update(); };
-$("#fImp").onclick=()=>{ st.impOnly=!st.impOnly; update(); };
 $("#fWrong").onclick=()=>{ st.wrong=!st.wrong; if(st.wrong) st.todo=false; update(); };
 $("#fTodo").onclick=()=>{ st.todo=!st.todo; if(st.todo) st.wrong=false; update(); };
 $("#fReveal").onclick=()=>{ st.reveal=!st.reveal; update(); };
