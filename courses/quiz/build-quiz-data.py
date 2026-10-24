@@ -96,6 +96,16 @@ TERMS = {
    'BoW','문서 벡터','임베딩','단어 임베딩','분포 가설','Word2Vec','CBOW','Skip-gram','윈도우','네거티브 샘플링','서브샘플링',
    'FastText','OOV','전이 학습','유추','Doc2Vec','SBERT','정적 임베딩','문맥 임베딩','ELMo','BERT','다의어',
  ],
+ 'nlp-w09': [
+   '질의응답','정보 검색','정답 유형','질문 유형','질의 재생성','의문사','오류 전파','불리언','TF-IDF','BM25','코사인','어휘 불일치',
+   '정답 후보','순위화','개체명','지식베이스','SPARQL','기계독해','MRC','Retriever','Reader','DPR','밀집 검색','RAG','환각','F1','Factoid',
+   '추출형','생성형','기계번역','어순','어휘 중의성','형태론','대응 단위','규칙 기반','Vauquois','중간 언어','직접 방식','전이 방식',
+   '통계 기반','병렬 코퍼스','조건부 확률','데이터 희소성','잡음 통로','베이즈','번역 모델','언어 모델','단어 정렬','EM 알고리즘','IBM Model',
+   '구 번역 표','구 기반','디코딩','빔 탐색','BLEU','clipping','길이 벌점','BP','n-gram','정밀도','chrF','COMET','BERTScore',
+   'seq2seq','인코더','디코더','문맥 벡터','정보 병목','어텐션','Transformer','위치 인코딩','셀프 어텐션','역번역','서브워드','BPE','OOV',
+   '대화 시스템','사용자 주도','시스템 주도','ASR','NLU','DM','NLG','TTS','의도','슬롯','슬롯 채우기','BIO','joint learning',
+   '대화 관리','FSA','Frame','우선순위','강화학습','POMDP','보상','정책','DST','Slot Error Rate','End-to-end','기능대화','일상대화','perplexity','tool calling',
+ ],
  'nlp-w07': [
    '개체명','개체명 인식','NER','태그셋','주석 지침','질의응답','정보 검색','상호참조',
    'PER','LOC','ORG','MISC','OntoNotes','NORP','GPE','CoNLL',
@@ -235,3 +245,5 @@ build('nlp-w07', 'materials/자연어처리/week07-quiz100.html', 'courses/quiz/
       {'title': '7주차 · 개체명 인식, 언어 모델, 그리고 정보 추출', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week07-quiz100.html'})
 build('ml-w07', 'materials/기계학습특론/week07-quiz100.html', 'courses/quiz/ml-w07.js',
       {'title': '7주차 · k 최근접 이웃과 XAI', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week07-quiz100.html'})
+build('nlp-w09', 'materials/자연어처리/week09-quiz100.html', 'courses/quiz/nlp-w09.js',
+      {'title': '9주차 · 질의응답, 기계번역, 그리고 대화 시스템', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week09-quiz100.html'})

@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자연어처리 | 9주차 수업내용</title>
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0c1a3a">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+.exam{background:#fef2f2;border:2px solid var(--red);border-radius:var(--radius);padding:11px 15px;font-size:12.5px;color:#7f1d1d;line-height:1.7;margin:0 0 12px;display:flex;gap:9px;align-items:flex-start}
+.exam .tag{flex-shrink:0;background:var(--red);color:#fff;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;margin-top:1px}
+table.exam-table th{background:#fdecec}
+table.exam-table td:first-child{background:#fef7f7}
+.pipe{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:14px 0}
+.pipe .st{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:12px;font-weight:700;text-align:center;line-height:1.5;flex:1 1 100px;min-width:88px}
+.pipe .st small{display:block;font-size:10px;font-weight:400;color:var(--muted);margin-top:2px}
+.pipe .st.raw{background:#f1f0ec;color:var(--muted)}
+.pipe .st.app{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pipe .arrow{color:var(--muted);font-size:14px;flex:0 0 auto}
+.cycle{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.cyc{background:var(--accent);color:#fff;border-radius:8px;padding:12px 12px 11px;font-size:12.5px;font-weight:700;text-align:center}
+.cyc em{display:block;font-style:normal;font-size:10.5px;font-weight:400;color:#dbe4f7;margin-top:4px;line-height:1.5}
+.cyc.dim{background:#7d9ad6}
+@media(max-width:480px){.cycle{grid-template-columns:1fr 1fr}}
+.cyc-note{grid-column:1/-1;background:#fff7ed;border:1px solid #f59e0b;border-radius:8px;padding:9px 12px;font-size:11.5px;color:#78350f;text-align:center}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+
+/* 주차 내비 */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .out{color:#c9f24b}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 용어 · 약어 표 — 좁은 화면에서도 가로 스크롤 없이 읽히게 */
+#terms table{min-width:0}
+#terms td:first-child{white-space:normal;width:1%;font-size:12.5px}
+#terms td{padding:9px 11px}
+
+/* 수식 카드 · 풀이 예제 (기계학습특론 페이지와 같은 규칙) */
+.fx{background:#f8faff;border:1px solid #cfdcf5;border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:10px 0}
+.fx-lab{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.fx-note{font-size:12px;color:#4b5563;line-height:1.7;margin-top:7px}
+.fx-note b{color:var(--ink)}
+.tex-d{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:9px 2px 5px;text-align:center}
+.tex-d .katex{font-size:1.08em}
+.ex{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin:10px 0}
+.ex-q{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.65;background:#f1f0ec;border-radius:7px;padding:9px 12px;margin-bottom:4px}
+.ex-q em{font-style:normal;color:var(--red);font-size:11px;font-weight:700;display:block;margin-bottom:3px}
+.step{display:grid;grid-template-columns:20px 1fr;gap:9px;align-items:baseline;font-size:12.5px;color:#4b5563;line-height:1.75;padding:5px 0}
+.step i{font-style:normal;font-weight:700;color:var(--accent);font-size:11.5px}
+.ex-ans{margin-top:8px;background:#f0fdf4;border:1px solid #22c55e;border-radius:8px;padding:9px 12px;font-size:12.5px;color:#14532d;line-height:1.7}
+.ex-ans b{color:var(--green)}
+.figs > .note-box{margin:0}
+/* 편집 거리 DP 표 */
+.lev table{min-width:0;width:auto;margin:0 auto;font-family:'Consolas','D2Coding',ui-monospace,monospace}
+.lev th,.lev td{text-align:center;padding:6px 10px;white-space:nowrap}
+.lev td.on{background:#fde68a;font-weight:700;color:#7c2d12}
+/* ===== 개념 하이라이트(형광펜) + 툴팁 ===== */
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);
+  border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+td .term,th .term{font-weight:700}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;
+  left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+/* ===== 심화 — 한 걸음 더 ===== */
+.deep{
+  background:#f7f5ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:13px 16px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.deep::before{
+  content:'🔎 한 걸음 더 — 심화 개념';display:table;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:8px;
+}
+.deep b{color:#2e1065}
+.deep .ul li{color:#3b2a6b}
+.deep .ul li::before{background:#6d28d9;opacity:.75}
+.deep .tbl-wrap{margin:9px 0 4px;background:#fff}
+.deep pre.code{margin:9px 0}
+.deep .fx{background:#fff;border-color:#d8cdf7;border-left-color:#6d28d9;margin:9px 0}
+.deep .fx-lab{color:#6d28d9}
+.deep .term{background:#ede7ff;color:#5b21b6;border-bottom-color:#6d28d9}
+.deep .term:hover,.deep .term.on{background:#ddd2fb}
+/* ===== 오답 포인트 — 문제에서 갈린 지점 ===== */
+.pit{
+  background:#fff7ed;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:12.5px;line-height:1.8;color:#7c2d12;
+}
+.pit::before{
+  content:'⚠ 여기서 갈린다';display:table;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.pit b{color:#7c2d12}
+.pit .ul li{color:#7c2d12}
+.pit .ul li::before{background:#b45309;opacity:.8}
+.pit table{min-width:0}
+.pit .tbl-wrap{margin:8px 0 4px;background:#fff}
+
+/* ===== 필기 구분 — 실시간 강의 강조 / 내 복습 필기 ===== */
+.live{
+  background:#fffaf3;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#7c2d12;
+}
+.live::before{
+  content:'🎙 실시간 강의 강조';display:table;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.live b{color:#7c2d12}
+.live .ul li{color:#7c2d12}
+.live .ul li::before{background:#b45309;opacity:.75}
+.mynote{
+  background:#f5f3ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.mynote::before{
+  content:'📝 내 복습 필기 · 추가 개념';display:table;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.mynote b{color:#2e1065}
+.mynote .ul li{color:#3b2a6b}
+.mynote .ul li::before{background:#6d28d9;opacity:.75}
+.mynote table{min-width:0}
+.mynote .tbl-wrap{margin:8px 0 4px;background:#fff}
+.mynote pre.code{margin:9px 0}
+.mynote .fx{background:#fff;border-color:#d8cdf7;border-left-color:#6d28d9;margin:9px 0}
+/* 분류 알고리즘 바로가기 카드 */
+.algo{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:9px;margin:12px 0}
+.algo a{display:block;background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:11px 13px;text-decoration:none;color:inherit;transition:border-color .12s,transform .12s}
+.algo a:hover{border-color:var(--accent);transform:translateY(-1px)}
+.algo a b{display:block;font-size:13.5px;color:var(--ink)}
+.algo a small{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}
+.algo a span{display:block;font-size:12px;color:#4b5563;line-height:1.65}
+.algo a em{display:block;font-style:normal;font-size:11px;color:var(--accent);font-weight:700;margin-top:6px}
+/* 재현율 점 그림 */
+.dots{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0 4px}
+.dots i{width:15px;height:15px;border-radius:50%;display:inline-block}
+.dots i.tp{background:#16a34a}
+.dots i.fn{background:#fff;border:2px solid #dc2626}
+.dots i.fp{background:#f59e0b}
+.dots-lab{font-size:11.5px;color:#4b5563}
+/* 시그모이드 그림 */
+.sig{display:block;width:100%;max-width:420px;height:auto;margin:8px auto 2px;background:#fff;border:1px solid #d8cdf7;border-radius:8px}
+/* ===== 복습하기 ===== */
+.rv{background:var(--surface);border:1px solid var(--border);border-left:4px solid #0f766e;border-radius:var(--radius);margin:10px 0;overflow:hidden}
+.rv summary{cursor:pointer;list-style:none;padding:12px 15px;font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.6;display:flex;gap:9px;align-items:baseline}
+.rv summary::-webkit-details-marker{display:none}
+.rv summary i{font-style:normal;flex:none;font-size:11px;font-weight:800;color:#fff;background:#0f766e;border-radius:999px;padding:1px 8px}
+.rv summary::after{content:'답 보기 ▾';margin-left:auto;flex:none;font-size:11px;font-weight:700;color:#0f766e}
+.rv[open] summary::after{content:'접기 ▴'}
+.rv .ans{border-top:1px dashed #99e0d6;background:#f0fdfa;padding:12px 15px;font-size:13px;line-height:1.85;color:#134e4a}
+.rv .ans b{color:#0f3d3a}
+.rv .ans .ul li{color:#134e4a}
+.rv .ans .tbl-wrap{background:#fff;margin:8px 0}
+.rv .ans table{min-width:0}
+.rv .ans pre.code{margin:8px 0}
+.rv .one{display:block;background:#fff;border:1px solid #99e0d6;border-radius:7px;padding:7px 11px;margin-bottom:8px;font-weight:700;color:#0f3d3a}
+/* 범례 */
+.mark-legend{display:flex;flex-wrap:wrap;gap:8px 18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px 14px;margin:-14px 0 26px;font-size:12.5px;color:#4b5563;line-height:1.6}
+.mark-legend span{display:inline-flex;align-items:center;gap:6px}
+.hi{background:linear-gradient(transparent 58%,#ffe9a8 58%);font-weight:700;color:var(--ink);padding:0 1px}
+.mark-legend i{width:12px;height:12px;border-radius:3px;display:inline-block;flex-shrink:0}
+/* 7주차 추가: 한 줄 요약 · SVG 도식 */
+.oneline{background:#16233f;color:#e7edf9;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+.oneline > p{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:#c9f24b}
+.oneline .ul li{color:#c5d0e8;font-size:13px}
+.oneline .ul li b{color:#fff}
+.oneline .ul li::before{background:#c9f24b;opacity:.9}
+.oneline .hi{color:#16233f}
+.svgfig{padding:11px 11px 9px}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:560px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#docs">강의자료</a>
+  <a href="#goal">학습 목표</a>
+  <a href="#qa-intro">9.1.1 질의응답 개요</a>
+  <a href="#qa-ir">9.1.2 IR 기반 QA</a>
+  <a href="#qa-neural">9.1.3 신경망 QA · 평가</a>
+  <a href="#mt-rule">9.2.1 번역 · 규칙 기반</a>
+  <a href="#mt-smt">9.2.2 통계 기반 번역</a>
+  <a href="#mt-bleu">9.2.3 BLEU</a>
+  <a href="#mt-nmt">9.2.4 신경망 번역</a>
+  <a href="#ds-arch">9.3.1 대화 시스템 구현</a>
+  <a href="#ds-dm">9.3.2 대화 관리</a>
+  <a href="#ds-eval">9.3.3 평가 · 분류</a>
+  <a href="#wrap">9.4 종합 정리</a>
+  <a href="#review">확인 질문</a>
+  <a href="#lab">실습 노트북</a>
+  <a href="#hw">과제 · 제출</a>
+  <a href="#next">다음 주 예고</a>
+</nav>
+
+<div class="wrap">
+
+<div class="weeknav">
+  <a href="nlp.html" class="plan">← 강의계획서</a>
+  <a href="nlp-week06.html">6주차 · 요약 · 생성 · 벡터 표현</a>
+  <a href="nlp-week07.html">7주차 · 개체명 인식 · 언어 모델 · 정보 추출</a>
+  <a href="nlp-week08.html">8주차 · 중간 정리 · 700제</a>
+  <span class="cur">9주차 · 질의응답 · 기계번역 · 대화 시스템</span>
+</div>
+
+<section class="hero">
+  <p class="kicker">9주차 · 10.26 ~ 11.1 · 2026-2학기</p>
+  <h1>CHAPTER 9 — 질의응답, 기계번역, 그리고 대화 시스템</h1>
+  <p>핵심 질문은 &ldquo;<b>질문에 답하고 언어를 번역하는 시스템은 어떻게 만드는가?</b>&rdquo;이다. 지금까지 배운 전처리 · 표현 · 언어 모델 · 개체명 인식을 <b>실제 응용 세 가지</b>로 조립한다. 질문을 받아 정답을 내는 <b>질의응답</b>(9.1), 원문을 다른 언어로 옮기는 <b>기계번역</b>(9.2), 사람과 말을 주고받는 <b>대화 시스템</b>(9.3)이다. 교안은 셋을 따로 외우지 말고 <b>이해 → 탐색 · 정렬 → 생성</b>이라는 <b>하나의 뼈대</b>로 보라고 한다(9.4).</p>
+  <div class="chips"><span class="chip">IR 기반 QA 3단계</span><span class="chip">MRC · DPR · RAG</span><span class="chip">EM · 토큰 F1</span><span class="chip">잡음 통로 모델</span><span class="chip">BLEU 손계산</span><span class="chip">어텐션 = 학습된 정렬</span><span class="chip">슬롯 채우기 · SER</span><span class="chip">교안 69p</span><span class="chip">100문제</span></div>
+</section>
+
+<div class="mark-legend">
+  <span><i style="background:#eef6ff;border:1px solid #1b3f8b"></i><b class="term" tabindex="0" data-tip="이렇게 파란 형광펜이 칠해진 말에 손을 올리거나(모바일은 탭) 하면 짧은 설명이 뜹니다.">어려운 용어</b> — 커서를 올리면(모바일은 탭) 설명이 뜹니다</span>
+  <span><i style="background:#f7f5ff;border:1px solid #6d28d9"></i><b>🔎 한 걸음 더</b> — 교안 한 줄을 끝까지 파고든 심화 설명</span>
+  <span><i style="background:#fff7ed;border:1px solid #b45309"></i><b>⚠ 여기서 갈린다</b> — 헷갈리기 쉬운 지점을 정면으로 비교</span>
+</div>
+
+<!-- ===================== 강의자료 ===================== -->
+<section class="sec" id="docs">
+  <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">9주차 강의자료<small>제목을 누르면 앱 실행 없이 화면에서 바로 열립니다</small></h2></div>
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📘</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=nlp-w09-slides">자연어처리 CHAPTER 9 — 질의응답, 기계번역, 그리고 대화 시스템</a>
+      <p>9.1 질의응답(IR 기반 · 지식 기반 · MRC · DPR · RAG · 평가) / 9.2 기계번역(규칙 · 통계 · 신경망 · BLEU) / 9.3 대화 시스템(5개 모듈 · 대화 관리 · 평가 · 분류) · <b>69페이지</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week09-slides.pdf" download="자연어처리_9주차_질의응답_기계번역_대화시스템.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>☁️</span>Claude</div>
+    <div class="doc-main">
+      <a class="doc-open" href="https://claude.ai/artifact/QM4ayq31KLsHCJ5Mhb5xFp" target="_blank" rel="noopener">9주차 100문제 — 다른 기기에서 이어 풀기(Claude 계정 저장) ↗</a>
+      <p>폰 · 태블릿 · PC 어디서 열어도 <b>같은 풀이 기록</b>이 이어진다. 답을 고르면 해설 아래에 <b>이 페이지의 개념 바로가기</b>와 핵심 · 함정 정리가 붙는다. 마지막 결과 화면은 원래 문제지와 같은 모양이라 <b>그대로 캡처해 제출</b>하면 된다</p>
+    </div>
+    <a class="doc-dl" href="https://claude.ai/artifact/QM4ayq31KLsHCJ5Mhb5xFp" target="_blank" rel="noopener">열기 ↗</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📝</span>HTML</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week09-quiz100.html" target="_blank" rel="noopener">9주차 질의응답 · 기계번역 · 대화 시스템 100문제 (원본) ↗</a>
+      <p>교수님이 올린 원본 문제지 · 기록이 이 브라우저에만 남는다 · 절별 문제는 아래 각 절 제목 옆 버튼으로도 열린다 · <b>9.2.2 통계 기반 번역이 17문항으로 가장 비중이 크다</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week09-quiz100.html" download="자연어처리_9주차_100문제.html">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>🐍</span>IPYNB</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week09-lab.ipynb" download="9주차_실습_문제.ipynb">9주차 실습 노트북 (문제) — 이것을 풀어 제출</a>
+      <p>PART 1 질의응답 · PART 2 기계번역 · PART 3 대화 시스템 + <b>제출 과제 3문항</b> · <code>transformers</code> 모델을 내려받으므로 <b>Colab(GPU) 권장</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week09-lab.ipynb" download="9주차_실습_문제.ipynb">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>✅</span>IPYNB</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week09-lab-solution.ipynb" download="9주차_실습_정답.ipynb">9주차 실습 노트북 (정답)</a>
+      <p>과제 3문항의 모범 구현 · <b>출력이 비어 있는 상태</b>로 올라왔다 · 아래 수치 중 손으로 확인할 수 있는 것(BLEU 0.58, SER 0.333, EM/F1)은 교안 예시와 맞춰 적었고, 모델 출력은 실행해야 나온다</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week09-lab-solution.ipynb" download="9주차_실습_정답.ipynb">⬇ 다운로드</a>
+  </div>
+</div>
+</section>
+
+<!-- ===================== 학습 목표 ===================== -->
+<section class="sec" id="goal">
+  <div class="sec-head"><span class="sec-badge">GOAL</span><h2 class="sec-title">학습 목표와 강의 개요<small>교안 2 · 3p · 세 가지 응용, 하나의 뼈대</small></h2></div>
+<div class="cards">
+  <div class="card2"><b>9.1 질의응답</b>
+    <ul class="ul">
+      <li>정보 검색 기반 질의응답의 <b>3단계 처리 과정</b>을 설명한다</li>
+      <li><b>Retriever–Reader 구조</b>와 <b>RAG</b> 기반 질의응답의 원리를 이해한다</li>
+    </ul>
+  </div>
+  <div class="card2"><b>9.2 기계번역</b>
+    <ul class="ul">
+      <li><b>규칙 기반 · 통계 기반 · 신경망 기반</b> 번역의 차이를 비교한다</li>
+      <li><b>잡음 통로 모델</b>과 <b>BLEU 점수</b>를 직접 계산한다</li>
+    </ul>
+  </div>
+  <div class="card2"><b>9.3 대화 시스템</b>
+    <ul class="ul">
+      <li>대화 시스템의 <b>5개 모듈 구성도</b>와 <b>슬롯 채우기</b>를 이해한다</li>
+      <li><b>기능대화와 일상대화</b>의 차이와 평가 방법을 설명한다</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="sub-title" id="overview">강의 개요 표 (교안 3p)</h3>
+<p>세 응용 모두 입력 문장을 <b>이해(NLU)</b>하고 → 필요한 정보를 <b>찾고(검색 · 정렬)</b> → <b>자연어로 출력(NLG)</b>한다. 교안은 이것을 한 장의 표로 묶는다. 표의 <b>평가지표 행</b>은 시험에 그대로 나오기 좋으니 짝을 지어 외워 두자.</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>구분</th><th>9.1 질의응답<br><small>질문 → 정답</small></th><th>9.2 기계번역<br><small>원문 → 번역문</small></th><th>9.3 대화 시스템<br><small>발화 → 응답</small></th></tr></thead>
+  <tbody>
+    <tr><td><b>고전 기법</b></td><td>IR 기반 QA<br>(질문 · 문서 · 정답 처리)</td><td>규칙 기반 / 통계 기반<br>(구 기반 번역)</td><td>FSA · Frame 기반 대화 관리</td></tr>
+    <tr><td><b>신경망 기법</b></td><td>BERT Reader · DPR · RAG</td><td>seq2seq · 어텐션 · Transformer</td><td>신경망 DST · LLM 챗봇</td></tr>
+    <tr><td><b>평가지표</b></td><td><b>EM · F1</b></td><td><b>BLEU · chrF · COMET</b></td><td><b>Slot Error Rate · End-to-end 평가</b></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note-box"><b>앞 주차와의 연결</b> &mdash; 이번 주는 새 개념보다 <b>앞에서 배운 부품을 끼워 맞추는</b> 주다.
+<ul class="ul">
+  <li>IR 기반 QA의 문서 검색은 <a class="ext" href="nlp-week05.html">5주차</a> <b>TF-IDF · 코사인 유사도</b> 그대로다</li>
+  <li>정답 후보 추출은 <a class="ext" href="nlp-week07.html#ner-intro">7주차 개체명 인식</a>, 슬롯 채우기는 7주차 <b>BIO 태깅</b>과 같은 틀이다</li>
+  <li>잡음 통로 모델의 <b>언어 모델 P(F)</b>는 <a class="ext" href="nlp-week07.html#lm">7주차 n-gram 언어 모델</a>이고, 번역의 빔 탐색은 <a class="ext" href="nlp-week06.html">6주차 디코딩</a>과 같다</li>
+  <li>서브워드(BPE · SentencePiece)는 <a class="ext" href="nlp-week04.html">4주차</a>, 정밀도 · 재현율 · F1은 <a class="ext" href="nlp-week05.html">5주차</a>에서 이미 만났다</li>
+</ul></div>
+</section>
+
+<!-- ===================== 9.1.1 ===================== -->
+<section class="sec" id="qa-intro">
+  <div class="sec-head"><span class="sec-badge">9.1.1</span><h2 class="sec-title">질의응답이란<small>교안 5~8p · 문서 목록이 아니라 정답 그 자체를 준다</small></h2></div>
+
+<h3 class="sub-title" id="qa-def">정의 (교안 5p)</h3>
+<div class="note-box"><b>질의응답(Question Answering, QA)</b>은 사용자가 필요한 정보를 <b>자연어 질문</b>으로 입력하면, 시스템이 질문에 맞는 <b>정답을 문서에서 찾아 제시</b>하는 기술이다.
+<ul class="ul">
+  <li><b>왜 중요해졌나</b> &mdash; 텍스트 콘텐츠가 폭증했고, 모바일 · 음성 환경에서는 문서 목록을 훑어볼 화면이 없다. &ldquo;답만 말해 주는&rdquo; 시스템이 필요해졌다</li>
+  <li><b>무엇을 쓰나</b> &mdash; 자연어처리 · 정보 추출 · 정보 검색 기술이 한꺼번에 들어가는 <b>대표적인 종합 응용</b>이다</li>
+  <li><b>어디로 가나</b> &mdash; 무인 상담 시스템, 자동 응답 챗봇, 검색 엔진의 답변 요약(AI Overview)</li>
+</ul></div>
+
+<h3 class="sub-title" id="qa-vs-ir">정보 검색(IR)과 질의응답(QA)의 차이 (교안 6p)</h3>
+<p>정보 검색은 <b>관련 문서 목록</b>을 돌려주고, 사용자가 그 문서를 읽어 정답을 스스로 찾는다. 질의응답은 시스템이 <b>문서를 대신 읽고 정답만 짧게</b> 내놓는다.</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>구분</th><th>정보 검색(IR)</th><th>질의응답(QA)</th></tr></thead>
+  <tbody>
+    <tr><td><b>입력</b></td><td>키워드 (예: 인도 독립 운동가)</td><td>자연어 질문 (예: 인도의 독립 운동을 이끈 사람은?)</td></tr>
+    <tr><td><b>출력</b></td><td>문서 · 웹페이지 <b>순위 목록</b></td><td><b>정답 문자열 또는 문장</b> (예: 마하트마 간디)</td></tr>
+    <tr><td><b>필요 기술</b></td><td>색인, 유사도 계산, 순위화</td><td>IR + <b>질문 분석 + 정답 추출 · 검증</b></td></tr>
+    <tr><td><b>사용자 부담</b></td><td>문서를 직접 읽어야 함</td><td>정답을 바로 확인 (<b>근거 확인은 필요</b>)</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="pit"><b>&lsquo;QA는 사용자 부담이 0&rsquo;이 아니다</b> &mdash; 표의 마지막 칸 괄호가 함정이다. QA는 정답을 바로 보여 주지만 그 답이 맞는지 <b>근거를 확인할 부담</b>은 남는다. 그래서 뒤에 나오는 MRC는 &ldquo;근거가 지문에 있어 검증이 가능하다&rdquo;를, RAG는 &ldquo;출처를 함께 제시한다&rdquo;를 장점으로 꼽는다. 또 QA는 IR을 <b>대체</b>하지 않고 IR <b>위에 쌓는다</b>(필요 기술 칸의 &lsquo;IR +&rsquo;).</div>
+
+<h3 class="sub-title" id="qa-history">발전 과정 (교안 7p)</h3>
+<div class="flow">
+  <div class="fl"><b>1960s~ · 제한 도메인</b><span>기술 난이도 때문에 좁은 도메인 · 문서만 다뤘다 (야구 경기 기록에 답하는 BASEBALL 등)</span></div>
+  <div class="fl"><b>1999~ · TREC QA 트랙</b><span>평가 대회가 생기면서 <b>사실 기반(factoid) 질문</b> 처리가 발전 &mdash; IR 기반 QA의 시대. 이후 정보 추출 · 의미 분석이 발전하며 오픈 도메인으로 확장</span></div>
+  <div class="fl"><b>2016~ · 기계독해(MRC) · BERT Reader</b><span><b>SQuAD</b> 같은 기계독해 데이터셋과 사전학습 모델로 성능이 급상승</span></div>
+  <div class="fl"><b>2020~ · DPR · RAG · LLM 기반 QA</b><span>밀집 검색과 생성 모델의 결합</span></div>
+</div>
+<p>교안의 한 줄 요약 &mdash; <span class="hi">정답을 &lsquo;찾는&rsquo; 문제에서, 근거 문서를 &lsquo;읽고 생성하는&rsquo; 문제로 확장되었다.</span></p>
+
+<h3 class="sub-title" id="qa-types">질의응답 시스템의 분류 — 네 가지 기준 (교안 8p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>분류 기준</th><th>유형</th><th>설명 및 예시</th></tr></thead>
+  <tbody>
+    <tr><td><b>정답 출처</b></td><td>정보 검색 기반 / 지식 기반 / 모델 내부 지식</td><td>문서에서 찾기 / 지식베이스 질의 / 매개변수에 저장된 지식으로 생성</td></tr>
+    <tr><td><b>질문 성격</b></td><td><b>Factoid</b> / <b>Non-factoid</b></td><td>&lsquo;간디는 <b>언제</b> 태어났나?&rsquo; / &lsquo;간디는 <b>왜</b> 비폭력을 택했나?&rsquo;</td></tr>
+    <tr><td><b>정답 생성 방식</b></td><td><b>추출형(Extractive)</b> / <b>생성형(Abstractive)</b></td><td>문서의 구간을 <b>그대로 추출</b> / 문서를 종합해 <b>새 문장 생성</b></td></tr>
+    <tr><td><b>문서 범위</b></td><td>Closed-domain / Open-domain</td><td>의료 · 법률 등 특정 도메인 / 위키피디아 전체 · 웹</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="pit"><b>기준이 넷이라 한 질문에 여러 이름이 동시에 붙는다</b> &mdash; &lsquo;간디는 왜 비폭력을 택했나?&rsquo;는 <b>질문 성격</b> 기준으로 Non-factoid다. 같은 질문을 위키 전체에서 찾으면 <b>문서 범위</b> 기준으로는 Open-domain이고, 답을 새로 써 주면 <b>생성 방식</b> 기준으로는 생성형이다. 시험이 &ldquo;<b>질문 성격</b> 기준으로 무엇인가&rdquo;처럼 기준을 정해 묻는다면 그 기준의 이름만 골라야 한다. 이유 · 설명을 묻는 &lsquo;왜 · 어떻게&rsquo; 질문은 정답이 지문에 짧은 문자열로 없는 경우가 많다. 그래서 추출형 QA가 약하다(<a class="ext" href="#mrc">9.1.3 MRC의 한계</a>, 실습 1-3의 마지막 질문).</div>
+<p>교안은 이 절 이후를 <b>① 정보 검색 기반 → ② 지식 기반 → ③ 신경망 · 생성 기반</b> 순으로 다룬다.</p>
+</section>
+
+<!-- ===================== 9.1.2 ===================== -->
+<section class="sec" id="qa-ir">
+  <div class="sec-head"><span class="sec-badge">9.1.2</span><h2 class="sec-title">정보 검색 기반 질의응답<small>교안 9~17p · 질문 처리 → 문서 처리 → 정답 처리</small></h2></div>
+
+<h3 class="sub-title" id="ir-3stage">세 단계와 오류 전파 (교안 9 · 10p)</h3>
+<div class="flow">
+  <div class="fl"><b>① 질문 처리 (question processing)</b><span>질문 유형 분류 · 정답 유형 분류 · 질의 재생성 &mdash; 사용자가 요구하는 정보(정답)가 <b>무엇인지</b> 파악</span></div>
+  <div class="fl"><b>② 문서 처리 (document processing)</b><span>문서 검색 · 문장 검색 · 관련도 순위화 &mdash; 정답을 포함할 법한 문서 · 문장을 <b>색인된 문서 컬렉션</b>에서 찾는다. &lsquo;문서 검색&rsquo;이라고도 부른다</span></div>
+  <div class="fl"><b>③ 정답 처리 (answer processing)</b><span>정답 후보 추출 · 정답 순위화 · 정답 검증 &mdash; 찾아 온 문장에서 정답을 골라 제시</span></div>
+</div>
+<div class="pit"><b>오류 전파(error propagation) — 세 단계는 독립이 아니다</b> &mdash; 각 단계는 <b>앞 단계의 결과를 단서로</b> 쓴다. 그래서 앞에서 생긴 오류가 뒤로 그대로 흘러간다. 교안의 예는 이렇다. 질문 처리에서 정답 유형을 &lsquo;인물&rsquo;로 <b>잘못</b> 판단하면, 정답 처리는 인물 개체명만 후보로 뽑는다. 그러면 진짜 정답(예: 날짜)은 후보에조차 오르지 못한다. 거꾸로 뒤 단계의 오류가 앞 단계로 되돌아가 고쳐지는 구조도 아니다. <a class="ext" href="nlp-week07.html#iepipe">7주차 정보 추출 파이프라인</a>의 오류 전파와 같은 이야기다.</div>
+<p>정답 순위화는 세 가지 근거를 함께 본다(교안 10p). ① 질문과 정답 후보 문장의 <b>의미적 유사도</b>, ② 정답 유형과 후보의 <b>의미적 연관성</b>, ③ <b>키워드 중복성</b>이다.</p>
+
+<h3 class="sub-title" id="ir-question">질문 처리 ① — 질문 유형과 정답 유형 (교안 11p)</h3>
+<p>수많은 문서에서 정답을 찾으려면 먼저 <b>&lsquo;질문이 무엇을 묻는지&rsquo;</b>를 이해해야 한다. 질문 처리는 두 가지 분류를 하고, 두 분류는 <b>서로 의존</b>한다.</p>
+<div class="cards">
+  <div class="card2"><b>질문 유형 분류</b><p>질문을 <b>의문사</b>로 나눈다 &mdash; 누가 / 언제 / 어디서 / 무엇을 / 왜 / 어떻게</p></div>
+  <div class="card2"><b>정답 유형 분류</b><p>의문사 정보 + <b>개체명 태그</b> + <b>형태소 분석 결과</b>로 기대되는 정답의 <b>의미 범주</b>(인물 · 날짜 · 장소 …)를 정한다</p></div>
+</div>
+
+<h3 class="sub-title" id="ir-wh">의문사와 정답 유형 제약 (교안 12p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>의문사</th><th>정답 유형 제약</th><th>질문 예시</th></tr></thead>
+  <tbody>
+    <tr><td>누가 / Who</td><td>인물, 기관, 단체</td><td>인도의 독립 운동을 이끈 사람은 누구인가?</td></tr>
+    <tr><td>언제 / When</td><td>날짜, 시간, 기간</td><td>간디가 태어난 해는 언제인가?</td></tr>
+    <tr><td>어디 / Where</td><td>장소, 지명, 국가</td><td>소금 행진이 시작된 곳은 어디인가?</td></tr>
+    <tr><td>무엇 / What</td><td>사물, 용어, 정의</td><td>비폭력 저항 운동을 무엇이라 하는가?</td></tr>
+    <tr><td>얼마 / How many</td><td>수량, 금액, 비율</td><td>인도의 인구는 얼마인가?</td></tr>
+    <tr><td>왜 / Why</td><td>이유, 원인 (서술형)</td><td>간디는 왜 비폭력 노선을 택했는가?</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="pit"><b>의문사는 정답 유형을 &lsquo;결정&rsquo;하지 않고 &lsquo;제약&rsquo;한다</b> &mdash; 표의 칸 이름이 &lsquo;정답 유형&rsquo;이 아니라 <b>&lsquo;정답 유형 제약&rsquo;</b>인 이유다. &lsquo;누가&rsquo;의 답은 사람일 수도, 기관(&ldquo;누가 이 법을 만들었나? → 국회&rdquo;)일 수도 있다. &lsquo;무엇&rsquo;은 사물 · 용어 · 정의 · 사람까지 열려 있다(&ldquo;미국 초대 대통령의 이름은 무엇인가?&rdquo;). 그래서 의문사는 <b>중요한 단서</b>지만 개체명 태그 · 형태소 정보와 <b>함께</b> 써서 최종 정답 유형을 정한다.</div>
+
+<h3 class="sub-title" id="ir-reform">질문 처리 ② — 질의 재생성 (교안 13p)</h3>
+<p>질문은 <b>짧은 단문</b>이라 분류에 쓸 단서가 부족하고, 그대로 검색창에 넣기에도 불리하다(조사 · 의문사 · 불용어가 섞여 있다). 그래서 질문 속 주요 키워드와 문장 패턴을 인식해 <b>검색용 질의를 새로 만든다</b>. 이것이 <b>질의 재생성(query reformulation)</b>이고, 결과는 다음 단계인 문서 처리에서 쓰인다.</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>원 질문</th><th>재생성 질의</th></tr></thead>
+  <tbody><tr><td>&ldquo;인도의 독립 운동을 이끈 사람은 누구인가?&rdquo;</td><td><b>인도 AND 독립운동 AND 지도자</b> (유의어 확장)</td></tr></tbody>
+</table>
+</div>
+<ul class="ul">
+  <li><b>불용어 제거</b> &mdash; &lsquo;의&rsquo;, &lsquo;은&rsquo;, &lsquo;누구인가&rsquo; 같은 말을 뺀다</li>
+  <li><b>형태소 원형 복원</b> &mdash; &lsquo;이끈&rsquo; → &lsquo;이끌다&rsquo;</li>
+  <li><b>유의어 · 상위어 확장</b> &mdash; &lsquo;이끈 사람&rsquo; → &lsquo;지도자&rsquo;. 문서가 질문과 다른 단어를 써도 걸리게 한다</li>
+  <li><b>개체명 가중치</b> &mdash; &lsquo;인도&rsquo; 같은 개체명에 더 큰 가중치를 준다</li>
+</ul>
+<p>교안의 결론 &mdash; 질문 처리는 <b>형태소 분석 결과, 개체명 인식 결과, 의문사 정보, 어절 정보, 어휘 의미 정보</b>를 활용해 질문 유형 · 정답 유형을 분류한다.</p>
+
+<h3 class="sub-title" id="ir-boolean">문서 처리 ① — 불리언 모델과 그 한계 (교안 14p)</h3>
+<p>가장 기본적인 검색 모델은 <b>불리언(Boolean) 모델</b>이다. 질의의 각 단어가 문서에 <b>나왔는지 안 나왔는지</b>만 참 · 거짓으로 표시한다.</p>
+<ul class="ul">
+  <li><b>순위를 못 매긴다</b> &mdash; 일치 · 불일치만 있으므로 &ldquo;어떤 문서가 더 중요한가&rdquo;를 잴 수 없다</li>
+  <li><b>결과가 너무 많다</b> &mdash; 줄이려면 질의를 다듬어 다시 물어야 하고, 그러려면 AND · OR · NOT을 다루는 <b>전문적인 능력</b>이 필요하다</li>
+</ul>
+<p>그래서 실제 시스템은 단어 가중치를 쓰는 <b>벡터 공간 모델(TF-IDF)</b>과 <b>확률 모델(BM25)</b>을 쓴다.</p>
+
+<h3 class="sub-title" id="ir-tfidf">문서 처리 ② — TF-IDF · 코사인 · BM25, 그리고 어휘 불일치 (교안 15p)</h3>
+<div class="fx">
+  <div class="tex-d">\text{tf-idf}(t,d)=tf(t,d)\times\log\frac{N}{df(t)}\qquad\qquad sim(q,d)=\cos(v_q,v_d)=\frac{v_q\cdot v_d}{|v_q|\,|v_d|}</div>
+  <p class="fx-note"><span class="tex">tf(t,d)</span> = 단어 t가 문서 d 안에 나온 횟수 · <span class="tex">N</span> = 전체 문서 수 · <span class="tex">df(t)</span> = <b>단어 t가 나온 문서의 수</b>. <span class="tex">\log(N/df)</span>는 단어의 <b>희귀성</b>이다. 모든 문서에 나오는 단어(<span class="tex">df=N</span>)는 <span class="tex">\log 1=0</span>이라 가중치가 사라진다. 질의와 문서를 TF-IDF 벡터로 만든 뒤 <b>코사인 유사도</b>로 순위를 매긴다(<a class="ext" href="nlp-week05.html">5주차 5.1.3 · 5.3.2</a>).</p>
+</div>
+<div class="deep"><b>손으로 한 번 — df와 tf를 헷갈리지 않기</b> &mdash; 문서가 N = 7개이고 &lsquo;간디&rsquo;가 3개 문서에 나온다고 하자. 그러면 df(간디) = 3이다(그 3개 문서 안에서 몇 번 나왔는지는 df와 상관없다). 0번 문서에 &lsquo;간디&rsquo;가 2번 나오면 tf = 2이고, <span class="tex">\text{tf-idf}=2\times\log(7/3)\approx2\times0.847=1.69</span>(자연로그)이다. &lsquo;는&rsquo;처럼 7개 문서 모두에 나오는 말은 몇 번 나오든 <span class="tex">\log(7/7)=0</span>이다.<br>
+<b>BM25</b>는 TF-IDF를 다듬은 확률 모델이다. 문서 길이를 함께 보고(긴 문서는 단어가 많이 나오는 게 당연하다), <b>빈도 포화(saturation)</b>를 둔다 &mdash; 한 단어가 10번 나온 문서가 1번 나온 문서보다 10배 관련 있는 것은 아니다. 지금도 강력한 <b>기준선(baseline)</b>이다.</div>
+<div class="pit"><b>어휘 불일치(lexical gap) — 단어 일치 검색의 근본 한계</b> &mdash; 질의가 &lsquo;독립 운동가&rsquo;이고 문서가 &lsquo;민족 해방 지도자&rsquo;라고 쓰면, 뜻은 같아도 <b>표면형(글자)이 달라</b> TF-IDF · BM25 어디서도 겹치는 단어가 없다. 그래서 검색되지 않는다. 이 한계가 뒤에 나오는 <a class="ext" href="#retriever-reader">밀집 검색(DPR)</a>의 출발점이다. 헷갈리기 쉬운 다른 용어와 구별하자 &mdash; <b>오류 전파</b>는 앞 단계 오류가 뒤로 흐르는 문제, <b>데이터 희소성</b>은 코퍼스에 없는 조합의 확률을 못 구하는 문제(9.2.2), <b>빈도 포화</b>는 BM25의 설계 요소다.</div>
+
+<h3 class="sub-title" id="ir-answer">정답 처리 — 다섯 단계와 후보 순위화 예시 (교안 16 · 17p)</h3>
+<p>정답 처리는 검색된 문서 · 문장에서 정답 후보가 되는 <b>개체 · 어휘 · 구</b>를 뽑는다. 이때 질문 처리에서 정한 <b>정답 유형</b>이 핵심 단서다. 후보는 여러 개일 수 있고, 단어가 아니라 <b>구(phrase)</b>일 수도 있다.</p>
+<div class="flow">
+  <div class="fl"><b>① 정답 유형 확인</b><span>질문 처리 결과를 받는다 (예: PERSON)</span></div>
+  <div class="fl"><b>② 형태소 분석 · 개체명 태깅</b><span>검색된 문장에 태그를 붙인다</span></div>
+  <div class="fl"><b>③ 정답 유형과 같은 범주의 후보 추출</b><span>PERSON 태그가 붙은 것만 남긴다</span></div>
+  <div class="fl"><b>④ 후보 순위화</b><span>정답 유형 일치 · 질의 키워드 포함 · 재생성 질의와의 유사도</span></div>
+  <div class="fl"><b>⑤ 최종 정답 제시</b><span>1위 후보를 낸다</span></div>
+</div>
+<p><b>예시</b> &mdash; 질문 &ldquo;인도의 독립 운동을 이끈 사람은 누구인가?&rdquo; → 정답 유형 <b>PERSON</b>. 검색된 문장: &ldquo;인도의 독립 운동을 이끈 마하트마 간디는 비폭력 저항을 주장하였다. 현재 인도의 총리인 나렌드라 모디는 1950년에 태어났다.&rdquo;</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>정답 후보</th><th>개체명 태그</th><th>정답 유형 일치</th><th>질의 키워드 포함</th><th>최종 순위</th></tr></thead>
+  <tbody>
+    <tr><td><b>마하트마 간디</b></td><td>PERSON</td><td>○</td><td>독립 운동, 인도</td><td><b>1</b></td></tr>
+    <tr><td>나렌드라 모디</td><td>PERSON</td><td>○</td><td>인도</td><td>2</td></tr>
+    <tr><td>1950년</td><td>DATE</td><td>×</td><td>-</td><td>제외</td></tr>
+    <tr><td>비폭력 저항</td><td>TERM</td><td>×</td><td>-</td><td>제외</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="pit"><b>&lsquo;제외&rsquo;와 &lsquo;2위&rsquo;는 이유가 다르다</b>
+<ul class="ul">
+  <li><b>1950년 · 비폭력 저항이 빠진 이유</b> &mdash; 태그가 DATE · TERM이라 <b>정답 유형(PERSON)과 맞지 않아서</b>다. 순위화 이전의 ③ 후보 추출 단계에서 걸러졌다. 반복 등장이나 인식 실패와는 관계가 없다</li>
+  <li><b>나렌드라 모디가 2위인 이유</b> &mdash; 유형은 맞지만(PERSON), 같은 문장 안에 들어 있는 질의 키워드가 <b>&lsquo;인도&rsquo; 하나뿐</b>이라 <b>키워드 중복성</b>이 낮다. 간디는 &lsquo;독립 운동&rsquo;과 &lsquo;인도&rsquo;를 둘 다 품고 있어 1위다</li>
+</ul></div>
+</section>
+
+<!-- ===================== 9.1.3 ===================== -->
+<section class="sec" id="qa-neural">
+  <div class="sec-head"><span class="sec-badge">9.1.3</span><h2 class="sec-title">지식 기반 · 신경망 기반 질의응답과 평가<small>교안 18~23p · KBQA → MRC → Retriever–Reader → RAG → EM / F1</small></h2></div>
+
+<h3 class="sub-title" id="kbqa">지식 기반 질의응답 (Knowledge-based QA, 교안 18p)</h3>
+<p>문서 대신 <b>구조화된 지식베이스(knowledge base)</b>에서 정답을 찾는다. 자연어 질문을 <b>논리형(logical form)</b>이나 <b>SPARQL</b> 같은 질의어로 바꾸는데, 이 변환을 <span class="term" tabindex="0" data-tip="semantic parsing — 자연어 문장을 컴퓨터가 실행할 수 있는 의미 표현(논리식 · 데이터베이스 질의어)으로 바꾸는 작업. '간디는 언제 태어났나?' → (간디, 생년월일, ?x)">의미 분석(semantic parsing)</span>이라 한다.</p>
+<div class="flow">
+  <div class="fl"><b>자연어 질문</b><span>&ldquo;간디는 언제 태어났나?&rdquo;</span></div>
+  <div class="fl"><b>의미 분석 (semantic parsing)</b><span>주어 · 관계 · 빈칸을 찾는다</span></div>
+  <div class="fl"><b>지식베이스 질의</b><span><b>(간디, 생년월일, ?x)</b> &mdash; ?x를 지식베이스에서 채운다</span></div>
+</div>
+<div class="cards">
+  <div class="card2"><b>장점</b><p>정답이 <b>정확</b>하고 <b>근거 추적이 쉽다</b>. 수치 · 날짜 같은 <b>사실형 질문에 강하다</b></p></div>
+  <div class="card2"><b>단점</b><p>지식베이스 <b>구축 비용</b>이 크다. 지식베이스에 <b>없는 질문에는 답할 수 없다</b>(<b>coverage 문제</b>)</p></div>
+</div>
+<p>대표 자원은 <b>Freebase · DBpedia · Wikidata</b>와 한국어 개체 지식베이스다. 최근에는 문서 기반 QA와 지식 기반 QA를 섞은 <b>하이브리드</b> 방식이 많다. (세 튜플 모양 (개체, 관계, 값)은 <a class="ext" href="nlp-week07.html#ie">7주차 정보 추출</a>이 만들어 내는 바로 그 튜플이다.)</p>
+
+<h3 class="sub-title" id="mrc">신경망 기반 ① — 기계독해 MRC (교안 19p)</h3>
+<p><b>지문과 질문을 함께 입력</b>하고, 지문 안에서 정답 <b>구간(span)의 시작 위치와 끝 위치</b>를 예측한다. SQuAD · KorQuAD 데이터셋과 BERT 계열 모델이 만나 성능이 급상승했다.</p>
+<pre class="code">입력 :  [CLS] 질문 [SEP] 지문 [SEP]
+          ↓ 사전학습 언어모델(BERT)
+각 토큰의 은닉 벡터 → 선형층 → P(start = i) , P(end = j)</pre>
+<div class="fx">
+  <div class="tex-d">(\hat i,\hat j)=\arg\max_{i,j}\;P(\text{start}=i)\cdot P(\text{end}=j)\qquad\text{단 } i\le j,\;(i,j)\text{는 지문 구간 안},\;j-i&lt;\text{최대 정답 길이}</div>
+  <p class="fx-note"><b>왜 i ≤ j 인가</b> &mdash; 시작이 끝보다 뒤에 있으면 구간이 성립하지 않는다. start와 end를 <b>각각 따로</b> 최대로 고르면 끝 위치가 시작보다 앞에 찍힐 수 있으므로, 둘을 <b>곱한 점수</b>를 제약 안에서 최대화한다. 실습의 <code>reader()</code>도 <code>if j &lt; i or j - i &gt; 30: continue</code>로 같은 제약을 건다.</p>
+</div>
+<div class="cards">
+  <div class="card2"><b>장점</b><p>정답의 근거가 <b>지문에 명시</b>되어 있어 <b>검증이 가능하다</b></p></div>
+  <div class="card2"><b>한계</b><p>정답이 <b>지문 안에 문자열로 존재해야</b> 한다 &mdash; 여러 문장을 종합해야 하는 <b>추론형 · 서술형 질문에 약하다</b></p></div>
+</div>
+
+<h3 class="sub-title" id="retriever-reader">신경망 기반 ② — Retriever–Reader 구조와 밀집 검색 (교안 20p)</h3>
+<p>MRC는 지문이 주어져야 한다. 위키 전체에서 답하는 <b>오픈 도메인 QA</b>는 두 단계로 푼다. <span class="hi">검색기(retriever)가 후보 문서를 좁히고, 독해기(reader)가 그 안에서 정답을 추출한다.</span></p>
+<pre class="code">질문 → <b>Retriever</b> (TF-IDF / BM25 / DPR) ─ 문서 색인에서 top-k 문서
+     → <b>Reader</b> (BERT MRC) → 정답 + 근거</pre>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>희소 검색 (sparse) · BM25</th><th>밀집 검색 (dense) · DPR</th></tr></thead>
+  <tbody>
+    <tr><td><b>원리</b></td><td>단어 일치 기반</td><td>질문과 문서를 <b>같은 임베딩 공간의 벡터</b>로 만들고 <b>내적</b>으로 유사도 계산</td></tr>
+    <tr><td><b>장점</b></td><td>빠르고 <b>해석이 쉽다</b> (어느 단어가 겹쳤는지 보인다)</td><td>표면형이 달라도 <b>의미가 비슷하면</b> 검색된다 → <b>어휘 불일치 완화</b></td></tr>
+  </tbody>
+</table>
+</div>
+<p>실제 시스템은 두 방식을 섞은 <b>하이브리드 검색</b>을 자주 쓴다. <b>&lsquo;해석이 쉽다&rsquo;는 희소 검색의 장점</b>이지 DPR의 장점이 아니라는 점을 기억하자.</p>
+
+<h3 class="sub-title" id="rag">신경망 기반 ③ — 검색 증강 생성 RAG (교안 21p)</h3>
+<p><b>RAG(Retrieval-Augmented Generation)</b>는 검색한 문서를 생성 모델(LLM)의 <b>입력으로 넣어</b> 정답 문장을 생성한다. Reader가 &lsquo;구간을 찾는&rsquo; 모델에서 &lsquo;문장을 쓰는&rsquo; 모델로 바뀐 것이다.</p>
+<pre class="code">질문 → 검색기(벡터 DB) → 프롬프트 구성(질문 + 근거) → 생성 모델(LLM) → 정답 + 출처</pre>
+<div class="cards">
+  <div class="card2"><b>장점</b><ul class="ul"><li>모델을 <b>재학습하지 않고도</b> 최신 문서 · 사내 문서를 반영한다</li><li>근거 문서를 함께 제시하므로 <b>환각(hallucination)을 줄이고</b> 출처를 확인할 수 있다</li></ul></div>
+  <div class="card2"><b>유의점</b><ul class="ul"><li><b>검색 품질이 낮으면 생성 결과도 함께 나빠진다</b> (garbage in, garbage out)</li><li>근거에 없는 내용을 생성하지 않도록 <b>프롬프트와 검증 단계</b>를 설계해야 한다</li></ul></div>
+</div>
+<div class="pit"><b>RAG를 써도 환각은 &lsquo;줄어들 뿐&rsquo; 없어지지 않는다</b> &mdash; 생성 모델은 여전히 근거 밖의 말을 지어낼 수 있다. 그래서 교안이 &lsquo;검증 단계 설계&rsquo;를 유의점으로 든다. 근거를 많이 넣는다고 정확도가 늘 오르지도 않는다(관련 없는 문서가 섞이면 오히려 흔들린다). 모델이 커도 검색이 필요 없어지지 않는다(최신 · 사내 문서는 매개변수 안에 없다).</div>
+
+<h3 class="sub-title" id="qa-eval">질의응답의 평가 — EM과 토큰 F1 (교안 22p)</h3>
+<p>추출형 QA는 <b>정답 문자열과 얼마나 일치하는지</b>로 평가한다.</p>
+<div class="fx">
+  <div class="tex-d">EM=\frac{\text{완전히 일치한 질문 수}}{\text{전체 질문 수}}\qquad F1=\frac{2\cdot precision\cdot recall}{precision+recall}\;(\text{토큰 단위 중첩})</div>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>정답 (gold)</th><th>예측 (pred)</th><th>EM</th><th>토큰 F1</th></tr></thead>
+  <tbody>
+    <tr><td>마하트마 간디</td><td>마하트마 간디</td><td>1</td><td>1.00</td></tr>
+    <tr><td>마하트마 간디</td><td>간디</td><td><b>0</b></td><td><b>0.67</b></td></tr>
+    <tr><td>마하트마 간디</td><td>나렌드라 모디</td><td>0</td><td>0.00</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>0.67을 손으로 유도해 보자</b> &mdash; 예측 토큰 = {간디} (1개), 정답 토큰 = {마하트마, 간디} (2개), 겹치는 토큰 = 1개.
+<span class="tex">precision=1/1=1</span> (예측한 것 중 맞은 비율), <span class="tex">recall=1/2=0.5</span> (정답 중 맞힌 비율),
+<span class="tex">F1=\dfrac{2\cdot1\cdot0.5}{1+0.5}=\dfrac{1}{1.5}\approx0.67</span>. EM은 문자열이 <b>완전히</b> 같아야 1이므로 0이다. 그래서 <b>F1은 항상 EM 이상</b>이다(실습 과제 1 채점 셀도 이것을 검사한다).<br>
+교안의 각주 &mdash; KorQuAD 공식 평가는 <b>문자 단위</b>로 F1을 재므로 같은 예시가 <b>0.50</b>이 된다. 공백을 빼고 &lsquo;마하트마간디&rsquo;(6글자)와 &lsquo;간디&rsquo;(2글자)를 비교하면 precision = 2/2 = 1, recall = 2/6 = 1/3, F1 = 0.5다. <b>세는 단위가 바뀌면 같은 예측이라도 점수가 달라진다</b>는 점을 기억하자.</div>
+<ul class="ul">
+  <li><b>생성형 QA</b>는 정답 표현이 다양하므로 EM · F1만으로는 부족하다 → <b>ROUGE, BERTScore, 사람 평가, LLM 심사(LLM-as-a-judge)</b>를 함께 쓴다</li>
+  <li><b>근거 제시 여부(attribution)</b>도 중요한 평가 항목이다</li>
+</ul>
+
+<div class="oneline">
+  <p><b>9.1 정리 (교안 23p)</b></p>
+  <ul class="ul">
+    <li>질의응답은 자연어 질문에 <b>정답 자체</b>를 제시하는 기술로, 정보 검색 · 정보 추출 · 자연어처리의 종합 응용이다</li>
+    <li>IR 기반 QA는 <b>질문 처리 → 문서 처리 → 정답 처리</b> 3단계로 구성되며, 각 단계의 오류가 뒤로 전파된다</li>
+    <li>질문 처리는 질문 · 정답 유형 분류와 질의 재생성을, 문서 처리는 불리언 · TF-IDF · BM25 검색을, 정답 처리는 후보 추출과 순위화를 맡는다</li>
+    <li>신경망 시대에는 BERT 기계독해, DPR 밀집 검색, RAG 생성형 QA로 발전했지만 <b>&lsquo;질문 이해 → 근거 확보 → 정답 결정&rsquo;</b>이라는 뼈대는 같다</li>
+  </ul>
+</div>
+</section>
+
+<!-- ===================== 9.2.1 ===================== -->
+<section class="sec" id="mt-rule">
+  <div class="sec-head"><span class="sec-badge">9.2.1</span><h2 class="sec-title">기계번역이란 · 규칙 기반 기계번역<small>교안 25~30p · 다섯 가지 난점과 Vauquois 삼각형</small></h2></div>
+
+<h3 class="sub-title" id="mt-def">기계번역이란 (교안 25 · 26p)</h3>
+<div class="note-box"><b>번역</b>은 한 언어로 쓰인 글을 <b>같은 의미를 나타내는 다른 언어의 글로 변환</b>하는 작업이다. 두 언어에 모두 능숙한 사람은 적고, 사람이 번역하는 속도에도 한계가 있다. 그래서 번역을 컴퓨터에 맡기는 <b>기계번역(Machine Translation)</b> 연구가 시작되었다. 정확도가 완벽하지 않아도, 텍스트가 매우 빠르게 쏟아지는 정보 사회에서 <b>지체 없이 바로 읽을 수 있게 해 준다</b>는 장점이 크다.</div>
+<p>교안 26p는 서비스 현황을 짚는다. 가장 잘 알려진 것은 <b>구글 번역</b>이다. 많은 언어를 지원하고 입력 언어를 자동으로 감지하며, 일본어처럼 한자 읽기가 여럿인 언어에는 읽는 법까지 보여 준다. 그리고 기계번역의 특수성을 강조한다 &mdash; 과거의 명령 인식형 대화 시스템은 정해진 입력 형식만 받아도 됐고 자연어 생성도 고정된 문장 틀에 단어를 끼우면 됐다. 하지만 <b>기계번역은 처음부터 자연언어를 그대로 입력받지 않으면 성립하지 않는</b> 분야였다.</p>
+
+<h3 class="sub-title" id="mt-hard">기계번역이 어려운 다섯 가지 이유 (교안 27p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>난점</th><th>설명</th><th>예시 (한국어 ↔ 영어)</th></tr></thead>
+  <tbody>
+    <tr><td><b>어순 차이</b></td><td>SOV vs SVO &mdash; 단어 순서대로 옮기면 문장이 성립하지 않는다</td><td>나는 사과를 먹었다 → I ate an apple</td></tr>
+    <tr><td><b>어휘 중의성</b></td><td>한 단어가 여러 의미를 가져 문맥으로 판단해야 한다</td><td>&lsquo;배&rsquo; → ship / pear / stomach</td></tr>
+    <tr><td><b>형태론 차이</b></td><td>한국어는 조사 · 어미가 결합하며 형태가 변한다</td><td>먹었다 / 먹겠다 / 먹었더라면</td></tr>
+    <tr><td><b>대응 단위 불일치</b></td><td>한 단어가 여러 단어(구)로 번역되고, 그 역도 성립한다</td><td>to the conference → 컨퍼런스에</td></tr>
+    <tr><td><b>문화 · 관용 표현</b></td><td>숙어 · 관용구는 한 번에 번역해야 자연스럽다</td><td>쥐구멍에도 볕 들 날 있다</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="pit"><b>예시만 보고 난점 이름을 고르는 문제 — 세 개가 특히 비슷하다</b>
+<ul class="ul">
+  <li><b>어순 차이</b>는 <b>단어의 순서</b> 문제다 &mdash; &lsquo;먹었다&rsquo;가 문장 끝에서 두 번째 자리로 옮겨 간다</li>
+  <li><b>형태론 차이</b>는 <b>한 단어 안의 모양 변화</b> 문제다 &mdash; &lsquo;먹-&rsquo;에 &lsquo;-었다 / -겠다 / -었더라면&rsquo;이 붙는다</li>
+  <li><b>대응 단위 불일치</b>는 <b>개수</b> 문제다 &mdash; 영어 세 단어(to the conference)가 한국어 한 어절(컨퍼런스에)이 된다. 조사가 붙어서 생기지만, 묻는 핵심은 &lsquo;몇 대 몇으로 대응하나&rsquo;이다</li>
+</ul>
+교안은 마지막 줄에서 <span class="hi">이 난점들이 규칙 기반 → 통계 기반 → 신경망 기반으로 접근법이 발전한 이유</span>라고 정리한다.</div>
+
+<h3 class="sub-title" id="rbmt">규칙 기반 기계번역 RBMT (교안 28p)</h3>
+<p><b>언어학적 · 문법적 규칙</b>으로 문장을 번역한다. 원문을 <b>형태소 · 구문으로 분석</b>하고, 핵심 단어를 목표 언어로 번역한 뒤, <b>목표 언어의 문법 규칙에 맞게 다듬는다</b>. 단어만 바꾸는 것이 아니라 <b>통사적 · 의미론적 구조</b>를 함께 분석하려 한다. 궁극적으로는 규칙에 따라 원문을 <b>하나의 인공 통합 언어(중간 언어, interlingua)</b>로 바꾼 뒤, 다시 규칙으로 다른 언어로 옮기려 한다.</p>
+
+<h3 class="sub-title" id="vauquois">세 가지 전략 — Vauquois 삼각형 (교안 29p)</h3>
+<svg viewBox="0 0 640 300" role="img" aria-label="Vauquois 삼각형: 아래쪽 원문과 역문 사이를 직접 방식이 잇고, 한 단계 위 구문 구조 사이를 전이 방식이 잇고, 꼭대기에 중간 언어가 있다" style="width:100%;max-width:640px;display:block;margin:10px auto">
+  <polygon points="320,30 60,270 580,270" fill="#f7f9fc" stroke="#94a3b8" stroke-width="1.5"/>
+  <circle cx="320" cy="40" r="6" fill="#6d28d9"/>
+  <text x="320" y="24" text-anchor="middle" font-size="14" font-weight="700" fill="#6d28d9">중간 언어 (Interlingua)</text>
+  <text x="200" y="115" text-anchor="end" font-size="12.5" fill="#334155">원문 의미 표현</text>
+  <text x="440" y="115" font-size="12.5" fill="#334155">역문 의미 표현</text>
+  <text x="140" y="190" text-anchor="end" font-size="12.5" fill="#334155">원문 구문 구조</text>
+  <text x="500" y="190" font-size="12.5" fill="#334155">역문 구문 구조</text>
+  <line x1="150" y1="186" x2="490" y2="186" stroke="#1d4ed8" stroke-width="2.5" marker-end="url(#ah)"/>
+  <text x="320" y="178" text-anchor="middle" font-size="13" font-weight="700" fill="#1d4ed8">전이 방식 (transfer)</text>
+  <line x1="100" y1="262" x2="540" y2="262" stroke="#b45309" stroke-width="2.5" marker-end="url(#ah2)"/>
+  <text x="320" y="254" text-anchor="middle" font-size="13" font-weight="700" fill="#b45309">직접 방식 (direct)</text>
+  <text x="60" y="290" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">원문 (Source)</text>
+  <text x="580" y="290" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">역문 (Target)</text>
+  <text x="66" y="150" font-size="11.5" fill="#64748b" transform="rotate(-62 66 150)">분석 ↑ 깊게</text>
+  <text x="556" y="96" font-size="11.5" fill="#64748b" transform="rotate(62 556 96)">생성 ↓</text>
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#1d4ed8"/></marker><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#b45309"/></marker></defs>
+</svg>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>전략</th><th>어디서 건너가나</th><th>성격</th></tr></thead>
+  <tbody>
+    <tr><td><b>직접 방식 (direct)</b></td><td>원문 → 역문 바로</td><td>깊은 분석 없이 단어를 바꾸고 순서를 조금 손본다. 가장 얕다</td></tr>
+    <tr><td><b>전이 방식 (transfer)</b></td><td>원문 구문 구조 → 역문 구문 구조</td><td>구문 트리를 만든 뒤 트리를 목표 언어 트리로 바꾸는 규칙을 쓴다</td></tr>
+    <tr><td><b>중간 언어 (interlingua)</b></td><td>원문 의미 표현 → 중간 언어 → 역문 의미 표현</td><td>언어와 무관한 의미 표현을 거친다. 가장 깊다</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>&lsquo;분석을 깊게 할수록 언어쌍별 규칙은 줄지만 분석 난도가 높아진다&rsquo;의 뜻</b> &mdash; 언어가 n개라고 하자. 직접 · 전이 방식은 <b>언어쌍마다</b> 변환 규칙이 따로 필요하다. 그래서 대략 <span class="tex">n(n-1)</span>벌이 든다(10개 언어면 90벌). 중간 언어 방식은 각 언어 ↔ 중간 언어의 <b>분석기와 생성기만</b> 있으면 된다(<span class="tex">2n</span>벌, 10개 언어면 20벌). 대신 &ldquo;모든 언어의 뜻을 다 담는 중립적 의미 표현&rdquo;을 만드는 일 자체가 매우 어렵다 &mdash; 그래서 <b>규칙 수 ↓, 분석 난도 ↑</b>의 맞바꿈이다.</div>
+
+<h3 class="sub-title" id="rbmt-proscons">규칙 기반의 장점과 한계 (교안 30p)</h3>
+<div class="cards">
+  <div class="card2"><b>장점</b><ul class="ul"><li>문법을 반드시 지키며 진행하므로 <b>번역문의 문법이 꽤 정확하다</b></li><li>한 언어의 규칙에 대응하는 다른 언어의 규칙을 적용해 문장을 그대로 옮긴다</li><li>규칙이 명시적이라 <b>오류의 원인을 추적하고 고치기 쉽다</b></li></ul></div>
+  <div class="card2"><b>한계</b><ul class="ul"><li><b>한국어</b>는 형태소가 결합하며 형태가 바뀌어 분석이 어렵고, <b>잘못된 분석의 여파가 결과물까지</b> 이어져 번역이 쓸모없어지는 경우가 잦았다</li><li>언어쌍마다 방대한 규칙과 사전을 <b>사람이 구축</b>해야 하므로 <b>확장성이 낮다</b></li></ul></div>
+</div>
+<p>다만 형태소 분석기 성능은 딥러닝과 함께 크게 좋아졌고, 규칙이라는 요소의 가치 자체가 사라진 것은 아니다. 그래서 <b>딥러닝 번역과 융합</b>하려는 시도가 있다. 시험에서 &ldquo;규칙을 자동으로 학습해 확장성이 높다&rdquo;가 보기에 나오면 <b>규칙 기반의 장점이 아니다</b> &mdash; 그것은 통계 · 신경망 쪽 이야기다.</p>
+</section>
+
+<!-- ===================== 9.2.2 ===================== -->
+<section class="sec" id="mt-smt">
+  <div class="sec-head"><span class="sec-badge">9.2.2</span><h2 class="sec-title">통계 기반 기계번역<small>교안 31~40p · 100문제에서 가장 비중이 큰 절(17문항) · 잡음 통로 모델 · 정렬 · 구 기반 · 디코딩</small></h2></div>
+
+<h3 class="sub-title" id="smt-def">통계 기반 기계번역 SMT (교안 31p)</h3>
+<p><b>대량의 예제 문장</b>으로 두 언어 사이의 <b>상관관계를 통계적으로 분석</b>한 모델을 만들고, 그 모델로 주어진 문장의 번역을 제시한다. 규칙 기반과의 차이는 둘이다.</p>
+<ul class="ul">
+  <li>① 대량의 문장을 모아 둔 <b>코퍼스</b>가 필요하다</li>
+  <li>② 기계가 코퍼스로 번역을 학습하므로, 두 언어로 같은 내용을 뜻하는 문장이 <b>쌍으로 연결된 병렬 코퍼스(parallel corpus)</b>가 필요하다</li>
+</ul>
+<p><span class="hi">사람이 규칙을 쓰는 대신, 데이터가 규칙을 대신하는 패러다임 전환</span>이다.</p>
+
+<h3 class="sub-title" id="smt-corpus">코퍼스의 역할 (교안 32p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>병렬 코퍼스 크기 (문장쌍)</th><th>10만</th><th>50만</th><th>100만</th><th>500만</th><th>1000만</th></tr></thead>
+  <tbody><tr><td>번역 품질 점수</td><td><b>12.4</b></td><td>19.8</td><td>23.5</td><td>28.9</td><td>31.2</td></tr></tbody>
+</table>
+</div>
+<p>코퍼스가 클수록 품질 점수가 오르지만 <b>증가 폭은 점점 줄어든다</b>(10만→50만에 +7.4, 500만→1000만에 +2.3). 교안이 밝히듯 <b>개념 설명용 예시 수치</b>다.</p>
+
+<h3 class="sub-title" id="smt-cond">수학적 접근 — 조건부 확률과 그 한계 (교안 33 · 34p)</h3>
+<p>영어 문장 E를 넣으면 프랑스어 문장 F를 내는 번역기를 만든다고 하자. 가장 단순한 방법은 병렬 코퍼스에서 두 문장이 쌍으로 연결된 경우를 <b>세는</b> 것이다.</p>
+<div class="fx">
+  <div class="tex-d">P(F\mid E)=\frac{count(E,F)}{count(E)}\qquad\qquad F^{*}=\arg\max_{F}P(F\mid E)</div>
+  <p class="fx-note">입력 E는 고정이므로 <span class="tex">count(E)</span>는 F와 무관한 상수다. 그래서 argmax는 <span class="tex">count(E,F)</span>만으로 정해진다 &mdash; 모든 프랑스어 후보의 확률을 구해 <b>가장 높은 것</b>을 고르면 번역이다. argmin도 아니고, <span class="tex">E^*</span>를 고르는 것도 아니다. 우리가 찾는 것은 <b>출력 F</b>다.</p>
+</div>
+<div class="pit"><b>왜 이것만으로는 번역을 못 하나 — 데이터 희소성 (교안 34p)</b>
+<ul class="ul">
+  <li>우리는 세상의 모든 문장을 알 수 없다. 입력 문장이 <b>코퍼스에 한 번도 없으면 확률조차 구할 수 없다</b>(<span class="tex">count(E)=0</span>) &mdash; <b>data sparsity</b></li>
+  <li>&ldquo;그럼 코퍼스를 키우면 되지 않나?&rdquo; &mdash; 안 된다. 좋은 품질의 <b>사람이 직접 번역한 문장쌍</b>을 만드는 데 시간과 비용이 매우 크고, 무엇보다 <b>언어는 무한하다</b>. 세상의 모든 문장을 담은 병렬 코퍼스는 <b>절대</b> 만들 수 없다</li>
+</ul>
+그래서 &lsquo;확률이 가장 높은 문장을 고른다&rsquo;는 핵심은 유지하면서, 확률을 <b>단어 · 구 단위로 쪼개서</b> 계산하는 방법들이 도입되었다. <a class="ext" href="nlp-week07.html#smooth">7주차 n-gram의 희소성</a>과 같은 뿌리다 &mdash; 긴 단위를 통째로 세면 0이 되고, 짧게 쪼개야 일반화된다.</div>
+
+<h3 class="sub-title" id="noisy-pre">번역의 질을 지표화하기 (교안 35p)</h3>
+<p>단어 · 구 단위로 쪼갠 확률도 원하는 번역과는 아직 거리가 있다. 교안은 세 가지 문제를 든다. ① 단어가 항상 한 가지 의미로만 번역되지 않는다(중의성, 위치에 따라 달라지는 선택). ② 언어마다 단어 활용 방법이 달라 단어를 직접 바꿔 이어 붙이면 자연스럽지 않다. ③ 어순이 달라 원문 순서대로 옮기면 자연스러운 번역이 안 된다. 세 문제는 모두 번역 자체보다 <b>&lsquo;번역 후 문장의 상태&rsquo;</b>에 관한 것이다. 그래서 문장을 고를 때 <b>번역문 상태를 따지는 변수</b>를 하나 더 넣으면 도움이 된다 &mdash; 그것이 다음의 잡음 통로 모델이다.</p>
+
+<h3 class="sub-title" id="noisy">잡음 통로 모델 Noisy Channel Model (교안 36p)</h3>
+<p>추가할 변수는 기초 수식에서 <b>유도</b>되면 가장 좋다. 조건부 확률에 <b>베이즈 정리</b>를 쓴다.</p>
+<div class="fx">
+  <div class="tex-d">F^{*}=\arg\max_{F}P(F\mid E)=\arg\max_{F}\frac{P(E\mid F)\cdot P(F)}{P(E)}=\arg\max_{F}\underbrace{P(E\mid F)}_{\text{번역 모델}}\cdot\underbrace{P(F)}_{\text{언어 모델}}</div>
+  <p class="fx-note"><b>P(E)를 지울 수 있는 이유</b> &mdash; 입력 E는 이미 주어져 고정되어 있다. 그래서 P(E)는 <b>어떤 F를 고르든 같은 값</b>이고, 모든 후보를 같은 수로 나누는 셈이라 1등이 바뀌지 않는다. P(E)가 1이라서도, 계산할 방법이 없어서도 아니다.</p>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>구성 요소</th><th>무엇을 담당하나</th><th>무엇으로 학습하나</th></tr></thead>
+  <tbody>
+    <tr><td><b>번역 모델 P(E | F)</b></td><td>두 언어 단어 · 구의 <b>대응 관계</b> &mdash; F가 E의 뜻을 제대로 담았나 (충실성)</td><td><b>병렬 코퍼스</b></td></tr>
+    <tr><td><b>언어 모델 P(F)</b></td><td>목표 언어 문장의 <b>자연스러움</b> &mdash; 어순 · 활용 (유창성)</td><td><b>단일 언어 코퍼스</b></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>왜 &lsquo;잡음 통로&rsquo;라 부르나 · 왜 굳이 뒤집나</b> &mdash; 원래 프랑스어 문장 F가 있었는데, 그것이 <b>잡음 낀 통로를 지나며 영어 E로 일그러져</b> 우리에게 도착했다고 상상한다. 번역은 &ldquo;관측된 E로부터 원래 F를 복원하는 일&rdquo;이 된다. 그러면 <span class="tex">P(E\mid F)</span>는 &lsquo;통로가 F를 E로 바꿀 확률&rsquo;, <span class="tex">P(F)</span>는 &lsquo;애초에 그런 F가 있을 법한가&rsquo;이다.<br>
+뒤집는 이점은 <b>일을 나눌 수 있다</b>는 데 있다. 귀한 병렬 코퍼스는 &lsquo;뜻이 맞나&rsquo;만 배우면 되고, &lsquo;말이 되나&rsquo;는 <b>구하기 쉬운 단일 언어 코퍼스</b>(뉴스 · 위키 등, 양이 훨씬 많다)로 따로 배운다. 앞 절의 세 문제(활용 · 어순 · 자연스러움)를 언어 모델이 크게 덜어 준다. 이 언어 모델이 바로 <a class="ext" href="nlp-week07.html#ngram">7주차 n-gram 언어 모델</a>이다.</div>
+
+<h3 class="sub-title" id="align">단어 정렬과 IBM Model (교안 37p)</h3>
+<p>번역 모델을 배우려면 문장쌍 안에서 <b>어떤 단어가 어떤 단어에 대응하는지</b> 알아야 한다. 그런데 병렬 코퍼스에는 문장 쌍만 있고 <b>단어 대응(정렬)은 사람이 표시해 주지 않는다</b>. 그래서 <b>EM 알고리즘</b>으로 반복 추정한다 &mdash; 이것이 <b>IBM Model 1~5</b>다.</p>
+<svg viewBox="0 0 560 170" role="img" aria-label="단어 정렬: I-나는, ate-먹었다, an apple-사과를이 교차해서 이어진다" style="width:100%;max-width:560px;display:block;margin:8px auto">
+  <g font-size="15" font-weight="700" text-anchor="middle" fill="#0f172a">
+    <text x="90" y="34">I</text><text x="210" y="34">ate</text><text x="330" y="34">an</text><text x="450" y="34">apple</text>
+    <text x="120" y="150">나는</text><text x="290" y="150">사과를</text><text x="450" y="150">먹었다</text>
+  </g>
+  <g stroke-width="2.2" fill="none">
+    <line x1="90" y1="44" x2="120" y2="130" stroke="#1d4ed8"/>
+    <line x1="210" y1="44" x2="450" y2="130" stroke="#b45309"/>
+    <line x1="330" y1="44" x2="290" y2="130" stroke="#15803d"/>
+    <line x1="450" y1="44" x2="290" y2="130" stroke="#15803d"/>
+  </g>
+  <text x="500" y="92" font-size="11.5" fill="#b45309">교차 = 어순 차이</text>
+  <text x="372" y="96" font-size="11.5" fill="#15803d">다:1</text>
+</svg>
+<ul class="ul">
+  <li>정렬은 1:1만이 아니다. <b>1:다, 다:1, 교차(reordering)</b>로도 나타난다. 위 그림에서 &lsquo;an apple&rsquo; 두 단어가 &lsquo;사과를&rsquo; 하나에 붙는 것이 다:1이다. &lsquo;ate&rsquo;가 맨 끝 &lsquo;먹었다&rsquo;로 건너가며 다른 선과 엇갈리는 것이 교차다</li>
+  <li><span class="hi">교차가 바로 어순 차이를 모델링하는 방법이다</span> &mdash; 잡음이 아니라 꼭 필요한 정보다</li>
+  <li>정렬 결과를 모아 <b>구 번역 표(phrase table)</b>를 만드는 것이 <b>구 기반 번역의 출발점</b>이다</li>
+</ul>
+<div class="deep"><b>EM이 정렬을 &lsquo;저절로&rsquo; 찾는 직관</b> &mdash; 처음에는 모든 단어쌍의 대응 확률을 똑같이 둔다(E-단계 준비). 코퍼스 전체를 보면 &lsquo;apple&rsquo;이 들어간 영어 문장의 짝에는 거의 항상 &lsquo;사과&rsquo;가 있고, &lsquo;나는&rsquo;은 &lsquo;apple&rsquo; 없는 문장에도 자주 나온다. 그래서 현재 확률로 &ldquo;이 문장에서 apple은 아마 사과와 짝일 것&rdquo;이라는 <b>기대 정렬</b>을 계산하고(E), 그 기대 횟수로 확률을 다시 센다(M). 이 두 단계를 반복하면 &lsquo;apple–사과&rsquo;의 확률이 점점 몰린다. 정답 정렬을 한 번도 보여 주지 않았는데도 <b>같이 나오는 패턴</b>만으로 대응이 드러난다.</div>
+
+<h3 class="sub-title" id="phrase">구 기반 번역 Phrase-Based Model (교안 38 · 39p)</h3>
+<p>지금까지는 모든 분석과 번역을 <b>단어 단위</b>로 했다. 하지만 한 단어가 여러 단어의 구로 번역되기도 하고(그 반대도 있다), 숙어 · 관용구는 한 번에 번역하지 않으면 어색하다. 그래서 문장을 <b>구(phrase) 단위로 경계를 나눈 뒤</b> 작은 단위부터 번역하는 방법이 나왔다.</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>Tomorrow</th><th>I will fly</th><th>to the conference</th><th>in France</th></tr></thead>
+  <tbody><tr><td>내일</td><td>나는 비행기로 간다</td><td><b>컨퍼런스에</b></td><td><b>프랑스에서 열리는</b></td></tr></tbody>
+</table>
+</div>
+<p>재배열 후 최종 번역 &mdash; <b>내일 나는 프랑스에서 열리는 컨퍼런스에 비행기로 간다</b>. 출력 언어에 맞춘 <b>순서 조절은 맨 마지막 단계</b>에서 한다(구별로 묶기 → 번역 → 재배열). &lsquo;in France&rsquo;는 &lsquo;프랑스에&rsquo;가 아니라 컨퍼런스를 꾸미는 &lsquo;프랑스에서 <b>열리는</b>&rsquo;으로 옮겨졌다는 점을 눈여겨보자 &mdash; 구 단위라서 가능한 번역이다.</p>
+
+<h3 class="sub-title" id="decode">통계 모델로 실제 문장 번역하기 — 디코딩 (교안 40p)</h3>
+<p>번역 모델과 언어 모델을 조합해 통계 모델을 만든 뒤, 입력 문장을 넣어 번역한다. 언어 모델이 앞 단어로 다음 단어를 예측하듯, 번역도 <b>앞에서부터 차례로</b> 수행하고 점차 재조합한다.</p>
+<div class="flow">
+  <div class="fl"><b>① 입력 문장 → 구 분할</b><span>Tomorrow / I will fly / to the conference / in France</span></div>
+  <div class="fl"><b>② 구별 번역 후보 생성</b><span>구 번역 표에서 구마다 후보 여러 개</span></div>
+  <div class="fl"><b>③ 빔 탐색으로 조합 탐색</b><span>확률이 높은 조합만 남기며 이어 붙인다</span></div>
+  <div class="fl"><b>④ 어순 재배열 → 최종 번역문</b><span>목표 언어 어순으로 다시 조립</span></div>
+</div>
+<div class="fx">
+  <div class="tex-d">\text{최종 점수}=\lambda_1\cdot\text{번역 모델 점수}+\lambda_2\cdot\text{언어 모델 점수}+\lambda_3\cdot\text{구 재배열 점수}</div>
+  <p class="fx-note">구가 4개이고 구마다 후보가 10개면 조합만 <span class="tex">10^4</span>, 여기에 재배열 순서(4! = 24)까지 곱하면 24만 가지다. 문장이 길어지면 경우의 수가 <b>폭발적으로</b> 늘어 전수 계산이 불가능하다. 그래서 각 단계에서 <b>상위 k개 후보만 유지</b>하는 <b>빔 탐색(beam search)</b>을 쓴다(<a class="ext" href="nlp-week06.html">6주차 디코딩</a>과 같은 원리).</p>
+</div>
+</section>
+
+<!-- ===================== 9.2.3 ===================== -->
+<section class="sec" id="mt-bleu">
+  <div class="sec-head"><span class="sec-badge">9.2.3</span><h2 class="sec-title">번역 품질의 평가 — BLEU<small>교안 41 · 42p · 손으로 직접 계산한다</small></h2></div>
+
+<h3 class="sub-title" id="bleu-def">BLEU의 정의 · clipping · 길이 벌점 (교안 41p)</h3>
+<p>기계 번역문과 사람이 만든 <b>참조 번역문</b>의 <b>n-gram 일치 비율(정밀도)</b>을 <b>기하평균</b>한 뒤, <b>너무 짧은 번역에 벌점</b>을 주는 지표다.</p>
+<div class="fx">
+  <div class="tex-d">BLEU=BP\cdot\exp\Bigl(\sum_{n=1}^{N}w_n\log p_n\Bigr),\quad w_n=\tfrac1N\;(\text{보통 }N=4)\qquad BP=\begin{cases}1&amp;(c&gt;r)\\ e^{\,1-r/c}&amp;(c\le r)\end{cases}</div>
+  <p class="fx-note"><span class="tex">p_n</span> = n-gram 정밀도(<b>clipping</b> 적용) · <span class="tex">c</span> = 후보 길이 · <span class="tex">r</span> = 참조 길이. 값의 범위는 0~1(또는 0~100)이고 클수록 참조와 비슷하다. <span class="tex">w_n=1/4</span>로 두면 <span class="tex">\exp(\sum\frac14\log p_n)=(p_1p_2p_3p_4)^{1/4}</span>, 즉 네 정밀도의 <b>기하평균</b>이다.</p>
+</div>
+<div class="cards">
+  <div class="card2"><b>clipping은 왜?</b><p>후보가 <b>같은 n-gram을 반복</b>해 정밀도를 부풀리는 것을 막는다. 참조 &lsquo;the cat is on the mat&rsquo;에 후보 &lsquo;the the the the&rsquo;를 내면, clipping이 없을 때 <span class="tex">p_1=4/4=1</span>이다. clipping은 각 n-gram을 <b>참조에 나온 횟수까지만</b> 인정한다(&lsquo;the&rsquo;는 참조에 2번). 그래서 <span class="tex">p_1=2/4=0.5</span>가 된다</p></div>
+  <div class="card2"><b>BP는 왜?</b><p>정밀도는 <b>짧게 쓸수록 쉽게 높아진다</b>. 자신 있는 단어 하나 &lsquo;cat&rsquo;만 내면 <span class="tex">p_1=1</span>이다. 그래서 후보가 참조보다 <b>짧거나 같으면</b>(<span class="tex">c\le r</span>) <span class="tex">e^{1-r/c}</span>(1보다 작다)를 곱해 깎는다. <b>길면</b>(<span class="tex">c&gt;r</span>) 정밀도가 이미 손해를 보므로 BP = 1이다</p></div>
+</div>
+<div class="pit"><b>BP의 조건 방향과 BLEU의 한계</b>
+<ul class="ul">
+  <li><b>BP 조건을 뒤집은 보기에 주의</b> &mdash; 벌점은 <b>짧은 쪽</b>(<span class="tex">c\le r</span>)에 준다. &ldquo;c &gt; r이면 exp(1 − r/c)&rdquo;는 틀린 식이다. 실제로 c &gt; r이면 <span class="tex">1-r/c&gt;0</span>이라 BP가 1보다 커지는데, 그러면 벌점이 아니라 상이 된다</li>
+  <li><b>clipping과 BP는 역할이 다르다</b> &mdash; clipping은 <b>중복</b>, BP는 <b>길이</b>를 막는다. 동의어 · 어순은 <b>둘 다 못 막는다</b></li>
+  <li><b>한계</b> &mdash; 어순 변화와 동의어를 반영하지 못한다(&lsquo;fly&rsquo; 대신 &lsquo;go by plane&rsquo;이면 0점). 그리고 <b>문장 단위 점수는 신뢰도가 낮다</b>. 4-gram이 하나도 안 맞으면 기하평균 전체가 0이 되기 때문이다. BLEU는 원래 <b>코퍼스 단위</b>로 쓰는 지표다</li>
+  <li><b>보완 지표</b> &mdash; <b>chrF</b>(문자 n-gram, 한국어처럼 어미가 변하는 언어에 유리), <b>METEOR</b>(동의어), <b>COMET · BERTScore</b>(의미 임베딩 기반)</li>
+</ul></div>
+
+<h3 class="sub-title" id="bleu-ex">BLEU 계산 예시 — 손으로 끝까지 (교안 42p)</h3>
+<p>참조: <b>the cat is on the mat</b> (r = 6) &nbsp;/&nbsp; 후보: <b>the cat is on mat</b> (c = 5)</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>n</th><th>후보의 n-gram</th><th>후보 n-gram 수</th><th>일치 (clipped)</th><th>정밀도 p<sub>n</sub></th></tr></thead>
+  <tbody>
+    <tr><td>1-gram</td><td>the · cat · is · on · mat</td><td>5</td><td>5</td><td>5/5 = <b>1.000</b></td></tr>
+    <tr><td>2-gram</td><td>the cat · cat is · is on · <s>on mat</s></td><td>4</td><td>3</td><td>3/4 = <b>0.750</b></td></tr>
+    <tr><td>3-gram</td><td>the cat is · cat is on · <s>is on mat</s></td><td>3</td><td>2</td><td>2/3 = <b>0.667</b></td></tr>
+    <tr><td>4-gram</td><td>the cat is on · <s>cat is on mat</s></td><td>2</td><td>1</td><td>1/2 = <b>0.500</b></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="fx">
+  <div class="tex-d">BP=e^{\,1-6/5}=e^{-0.2}\approx0.819\qquad BLEU=0.819\times(1\cdot0.75\cdot0.667\cdot0.5)^{1/4}=0.819\times0.25^{1/4}\approx0.819\times0.707\approx0.58</div>
+  <p class="fx-note">후보 길이 L에서 n-gram 수는 <b>L − n + 1</b>이다(5, 4, 3, 2 &mdash; <a class="ext" href="nlp-week07.html#ngram">7주차의 L − N + 1</a>). 취소선은 참조에 없는 n-gram이다 &mdash; 참조에는 &lsquo;on mat&rsquo;가 아니라 &lsquo;on the&rsquo;, &lsquo;the mat&rsquo;가 있다. <span class="tex">1\cdot0.75\cdot0.667\cdot0.5=0.25</span>이고 <span class="tex">0.25^{1/4}=\sqrt{0.5}\approx0.707</span>이다.</p>
+</div>
+<div class="deep"><b>&lsquo;the&rsquo; 한 단어가 빠졌을 뿐인데 0.58인 이유</b> &mdash; 1-gram은 다 맞았다. 하지만 &lsquo;the&rsquo;가 빠진 자리에서 <b>2 · 3 · 4-gram이 하나씩 동시에 깨진다</b>. 그리고 한 단어 짧아서 BP로 18%를 또 잃는다. 교안이 &ldquo;단어 하나가 빠지면서 2~4-gram 정밀도가 함께 떨어지고 길이 벌점까지 받는다&rdquo;고 짚는 지점이다. 시험에서 &ldquo;p<sub>2</sub>는?&rdquo; 같은 문항이 나오면 표의 값(1.000 / 0.750 / 0.667 / 0.500)이 각각 몇 그램인지 섞어 내기 좋다 &mdash; <b>n이 커질수록 정밀도가 작아지는 순서</b>로 기억하자. 실습 2-3이 이 계산을 그대로 구현하고 <code>sacrebleu</code>와 비교한다.</div>
+</section>
+
+<!-- ===================== 9.2.4 ===================== -->
+<section class="sec" id="mt-nmt">
+  <div class="sec-head"><span class="sec-badge">9.2.4</span><h2 class="sec-title">신경망 기계번역<small>교안 43~47p · seq2seq → 어텐션 → Transformer · 실무 요소</small></h2></div>
+
+<h3 class="sub-title" id="seq2seq">① seq2seq — 인코더–디코더 (교안 43p)</h3>
+<p><b>인코더 RNN</b>이 원문 전체를 <b>하나의 문맥 벡터</b>로 압축하고, <b>디코더 RNN</b>이 그 벡터로부터 번역문을 <b>한 단어씩</b> 생성한다(은닉 상태와 RNN의 정의는 12주차에서 자세히 다룬다).</p>
+<svg viewBox="0 0 640 140" role="img" aria-label="seq2seq: 나는, 사과를, 먹었다를 인코더가 읽어 문맥 벡터 하나로 압축하고 디코더가 I, ate, an apple을 차례로 만든다" style="width:100%;max-width:640px;display:block;margin:8px auto">
+  <g font-size="12.5" text-anchor="middle">
+    <rect x="20" y="50" width="70" height="36" rx="6" fill="#eef6ff" stroke="#1d4ed8"/><text x="55" y="73">Enc</text><text x="55" y="110" font-weight="700">나는</text>
+    <rect x="110" y="50" width="70" height="36" rx="6" fill="#eef6ff" stroke="#1d4ed8"/><text x="145" y="73">Enc</text><text x="145" y="110" font-weight="700">사과를</text>
+    <rect x="200" y="50" width="70" height="36" rx="6" fill="#eef6ff" stroke="#1d4ed8"/><text x="235" y="73">Enc</text><text x="235" y="110" font-weight="700">먹었다</text>
+    <rect x="292" y="44" width="70" height="48" rx="24" fill="#fff7ed" stroke="#b45309" stroke-width="2"/><text x="327" y="66" font-weight="700" fill="#b45309">문맥</text><text x="327" y="82" font-weight="700" fill="#b45309">벡터</text>
+    <rect x="384" y="50" width="70" height="36" rx="6" fill="#f0fdf4" stroke="#15803d"/><text x="419" y="73">Dec</text><text x="419" y="34" font-weight="700">I</text>
+    <rect x="474" y="50" width="70" height="36" rx="6" fill="#f0fdf4" stroke="#15803d"/><text x="509" y="73">Dec</text><text x="509" y="34" font-weight="700">ate</text>
+    <rect x="564" y="50" width="70" height="36" rx="6" fill="#f0fdf4" stroke="#15803d"/><text x="599" y="73">Dec</text><text x="599" y="34" font-weight="700">an apple</text>
+  </g>
+  <g stroke="#64748b" stroke-width="1.6"><line x1="90" y1="68" x2="110" y2="68"/><line x1="180" y1="68" x2="200" y2="68"/><line x1="270" y1="68" x2="292" y2="68"/><line x1="362" y1="68" x2="384" y2="68"/><line x1="454" y1="68" x2="474" y2="68"/><line x1="544" y1="68" x2="564" y2="68"/></g>
+  <text x="327" y="130" text-anchor="middle" font-size="11.5" fill="#b45309">원문이 아무리 길어도 이 한 칸에 다 담아야 한다 → 정보 병목</text>
+</svg>
+<ul class="ul">
+  <li><b>무엇이 좋아졌나</b> &mdash; 별도의 정렬 · 구 번역 표 · 재배열 규칙 없이 <b>병렬 코퍼스만으로 종단간(end-to-end) 학습</b>이 된다. 통계 번역의 여러 부품이 신경망 하나로 합쳐졌다</li>
+  <li><b>문제 — 정보 병목(information bottleneck)</b> &mdash; 긴 문장의 정보를 <b>고정 길이 벡터 하나</b>에 담기 어렵다. 문장 앞부분 정보가 끝까지 가면서 희미해진다</li>
+  <li><b>해결</b> &mdash; 디코더가 <b>매 시점</b> 원문의 어느 부분을 볼지 정하는 <b>어텐션</b>을 도입했다</li>
+</ul>
+
+<h3 class="sub-title" id="attention">② 어텐션 Attention (교안 44p)</h3>
+<p>디코더가 단어를 하나 생성할 때마다, 인코더의 <b>모든 은닉 상태</b>에 가중치를 매겨 <b>가중합(문맥 벡터)을 새로</b> 계산한다. 문맥 벡터가 하나로 고정되지 않고 시점마다 바뀐다.</p>
+<div class="fx">
+  <div class="tex-d">\text{score}(s,h_i)=s\cdot h_i\;\;\longrightarrow\;\;\alpha_i=\text{softmax}_i(\text{score})\;\;\longrightarrow\;\;c=\sum_i\alpha_i\,h_i</div>
+  <p class="fx-note">① 디코더의 현재 상태 <span class="tex">s</span>와 인코더 은닉 상태 <span class="tex">h_i</span>의 <b>점수</b>(내적)를 구한다 → ② softmax로 합이 1인 <b>가중치 α</b>로 바꾼다 → ③ 그 가중치로 <span class="tex">h_i</span>를 섞어 <b>문맥 벡터 c</b>를 만든다. 순서가 &lsquo;점수 → softmax → 가중합&rsquo;이다. score에는 내적(Luong) · additive(Bahdanau) 같은 변형이 있고, <span class="tex">c(t)</span>는 <span class="tex">s(t)</span>와 결합해 출력층에 들어간다.</p>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>생성 단어 \ 원문</th><th>나는</th><th>사과를</th><th>먹었다</th></tr></thead>
+  <tbody>
+    <tr><td><b>I</b></td><td><b>0.82</b></td><td>0.10</td><td>0.08</td></tr>
+    <tr><td><b>ate</b></td><td>0.06</td><td>0.14</td><td><b>0.80</b></td></tr>
+    <tr><td><b>an apple</b></td><td>0.05</td><td><b>0.86</b></td><td>0.09</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>표를 읽는 법 — 행이 &lsquo;지금 만드는 단어&rsquo;, 열이 &lsquo;원문 단어&rsquo;</b> &mdash; 각 행의 합은 1이다(softmax). &lsquo;ate&rsquo;를 만들 때는 원문 맨 끝의 &lsquo;먹었다&rsquo;(0.80)를 가장 많이 본다. 굵은 칸만 이으면 (I–나는), (ate–먹었다), (an apple–사과를)이다. 바로 위 9.2.2 그림의 <b>교차 정렬</b>과 똑같은 모양이다.<br>
+그래서 교안은 <span class="hi">어텐션 가중치는 통계 기반 번역의 &lsquo;단어 정렬&rsquo;을 학습으로 대체한 것</span>이라고 말한다. IBM Model이 EM으로 따로 추정하던 정렬을, 신경망이 번역을 배우면서 <b>부산물로</b> 함께 배운다. 교차(어순 차이)가 가중치 분포로 자연스럽게 드러나서 번역 결과를 해석하는 데도 쓰인다. 언어 모델이나 빔 탐색을 대체한 것이 아니다 &mdash; 신경망 번역도 디코딩에서는 여전히 빔 탐색을 쓴다(실습 2-4).</div>
+
+<h3 class="sub-title" id="transformer">③ Transformer (교안 45p)</h3>
+<p>RNN의 <b>순차 계산을 제거</b>하고 <b>셀프 어텐션만으로</b> 문맥을 표현한다 → <b>병렬 학습</b>이 가능해지고 <b>장거리 의존 관계</b>를 잘 잡는다.</p>
+<div class="cards">
+  <div class="card2"><b>인코더 × N</b><ul class="ul"><li>멀티헤드 셀프 어텐션</li><li>위치별 피드포워드</li><li>잔차 연결 + 층 정규화 (두 번)</li></ul></div>
+  <div class="card2"><b>디코더 × N</b><ul class="ul"><li><b>마스킹된</b> 셀프 어텐션 &mdash; 아직 만들지 않은 뒤 단어를 못 보게</li><li><b>인코더–디코더 어텐션</b> &mdash; 앞의 ② 어텐션이 여기 들어간다</li><li>위치별 피드포워드</li></ul></div>
+</div>
+<div class="pit"><b>순서 정보는 어디서 오나</b> &mdash; 순환 구조를 <b>없앴기</b> 때문에, 모델은 &ldquo;나는 사과를 먹었다&rdquo;와 &ldquo;사과를 나는 먹었다&rdquo;를 단어 집합으로만 보면 구별하지 못한다. 그래서 각 위치에 <b>위치 인코딩(positional encoding)</b>을 더해 순서를 따로 주입한다. &ldquo;순환 구조로 순서가 자연스럽게 전달된다&rdquo;는 RNN 이야기다. Transformer는 오늘날 <b>상용 번역기와 대규모 언어모델의 공통 기반 구조</b>다.</div>
+
+<h3 class="sub-title" id="mt-practice">신경망 번역의 실무 요소 (교안 46p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>요소</th><th>무엇을 하나</th></tr></thead>
+  <tbody>
+    <tr><td><b>서브워드 분절</b> (BPE, SentencePiece)</td><td>어휘 사전을 <b>유한하게</b> 유지하면서 <b>미등록어(OOV)</b>를 처리한다. 처음 보는 단어도 조각의 조합으로 표현된다 &mdash; 한국어의 교착어적 특성에도 효과적(<a class="ext" href="nlp-week04.html">4주차</a>)</td></tr>
+    <tr><td><b>역번역</b> (back-translation)</td><td><b>단일 언어 코퍼스</b>를 번역해 <b>가짜 병렬 코퍼스</b>를 만들어 학습 데이터를 늘린다(데이터 증강)</td></tr>
+    <tr><td><b>다국어 · 제로샷 번역</b></td><td>하나의 모델로 여러 언어쌍을 학습하면 데이터가 적은 언어쌍의 성능도 오른다</td></tr>
+    <tr><td><b>LLM 기반 번역</b></td><td>문맥 · 문체 · 용어집을 프롬프트로 지시할 수 있어 문서 단위 번역과 <b>사후 교정(APE)</b>에 강하다</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="pit"><b>역번역은 평가 기법이 아니라 &lsquo;데이터를 만드는&rsquo; 기법이다</b> &mdash; 교안의 정의는 데이터 증강이다. 예를 들어 한→영 번역기를 키우고 싶은데 병렬 코퍼스가 부족하다면, 많이 구할 수 있는 <b>영어 단일 문장</b>을 영→한 모델로 한국어로 옮긴다. 그러면 (가짜 한국어, 진짜 영어) 쌍이 생기고, 이것을 학습에 더한다. 실습 2-5는 한→영→한 왕복 번역의 BLEU를 재 보며 &lsquo;간접 진단&rsquo;에도 쓰지만, 교안이 말하는 본래 용도는 증강이다. &lsquo;미등록어를 조각낸다&rsquo;는 서브워드, &lsquo;한 모델로 여러 언어쌍&rsquo;은 다국어 번역의 설명이다.</div>
+
+<div class="oneline">
+  <p><b>9.2 정리 (교안 47p)</b></p>
+  <ul class="ul">
+    <li>규칙 기반 번역은 언어학적 규칙으로 <b>문법 정확성</b>을 얻지만, 규칙 구축 비용과 분석 오류 전파가 한계다</li>
+    <li>통계 기반 번역은 병렬 코퍼스에서 확률을 추정하고, 베이즈 정리로 <b>번역 모델 P(E|F)과 언어 모델 P(F)</b>로 분해한다</li>
+    <li>단어 단위의 한계를 보완하려 <b>구 기반 번역</b>이 나왔고, 디코딩은 <b>빔 탐색</b>으로 후보를 조합한다</li>
+    <li>신경망 번역은 <b>seq2seq → 어텐션 → Transformer</b>로 발전했고, 어텐션은 통계 번역의 단어 정렬을 학습으로 대체한 것으로 볼 수 있다</li>
+    <li>번역 품질은 BLEU로 널리 재지만 의미 · 어순을 반영하지 못하므로 <b>chrF · COMET</b> 등과 함께 쓴다</li>
+  </ul>
+</div>
+</section>
+
+<!-- ===================== 9.3.1 ===================== -->
+<section class="sec" id="ds-arch">
+  <div class="sec-head"><span class="sec-badge">9.3.1</span><h2 class="sec-title">대화 시스템 개론과 구현<small>교안 49~54p · 주도권 · 5개 모듈 · 의도 분류와 슬롯 채우기</small></h2></div>
+
+<h3 class="sub-title" id="ds-def">대화 시스템이란 · 주도권에 따른 두 갈래 (교안 49 · 50p)</h3>
+<p><b>대화 시스템</b>은 자연어를 사용해 인간과 대화하는 시스템이다. <b>대화의 주도권</b>을 누가 쥐느냐에 따라 둘로 나뉜다.</p>
+<div class="cards">
+  <div class="card2"><b>사용자 주도 대화 시스템</b><pre class="code">사용자: 오늘 서울 날씨 알려줘
+시스템: 맑고 최고 28도입니다
+사용자: 내일은?
+시스템: 흐리고 비가 옵니다</pre><p>사용자가 원하는 것을 <b>자유롭게</b> 묻는다 → <b>유연하지만 이해 실패 위험이 크다</b> (&lsquo;내일은?&rsquo;처럼 생략된 말을 문맥으로 메워야 한다)</p></div>
+  <div class="card2"><b>시스템 주도 대화 시스템</b><pre class="code">시스템: 몇 명 예약하시겠습니까?
+사용자: 두 명이요
+시스템: 언제 방문하시겠습니까?
+사용자: 토요일 저녁 7시</pre><p>시스템이 필요한 정보를 <b>차례로 질문</b>한다 → <b>안정적이지만 대화가 경직된다</b></p></div>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>대표 사례 (교안 50p)</th><th>예</th></tr></thead>
+  <tbody>
+    <tr><td><b>스마트폰 음성 비서</b></td><td>삼성 빅스비, <b>애플 시리</b>, 구글 어시스턴트, 마이크로소프트 Cortana</td></tr>
+    <tr><td><b>인공지능 스피커 제품</b></td><td>아마존 에코(Alexa), 구글 네스트, KT 기가지니, 네이버 Clova</td></tr>
+    <tr><td><b>고객 상담 챗봇</b></td><td>은행 · 통신사 · 쇼핑몰의 상담 자동화, 사내 규정 문의 응답</td></tr>
+    <tr><td><b>LLM 기반 범용 대화 시스템</b></td><td>도메인에 한정되지 않는 자유 대화와 <b>도구 호출(tool calling)</b>까지 수행</td></tr>
+  </tbody>
+</table>
+</div>
+<p>시리는 &lsquo;스피커&rsquo;가 아니라 <b>스마트폰 음성 비서</b> 칸에 있다는 것처럼, 분류 칸을 묻는 보기가 나올 수 있다.</p>
+
+<h3 class="sub-title" id="ds-modules">전체 구성도 — 다섯 모듈 (교안 51 · 52 · 54p)</h3>
+<svg viewBox="0 0 680 150" role="img" aria-label="대화 시스템 구성도: 사용자 발화가 ASR, NLU, DM, NLG, TTS를 거쳐 시스템 음성이 되고, DM은 작업 관리 시스템과 주고받는다" style="width:100%;max-width:680px;display:block;margin:8px auto">
+  <g font-size="12.5" text-anchor="middle">
+    <text x="30" y="56" font-size="11.5" fill="#64748b">사용자</text><text x="30" y="72" font-size="11.5" fill="#64748b">발화</text>
+    <rect x="62" y="38" width="96" height="44" rx="8" fill="#eef6ff" stroke="#1d4ed8"/><text x="110" y="57" font-weight="700">음성 인식</text><text x="110" y="73">ASR</text>
+    <rect x="178" y="38" width="96" height="44" rx="8" fill="#eef6ff" stroke="#1d4ed8"/><text x="226" y="57" font-weight="700">자연어 이해</text><text x="226" y="73">NLU</text>
+    <rect x="294" y="38" width="96" height="44" rx="8" fill="#fff7ed" stroke="#b45309" stroke-width="2"/><text x="342" y="57" font-weight="700">대화 관리</text><text x="342" y="73">DM</text>
+    <rect x="410" y="38" width="96" height="44" rx="8" fill="#f0fdf4" stroke="#15803d"/><text x="458" y="57" font-weight="700">자연어 생성</text><text x="458" y="73">NLG</text>
+    <rect x="526" y="38" width="96" height="44" rx="8" fill="#f0fdf4" stroke="#15803d"/><text x="574" y="57" font-weight="700">음성 합성</text><text x="574" y="73">TTS</text>
+    <text x="652" y="56" font-size="11.5" fill="#64748b">시스템</text><text x="652" y="72" font-size="11.5" fill="#64748b">음성</text>
+    <rect x="270" y="112" width="144" height="32" rx="6" fill="#f8fafc" stroke="#94a3b8" stroke-dasharray="4 3"/><text x="342" y="132">작업 관리 시스템 (DB · 외부 API)</text>
+  </g>
+  <g stroke="#64748b" stroke-width="1.6"><line x1="158" y1="60" x2="178" y2="60"/><line x1="274" y1="60" x2="294" y2="60"/><line x1="390" y1="60" x2="410" y2="60"/><line x1="506" y1="60" x2="526" y2="60"/><line x1="342" y1="82" x2="342" y2="112"/></g>
+</svg>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>모듈</th><th>입력 → 출력</th><th>핵심 과제</th></tr></thead>
+  <tbody>
+    <tr><td><b>ASR</b> 음성 인식</td><td>음성 신호 → 텍스트</td><td>잡음 · 발음 변이에 강한 인식</td></tr>
+    <tr><td><b>NLU</b> 자연어 이해</td><td>텍스트 → 의미 표현(<b>의도 + 슬롯</b>)</td><td><b>의도 분류, 슬롯 채우기</b></td></tr>
+    <tr><td><b>DM</b> 대화 관리</td><td>의미 표현 → 시스템 행동</td><td><b>문맥 관리, 생략 복원, 예외 처리</b></td></tr>
+    <tr><td><b>NLG</b> 자연어 생성</td><td>시스템 행동 → 문장</td><td>자연스럽고 간결한 응답 생성</td></tr>
+    <tr><td><b>TTS</b> 음성 합성</td><td>문장 → 음성</td><td>듣기 편한 운율 · 음색</td></tr>
+  </tbody>
+</table>
+</div>
+<p><b>처리 흐름(교안 52 · 54p)</b> &mdash; 사용자가 말하면 <b>ASR</b>이 음성을 텍스트로 바꾼다(정확한 음성 인식이 <b>전제</b>다 &mdash; 여기서 틀리면 뒤가 다 틀린다). <b>NLU</b>가 텍스트를 의미 표현으로 바꿔 <b>DM</b>으로 보낸다. DM은 <b>작업 관리 시스템</b>(DB · 외부 API)과 주고받으며 대화의 문맥 · 흐름 · 도메인 · 생략 복원 · 중의성 해소 · 예외 처리를 맡는다. 가장 많이 고민하는 것은 <b>대화의 문맥을 어떻게 저장하고 활용할지</b>다. 그 뒤 <b>NLG</b>가 목적에 맞는 문장을 만들고, <b>TTS</b>가 사람과 비슷하고 듣기 편한 음성으로 바꿔 전달한다. 순서 <b>ASR → NLU → DM → NLG → TTS</b>는 &lsquo;듣고 → 알아듣고 → 정하고 → 말을 짓고 → 소리 낸다&rsquo;로 외우자.</p>
+
+<h3 class="sub-title" id="nlu-slot">자연어 이해 — 의도 분류와 슬롯 채우기 (교안 52 · 53p)</h3>
+<p>NLU는 발화에서 <b>슬롯(slot)</b>을 만들고 그 <b>값을 채우는</b> 형식으로 의미를 표현한다. 영화 예매라면 예매 장소 · 상영 시간 · 티켓 수 · 성인/청소년 여부 같은 슬롯이다. 이것을 <b>슬롯 채우기(slot filling)</b>라 한다.</p>
+<p>발화: <b>&ldquo;토요일 저녁 7시에 강남에서 아바타 성인 2장 예매해줘&rdquo;</b></p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>의도 (intent)</th><th>영화 (title)</th><th>장소 (location)</th><th>날짜 (date)</th><th>시간 (time)</th><th>인원 (count)</th></tr></thead>
+  <tbody><tr><td><b>movie_booking</b></td><td>아바타</td><td>강남</td><td>토요일</td><td>저녁 7시</td><td>성인 2명</td></tr></tbody>
+</table>
+</div>
+<div class="pit"><b>의도 분류와 슬롯 채우기는 문제 유형이 다르다</b>
+<ul class="ul">
+  <li><b>의도 분류</b> = <b>문장 분류</b> 문제 &mdash; 문장 <b>전체</b>에 movie_booking 같은 범주 <b>하나</b>를 붙인다(<a class="ext" href="nlp-week05.html">5주차 텍스트 분류</a>)</li>
+  <li><b>슬롯 채우기</b> = <b>시퀀스 라벨링</b> 문제 &mdash; <b>토큰마다</b> BIO 태그를 붙인다. <a class="ext" href="nlp-week07.html#bio">7주차 개체명 인식</a>과 같은 틀이다. 예) 저녁/B-time 7시/I-time 에/O 강남/B-location …</li>
+  <li>두 과제를 <b>하나의 신경망으로 함께 학습(joint learning)</b>하면 성능이 오른다 &mdash; 의도가 movie_booking이면 &lsquo;아바타&rsquo;는 영화 제목일 가능성이 높아지는 식으로 서로 돕는다. &ldquo;간섭이 심해 따로 학습해야 한다&rdquo;는 틀린 말이다</li>
+</ul></div>
+</section>
+
+<!-- ===================== 9.3.2 ===================== -->
+<section class="sec" id="ds-dm">
+  <div class="sec-head"><span class="sec-badge">9.3.2</span><h2 class="sec-title">대화 관리 방식<small>교안 55~58p · 규칙 기반(FSA · Frame) vs 데이터 기반(강화학습 · 신경망 DST)</small></h2></div>
+
+<h3 class="sub-title" id="dm-types">두 접근의 비교 (교안 55p)</h3>
+<p>실제 연구에서는 모듈마다 따로 연구자가 있을 정도로 대화 시스템 연구는 어렵다. 대화 관리는 크게 두 방식으로 나뉜다.</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>규칙 기반 접근</th><th>데이터 기반 접근</th></tr></thead>
+  <tbody>
+    <tr><td><b>기법</b></td><td>유한 상태 오토마타(FSA) · Frame 기반</td><td>강화학습(POMDP) · 신경망 대화 상태 추적</td></tr>
+    <tr><td><b>장점</b></td><td><b>예측 가능</b>, <b>소량 데이터</b>로 가능</td><td><b>유연</b>, <b>자동 개선</b></td></tr>
+    <tr><td><b>단점</b></td><td><b>확장 · 유지보수 비용</b></td><td><b>대량 데이터</b> 필요, <b>불투명</b></td></tr>
+  </tbody>
+</table>
+</div>
+<p>장단점이 거울처럼 맞선다 &mdash; 규칙 기반의 장점(예측 가능 · 소량 데이터)이 데이터 기반의 단점(불투명 · 대량 데이터)이다. 보기에서 BPE · SentencePiece(서브워드), BM25 · TF-IDF(검색)가 대화 관리 기법인 척 섞여 나와도 속지 말자.</p>
+
+<h3 class="sub-title" id="fsa">규칙 기반 ① — 유한 상태 오토마타 FSA (교안 56p)</h3>
+<p>모든 경우의 수에 규칙을 정해 두고, 대화의 문맥과 순서를 <b>상태 전이</b>로 표현한다.</p>
+<pre class="code">S1 인원 질문 → S2 날짜 질문 → S3 시간 질문 → S4 예약 확인 · 완료
+      ↺ 재질문(오류 시)</pre>
+<ul class="ul">
+  <li>시스템이 대화를 주도하므로 <b>안정적이고 구현이 단순하다</b></li>
+  <li>사용자가 <b>순서를 벗어난 발화</b>를 하면 처리하기 어렵다 &mdash; S3(시간 질문)에서 &ldquo;아, 날짜를 바꿀게요&rdquo;라고 하면 S2로 돌아가는 전이가 따로 없으면 막힌다</li>
+  <li>상태 수가 늘면 전이 규칙이 <b>폭발적으로 증가</b>한다 → 대규모 서비스에는 부적합</li>
+  <li>그래도 실무에서는 간단한 <b>ARS · 주문 봇</b>에 여전히 널리 쓴다</li>
+</ul>
+
+<h3 class="sub-title" id="frame">규칙 기반 ② — Frame 기반 대화 관리 (교안 57p)</h3>
+<p><b>Frame</b>이라는 규칙과 규칙 사이의 <b>우선순위</b>가 있고, <b>비어 있는 슬롯</b>에 대해 사용자에게 질문하며 문맥을 이해한다. 사용자가 주도해 여러 정보를 한꺼번에 말하는 <b>mixed initiative</b>도 가능하다 &mdash; 슬롯 순서가 아니라 &lsquo;무엇이 비었나&rsquo;를 보기 때문이다.</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>슬롯</th><th>현재 값</th><th>시스템 행동</th></tr></thead>
+  <tbody>
+    <tr><td>출발지</td><td>서울</td><td>채워짐 → 질문하지 않음</td></tr>
+    <tr><td><b>도착지</b></td><td>(비어 있음)</td><td><b>우선순위 1 → &ldquo;어디로 가십니까?&rdquo;</b></td></tr>
+    <tr><td>날짜</td><td>(비어 있음)</td><td>우선순위 2 → 도착지 확보 후 질문</td></tr>
+    <tr><td>인원</td><td>1명 (기본값)</td><td>기본값 사용, 필요 시 확인</td></tr>
+  </tbody>
+</table>
+</div>
+<p>빈 슬롯이 모두 채워지면 <b>작업 관리 시스템(예약 API)</b>을 호출한다. 실습 3-1의 <code>FRAME</code> 딕셔너리(질문 · 값 · 우선순위)와 <code>frame_chatbot()</code>이 이 표를 코드로 옮긴 것이다.</p>
+<div class="pit"><b>FSA와 Frame — 둘 다 규칙 기반인데 무엇이 다른가</b> &mdash; FSA는 <b>&lsquo;지금 몇 번째 상태인가&rsquo;</b>로 대화를 기억하고, 정해진 길로만 움직인다. Frame은 <b>&lsquo;어떤 칸이 비었나&rsquo;</b>로 대화를 기억한다. 그래서 사용자가 &ldquo;토요일 저녁 7시에 아바타 2명&rdquo;을 한 번에 말하면 네 칸을 한꺼번에 채우고 바로 넘어간다. 실습 3-1 관찰 포인트가 이 차이다. 대신 사전에 없는 영화 제목이나 예상하지 못한 표현은 Frame도 전혀 인식하지 못한다 &mdash; 여전히 규칙 기반의 한계다.</div>
+
+<h3 class="sub-title" id="rl-dm">데이터 기반 — 강화학습 기반 대화 관리 (교안 58p)</h3>
+<p>대화를 <b>&lsquo;상태–행동–보상&rsquo;의 순차 의사결정 문제</b>로 보고, 목표를 달성하면 보상을 주어 <b>정책(policy)</b>을 학습한다.</p>
+<pre class="code">대화 상태(state) ──상태 관측──▶ 대화 정책(policy) ──행동 선택──▶ (다음 시스템 발화)
+         ▲                                                     │
+         └──────────── 보상: 작업 성공 +, 턴 수 − ─────────────┘</pre>
+<ul class="ul">
+  <li><b>보상 설계</b> &mdash; 작업에 <b>성공하면 +</b>, 턴이 <b>길어질수록 −</b>. 그래서 정책은 &ldquo;빨리, 그리고 확실히 끝내는&rdquo; 질문 순서를 스스로 배운다</li>
+  <li>음성 인식 · 이해 결과는 불확실하다(&lsquo;강남&rsquo;인지 &lsquo;광남&rsquo;인지). 이것을 하나로 단정하지 않고 <b>확률 분포</b>로 다루는 <b>POMDP</b> 기반 대화 관리로 발전했다</li>
+  <li>최근에는 <b>신경망 대화 상태 추적(DST)</b>과 결합하고, 사람 대신 <b>사용자 시뮬레이터</b>와 수만 번 대화시켜 학습 데이터를 확보한다</li>
+</ul>
+<div class="deep"><b>&lsquo;턴 수 −&rsquo;가 왜 필요한가</b> &mdash; 성공 보상만 있으면 시스템은 &ldquo;정말 서울 맞으세요? 정말요?&rdquo;처럼 확인 질문을 끝없이 반복해도 손해가 없다. 언젠가는 성공하니까. 턴마다 작은 벌점을 주면, 확인으로 얻는 성공률과 대화가 길어지는 비용을 <b>저울질</b>하게 된다. 인식 확률이 0.95면 바로 넘어가고, 0.6이면 한 번 확인하는 식의 정책이 학습된다 &mdash; POMDP가 불확실성을 분포로 들고 있는 이유가 여기서 이어진다.</div>
+</section>
+
+<!-- ===================== 9.3.3 ===================== -->
+<section class="sec" id="ds-eval">
+  <div class="sec-head"><span class="sec-badge">9.3.3</span><h2 class="sec-title">대화 시스템의 평가 · 분류 · 최신 동향<small>교안 59~65p · Slot Error Rate · 기능대화 vs 일상대화</small></h2></div>
+
+<h3 class="sub-title" id="ser">평가 두 가지와 Slot Error Rate (교안 59 · 60p)</h3>
+<p>좋은 대화 시스템이란 무엇이고, 평가는 어떻게 할까? 크게 두 가지다.</p>
+<div class="cards">
+  <div class="card2"><b>① Slot Error Rate</b><p>문장의 <b>슬롯 채우기를 얼마나 정확히</b> 했는지 평가</p></div>
+  <div class="card2"><b>② End-to-end evaluation</b><p><b>대화 전체가 목적을 달성</b>했는지 평가 (예: 올바른 약속 정보가 달력에 잘 저장되었는지 확인)</p></div>
+</div>
+<p>이 밖에 대화 턴 수, 작업 완료율, 사용자 만족도 설문을 함께 쓴다.</p>
+<p>발화: <b>&ldquo;Make an appointment with Chris at 10:30 in Gates 104&rdquo;</b></p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>슬롯</th><th>정답 값</th><th>시스템이 채운 값</th><th>판정</th></tr></thead>
+  <tbody>
+    <tr><td>PERSON</td><td>Chris</td><td>Chris</td><td>○</td></tr>
+    <tr><td>TIME</td><td>10:30</td><td><b>11:30</b></td><td><b>×</b></td></tr>
+    <tr><td>ROOM</td><td>Gates 104</td><td>Gates 104</td><td>○</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="fx">
+  <div class="tex-d">\text{Slot Error Rate}=\frac{\text{치환}+\text{삽입}+\text{삭제}}{\text{전체 참조 슬롯 수}}=\frac{1}{3}\approx0.33</div>
+  <p class="fx-note">분자는 <b>틀린</b> 슬롯 수다(값을 잘못 채움 = 치환, 없는 슬롯을 지어냄 = 삽입, 있어야 할 슬롯을 빠뜨림 = 삭제). 분모는 <b>정답(참조) 슬롯 수</b>다. &ldquo;맞은 슬롯 / 전체&rdquo;(= 2/3)는 SER이 아니라 정확도다. <b>낮을수록 좋다.</b></p>
+</div>
+<div class="pit"><b>SER이 0이어도 대화는 실패할 수 있다</b> &mdash; 슬롯을 다 맞게 채웠어도 DM이 예약 API를 부르지 않았거나, 날짜를 바꾸자는 말을 무시하고 옛 값으로 예약했다면 사용자 입장에서는 실패다. 그래서 교안은 <b>End-to-end 평가를 함께</b> 보라고 한다. 또 <b>일상대화</b>는 정답이 하나가 아니므로 SER을 쓸 수 없다. 대신 <b>perplexity</b>와 <b>적절성 · 일관성 · 안전성에 대한 사람 평가</b>를 쓴다.</div>
+
+<h3 class="sub-title" id="task-social">기능대화와 일상대화 (교안 61~64p)</h3>
+<p>대화 시스템은 <b>기능대화(Task-oriented dialogue)</b>와 <b>일상대화(Social conversation)</b>로 나뉜다.</p>
+<ul class="ul">
+  <li><b>기능대화</b>는 목적이 분명하다. 사용자는 대화를 통해 어떤 결과가 나오기를 바란다(<b>Task-Completion</b>). 목적은 고정되지 않고 대화가 진행되며 <b>동적으로 바뀐다</b> &mdash; 식당 예약 중에 주차 공간을 물으면 restaurant booking → parking이 된다</li>
+  <li>기능대화는 <b>Domain-specific</b>하다. 비행기 티켓 예매와 영화 티켓 예매는 비슷해 보여도 도메인이 전혀 달라 모델 학습에 큰 영향을 준다. 도메인이 늘면 감당이 어려워 <b>transfer learning을 쓴 domain adaptation</b> 연구가 많다. 그리고 <b>명확한 답</b>이 있다 &mdash; 호텔을 예약하고 싶으면 결과는 반드시 호텔 예약이어야 한다</li>
+  <li><b>일상대화</b>는 <b>대화 자체가 목적</b>이다. 카페 수다처럼 사회적 관계를 유지하려고 잡담(chit-chat)을 한다. <b>Open-domain</b>이라 주제 제한이 없고, <b>여러 개의 정답</b>을 가진다 &mdash; &ldquo;오늘 너무 춥다&rdquo;에는 공감 · 정보 제공 · 농담이 모두 적절할 수 있다</li>
+</ul>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>구분</th><th>기능대화 (Task-oriented)</th><th>일상대화 (Social conversation)</th></tr></thead>
+  <tbody>
+    <tr><td><b>대화의 목적</b></td><td>명확한 작업 완료 (Task-Completion)</td><td>대화 자체 (사회적 관계 유지)</td></tr>
+    <tr><td><b>도메인</b></td><td>Domain-specific (예약, 주문)</td><td>Open-domain (주제 제한 없음)</td></tr>
+    <tr><td><b>정답</b></td><td>명확한 하나의 정답</td><td>여러 개의 적절한 응답</td></tr>
+    <tr><td><b>구현 방식</b></td><td>슬롯 채우기 + 대화 관리 + API 호출</td><td><b>생성 모델 (seq2seq, LLM)</b></td></tr>
+    <tr><td><b>주요 평가</b></td><td>작업 완료율, Slot Error Rate, 턴 수</td><td>적절성 · 일관성 · 안전성 사람 평가</td></tr>
+    <tr><td><b>대표 예시</b></td><td>항공 예약 봇, 상담 챗봇</td><td>심심이, 페르소나 챗봇, 범용 AI 채팅</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>교안 69p 질문 4 — 왜 평가 방법이 달라야 하나</b> &mdash; 평가는 &ldquo;정답과 얼마나 같은가&rdquo;를 재는데, 그러려면 <b>정답이 정해져 있어야</b> 한다. 기능대화는 정답(올바른 예약)이 하나라 SER · 작업 완료율로 기계적으로 잴 수 있다. 일상대화는 적절한 응답이 여럿이라, 정답 하나와 비교하면 훌륭한 응답도 오답 처리된다. 그래서 &ldquo;말이 되는가(적절성) · 앞뒤가 맞는가(일관성) · 해롭지 않은가(안전성)&rdquo;를 <b>사람이</b> 판단한다. 실습 3-4의 토의 질문도 같은 이야기다 &mdash; <code>do_sample=True</code>로 매번 다른 답이 나오는 성질은 예약 봇에서는 사고지만 잡담 봇에서는 미덕이다.</div>
+
+<h3 class="sub-title" id="ds-trend">대화 시스템의 최신 동향 (교안 65p)</h3>
+<ul class="ul">
+  <li><b>신경망 대화 상태 추적(DST)</b> &mdash; 매 턴 <b>전체 대화 이력</b>을 입력해 슬롯 값을 <b>직접 생성</b>한다. 그래서 미리 정의한 값 목록(영화 제목 사전 등)에 얽매이지 않는다. Frame 기반이 &lsquo;사전에 없는 영화 제목&rsquo;을 못 알아듣던 한계를 넘는다</li>
+  <li><b>종단간(end-to-end) 대화 모델</b> &mdash; NLU–DM–NLG를 <b>하나의 생성 모델</b>로 통합한다</li>
+  <li><b>LLM 기반 대화 시스템</b> &mdash; 프롬프트로 역할 · 정책을 지정하고, <b>함수 호출(tool calling)</b>로 예약 · 검색 같은 실제 작업을 수행한다</li>
+  <li><b>RAG 결합</b> &mdash; 사내 문서 · 매뉴얼을 검색해 근거와 함께 답하게 해 환각을 줄인다(<a class="ext" href="#rag">9.1의 RAG</a>와 같은 구조)</li>
+  <li><b>안전성 · 정책 준수</b> &mdash; 개인정보 노출, 유해 발화, 근거 없는 단정을 걸러 내는 필터링과 <b>사람 검토(HITL)</b>가 실무의 핵심 과제다</li>
+</ul>
+<p>&lsquo;잡음 통로 모델&rsquo;은 9.2 통계 번역의 개념이라 대화 시스템 최신 동향 목록에는 없다.</p>
+</section>
+
+<!-- ===================== 9.4 ===================== -->
+<section class="sec" id="wrap">
+  <div class="sec-head"><span class="sec-badge">9.4</span><h2 class="sec-title">세 응용을 관통하는 하나의 구조 · 요약<small>교안 66 · 67p · 이해 → 탐색 · 정렬 → 생성</small></h2></div>
+
+<h3 class="sub-title" id="pipeline3">이해 → 탐색 · 정렬 → 생성 (교안 66p)</h3>
+<div class="flow">
+  <div class="fl"><b>이해 (Understand)</b><span>입력을 분석해 무엇을 원하는지 파악</span></div>
+  <div class="fl"><b>탐색 · 정렬</b><span>필요한 정보를 찾고 대응시킨다</span></div>
+  <div class="fl"><b>생성 (Generate)</b><span>자연어로 출력한다</span></div>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>응용</th><th>이해</th><th>탐색 · 정렬</th><th>생성</th></tr></thead>
+  <tbody>
+    <tr><td><b>질의응답</b></td><td>질문 유형 · 정답 유형 분류</td><td>문서 검색 · 정답 후보 순위화</td><td>정답 문자열 / 근거 기반 답변</td></tr>
+    <tr><td><b>기계번역</b></td><td>형태소 · 구문 분석 / 인코딩</td><td><b>단어 정렬 · 어텐션 · 빔 탐색</b></td><td>목표 언어 문장</td></tr>
+    <tr><td><b>대화 시스템</b></td><td>의도 분류 · 슬롯 채우기</td><td>대화 상태 추적 · 정책 결정</td><td>시스템 응답 발화</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="pit"><b>칸을 바꿔 끼운 보기에 주의</b> &mdash; 이 표는 &ldquo;기계번역의 <b>탐색 · 정렬</b>은?&rdquo;처럼 칸 하나를 찍어 묻기 좋다. 질문 · 정답 유형 분류는 질의응답의 <b>이해</b>, 대화 상태 추적 · 정책 결정은 대화 시스템의 <b>탐색 · 정렬</b>, 목표 언어 문장은 기계번역의 <b>생성</b>이다. 순서도 &lsquo;이해 → 탐색 · 정렬 → 생성&rsquo; 하나뿐이다. 그리고 <a class="ext" href="#overview">강의 개요 표</a>의 평가지표 짝(QA = EM · F1 / 번역 = BLEU · chrF · COMET / 대화 = SER · End-to-end)도 함께 외워 두자.</div>
+
+<div class="oneline">
+  <p><b>요약 (교안 67p)</b></p>
+  <ul class="ul">
+    <li><b>질의응답</b> &mdash; 정의, 정보 검색 기반 QA(질문 처리 · 문서 처리 · 정답 처리)와 지식 기반 QA, 그리고 BERT Reader · DPR · RAG 기반 최신 QA</li>
+    <li><b>기계번역</b> &mdash; 정의, 규칙 기반, 통계 기반(잡음 통로 모델 · 단어 정렬), 구 기반 번역, 통계 모델을 이용한 실제 문장 번역, seq2seq · 어텐션 · Transformer 신경망 번역과 BLEU 평가</li>
+    <li><b>대화 시스템</b> &mdash; 개론, 5개 모듈 구성도, 규칙 기반(FSA · Frame)과 데이터 기반(강화학습) 대화 관리, Slot Error Rate와 End-to-end 평가, 기능대화와 일상대화의 분류와 LLM 기반 최신 동향</li>
+    <li>세 응용은 모두 <b>&lsquo;이해 → 탐색 · 정렬 → 생성&rsquo;</b>이라는 공통 뼈대를 가지며, <b>규칙 → 통계 → 신경망</b>으로 발전해 왔다</li>
+  </ul>
+</div>
+
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>약어 · 용어</th><th>풀네임 · 원어</th><th>뜻</th></tr></thead>
+  <tbody>
+    <tr><td><b>QA · IR</b></td><td>Question Answering · Information Retrieval</td><td>질의응답 · 정보 검색</td></tr>
+    <tr><td><b>Factoid</b></td><td>&mdash;</td><td>사실을 묻는 질문 (언제 · 어디 · 누구)</td></tr>
+    <tr><td><b>BM25</b></td><td>Best Matching 25</td><td>문서 길이와 빈도 포화를 고려한 확률 검색 모델</td></tr>
+    <tr><td><b>KBQA · SPARQL</b></td><td>Knowledge-Based QA · SPARQL Protocol and RDF Query Language</td><td>지식베이스 질의응답 · 지식 그래프 질의어</td></tr>
+    <tr><td><b>MRC</b></td><td>Machine Reading Comprehension</td><td>기계독해 &mdash; 지문에서 정답 구간의 시작 · 끝을 예측</td></tr>
+    <tr><td><b>DPR</b></td><td>Dense Passage Retrieval</td><td>밀집 검색 &mdash; 질문 · 문서를 임베딩해 내적으로 비교</td></tr>
+    <tr><td><b>RAG</b></td><td>Retrieval-Augmented Generation</td><td>검색 증강 생성</td></tr>
+    <tr><td><b>EM</b></td><td>Exact Match</td><td>완전 일치 비율</td></tr>
+    <tr><td><b>RBMT · SMT · NMT</b></td><td>Rule-Based / Statistical / Neural MT</td><td>규칙 · 통계 · 신경망 기계번역</td></tr>
+    <tr><td><b>BLEU · BP</b></td><td>Bilingual Evaluation Understudy · Brevity Penalty</td><td>n-gram 정밀도의 기하평균 × 길이 벌점</td></tr>
+    <tr><td><b>chrF · COMET</b></td><td>character n-gram F-score · Crosslingual Optimized Metric for Evaluation of Translation</td><td>문자 n-gram 지표 · 의미 임베딩 기반 지표</td></tr>
+    <tr><td><b>ASR · NLU · DM · NLG · TTS</b></td><td>Automatic Speech Recognition … Text-To-Speech</td><td>대화 시스템의 다섯 모듈</td></tr>
+    <tr><td><b>FSA</b></td><td>Finite State Automaton</td><td>유한 상태 오토마타</td></tr>
+    <tr><td><b>POMDP</b></td><td>Partially Observable Markov Decision Process</td><td>상태를 확률 분포로만 아는 순차 의사결정 모델</td></tr>
+    <tr><td><b>DST</b></td><td>Dialogue State Tracking</td><td>대화 상태 추적</td></tr>
+    <tr><td><b>SER</b></td><td>Slot Error Rate</td><td>틀린 슬롯 수 / 참조 슬롯 수</td></tr>
+    <tr><td><b>HITL</b></td><td>Human-In-The-Loop</td><td>사람 검토를 끼워 넣는 운영 방식</td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
+<!-- ===================== 확인 질문 ===================== -->
+<section class="sec" id="review">
+  <div class="sec-head"><span class="sec-badge">Q&amp;A</span><h2 class="sec-title">확인 질문 4개 — 답까지<small>교안 69p · 눌러서 답 보기</small></h2></div>
+<details class="rv"><summary><i>Q1</i>IR 기반 질의응답의 3단계에서 오류가 전파되는 과정을 예로 설명해 보자.</summary>
+<div class="ans">질문 &ldquo;소금 행진이 시작된 곳은 어디인가?&rdquo;에서 질문 처리가 정답 유형을 <b>장소(LOCATION)가 아니라 날짜(DATE)</b>로 잘못 분류했다고 하자. 문서 처리는 제대로 &ldquo;1930년 간디는 … 아메다바드에서 단디까지 …&rdquo; 문장을 찾아 온다. 하지만 정답 처리는 DATE 태그가 붙은 &lsquo;1930년&rsquo;만 후보로 뽑고, 진짜 정답 &lsquo;아메다바드&rsquo;(LOCATION)는 <b>후보 추출 단계에서 제외</b>된다. 문서 처리가 아무리 잘해도 앞 단계의 오류를 되돌리지 못한다. 반대로 질의 재생성이 키워드를 잘못 뽑으면 문서 처리가 엉뚱한 문서를 가져오고, 정답 처리는 그 안에서 고르므로 역시 틀린다.</div></details>
+<details class="rv"><summary><i>Q2</i>잡음 통로 모델에서 언어 모델 P(F)가 필요한 이유는 무엇인가?</summary>
+<div class="ans">번역 모델 <span class="tex">P(E\mid F)</span>는 &ldquo;F가 E의 뜻을 담았나&rdquo;만 본다. 단어 · 구 대응만 맞으면 &ldquo;나는 먹었다 사과를&rdquo;처럼 <b>어순이 틀리거나 활용이 어색한</b> 문장도 높은 점수를 받을 수 있다. <span class="tex">P(F)</span>는 목표 언어 문장 자체가 <b>얼마나 자연스러운가</b>를 따로 점수 매긴다. 그래서 둘을 곱하면 &lsquo;뜻도 맞고 말도 되는&rsquo; 문장이 이긴다. 게다가 <span class="tex">P(F)</span>는 병렬 코퍼스가 아니라 <b>훨씬 많은 단일 언어 코퍼스</b>로 학습할 수 있다. 교안 35p의 세 문제(중의성 · 활용 · 어순)를 크게 덜어 준다.</div></details>
+<details class="rv"><summary><i>Q3</i>BLEU가 높아도 번역 품질이 나쁠 수 있는 경우는?</summary>
+<div class="ans"><ul class="ul"><li><b>핵심 단어 하나가 틀린 경우</b> &mdash; 참조 &ldquo;the patient is <b>not</b> allergic&rdquo;에 후보 &ldquo;the patient is allergic&rdquo;을 내면 n-gram은 대부분 맞아 BLEU는 높지만, 뜻이 정반대다. BLEU는 모든 n-gram을 같은 무게로 센다</li><li><b>n-gram만 맞고 문장이 어색한 경우</b> &mdash; 짧은 조각들이 참조와 겹치지만 이어 놓으면 문법이 무너진 문장</li><li><b>문장 하나로 잰 점수</b> &mdash; 문장 단위 BLEU는 신뢰도가 낮다</li></ul>반대로 &lsquo;BLEU는 낮은데 좋은 번역&rsquo;은 동의어 · 다른 어순으로 옮긴 경우다(과제 2 서술). 그래서 의미를 보는 <b>COMET · BERTScore</b>, 문자 단위 <b>chrF</b>, 사람 평가로 보완한다.</div></details>
+<details class="rv"><summary><i>Q4</i>기능대화와 일상대화의 평가 방법은 왜 달라야 하는가?</summary>
+<div class="ans">기능대화는 <b>정답이 하나</b>(올바른 예약)라 Slot Error Rate · 작업 완료율 · 턴 수로 <b>기계적으로</b> 잴 수 있다. 일상대화는 <b>적절한 응답이 여럿</b>이라 정답 하나와 비교하면 좋은 응답도 오답이 된다. 그래서 perplexity와 <b>적절성 · 일관성 · 안전성 사람 평가</b>를 쓴다. 목적이 다르니(작업 완료 vs 관계 유지) 성공의 정의도 다르다. 자세한 설명은 <a class="ext" href="#task-social">9.3.3</a>.</div></details>
+</section>
+
+<!-- ===================== 실습 ===================== -->
+<section class="sec" id="lab">
+  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">9주차 실습 노트북<small>transformers 모델을 내려받으므로 Colab(GPU) 권장 · 첫 실행 2~3분</small></h2></div>
+<div class="warn"><b>환경 설정에서 막히지 않으려면</b> &mdash; 설치 셀은 <code>pip install -q transformers sentencepiece sacrebleu</code>로 <b>버전을 고정하지 않는다</b>. <code>transformers</code>만 옛 버전으로 고정하면 <code>tokenizers</code> · <code>huggingface_hub</code>가 최신으로 남아 <code>ImportError: cannot import name …</code>가 난다 &mdash; 셋은 함께 고정하거나 함께 풀어야 한다. 설치 후 <b>재시작 안내가 뜨면 반드시 런타임을 다시 시작</b>하고 <b>[0-2] 셀부터</b> 이어서 실행한다. 한글 그래프는 <code>fm.fontManager.addfont()</code>로 나눔 폰트를 직접 등록해야 재시작 없이 바로 적용된다.</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>PART</th><th>코드로 하는 것</th><th>교안의 어느 부분인가 · 확인할 값</th></tr></thead>
+  <tbody>
+    <tr><td><b>1 · 질의응답</b> (9.1)</td><td>7개 문서 컬렉션 · <code>TfidfVectorizer(analyzer="char_wb", ngram_range=(2,3))</code> Retriever · KoELECTRA KorQuAD Reader(<code>monologg/koelectra-small-v2-distilled-korquad-384</code>) · <code>open_domain_qa</code> · EM / 토큰 F1</td><td>문서 처리 = TF-IDF + 코사인, 정답 처리 = MRC 구간 예측. &ldquo;인도의 독립 운동을 이끈 사람은?&rdquo;에서 <b>0번 문서가 1위</b>여야 한다. EM/F1 검증 = <b>1/1.00 · 0/0.67 · 0/0.00</b>(교안 22p 표)</td></tr>
+    <tr><td><b>2 · 기계번역</b> (9.2)</td><td>MarianMT <code>Helsinki-NLP/opus-mt-ko-en</code> 번역 · 서브워드 분절 관찰 · <code>my_bleu</code> 직접 구현 vs <code>sacrebleu</code> · 빔 크기 1/2/4/8 비교 · 역번역(<code>opus-mt-tc-big-en-ko</code>)</td><td>BLEU 검증 = <b>p = 1.000 · 0.750 · 0.667 · 0.500, BP = 0.819, BLEU ≈ 0.58</b>(교안 42p). <code>num_beams=1</code>이 그리디 탐색이다</td></tr>
+    <tr><td><b>3 · 대화 시스템</b> (9.3)</td><td>정규식 <code>extract_slots</code> + <code>FRAME</code> 우선순위 챗봇 · 문자 n-gram TF-IDF + 로지스틱 회귀 의도 분류(4의도 × 4문장) · <code>slot_error_rate</code> · DialoGPT 멀티턴 생성</td><td>슬롯 추출 기대값 <code>{'movie':'아바타','date':'토요일','time':'저녁 7시','count':'2명'}</code>, SER 검증 = <b>0.333</b>(교안 60p)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 class="sub-title">PART 1 핵심 코드 줄 단위로 읽기</h3>
+<pre class="code">vectorizer = TfidfVectorizer(analyzer=<span class="out">"char_wb"</span>, ngram_range=(2, 3))  <span class="cm"># 단어 대신 '어절 경계를 지킨 문자 2~3글자 조각'을 자질로</span>
+DOC_MATRIX = vectorizer.fit_transform(DOCS)                        <span class="cm"># (문서 수, 자질 수) 행렬 — 문서를 TF-IDF 벡터로</span>
+
+def retrieve(question, top_k=2):
+    q_vec = vectorizer.transform([question])                       <span class="cm"># 질문은 fit 없이 transform만 (같은 자질 공간)</span>
+    sims = cosine_similarity(q_vec, DOC_MATRIX)[0]                 <span class="cm"># (1, 문서수) → [0]으로 1차원 (문서수,)</span>
+    order = np.argsort(-sims)[:top_k]                              <span class="cm"># 부호를 뒤집어 내림차순 정렬 후 상위 k개</span>
+    return [(int(i), float(sims[i])) for i in order]
+
+final_score = 0.3 * sim + 0.7 * r[<span class="out">"score"</span>]                         <span class="cm"># 검색 점수와 Reader 점수의 가중합 — Reader에 더 큰 무게</span></pre>
+<div class="deep"><b>왜 문자 n-gram인가 — 실습이 &lsquo;어휘 불일치&rsquo;를 작게 푸는 방식</b> &mdash; 질문의 &lsquo;독립 운동을&rsquo;과 문서의 &lsquo;독립 운동인&rsquo;은 단어 단위로는 다른 토큰이다. 문자 2~3-gram으로 쪼개면 &lsquo;독립&rsquo;, &lsquo;운동&rsquo; 조각을 공유한다. 한국어는 조사가 붙어 표면형이 계속 바뀌므로 이 방법이 잘 듣는다. 다만 이것은 <b>철자가 비슷한</b> 경우만 살린다. &lsquo;독립 운동가&rsquo; vs &lsquo;민족 해방 지도자&rsquo;처럼 글자가 아예 다르면 여전히 못 찾는다 &mdash; 그 문제는 DPR의 몫이다.<br>
+<b>Reader 점수가 낮게 나오는 질문</b> &mdash; &ldquo;간디는 왜 비폭력을 주장했는가?&rdquo;는 지문에 이유가 문자열로 없다(non-factoid). 그래서 점수가 낮거나 엉뚱한 구간을 돌려준다 &mdash; 추출형 QA의 구조적 한계를 눈으로 보는 셀이다.<br>
+<b>토의 &lsquo;EM은 0인데 F1이 높은 경우&rsquo;</b> &mdash; 정답 &ldquo;1869년 10월 2일&rdquo;을 &ldquo;1869년&rdquo;으로만 예측하면, 정답 토큰 3개 중 1개가 겹친다. precision 1, recall 1/3이라 F1 = 0.5다. 부분적으로 맞았지만 완전 일치는 아니다.</div>
+
+<h3 class="sub-title">PART 2 · 3 핵심 코드</h3>
+<pre class="code">clipped = sum(min(cnt, ref_counts[gram]) for gram, cnt in cand_counts.items())  <span class="cm"># clipping — 참조 횟수까지만 인정</span>
+if min(precisions) == 0:
+    precisions = [p if p &gt; 0 else 1e-9 for p in precisions]                    <span class="cm"># log(0) 방지용 스무딩</span>
+bp = 1.0 if c &gt; r else math.exp(1 - r / c)                                       <span class="cm"># 짧거나 같으면 벌점</span>
+
+errors = sum(1 for k in keys if gold_slots.get(k) != pred_slots.get(k))           <span class="cm"># 값이 다르거나 한쪽에만 있으면 오류</span>
+return errors / len(gold_slots)                                                   <span class="cm"># 분모는 '정답 슬롯 수'</span></pre>
+<div class="note-box"><b>실습이 보여 주는 &lsquo;한계&rsquo;들</b>
+<ul class="ul">
+  <li><b>sacrebleu와 내 구현이 소수점까지는 다르다</b> &mdash; 0인 정밀도를 다루는 <b>스무딩 방식</b>이 달라서다. 경향이 같으면 성공이다</li>
+  <li><b>빔을 키우면</b> 보통 점수가 오르지만 무한히 좋아지지 않고, 계산량은 빔 크기에 비례해 는다. 빔이 커지면 <b>짧고 무난한 번역</b>을 선호하는 경향도 있다(긴 문장일수록 로그 확률 합이 작아지므로)</li>
+  <li><b>round-trip BLEU가 낮다고 번역이 나쁜 것은 아니다</b> &mdash; 같은 뜻을 다른 표현으로 돌려받으면 BLEU는 떨어진다(9.2.3의 한계)</li>
+  <li><b>규칙 챗봇 vs 생성 챗봇</b> &mdash; Frame은 예측 가능하지만 사전에 없는 표현을 모른다. 생성 모델은 유연하지만 그럴듯한 오답(환각)을 낸다. 실무에서는 둘을 섞고, 근거가 필요한 답은 RAG로 처리한다</li>
+</ul></div>
+</section>
+
+<!-- ===================== 과제 ===================== -->
+<section class="sec" id="hw">
+  <div class="sec-head"><span class="sec-badge">HW</span><h2 class="sec-title">제출 과제 (총 100점) — 무엇을 풀어 내나<small>과제 1 질의응답 30 · 과제 2 번역 40 · 과제 3 대화 도메인 확장 30</small></h2></div>
+<div class="warn"><b>제출 방법 정리</b>
+<ul class="ul">
+  <li><b>풀 파일</b> &mdash; <code>week09-lab.ipynb</code>(폴더의 <code>9주차_실습_문제.ipynb</code>). 본문의 <b>실습 TODO (1)~(8)</b>을 먼저 채워야 과제 셀이 정상 동작한다. <code>raise NotImplementedError(...)</code> 줄을 지우고 코드를 쓴다</li>
+  <li><b>저장 상태</b> &mdash; 코드 셀은 <b>실행 결과가 남은 상태</b>로 저장하고, 서술형 답안은 마크다운 셀에 쓴다. 세 <b>채점 셀이 모두 <code>통과!</code></b>를 출력해야 정답으로 인정된다. 채점 셀을 고치면 무효다</li>
+  <li><b>파일명</b> &mdash; 과제 안내는 <code>9주차_과제_학번_이름.ipynb</code>다. 지난주까지처럼 <code>9주차_실습_2026711051_박민지.ipynb</code>로 낼지는 한 번 확인하자</li>
+</ul></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>과제</th><th>구현할 것</th><th>채점 셀이 확인하는 것</th></tr></thead>
+  <tbody>
+    <tr><td><b>1 (30)</b><br>QA 확장 · 실패 분석<br><small>9.1절</small></td><td><code>build_my_docs()</code> 새 주제 문서 3개 이상(각 2문장 이상) · <code>build_my_eval()</code> (질문, 정답) 3쌍 · <code>topk_table(eval_set, ks)</code> top_k 1/3/5별 EM · F1(0~100)</td><td>문서 40자 이상 · 기존 DOCS 복사 금지 · 질문은 &lsquo;?&rsquo;로 끝남 · <b>정답 문자열이 문서 안에 그대로</b>(추출형) · 정답이 없는 가짜 평가셋에서 EM = F1 = 0(상수 반환 차단) · <b>F1 ≥ EM</b></td></tr>
+    <tr><td><b>2 (40)</b><br>번역 품질 · 디코딩<br><small>9.2절</small></td><td><code>build_my_pairs()</code> (한국어, 영어 참조) 5쌍 &mdash; <b>6어절 이하 2개 이상, 10어절 이상 2개 이상</b> · <code>beam_bleu_table</code> 빔 1/2/4/8별 my_bleu · sacrebleu 평균 · <code>length_bleu</code> (어절 수, BLEU)</td><td>정확히 5쌍 · 첫 원소 한국어 / 둘째 영어 · 참조 3어절 이상 · 길이 조건 · <b>소문자로 맞춘 뒤 계산</b></td></tr>
+    <tr><td><b>3 (30)</b><br>도메인 확장<br><small>9.3절</small></td><td><code>build_frame_v2()</code> 영화 예매와 <b>다른 새 도메인</b> 프레임(슬롯 3개 이상) · <code>extract_slots_v2</code> 새 슬롯 추출기 · <code>dialogue_manager</code> <b>의도 분류 결과로 프레임 선택</b> · <code>build_my_cases()</code> 발화 5개 + 정답 슬롯</td><td>슬롯마다 질문/값/우선순위 키 · 초기 값 None · <b>우선순위가 서로 다른 정수</b> · 발화 정확히 5개, 중복 없음 · <b>평균 SER ≤ 0.3</b></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="pit"><b>서술형 칸에 쓸 거리</b>
+<ul class="ul">
+  <li><b>과제 1 — 검색 실패 vs Reader 실패를 교안 용어로</b> &mdash; 정답 문서가 top_k 안에 안 들어오면 <b>문서 처리 단계 실패</b>다(문자 n-gram이 겹치지 않음 = 어휘 불일치). 문서는 1위로 왔는데 구간을 잘못 자르면(&lsquo;프랭크 로젠블랫&rsquo; 대신 &lsquo;로젠블랫이&rsquo;) <b>정답 처리 단계 실패</b>다. 질문이 &lsquo;누가&rsquo;인데 날짜를 답했다면 정답 유형을 놓친 <b>질문 처리 성격</b>의 오류다. top_k를 1 → 3 → 5로 늘리면 검색 실패는 줄지만, 엉뚱한 문서의 Reader 점수가 높게 나와 오히려 틀릴 수도 있다</li>
+  <li><b>과제 2 — BLEU는 낮지만 좋은 번역</b> &mdash; 예) 참조 &ldquo;that movie was really interesting&rdquo;에 모델이 &ldquo;the film was very fun&rdquo;을 내면, 사람이 보기에는 맞는 번역인데 <b>동의어(film/movie, very/really, fun/interesting)</b>라 n-gram이 거의 안 겹친다. 교안 41p의 &lsquo;동의어 · 어순을 반영하지 못한다&rsquo;와 &lsquo;문장 단위 점수는 신뢰도가 낮다&rsquo;에 연결하고, <b>METEOR(동의어) · chrF · COMET · BERTScore</b>로 보완할 수 있다고 쓴다. 짧은 문장은 4-gram이 거의 없어 BLEU가 0에 가깝게 떨어지기 쉽다 &mdash; <code>length_bleu</code> 결과를 이 관점에서 해석하면 된다</li>
+  <li><b>과제 3 — 규칙 기반이 실패하는 발화</b> &mdash; 정답 노트북의 식당 프레임(메뉴 · 인원 · 날짜 · 시간)으로 보면 이렇다. &ldquo;<b>넷이서</b> 파스타 먹을래&rdquo;는 인원이 숫자 + 명/인이 아니라 정규식이 놓친다. &ldquo;<b>다음 주 화요일</b>&rdquo;은 &lsquo;화요일&rsquo;만 잡혀 주 정보가 사라진다. &ldquo;<b>까르보나라</b> 예약&rdquo;은 사전(RESTAURANT_MENUS)에 없어 메뉴를 못 찾는다. 인원 정규식에서 &lsquo;분&rsquo;을 빼 둔 이유도 &ldquo;6시 30<b>분</b>&rdquo;과 겹치기 때문이다 &mdash; &ldquo;세 <b>분</b>이요&rdquo;는 놓친다. 모두 <b>사전 · 패턴에 없는 표현은 전혀 인식하지 못하는</b> 규칙 기반의 한계다. 또 의도는 첫 발화 하나로만 정하므로, 대화 중간에 &ldquo;아 영화로 바꿀게요&rdquo;라고 하면 프레임이 바뀌지 않는다(9.3.3 기능대화의 &lsquo;목적이 동적으로 바뀐다&rsquo;)</li>
+  <li><b>신경망으로 바꾸면</b> &mdash; 나아지는 것: 처음 보는 표현 · 메뉴명도 문맥으로 슬롯을 채운다(신경망 DST는 값 목록에 얽매이지 않는다). 나빠지는 것: <b>대량의 라벨 데이터</b>가 필요하고, 왜 그렇게 채웠는지 <b>불투명</b>하며, 그럴듯하지만 틀린 값을 지어낼 수 있다(9.3.2 비교표 그대로)</li>
+</ul></div>
+</section>
+
+<!-- ===================== 다음 주 ===================== -->
+<section class="sec" id="next">
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>10주차 — 토픽 모델링, 감성 분석, 그리고 기계 이해 (11.2 ~ 11.8)</small></h2></div>
+<div class="note-box"><b>10주차</b>는 &ldquo;<b>문서의 주제와 감성은 어떻게 파악하는가?</b>&rdquo;를 다룬다 &mdash; 토픽 모델링 · 감성 분석 · 기계 독해. 이번 주 9.1.3의 <b>MRC(기계독해)</b>가 한 번 더, 더 자세히 나온다.
+<ul class="ul">
+  <li><b>12주차</b> &mdash; 9.2.4에서 &lsquo;개념 소개&rsquo;로만 지나간 RNN · 은닉 상태를 자세히 다룬다</li>
+  <li>이번 주 손계산 거리 &mdash; <b>tf-idf · EM/토큰 F1 · BLEU(p<sub>n</sub> · BP) · SER</b>. 그리고 비교표 &mdash; <b>IR vs QA, 희소 vs 밀집 검색, 규칙 vs 데이터 대화 관리, 기능대화 vs 일상대화</b></li>
+</ul></div>
+</section>
+
+<p class="src">자연어처리 9주차 (CHAPTER 9) 강의자료 정리 · 2026학년도 2학기<br>
+원본 교안 69페이지를 절 단위로 정리하고, 9주차 실습 노트북의 코드와 교안 예시 수치(EM/F1 · BLEU · SER)를 각 절에 붙였다. 100문제의 절 구분(9.1.1 ~ 9.4)과 같은 번호를 사용해, 절 제목 옆 버튼으로 해당 절의 문제를 바로 풀 수 있다.</p>
+
+</div>
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive(){
+    var cur = '';
+    sections.forEach(function(s){ if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function(t){ t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      setTimeout(function(){
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+
+  /* ---- 개념 설명 말풍선 (형광펜 용어) ---- */
+  var terms = document.querySelectorAll('.term');
+  if (!terms.length) return;
+  var tip = document.createElement('div');
+  tip.id = 'tipbox';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  var current = null;
+
+  function hide() {
+    tip.classList.remove('on');
+    if (current) { current.classList.remove('on'); current = null; }
+  }
+  function show(el) {
+    tip.textContent = el.getAttribute('data-tip') || '';
+    tip.classList.add('on');
+    if (current && current !== el) current.classList.remove('on');
+    current = el;
+    el.classList.add('on');
+    var pad = 8;
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+    var top = r.top - t.height - 10;
+    if (top < pad) top = r.bottom + 10;
+    top = Math.min(top, window.innerHeight - t.height - pad);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+  terms.forEach(function (el) {
+    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+    el.addEventListener('mouseenter', function () { show(el); });
+    el.addEventListener('mouseleave', function () { if (current === el) hide(); });
+    el.addEventListener('focus', function () { show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (current === el && tip.classList.contains('on')) hide(); else show(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el); }
+      if (e.key === 'Escape') hide();
+    });
+  });
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide);
+});
+</script>
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script src="../vendor/katex/katex.min.js"></script>
+<script>
+// .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.
+// KaTeX를 못 불러온 경우에는 원문이 그대로 남아 최소한 읽을 수는 있게 둔다.
+(function () {
+  if (typeof katex === 'undefined') { return; }
+  document.querySelectorAll('.tex, .tex-d').forEach(function (el) {
+    try {
+      katex.render(el.textContent.trim(), el, {
+        displayMode: el.classList.contains('tex-d'),
+        throwOnError: false,
+        strict: false
+      });
+    } catch (e) { if (window.console) { console.error('KaTeX', e, el.textContent); } }
+  });
+})();
+</script>
+
+<script src="quiz/nlp-w09.js?v=1"></script>
+<script src="quiz/inline-quiz.js?v=2"></script>
+
+</body>
+</html>

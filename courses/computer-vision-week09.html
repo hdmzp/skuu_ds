@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>컴퓨터비전 | 9주차 수업내용</title>
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0c1a3a">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+@media(max-width:560px){.fl{grid-template-columns:1fr;gap:4px}}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+
+/* 주차 내비 */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* ===== 필기 표기 ===== */
+.hw{color:#b45309;font-weight:700;background:#fff7ed;border-radius:3px;padding:0 3px}
+.legend{
+  display:flex;flex-wrap:wrap;gap:9px 16px;align-items:center;
+  background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius);
+  padding:13px 15px;margin:0 0 24px;font-size:12px;color:var(--muted);line-height:1.6;
+}
+.legend i{font-style:normal;display:flex;align-items:center;gap:7px}
+.legend .legend-t{flex:0 0 100%;font-size:12.5px;font-weight:700;color:var(--ink)}
+.legend .legend-t2{flex:0 0 100%;font-size:11.5px;color:var(--muted);border-top:1px dashed var(--border);padding-top:10px;margin-top:1px}
+
+/* ===== 주차 내비 ===== */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* ===== 자료별 구분 ===== */
+.matbar{
+  background:linear-gradient(135deg,#122250,#24407f);color:#fff;border-radius:14px;
+  padding:16px 18px;margin:34px 0 18px;box-shadow:0 6px 18px rgba(18,34,80,.15);
+}
+.matbar .tagline{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--lime)}
+.matbar h2{font-size:clamp(16px,3.6vw,20px);font-weight:700;line-height:1.3;margin:5px 0 4px}
+.matbar p{font-size:12.5px;color:#c9d3ee;line-height:1.65}
+.matbar .acts{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.matbar .acts a{
+  font-size:12px;font-weight:700;text-decoration:none;border-radius:8px;padding:6px 12px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;
+}
+.matbar .acts a.primary{background:var(--lime);border-color:var(--lime);color:#16233f}
+.partbar{
+  display:flex;align-items:center;gap:10px;margin:26px 0 14px;
+  font-size:13px;font-weight:700;color:var(--accent);
+}
+.partbar::after{content:'';flex:1;height:1px;background:var(--border)}
+.partbar b{background:var(--accent-light);border:1px solid #c4d2ee;border-radius:999px;padding:4px 11px;font-size:11.5px}
+
+/* ===== 한눈에 보기 ===== */
+.mapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px;margin-top:10px}
+.mapgrid a{
+  display:block;text-decoration:none;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:9px;padding:10px 13px;transition:.15s;
+}
+.mapgrid a:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(18,34,80,.1)}
+.mapgrid b{display:block;font-size:12.5px;color:var(--ink)}
+.mapgrid span{font-size:11.5px;color:var(--muted);line-height:1.55}
+
+/* ===== 개념 하이라이트 + 툴팁 ===== */
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);
+  border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;
+  left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+
+/* ===== 행렬 ===== */
+.mtx{display:inline-flex;align-items:center;gap:4px;vertical-align:middle;margin:0 2px}
+.mtx .br{display:inline-block;width:7px;align-self:stretch;border:2px solid var(--ink);border-right:none;border-radius:3px 0 0 3px}
+.mtx .br.r{border:2px solid var(--ink);border-left:none;border-radius:0 3px 3px 0}
+.mtx .cells{display:grid;gap:2px 12px;padding:5px 2px;font-size:12.5px;text-align:center}
+.mtx .cells span{min-width:26px;line-height:1.5}
+.eq{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;justify-content:center;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 14px;margin:10px 0;
+}
+.eq .op{font-size:14px;font-weight:700;color:var(--muted)}
+/* ===== 변환 카드 ===== */
+.xf{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px}
+.xf-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:4px}
+.xf-head h4{font-size:14.5px;font-weight:700}
+.xf-head .en{font-size:11.5px;color:var(--muted)}
+.xf-dof{margin-left:auto;background:var(--accent);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.xf p{font-size:13px;color:#4b5563;line-height:1.78}
+.xf-keep{font-size:12.5px;color:#166534;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.65}
+.xf-sol{font-size:12.5px;color:#1b3f8b;background:#eef6ff;border:1px solid #c4d2ee;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.7}
+
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .st{color:#c9f24b}
+pre.code .fn{color:#7ec8ff}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 함수 카드 */
+.fnc{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:var(--radius);padding:13px 15px;margin:11px 0}
+.fnc h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fnc .sig{
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;color:#1b3f8b;
+  background:#eef2fb;border:1px solid #dbe3f5;border-radius:6px;padding:7px 10px;margin:7px 0 9px;
+  overflow-x:auto;white-space:pre;
+}
+.fnc dl{display:grid;grid-template-columns:minmax(88px,auto) 1fr;gap:5px 12px;font-size:12.5px;line-height:1.65}
+.fnc dt{font-weight:700;color:var(--ink)}
+.fnc dd{color:#4b5563}
+@media(max-width:440px){.fnc dl{grid-template-columns:1fr;gap:2px}.fnc dd{margin-bottom:6px}}
+
+/* 수식 카드 · 풀이 예제 (기계학습특론 페이지와 같은 규칙) */
+.fx{background:#f8faff;border:1px solid #cfdcf5;border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:10px 0}
+.fx-lab{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.fx-note{font-size:12px;color:#4b5563;line-height:1.7;margin-top:7px}
+.fx-note b{color:var(--ink)}
+.tex-d{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:9px 2px 5px;text-align:center}
+.tex-d .katex{font-size:1.08em}
+.ex{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin:10px 0}
+.ex-q{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.65;background:#f1f0ec;border-radius:7px;padding:9px 12px;margin-bottom:4px}
+.ex-q em{font-style:normal;color:var(--red);font-size:11px;font-weight:700;display:block;margin-bottom:3px}
+.step{display:grid;grid-template-columns:minmax(20px,auto) 1fr;gap:9px;align-items:baseline;font-size:12.5px;color:#4b5563;line-height:1.75;padding:5px 0}
+.step i{font-style:normal;font-weight:700;color:var(--accent);font-size:11.5px}
+.ex-ans{margin-top:8px;background:#f0fdf4;border:1px solid #22c55e;border-radius:8px;padding:9px 12px;font-size:12.5px;color:#14532d;line-height:1.7}
+.ex-ans b{color:var(--green)}
+.figs > .note-box{margin:0}
+/* 편집 거리 DP 표 */
+.lev table{min-width:0;width:auto;margin:0 auto;font-family:'Consolas','D2Coding',ui-monospace,monospace}
+.lev th,.lev td{text-align:center;padding:6px 10px;white-space:nowrap}
+.lev td.on{background:#fde68a;font-weight:700;color:#7c2d12}
+
+/* ===== 출처 뱃지 ===== */
+.bdg{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.02em;padding:3px 9px;border-radius:999px;white-space:nowrap;line-height:1.5}
+.bdg-gyo{background:#eef2fb;color:#1b3f8b;border:1px solid #c4d2ee}
+.bdg-flip{background:#fff7ed;color:#b45309;border:1px solid #f0c48a}
+.bdg-live{background:#fdf0f5;color:#9d174d;border:1px solid #f3bcd2}
+.bdg-plus{background:#f0fdfa;color:#0f766e;border:1px solid #99e0d6}
+.bdg-pres{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
+
+/* ===== 개념 카드 ===== */
+.pt{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin:11px 0}
+.pt-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;font-weight:700;line-height:1.45;margin-bottom:7px}
+.pt > p{font-size:13.5px;color:#3f4854;line-height:1.85}
+.pt > p + p{margin-top:9px}
+.pt > p b{color:var(--ink)}
+.pt.gyo{border-left-color:#1b3f8b}
+.pt.flip{border-left-color:#b45309}
+.pt.live{border-left-color:#9d174d}
+.pt.plus{border-left-color:#0f766e}
+.pt.pres{border-left-color:#6d28d9}
+.deep{background:#f5f3ff;border:1px solid #c4b5fd;border-left:4px solid #7c3aed;border-radius:0 var(--radius) var(--radius) 0;padding:11px 14px;margin:12px 0;font-size:13px;color:#3f4854;line-height:1.8}
+.deep b:first-child{color:#6d28d9}
+.pit{background:#fff7ed;border:1px solid #f0c48a;border-left:4px solid #ea580c;border-radius:0 var(--radius) var(--radius) 0;padding:11px 14px;margin:12px 0}
+.pit p{font-size:13px;color:#3f4854;line-height:1.8}
+.pit p + p{margin-top:7px}
+.pit .pit-h{font-size:12.5px;font-weight:800;color:#c2410c;margin-bottom:3px}
+.pt .sub-title{margin:18px 0 8px}
+.hi{background:linear-gradient(transparent 58%,#ffe9a8 58%);font-weight:700;color:var(--ink);padding:0 1px}
+.pt pre.code{margin:9px 0}
+
+/* 커널(마스크) 격자 */
+.kmat{display:inline-grid;grid-template-columns:repeat(3,26px);border:1.5px solid #1f2937;border-radius:3px;overflow:hidden;background:#fff;font:700 12px/24px Consolas,'D2Coding',ui-monospace,monospace;text-align:center;vertical-align:middle}
+.kmat.k2{grid-template-columns:repeat(2,26px)}
+.kmat.k1{grid-template-columns:26px}
+.kmat span{border:1px solid #d6dbe3;height:24px}
+.kmat .p{background:#dbeafe;color:#1e3a8a}
+.kmat .n{background:#fee2e2;color:#991b1b}
+.kmat .z{color:#9ca3af}
+.kmat.hl{box-shadow:0 0 0 3px #f59e0b}
+.kpair{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
+.kbox{display:inline-flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--muted);line-height:1.4}
+.kbox b{font-size:11.5px;color:var(--ink)}
+.kbox em{font-style:normal;font-weight:700;color:#4b5563}
+.kbox.win em{color:#b45309}
+.ktbl td{vertical-align:middle}
+.ktbl td .kpair{justify-content:flex-start}
+.cmp{display:grid;grid-template-columns:repeat(3,auto);gap:12px 16px;justify-content:center;align-items:center;margin:12px 0}
+.cmp .mid{display:flex;align-items:center;justify-content:center}
+.dia{display:block;width:100%;max-width:580px;height:auto;margin:10px auto 4px;background:#fff;border:1px solid var(--border);border-radius:8px}
+.dia-cap{font-size:11.5px;color:var(--muted);text-align:center;line-height:1.6;margin-bottom:8px}
+.patch{display:inline-grid;grid-template-columns:repeat(3,30px);border:1.5px solid #1f2937;font:700 11px/30px Consolas,monospace;text-align:center}
+.patch span{height:30px}
+.chain{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}
+.chain span{min-width:44px;text-align:center;border-radius:6px;padding:4px 2px;font:700 12px/1.3 Consolas,monospace}
+.chain small{display:block;font:600 10px/1.3 'Pretendard',sans-serif}
+.chain .s{background:#1f2937;color:#fff}
+.chain .wk{background:#dcfce7;color:#14532d;border:1px solid #22c55e}
+.chain .wd{background:#fee2e2;color:#991b1b;border:1px dashed #ef4444}
+.pt-figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px;margin:10px 0}
+.pt-figs .sld{margin:0}
+table.acc{min-width:0}
+.acc td,.acc th{text-align:center;font-family:Consolas,monospace;padding:6px 6px;white-space:nowrap}
+.acc td.h1{background:#fef3c7}
+.acc td.h3{background:#b45309;color:#fff;font-weight:800}
+.chain .d{background:#f3f4f6;color:#9ca3af;border:1px dashed #d1d5db}
+
+/* 본문 속 짧은 보충 설명 상자 */
+.qa{background:#f0fdfa;border:1px solid #99e0d6;border-left:4px solid #0f766e;
+  border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:11px 0;
+  font-size:13px;line-height:1.85;color:#134e4a}
+.qa::before{content:'보충설명';display:table;font-size:10.5px;font-weight:800;letter-spacing:.02em;
+  padding:3px 9px;border-radius:999px;margin-bottom:7px;background:#e3f7f3;color:#0f766e;border:1px solid #99e0d6}
+.qa b{color:#0f3d3a}
+.qa .ul li{color:#134e4a}
+.qa .ul li::before{background:#0f766e;opacity:.8}
+
+/* ===== 슬라이드 모아보기 ===== */
+.deck{background:#efeeea;border:1px solid var(--border);border-radius:var(--radius);padding:12px 12px 14px;margin-bottom:20px}
+.deck-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.deck-h span{font-size:11px;font-weight:400;color:var(--muted)}
+.deck-t{font-size:12px;font-weight:700;color:var(--accent);margin:13px 0 7px;padding-left:8px;border-left:3px solid var(--accent)}
+.deck-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.sld{background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px;margin:0;cursor:zoom-in;transition:box-shadow .15s,transform .15s}
+.sld:hover{box-shadow:0 6px 16px rgba(18,34,80,.13);transform:translateY(-2px)}
+.sld img{display:block;width:100%;height:auto;border-radius:4px;background:#fff}
+.sld figcaption{font-size:11px;color:var(--muted);line-height:1.5;margin-top:6px;text-align:center}
+.sld figcaption b{color:var(--accent)}
+
+/* ===== 한 줄 요약 ===== */
+.oneline{background:#16233f;color:#e7edf9;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+.oneline > p{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--lime)}
+.oneline .ul li{color:#c5d0e8;font-size:13px}
+.oneline .ul li b{color:#fff}
+.oneline .ul li::before{background:var(--lime);opacity:.9}
+
+/* ===== 슬라이드 확대 보기 ===== */
+#lb{position:fixed;inset:0;background:rgba(9,15,31,.94);display:none;align-items:center;justify-content:center;
+  z-index:400;padding:52px 60px 64px;cursor:zoom-out;-webkit-user-select:none;user-select:none}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:80vh;border-radius:8px;background:#fff;box-shadow:0 18px 50px rgba(0,0,0,.45);cursor:default}
+#lb .cap{position:absolute;left:0;right:0;bottom:18px;text-align:center;color:#d9e1f3;font-size:12.5px;line-height:1.6;padding:0 20px;cursor:default}
+#lb .cap b{color:#fff}
+#lb .cap .num{display:block;font-size:11px;color:#9fb0d4;margin-top:4px;letter-spacing:.04em}
+#lb button{
+  position:absolute;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;
+  border-radius:50%;width:44px;height:44px;font-size:20px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .15s;
+  font-family:inherit;padding:0;
+}
+#lb button:hover{background:rgba(255,255,255,.22)}
+#lb button:disabled{opacity:.25;cursor:default}
+#lb .prev{left:12px;top:50%;transform:translateY(-50%)}
+#lb .next{right:12px;top:50%;transform:translateY(-50%)}
+#lb .x{right:12px;top:12px;width:38px;height:38px;font-size:17px}
+@media(max-width:560px){
+  #lb{padding:48px 10px 92px}
+  #lb .prev{left:50%;top:auto;bottom:16px;transform:translateX(-64px)}
+  #lb .next{right:50%;top:auto;bottom:16px;transform:translateX(64px)}
+  #lb .cap{bottom:70px}
+}
+
+.kg{display:block;width:108px;height:42px;margin:0 auto}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:640px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#map">한눈에 보기</a>
+  <a href="#epi">01 에피폴라 기하</a>
+  <a href="#essential">02 본질 행렬 E</a>
+  <a href="#fundamental">03 기본 행렬 F</a>
+  <a href="#eight">04 8점 알고리즘</a>
+  <a href="#tri">05 삼각측량</a>
+  <a href="#rect">06 스테레오 정류</a>
+  <a href="#match">07 스테레오 매칭 · DSI</a>
+  <a href="#depth">08 시차와 깊이</a>
+  <a href="#summary">핵심 정리</a>
+  <a href="#next">과제 · 다음 주</a>
+</nav>
+
+<div class="wrap">
+
+<div class="weeknav">
+  <a href="computer-vision.html" class="plan">← 강의계획서</a>
+  <a href="computer-vision-week06.html">6주차 · Feature Descriptors</a>
+  <a href="computer-vision-week07.html">7주차 · Feature Matching &amp; Homography</a>
+  <a href="computer-vision-week08.html">8주차 · 중간고사 대비 자료집</a>
+  <span class="cur">9주차 · Stereo Vision</span>
+  <a href="computer-vision-assignments.html">과제 · 논문 발표</a>
+</div>
+
+<section class="hero">
+  <p class="kicker">9주차 · 10.28 · 2026-2학기</p>
+  <h1>09. 스테레오 비전 — 두 눈으로 깊이를 잰다</h1>
+  <p>7주차의 호모그래피는 &lsquo;평면이거나, 아주 멀거나, 카메라가 <b>회전만</b> 할 때&rsquo;의 세계였다. 이번 주는 카메라가 <b>옆으로 이동</b>해서 같은 장면을 두 시점에서 찍는 경우다. 이때 두 사진 사이에는 점 → 점 대응 대신 <b>점 → 선</b> 대응이 생긴다 &mdash; <b>에피폴라 기하</b>다. 그 관계를 3×3 행렬 하나(<b>본질 행렬 E · 기본 행렬 F</b>)로 적고, 두 사진을 나란히 <b>정류(rectification)</b>해 같은 가로줄에서 짝을 찾은 뒤, 짝이 옆으로 얼마나 밀렸는지(<b>시차 · disparity</b>)로 <b>깊이</b>를 계산한다.</p>
+  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 79p</span><span class="chip">에피폴라 제약 → 1D 탐색</span><span class="chip">E · F · Longuet-Higgins</span><span class="chip">8점 알고리즘 · SVD</span><span class="chip">삼각측량</span><span class="chip">정류 · DSI</span><span class="chip"><span class="tex">Z=bf/d</span></span></div>
+</section>
+
+<div class="legend">
+  <p class="legend-t">내용이 어디에서 왔는지 <b>뱃지</b>로 구분했습니다</p>
+  <i><span class="bdg bdg-gyo">교안</span><span>교수님 슬라이드에 있는 내용 (영어 교안을 한국어로 옮김)</span></i>
+  <i><span class="bdg bdg-plus">보충설명</span><span>교안에 없거나 짧게 지나간 부분을 따로 찾아 정리한 내용</span></i>
+  <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고, <span class="hi">노란 형광펜</span>은 <b>꼭 기억할 문장</b>, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선</span>은 누르면 뜻이 뜹니다. 쪽수는 <b>슬라이드 오른쪽 아래에 찍힌 번호</b>(= PDF 쪽수)다.</p>
+</div>
+
+<section class="sec" id="map">
+  <div class="sec-head"><span class="sec-badge">MAP</span><h2 class="sec-title">한눈에 보기<small>Two-view Geometry → Stereo Vision</small></h2></div>
+
+<div class="oneline">
+  <p><b>이번 주 한 줄 요약</b></p>
+  <ul class="ul">
+    <li>왼쪽 사진의 점 <span class="tex">x</span>의 짝 <span class="tex">x'</span>은 오른쪽 사진 아무 데나 있지 않고 <b>한 직선(에피폴라 선)</b> 위에 있다 &mdash; <span class="hi">대응점 찾기가 2D 탐색에서 1D 탐색으로 줄어든다</span>(에피폴라 제약)</li>
+    <li>그 직선을 알려 주는 3×3 행렬이 <b>본질 행렬 E</b>(카메라 좌표, 보정된 카메라)와 <b>기본 행렬 F</b>(픽셀 좌표, 일반화)다. 둘 다 <span class="tex">x'^\top E x=0</span> · <span class="tex">x'^\top F x=0</span>(Longuet-Higgins 식)을 만족한다</li>
+    <li>E · F는 <b>점 → 선</b>, 호모그래피 H는 <b>점 → 점</b>. F는 짝 하나에 식 하나라 <b>8쌍</b>이면 풀린다 &mdash; 8점 알고리즘(SVD)</li>
+    <li>두 카메라를 <b>나란히 돌려(정류)</b> 에피폴라 선을 수평으로 만들면, 같은 가로줄만 훑어 짝을 찾는다(스테레오 매칭 · DSI)</li>
+    <li>짝이 옆으로 밀린 정도가 <b>시차 d</b>이고, <b><span class="tex">Z=bf/d</span></b> &mdash; 시차는 깊이에 <b>반비례</b>한다</li>
+  </ul>
+</div>
+
+<div class="mapgrid">
+  <a href="#epi"><b>01 에피폴라 기하</b><span>기준선 · 에피폴 · 에피폴라 평면 · 에피폴라 선 · 에피폴라 제약 · 수렴 · 평행 카메라</span></a>
+  <a href="#essential"><b>02 본질 행렬 E</b><span>직선의 벡터 표현 · <span class="tex">Ex=l'</span> · Longuet-Higgins 식 · 에피폴 · E vs H · 보정 가정</span></a>
+  <a href="#fundamental"><b>03 기본 행렬 F</b><span>K로 일반화 · <span class="tex">F=K'^{-\top}EK^{-1}</span> · 개선문 예제 · <span class="tex">Fe=0</span>으로 에피폴 구하기</span></a>
+  <a href="#eight"><b>04 8점 알고리즘</b><span>짝 하나 = 식 하나 · M×9 동차 시스템 · TLS · SVD · rank 2 · 정규화</span></a>
+  <a href="#tri"><b>05 삼각측량</b><span>네 단계 · 두 광선이 만나는 점 · 잡음 때문에 해가 하나가 아니다</span></a>
+  <a href="#rect"><b>06 스테레오 정류</b><span>에피폴라 선이 수평일 조건 · 공통 평면으로 재투영 · 네 단계 · 8단계 알고리즘</span></a>
+  <a href="#match"><b>07 스테레오 매칭</b><span>입체시 · 기본 매칭 알고리즘 · 시차 · DSI와 최적 경로</span></a>
+  <a href="#depth"><b>08 시차와 깊이</b><span><span class="tex">d=bf/Z</span> · 깊이 지도 · SAD · SSD · NCC · Middlebury 데이터셋</span></a>
+</div>
+</section>
+
+<div class="matbar">
+  <p class="tagline">9주차 강의 · Stereo Vision</p>
+  <h2>09. Stereo Vision</h2>
+  <p>79페이지 · Two-view Geometry(에피폴라 기하 · 본질 행렬 · 기본 행렬) → Stereo Vision(정류 · 매칭 · 시차와 깊이) 순서다.</p>
+  <div class="acts">
+    <a class="primary" href="pdf-viewer.html?doc=cv-w09-stereo">뷰어로 보기</a>
+    <a href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week09-stereo-vision.pdf" download="컴퓨터비전_9주차_Stereo_Vision.pdf">⬇ 다운로드</a>
+  </div>
+</div>
+
+<!-- ===================== 01 ===================== -->
+<section class="sec" id="epi">
+  <div class="sec-head"><span class="sec-badge">01</span><h2 class="sec-title">에피폴라 기하 — 짝은 한 직선 위에 있다<small>교안 4~17p · Epipolar Geometry</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>4p · 6p · 8p · 9p · 10p · 11p · 13p · 15p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-04-use-case.jpg" alt="교안 4p — 두 카메라가 같은 장면을 다른 시점에서 찍는다"><figcaption><b>4p</b> 두 카메라가 같은 장면을 다른 시점에서 찍는다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-06-terms.jpg" alt="교안 6p — 기준선 · 에피폴 · 에피폴라 평면 · 에피폴라 선"><figcaption><b>6p</b> 기준선 · 에피폴 · 에피폴라 평면 · 에피폴라 선</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-08-backproject.jpg" alt="교안 8p — x를 광선으로 역투영하면 x′의 후보가 여럿"><figcaption><b>8p</b> x를 광선으로 역투영하면 x′의 후보가 여럿</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-09-constraint.jpg" alt="교안 9p — 에피폴라 제약 — 대응 문제를 1D 탐색으로"><figcaption><b>9p</b> 에피폴라 제약 — 대응 문제를 1D 탐색으로</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-10-potential.jpg" alt="교안 10p — x의 짝 후보는 에피폴라 선 l′ 위에 있다"><figcaption><b>10p</b> x의 짝 후보는 에피폴라 선 l′ 위에 있다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-11-example.jpg" alt="교안 11p — 예 — 실제 사진에 그린 에피폴라 선"><figcaption><b>11p</b> 예 — 실제 사진에 그린 에피폴라 선</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-13-converging.jpg" alt="교안 13p — 수렴 카메라 — 에피폴이 영상 밖에 있을 수도"><figcaption><b>13p</b> 수렴 카메라 — 에피폴이 영상 밖에 있을 수도</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-15-parallel.jpg" alt="교안 15p — 평행 카메라 — 에피폴은 무한대"><figcaption><b>15p</b> 평행 카메라 — 에피폴은 무한대</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>에피폴라 기하가 다루는 상황 (4 · 5p)</h3>
+  <p>전형적인 쓰임새는 이렇다. <b>두 대의 카메라가 같은 장면을 서로 다른 시점에서 찍는다.</b> 에피폴라 기하는 그렇게 얻은 <b>두 장의 사진 사이의 관계</b>를 설명한다. 4p 그림에서 초록 공과 주황 공은 왼쪽 사진에서는 겹쳐 보이고 오른쪽 사진에서는 떨어져 보인다 &mdash; 시점이 다르면 같은 3차원 점이 다른 위치에 찍힌다.</p>
+  <p>5p는 기본 구도다. 카메라 중심 <span class="tex">o</span>에서 3차원 점 <span class="tex">p</span>로 가는 광선이 왼쪽 <b>영상 평면(image plane)</b>을 뚫는 자리가 <span class="tex">p</span>의 상이다. 오른쪽 카메라 중심은 <span class="tex">o'</span>이다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>네 가지 용어 (6p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>용어</th><th>정의</th><th>그림에서</th></tr></thead>
+    <tbody>
+      <tr><td><b>기준선 (baseline)</b></td><td>두 카메라 중심을 잇는 선</td><td><span class="tex">o</span>–<span class="tex">o'</span>를 잇는 초록 화살표</td></tr>
+      <tr><td><b>에피폴 (epipole)</b></td><td>기준선이 영상 평면과 만나는 점 = <b>상대 카메라 중심이 이 영상에 찍힌 상</b>(<span class="tex">o'</span>의 투영)</td><td><span class="tex">e</span>, <span class="tex">e'</span></td></tr>
+      <tr><td><b>에피폴라 평면 (epipolar plane)</b></td><td>기준선과 3차원 점을 함께 품는 평면</td><td>노란 삼각형 <span class="tex">o\,p\,o'</span></td></tr>
+      <tr><td><b>에피폴라 선 (epipolar line)</b></td><td>에피폴라 평면이 영상 평면과 만나는 선</td><td><span class="tex">l</span>, <span class="tex">l'</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>그리고 두 가지 성질 &mdash; <span class="hi">모든 에피폴라 선은 에피폴에서 만난다.</span> 에피폴라 평면 하나는 왼쪽 · 오른쪽 영상 평면을 <b>각각 하나의 에피폴라 선</b>에서 자른다(<span class="tex">l</span>과 <span class="tex">l'</span>은 짝을 이룬다).</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>왜 모든 에피폴라 선이 에피폴을 지나나</h3>
+  <p>3차원 점 <span class="tex">p</span>를 바꿀 때마다 에피폴라 평면이 바뀐다. 하지만 어떤 평면이든 <b>기준선 <span class="tex">oo'</span>을 반드시 품는다</b>(정의가 그렇다). 그래서 에피폴라 평면들은 기준선을 축으로 책장이 넘어가듯 돌아가는 평면 다발이다. 각 평면이 영상 평면을 자른 선(에피폴라 선)은 모두 &lsquo;기준선이 영상 평면을 뚫는 점&rsquo;, 즉 <b>에피폴</b>을 지난다. 11p의 두 번째 예처럼 에피폴라 선들이 한 점으로 모이는 부채꼴로 보이는 이유다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>에피폴라 제약 — 짝은 어디에 있을 수 있나 (7~10p)</h3>
+  <p>질문은 하나다. <b>왼쪽 영상의 점 <span class="tex">x</span>가 주어졌을 때, 대응점 <span class="tex">x'</span>은 오른쪽 영상 어디에 있을 수 있나?</b> 7p처럼 아무 정보가 없으면 오른쪽 영상 전체가 후보다.</p>
+  <p>8p가 답의 실마리다. <span class="tex">x</span>를 <b>3차원 광선으로 역투영(backproject)</b>하면 <span class="tex">o</span>에서 <span class="tex">x</span>를 지나는 반직선이 된다. 진짜 3차원 점 <span class="tex">p</span>는 이 광선 위 <b>어딘가</b>에 있지만 깊이는 모른다. 광선 위의 후보 점들을 오른쪽 카메라 <span class="tex">o'</span>에서 보면, 그 상들은 오른쪽 영상에서 <b>한 직선</b> 위에 늘어선다(10p의 노란 부채꼴 위 점들).</p>
+  <p>그래서 <b>에피폴라 제약(epipolar constraint)</b>이 나온다 &mdash; <span class="hi">두 시점의 기하가, 첫 영상의 점에 대응하는 픽셀이 둘째 영상에서 어디에 나타나야 하는지를 제약한다. 대응 문제를 짝을 이루는 에피폴라 선을 따라가는 1D 탐색으로 줄인다.</span> 교안 그림의 표현으로는 &ldquo;<span class="tex">x</span>의 짝이 될 후보는 에피폴라 선 <span class="tex">l'</span> 위에 있다(Potential matches for <span class="tex">x</span> lie on the epipolar line <span class="tex">l'</span>)&rdquo;이다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>예 — 수렴 카메라와 평행 카메라 (11~15p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>배치</th><th>에피폴라 선의 모양</th><th>에피폴은 어디에?</th></tr></thead>
+    <tbody>
+      <tr><td><b>수렴 카메라 (converging)</b><br><small>두 카메라가 안쪽으로 서로를 향함</small></td><td>한 점으로 모여드는 부채꼴 (12 · 13p 항아리 사진의 초록 선)</td><td>선들이 만나는 점. <b>영상 밖에 있을 수도 있다</b>(13p &ldquo;here!&rdquo; &mdash; It's not always in the image)</td></tr>
+      <tr><td><b>평행 카메라 (parallel)</b><br><small>두 카메라가 같은 방향을 보며 옆으로만 이동</small></td><td><b>서로 평행한 수평선</b> (14 · 15p 집 사진의 흰 선)</td><td><b>무한대(epipole at infinity)</b> &mdash; 평행선은 무한히 먼 곳에서 만난다</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>16 · 17p는 과제를 다시 못 박는다 &mdash; <b>에피폴라 제약은 스테레오 비전의 중요한 개념</b>이고, 할 일은 &ldquo;왼쪽 영상의 점을 오른쪽 영상의 점과 짝짓기&rdquo;다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>평행 카메라의 에피폴이 무한대인 이유 — 그리고 06절의 예고</h3>
+  <p>에피폴은 &lsquo;기준선이 영상 평면을 뚫는 점&rsquo;이다. 카메라가 옆으로만 이동하면 기준선이 영상 평면과 <b>평행</b>해서 영상 평면과 영원히 만나지 않는다 &mdash; 그래서 에피폴이 무한대로 간다. 에피폴이 무한대면 &ldquo;모든 에피폴라 선이 에피폴을 지난다&rdquo;는 말이 &ldquo;<b>모두 평행하다</b>&rdquo;가 된다. 게다가 두 카메라의 높이가 같으면 그 평행선이 <b>같은 가로줄</b>에 놓인다. 짝 찾기가 가장 쉬운 이 배치를 일부러 만드는 것이 <a class="ext" href="#rect">06 스테레오 정류</a>다.</p>
+</div>
+</section>
+
+<!-- ===================== 02 ===================== -->
+<section class="sec" id="essential">
+  <div class="sec-head"><span class="sec-badge">02</span><h2 class="sec-title">본질 행렬 E — 점을 선으로 보내는 행렬<small>교안 18~23p · Essential Matrix (Longuet-Higgins 1981)</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>18p · 19p · 20p · 21p · 22p · 23p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-18-ex-l.jpg" alt="교안 18p — 점에 E를 곱하면 에피폴라 선 — Ex = l′"><figcaption><b>18p</b> 점에 E를 곱하면 에피폴라 선 — Ex = l′</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-19-line-vector.jpg" alt="교안 19p — 직선의 벡터 표현과 xᵀl"><figcaption><b>19p</b> 직선의 벡터 표현과 xᵀl</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-20-longuet.jpg" alt="교안 20p — x′ᵀl′ = 0 과 Ex = l′ → x′ᵀEx = 0"><figcaption><b>20p</b> x′ᵀl′ = 0 과 Ex = l′ → x′ᵀEx = 0</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-21-e-props.jpg" alt="교안 21p — E 행렬의 성질 (카메라 좌표)"><figcaption><b>21p</b> E 행렬의 성질 (카메라 좌표)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-22-e-vs-h.jpg" alt="교안 22p — 본질 행렬은 점→선, 호모그래피는 점→점"><figcaption><b>22p</b> 본질 행렬은 점→선, 호모그래피는 점→점</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-23-calibrated.jpg" alt="교안 23p — 본질 행렬의 가정 — 보정된 카메라"><figcaption><b>23p</b> 본질 행렬의 가정 — 보정된 카메라</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>한 영상의 점에 E를 곱하면 다른 영상의 에피폴라 선이 나온다 (18p)</h3>
+  <div class="fx"><div class="tex-d">E\,x=l'</div>
+  <p class="fx-note">왼쪽 영상의 점 <span class="tex">x</span>에 <b>본질 행렬(essential matrix)</b> <span class="tex">E</span>를 곱하면 오른쪽 영상의 에피폴라 선 <span class="tex">l'</span>이 나온다. 01절에서 그림으로 찾던 선을 <b>행렬 곱 하나</b>로 계산한다.</p></div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>직선의 벡터 표현과 &lsquo;점이 선 위에 있다&rsquo;의 식 (19 · 20p)</h3>
+  <p>직선 <span class="tex">ax+by+c=0</span>은 계수만 모아 벡터 <span class="tex">l=[a\;b\;c]^\top</span>로 쓸 수 있다. 점 <span class="tex">x</span>를 동차 좌표 <span class="tex">[x\;y\;1]^\top</span>로 쓰면, <b>점 <span class="tex">x</span>가 직선 <span class="tex">l</span> 위에 있다</b>는 말은 곧</p>
+  <div class="fx"><div class="tex-d">x^\top l=ax+by+c=0</div></div>
+  <p>이다(19p의 &ldquo;<span class="tex">x^\top l=\;?</span>&rdquo;의 답이 0). 20p는 두 식을 잇는다. 오른쪽 점 <span class="tex">x'</span>이 선 <span class="tex">l'</span> 위에 있으니 <span class="tex">x'^\top l'=0</span>이고, <span class="tex">Ex=l'</span>이므로 <span class="tex">l'</span> 자리에 <span class="tex">Ex</span>를 넣는다.</p>
+  <div class="fx"><div class="tex-d">x'^\top l'=0\;\;\text{그리고}\;\;Ex=l'\quad\Longrightarrow\quad x'^\top E\,x=0\qquad\text{(Longuet-Higgins 1981)}</div></div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>E 행렬의 성질 (21p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>성질</th><th>식</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><b>Longuet-Higgins 식</b></td><td><span class="tex">x'^\top E x=0</span></td><td>짝이 맞는 두 점이면 항상 0</td></tr>
+      <tr><td><b>에피폴라 선</b></td><td><span class="tex">x^\top l=0,\;x'^\top l'=0</span><br><span class="tex">l'=Ex,\;\;l=E^\top x'</span></td><td>왼쪽 점 → 오른쪽 선은 <span class="tex">E</span>, 오른쪽 점 → 왼쪽 선은 <span class="tex">E^\top</span></td></tr>
+      <tr><td><b>에피폴</b></td><td><span class="tex">e'^\top E=0,\;\;Ee=0</span></td><td>에피폴은 E의 영공간(null space)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>교안의 빨간 단서 &mdash; 여기서 점들은 <b>카메라 좌표계로 표현한 2D 점</b>이다(2D points expressed in <u>camera</u> coordinate system). 픽셀 좌표가 아니다. 이 단서가 03절 기본 행렬로 넘어가는 이유다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span><span class="tex">Ee=0</span>은 왜 성립하나</h3>
+  <p>왼쪽 에피폴 <span class="tex">e</span>에 <span class="tex">E</span>를 곱하면 &lsquo;<span class="tex">e</span>에 대응하는 오른쪽 에피폴라 선&rsquo;이 나와야 한다. 그런데 <span class="tex">e</span>는 오른쪽 카메라 중심 <span class="tex">o'</span>이 왼쪽 영상에 찍힌 상이다. <span class="tex">e</span>를 역투영한 광선은 <b>기준선 그 자체</b>이므로, 그 광선을 오른쪽 카메라에서 보면 한 점(<span class="tex">e'</span>)으로 쪼그라든다. 직선이 정의되지 않으니 <span class="tex">Ee=\mathbf 0</span>(영벡터)이다. 그래서 <span class="tex">E</span>는 <b>역행렬이 없는(rank 2) 행렬</b>이다. 이 성질이 04절 8점 알고리즘의 &lsquo;rank 2 강제&rsquo; 단계로 이어진다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>본질 행렬 vs 호모그래피 (22p)</h3>
+  <p>둘 다 3×3 행렬이지만 하는 일이 다르다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>본질 행렬 E</th><th>호모그래피 H (7주차)</th></tr></thead>
+    <tbody>
+      <tr><td><b>식</b></td><td><span class="tex">l'=Ex</span></td><td><span class="tex">x'=Hx</span></td></tr>
+      <tr><td><b>무엇을 무엇으로</b></td><td><b>점 → 선</b></td><td><b>점 → 점</b></td></tr>
+      <tr><td><b>쓸 수 있는 장면</b></td><td>임의의 3차원 장면 + 카메라가 이동(기준선이 있다)</td><td>평면 · 아주 먼 장면 · 회전만 하는 카메라</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>왜 E는 &lsquo;점&rsquo;을 못 주고 &lsquo;선&rsquo;만 주나</h3>
+  <p>호모그래피가 점 하나를 정확한 점으로 보낼 수 있는 이유는 장면이 <b>평면</b>이라 깊이가 평면 식으로 정해지기 때문이다. 일반 3차원 장면에서는 <span class="tex">x</span>의 <b>깊이를 모른다</b>. 깊이가 정해지지 않은 광선 전체가 오른쪽에서 선 하나로 보이므로, 기하만으로 알 수 있는 것은 &lsquo;그 선 위 어딘가&rsquo;까지다. 선 위의 <b>정확한 위치</b>를 정하는 일은 기하가 아니라 <b>외관(밝기 패턴) 비교</b>의 몫이다 &mdash; 그것이 07절의 스테레오 매칭이다. 거꾸로, 짝을 찾아 위치가 정해지면 그 위치(시차)가 곧 깊이를 알려 준다(08절).</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>본질 행렬의 가정 — 보정된 카메라 (23p)</h3>
+  <p>본질 행렬은 <b>점들이 카메라 좌표축에 맞춰져 있다(calibrated camera)</b>고 가정한다. 즉 내부 파라미터 <span class="tex">K</span>를 이미 알고 있어서 픽셀 좌표를 카메라 좌표로 바꿔 놓은 상태라야 한다.</p>
+</div>
+</section>
+
+<!-- ===================== 03 ===================== -->
+<section class="sec" id="fundamental">
+  <div class="sec-head"><span class="sec-badge">03</span><h2 class="sec-title">기본 행렬 F — 픽셀 좌표로 일반화<small>교안 24~27p · 33~38p · Fundamental Matrix</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>24p · 25p · 26p · 27p · 34p · 35p · 36p · 37p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-24-generalize.jpg" alt="교안 24p — 기본 행렬 = 보정 가정을 없앤 일반화"><figcaption><b>24p</b> 기본 행렬 = 보정 가정을 없앤 일반화</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-25-f-derive.jpg" alt="교안 25p — 영상 좌표로 쓰면 x′ᵀFx = 0"><figcaption><b>25p</b> 영상 좌표로 쓰면 x′ᵀFx = 0</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-26-f-props.jpg" alt="교안 26p — F 행렬의 성질 (영상 좌표)"><figcaption><b>26p</b> F 행렬의 성질 (영상 좌표)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-27-f-decompose.jpg" alt="교안 27p — F = K′⁻ᵀ[t×]RK⁻¹ — 내부 · 외부 파라미터 모두"><figcaption><b>27p</b> F = K′⁻ᵀ[t×]RK⁻¹ — 내부 · 외부 파라미터 모두</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-34-arc-l.jpg" alt="교안 34p — 개선문 예제 — l′ = Fx 계산"><figcaption><b>34p</b> 개선문 예제 — l′ = Fx 계산</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-35-arc-line.jpg" alt="교안 35p — 계산한 에피폴라 선을 오른쪽 영상에"><figcaption><b>35p</b> 계산한 에피폴라 선을 오른쪽 영상에</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-36-arc-lines.jpg" alt="교안 36p — 여러 점의 에피폴라 선"><figcaption><b>36p</b> 여러 점의 에피폴라 선</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-37-arc-epipole.jpg" alt="교안 37p — 에피폴은 어디에? — Fe = 0"><figcaption><b>37p</b> 에피폴은 어디에? — Fe = 0</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>내부 행렬이 단위 행렬이 아니라면? (24 · 25p)</h3>
+  <p><span class="hi">기본 행렬(fundamental matrix)은 본질 행렬에서 &lsquo;보정된 카메라&rsquo; 가정을 없앤 일반화다.</span> 본질 행렬은 카메라 좌표계로 표현한 2D 점 <span class="tex">\hat x</span>에 작용한다: <span class="tex">\hat x'^\top E\hat x=0</span>. 카메라 점과 영상(픽셀) 점은 내부 행렬 <span class="tex">K</span>로 이어진다(<a class="ext" href="computer-vision-week02-2.html">2주차 카메라 모델</a>).</p>
+  <div class="fx">
+    <div class="tex-d">\hat x=K^{-1}x,\qquad \hat x'=K'^{-1}x'\qquad(\hat x:\text{카메라 점},\;x:\text{영상 점})</div>
+    <div class="tex-d">x'^\top K'^{-\top}EK^{-1}x=0\;\;\Longrightarrow\;\;x'^\top(K'^{-\top}EK^{-1})x=0\;\;\Longrightarrow\;\;x'^\top F\,x=0</div>
+    <p class="fx-note">첫 식을 <span class="tex">\hat x'^\top E\hat x=0</span>에 넣으면 <span class="tex">(K'^{-1}x')^\top E(K^{-1}x)=x'^\top K'^{-\top}EK^{-1}x</span>가 된다. 가운데 세 행렬을 묶은 것이 <span class="tex">F</span>다. 교안의 한 줄 &mdash; <b>F는 픽셀을 에피폴라 선으로 보낸다(it maps pixels to epipolar lines).</b></p>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>F 행렬의 성질 (26p)</h3>
+  <p>E의 성질표에서 E를 F로 바꾸면 그대로다 &mdash; 단, 점들은 이제 <b>영상(image) 좌표</b>다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Longuet-Higgins 식</th><th>에피폴라 선</th><th>에피폴</th></tr></thead>
+    <tbody><tr><td><span class="tex">x'^\top Fx=0</span></td><td><span class="tex">l'=Fx,\;\;l=F^\top x'</span></td><td><span class="tex">e'^\top F=0,\;\;Fe=0</span></td></tr></tbody>
+  </table>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>F를 분해하면 (27p)</h3>
+  <div class="fx">
+    <div class="tex-d">F=K'^{-\top}EK^{-1}=K'^{-\top}[t_\times]RK^{-1}</div>
+    <p class="fx-note"><span class="tex">E=[t_\times]R</span> &mdash; 두 카메라 사이의 회전 <span class="tex">R</span>과 이동 <span class="tex">t</span>(외부 파라미터)로 만들어진다. <span class="tex">[t_\times]</span>는 <span class="tex">t</span>와의 외적을 행렬 곱으로 쓴 3×3 반대칭 행렬이다. 그래서 <b>F는 내부 파라미터(K, K')와 외부 파라미터(R, t)에 모두 의존한다.</b> 교안은 &ldquo;그러면 F는 어떻게 구하나?&rdquo;로 04절을 연다.</p>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>E와 F, 언제 무엇을 쓰나</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>본질 행렬 E</th><th>기본 행렬 F</th></tr></thead>
+    <tbody>
+      <tr><td><b>좌표</b></td><td>카메라(정규화) 좌표 <span class="tex">\hat x</span></td><td>픽셀 좌표 <span class="tex">x</span></td></tr>
+      <tr><td><b>필요한 것</b></td><td>K를 <b>안다</b>(보정됨)</td><td>K를 <b>몰라도</b> 된다 &mdash; 대응점만으로 구한다</td></tr>
+      <tr><td><b>담는 정보</b></td><td>R, t (외부만)</td><td>K, K', R, t (내부 + 외부)</td></tr>
+      <tr><td><b>자유도</b></td><td>5 (회전 3 + 이동 방향 2, 이동 크기는 모름)</td><td>7 (9개 원소 − 배율 1 − rank 2 조건 1)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>그래서 실무 흐름은 &ldquo;대응점으로 <b>F</b>를 구한다 → K를 알면 <span class="tex">E=K'^\top FK</span>로 바꾼다 → E를 R과 t로 분해한다&rdquo;이다. 06절 정류 알고리즘의 1단계 &lsquo;E를 구해 R을 얻는다&rsquo;가 바로 이것이다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>예제 — 개선문 두 장 (33~37p)</h3>
+  <p>33p의 입력 영상 두 장(낮 · 밤의 개선문)에서 추정한 F는 다음과 같다.</p>
+  <div class="fx">
+    <div class="tex-d">F=\begin{bmatrix}-0.00310695&amp;-0.0025646&amp;2.96584\\-0.028094&amp;-0.00771621&amp;56.3813\\13.1905&amp;-29.2007&amp;-9999.79\end{bmatrix}</div>
+    <div class="tex-d">x=\begin{bmatrix}343.53\\221.70\\1.0\end{bmatrix}\quad\Longrightarrow\quad l'=Fx=\begin{bmatrix}0.0295\\0.9996\\-265.1531\end{bmatrix}</div>
+    <p class="fx-note">34p는 왼쪽 영상의 파란 점 <span class="tex">x</span>(픽셀 좌표, 동차)를 골라 <span class="tex">l'=Fx</span>를 계산한다. 35p는 그 선을 오른쪽 영상에 그린 결과다(가로로 거의 수평인 파란 선). 36p는 여러 점의 에피폴라 선을 두 영상에 색으로 그렸다(OpenCV 튜토리얼).</p>
+  </div>
+  <p>37p의 질문 &mdash; <b>에피폴은 어디에 있고, 어떻게 계산하나?</b> 답은 <span class="tex">Fe=0</span>이다. 에피폴은 모든 에피폴라 선이 지나는 점이므로 F의 <b>영공간</b>이다. 38p &lsquo;Fundamental Matrix Song&rsquo; 칠판의 <span class="tex">\text{null}(F)=e</span>, <span class="tex">\text{null}(F^\top)=e'</span>가 같은 말이다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>l' = Fx를 직선으로 읽어 보기</h3>
+  <p><span class="tex">l'=[0.0295,\;0.9996,\;-265.15]^\top</span>은 직선 <span class="tex">0.0295\,u+0.9996\,v-265.15=0</span>, 즉 <span class="tex">v\approx265.3-0.0295\,u</span>다. 기울기가 −0.03이라 <b>거의 수평</b>이고, 오른쪽 영상의 <b>세로 265픽셀 근처</b>를 가로지른다. 35p에서 파란 선이 개선문 아치 윗부분을 거의 수평으로 지나는 것과 맞는다. 오른쪽 영상에서 짝을 찾을 때는 이 한 줄만 훑으면 된다 &mdash; 에피폴라 제약이 숫자로 보이는 순간이다.<br>
+<b>에피폴 계산</b> &mdash; <span class="tex">Fe=0</span>은 동차 선형 시스템이므로, F를 SVD 했을 때 <b>가장 작은 특이값(이론상 0)에 대응하는 V의 열</b>이 <span class="tex">e</span>다(마지막 성분으로 나눠 픽셀 좌표로 바꾼다). <span class="tex">e'</span>은 <span class="tex">F^\top</span>로 똑같이 구한다. 04절 8점 알고리즘과 같은 도구다.</p>
+</div>
+</section>
+
+<!-- ===================== 04 ===================== -->
+<section class="sec" id="eight">
+  <div class="sec-head"><span class="sec-badge">04</span><h2 class="sec-title">8점 알고리즘 — 대응점으로 F 구하기<small>교안 28~32p · Eight-Point Algorithm</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>28p · 29p · 30p · 31p · 32p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-28-8pt-setup.jpg" alt="교안 28p — M개의 짝 — 미지수 9개 동차 시스템"><figcaption><b>28p</b> M개의 짝 — 미지수 9개 동차 시스템</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-29-8pt-one.jpg" alt="교안 29p — 짝 하나는 식 하나"><figcaption><b>29p</b> 짝 하나는 식 하나</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-30-8pt-system.jpg" alt="교안 30p — M×9 행렬로 쌓기"><figcaption><b>30p</b> M×9 행렬로 쌓기</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-31-8pt-tls.jpg" alt="교안 31p — Ax = 0 — 전체 최소제곱"><figcaption><b>31p</b> Ax = 0 — 전체 최소제곱</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-32-8pt-steps.jpg" alt="교안 32p — 8점 알고리즘 단계"><figcaption><b>32p</b> 8점 알고리즘 단계</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>대응점 하나는 식 하나를 준다 (28 · 29p)</h3>
+  <p>짝지은 영상 점 <span class="tex">\{x_m,x'_m\},\;m=1,\dots,M</span>이 있다고 하자. 각 짝은 <span class="tex">x_m'^\top Fx_m=0</span>을 만족해야 한다. 3×3 F를 어떻게 구하나? &mdash; <b>미지수 9개의 동차 선형 시스템</b>을 세운다.</p>
+  <div class="fx">
+    <div class="tex-d">\begin{bmatrix}x'_m&amp;y'_m&amp;1\end{bmatrix}\begin{bmatrix}f_1&amp;f_2&amp;f_3\\f_4&amp;f_5&amp;f_6\\f_7&amp;f_8&amp;f_9\end{bmatrix}\begin{bmatrix}x_m\\y_m\\1\end{bmatrix}=0</div>
+    <div class="tex-d">x_mx'_mf_1+x_my'_mf_2+x_mf_3+y_mx'_mf_4+y_my'_mf_5+y_mf_6+x'_mf_7+y'_mf_8+f_9=0</div>
+    <p class="fx-note"><b>짝 하나가 식 하나</b>를 준다(ONE correspondence gives you ONE equation). 7주차 호모그래피(짝 하나에 식 <b>둘</b>)와 다르다 &mdash; F는 &lsquo;<span class="tex">x'</span>이 선 위에 있다&rsquo;는 조건 하나뿐이라서다. 위 전개식은 교안 표기를 그대로 옮겼다. 원소 이름을 어떻게 붙이든 9개 곱(<span class="tex">xx',\,xy',\,x,\,yx',\,yy',\,y,\,x',\,y',\,1</span>)에 계수가 하나씩 붙는 구조는 같다.</p>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>M×9 시스템과 전체 최소제곱 (30 · 31p)</h3>
+  <div class="fx">
+    <div class="tex-d">\underbrace{\begin{bmatrix}x_1x'_1&amp;x_1y'_1&amp;x_1&amp;y_1x'_1&amp;y_1y'_1&amp;y_1&amp;x'_1&amp;y'_1&amp;1\\ \vdots&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;\vdots\\ x_Mx'_M&amp;x_My'_M&amp;x_M&amp;y_Mx'_M&amp;y_My'_M&amp;y_M&amp;x'_M&amp;y'_M&amp;1\end{bmatrix}}_{A\;(M\times9)}\begin{bmatrix}f_1\\ \vdots\\ f_9\end{bmatrix}=\mathbf 0</div>
+    <div class="tex-d">A\mathbf x=\mathbf 0\qquad\Longrightarrow\qquad\text{minimize }\lVert A\mathbf x\rVert^2\quad\text{subject to }\lVert\mathbf x\rVert^2=1\quad(\text{Total Least Squares})</div>
+    <p class="fx-note">F는 배율이 자유롭다(F와 2F는 같은 선을 준다). 그래서 미지수 9개 중 의미 있는 것은 8개 &mdash; <b>8쌍</b>이면 정해진다(그래서 &lsquo;8점&rsquo;). 잡음이 있으면 정확히 0이 되는 해가 없으므로, <span class="tex">\lVert\mathbf x\rVert=1</span>로 0벡터를 막은 뒤 <span class="tex">\lVert A\mathbf x\rVert^2</span>를 최소화한다. <a class="ext" href="computer-vision-week07.html#dlt">7주차 DLT(<span class="tex">A\mathbf h=0</span>)</a>와 똑같은 문제다.</p>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>알고리즘 한 장 정리 (32p)</h3>
+  <div class="flow">
+    <div class="fl"><b>0. (점 정규화)</b><span>Normalize points</span></div>
+    <div class="fl"><b>1. M×9 행렬 A를 만든다</b><span>짝마다 한 행</span></div>
+    <div class="fl"><b>2. A의 SVD를 구한다</b><span><span class="tex">A=U\Sigma V^\top</span></span></div>
+    <div class="fl"><b>3. 가장 작은 특이값에 대응하는 V의 열이 F의 원소</b><span>9개를 3×3으로 접는다</span></div>
+    <div class="fl"><b>4. (F에 rank 2 조건을 강제한다)</b><span>Enforce rank 2 constraint</span></div>
+    <div class="fl"><b>5. (정규화를 되돌린다)</b><span>Un-normalize F</span></div>
+  </div>
+  <p>교안에서 0 · 4 · 5단계는 <b>초록색 괄호</b>로 따로 표시되어 있다. 핵심 1~3단계에 덧붙이는 &lsquo;실전용&rsquo; 단계라는 뜻이다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>괄호 속 세 단계는 왜 필요한가</h3>
+  <ul class="ul">
+    <li><b>0 · 5. 정규화(Hartley)</b> &mdash; 픽셀 좌표는 수백 단위다. 그래서 A의 한 행에 <span class="tex">x x'\approx10^5</span>와 <span class="tex">1</span>이 함께 들어가 숫자 크기가 10만 배 차이 난다. 그러면 SVD가 수치적으로 불안정해진다. 점들을 무게중심이 원점, 평균 거리가 <span class="tex">\sqrt2</span>가 되게 옮기고 줄인 뒤(<span class="tex">T,\,T'</span>) F를 구하고, 마지막에 <span class="tex">F=T'^\top\hat FT</span>로 되돌린다. 개선문 예제의 F에 −0.003과 −9999.79가 함께 들어 있는 것이 바로 픽셀 좌표 F의 이 크기 차이다</li>
+    <li><b>4. rank 2 강제</b> &mdash; 02절 보충설명처럼 진짜 F는 <span class="tex">Fe=0</span>이라 rank 2다. 잡음이 섞인 SVD 해는 보통 rank 3이라 에피폴라 선들이 한 점에서 만나지 않는다. F를 다시 SVD 해서 <b>가장 작은 특이값을 0으로</b> 바꾸고 곱해 되돌리면, 가장 가까운 rank 2 행렬이 된다</li>
+    <li><b>잘못된 짝이 섞이면</b> &mdash; 최소제곱이라 이상치 하나에 무너진다. 실무에서는 <a class="ext" href="computer-vision-week07.html#ransac">7주차 RANSAC</a>으로 8쌍씩 뽑아 F를 세우고 인라이어(<span class="tex">|x'^\top Fx|</span>가 작은 짝)를 세서 고른다 &mdash; OpenCV <code>cv2.findFundamentalMat(pts1, pts2, cv2.FM_RANSAC)</code>이 그것이다</li>
+  </ul>
+</div>
+</section>
+
+<!-- ===================== 05 ===================== -->
+<section class="sec" id="tri">
+  <div class="sec-head"><span class="sec-badge">05</span><h2 class="sec-title">삼각측량 — 두 광선이 만나는 곳<small>교안 40~47p · Triangulation</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>40p · 43p · 44p · 45p · 46p · 47p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-40-tri-task.jpg" alt="교안 40p — 왼쪽 점을 오른쪽 점과 짝짓기"><figcaption><b>40p</b> 왼쪽 점을 오른쪽 점과 짝짓기</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-43-tri-line.jpg" alt="교안 43p — 2. 둘째 영상에 에피폴라 선"><figcaption><b>43p</b> 2. 둘째 영상에 에피폴라 선</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-44-tri-match.jpg" alt="교안 44p — 3. 선을 따라 짝 찾기"><figcaption><b>44p</b> 3. 선을 따라 짝 찾기</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-45-tri-steps.jpg" alt="교안 45p — 4. 삼각측량"><figcaption><b>45p</b> 4. 삼각측량</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-46-tri-rays.jpg" alt="교안 46p — 두 광선의 교점 — 잡음 때문에 근사"><figcaption><b>46p</b> 두 광선의 교점 — 잡음 때문에 근사</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-47-tri-solve.jpg" alt="교안 47p — 짝과 카메라 행렬로 X 추정"><figcaption><b>47p</b> 짝과 카메라 행렬로 X 추정</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>네 단계 (40~45p)</h3>
+  <p>할 일은 여전히 &ldquo;왼쪽 영상의 점을 오른쪽 영상의 점과 짝짓기&rdquo;다(40p, 두 장의 건물 사진). 41~45p가 한 장씩 단계를 쌓는다.</p>
+  <div class="flow">
+    <div class="fl"><b>1. 한 영상에서 점을 고른다</b><span>왼쪽 영상의 초록 점 (42p)</span></div>
+    <div class="fl"><b>2. 둘째 영상에 그 점의 에피폴라 선을 만든다</b><span>오른쪽 영상의 초록 선 &mdash; <span class="tex">l'=Fx</span> (43p)</span></div>
+    <div class="fl"><b>3. 그 선을 따라 짝을 찾는다</b><span>선 위의 초록 점 (44p)</span></div>
+    <div class="fl"><b>4. 삼각측량을 한다</b><span>두 점에서 3차원 점을 계산 (45p)</span></div>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>3차원 점 찾기 (46 · 47p)</h3>
+  <p>카메라 1(행렬 <span class="tex">P</span>, 중심 <span class="tex">C</span>)의 점 <span class="tex">x</span>와 카메라 2(행렬 <span class="tex">P'</span>, 중심 <span class="tex">C'</span>)의 점 <span class="tex">x'</span>을 각각 광선으로 역투영하면, 두 광선이 만나는 곳이 3차원 점이다. 교안의 단서 &mdash; <b>잡음 때문에 해가 하나로 정해지지 않는다(no single solution due to noise)</b>. 46p 그림처럼 두 광선이 <b>살짝 엇갈려</b> 지나가기 때문이다.</p>
+  <div class="fx">
+    <div class="tex-d">\text{주어진 것: }\{x_i,x'_i\}\;(\text{잡음 섞인 짝}),\;\;P,\,P'\qquad\text{구할 것: }X\qquad x=PX\;\;(x,\,P\text{는 알고 있다})</div>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>x = PX를 X에 대해 푸는 법 — 또 SVD</h3>
+  <p><span class="tex">x=PX</span>는 &lsquo;배율까지 같다&rsquo;는 동차 식이라, 양변을 외적해 <span class="tex">x\times PX=0</span>으로 바꾼다. <span class="tex">P</span>의 행을 <span class="tex">p_1^\top,p_2^\top,p_3^\top</span>라 하면 점 하나가 독립인 식 2개를 준다. 두 카메라를 모으면 4×4 시스템이다.</p>
+  <div class="fx"><div class="tex-d">\begin{bmatrix}x\,p_3^\top-p_1^\top\\ y\,p_3^\top-p_2^\top\\ x'\,p_3'^\top-p_1'^\top\\ y'\,p_3'^\top-p_2'^\top\end{bmatrix}X=\mathbf 0</div>
+  <p class="fx-note">미지수는 동차 좌표 <span class="tex">X=[X,Y,Z,1]^\top</span>의 4개(배율 자유라 실제 3개)이고 식이 4개라 남는다. 잡음이 있으면 정확한 해가 없으므로 다시 <b>최소 특이값 벡터</b>를 답으로 쓴다(선형 삼각측량). 더 정확히는 &lsquo;3차원 점을 다시 투영했을 때 관측 점과의 거리(재투영 오차)가 최소&rsquo;가 되도록 다듬는다. 8점 알고리즘 · DLT · 삼각측량이 모두 <b>&ldquo;<span class="tex">A\mathbf v=0</span>, <span class="tex">\lVert\mathbf v\rVert=1</span>, SVD&rdquo;</b>라는 한 도구로 풀린다는 점을 묶어 기억하자.</p></div>
+</div>
+</section>
+
+<!-- ===================== 06 ===================== -->
+<section class="sec" id="rect">
+  <div class="sec-head"><span class="sec-badge">06</span><h2 class="sec-title">스테레오 정류 — 에피폴라 선을 수평으로<small>교안 48~62p · Stereo Rectification</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>48p · 49p · 50p · 52p · 53p · 54p · 55p · 56p · 58p · 60p · 62p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-48-rect-cond.jpg" alt="교안 48p — 에피폴라 선이 수평일 조건"><figcaption><b>48p</b> 에피폴라 선이 수평일 조건</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-49-rect-proof.jpg" alt="교안 49p — R = I, t = (T,0,0) → v′ = v"><figcaption><b>49p</b> R = I, t = (T,0,0) → v′ = v</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-50-rect-howto.jpg" alt="교안 50p — 어떻게 수평으로 만드나 — 정류 전후"><figcaption><b>50p</b> 어떻게 수평으로 만드나 — 정류 전후</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-52-rect-common.jpg" alt="교안 52p — 공통 평면으로 재투영"><figcaption><b>52p</b> 공통 평면으로 재투영</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-53-rect-two-h.jpg" alt="교안 53p — 영상마다 호모그래피 하나씩"><figcaption><b>53p</b> 영상마다 호모그래피 하나씩</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-54-rect-4steps.jpg" alt="교안 54p — 정류의 네 단계"><figcaption><b>54p</b> 정류의 네 단계</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-55-rect-s1.jpg" alt="교안 55p — 1. E를 구해 R을 얻는다"><figcaption><b>55p</b> 1. E를 구해 R을 얻는다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-56-rect-s2.jpg" alt="교안 56p — 2. 오른쪽 영상을 R로 회전"><figcaption><b>56p</b> 2. 오른쪽 영상을 R로 회전</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-58-rect-s3.jpg" alt="교안 58p — 3. 두 영상을 R_rect로 회전"><figcaption><b>58p</b> 3. 두 영상을 R_rect로 회전</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-60-rect-s4.jpg" alt="교안 60p — 4. 두 영상을 H로 배율 조정"><figcaption><b>60p</b> 4. 두 영상을 H로 배율 조정</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-62-rect-algo.jpg" alt="교안 62p — 스테레오 정류 알고리즘 8단계"><figcaption><b>62p</b> 스테레오 정류 알고리즘 8단계</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>에피폴라 선은 언제 수평인가 (48 · 49p)</h3>
+  <p>조건은 <span class="tex">R=I</span>(두 카메라가 같은 방향), <span class="tex">t=(T,0,0)</span>(x축으로만 이동)이다. 풀어 쓰면 넷이다.</p>
+  <ul class="ul">
+    <li>두 카메라의 <b>영상 평면이 서로 평행하고, 기준선과도 평행</b>하다</li>
+    <li>두 카메라 중심의 <b>높이가 같다</b></li>
+    <li><b>초점 거리가 같다</b></li>
+    <li>그러면 에피폴라 선이 영상의 <b>수평 주사선(horizontal scan line)</b>을 따라 놓인다</li>
+  </ul>
+  <p>49p는 이것을 식으로 확인한다.</p>
+  <div class="fx">
+    <div class="tex-d">E=[t_\times]R=[t_\times]=\begin{bmatrix}0&amp;0&amp;0\\0&amp;0&amp;-T\\0&amp;T&amp;0\end{bmatrix}</div>
+    <div class="tex-d">x'^\top Ex=\begin{pmatrix}u'&amp;v'&amp;1\end{pmatrix}\begin{bmatrix}0&amp;0&amp;0\\0&amp;0&amp;-T\\0&amp;T&amp;0\end{bmatrix}\begin{pmatrix}u\\v\\1\end{pmatrix}=\begin{pmatrix}u'&amp;v'&amp;1\end{pmatrix}\begin{pmatrix}0\\-T\\Tv\end{pmatrix}=-Tv'+Tv=0\;\;\Longrightarrow\;\;Tv'=Tv</div>
+    <p class="fx-note">결론 <span class="tex">v'=v</span> &mdash; <span class="hi">짝의 세로 좌표가 같다. 왼쪽 영상의 v번째 줄에 있는 점의 짝은 오른쪽 영상의 같은 v번째 줄에 있다.</span> u(가로)는 아무 제약이 없다 &mdash; 그 차이가 08절의 시차다.</p>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>[t×]를 직접 만들어 보면</h3>
+  <p>벡터 <span class="tex">t=(t_1,t_2,t_3)</span>와의 외적 <span class="tex">t\times v</span>를 행렬 곱으로 쓰면 <span class="tex">[t_\times]=\begin{bmatrix}0&amp;-t_3&amp;t_2\\t_3&amp;0&amp;-t_1\\-t_2&amp;t_1&amp;0\end{bmatrix}</span>이다. 교안의 E는 이 표준 정의와 부호가 반대다. 부호를 어떻게 잡든 <span class="tex">x'^\top Ex=0</span>의 결론 <span class="tex">v'=v</span>는 같다(식 전체에 −1을 곱해도 0은 0이다). 핵심은 <span class="tex">t</span>에 x 성분만 있으면 첫 행 · 첫 열이 0이라 <b>u와 u'이 식에서 사라진다</b>는 점이다 &mdash; 가로 위치는 아무래도 좋고, 세로만 맞으면 된다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>정류란 무엇인가 — 공통 평면으로 재투영 (50~53p)</h3>
+  <p>그럼 에피폴라 선을 <b>어떻게</b> 수평으로 만드나? (50p: 위는 원래 사진 두 장, 아래는 정류 후 &mdash; 영상이 기울어지며 에피폴라 선이 나란한 수평선이 된다.)</p>
+  <p>51~53p의 답 &mdash; <span class="hi">두 영상 평면을, 카메라 중심을 잇는 선(기준선)과 평행한 하나의 공통 평면으로 재투영한다.</span> 회색(원래) 영상 평면 두 장을 노란(정류된) 평면으로 돌려 세운다. 이 재투영에는 <b>입력 영상마다 하나씩, 호모그래피(3×3 변환) 두 개</b>가 필요하다. 카메라 중심은 움직이지 않고 <b>보는 방향만 돌리는</b> 것이라, 7주차에서 본 &lsquo;회전만 하는 카메라&rsquo; 조건이 되어 호모그래피로 충분하다. 참고 논문은 C. Loop and Z. Zhang, &ldquo;Computing Rectifying Homographies for Stereo Vision&rdquo;, CVPR 1999이다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>네 단계 (54~61p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>단계</th><th>54p 표현</th><th>55~61p 그림 표현</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>—</td><td><b>E를 구해 R을 얻는다</b> (Compute E to get R)</td></tr>
+      <tr><td>2</td><td>오른쪽 카메라를 <b>R만큼 회전</b> &mdash; 좌표계의 <b>방향만</b> 맞춘다</td><td>오른쪽 영상을 R로 회전 (56p)</td></tr>
+      <tr><td>3</td><td>왼쪽 카메라를 회전(정류)해 <b>에피폴을 무한대로</b> / 오른쪽 카메라도 같은 방식으로</td><td>두 영상을 <b><span class="tex">R_{rect}</span>로 회전</b> (58p)</td></tr>
+      <tr><td>4</td><td><b>배율을 맞춘다</b> (Adjust the scale)</td><td>두 영상을 <b>H로 배율 조정</b> (60p)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>55p의 시작 상태에서는 두 노란 영상의 점선(에피폴라 선)이 비스듬하다. R로 돌리면 두 카메라가 같은 방향을 보고(57p), <span class="tex">R_{rect}</span>로 둘을 함께 돌리면 점선이 기준선과 나란해진다(59p). 마지막으로 H로 크기를 맞추면 점선이 같은 높이에 놓인다(61p).</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>스테레오 정류 알고리즘 8단계 (62p)</h3>
+  <pre class="code">1. E 를 추정한다
+2. 에피폴 e 를 추정한다                         <span class="cm"># E 의 SVD — Ee = 0 의 해</span>
+3. e 로부터 R_rect 를 만든다
+4. E 를 R 과 T 로 분해한다
+5. R1 = R_rect ,  R2 = R · R_rect 로 둔다
+6. 왼쪽 카메라의 각 점을 회전한다 (영상 와핑)    [x' y' z'] = R1 [x y z]
+7. 정류된 점은  p = f / z' · [x' y' z']        <span class="cm"># 다시 영상 평면(깊이 f)으로 투영</span>
+8. 오른쪽 카메라 점에 대해 R2 로 6 · 7 을 반복한다</pre>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>R_rect는 어떻게 만드나 — &lsquo;에피폴을 무한대로&rsquo;의 뜻</h3>
+  <p>정류된 카메라의 x축은 <b>기준선 방향</b>이어야 한다(그래야 이동이 <span class="tex">t=(T,0,0)</span>이 된다). 에피폴 <span class="tex">e</span>는 기준선 방향을 가리키므로 새 x축 <span class="tex">r_1=e/\lVert e\rVert</span>로 잡는다. 새 y축 <span class="tex">r_2</span>는 <span class="tex">r_1</span>과 원래 광축(z) 모두에 수직이 되게, 새 z축은 <span class="tex">r_3=r_1\times r_2</span>로 잡는다. 이 세 벡터를 행으로 쌓은 것이 <span class="tex">R_{rect}=[r_1^\top;r_2^\top;r_3^\top]</span>이다. 이렇게 돌리면 에피폴 방향이 새 x축, 즉 <b>영상 평면과 평행한 방향</b>이 된다 &mdash; 기준선이 영상 평면과 평행해지니 에피폴이 <b>무한대</b>로 간다(01절의 평행 카메라). OpenCV에서는 <code>cv2.stereoRectify</code> → <code>cv2.initUndistortRectifyMap</code> → <code>cv2.remap</code>이 이 과정을 맡는다.</p>
+</div>
+</section>
+
+<!-- ===================== 07 ===================== -->
+<section class="sec" id="match">
+  <div class="sec-head"><span class="sec-badge">07</span><h2 class="sec-title">스테레오 매칭 — 같은 줄에서 짝 찾기<small>교안 63~74p · Stereo Matching · Disparity Space Image</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>63p · 64p · 65p · 67p · 68p · 69p · 70p · 73p · 74p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-63-match-depth.jpg" alt="교안 63p — 정류 다음 — 스테레오 매칭으로 깊이"><figcaption><b>63p</b> 정류 다음 — 스테레오 매칭으로 깊이</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-64-match-inverse.jpg" alt="교안 64p — 수평 이동량은 거리에 반비례 — 시차 지도"><figcaption><b>64p</b> 수평 이동량은 거리에 반비례 — 시차 지도</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-65-stereopsis.jpg" alt="교안 65p — 입체시와 시차 d = r − l"><figcaption><b>65p</b> 입체시와 시차 d = r − l</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-67-match-scan.jpg" alt="교안 67p — 같은 줄을 훑어 가장 잘 맞는 짝"><figcaption><b>67p</b> 같은 줄을 훑어 가장 잘 맞는 짝</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-68-match-disp.jpg" alt="교안 68p — x₂ − x₁ = 시차"><figcaption><b>68p</b> x₂ − x₁ = 시차</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-69-dsi-def.jpg" alt="교안 69p — DSI — 한 줄의 매칭 점수 C(i, j)"><figcaption><b>69p</b> DSI — 한 줄의 매칭 점수 C(i, j)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-70-dsi-curve.jpg" alt="교안 70p — 창 하나의 비유사도 곡선"><figcaption><b>70p</b> 창 하나의 비유사도 곡선</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-73-dsi-columns.jpg" alt="교안 73p — 곡선을 DSI의 열로"><figcaption><b>73p</b> 곡선을 DSI의 열로</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-74-dsi-path.jpg" alt="교안 74p — 완성된 DSI와 짝 경로"><figcaption><b>74p</b> 완성된 DSI와 짝 경로</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>정류 다음에 할 수 있는 일 — 깊이 추정 (63 · 64p)</h3>
+  <p>정류가 끝나면 <b>스테레오 매칭으로 깊이를 추정</b>할 수 있다(63p: 두 장의 곰 인형 사진 → 3차원으로 복원한 장면). 64p의 한 문장이 이번 주의 핵심이다 &mdash; <span class="hi">수평으로 움직인 양은 카메라로부터의 거리에 반비례한다.</span> 64p 오른쪽 회색 영상이 <b>시차 지도(disparity map)</b>다. 밝을수록 많이 움직였다 = 가깝다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>손가락으로 바로 확인하기</h3>
+  <p>손가락을 눈앞 10cm에 세우고 한쪽 눈씩 번갈아 감아 보자. 손가락이 크게 &lsquo;뛴다&rsquo;. 멀리 있는 창문은 거의 안 움직인다. 가까운 것일수록 두 눈에 비친 위치 차이(시차)가 크다 &mdash; 시차가 깊이에 <b>반비례</b>한다는 말이 이것이다. 자동차 창밖 풍경에서 가까운 가로수는 휙휙 지나가고 먼 산은 천천히 가는 것도 같은 원리다(이건 시간에 따른 이동이라 10주차 광류(optical flow)와 이어진다).</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>입체시의 개념 (65p)</h3>
+  <p><b>입체시(stereopsis)</b> &mdash; 두 눈이 기록한 그림을 합치고 둘 사이의 차이(<b>시차 · disparity</b>)를 활용하면 강한 깊이감을 얻는다. 시차는 두 눈이 한 물체를 응시할 때 다른 물체가 <b>다른 시각(visual angle)</b>에 보이며 생긴다.</p>
+  <div class="fx"><div class="tex-d">\text{Disparity: }d=r-l=D-F</div>
+  <p class="fx-note">65p 오른쪽 그림(Vieth-Müller 원)에서 F는 응시점(fixated dot)이 두 눈에 만드는 각, D는 다른 점(disparate dot)이 만드는 각이다. 응시점과 같은 원 위의 점은 시차가 0이고, 원에서 벗어날수록 시차가 커진다.</p></div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>기본 스테레오 매칭 알고리즘 (66~68p)</h3>
+  <pre class="code">1. 영상을 정류한다 (에피폴라 선을 수평으로)
+2. 첫 영상의 각 픽셀에 대해
+   a. 에피폴라 선을 찾는다          <span class="cm"># 정류했으므로 = 같은 가로줄 (66p 링컨 사진의 흰 점선)</span>
+   b. 그 선을 훑어 가장 잘 맞는 짝을 찾는다   <span class="cm"># 왼쪽의 노란 창 하나를 오른쪽 같은 줄의 창들과 비교 (67p)</span>
+   c. 시차로부터 깊이를 계산한다</pre>
+  <div class="fx"><div class="tex-d">x_2-x_1=\text{픽셀 }(x_1,y_1)\text{의 시차 (disparity)}</div>
+  <p class="fx-note">68p &mdash; 왼쪽의 <span class="tex">(x_1,y_1)</span>과 오른쪽의 <span class="tex">(x_2,y_1)</span>. <b>y가 같다</b>는 점이 정류의 효과다.</p></div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>시차 공간 영상 DSI (69~74p)</h3>
+  <p>유사도 제약은 <b>국소적</b>이다 &mdash; 기준 창 하나하나를 독립적으로 매칭한다. 한 줄(row)에 대한 <b>시차 공간 영상(Disparity Space Image, DSI)</b>을 이렇게 만든다(69p).</p>
+  <div class="fx"><div class="tex-d">C(i,j)=\text{왼쪽 픽셀 }i\text{를 중심으로 한 패치와 오른쪽 픽셀 }j\text{를 중심으로 한 패치의 매칭 점수}</div>
+  <p class="fx-note">가로축 = 왼쪽 주사선의 픽셀 i, 세로축 = 오른쪽 주사선의 픽셀 j. 한 줄의 모든 (i, j) 짝 점수를 한 장의 영상으로 펼친 것이다.</p></div>
+  <ul class="ul">
+    <li><b>70~72p</b> &mdash; 왼쪽 영상(원뿔 · 가면 장면)의 노란 창 하나를 오른쪽 같은 줄(노란 선)을 따라 밀며 비교하면 <b>비유사도(dissimilarity) 곡선</b>이 나온다. 아래로 가장 깊이 꺼진 곳이 짝이다. 창 위치를 바꾸면 곡선도 바뀐다</li>
+    <li><b>73p</b> &mdash; 그 비유사도 벡터 하나하나를 <b>DSI의 한 열</b>로 넣는다(Enter each vector of match scores as a column in the DSI). 초록 · 빨강 · 파랑 창이 각각 DSI의 세 열이 된다</li>
+    <li><b>74p</b> &mdash; 완성된 DSI(가로 = 왼쪽 주사선, 세로 = 오른쪽 주사선). 노란 선이 각 열에서 짝을 이은 <b>경로</b>다. 대각선 근처를 지나되 계단처럼 꺾인다 &mdash; 꺾이는 곳이 시차가 바뀌는 곳(물체 경계)이다</li>
+  </ul>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>열마다 최솟값만 고르면 왜 안 되나 — DSI 경로의 의미</h3>
+  <p>교안이 짚은 대로 기본 알고리즘은 창마다 <b>독립적으로</b> 최선의 짝을 고른다(winner-take-all). 그러면 벽처럼 무늬 없는 영역(어디나 비슷해 곡선이 평평하다)이나 반복 무늬(창문이 줄지어 있어 골짜기가 여러 개다)에서 짝이 이웃 픽셀과 따로 논다. 그 결과 시차 지도에 소금 · 후추 같은 잡음이 생긴다. DSI에서 짝을 <b>한 줄로 이어진 경로</b>로 찾으면 두 가지 상식을 넣을 수 있다. ① <b>순서 유지</b> &mdash; 왼쪽에서 A가 B의 왼쪽이면 오른쪽에서도 대개 그렇다(경로가 되돌아가지 않는다). ② <b>매끄러움</b> &mdash; 이웃 픽셀의 시차는 비슷하다(경로가 함부로 튀지 않는다). 이 경로를 <b>동적 계획법</b>으로 찾는 것이 고전적인 스캔라인 스테레오다. 그리고 한쪽 카메라에만 보이는 <b>가림(occlusion)</b> 영역은 경로가 수평 · 수직으로 건너뛰는 구간으로 나타난다.</p>
+</div>
+</section>
+
+<!-- ===================== 08 ===================== -->
+<section class="sec" id="depth">
+  <div class="sec-head"><span class="sec-badge">08</span><h2 class="sec-title">시차에서 깊이로 — Z = bf / d<small>교안 75~78p · Depth from Disparity</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>75p · 76p · 77p · 78p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-75-depth-formula.jpg" alt="교안 75p — d = bf / Z — 깊이에 반비례"><figcaption><b>75p</b> d = bf / Z — 깊이에 반비례</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-76-depth-example.jpg" alt="교안 76p — 예제 — 정답 시차 지도"><figcaption><b>76p</b> 예제 — 정답 시차 지도</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-77-depth-measures.jpg" alt="교안 77p — 유사도 척도 SAD · SSD · NCC"><figcaption><b>77p</b> 유사도 척도 SAD · SSD · NCC</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-78-datasets.jpg" alt="교안 78p — Middlebury 데이터셋"><figcaption><b>78p</b> Middlebury 데이터셋</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>시차는 깊이에 반비례한다 (75p)</h3>
+  <p>두 카메라 중심 <span class="tex">O,\,O'</span>이 기준선 <span class="tex">b</span>만큼 떨어져 있고, 초점 거리가 둘 다 <span class="tex">f</span>, 3차원 점 <span class="tex">X</span>의 깊이가 <span class="tex">Z</span>다. <span class="tex">X</span>가 왼쪽 영상의 <span class="tex">x</span>, 오른쪽 영상의 <span class="tex">x'</span>에 찍힌다(각 영상 평면의 카메라 원점 기준 좌표).</p>
+  <div class="fx"><div class="tex-d">d=x-x'=\frac{bf}{Z}\qquad\Longleftrightarrow\qquad Z=\frac{bf}{d}</div>
+  <p class="fx-note">교안의 빨간 화살표 &mdash; <b>깊이에 반비례(inversely proportional to depth)</b>. 가까울수록(Z ↓) 시차가 크고(d ↑), 멀수록 시차가 0에 가까워진다.</p></div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>닮은 삼각형으로 유도하기</h3>
+  <p>왼쪽 카메라 중심 <span class="tex">O</span>를 원점으로 두고 점 <span class="tex">X</span>의 가로 위치를 <span class="tex">X_h</span>라 하자. 왼쪽 카메라에서 <span class="tex">X</span>까지의 큰 삼각형(가로 <span class="tex">X_h</span>, 세로 <span class="tex">Z</span>)과 영상 평면까지의 작은 삼각형(가로 <span class="tex">x</span>, 세로 <span class="tex">f</span>)이 닮았다. 그래서 <span class="tex">\dfrac{x}{f}=\dfrac{X_h}{Z}</span>. 오른쪽 카메라는 <span class="tex">b</span>만큼 옆에 있으니 <span class="tex">\dfrac{x'}{f}=\dfrac{X_h-b}{Z}</span>. 두 식을 빼면</p>
+  <div class="fx"><div class="tex-d">\frac{x-x'}{f}=\frac{X_h-(X_h-b)}{Z}=\frac{b}{Z}\qquad\Longrightarrow\qquad d=x-x'=\frac{bf}{Z}</div></div>
+  <p><b>숫자로</b> &mdash; 기준선 <span class="tex">b=0.1\,\text{m}</span>(10cm), 초점 거리 <span class="tex">f=700</span>픽셀이면 <span class="tex">bf=70</span>. 시차 70픽셀 → <span class="tex">Z=1\,\text{m}</span>, 7픽셀 → 10m, 1픽셀 → 70m. 먼 곳은 시차 1픽셀 차이가 수십 미터 차이가 된다 &mdash; <b>멀수록 깊이 정밀도가 급격히 나빠진다</b>. 그래서 먼 거리를 재려면 기준선을 넓힌다(자율주행 차의 스테레오 카메라가 좌우로 넓게 달린 이유). 대신 기준선이 넓으면 두 시점이 많이 달라 짝 찾기가 어려워지고 가림이 늘어난다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>예제와 유사도 척도 (76 · 77p)</h3>
+  <p>76p &mdash; 연구실 장면(석고상 · 스탠드 · 카메라)의 정류된 두 장과 정답 시차 지도(밝을수록 가깝다). 77p는 짝을 비교할 때 쓰는 유사도 척도 다섯 가지를 표로 정리하고, 결과를 비교한다(SAD · SSD · NCC · 정답).</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>유사도 척도</th><th>식 (창 W 안에서 합)</th><th>성격</th></tr></thead>
+    <tbody>
+      <tr><td><b>SAD</b> (Sum of Absolute Differences)</td><td><span class="tex">\sum_{(i,j)\in W}|I_1(i,j)-I_2(x+i,y+j)|</span></td><td>가장 단순하고 빠르다. <b>작을수록</b> 비슷하다</td></tr>
+      <tr><td><b>SSD</b> (Sum of Squared Differences)</td><td><span class="tex">\sum_{(i,j)\in W}\bigl(I_1(i,j)-I_2(x+i,y+j)\bigr)^2</span></td><td>큰 차이에 더 큰 벌점 &mdash; 이상치에 민감</td></tr>
+      <tr><td><b>Zero-mean SAD</b></td><td><span class="tex">\sum|I_1(i,j)-\bar I_1(i,j)-I_2(x+i,y+j)+\bar I_2(x+i,y+j)|</span></td><td>각 창의 <b>평균 밝기를 빼고</b> 비교 &mdash; 밝기 <b>차이(offset)</b>에 강함</td></tr>
+      <tr><td><b>Locally scaled SAD</b></td><td><span class="tex">\sum|I_1(i,j)-\tfrac{\bar I_1(i,j)}{\bar I_2(x+i,y+j)}I_2(x+i,y+j)|</span></td><td>평균 밝기 <b>비율</b>로 맞춘 뒤 비교 &mdash; 밝기 <b>배율(gain)</b>에 강함</td></tr>
+      <tr><td><b>NCC</b> (Normalized Cross Correlation)</td><td><span class="tex">\dfrac{\sum_{W}I_1(i,j)\,I_2(x+i,y+j)}{\sqrt{\sum_W I_1^2(i,j)\cdot\sum_W I_2^2(x+i,y+j)}}</span></td><td>두 창을 벡터로 본 <b>코사인 유사도</b>. <b>클수록</b> 비슷하다. 밝기 배율에 강하다</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>참고 &mdash; OpenCV 깊이 지도 튜토리얼(<code>cv2.StereoBM</code>).</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>왜 밝기에 강한 척도가 필요한가 — 그리고 창 크기</h3>
+  <p>두 카메라는 노출 · 게인 · 비네팅이 조금씩 달라, 같은 점이라도 오른쪽 사진이 전체적으로 더 밝게 찍힐 수 있다. SAD · SSD는 이 밝기 차이까지 &lsquo;다르다&rsquo;고 세어 짝을 놓친다. 평균을 빼거나(zero-mean) 크기로 나누면(NCC) 밝기가 일정하게 더해지거나 곱해진 변화를 상쇄한다 &mdash; 5주차 Harris · 6주차 SIFT에서 기술자를 정규화해 조명 변화에 강하게 만든 것과 같은 생각이다.<br>
+<b>창 크기</b>는 맞바꿈이다. 작은 창은 경계가 날카롭지만 무늬 없는 곳에서 잡음이 많다. 큰 창은 매끈하지만 물체 경계가 뭉개진다(창 하나에 앞 물체와 뒤 배경이 섞이기 때문이다). 77p 결과에서 SAD · SSD · NCC 모두 정답보다 경계가 거칠고 무늬 없는 영역에 얼룩이 있는 이유다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>데이터셋 (78p)</h3>
+  <p><b>Middlebury 스테레오 데이터셋</b>(vision.middlebury.edu/stereo/data) &mdash; 2001년(조각난 평면 장면 6종: Sawtooth · Venus · Bull · Poster · Barn1 · Barn2), 2003년(구조광으로 정답을 얻은 2종: Cones · Teddy), 2005년 9종, 2006년 21종, 2014년 33종. 정답 시차 지도가 함께 있어 알고리즘 비교의 표준으로 쓰인다(70~74p의 원뿔 장면이 Cones, 63 · 64p의 곰 인형이 Teddy다).</p>
+</div>
+</section>
+
+<section class="sec" id="summary">
+  <div class="sec-head"><span class="sec-badge">SUM</span><h2 class="sec-title">핵심 정리<small>서술형으로 나올 때 이 흐름으로</small></h2></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>개념</th><th>한 줄</th><th>숫자 · 식</th></tr></thead>
+  <tbody>
+    <tr><td>에피폴라 기하 네 용어</td><td>기준선(두 중심) · 에피폴(기준선 ∩ 영상 평면 = 상대 중심의 상) · 에피폴라 평면(기준선 + 3D 점) · 에피폴라 선(평면 ∩ 영상 평면)</td><td>모든 에피폴라 선은 에피폴을 지난다</td></tr>
+    <tr><td>에피폴라 제약</td><td>x의 짝은 에피폴라 선 l' 위 → <b>2D 탐색이 1D 탐색으로</b></td><td><span class="tex">x'^\top l'=0</span></td></tr>
+    <tr><td>에피폴의 위치</td><td>수렴 카메라는 영상 밖일 수도, 평행 카메라는 <b>무한대</b>(선이 평행)</td><td>&mdash;</td></tr>
+    <tr><td>본질 행렬 E</td><td>카메라 좌표(보정됨)에서 점 → 선</td><td><span class="tex">l'=Ex,\;x'^\top Ex=0,\;Ee=0,\;E=[t_\times]R</span></td></tr>
+    <tr><td>E vs H</td><td>E는 <b>점 → 선</b>, H는 <b>점 → 점</b>. 둘 다 3×3</td><td>&mdash;</td></tr>
+    <tr><td>기본 행렬 F</td><td>E에서 보정 가정을 없앤 일반화, 픽셀 좌표</td><td><span class="tex">F=K'^{-\top}EK^{-1}=K'^{-\top}[t_\times]RK^{-1}</span></td></tr>
+    <tr><td>에피폴 계산</td><td>F의 영공간</td><td><span class="tex">Fe=0,\;e'^\top F=0</span></td></tr>
+    <tr><td>8점 알고리즘</td><td>짝 하나 = 식 하나 · M×9 A · SVD 최소 특이값 벡터 · (정규화 · rank 2 강제)</td><td>최소 <b>8쌍</b>, <span class="tex">\min\lVert Ax\rVert^2\;\text{s.t.}\;\lVert x\rVert=1</span></td></tr>
+    <tr><td>삼각측량</td><td>점 고르기 → 에피폴라 선 → 선 따라 짝 → 두 광선의 교점(잡음 때문에 근사)</td><td><span class="tex">x=PX,\;x'=P'X</span></td></tr>
+    <tr><td>정류 조건</td><td>영상 평면 평행 · 높이 같음 · 초점 거리 같음 → 에피폴라 선 = 수평 주사선</td><td><span class="tex">R=I,\;t=(T,0,0)\Rightarrow v'=v</span></td></tr>
+    <tr><td>정류 방법</td><td>공통 평면으로 재투영 · 호모그래피 2개 · R 회전 → <span class="tex">R_{rect}</span> 회전 → H 배율</td><td><span class="tex">R_1=R_{rect},\;R_2=RR_{rect}</span></td></tr>
+    <tr><td>스테레오 매칭</td><td>정류 → 같은 줄 훑기 → 최선의 짝 → 시차 → 깊이 · DSI는 한 줄의 매칭 점수 표</td><td><span class="tex">d=x_2-x_1,\;C(i,j)</span></td></tr>
+    <tr><td>깊이</td><td>시차는 깊이에 <b>반비례</b></td><td><span class="tex">Z=bf/d</span></td></tr>
+    <tr><td>유사도 척도</td><td>SAD · SSD(작을수록) / zero-mean · locally scaled SAD(밝기 보정) / NCC(클수록, 코사인)</td><td>&mdash;</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note-box"><b>서술형으로 묶는다면</b> &mdash; &ldquo;두 장의 사진으로 깊이를 구하는 과정을 설명하시오&rdquo;: <b>특징점 매칭(6 · 7주차) → RANSAC + 8점 알고리즘으로 F 추정 → (K를 알면) E로 바꿔 R, t 분해 → 정류로 에피폴라 선을 수평으로 → 같은 줄에서 SAD · NCC로 짝 찾기(DSI) → 시차 d → <span class="tex">Z=bf/d</span></b>. 각 단계에서 &lsquo;왜 필요한가&rsquo;를 한 줄씩 붙이면 된다 &mdash; F는 탐색을 1D로 줄이려고, 정류는 그 1D를 가로줄로 만들려고, 밝기 보정 척도는 두 카메라의 노출 차이 때문에.</div>
+</section>
+
+<section class="sec" id="next">
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">과제 · 학생 발표 · 다음 주<small>HW2 마감 11/4 · 10주차 Motion Tracking</small></h2></div>
+<div class="warn"><b>HW2 제출 마감 &mdash; 11월 4일(10주차 수업일)</b>. 범위는 5~7주차(특징 검출 · 기술 · 매칭). 과제 내용은 <a class="ext" href="computer-vision-assignments.html">과제 · 논문 발표</a> 페이지에 모아 두었다.</div>
+<div class="tip"><b>9주차 학생 발표</b> &mdash; 바탕화면 <code>컴_9주차/학생발표</code> 폴더가 아직 비어 있다. 발표 자료가 올라오면 이 페이지 아래에 절을 추가한다.</div>
+<div class="note-box"><b>10주차(11.4) &mdash; Motion Tracking</b>. Motion · Optical Flow(Lucas-Kanade, Horn-Schunck)와 Visual Tracking(KLT, Mean shift, Cam shift). 이번 주가 <b>두 카메라 · 같은 시각</b>의 대응이었다면, 다음 주는 <b>한 카메라 · 이어지는 시각</b>의 대응이다 &mdash; 짝이 옆으로 밀린 양(시차) 대신, 시간에 따라 움직인 양(광류)을 구한다.</div>
+</section>
+
+<p class="src">출처 — 컴퓨터비전 09. Stereo Vision (2026-2학기, 79페이지)<br>
+영어 교안을 korean-translation 규칙(하다체 · 번역투 피하기)에 따라 절 단위로 한국어로 옮겨 정리하고 도식 · 예시 슬라이드 <b>57장</b>을 캡처해 실었다. &lsquo;보충설명&rsquo; 뱃지가 붙은 부분(에피폴 성질의 이유 · E와 F 비교 · l'=Fx 읽기 · 정규화와 rank 2 · 선형 삼각측량 · [t×] · R_rect 만들기 · DSI 경로 · Z=bf/d 유도와 숫자 예 · 척도의 밝기 보정)은 교안에 없는 내용을 따로 계산하거나 찾아 정리한 것이다.</p>
+
+</div>
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive() {
+    var cur = '';
+    sections.forEach(function (s) { if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function (t) { t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      setTimeout(function () {
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+
+  /* ---- 개념 설명 말풍선 ---- */
+  var terms = document.querySelectorAll('.term');
+  if (!terms.length) return;
+  var tip = document.createElement('div');
+  tip.id = 'tipbox';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  var current = null;
+
+  function hide() {
+    tip.classList.remove('on');
+    if (current) { current.classList.remove('on'); current = null; }
+  }
+  function show(el) {
+    tip.textContent = el.getAttribute('data-tip') || '';
+    tip.classList.add('on');
+    if (current && current !== el) current.classList.remove('on');
+    current = el;
+    el.classList.add('on');
+    var pad = 8;
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+    var top = r.top - t.height - 10;
+    if (top < pad) top = r.bottom + 10;
+    top = Math.min(top, window.innerHeight - t.height - pad);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+  terms.forEach(function (el) {
+    el.addEventListener('mouseenter', function () { show(el); });
+    el.addEventListener('mouseleave', function () { if (current === el) hide(); });
+    el.addEventListener('focus', function () { show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (current === el && tip.classList.contains('on')) hide(); else show(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el); }
+      if (e.key === 'Escape') hide();
+    });
+  });
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide);
+});
+</script>
+
+<script>
+/* 슬라이드 확대 보기 — 좌우 이동 · 닫으면 보던 자리로 */
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.sld'));
+  if (!slides.length) return;
+
+  var lb = document.createElement('div');
+  lb.id = 'lb';
+  lb.innerHTML =
+    '<button class="prev" type="button" aria-label="이전 슬라이드">&#10094;</button>' +
+    '<img alt="">' +
+    '<button class="next" type="button" aria-label="다음 슬라이드">&#10095;</button>' +
+    '<button class="x" type="button" aria-label="닫기">&#10005;</button>' +
+    '<p class="cap"></p>';
+  document.body.appendChild(lb);
+
+  var big = lb.querySelector('img'),
+      cap = lb.querySelector('.cap'),
+      bPrev = lb.querySelector('.prev'),
+      bNext = lb.querySelector('.next'),
+      bX = lb.querySelector('.x');
+
+  var idx = -1, openedIdx = -1, savedY = 0, pushed = false, prevRestore = null;
+
+  function lock() {
+    savedY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    document.body.style.position = 'fixed';
+    document.body.style.top = (-savedY) + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  /* html{scroll-behavior:smooth} 때문에 되돌아갈 때 화면이 흘러가지 않도록 잠깐 끈다 */
+  function instantly(fn) {
+    var de = document.documentElement, prev = de.style.scrollBehavior;
+    de.style.scrollBehavior = 'auto';
+    fn();
+    void de.offsetHeight;
+    de.style.scrollBehavior = prev;
+  }
+  function unlock() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    var target = (idx >= 0 && idx !== openedIdx) ? slides[idx] : null;
+    function place() {
+      instantly(function () {
+        window.scrollTo(0, savedY);
+        /* 넘겨 본 슬라이드가 있으면 그 슬라이드 자리로, 아니면 보던 자리 그대로 */
+        if (target) target.scrollIntoView({ block: 'center' });
+      });
+    }
+    place();
+    /* 기기 뒤로가기로 닫을 때 브라우저가 옛 스크롤을 덮어쓰므로 한 프레임 뒤 한 번 더 */
+    if (window.requestAnimationFrame) window.requestAnimationFrame(place);
+    setTimeout(place, 0);
+  }
+
+  function preload(i) {
+    if (i < 0 || i >= slides.length) return;
+    var im = slides[i].querySelector('img');
+    if (im) { var p = new Image(); p.src = im.currentSrc || im.src; }
+  }
+
+  function render(i) {
+    idx = i;
+    var f = slides[i], im = f.querySelector('img'), fc = f.querySelector('figcaption');
+    big.src = im.currentSrc || im.src;
+    big.alt = im.alt || '';
+    cap.innerHTML = '';
+    cap.appendChild(document.createTextNode(fc ? fc.textContent : ''));
+    var num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = (i + 1) + ' / ' + slides.length + ' · ← → 로 넘기기';
+    cap.appendChild(num);
+    bPrev.disabled = (i === 0);
+    bNext.disabled = (i === slides.length - 1);
+    preload(i + 1); preload(i - 1);
+  }
+
+  function open(i) {
+    openedIdx = i;
+    lock();
+    render(i);
+    lb.classList.add('on');
+    if (!pushed && window.history && window.history.pushState) {
+      try {
+        if ('scrollRestoration' in window.history && prevRestore === null) {
+          prevRestore = window.history.scrollRestoration;
+          window.history.scrollRestoration = 'manual';
+        }
+        window.history.pushState({ lb: 1 }, '');
+        pushed = true;
+      } catch (e) { pushed = false; }
+    }
+  }
+  function closeNow() {
+    if (!lb.classList.contains('on')) return;
+    lb.classList.remove('on');
+    unlock();
+    idx = openedIdx = -1;
+    if (prevRestore !== null) {
+      try { window.history.scrollRestoration = prevRestore; } catch (e) {}
+      prevRestore = null;
+    }
+  }
+  function closeByUser() {
+    if (pushed) { pushed = false; window.history.back(); }  /* popstate 가 닫는다 */
+    else { closeNow(); }
+  }
+  function go(step) {
+    var n = idx + step;
+    if (n < 0 || n >= slides.length) return;
+    render(n);
+  }
+
+  slides.forEach(function (f, i) {
+    f.addEventListener('click', function () { open(i); });
+  });
+
+  bPrev.addEventListener('click', function (e) { e.stopPropagation(); go(-1); });
+  bNext.addEventListener('click', function (e) { e.stopPropagation(); go(1); });
+  bX.addEventListener('click', function (e) { e.stopPropagation(); closeByUser(); });
+  big.addEventListener('click', function (e) { e.stopPropagation(); });
+  cap.addEventListener('click', function (e) { e.stopPropagation(); });
+  lb.addEventListener('click', closeByUser);
+
+  window.addEventListener('popstate', function () {
+    if (lb.classList.contains('on')) { pushed = false; closeNow(); }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('on')) return;
+    if (e.key === 'Escape') { e.preventDefault(); closeByUser(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+  });
+
+  /* 모바일 — 좌우로 쓸어 넘기기 */
+  var tx = 0, ty = 0;
+  lb.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) return;
+    tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+  }, { passive: true });
+  lb.addEventListener('touchend', function (e) {
+    if (!e.changedTouches.length) return;
+    var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
+</script>
+
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script src="../vendor/katex/katex.min.js"></script>
+<script>
+// .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.
+// KaTeX를 못 불러온 경우에는 원문이 그대로 남아 최소한 읽을 수는 있게 둔다.
+(function () {
+  if (typeof katex === 'undefined') { return; }
+  document.querySelectorAll('.tex, .tex-d').forEach(function (el) {
+    try {
+      katex.render(el.textContent.trim(), el, {
+        displayMode: el.classList.contains('tex-d'),
+        throwOnError: false,
+        strict: false
+      });
+    } catch (e) { if (window.console) { console.error('KaTeX', e, el.textContent); } }
+  });
+})();
+</script>
+
+</body>
+</html>

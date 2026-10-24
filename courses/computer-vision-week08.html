@@ -616,6 +616,7 @@ details.viz[open] > summary::before{transform:rotate(90deg)}
 
 <nav class="tab-bar" id="tabbar">
   <a href="#guide">시험 안내</a>
+  <a href="#exam">중간고사 기출</a>
   <a href="#w2">2주차 카메라 모델</a>
   <a href="#w3">3주차 선형 필터</a>
   <a href="#w4">4주차 피라미드</a>
@@ -635,6 +636,7 @@ details.viz[open] > summary::before{transform:rotate(90deg)}
   <a href="computer-vision-week06.html">6주차 · Feature Descriptors</a>
   <a href="computer-vision-week07.html">7주차 · Feature Matching &amp; Homography</a>
   <span class="cur">8주차 · 중간고사 대비 자료집</span>
+  <a href="computer-vision-week09.html">9주차 · Stereo Vision</a>
 </div>
 
 <section class="hero">
@@ -684,6 +686,100 @@ details.viz[open] > summary::before{transform:rotate(90deg)}
 <div class="note-box"><b>답 쓰는 방식</b> &mdash; 개념 하나를 따로 외우지 않고, 교안에서 <b>앞뒤로 이어지는 개념을 엮어</b> 한 흐름으로 쓴다. 예를 들어 핀홀 카메라를 물으면 구멍 크기의 딜레마 → 그래서 렌즈 → 렌즈의 대가인 초점 → 피사계 심도와 조리개 → 화각과 초점거리까지 이어 쓴다. 용어는 <b>영어 원어와 우리말을 함께</b> 적는다. <span class="mine">직접 정리</span> 표시가 붙은 답은 내가 직접 적은 답이다.</div>
 <div class="tip"><b>6~7문항이라면</b> &mdash; 주차당 한 문제 꼴이라 정말 중요한 것만 나온다. <span class="star">★ 중요</span> 스티커가 붙은 17문항을 먼저 본다. 또 부분점수가 있다는 것은 한 문제 안에서 <b>상위 개념과 하위 개념을 함께</b> 물을 가능성이 크다는 뜻이다 &mdash; 문제마다 아래에 적은 <b>&lsquo;이렇게도 나올 수 있다&rsquo;</b> 후보를 보며, 같은 답을 다른 각도의 질문에 맞춰 꺼내 쓰는 연습을 하자.</div>
 <div class="note-box"><b>지난 학기 후기로 본 출제 경향</b> &mdash; 같은 교수님 강의의 2023년 후기에 따르면, 서술형은 각 기법의 <b>장단점</b>, <b>다른 기법과의 비교</b>, <b>특장점</b>, <b>어디에 쓰이는지</b>를 묻고 생각보다 디테일하게 나온다. 위쪽 <b>개념</b> 슬라이서에서 SIFT · 가우시안 · RANSAC 같은 개념을 고르면, 그 개념이 나오는 문항만 모아 볼 수 있다. 두 개를 함께 고르면 둘 중 하나라도 나오는 문항을 한 번에 훑어볼 수 있다. 비교 문제는 맨 아래 <a class="ext" href="#pairs">헷갈리는 짝 비교표</a>로 한 번 더 정리하자.</div>
+</section>
+
+<!-- ===================== 중간고사 기출 ===================== -->
+<section class="sec pb" id="exam">
+  <div class="sec-head"><span class="sec-badge">EXAM</span><h2 class="sec-title">중간고사 실제 출제 문항<small>10.21 시험에 나온 서술형 7문항 &mdash; 답은 아래 주차별 문항의 표현을 묶어 다시 썼다</small></h2></div>
+<div class="note-box"><b>나온 것</b> &mdash; 예상대로 <b>4주차(피라미드 · 에일리어싱)</b>와 <b>5~7주차(DoG · SIFT · 공변/불변 · RANSAC)</b>에 몰렸고, 2주차 카메라 모델은 나오지 않았다. 문항마다 <b>정의 → 함수 · 원리 → 장점 · 용도 → 비교</b>를 함께 물었다 &mdash; &lsquo;이렇게도 나올 수 있다&rsquo;에 적어 둔 상위 · 하위 개념 묶음이 그대로 나온 셈이다. 각 문항의 <b>개념 바로가기</b>로 원래 문항과 교안 절을 열 수 있다.</div>
+
+<article class="q" id="q-E-1" data-k="E-1" data-w="E" data-star="1">
+  <div class="q-h"><span class="q-no">E-1</span><span class="q-wk">4주차 · 3주차</span><span class="star">중간고사 기출</span><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
+  <p class="q-txt">Q. 가우시안 피라미드 &mdash; (1) 정의 · 함수 · 장점 · 용도를 서술하시오. (2) 표준편차 시그마(σ)의 의미를 서술하시오.</p>
+  <div class="go"><b>개념 바로가기</b><a class="go-a" href="#q-4-2">4-2 가우시안 피라미드</a><a class="go-a" href="#q-3-6">3-6 가우시안 필터</a><a class="go-a" href="#q-P-2">P-2 σ의 영향</a><a class="go-a" href="computer-vision-week04.html#gpyr">4주차 교안</a></div>
+  <details class="ans" open><summary>답</summary>
+    <p><span class="lab">[(1) 정의]</span><b>가우시안 피라미드</b>는 한 장의 이미지에 <b>&lsquo;가우시안 블러 후 축소(다운샘플링)&rsquo;</b>를 반복해 여러 해상도 버전을 쌓아 둔 것이다. 원본을 맨 아래에 두고 작아진 것을 위로 쌓는다. 위로 갈수록 해상도는 ½, 픽셀 수는 ¼로 줄어, 전부 더해도 원본의 약 4/3배다.</p>
+    <p><span class="lab">[(1) 함수]</span>블러에 쓰는 함수는 <b>2D 가우시안(정규분포)</b>이다. 필터 계수가 가우시안의 표본이라, 중심에 가중치를 크게 두고 가장자리로 갈수록 줄이는 <b>가중 평균 필터</b>다. 축소 전에 이 필터로 고주파를 먼저 지우기 때문에 <b>에일리어싱이 생기지 않는다</b>.</p>
+    <p><span class="lab">[(1) 장점]</span>가우시안을 쓰는 이유는 네 가지다. ① <b>회전 대칭</b>이라 박스 필터의 네모 자국이 없다. ② 흐림 정도가 <b>σ 하나로</b> 정해져 간단하다. ③ <b>가우시안끼리 컨볼루션하면 또 가우시안</b>이라 블러를 거듭해도 성질이 유지된다(피라미드의 층층 블러). ④ <b>분리 가능</b>해 k×k 연산 k²을 1D 두 번, 2k로 줄인다. 피라미드 자체의 장점은, 위층은 픽셀 수가 적어 <b>연산이 싸고</b>, 같은 크기의 창으로 층마다 훑으면 <b>크기가 다른 물체를 모두</b> 잡는다는 것이다.</p>
+    <p><span class="lab">[(1) 용도]</span>크기를 바꿔 가며 보는 도구다. ① <b>SIFT의 스케일 불변 검출</b> &mdash; 피라미드(스케일 공간)를 쌓고 이웃 층의 차이 DoG에서 극값을 찾는다. ② <b>coarse-to-fine 탐색</b> &mdash; 작은 위층에서 대략의 위치 · 움직임을 빠르게 찾고, 아래층으로 내려오며 정밀하게 다듬는다(10주차 광류 · 7주차 정렬). ③ 넓은 영역 탐색의 <b>연산량 절감</b>. 한계는 블러로 지운 고주파가 어느 층에도 남지 않아 원본을 되살릴 수 없다는 것이다 &mdash; 그래서 라플라시안 피라미드가 나온다.</p>
+    <p><span class="lab">[(2) σ의 의미]</span>σ는 가우시안의 <b>표준편차</b>로, 가중치가 <b>얼마나 멀리까지 미치는지</b>를 정한다. σ가 크면 더 먼 이웃까지 가중치를 받아 더 넓은 범위가 평균에 섞이고, 이미지가 <b>더 흐려진다</b>. 곧 σ보다 작은 구조(가는 무늬 · 잡음)는 지워지고 큰 구조만 남는다. 그래서 σ는 <b>&lsquo;어느 크기(스케일)로 보는가&rsquo;</b>를 뜻한다 &mdash; 피라미드에서 층이 올라갈수록 실효 σ가 커지고, SIFT에서는 극값이 나온 σ가 그 특징의 크기(특성 스케일)가 된다. 마스크 크기는 보통 σ의 약 3배 반경(6σ 폭)으로 잡는다.</p>
+  </details>
+</article>
+
+<article class="q" id="q-E-2" data-k="E-2" data-w="E" data-star="1">
+  <div class="q-h"><span class="q-no">E-2</span><span class="q-wk">4주차</span><span class="star">중간고사 기출</span><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
+  <p class="q-txt">Q. 에일리어싱(Aliasing) &mdash; (1) 정의와 예시를 서술하시오. (2) 해결 방법 두 가지를 서술하시오.</p>
+  <div class="go"><b>개념 바로가기</b><a class="go-a" href="#q-4-1">4-1 에일리어싱</a><a class="go-a" href="#q-P-4">P-4 에일리어싱 · 피라미드</a><a class="go-a" href="computer-vision-week04.html">4주차 교안</a></div>
+  <details class="ans" open><summary>답</summary>
+    <p><span class="lab">[(1) 정의]</span><b>에일리어싱</b>은 신호를 너무 낮은 주파수로 샘플링할 때, <b>고주파 성분이 저주파 성분으로 겹쳐 보여</b> 원래 신호가 왜곡되는 현상이다. 이미지에서는 다운샘플링(해상도 축소) 때 생긴다. 단순히 흐려지는 것이 아니라 <b>원래 없던 틀린 무늬가 새로 생기는 것</b>이 특징이다. 원인은 <b>나이퀴스트 이론</b>으로 설명한다 &mdash; 샘플링 주파수가 신호 최대 주파수의 <b>2배 이상</b>이어야 하는데, 이를 어기면 샘플링으로 복제된 스펙트럼끼리 겹쳐 원래 신호를 되찾을 수 없다.</p>
+    <p><span class="lab">[(1) 예시]</span>① 촘촘한 줄무늬 셔츠나 벽돌 벽을 줄이면 생기는 <b>모아레</b> 무늬. ② 비스듬한 경계가 <b>계단 모양</b>으로 깨지는 것(재기). ③ 영상에서 바퀴가 멈추거나 <b>거꾸로 도는</b> 듯 보이는 마차 바퀴 효과 &mdash; 시간축의 에일리어싱이다.</p>
+    <p><span class="lab">[(2) 해결 ① 오버샘플링]</span>애초에 <b>더 촘촘히 샘플링</b>해 나이퀴스트 조건을 만족시킨다. 센서 해상도나 프레임 속도를 올리는 것이다.</p>
+    <p><span class="lab">[(2) 해결 ② 블러 후 축소]</span>이미 찍힌 이미지라면, 줄이기 <b>전에</b> 가우시안 블러(저역 통과 필터)로 <b>깨질 고주파를 먼저 지운다</b>(anti-aliasing). 순서가 핵심이다 &mdash; 반드시 <b>블러 → 축소</b>. 이것을 반복한 것이 가우시안 피라미드다. 대가로 가는 디테일은 잃지만, 틀린 무늬 대신 정직하게 흐린 이미지가 남는다.</p>
+  </details>
+</article>
+
+<article class="q" id="q-E-3" data-k="E-3" data-w="E" data-star="1">
+  <div class="q-h"><span class="q-no">E-3</span><span class="q-wk">3 · 5주차</span><span class="star">중간고사 기출</span><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
+  <p class="q-txt">Q. DoG(Derivative of Gaussian)와 DoG(Difference of Gaussians)의 차이를 정의와 용도 중심으로 서술하시오.</p>
+  <div class="go"><b>개념 바로가기</b><a class="go-a" href="#q-3-9">3-9 에지 검출</a><a class="go-a" href="#q-P-3">P-3 스무딩 · 검출기 비교</a><a class="go-a" href="#q-5-7">5-7 블롭 · DoG</a><a class="go-a" href="computer-vision-week05.html#blob">5주차 교안</a></div>
+  <details class="ans" open><summary>답</summary>
+    <p><span class="lab">[Derivative of Gaussian · 정의]</span>가우시안의 <b>1차 미분</b>이다. 에지를 찾으려면 밝기를 미분해야 하는데, 미분은 잡음을 키우므로 먼저 가우시안으로 스무딩한다. 스무딩과 미분이 모두 컨볼루션이라 결합법칙이 성립한다 &mdash; <b>d/dx (G ∗ I) = (dG/dx) ∗ I</b>. 그래서 가우시안을 <b>미리 미분해 둔 필터 하나</b>로 두 단계를 한 번에 한다.</p>
+    <p><span class="lab">[Derivative of Gaussian · 용도]</span><b>에지 검출</b>(3주차). 응답의 크기가 큰 곳이 에지다. Prewitt([1 1 1]) → Sobel([1 2 1]) → DoG(진짜 가우시안) 순으로 스무딩이 가우시안에 가까워져 잡음에 강하고, σ로 스무딩 정도를 조절할 수 있다. Sobel은 이 DoG를 3×3으로 근사한 셈이다. Canny 에지 검출의 첫 단계도 이것이다.</p>
+    <p><span class="lab">[Difference of Gaussians · 정의]</span>σ가 조금 다른 <b>두 가우시안 블러 영상의 차(뺄셈)</b>이다 &mdash; <b>G(kσ) ∗ I − G(σ) ∗ I</b>. 모양이 <b>스케일 정규화된 LoG</b>(가우시안의 2차 미분)와 거의 같다. 2차 미분을 직접 계산하지 않고 <b>뺄셈만으로</b> 얻으므로 훨씬 싸다.</p>
+    <p><span class="lab">[Difference of Gaussians · 용도]</span><b>블롭 검출과 SIFT의 키포인트 검출</b>(5 · 6주차). 가우시안 피라미드의 이웃 층끼리 빼서 DoG 스케일 공간을 만들고, 위치 · 스케일 양쪽 26개 이웃보다 크거나 작은 극값을 특징점(위치 + 크기)으로 삼는다.</p>
+    <p><span class="lab">[차이 한 줄]</span>이름(약자)만 같다. 앞의 DoG는 <b>1차 미분</b>으로 <b>에지(경계선)</b>를 찾고, 뒤의 DoG는 <b>LoG(2차 미분)의 근사</b>로 <b>블롭(덩어리)과 그 크기</b>를 찾는다. 앞은 한 σ의 필터 하나이고, 뒤는 두 σ의 블러 영상 두 장의 차다.</p>
+  </details>
+</article>
+
+<article class="q" id="q-E-4" data-k="E-4" data-w="E" data-star="1">
+  <div class="q-h"><span class="q-no">E-4</span><span class="q-wk">4주차</span><span class="star">중간고사 기출</span><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
+  <p class="q-txt">Q. 라플라시안 피라미드의 잔차(residual)에 대해 설명하고, 원본으로 복원하는 순서를 가우시안 피라미드와 비교하여 서술하시오.</p>
+  <div class="go"><b>개념 바로가기</b><a class="go-a" href="#q-4-3">4-3 라플라시안 피라미드</a><a class="go-a" href="#q-4-2">4-2 가우시안 피라미드</a><a class="go-a" href="computer-vision-week04.html">4주차 교안</a></div>
+  <details class="ans" open><summary>답</summary>
+    <p><span class="lab">[잔차란]</span>가우시안 피라미드의 한 층 <b>G<sub>i</sub></b>를 블러 · 축소하면 위층 <b>G<sub>i+1</sub></b>이 된다. 이 위층을 다시 원래 크기로 키운 것(<b>expand(G<sub>i+1</sub>)</b>)은 <b>G<sub>i</sub></b>를 <b>&lsquo;예측&rsquo;</b>한 영상이다. 하지만 블러로 지운 디테일이 없어 원래 층과 조금 다르다. 그 <b>차이가 잔차(예측 오차)</b>다 &mdash; <b>L<sub>i</sub> = G<sub>i</sub> − expand(G<sub>i+1</sub>)</b>.</p>
+    <p><span class="lab">[잔차의 모습과 성질]</span>잔차는 축소하면서 <b>잃어버린 고주파(에지 · 질감)</b>만 담는다. 그래서 회색 배경에 경계선만 남은 모습이고, 특정 주파수 대역만 남기는 <b>대역 통과(band-pass)</b> 역할을 한다. 값이 대부분 0 근처에 몰려 있어 적은 비트로 담을 수 있다 &mdash; Burt &amp; Adelson이 만든 원래 목적인 <b>압축</b>이다. 또 층(대역)마다 따로 섞을 수 있어 <b>이미지 블렌딩</b>(사과 + 오렌지, 7주차 다중 대역 블렌딩)에 쓴다.</p>
+    <p><span class="lab">[가우시안 피라미드로는 복원 불가]</span>가우시안 피라미드는 <b>블러 → 축소</b>만 반복하고 블러 결과만 저장한다. 지운 고주파가 <b>어느 층에도 남지 않으므로</b>, 맨 위의 작은 영상을 아무리 키워도 흐린 원본밖에 안 된다.</p>
+    <p><span class="lab">[라플라시안 복원 순서]</span>저장하는 것은 <b>맨 위의 작은 가우시안 영상 한 장 + 층마다의 잔차</b>다. 복원은 <b>맨 위에서 아래로</b> 내려온다. ① 맨 위 영상을 한 단계 키운다(업샘플링 + 보간) → ② 그 층의 잔차를 더한다 → ③ 그 결과를 다시 키우고 다음 잔차를 더한다 → … → 맨 아래에서 <b>원본이 정확히</b> 돌아온다. 곧 <b>G<sub>i</sub> = expand(G<sub>i+1</sub>) + L<sub>i</sub></b>를 위에서부터 반복한다.</p>
+    <p><span class="lab">[비교 한 줄]</span>만들 때 가우시안은 <b>아래 → 위(블러 · 축소)</b>, 복원할 때 라플라시안은 <b>위 → 아래(확대 · 잔차 더하기)</b>로 간다. 가우시안 피라미드는 &lsquo;크기를 바꿔 보는&rsquo; 도구라 되돌릴 수 없고, 라플라시안 피라미드는 지운 것을 잔차로 보관해 <b>가역적</b>이다.</p>
+  </details>
+</article>
+
+<article class="q" id="q-E-5" data-k="E-5" data-w="E" data-star="1">
+  <div class="q-h"><span class="q-no">E-5</span><span class="q-wk">6주차</span><span class="star">중간고사 기출</span><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
+  <p class="q-txt">Q. SIFT가 (1) 스케일 (2) 회전 (3) 조명(illumination) (4) 노이즈 변화에 강건하기 위해 어떻게 하는지 서술하시오.</p>
+  <div class="go"><b>개념 바로가기</b><a class="go-a" href="#q-6-3">6-3 SIFT</a><a class="go-a" href="#q-5-7">5-7 블롭 · DoG</a><a class="go-a" href="computer-vision-week06.html#sift">6주차 교안</a></div>
+  <details class="ans" open><summary>답</summary>
+    <p><span class="lab">[(1) 스케일]</span><b>스케일 공간</b>을 만든다. 같은 영상을 σ를 키워 가며 가우시안 블러하고, σ가 두 배가 되면 영상을 절반으로 줄여 다음 옥타브를 시작한다(가우시안 피라미드). 이웃한 두 블러 영상을 빼 <b>DoG</b>를 만들고, 한 픽셀을 같은 스케일 8개 + 위 · 아래 스케일 9개씩, <b>26개 이웃</b>과 비교해 극값을 찾는다. 극값이 나온 σ가 그 점의 크기(특성 스케일)이고, 기술자는 <b>그 σ에 맞춘 크기의 패치</b>에서 뽑는다. 그래서 물체가 커지거나 작아져도 같은 영역을 기술한다.</p>
+    <p><span class="lab">[(2) 회전]</span><b>기준 방향(orientation assignment)</b>을 정한다. 키포인트 스케일의 블러 영상에서 주변 그래디언트 방향을 <b>36칸 히스토그램</b>에 크기만큼 투표하고, 가장 큰 칸을 기준 방향으로 삼는다(80% 이상인 봉우리가 더 있으면 키포인트를 하나 더 만든다). 기술할 때 16×16 영역과 그래디언트 방향을 <b>모두 기준 방향만큼 돌려</b> 표현하므로, 영상이 돌아도 기술자는 같다.</p>
+    <p><span class="lab">[(3) 조명]</span>기술자를 밝기 값이 아니라 <b>그래디언트(밝기의 차이)</b>로 만든다 &mdash; 밝기가 일정하게 더해져도 차이는 그대로다. 4×4 셀 × 8방향 = <b>128차원</b> 벡터를 만든 뒤 <b>길이 1로 정규화</b>해 대비(밝기 배율) 변화를 없앤다. 그다음 <b>0.2보다 큰 값을 잘라 내고 다시 정규화</b>해, 카메라 포화 · 반사처럼 일부 그래디언트만 크게 바뀌는 비선형 조명 변화의 영향을 줄인다.</p>
+    <p><span class="lab">[(4) 노이즈]</span>① DoG 자체가 <b>가우시안 블러 영상</b>에서 계산되므로 잡음이 먼저 눌린다. ② 극값 주변에 2차 함수를 맞춰 위치를 정밀화한 뒤 <b>대비가 낮은 점</b>(잡음에 흔들리는 약한 극값)을 버린다. ③ <b>엣지 위의 점</b>은 엣지 방향으로 위치가 불안정하므로 Harris의 <b>고윳값 비율</b>로 걸러 낸다. ④ 기술할 때 그래디언트를 <b>가우시안 가중치</b>로 투표하고 셀 단위 히스토그램으로 모으므로, 픽셀 몇 개의 잡음이나 작은 위치 오차가 벡터를 크게 바꾸지 못한다.</p>
+  </details>
+</article>
+
+<article class="q" id="q-E-6" data-k="E-6" data-w="E" data-star="1">
+  <div class="q-h"><span class="q-no">E-6</span><span class="q-wk">7주차</span><span class="star">중간고사 기출</span><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
+  <p class="q-txt">Q. RANSAC &mdash; (1) 정의를 쓰고 일반적인 최소제곱법과 비교하시오. (2) 네 단계를 서술하시오.</p>
+  <div class="go"><b>개념 바로가기</b><a class="go-a" href="#q-7-2">7-2 RANSAC</a><a class="go-a" href="#q-7-1">7-1 피팅 · 최소제곱</a><a class="go-a" href="computer-vision-week07.html#ransac">7주차 교안</a></div>
+  <details class="ans" open><summary>답</summary>
+    <p><span class="lab">[(1) 정의]</span><b>RANSAC(RANdom SAmple Consensus)</b>은 이상치(outlier)가 많이 섞인 데이터에서 모델을 <b>강건하게</b> 추정하는 반복 알고리즘이다(Fischler &amp; Bolles, 1981). 모델을 정하는 데 필요한 <b>최소 개수의 점만 무작위로</b> 뽑아 모델을 세우고, 그 모델에 <b>동의하는 점(인라이어)을 센다</b>. 이를 여러 번 반복해 가장 많은 동의를 얻은 모델을 고른다.</p>
+    <p><span class="lab">[(1) 최소제곱과 비교]</span><b>최소제곱</b>은 <b>모든 점</b>의 오차 제곱합을 최소화한다. 그래서 잡음에는 강하지만 <b>이상치 하나에 무너진다</b> &mdash; 제곱 오차가 멀리 떨어진 점에 엄청난 벌점을 주기 때문에, 직선이 그 한 점 쪽으로 끌려가 나머지 점을 모두 놓친다. RANSAC은 이상치를 <b>계산에서 아예 빼 버린다</b>. 그래서 이상치가 절반이어도 견딘다. 대신 최소제곱은 한 번에 답이 나오지만(정규방정식), RANSAC은 <b>반복 횟수 N · 임계값 t</b> 같은 파라미터가 필요하고 확률적으로 답을 찾는다. 둘은 경쟁 관계가 아니라 협력한다 &mdash; RANSAC으로 인라이어를 고른 뒤, <b>그 인라이어 전부로 최소제곱을 다시 돌려</b> 정밀하게 다듬는다.</p>
+    <p><span class="lab">[(2) 네 단계]</span>① <b>최소 부분집합을 무작위로 뽑는다</b> &mdash; 직선 2개, 어파인 3쌍, 호모그래피 4쌍. ② <b>그 점들로 모델을 가정한다</b>(hypothesize). ③ <b>나머지 모든 점의 오차를 계산해, 임계값 t 이내인 점을 인라이어로 고른다</b>(verify · consensus). ④ <b>①~③을 N번 반복해 인라이어가 가장 많은 모델을 고르고, 그 인라이어 전부로 다시 맞춘다</b>.</p>
+    <p><span class="lab">[덧붙이면 좋은 것]</span>N은 &lsquo;이상치 없는 표본을 적어도 한 번 뽑을 확률 p(0.99)&rsquo;로 정한다: <b>N = log(1 − p) / log(1 − (1 − e)<sup>s</sup>)</b>. 호모그래피(s = 4)에 이상치 50%면 약 72번이다. N은 점의 총 개수와 무관하고, s가 작을수록 유리하다.</p>
+  </details>
+</article>
+
+<article class="q" id="q-E-7" data-k="E-7" data-w="E" data-star="1">
+  <div class="q-h"><span class="q-no">E-7</span><span class="q-wk">5 · 6주차</span><span class="star">중간고사 기출</span><button type="button" class="bm" aria-pressed="false" aria-label="북마크" title="북마크"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button></div>
+  <p class="q-txt">Q. 특징 검출에서의 공변(covariance)과 특징 기술에서의 불변(invariance)의 차이를 서술하시오. 이미지를 회전 · 확대할 때 검출된 특징의 위치는 변하는가? 특징 기술도 변하는가?</p>
+  <div class="go"><b>개념 바로가기</b><a class="go-a" href="#q-5-8">5-8 공변 · 불변</a><a class="go-a" href="#q-5-6">5-6 Harris 불변성</a><a class="go-a" href="#q-6-3">6-3 SIFT</a><a class="go-a" href="computer-vision-week05.html#invariance">5주차 교안</a></div>
+  <details class="ans" open><summary>답</summary>
+    <p><span class="lab">[공변 — 검출]</span><b>공변(covariant)</b>은 &lsquo;영상을 변환한 뒤 특징을 뽑은 결과&rsquo;와 &lsquo;특징을 뽑은 뒤 같은 변환을 가한 결과&rsquo;가 같다는 뜻이다. 결과가 <b>영상을 따라 함께 변한다</b>. 검출기는 공변이어야 한다 &mdash; 영상이 움직이면 검출된 점도 같이 움직여야 <b>같은 물리적 지점</b>을 잡기 때문이다.</p>
+    <p><span class="lab">[불변 — 기술]</span><b>불변(invariant)</b>은 영상에 변화를 가해도 뽑은 값이 <b>전혀 바뀌지 않는다</b>는 뜻이다. 기술자는 불변이어야 한다 &mdash; 같은 지점을 설명하는 숫자가 두 사진에서 같아야 거리로 비교해 <b>짝을 지을 수</b> 있기 때문이다.</p>
+    <p><span class="lab">[회전 · 확대하면 위치는?]</span><b>변한다.</b> 이미지를 30° 돌리면 검출된 위치도 같이 돌고, 기준 방향도 30° 바뀐다. 이미지를 2배로 키우면 검출된 위치 좌표도 2배가 되고, 검출된 스케일 σ도 2배가 된다. 위치 · 방향 · 크기가 영상을 <b>따라 변하는 것</b>이 바로 공변이며, 그래야 같은 지점을 잡은 것이다.</p>
+    <p><span class="lab">[특징 기술은?]</span><b>변하지 않는다.</b> 기술자는 검출 단계가 알려 준 <b>방향만큼 패치를 되돌리고, 크기에 맞춰 패치를 정규화</b>한 뒤에 뽑는다(아핀 적응이면 타원을 원으로 편다). 그래서 회전 · 확대된 사진에서도 128차원 SIFT 벡터가 같다. 곧 <span class="hi">검출의 공변성이 기술의 불변성을 만든다</span> &mdash; 검출이 변화를 정확히 따라가 주었기 때문에, 기술은 그 변화를 상쇄하고 같은 값을 낼 수 있다.</p>
+    <p><span class="lab">[예외 · 주의]</span>Harris는 회전에는 공변(코너 응답이 고윳값으로 정해져 회전과 무관)이지만 <b>스케일에는 공변이 아니다</b> &mdash; 고정된 창이라 확대하면 코너가 엣지로 보인다. 그래서 스케일 공간(LoG · DoG)이 필요했다. 또 BRIEF는 패치 방향을 맞추지 않아 회전 불변이 아니고, ORB가 방향을 더해 이를 고쳤다.</p>
+  </details>
+</article>
 </section>
 
 <!-- ===================== 2주차 ===================== -->
@@ -1668,7 +1764,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch (e) { syncMsg('err', '계정 저장소에 연결하지 못함 · 이 브라우저에는 저장됨'); }
   }
   var cards = [].slice.call(document.querySelectorAll('article.q[data-k]'));
-  var WEEKS = [['2','2주차'],['3','3주차'],['4','4주차'],['5','5주차'],['6','6주차'],['7','7주차'],['X','엮는 문제'],['P','개인정리']];
+  var WEEKS = [['E','중간고사 기출'],['2','2주차'],['3','3주차'],['4','4주차'],['5','5주차'],['6','6주차'],['7','7주차'],['X','엮는 문제'],['P','개인정리']];
   var bar = document.getElementById('fbar'), tab = document.getElementById('tabbar');
   function place() { bar.style.top = window.innerWidth >= 720 ? (tab ? tab.offsetHeight : 0) + 'px' : ''; }
   place(); window.addEventListener('resize', place);
