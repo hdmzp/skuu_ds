@@ -111,6 +111,17 @@
   .btn.danger:hover{background:var(--no-soft)}
 
   /* palette */
+  details.sec-fold{display:block}
+  details.sec-fold summary{display:flex;align-items:center;gap:8px;cursor:pointer;list-style:none;user-select:none}
+  details.sec-fold summary::-webkit-details-marker{display:none}
+  details.sec-fold summary::before{content:"▸";color:var(--muted);transition:.15s}
+  details.sec-fold[open] summary::before{transform:rotate(90deg)}
+  details.sec-fold .ctl-label{min-width:0}
+  .sec-cur{font-size:13px;font-weight:600;color:var(--brand-deep);background:var(--brand-soft);padding:3px 10px;border-radius:999px}
+  .sec-hint{margin-left:auto;font-size:12px;color:var(--muted)}
+  .sec-hint::before{content:"펼치기"}
+  details.sec-fold[open] .sec-hint::before{content:"접기"}
+  details.sec-fold > #secChips{margin-top:10px}
   details.pal{padding:0;margin-bottom:14px;overflow:hidden}
   details.pal summary{padding:13px 16px;cursor:pointer;font-size:14px;font-weight:600;list-style:none;display:flex;align-items:center;gap:8px}
   details.pal summary::-webkit-details-marker{display:none}
@@ -153,10 +164,10 @@
   </header>
 
   <section class="panel controls">
-    <div class="ctl-row">
-      <span class="ctl-label">단원</span>
+    <details class="ctl-row sec-fold" id="secFold">
+      <summary><span class="ctl-label">단원</span><span class="sec-cur" id="secCur"></span><span class="sec-hint"></span></summary>
       <div id="secChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
-    </div>
+    </details>
     <div class="ctl-row">
       <span class="ctl-label">난이도</span>
       <div id="diffChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
@@ -214,6 +225,7 @@ const SECTIONS = {
 const DIFFS = ["기초","중급","심화"];
 const DIFFCLS = {"기초":"d1","중급":"d2","심화":"d3"};
 const KEY = "nlp_week9_quiz_v1";
+const FOLD_KEY = KEY+"_secOpen";
 
 /* ---------- state ---------- */
 let state = {
@@ -294,6 +306,8 @@ function renderChips(){
     const n = QUESTIONS.filter(q=>q.sec===k).length;
     sc.appendChild(mk(k+" "+SECTIONS[k]+" ("+n+")",k,state.secFilter,setSec));
   });
+  $("#secCur").textContent = state.secFilter==="ALL" ? "전체 "+QUESTIONS.length+"문항"
+    : state.secFilter+" "+SECTIONS[state.secFilter]+" ("+QUESTIONS.filter(q=>q.sec===state.secFilter).length+")";
   const dc = $("#diffChips"); dc.innerHTML="";
   dc.appendChild(mk("전체","ALL",state.diffFilter,setDiff));
   DIFFS.forEach(d=>{
@@ -491,6 +505,11 @@ document.addEventListener("keydown",e=>{
 
 /* ---------- init ---------- */
 load();
+(function(){
+  const f=$("#secFold");
+  try{ f.open = localStorage.getItem(FOLD_KEY)==="1"; }catch(e){}
+  f.addEventListener("toggle",()=>{ try{ localStorage.setItem(FOLD_KEY, f.open?"1":"0"); }catch(e){} });
+})();
 buildOrder(false);
 // resume at first unanswered
 const firstUn = state.order.findIndex(id=> !(id in state.answers));
