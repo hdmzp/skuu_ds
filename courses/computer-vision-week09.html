@@ -344,6 +344,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .bdg-live{background:#fdf0f5;color:#9d174d;border:1px solid #f3bcd2}
 .bdg-plus{background:#f0fdfa;color:#0f766e;border:1px solid #99e0d6}
 .bdg-pres{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
+.bdg-exam{background:#fef2f2;color:#b91c1c;border:1px solid #fca5a5}
 
 /* ===== 개념 카드 ===== */
 .pt{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
@@ -500,7 +501,9 @@ table.acc{min-width:0}
 <div class="legend">
   <p class="legend-t">내용이 어디에서 왔는지 <b>뱃지</b>로 구분했습니다</p>
   <i><span class="bdg bdg-gyo">교안</span><span>교수님 슬라이드에 있는 내용 (영어 교안을 한국어로 옮김)</span></i>
+  <i><span class="bdg bdg-flip">플립러닝</span><span>사전 강의에서 말로 설명한 내용 &mdash; 제목에 교안 뱃지와 함께 붙은 곳은 둘을 하나로 이어 풀어 쓴 것</span></i>
   <i><span class="bdg bdg-plus">보충설명</span><span>교안에 없거나 짧게 지나간 부분을 따로 찾아 정리한 내용</span></i>
+  <i><span class="bdg bdg-exam">기말</span><span>강의에서 힘주어 다뤄 기말고사에 나올 가능성이 높아 보이는 내용</span></i>
   <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고, <span class="hi">노란 형광펜</span>은 <b>꼭 기억할 문장</b>, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선</span>은 누르면 뜻이 뜹니다. 쪽수는 <b>슬라이드 오른쪽 아래에 찍힌 번호</b>(= PDF 쪽수)다.</p>
 </div>
 
@@ -561,13 +564,14 @@ table.acc{min-width:0}
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>에피폴라 기하가 다루는 상황 (4 · 5p)</h3>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-flip">플립러닝</span>에피폴라 기하가 다루는 상황 (4 · 5p)</h3>
+  <p>지금까지는 카메라 <b>한 대</b>로 찍은 사진을 다뤘다. 사진 한 장으로는 깊이를 알 수 없다. 3차원 점이 2차원 영상으로 투영될 때, 카메라 중심에서 뻗은 <b>한 광선 위의 점은 가까이 있든 멀리 있든 모두 같은 픽셀</b>에 찍히기 때문이다. 투영하는 순간 깊이 정보가 사라진다. 그래서 카메라를 <b>여러 대</b> 써서 같은 장면을 다른 시점에서 찍는다(다중 시점, multi-view). 이번 주는 그중 가장 단순한 <b>두 대(two-view)</b>다. 교안 앞부분의 제목 &lsquo;Two-view Geometry&rsquo;는 <b>두 영상 사이의 관계</b>를 다루는 기하라는 뜻이고, 그 첫 주제가 에피폴라 기하(epipolar geometry, 우리말로 &lsquo;등극선 기하&rsquo;)다. 수식이 많은 단원이라 그림과 식을 한 쌍으로 묶어 읽는 것이 좋다.</p>
   <p>전형적인 쓰임새는 이렇다. <b>두 대의 카메라가 같은 장면을 서로 다른 시점에서 찍는다.</b> 에피폴라 기하는 그렇게 얻은 <b>두 장의 사진 사이의 관계</b>를 설명한다. 4p 그림에서 초록 공과 주황 공은 왼쪽 사진에서는 겹쳐 보이고 오른쪽 사진에서는 떨어져 보인다 &mdash; 시점이 다르면 같은 3차원 점이 다른 위치에 찍힌다.</p>
   <p>5p는 기본 구도다. 카메라 중심 <span class="tex">o</span>에서 3차원 점 <span class="tex">p</span>로 가는 광선이 왼쪽 <b>영상 평면(image plane)</b>을 뚫는 자리가 <span class="tex">p</span>의 상이다. 오른쪽 카메라 중심은 <span class="tex">o'</span>이다.</p>
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>네 가지 용어 (6p)</h3>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-flip">플립러닝</span><span class="bdg bdg-exam">기말</span>네 가지 용어 (6p)</h3>
   <div class="tbl-wrap">
   <table>
     <thead><tr><th>용어</th><th>정의</th><th>그림에서</th></tr></thead>
@@ -579,7 +583,10 @@ table.acc{min-width:0}
     </tbody>
   </table>
   </div>
+  <p>강의에서는 이렇게 풀어 말했다. 왼쪽 영상의 점 하나에는 그 광선 위의 3차원 점 여러 개가 <b>모두 후보</b>로 걸려 있다. 그 후보들이 오른쪽 영상에 찍힐 수 있는 자리를 모두 이으면 선이 되는데, 이 &lsquo;가능한 자리들의 선&rsquo;이 에피폴라 선(줄여서 epiline)이다. 두 카메라 중심과 3차원 점 <span class="tex">p</span>를 이어 만든 삼각형을 펼친 평면이 에피폴라 평면이다.</p>
   <p>그리고 두 가지 성질 &mdash; <span class="hi">모든 에피폴라 선은 에피폴에서 만난다.</span> 에피폴라 평면 하나는 왼쪽 · 오른쪽 영상 평면을 <b>각각 하나의 에피폴라 선</b>에서 자른다(<span class="tex">l</span>과 <span class="tex">l'</span>은 짝을 이룬다).</p>
+  <p>강의에서 &ldquo;에피폴을 구하는 것이 곧 에피폴라 선을 구하는 것&rdquo;이라고 한 것도 첫 번째 성질 때문이다. 어떤 에피폴라 선이든 에피폴을 지나므로, 에피폴을 알면 남는 것은 선의 <b>방향</b>뿐이다. 에피폴과 후보 점 하나만 이으면 선이 정해진다.</p>
+  <div class="tip"><b>기말 대비</b> &mdash; 네 용어는 정의를 한 줄씩 쓸 수 있어야 한다. 6p 그림을 그려 놓고 기준선 → 에피폴 → 에피폴라 평면 → 에피폴라 선 순서로 짚으면 정의가 앞의 것을 딛고 이어진다(에피폴은 기준선으로, 에피폴라 선은 에피폴라 평면으로 정의된다).</div>
 </div>
 
 <div class="pt plus">
@@ -588,14 +595,15 @@ table.acc{min-width:0}
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>에피폴라 제약 — 짝은 어디에 있을 수 있나 (7~10p)</h3>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-flip">플립러닝</span>에피폴라 제약 — 짝은 어디에 있을 수 있나 (7~10p)</h3>
   <p>질문은 하나다. <b>왼쪽 영상의 점 <span class="tex">x</span>가 주어졌을 때, 대응점 <span class="tex">x'</span>은 오른쪽 영상 어디에 있을 수 있나?</b> 7p처럼 아무 정보가 없으면 오른쪽 영상 전체가 후보다.</p>
   <p>8p가 답의 실마리다. <span class="tex">x</span>를 <b>3차원 광선으로 역투영(backproject)</b>하면 <span class="tex">o</span>에서 <span class="tex">x</span>를 지나는 반직선이 된다. 진짜 3차원 점 <span class="tex">p</span>는 이 광선 위 <b>어딘가</b>에 있지만 깊이는 모른다. 광선 위의 후보 점들을 오른쪽 카메라 <span class="tex">o'</span>에서 보면, 그 상들은 오른쪽 영상에서 <b>한 직선</b> 위에 늘어선다(10p의 노란 부채꼴 위 점들).</p>
   <p>그래서 <b>에피폴라 제약(epipolar constraint)</b>이 나온다 &mdash; <span class="hi">두 시점의 기하가, 첫 영상의 점에 대응하는 픽셀이 둘째 영상에서 어디에 나타나야 하는지를 제약한다. 대응 문제를 짝을 이루는 에피폴라 선을 따라가는 1D 탐색으로 줄인다.</span> 교안 그림의 표현으로는 &ldquo;<span class="tex">x</span>의 짝이 될 후보는 에피폴라 선 <span class="tex">l'</span> 위에 있다(Potential matches for <span class="tex">x</span> lie on the epipolar line <span class="tex">l'</span>)&rdquo;이다.</p>
+  <p>이 제약 덕분에 계산이 훨씬 가벼워진다. 오른쪽 영상 전체를 뒤질 필요 없이 <span class="tex">l'</span> 위의 픽셀만 비교하면 된다. 그래서 대응점 문제의 열쇠는 <b>&lsquo;<span class="tex">x</span>에 대응하는 에피폴라 선 <span class="tex">l'</span>을 어떻게 구하나&rsquo;</b>로 바뀐다. 그 답이 02절의 <span class="tex">l'=Ex</span>와 03절의 <span class="tex">l'=Fx</span>다.</p>
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>예 — 수렴 카메라와 평행 카메라 (11~15p)</h3>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-flip">플립러닝</span>예 — 수렴 카메라와 평행 카메라 (11~15p)</h3>
   <div class="tbl-wrap">
   <table>
     <thead><tr><th>배치</th><th>에피폴라 선의 모양</th><th>에피폴은 어디에?</th></tr></thead>
@@ -605,6 +613,7 @@ table.acc{min-width:0}
     </tbody>
   </table>
   </div>
+  <p>강의에서 짚은 점 &mdash; <span class="hi">에피폴이 꼭 영상 <b>안</b>에 있을 필요는 없다.</span> 영상 밖에 있을 수도 있고, 평행 카메라처럼 무한대에 있을 수도 있다. 오히려 스테레오 비전에서는 <b>에피폴라 선을 일부러 평행하게 만들어 에피폴을 무한대로 보내는 것</b>이 목표가 되기도 한다. 그래야 짝을 같은 가로줄에서만 찾으면 되기 때문이다. 이 작업이 <a class="ext" href="#rect">06절 스테레오 정류</a>다.</p>
   <p>16 · 17p는 과제를 다시 못 박는다 &mdash; <b>에피폴라 제약은 스테레오 비전의 중요한 개념</b>이고, 할 일은 &ldquo;왼쪽 영상의 점을 오른쪽 영상의 점과 짝짓기&rdquo;다.</p>
 </div>
 
@@ -633,17 +642,32 @@ table.acc{min-width:0}
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>한 영상의 점에 E를 곱하면 다른 영상의 에피폴라 선이 나온다 (18p)</h3>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-flip">플립러닝</span>한 영상의 점에 E를 곱하면 다른 영상의 에피폴라 선이 나온다 (18p)</h3>
+  <p>두 영상의 관계를 나타내는 행렬은 <b>두 종류</b>다. 카메라 좌표에서 쓰는 <b>본질 행렬 E</b>와, 픽셀 좌표에서 쓰는 <b>기본 행렬 F</b>(03절)다. 하는 일은 같다 &mdash; 한 영상의 점을 받아 상대 영상의 에피폴라 선을 내놓는다.</p>
   <div class="fx"><div class="tex-d">E\,x=l'</div>
   <p class="fx-note">왼쪽 영상의 점 <span class="tex">x</span>에 <b>본질 행렬(essential matrix)</b> <span class="tex">E</span>를 곱하면 오른쪽 영상의 에피폴라 선 <span class="tex">l'</span>이 나온다. 01절에서 그림으로 찾던 선을 <b>행렬 곱 하나</b>로 계산한다.</p></div>
+  <p>강의에서는 E가 어디서 오는지를 두 카메라 좌표의 관계 <span class="tex">x'=R(x-t)</span>로 설명했다. 왼쪽 카메라 좌표로 적은 점 <span class="tex">x</span>를 두 카메라 중심의 차이 <span class="tex">t</span>만큼 옮기고 회전 <span class="tex">R</span>만큼 돌리면, 같은 점을 오른쪽 카메라 좌표로 적은 <span class="tex">x'</span>이 된다. E는 이 <span class="tex">R</span>과 <span class="tex">t</span>로 만들어진다(바로 아래 보충설명).</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span><span class="tex">x'=R(x-t)</span>에서 <span class="tex">x'^\top Ex=0</span>까지</h3>
+  <p>세 벡터를 왼쪽 카메라 좌표로 본다. <span class="tex">x</span>는 <span class="tex">o</span>에서 3차원 점으로 가는 벡터, <span class="tex">t</span>는 <span class="tex">o</span>에서 <span class="tex">o'</span>으로 가는 기준선, <span class="tex">x-t</span>는 <span class="tex">o'</span>에서 3차원 점으로 가는 벡터다. 셋은 모두 <b>에피폴라 평면 위</b>에 있다.</p>
+  <div class="flow">
+    <div class="fl"><span class="fl-n">1</span><div><h4>한 평면 위의 세 벡터</h4><p><span class="tex">t\times x</span>는 에피폴라 평면에 수직인 벡터다. 평면 위의 <span class="tex">x-t</span>와 내적하면 0이다: <span class="tex">(x-t)^\top(t\times x)=0</span></p></div></div>
+    <div class="fl"><span class="fl-n">2</span><div><h4><span class="tex">x-t</span>를 오른쪽 좌표로 바꾼다</h4><p><span class="tex">x'=R(x-t)</span>이고 회전 행렬은 <span class="tex">R^{-1}=R^\top</span>이므로 <span class="tex">x-t=R^\top x'</span>. 넣으면 <span class="tex">(R^\top x')^\top(t\times x)=x'^\top R\,(t\times x)=0</span></p></div></div>
+    <div class="fl"><span class="fl-n">3</span><div><h4>외적을 행렬 곱으로</h4><p><span class="tex">t\times x=[t_\times]x</span>로 쓰면 <span class="tex">x'^\top\underbrace{R\,[t_\times]}_{E}\,x=0</span>. 이것이 Longuet-Higgins 식이다</p></div></div>
+    <div class="fl"><span class="fl-n">4</span><div><h4>3차원 점을 영상 점으로</h4><p>식의 우변이 0이라 <span class="tex">x</span>, <span class="tex">x'</span>의 길이를 바꿔도 성립한다. 그래서 3차원 벡터 대신 영상 평면 위의 점(<span class="tex">z=1</span>로 나눈 카메라 좌표)을 넣어도 된다</p></div></div>
+  </div>
+  <p>교안 27p는 <span class="tex">E=[t_\times]R</span>로 순서가 반대다. 두 좌표의 관계를 <span class="tex">x'=Rx+t</span>로 적으면(<span class="tex">t</span>를 오른쪽 카메라 좌표로 잰다) 같은 과정으로 <span class="tex">x'^\top[t_\times]R\,x=0</span>이 나온다. <span class="tex">t</span>를 어느 좌표계에서 재느냐의 차이일 뿐, <b>회전과 &lsquo;기준선과의 외적&rsquo;을 곱한 행렬</b>이라는 구조는 같다.</p>
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>직선의 벡터 표현과 &lsquo;점이 선 위에 있다&rsquo;의 식 (19 · 20p)</h3>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-exam">기말</span>직선의 벡터 표현과 &lsquo;점이 선 위에 있다&rsquo;의 식 (19 · 20p)</h3>
   <p>직선 <span class="tex">ax+by+c=0</span>은 계수만 모아 벡터 <span class="tex">l=[a\;b\;c]^\top</span>로 쓸 수 있다. 점 <span class="tex">x</span>를 동차 좌표 <span class="tex">[x\;y\;1]^\top</span>로 쓰면, <b>점 <span class="tex">x</span>가 직선 <span class="tex">l</span> 위에 있다</b>는 말은 곧</p>
   <div class="fx"><div class="tex-d">x^\top l=ax+by+c=0</div></div>
   <p>이다(19p의 &ldquo;<span class="tex">x^\top l=\;?</span>&rdquo;의 답이 0). 20p는 두 식을 잇는다. 오른쪽 점 <span class="tex">x'</span>이 선 <span class="tex">l'</span> 위에 있으니 <span class="tex">x'^\top l'=0</span>이고, <span class="tex">Ex=l'</span>이므로 <span class="tex">l'</span> 자리에 <span class="tex">Ex</span>를 넣는다.</p>
   <div class="fx"><div class="tex-d">x'^\top l'=0\;\;\text{그리고}\;\;Ex=l'\quad\Longrightarrow\quad x'^\top E\,x=0\qquad\text{(Longuet-Higgins 1981)}</div></div>
+  <div class="tip"><b>기말 대비</b> &mdash; &lsquo;<span class="tex">x'^\top Ex=0</span>을 유도하라&rsquo;처럼 행렬식으로 쓰는 문제가 나올 수 있다. 세 줄로 쓴다. ① 점이 선 위에 있다 ⇔ <span class="tex">x^\top l=0</span> ② 점에 E를 곱하면 상대 영상의 선: <span class="tex">l'=Ex</span> ③ <span class="tex">x'^\top l'=0</span>에 ②를 넣는다 → <span class="tex">x'^\top Ex=0</span>.</div>
 </div>
 
 <div class="pt gyo">
@@ -667,8 +691,8 @@ table.acc{min-width:0}
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>본질 행렬 vs 호모그래피 (22p)</h3>
-  <p>둘 다 3×3 행렬이지만 하는 일이 다르다.</p>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-flip">플립러닝</span><span class="bdg bdg-exam">기말</span>본질 행렬 vs 호모그래피 (22p)</h3>
+  <p>둘 다 3×3 행렬이고 식 모양(<span class="tex">Ex</span>, <span class="tex">Hx</span>)도 닮아서 헷갈리기 쉽다. 강의에서 정리한 차이는 이렇다. 호모그래피는 점을 받아 상대 영상의 <b>점</b>을 바로 내놓는다. 본질 행렬도 점을 받지만, 그 점으로 <b>선</b>을 만든다 &mdash; 그 선이 <span class="tex">l'</span>이고, 짝은 그 선 위 어딘가에 있다.</p>
   <div class="tbl-wrap">
   <table>
     <thead><tr><th></th><th>본질 행렬 E</th><th>호모그래피 H (7주차)</th></tr></thead>
@@ -679,6 +703,7 @@ table.acc{min-width:0}
     </tbody>
   </table>
   </div>
+  <div class="tip"><b>서술형 답안 뼈대</b> &mdash; &ldquo;둘 다 3×3 행렬이다. 호모그래피는 장면이 평면이거나 카메라가 회전만 한다고 가정하고, 한 영상의 점을 다른 영상의 <b>점</b>으로 옮긴다(<span class="tex">x'=Hx</span>). 본질 행렬은 일반 3차원 장면에서 깊이를 모르기 때문에, 한 영상의 점을 다른 영상의 <b>에피폴라 선</b>으로 옮긴다(<span class="tex">l'=Ex</span>, <span class="tex">x'^\top Ex=0</span>). 그래서 호모그래피는 대응점을 바로 주고, 본질 행렬은 대응점을 찾을 범위를 선 하나로 좁혀 준다.&rdquo;</div>
 </div>
 
 <div class="pt plus">
@@ -687,8 +712,8 @@ table.acc{min-width:0}
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>본질 행렬의 가정 — 보정된 카메라 (23p)</h3>
-  <p>본질 행렬은 <b>점들이 카메라 좌표축에 맞춰져 있다(calibrated camera)</b>고 가정한다. 즉 내부 파라미터 <span class="tex">K</span>를 이미 알고 있어서 픽셀 좌표를 카메라 좌표로 바꿔 놓은 상태라야 한다.</p>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-flip">플립러닝</span>본질 행렬의 가정 — 보정된 카메라 (23p)</h3>
+  <p>본질 행렬은 <b>점들이 카메라 좌표축에 맞춰져 있다(calibrated camera)</b>고 가정한다. 즉 내부 파라미터 <span class="tex">K</span>를 이미 알고 있어서 픽셀 좌표를 카메라 좌표로 바꿔 놓은 상태라야 한다. 강의 표현으로는 &lsquo;카메라 좌표축에 맞춰진 점들끼리 대응시킨다&rsquo;는 전제가 깔려 있다. 실제 사진의 픽셀 좌표를 그대로 넣으면 이 전제가 깨진다.</p>
 </div>
 </section>
 
@@ -713,13 +738,14 @@ table.acc{min-width:0}
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>내부 행렬이 단위 행렬이 아니라면? (24 · 25p)</h3>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-flip">플립러닝</span>내부 행렬이 단위 행렬이 아니라면? (24 · 25p)</h3>
   <p><span class="hi">기본 행렬(fundamental matrix)은 본질 행렬에서 &lsquo;보정된 카메라&rsquo; 가정을 없앤 일반화다.</span> 본질 행렬은 카메라 좌표계로 표현한 2D 점 <span class="tex">\hat x</span>에 작용한다: <span class="tex">\hat x'^\top E\hat x=0</span>. 카메라 점과 영상(픽셀) 점은 내부 행렬 <span class="tex">K</span>로 이어진다(<a class="ext" href="computer-vision-week02-2.html">2주차 카메라 모델</a>).</p>
   <div class="fx">
     <div class="tex-d">\hat x=K^{-1}x,\qquad \hat x'=K'^{-1}x'\qquad(\hat x:\text{카메라 점},\;x:\text{영상 점})</div>
     <div class="tex-d">x'^\top K'^{-\top}EK^{-1}x=0\;\;\Longrightarrow\;\;x'^\top(K'^{-\top}EK^{-1})x=0\;\;\Longrightarrow\;\;x'^\top F\,x=0</div>
     <p class="fx-note">첫 식을 <span class="tex">\hat x'^\top E\hat x=0</span>에 넣으면 <span class="tex">(K'^{-1}x')^\top E(K^{-1}x)=x'^\top K'^{-\top}EK^{-1}x</span>가 된다. 가운데 세 행렬을 묶은 것이 <span class="tex">F</span>다. 교안의 한 줄 &mdash; <b>F는 픽셀을 에피폴라 선으로 보낸다(it maps pixels to epipolar lines).</b></p>
   </div>
+  <p>강의의 설명을 이으면 이렇다. 픽셀 좌표를 자유롭게 쓰려면 카메라의 <b>내부 파라미터</b>를 식 안에 넣어야 하고, 그것까지 담은 행렬이 기본 행렬이다. 보정 과정을 따로 거치지 않아도 되게 만든 것이다. 여기서 <span class="tex">K</span>는 초점 거리 · 주점 · 화소 비율을 담은 <b>내부 파라미터 행렬</b>이다. 전역(world) 좌표계가 아니다 &mdash; 전역 좌표계와 카메라를 잇는 것은 외부 파라미터 <span class="tex">R</span>, <span class="tex">t</span>다. 식의 모양은 E 자리에 F가 들어갈 뿐 그대로이므로, 실제로 중요한 것은 <b>F를 어떻게 구하느냐</b>다(04절).</p>
 </div>
 
 <div class="pt gyo">
@@ -793,7 +819,8 @@ table.acc{min-width:0}
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>대응점 하나는 식 하나를 준다 (28 · 29p)</h3>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-flip">플립러닝</span>대응점 하나는 식 하나를 준다 (28 · 29p)</h3>
+  <p>F를 구하려면 먼저 두 영상의 <b>대응점</b>이 있어야 한다. 대응점을 찾는 과정은 <a class="ext" href="computer-vision-week06.html#sift">6주차 SIFT</a> · <a class="ext" href="computer-vision-week07.html#matcher">7주차 특징 매칭</a>과 똑같다 &mdash; 특징점을 검출하고 기술자로 짝을 짓는다. 이렇게 얻은 짝을 재료로 두 영상의 관계(F)를 계산하는 것이 8점 알고리즘이다.</p>
   <p>짝지은 영상 점 <span class="tex">\{x_m,x'_m\},\;m=1,\dots,M</span>이 있다고 하자. 각 짝은 <span class="tex">x_m'^\top Fx_m=0</span>을 만족해야 한다. 3×3 F를 어떻게 구하나? &mdash; <b>미지수 9개의 동차 선형 시스템</b>을 세운다.</p>
   <div class="fx">
     <div class="tex-d">\begin{bmatrix}x'_m&amp;y'_m&amp;1\end{bmatrix}\begin{bmatrix}f_1&amp;f_2&amp;f_3\\f_4&amp;f_5&amp;f_6\\f_7&amp;f_8&amp;f_9\end{bmatrix}\begin{bmatrix}x_m\\y_m\\1\end{bmatrix}=0</div>
@@ -803,16 +830,17 @@ table.acc{min-width:0}
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>M×9 시스템과 전체 최소제곱 (30 · 31p)</h3>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-flip">플립러닝</span>M×9 시스템과 전체 최소제곱 (30 · 31p)</h3>
   <div class="fx">
     <div class="tex-d">\underbrace{\begin{bmatrix}x_1x'_1&amp;x_1y'_1&amp;x_1&amp;y_1x'_1&amp;y_1y'_1&amp;y_1&amp;x'_1&amp;y'_1&amp;1\\ \vdots&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;\vdots\\ x_Mx'_M&amp;x_My'_M&amp;x_M&amp;y_Mx'_M&amp;y_My'_M&amp;y_M&amp;x'_M&amp;y'_M&amp;1\end{bmatrix}}_{A\;(M\times9)}\begin{bmatrix}f_1\\ \vdots\\ f_9\end{bmatrix}=\mathbf 0</div>
     <div class="tex-d">A\mathbf x=\mathbf 0\qquad\Longrightarrow\qquad\text{minimize }\lVert A\mathbf x\rVert^2\quad\text{subject to }\lVert\mathbf x\rVert^2=1\quad(\text{Total Least Squares})</div>
     <p class="fx-note">F는 배율이 자유롭다(F와 2F는 같은 선을 준다). 그래서 미지수 9개 중 의미 있는 것은 8개 &mdash; <b>8쌍</b>이면 정해진다(그래서 &lsquo;8점&rsquo;). 잡음이 있으면 정확히 0이 되는 해가 없으므로, <span class="tex">\lVert\mathbf x\rVert=1</span>로 0벡터를 막은 뒤 <span class="tex">\lVert A\mathbf x\rVert^2</span>를 최소화한다. <a class="ext" href="computer-vision-week07.html#dlt">7주차 DLT(<span class="tex">A\mathbf h=0</span>)</a>와 똑같은 문제다.</p>
   </div>
+  <p>8쌍은 F를 정하는 데 필요한 <b>최소</b> 개수다. 대응점이 꼭 8쌍이어야 하는 것은 아니고, 실제로는 잡음을 견디려고 8쌍보다 <b>많은</b> 짝을 넣어 최소제곱으로 푼다. 교안이 짝의 개수를 8이 아니라 <span class="tex">M</span>으로 적는 이유다.</p>
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>알고리즘 한 장 정리 (32p)</h3>
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span><span class="bdg bdg-flip">플립러닝</span><span class="bdg bdg-exam">기말</span>알고리즘 한 장 정리 (32p)</h3>
   <div class="flow">
     <div class="fl"><b>0. (점 정규화)</b><span>Normalize points</span></div>
     <div class="fl"><b>1. M×9 행렬 A를 만든다</b><span>짝마다 한 행</span></div>
@@ -822,15 +850,31 @@ table.acc{min-width:0}
     <div class="fl"><b>5. (정규화를 되돌린다)</b><span>Un-normalize F</span></div>
   </div>
   <p>교안에서 0 · 4 · 5단계는 <b>초록색 괄호</b>로 따로 표시되어 있다. 핵심 1~3단계에 덧붙이는 &lsquo;실전용&rsquo; 단계라는 뜻이다.</p>
+  <p>0단계의 정규화는 강의에서 이렇게 설명했다. A의 <b>열마다 값의 크기 차이가 매우 크다</b>(<span class="tex">xx'</span> 열은 수만~수십만, 마지막 열은 1). 이 차이가 계산 오차를 키우므로, 먼저 점 좌표를 비슷한 크기로 맞춰 오차를 줄인다.</p>
+  <div class="tip"><b>기말 대비 &mdash; &lsquo;8점 알고리즘의 단계를 서술하시오&rsquo;</b><br>0. 두 영상의 점을 각각 정규화한다(무게중심을 원점으로, 크기를 비슷하게) &mdash; 열 사이 크기 차이로 생기는 수치 오차를 줄인다.<br>1. 대응점 한 쌍마다 <span class="tex">x'^\top Fx=0</span>을 전개한 한 행을 만들어 M×9 행렬 A를 쌓는다.<br>2. <span class="tex">A=U\Sigma V^\top</span>로 SVD 한다.<br>3. 가장 작은 특이값에 대응하는 V의 열(9개 값)을 3×3으로 접어 F로 삼는다 &mdash; <span class="tex">\lVert\mathbf f\rVert=1</span>에서 <span class="tex">\lVert A\mathbf f\rVert</span>를 최소로 하는 해다.<br>4. F를 다시 SVD 해 가장 작은 특이값을 0으로 바꿔 rank 2로 만든다 &mdash; 모든 에피폴라 선이 한 에피폴에서 만나게 한다.<br>5. 정규화를 되돌린다: <span class="tex">F=T'^\top\hat FT</span>.</div>
 </div>
 
 <div class="pt plus">
   <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>괄호 속 세 단계는 왜 필요한가</h3>
   <ul class="ul">
     <li><b>0 · 5. 정규화(Hartley)</b> &mdash; 픽셀 좌표는 수백 단위다. 그래서 A의 한 행에 <span class="tex">x x'\approx10^5</span>와 <span class="tex">1</span>이 함께 들어가 숫자 크기가 10만 배 차이 난다. 그러면 SVD가 수치적으로 불안정해진다. 점들을 무게중심이 원점, 평균 거리가 <span class="tex">\sqrt2</span>가 되게 옮기고 줄인 뒤(<span class="tex">T,\,T'</span>) F를 구하고, 마지막에 <span class="tex">F=T'^\top\hat FT</span>로 되돌린다. 개선문 예제의 F에 −0.003과 −9999.79가 함께 들어 있는 것이 바로 픽셀 좌표 F의 이 크기 차이다</li>
-    <li><b>4. rank 2 강제</b> &mdash; 02절 보충설명처럼 진짜 F는 <span class="tex">Fe=0</span>이라 rank 2다. 잡음이 섞인 SVD 해는 보통 rank 3이라 에피폴라 선들이 한 점에서 만나지 않는다. F를 다시 SVD 해서 <b>가장 작은 특이값을 0으로</b> 바꾸고 곱해 되돌리면, 가장 가까운 rank 2 행렬이 된다</li>
+    <li><b>4. rank 2 강제</b> &mdash; 02절 보충설명처럼 진짜 F는 <span class="tex">Fe=0</span>이라 rank 2다. 잡음이 섞인 SVD 해는 보통 rank 3이라 에피폴라 선들이 한 점에서 만나지 않는다. 고치는 방법은 바로 아래 상자에 단계별로 풀었다</li>
     <li><b>잘못된 짝이 섞이면</b> &mdash; 최소제곱이라 이상치 하나에 무너진다. 실무에서는 <a class="ext" href="computer-vision-week07.html#ransac">7주차 RANSAC</a>으로 8쌍씩 뽑아 F를 세우고 인라이어(<span class="tex">|x'^\top Fx|</span>가 작은 짝)를 세서 고른다 &mdash; OpenCV <code>cv2.findFundamentalMat(pts1, pts2, cv2.FM_RANSAC)</code>이 그것이다</li>
+    <li><b>8쌍보다 적으면?</b> &mdash; rank 2 조건(<span class="tex">\det F=0</span>)까지 식으로 넣으면 <b>7쌍</b>으로도 풀린다(7점 알고리즘, 해가 1개 또는 3개 나온다). K를 아는 보정된 카메라라면 E를 <b>5쌍</b>으로 구하는 5점 알고리즘도 있다</li>
   </ul>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>rank 2 강제 &mdash; <span class="tex">\min\lVert F-F'\rVert</span>를 풀어 쓰면</h3>
+  <p>3단계에서 얻은 행렬을 <span class="tex">F</span>라 하자. 잡음 때문에 보통 rank 3이다. 하고 싶은 일은 <b>rank 2인 행렬 가운데 <span class="tex">F</span>와 가장 가까운 <span class="tex">F'</span></b>을 찾는 것이다.</p>
+  <div class="fx"><div class="tex-d">\min_{F'}\lVert F-F'\rVert_F\quad\text{s.t.}\quad\det F'=0</div>
+  <p class="fx-note"><span class="tex">\lVert\cdot\rVert_F</span>는 프로베니우스 노름이다 &mdash; 9개 원소의 차이를 각각 제곱해 더하고 제곱근을 씌운 값으로, &lsquo;두 행렬이 원소 단위로 얼마나 다른가&rsquo;를 잰다. <span class="tex">\det F'=0</span>은 rank가 3보다 작다는 조건이다.</p></div>
+  <div class="flow">
+    <div class="fl"><span class="fl-n">1</span><div><h4>F를 SVD 한다</h4><p><span class="tex">F=U\,\mathrm{diag}(\sigma_1,\sigma_2,\sigma_3)\,V^\top</span>, <span class="tex">\sigma_1\ge\sigma_2\ge\sigma_3\ge0</span>. 0이 아닌 특이값의 개수가 rank다. 잡음 때문에 <span class="tex">\sigma_3</span>가 0이 아닌 작은 값으로 남아 있다</p></div></div>
+    <div class="fl"><span class="fl-n">2</span><div><h4>가장 작은 특이값만 0으로</h4><p><span class="tex">F'=U\,\mathrm{diag}(\sigma_1,\sigma_2,0)\,V^\top</span>. 특이값이 둘만 남으니 rank 2다</p></div></div>
+    <div class="fl"><span class="fl-n">3</span><div><h4>이것이 가장 가까운 이유</h4><p><span class="tex">U</span>, <span class="tex">V</span>는 직교 행렬(회전)이라 곱해도 프로베니우스 노름이 바뀌지 않는다. 그래서 <span class="tex">\lVert F-F'\rVert_F=\lVert\mathrm{diag}(0,0,\sigma_3)\rVert_F=\sigma_3</span>이다. rank를 하나 줄이려면 특이값 하나를 없애야 하고, 가장 작은 것을 없앨 때 바뀌는 양이 가장 적다(Eckart–Young 정리)</p></div></div>
+  </div>
+  <p>결과적으로 <span class="tex">F'</span>은 원래 추정치를 거의 건드리지 않으면서 <span class="tex">F'e=0</span>을 만족하는 <span class="tex">e</span>(에피폴)를 갖게 된다. 그림으로 보면, 한 점에서 만나지 않고 흩어지던 에피폴라 선들이 <b>한 에피폴로 모이도록</b> 살짝 고쳐진다.</p>
 </div>
 </section>
 
