@@ -554,7 +554,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>3주차에서 가져오는 것</h3>
+  <h3 class="pt-h" data-sref="1부 3p,2부 3p"><span class="bdg bdg-gyo">교안</span>3주차에서 가져오는 것</h3>
   <div class="fx" style="margin-top:0">
     <p class="fx-lab">선형회귀 핵심 복습</p>
     <div class="tex-d">\hat y_i=w_0+w_1x_i,\qquad L(\mathbf w)=\frac1N\sum_{i=1}^{N}(\hat y_i-y_i)^2,\qquad w_0\leftarrow w_0-\alpha\frac{\partial L(\mathbf w)}{\partial w_0},\qquad \hat y_i=\mathbf w^{\mathsf T}\mathbf x_i</div>
@@ -563,7 +563,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>분류(Classification)란</h3>
+  <h3 class="pt-h" data-sref="1부 4p"><span class="bdg bdg-gyo">교안</span>분류(Classification)란</h3>
   <p>특성 값의 집합으로 설명되는 개체의 <b>소속 클래스 / 카테고리를 예측</b>하는 작업이다. 클래스는 미리 정해져 있고, 모든 개체는 그중 하나에 속한다고 본다.</p>
   <ul class="ul">
     <li>학습 데이터 <span class="tex">\mathcal D=\{(\mathbf x_i,y_i)\}_{i=1}^N,\;y_i\in\{C_1,\dots,C_K\}</span> — 회귀와 달리 <span class="tex">y_i</span> 는 실수 전체가 아니라 <b>정해진 레이블 중 하나</b></li>
@@ -572,7 +572,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </div>
 
 <div class="pt flip">
-  <h3 class="pt-h"><span class="bdg bdg-flip">플립러닝</span>이번 주 내내 다루는 것은 &lsquo;이진(바이너리) 분류&rsquo;</h3>
+  <h3 class="pt-h" data-sref="1부 4p"><span class="bdg bdg-flip">플립러닝</span>이번 주 내내 다루는 것은 &lsquo;이진(바이너리) 분류&rsquo;</h3>
   <p>모든 개체가 <b><span class="tex">C_1</span> 아니면 <span class="tex">C_2</span></b> 둘 중 하나에 속하는 상황만 다룬다. 스팸메일 여부, 대학생 여부, 구매 여부처럼 <b>예 / 아니오</b>로 답이 갈리는 문제다. 레이블은 <span class="tex">\{C_1=1,\;C_2=0\}</span> 으로 적는다.</p>
   <p>그래서 확률 하나만 구하면 끝난다. <span class="tex">P(C_1\mid\mathbf x)</span> 를 알면 나머지는 <span class="tex">P(C_2\mid\mathbf x)=1-P(C_1\mid\mathbf x)</span> 로 자동으로 정해지기 때문이다. <b>0.5보다 크면 <span class="tex">C_1</span></b> 이 기본 결정 규칙이 된다.</p>
 </div>
@@ -593,7 +593,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>개체 하나를 숫자 벡터로</h3>
+  <h3 class="pt-h" data-sref="1부 5p,1부 6p"><span class="bdg bdg-gyo">교안</span>개체 하나를 숫자 벡터로</h3>
   <ul class="ul">
     <li><b>특징 벡터</b> — 모든 개체를 같은 특징으로 설명할 때, 개별 관측값을 늘어놓은 벡터</li>
     <li>학과를 숫자로 부호화(인공지능학과 1, 기계공학과 2, 수학과 3, 물리학과 4)한 뒤, 홍길동(인공지능학과, 평점 3.8) = <span class="tex">[1\;\;3.8]^{\mathsf T}</span>, 성춘향(수학과, 4.0) = <span class="tex">[3\;\;4.0]^{\mathsf T}</span></li>
@@ -623,12 +623,12 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>구분선은 하나로 정해지지 않는다</h3>
+  <h3 class="pt-h" data-sref="1부 7p"><span class="bdg bdg-gyo">교안</span>구분선은 하나로 정해지지 않는다</h3>
   <p>&lsquo;정수론&rsquo; 수강 여부 예제에서 인공지능학과 3명 <span class="tex">[1\;2.2],[1\;3.8],[1\;3.9]</span> 은 미수강(<b>0</b>), 수학과 3명 <span class="tex">[3\;2.2],[3\;4.0],[3\;3.2]</span> 는 수강(<b>1</b>)이다. 이 여섯 점을 가르는 선은 <b>하나가 아니라 여러 개</b>를 그을 수 있다(교안의 구분선 1, 2). 그래서 &ldquo;어떤 선이 더 나은가&rdquo;를 정하는 기준이 필요해진다.</p>
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>확률로 분류하기 — 사후 확률과 베이즈 규칙</h3>
+  <h3 class="pt-h" data-sref="1부 8p,1부 9p"><span class="bdg bdg-gyo">교안</span>확률로 분류하기 — 사후 확률과 베이즈 규칙</h3>
   <p>체조 동아리 회원(<span class="tex">C_1</span>)과 비회원(<span class="tex">C_2</span>)의 몸무게 분포를 안다면, 52kg인 학생은 어느 쪽일까? 이때 쓰는 것이 <b>사후 확률</b> <span class="tex">P(C_1\mid x)</span> — <span class="tex">x</span> 를 관찰한 <b>뒤</b> 소속이 <span class="tex">C_1</span> 일 가능성을 나타내는 조건부 확률이다.</p>
   <div class="fx">
     <p class="fx-lab">베이즈 규칙 (2주차 확률 복습)</p>
@@ -672,7 +672,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>선형 판별 함수 — 값이 아니라 부호를 본다</h3>
+  <h3 class="pt-h" data-sref="1부 10p,1부 11p,1부 12p,1부 15p"><span class="bdg bdg-gyo">교안</span>선형 판별 함수 — 값이 아니라 부호를 본다</h3>
   <div class="fx" style="margin-top:0">
     <p class="fx-lab">Linear discriminant function</p>
     <div class="tex-d">g(\mathbf x)=\mathbf w\cdot\mathbf x=\mathbf w^{\mathsf T}\mathbf x=w_0+w_1x_1+\cdots+w_dx_d\qquad(x_0=1)</div>
@@ -683,7 +683,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>예제로 확인 — 정수론 수강생</h3>
+  <h3 class="pt-h" data-sref="1부 13p,1부 14p"><span class="bdg bdg-gyo">교안</span>예제로 확인 — 정수론 수강생</h3>
   <div class="ex" style="margin-top:0">
     <p class="ex-q"><em>교안 13p</em> <span class="tex">g(\mathbf x)=20x_1+3x_2-36</span>, 즉 <span class="tex">\mathbf w=[-36\;\;20\;\;3]^{\mathsf T}</span> (<span class="tex">x_1</span> 학과, <span class="tex">x_2</span> 학점)</p>
     <div class="step"><i>①</i><div><span class="tex">\mathbf x_2=[1\;\;3.8]^{\mathsf T}</span>: <span class="tex">20+11.4-36=-4.6&lt;0</span> → 미수강</div></div>
@@ -716,7 +716,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>로지스틱(시그모이드) 함수</h3>
+  <h3 class="pt-h" data-sref="1부 16p,1부 17p"><span class="bdg bdg-gyo">교안</span>로지스틱(시그모이드) 함수</h3>
   <div class="fx" style="margin-top:0">
     <p class="fx-lab">정의와 미분</p>
     <div class="tex-d">\sigma(x)=\frac{1}{1+e^{-x}}=\frac{e^x}{1+e^x},\qquad \frac{d}{dx}\sigma(x)=\sigma(x)\bigl(1-\sigma(x)\bigr)</div>
@@ -750,7 +750,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </svg></div><figcaption>선형 점수 <span class="tex">z=\mathbf w^{\mathsf T}\mathbf x</span> 가 양수면 확률이 0.5보다 크고, 음수면 작다 — 4.4의 부호 규칙이 그대로 확률 규칙이 된다</figcaption></figure>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>오드(Odds)와 로그 오드(Log-odds)</h3>
+  <h3 class="pt-h" data-sref="2부 4p"><span class="bdg bdg-gyo">교안</span>오드(Odds)와 로그 오드(Log-odds)</h3>
   <div class="fx" style="margin-top:0">
     <div class="tex-d">\text{odds}=\frac{p}{1-p},\qquad \text{logit}(p)=\ln\frac{p}{1-p}</div>
     <p class="fx-note">· 공정한 주사위에서 3의 배수가 <b>아닌</b> 눈이 나올 확률은 <span class="tex">p=2/3</span> → 오드는 <span class="tex">\frac{2/3}{1/3}=2</span>. &ldquo;일어날 가능성이 안 일어날 가능성의 <b>2배</b>&rdquo;라는 뜻이다<br>
@@ -760,7 +760,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </div>
 
 <div class="pt plus">
-  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>로짓 변환이란 — 확률 축을 실수 축으로 펴는 일</h3>
+  <h3 class="pt-h" data-sref="2부 4p"><span class="bdg bdg-plus">보충설명</span>로짓 변환이란 — 확률 축을 실수 축으로 펴는 일</h3>
   <p><b>로짓 변환</b>은 확률 <span class="tex">p</span> 를 <span class="tex">\ln\frac{p}{1-p}</span> 로 바꾸는 것이다. 0과 1 사이에 눌려 있던 값이 <b>−∞부터 ∞까지 쭉 펴진다</b>. <span class="tex">p=0.5</span> 가 0, <span class="tex">p</span> 가 1에 가까우면 +∞, 0에 가까우면 −∞로 간다.</p>
   <ul class="ul">
     <li><b>시그모이드와 정확히 반대</b>다 — 로짓은 확률 → 실수, 시그모이드는 실수 → 확률. 즉 <span class="tex">\text{logit}(\sigma(z))=z</span> 로 <b>서로 역함수</b>다</li>
@@ -832,7 +832,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>모델 유도 — 로그 오드를 선형으로 놓으면 시그모이드가 나온다</h3>
+  <h3 class="pt-h" data-sref="2부 5p,2부 6p"><span class="bdg bdg-gyo">교안</span>모델 유도 — 로그 오드를 선형으로 놓으면 시그모이드가 나온다</h3>
   <p>이진 분류에는 두 갈래가 있다. <b>접근법 1</b>은 두 클래스를 구분하도록 특징 공간을 자르는 것(4.4), <b>접근법 2</b>는 <span class="tex">P(C_1\mid\mathbf x)</span> 와 <span class="tex">P(C_2\mid\mathbf x)</span> 를 비교해 레이블을 정하는 것이다. 로지스틱 회귀는 <b>접근법 2</b>를 쓰되, 그 확률을 직접 만들어 낸다.</p>
   <div class="ex" style="margin-top:2px">
     <p class="ex-q"><em>교안 6p 전개</em> <span class="tex">\ln\dfrac{P(C_1\mid\mathbf x)}{1-P(C_1\mid\mathbf x)}=\mathbf w^{\mathsf T}\mathbf x</span> 를 <span class="tex">P(C_1\mid\mathbf x)</span> 에 대해 풀면?</p>
@@ -844,13 +844,13 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </div>
 
 <div class="pt flip">
-  <h3 class="pt-h"><span class="bdg bdg-flip">플립러닝</span>&ldquo;로지스틱 회귀에서는 로그 오드를 선형 함수로 표현한다&rdquo;</h3>
+  <h3 class="pt-h" data-sref="2부 6p"><span class="bdg bdg-flip">플립러닝</span>&ldquo;로지스틱 회귀에서는 로그 오드를 선형 함수로 표현한다&rdquo;</h3>
   <p>이 한 문장이 모델 전체다. 확률을 바로 선형식으로 쓰려 하면 0~1을 벗어나 버리니까, <b>확률 → 로그 오드로 한 번 바꿔서</b> 선형식과 크기를 맞춘 것이다. 그리고 그 식을 확률로 되돌리면 자동으로 <b>시그모이드</b>가 튀어나온다.</p>
   <p>정리하면 <b>로그 오드 = <span class="tex">\mathbf w^{\mathsf T}\mathbf x</span> ⟺ 확률 = <span class="tex">\sigma(\mathbf w^{\mathsf T}\mathbf x)</span></b> 로, 같은 말을 두 방향으로 쓴 것뿐이다.</p>
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>베르누이 분포로 레이블 확률을 한 줄에</h3>
+  <h3 class="pt-h" data-sref="2부 7p"><span class="bdg bdg-gyo">교안</span>베르누이 분포로 레이블 확률을 한 줄에</h3>
   <div class="fx" style="margin-top:0">
     <p class="fx-lab">베르누이 분포 → 레이블의 조건부 확률</p>
     <div class="tex-d">P(X=x)=p^{x}(1-p)^{1-x},\;x\in\{0,1\}\qquad\Longrightarrow\qquad P(y_i\mid\mathbf x_i)=\sigma(\mathbf w^{\mathsf T}\mathbf x_i)^{y_i}\bigl(1-\sigma(\mathbf w^{\mathsf T}\mathbf x_i)\bigr)^{1-y_i}</div>
@@ -869,7 +869,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>우도(Likelihood)와 음의 로그 우도</h3>
+  <h3 class="pt-h" data-sref="2부 8p"><span class="bdg bdg-gyo">교안</span>우도(Likelihood)와 음의 로그 우도</h3>
   <div class="fx" style="margin-top:0">
     <p class="fx-lab">학습 데이터 전체의 우도 (단순 로지스틱 — <span class="tex">x_i</span> 가 실수 하나인 경우)</p>
     <div class="tex-d">\ell(w_0,w_1)=\prod_{i=1}^{N}P(y_i\mid x_i)=\prod_{i=1}^{N}\sigma(w_0+w_1x_i)^{y_i}\bigl(1-\sigma(w_0+w_1x_i)\bigr)^{1-y_i}</div>
@@ -878,7 +878,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </div>
 
 <div class="pt flip">
-  <h3 class="pt-h"><span class="bdg bdg-flip">플립러닝</span>클수록 좋은 것과 작을수록 좋은 것</h3>
+  <h3 class="pt-h" data-sref="2부 8p,2부 9p"><span class="bdg bdg-flip">플립러닝</span>클수록 좋은 것과 작을수록 좋은 것</h3>
   <ul class="ul">
     <li><b>우도는 각 조건부 확률의 곱</b>이므로, <b>값이 클수록</b> 데이터를 잘 설명하는 모델이다 → 선호</li>
     <li><b>Negative log likelihood</b> <span class="tex">-\ln\ell(w_0,w_1)</span> 는 우도 로그값의 음수이므로, <b>작을수록</b> 좋다 → 선호</li>
@@ -930,7 +930,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </svg></div><figcaption>정답이 1인데 모델이 0.9라고 하면 손실 0.105, 0.5면 0.693, 0.1이라고 <b>자신 있게 틀리면</b> 2.303 — 틀린 확신에 큰 벌점을 주는 것이 CE의 성격</figcaption></figure>
 
 <div class="pt plus">
-  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>argmin이 무슨 뜻인가 — 값이 아니라 &lsquo;자리&rsquo;</h3>
+  <h3 class="pt-h" data-sref="2부 11p"><span class="bdg bdg-plus">보충설명</span>argmin이 무슨 뜻인가 — 값이 아니라 &lsquo;자리&rsquo;</h3>
   <p><span class="tex">\min_{\mathbf w}L(\mathbf w)</span> 는 손실의 <b>가장 작은 값</b>이고, <span class="tex">\operatorname*{argmin}_{\mathbf w}L(\mathbf w)</span> 는 그 값을 만드는 <b><span class="tex">\mathbf w</span> 자체</b>다. 산에서 가장 낮은 지점의 <b>높이</b>가 min이라면, 그 지점의 <b>좌표</b>가 argmin이다.</p>
   <ul class="ul">
     <li><b>왜 쓰나</b> — 우리가 원하는 것은 손실 수치가 아니라 <b>그 손실을 내는 가중치</b>다. 그래서 학습 목표를 <span class="tex">\mathbf w^*=\operatorname*{argmin}_{\mathbf w}L(\mathbf w)</span> 한 줄로 적는다</li>
@@ -950,7 +950,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>외워 둘 수식꼴 — 편미분 결과와 갱신식</h3>
+  <h3 class="pt-h" data-sref="2부 10p,2부 12p"><span class="bdg bdg-gyo">교안</span>외워 둘 수식꼴 — 편미분 결과와 갱신식</h3>
   <div class="fx" style="margin-top:0">
     <p class="fx-lab">교안 10p — 단순 로지스틱의 편미분과 갱신</p>
     <div class="tex-d">\frac{\partial L}{\partial w_0}=-\frac1N\sum_{i=1}^{N}\bigl\{y_i-\sigma(w_0+w_1x_i)\bigr\},\qquad \frac{\partial L}{\partial w_1}=-\frac1N\sum_{i=1}^{N}x_i\bigl(y_i-\sigma(w_0+w_1x_i)\bigr)</div>
@@ -976,7 +976,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>경사하강법의 적용 I과 II</h3>
+  <h3 class="pt-h" data-sref="2부 13p,2부 14p,2부 15p"><span class="bdg bdg-gyo">교안</span>경사하강법의 적용 I과 II</h3>
   <div class="tbl-wrap" style="margin-top:2px">
   <table>
     <thead><tr><th></th><th>적용 I — 배치 (교안 13 · 14p)</th><th>적용 II — 개별 관측값 (교안 15p)</th></tr></thead>
@@ -992,7 +992,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </div>
 
 <div class="pt flip">
-  <h3 class="pt-h"><span class="bdg bdg-flip">플립러닝</span>학습은 결국 이 네 걸음의 반복</h3>
+  <h3 class="pt-h" data-sref="2부 11p,2부 13p"><span class="bdg bdg-flip">플립러닝</span>학습은 결국 이 네 걸음의 반복</h3>
   <div class="flow" style="margin-top:2px">
     <div class="fl"><div class="fl-n">1</div><div><h4>목표를 세운다</h4><p><span class="tex">\mathbf w^*=\operatorname*{argmin}_{\mathbf w}L(\mathbf w)</span> — 크로스 엔트로피를 가장 작게 만드는 가중치를 찾는다</p></div></div>
     <div class="fl"><div class="fl-n">2</div><div><h4>편미분을 수행한다</h4><p>인자마다 <span class="tex">\frac{\partial L}{\partial w_k}</span> 를 구한다 — 그 인자를 조금 움직였을 때 손실이 어느 쪽으로 얼마나 변하는지</p></div></div>
@@ -1197,7 +1197,7 @@ document.addEventListener('DOMContentLoaded', function () {
       bNext = lb.querySelector('.next'),
       bX = lb.querySelector('.x');
 
-  var idx = -1, openedIdx = -1, savedY = 0, pushed = false, prevRestore = null;
+  var idx = -1, openedIdx = -1, savedY = 0, pushed = false, prevRestore = null, fromRef = false;
 
   function lock() {
     savedY = window.pageYOffset || document.documentElement.scrollTop || 0;
@@ -1221,7 +1221,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.style.left = '';
     document.body.style.right = '';
     document.body.style.width = '';
-    var target = (idx >= 0 && idx !== openedIdx) ? slides[idx] : null;
+    /* 개념 카드의 썸네일로 연 경우에는 넘겨 봤어도 읽던 자리로 돌아간다 */
+    var target = (!fromRef && idx >= 0 && idx !== openedIdx) ? slides[idx] : null;
     function place() {
       instantly(function () {
         window.scrollTo(0, savedY);
@@ -1278,6 +1279,7 @@ document.addEventListener('DOMContentLoaded', function () {
     lb.classList.remove('on');
     unlock();
     idx = openedIdx = -1;
+    fromRef = false;
     if (prevRestore !== null) {
       try { window.history.scrollRestoration = prevRestore; } catch (e) {}
       prevRestore = null;
@@ -1296,6 +1298,10 @@ document.addEventListener('DOMContentLoaded', function () {
   slides.forEach(function (f, i) {
     f.addEventListener('click', function () { open(i); });
   });
+  window.__lbOpenFig = function (f) {
+    var i = slides.indexOf(f);
+    if (i >= 0) { fromRef = true; open(i); }
+  };
 
   bPrev.addEventListener('click', function (e) { e.stopPropagation(); go(-1); });
   bNext.addEventListener('click', function (e) { e.stopPropagation(); go(1); });
@@ -1330,6 +1336,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script src="slide-ref.js?v=2"></script>
 <script src="../vendor/katex/katex.min.js"></script>
 <script>
 // .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.

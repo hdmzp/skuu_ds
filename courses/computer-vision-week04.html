@@ -539,19 +539,19 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>다운샘플링이 무엇이고, 왜 하나</h3>
+  <h3 class="pt-h" data-sref="4p"><span class="bdg bdg-gyo">교안</span>다운샘플링이 무엇이고, 왜 하나</h3>
   <p><b>다운샘플링</b>은 이미지의 해상도(가로 · 세로 픽셀 수)를 줄이는 것이다. 1024×1024를 512×512로 만드는 식이다. 가장 단순한 방법은 <b>짝수 번째 행과 열만 남기고 나머지를 버리는 것</b>(<span class="term" tabindex="0" data-tip="원래 화소 중 일부만 골라 남기는 것. 2배로 줄이려면 한 줄 건너 한 줄씩 남긴다.">서브샘플링</span>)이다.</p>
   <p>줄이는 이유는 세 가지다. <b>데이터와 연산량을 줄이려고</b>, <b>세부를 걷어내고 큰 구조만 보려고</b>, 그리고 <b>여러 크기에서 이미지를 분석하는 피라미드를 만들려고</b>다.</p>
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>그냥 버리면 생기는 문제 — 에일리어싱</h3>
+  <h3 class="pt-h" data-sref="5p,6p"><span class="bdg bdg-gyo">교안</span>그냥 버리면 생기는 문제 — 에일리어싱</h3>
   <p><b>에일리어싱</b>은 연속적인 신호를 띄엄띄엄 찍어 디지털로 바꾸는 과정에서, 샘플이 충분히 촘촘하지 않아 <b>원래와 다른 신호로 둔갑해 버리는 왜곡</b>이다. alias는 &lsquo;가명&rsquo;이라는 뜻이다.</p>
   <p>이미지에서는 가는 줄무늬나 경계가 <b>계단 모양으로 깨지고</b>, 원래 없던 <b>물결무늬(모아레)</b>가 나타난다. 중요한 건 단순히 흐려지는 게 아니라 <b>틀린 무늬가 새로 생긴다</b>는 점이다(6p 창문 무늬).</p>
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>왜 생기나 — 샘플링 정리(나이퀴스트)</h3>
+  <h3 class="pt-h" data-sref="8p,9p,10p,15p,16p"><span class="bdg bdg-gyo">교안</span>왜 생기나 — 샘플링 정리(나이퀴스트)</h3>
   <p>신호가 한 번 오르내리는 동안 <b>최소 두 번은 찍어야</b> 그 오르내림이 기록에 남는다. 한 번만 찍으면 오르내린 사실 자체가 사라져 <b>훨씬 느린 파형</b>으로 보인다(9 · 10p). 이것을 주파수로 쓴 것이 나이퀴스트 조건이다.</p>
   <div class="fx">
     <p class="fx-lab">나이퀴스트 조건</p>
@@ -562,13 +562,13 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </div>
 
 <div class="pt flip">
-  <h3 class="pt-h"><span class="bdg bdg-flip">플립러닝</span>주변에서 보이는 에일리어싱</h3>
+  <h3 class="pt-h" data-sref="11p,12p,13p"><span class="bdg bdg-flip">플립러닝</span>주변에서 보이는 에일리어싱</h3>
   <p><b>모아레</b> — 비단 섬유나 체크무늬 재킷처럼 <b>격자 · 줄무늬가 촘촘한 것</b>을 찍으면 원래 없던 물결무늬가 생긴다. 카메라 센서 간격이 그 무늬를 따라가지 못해서다.</p>
   <p><b>마차 바퀴 효과</b> — 영상은 1/30초(필름은 1/24초)마다 한 장씩 찍는다. 한 프레임 사이에 바퀴살이 <b>딱 한 칸(또는 그 정수 배)</b>을 돌면 늘 같은 자리에 찍혀 <b>멈춰 보이고</b>, <b>한 칸보다 살짝 덜</b> 돌면 옆 살이 조금 뒤쪽에 찍혀 <b>거꾸로 도는 것처럼</b> 보인다. 헬리콥터 날개가 멈춰 보이는 영상도 같은 원리다. 공간이 아니라 <b>시간축에서 나이퀴스트를 어긴</b> 에일리어싱이다.</p>
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>피하는 방법 두 가지</h3>
+  <h3 class="pt-h" data-sref="18p,19p"><span class="bdg bdg-gyo">교안</span>피하는 방법 두 가지</h3>
   <p><b>① 더 촘촘히 찍는다</b>(오버샘플링) — 나이퀴스트율 이상으로 샘플링한다. 사진을 <b>찍는 단계</b>나 렌더링에서 쓸 수 있는 방법이다.</p>
   <p><b>② 블러를 먼저 하고, 그다음 줄인다</b> — 이미 찍힌 이미지를 줄일 때 쓰는 방법이다. 가우시안 블러로 <b>줄이면 깨질 고주파를 미리 지운 뒤</b> 행 · 열을 솎아낸다. 디테일은 잃지만 <b>가짜 무늬가 생기는 것보다는 낫다</b>. 19p 비교에서 위(블러 후 축소)와 아래(그냥 축소)의 차이가 그것이다.</p>
   <div class="tip"><b>순서가 핵심이다</b> — 줄이고 나서 블러를 하면 소용이 없다. 이미 가짜 무늬가 생긴 뒤라서, 그 <b>가짜 무늬가 흐려질 뿐</b>이다. 반드시 <b>블러 → 축소</b> 순서여야 한다.</div>
@@ -623,7 +623,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>무엇인가 — 같은 사진을 여러 크기로 쌓아 둔 것</h3>
+  <h3 class="pt-h" data-sref="21p"><span class="bdg bdg-gyo">교안</span>무엇인가 — 같은 사진을 여러 크기로 쌓아 둔 것</h3>
   <p>한 장의 이미지에 <b>&ldquo;블러 → 절반으로 줄이기&rdquo;를 반복</b>해서 여러 해상도 버전을 만들어 둔 것이다. 원본을 맨 아래(Level 0)에 두고 작아진 것을 위로 쌓으면 피라미드 모양이 되어 붙은 이름이다.</p>
   <div class="fx">
     <p class="fx-lab">만드는 법</p>
@@ -644,13 +644,13 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>저장 공간은 4/3배, 대신 원본은 되살릴 수 없다</h3>
+  <h3 class="pt-h" data-sref="22p"><span class="bdg bdg-gyo">교안</span>저장 공간은 4/3배, 대신 원본은 되살릴 수 없다</h3>
   <p>층마다 픽셀 수가 1, 1/4, 1/16 … 로 줄어들므로 전부 더해도 <b>원본의 약 4/3배</b>밖에 되지 않는다(22p). 생각보다 싸다.</p>
   <p>대신 <b>위층만 가지고 원본을 되살릴 수는 없다</b>. 블러로 지운 고주파는 어디에도 남아 있지 않기 때문이다(손실, lossy). &ldquo;그러면 잃어버린 것을 따로 보관하면 되지 않나?&rdquo;라는 물음에서 나온 것이 <a class="ext" href="#lpyr">라플라시안 피라미드</a>다.</p>
 </div>
 
 <div class="pt flip">
-  <h3 class="pt-h"><span class="bdg bdg-flip">플립러닝</span>위층에는 &lsquo;숲&rsquo;만 남는다</h3>
+  <h3 class="pt-h" data-sref="21p"><span class="bdg bdg-flip">플립러닝</span>위층에는 &lsquo;숲&rsquo;만 남는다</h3>
   <p>위로 갈수록 가는 무늬 · 질감 · 작은 물체가 블러로 지워지고 <b>크고 균일한 영역</b>(교수님 표현으로 uniform regions)만 남는다. 나무를 지우고 숲만 남긴 이미지인 셈이다.</p>
   <p>그래서 위층을 보면 &ldquo;하늘은 위쪽, 건물은 가운데&rdquo; 같은 <b>전체 배치와 큰 구조</b>를 디테일에 방해받지 않고 빠르게 파악할 수 있다. 반대로 아래층(원본)은 한 부분의 세밀한 정보를 준다. 표지판을 찾을 때 위층에서 &ldquo;빨간 원형 덩어리가 오른쪽 위에 있다&rdquo;를 먼저 찾고, 아래층으로 내려와 글자를 읽는 식이다.</p>
 </div>
@@ -701,7 +701,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>핵심 — 블러 이미지 대신 &lsquo;차이&rsquo;를 저장한다</h3>
+  <h3 class="pt-h" data-sref="24p,26p,27p"><span class="bdg bdg-gyo">교안</span>핵심 — 블러 이미지 대신 &lsquo;차이&rsquo;를 저장한다</h3>
   <p>한 층 위 이미지를 <b>다시 키운 것</b>은 원래 층의 &lsquo;예측&rsquo;이라고 볼 수 있다. 블러로 지워진 디테일이 없으니 원래 층과 조금 다를 텐데, 그 <b>차이(예측 오차 · 잔차)</b>를 저장해 두면 나중에 다시 더해서 원본을 정확히 되살릴 수 있다.</p>
   <div class="fx">
     <p class="fx-lab">분해와 복원</p>
@@ -751,18 +751,18 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 </g></svg></div><figcaption>교안 27 · 28p 블록도를 색으로 다시 그린 것 — 한 단계(G₀ → L₀)가 27p, 한 번 더 이어 붙인 것(G₁ → L₁)이 28p다</figcaption></figure>
 
 <div class="pt flip">
-  <h3 class="pt-h"><span class="bdg bdg-flip">플립러닝</span>블록도 읽는 법</h3>
+  <h3 class="pt-h" data-sref="27p,28p,29p,30p,31p"><span class="bdg bdg-flip">플립러닝</span>블록도 읽는 법</h3>
   <p><b>하늘색</b>(Smooth · Down-sampling)은 가우시안 피라미드를 한 층 만드는 부분이고, <b>연두색</b>(Up-sampling · Interpolate)은 그 위층을 다시 키워 만든 <b>예측</b>이다. 연두색 자체가 라플라시안이 아니라, <b>원래 층 − 예측 = 주황색 상자(Prediction error)</b>가 라플라시안 층이다.</p>
   <p>이 과정을 반복하면 잔차가 층층이 쌓이고, <b>맨 마지막에는 더 줄일 수 없을 만큼 작아진 근사 이미지 한 장</b>이 남는다. 가우시안만으로는 불가능했던 복원이 이 잔차들 덕분에 가능해진다.</p>
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>왜 이름이 &lsquo;라플라시안&rsquo;인가</h3>
+  <h3 class="pt-h" data-sref="24p,32p"><span class="bdg bdg-gyo">교안</span>왜 이름이 &lsquo;라플라시안&rsquo;인가</h3>
   <p>원본 − 블러는 결국 <b>흐림 정도가 다른 두 가우시안의 차이</b>(<span class="term" tabindex="0" data-tip="Difference of Gaussians. 시그마가 다른 두 가우시안 블러 결과를 빼는 것. 엣지와 얼룩(블롭)에 강하게 반응한다.">DoG</span>)이고, DoG는 3주차에서 본 대로 <b>LoG(라플라시안 오브 가우시안)의 근사</b>다. 그래서 잔차 이미지가 엣지 검출 결과처럼 보인다.</p>
 </div>
 
 <div class="pt live">
-  <h3 class="pt-h"><span class="bdg bdg-live">실시간</span>OpenCV로 한 층 분해하고 복원하기</h3>
+  <h3 class="pt-h" data-sref="31p"><span class="bdg bdg-live">실시간</span>OpenCV로 한 층 분해하고 복원하기</h3>
   <p>3주차 실습에서 본 <code>pyrDown</code> · <code>pyrUp</code>이 그대로 쓰인다. 과제 #1의 3-3번이 이 코드다.</p>
 <pre class="code">down = cv2.pyrDown(img)                    <span class="cm"># G: 블러 + 1/2</span>
 up   = cv2.pyrUp(down, dstsize=(img.shape[1], img.shape[0]))   <span class="cm"># F: 2배 + 보간</span>
@@ -772,7 +772,7 @@ restored = cv2.add(up, L)                  <span class="cm"># 복원 x = F(G x) 
 </div>
 
 <div class="pt plus">
-  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>어디에 쓰나 — 디테일을 층별로 조작하는 도구</h3>
+  <h3 class="pt-h" data-sref="33p,34p"><span class="bdg bdg-plus">보충설명</span>어디에 쓰나 — 디테일을 층별로 조작하는 도구</h3>
   <p><b>① 이미지 블렌딩</b> — 두 사진을 마스크로 그냥 합치면 이음새가 보인다. 넓게 섞으면 겹쳐 보이고, 좁게 섞으면 경계가 남는다. 해답은 <b>저주파(밝기 · 색)는 넓게, 고주파(엣지 · 질감)는 좁게</b> 섞는 것이다. 두 이미지 A · B의 라플라시안 피라미드와 마스크 M의 가우시안 피라미드를 만든 뒤, 층마다 <span class="tex">L_i=G^M_i\cdot L^A_i+(1-G^M_i)\cdot L^B_i</span> 로 섞고 복원하면 된다. 사과 + 오렌지 합성과 파노라마 스티칭이 그 예다.</p>
   <p><b>② 압축</b> — 라플라시안 층은 평탄한 영역이 대부분 0에 가까워 값의 분포가 <b>0 근처에 뾰족하게</b> 몰린다. 이런 데이터는 양자화 후 엔트로피 부호화로 적은 비트에 담긴다. 샘플 수는 4/3배로 늘지만 값이 희소해 압축 이득이 더 크다. Burt &amp; Adelson이 1983년 이 피라미드를 제안한 원래 목적이 압축이었다.</p>
   <p><b>③ 디테일 강화와 톤 매핑</b> — 특정 층의 계수에 상수를 곱하면(<span class="tex">L'_i=\alpha_i L_i</span>) 그 크기대의 디테일만 강조하거나 줄일 수 있다. HDR <b>톤 매핑</b>은 저주파 층의 큰 밝기 차이는 압축하고 고주파 층(디테일)은 그대로 두어, 밝기 범위는 좁히면서 질감은 살린다. 여러 노출 사진을 합치는 <b>Exposure Fusion</b>도 사진은 라플라시안, 가중치는 가우시안 피라미드로 만들어 층별로 섞는 방식이다.</p>
@@ -799,7 +799,7 @@ restored = cv2.add(up, L)                  <span class="cm"># 복원 x = F(G x) 
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>한 번 쪼개면 네 덩어리</h3>
+  <h3 class="pt-h" data-sref="36p,37p,38p,39p,40p"><span class="bdg bdg-gyo">교안</span>한 번 쪼개면 네 덩어리</h3>
   <p>웨이블릿 부호화는 <span class="term" tabindex="0" data-tip="Discrete Cosine Transform. 이미지를 8×8 블록으로 나눠 코사인 주파수 성분으로 바꾸는 변환. JPEG 압축의 핵심.">DCT</span> 부호화의 변형으로, DCT처럼 <b>블록으로 자르지 않고</b> 웨이블릿을 쓴다(JPEG 2000이 대표 예). 한 번 쪼개면 이렇게 넷으로 갈린다.</p>
   <ul class="ul">
     <li>저주파는 그대로 <b>근사(approximation, a · LL)</b>로 간다 — 원본을 절반 크기로 줄인 것처럼 보인다</li>
@@ -814,7 +814,7 @@ restored = cv2.add(up, L)                  <span class="cm"># 복원 x = F(G x) 
 </div>
 
 <div class="pt plus">
-  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>왜 근사(저주파) 쪽만 다시 쪼개나</h3>
+  <h3 class="pt-h" data-sref="40p"><span class="bdg bdg-plus">보충설명</span>왜 근사(저주파) 쪽만 다시 쪼개나</h3>
   <p><b>① 정보가 저주파에 몰려 있다</b> — 자연 영상은 이웃 픽셀 변화가 완만해서 신호 에너지의 <b>90% 이상이 저주파</b>에 집중된다. 그 덩어리를 계속 쪼개야 구조를 여러 크기로 훑을 수 있다.</p>
   <p><b>② 압축이 잘 되게 하려고</b> — 디테일(LH · HL · HH)은 경계와 질감 말고는 이미 값이 0에 가깝다. 반면 근사는 아직 큰 값들이 빽빽하다. 근사를 더 잘게 쪼개 또 다른 디테일로 바꿔야 <b>0에 가까운 계수를 대량으로</b> 얻는다.</p>
   <p><b>③ 사람 눈이 저주파에 민감하다</b> — 고주파의 미세한 손실은 잘 못 느끼지만, 전체 윤곽 · 밝기 분포 · 큰 형태가 틀어지면 바로 알아챈다. 그래서 저주파 쪽만 세밀하게 나눈다.</p>
@@ -862,7 +862,7 @@ restored = cv2.add(up, L)                  <span class="cm"># 복원 x = F(G x) 
 <h3 class="sub-title">개념 정리</h3>
 
 <div class="pt flip">
-  <h3 class="pt-h"><span class="bdg bdg-flip">플립러닝</span>보간은 &lsquo;키울 때 생기는 빈칸&rsquo;을 채우는 일</h3>
+  <h3 class="pt-h" data-sref="42p"><span class="bdg bdg-flip">플립러닝</span>보간은 &lsquo;키울 때 생기는 빈칸&rsquo;을 채우는 일</h3>
   <p>이미지를 키우면 없던 자리에 새 픽셀이 생긴다. 2배로 키우면 네 칸 중 세 칸이 빈칸이다. <b>이 빈칸을 무엇으로 채울 것인가</b>가 보간이다. 가장 단순하게는 각 행 · 열을 그대로 여러 번 반복하는데, 그게 <b>최근접 이웃</b>이고 결과는 계단 모양이 된다(42p).</p>
   <p>원래의 연속적인 장면 <span class="tex">f</span> 를 알면 어떤 해상도로든 다시 만들 수 있지만, 우리에게는 <b>찍힌 픽셀 값뿐</b>이다. 그래서 <span class="tex">f</span> 를 <b>근사하는 필터 <span class="tex">h</span></b> 를 정해서 채운다. <b>어떤 필터를 쓰느냐가 곧 어떤 보간이냐</b>를 결정한다.</p>
   <div class="fx">
@@ -873,7 +873,7 @@ restored = cv2.add(up, L)                  <span class="cm"># 복원 x = F(G x) 
 </div>
 
 <div class="pt plus">
-  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>재구성 필터가 정확히 무엇인가</h3>
+  <h3 class="pt-h" data-sref="44p,45p,46p"><span class="bdg bdg-plus">보충설명</span>재구성 필터가 정확히 무엇인가</h3>
   <p><b>흩어진 샘플점들 사이를 특정 모양의 연속 함수(커널)로 이어 붙여 연속 신호로 되돌리는 필터</b>다. 샘플 위치마다 이 함수를 하나씩 올려 두고 합치는 것이라, 함수의 <b>모양이 곧 보간 방법</b>이 된다.</p>
   <ul class="ul">
     <li><b>공간에서 보면</b> — 새 위치의 값을 구할 때 주변 픽셀에 <b>모양대로의 가중치</b>를 곱해 더하는 가중합이다</li>
@@ -893,7 +893,7 @@ restored = cv2.add(up, L)                  <span class="cm"># 복원 x = F(G x) 
 </div>
 
 <div class="pt gyo">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>바이리니어 — x로 두 번, y로 한 번</h3>
+  <h3 class="pt-h" data-sref="46p,48p,49p"><span class="bdg bdg-gyo">교안</span>바이리니어 — x로 두 번, y로 한 번</h3>
   <p>주변 <b>네 점</b>만 쓴다. 먼저 위 두 점 사이를 가로로 섞고, 아래 두 점 사이도 가로로 섞은 뒤, 그 두 결과를 세로로 한 번 더 섞는다. 가까운 쪽 값에 더 큰 가중치가 붙는다.</p>
   <div class="fx">
     <p class="fx-lab">1D 선형 (47p) → 2D 바이리니어 (48p)</p>
@@ -914,7 +914,7 @@ restored = cv2.add(up, L)                  <span class="cm"># 복원 x = F(G x) 
 </div>
 
 <div class="pt plus">
-  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>바이큐빅 — 직선 대신 곡선으로 잇는다</h3>
+  <h3 class="pt-h" data-sref="50p"><span class="bdg bdg-plus">보충설명</span>바이큐빅 — 직선 대신 곡선으로 잇는다</h3>
   <p>이웃 점들을 직선이 아니라 <b>3차 다항식 곡선</b>으로 이어 사이 값을 추정한다. 1D는 좌우 <b>4점</b>, 2D는 <b>4×4 = 16점</b>을 본다(50p).</p>
   <ul class="ul">
     <li><b>왜 더 매끄러운가</b> — 선형 보간은 점과 점이 만나는 자리에서 기울기가 꺾이지만, 큐빅은 <b>기울기까지 이어지도록</b> 곡선을 붙인다</li>
@@ -930,7 +930,7 @@ restored = cv2.add(up, L)                  <span class="cm"># 복원 x = F(G x) 
 </div>
 
 <div class="pt plus">
-  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>세 방식 비교 — 과제 3-1에 그대로 쓰인다</h3>
+  <h3 class="pt-h" data-sref="51p,52p"><span class="bdg bdg-plus">보충설명</span>세 방식 비교 — 과제 3-1에 그대로 쓰인다</h3>
   <div class="tbl-wrap">
   <table>
     <thead><tr><th>방식</th><th>참조 이웃 (1D · 2D)</th><th>이어지는 모양</th><th>결과</th><th>OpenCV</th></tr></thead>
@@ -1369,7 +1369,7 @@ document.addEventListener('DOMContentLoaded', function () {
       bNext = lb.querySelector('.next'),
       bX = lb.querySelector('.x');
 
-  var idx = -1, openedIdx = -1, savedY = 0, pushed = false, prevRestore = null;
+  var idx = -1, openedIdx = -1, savedY = 0, pushed = false, prevRestore = null, fromRef = false;
 
   function lock() {
     savedY = window.pageYOffset || document.documentElement.scrollTop || 0;
@@ -1393,7 +1393,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.style.left = '';
     document.body.style.right = '';
     document.body.style.width = '';
-    var target = (idx >= 0 && idx !== openedIdx) ? slides[idx] : null;
+    /* 개념 카드의 썸네일로 연 경우에는 넘겨 봤어도 읽던 자리로 돌아간다 */
+    var target = (!fromRef && idx >= 0 && idx !== openedIdx) ? slides[idx] : null;
     function place() {
       instantly(function () {
         window.scrollTo(0, savedY);
@@ -1450,6 +1451,7 @@ document.addEventListener('DOMContentLoaded', function () {
     lb.classList.remove('on');
     unlock();
     idx = openedIdx = -1;
+    fromRef = false;
     if (prevRestore !== null) {
       try { window.history.scrollRestoration = prevRestore; } catch (e) {}
       prevRestore = null;
@@ -1468,6 +1470,10 @@ document.addEventListener('DOMContentLoaded', function () {
   slides.forEach(function (f, i) {
     f.addEventListener('click', function () { open(i); });
   });
+  window.__lbOpenFig = function (f) {
+    var i = slides.indexOf(f);
+    if (i >= 0) { fromRef = true; open(i); }
+  };
 
   bPrev.addEventListener('click', function (e) { e.stopPropagation(); go(-1); });
   bNext.addEventListener('click', function (e) { e.stopPropagation(); go(1); });
@@ -1502,6 +1508,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script src="slide-ref.js?v=2"></script>
 <script src="../vendor/katex/katex.min.js"></script>
 <script>
 // .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.

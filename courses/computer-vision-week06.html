@@ -3245,7 +3245,7 @@ document.addEventListener('DOMContentLoaded', function () {
       bNext = lb.querySelector('.next'),
       bX = lb.querySelector('.x');
 
-  var idx = -1, openedIdx = -1, savedY = 0, pushed = false, prevRestore = null;
+  var idx = -1, openedIdx = -1, savedY = 0, pushed = false, prevRestore = null, fromRef = false;
 
   function lock() {
     savedY = window.pageYOffset || document.documentElement.scrollTop || 0;
@@ -3269,7 +3269,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.style.left = '';
     document.body.style.right = '';
     document.body.style.width = '';
-    var target = (idx >= 0 && idx !== openedIdx) ? slides[idx] : null;
+    /* 개념 카드의 썸네일로 연 경우에는 넘겨 봤어도 읽던 자리로 돌아간다 */
+    var target = (!fromRef && idx >= 0 && idx !== openedIdx) ? slides[idx] : null;
     function place() {
       instantly(function () {
         window.scrollTo(0, savedY);
@@ -3326,6 +3327,7 @@ document.addEventListener('DOMContentLoaded', function () {
     lb.classList.remove('on');
     unlock();
     idx = openedIdx = -1;
+    fromRef = false;
     if (prevRestore !== null) {
       try { window.history.scrollRestoration = prevRestore; } catch (e) {}
       prevRestore = null;
@@ -3344,6 +3346,10 @@ document.addEventListener('DOMContentLoaded', function () {
   slides.forEach(function (f, i) {
     f.addEventListener('click', function () { open(i); });
   });
+  window.__lbOpenFig = function (f) {
+    var i = slides.indexOf(f);
+    if (i >= 0) { fromRef = true; open(i); }
+  };
 
   bPrev.addEventListener('click', function (e) { e.stopPropagation(); go(-1); });
   bNext.addEventListener('click', function (e) { e.stopPropagation(); go(1); });
@@ -3378,6 +3384,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script src="slide-ref.js?v=2"></script>
 <script src="../vendor/katex/katex.min.js"></script>
 <script>
 // .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.

@@ -74,6 +74,12 @@ git push origin HEAD:refs/heads/claude/masters-course-summary-site-4vp2sc
   페이지 하단 스크립트가 `#tipbox`를 만들어 hover·focus·click에 띄운다.
   새 페이지에 쓰려면 `.term`/`#tipbox` CSS와 해당 스크립트를 함께 옮긴다
 
+- **교안 썸네일** — `courses/slide-ref.js`가 `.pt-h` 제목의 쪽수 표기 `(54~61p)` ·
+  `(4 · 5p)`를 읽어 같은 절 `.deck`의 슬라이드를 작은 썸네일로 붙이고, 누르면
+  슬라이드 확대 보기 팝업(`window.__lbOpenFig`)으로 연다. 제목에 쪽수를 안 쓰는
+  카드는 `<h3 class="pt-h" data-sref="1부 3p, 2부 4p">`처럼 캡션 굵은 글씨로 지정한다.
+  새 페이지에는 KaTeX 스크립트 앞에 `<script src="slide-ref.js?v=2"></script>`를 둔다
+
 탭바(`.tab-bar`)의 앵커와 섹션 `id`는 1:1로 맞춘다. 섹션을 추가하면
 탭바에도 링크를 넣는다.
 
