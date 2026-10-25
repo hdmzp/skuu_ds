@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기계학습특론 | 9주차 수업내용</title>
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0c1a3a">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.svgfig{padding:11px 11px 9px}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:560px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+.alg-h{font-size:14.5px;font-weight:700;margin:24px 0 10px;padding:9px 13px;border-radius:8px}
+.alg-h.hi-x{background:#f0fdf4;border:1px solid #bbf7d0;color:#14532d}
+.alg-h.lo-x{background:#fef2f2;border:1px solid #fecaca;color:#7f1d1d}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+/* 수식 카드 */
+.fx{background:#f8faff;border:1px solid #cfdcf5;border-left:3px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:10px 0}
+.fx + .fx{margin-top:8px}
+.fx-lab{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.fx-note{font-size:12px;color:#4b5563;line-height:1.7;margin-top:7px}
+.fx-note b{color:var(--ink)}
+.tex-d{position:relative;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:9px 2px 5px;text-align:center}
+.tex-d .katex{font-size:1.12em}
+.tex{white-space:nowrap}
+/* 풀이 예제 */
+.ex{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin:10px 0}
+.ex-q{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.65;
+  background:#f1f0ec;border-radius:7px;padding:9px 12px;margin-bottom:4px}
+.ex-q em{font-style:normal;color:var(--red);font-size:11px;font-weight:700;display:block;margin-bottom:3px}
+.step{display:grid;grid-template-columns:20px 1fr;gap:9px;align-items:baseline;
+  font-size:12.5px;color:#4b5563;line-height:1.75;padding:5px 0}
+.step i{font-style:normal;font-weight:700;color:var(--accent);font-size:11.5px}
+.step .katex{font-size:1em}
+.ex-ans{margin-top:8px;background:#f0fdf4;border:1px solid #22c55e;border-radius:8px;
+  padding:9px 12px;font-size:12.5px;color:#14532d;line-height:1.7}
+.ex-ans b{color:var(--green)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+
+/* 주차 내비 */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* 노트북 주석 */
+.nbc{color:#b45309;font-weight:700;background:#fff7ed;border-radius:3px;padding:0 3px}
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .out{color:#c9f24b}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 함수 카드 */
+.fnc{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:var(--radius);padding:13px 15px;margin:11px 0}
+.fnc h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fnc .sig{
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;color:#1b3f8b;
+  background:#eef2fb;border:1px solid #dbe3f5;border-radius:6px;padding:7px 10px;margin:7px 0 9px;
+  overflow-x:auto;white-space:pre;
+}
+.fnc dl{display:grid;grid-template-columns:minmax(84px,auto) 1fr;gap:5px 12px;font-size:12.5px;line-height:1.65}
+.fnc dt{font-weight:700;color:var(--ink)}
+.fnc dd{color:#4b5563}
+@media(max-width:440px){.fnc dl{grid-template-columns:1fr;gap:2px}.fnc dd{margin-bottom:6px}}
+/* 개념 하이라이트 + 툴팁 */
+
+/* ===== 4주차 개편: 슬라이드 모아보기 · 출처 뱃지 ===== */
+/* ===== 출처 뱃지 ===== */
+.bdg{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.02em;padding:3px 9px;border-radius:999px;white-space:nowrap;line-height:1.5}
+.bdg-gyo{background:#eef2fb;color:#1b3f8b;border:1px solid #c4d2ee}
+.bdg-flip{background:#fff7ed;color:#b45309;border:1px solid #f0c48a}
+.bdg-live{background:#fdf0f5;color:#9d174d;border:1px solid #f3bcd2}
+.bdg-plus{background:#f0fdfa;color:#0f766e;border:1px solid #99e0d6}
+.bdg-pres{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
+
+/* ===== 개념 카드 ===== */
+.pt{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin:11px 0}
+.pt-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;font-weight:700;line-height:1.45;margin-bottom:7px}
+.pt > p{font-size:13.5px;color:#3f4854;line-height:1.85}
+.pt > p + p{margin-top:9px}
+.pt > p b{color:var(--ink)}
+.pt.gyo{border-left-color:#1b3f8b}
+.pt.flip{border-left-color:#b45309}
+.pt.live{border-left-color:#9d174d}
+.pt.plus{border-left-color:#0f766e}
+.hi{background:linear-gradient(transparent 58%,#ffe9a8 58%);font-weight:700;color:var(--ink);padding:0 1px}
+.pt pre.code{margin:9px 0}
+
+/* 본문 속 짧은 보충 설명 상자 */
+.qa{background:#f0fdfa;border:1px solid #99e0d6;border-left:4px solid #0f766e;
+  border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:11px 0;
+  font-size:13px;line-height:1.85;color:#134e4a}
+.qa::before{content:'보충설명';display:table;font-size:10.5px;font-weight:800;letter-spacing:.02em;
+  padding:3px 9px;border-radius:999px;margin-bottom:7px;background:#e3f7f3;color:#0f766e;border:1px solid #99e0d6}
+.qa b{color:#0f3d3a}
+.qa .ul li{color:#134e4a}
+.qa .ul li::before{background:#0f766e;opacity:.8}
+
+/* ===== 슬라이드 모아보기 ===== */
+.deck{background:#efeeea;border:1px solid var(--border);border-radius:var(--radius);padding:12px 12px 14px;margin-bottom:20px}
+.deck-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.deck-h span{font-size:11px;font-weight:400;color:var(--muted)}
+.deck-t{font-size:12px;font-weight:700;color:var(--accent);margin:13px 0 7px;padding-left:8px;border-left:3px solid var(--accent)}
+.deck-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.sld{background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px;margin:0;cursor:zoom-in;transition:box-shadow .15s,transform .15s}
+.sld:hover{box-shadow:0 6px 16px rgba(18,34,80,.13);transform:translateY(-2px)}
+.sld img{display:block;width:100%;height:auto;border-radius:4px;background:#fff}
+.sld figcaption{font-size:11px;color:var(--muted);line-height:1.5;margin-top:6px;text-align:center}
+.sld figcaption b{color:var(--accent)}
+
+/* ===== 한 줄 요약 ===== */
+.oneline{background:#16233f;color:#e7edf9;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+.oneline > p{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--lime)}
+.oneline .ul li{color:#c5d0e8;font-size:13px}
+.oneline .ul li b{color:#fff}
+.oneline .ul li::before{background:var(--lime);opacity:.9}
+
+/* ===== 슬라이드 확대 보기 ===== */
+#lb{position:fixed;inset:0;background:rgba(9,15,31,.94);display:none;align-items:center;justify-content:center;
+  z-index:400;padding:52px 60px 64px;cursor:zoom-out;-webkit-user-select:none;user-select:none}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:80vh;border-radius:8px;background:#fff;box-shadow:0 18px 50px rgba(0,0,0,.45);cursor:default}
+#lb .cap{position:absolute;left:0;right:0;bottom:18px;text-align:center;color:#d9e1f3;font-size:12.5px;line-height:1.6;padding:0 20px;cursor:default}
+#lb .cap b{color:#fff}
+#lb .cap .num{display:block;font-size:11px;color:#9fb0d4;margin-top:4px;letter-spacing:.04em}
+#lb button{
+  position:absolute;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;
+  border-radius:50%;width:44px;height:44px;font-size:20px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .15s;
+  font-family:inherit;padding:0;
+}
+#lb button:hover{background:rgba(255,255,255,.22)}
+#lb button:disabled{opacity:.25;cursor:default}
+#lb .prev{left:12px;top:50%;transform:translateY(-50%)}
+#lb .next{right:12px;top:50%;transform:translateY(-50%)}
+#lb .x{right:12px;top:12px;width:38px;height:38px;font-size:17px}
+@media(max-width:560px){
+  #lb{padding:48px 10px 92px}
+  #lb .prev{left:50%;top:auto;bottom:16px;transform:translateX(-64px)}
+  #lb .next{right:50%;top:auto;bottom:16px;transform:translateX(64px)}
+  #lb .cap{bottom:70px}
+}
+
+.kg{display:block;width:108px;height:42px;margin:0 auto}
+.mapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px;margin-top:10px}
+.mapgrid a{
+  display:block;text-decoration:none;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:9px;padding:10px 13px;transition:.15s;
+}
+.mapgrid a:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(18,34,80,.1)}
+.mapgrid b{display:block;font-size:12.5px;color:var(--ink)}
+.mapgrid span{font-size:11.5px;color:var(--muted);line-height:1.55}
+.legend{
+  display:flex;flex-wrap:wrap;gap:9px 16px;align-items:center;
+  background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius);
+  padding:13px 15px;margin:0 0 24px;font-size:12px;color:var(--muted);line-height:1.6;
+}
+.legend i{font-style:normal;display:flex;align-items:center;gap:7px}
+.legend .legend-t{flex:0 0 100%;font-size:12.5px;font-weight:700;color:var(--ink)}
+.legend .legend-t2{flex:0 0 100%;font-size:11.5px;color:var(--muted);border-top:1px dashed var(--border);padding-top:10px;margin-top:1px}
+
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+/* 퀴즈 목록 */
+.qz{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 15px;margin-bottom:9px}
+.qz h4{font-size:13px;font-weight:700;margin-bottom:5px}
+.qz .ans{
+  display:block;margin-top:7px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;
+  padding:8px 11px;font-size:12.5px;color:#14532d;line-height:1.7;
+}
+.qz .ans summary{cursor:pointer;font-weight:700;color:#166534;list-style:none}
+.qz .ans summary::-webkit-details-marker{display:none}
+.qz .ans summary::before{content:'▸ ';font-weight:700}
+.qz .ans[open] summary::before{content:'▾ '}
+.qz .ans pre.code{margin:8px 0 0}
+
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 실시간 강의 강조 */
+.live{
+  background:#fffaf3;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#7c2d12;
+}
+.live::before{
+  content:'🎙 실시간 강의 강조';display:inline-block;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.live b{color:#7c2d12}
+.live .ul li{color:#7c2d12}
+.live .ul li::before{background:#b45309;opacity:.75}
+/* 100문제 해설 포인트 */
+.qexp{
+  background:#f0fdf4;border:1px solid #bbf7d0;border-left:4px solid #16a34a;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;font-size:13px;line-height:1.8;color:#14532d;
+}
+.qexp::before{
+  content:'✅ 100문제 해설에서 짚어 준 것';display:inline-block;background:#16a34a;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.qexp b{color:#14532d}
+.qexp .ul li{color:#166534}
+.qexp .ul li::before{background:#16a34a;opacity:.8}
+.fml{
+  display:block;background:#eef2fb;border:1px solid #dbe3f5;border-radius:8px;
+  padding:9px 12px;margin:8px 0;font-size:13px;color:#1b3f8b;text-align:center;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;overflow-x:auto;white-space:nowrap;
+}
+
+/* 계산으로 채운 수업시간 도식 (SVG) — 좁은 화면에서는 가로 스크롤 */
+.svgfig{padding:11px 11px 9px}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:560px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+.figs > .note-box{margin:0}
+/* 7주차 추가: 심화 · 함정 · 복습 상자 (자연어처리 페이지와 같은 모양) */
+.deep{
+  background:#f7f5ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:13px 16px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.deep::before{
+  content:'🔎 한 걸음 더 — 심화 개념';display:table;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:8px;
+}
+.deep b{color:#2e1065}
+.deep .ul li{color:#3b2a6b}
+.deep .ul li::before{background:#6d28d9;opacity:.75}
+.deep .tbl-wrap{margin:9px 0 4px;background:#fff}
+.deep pre.code{margin:9px 0}
+.deep .fx{background:#fff;border-color:#d8cdf7;border-left-color:#6d28d9;margin:9px 0}
+.deep .fx-lab{color:#6d28d9}
+.deep .term{background:#ede7ff;color:#5b21b6;border-bottom-color:#6d28d9}
+.deep .term:hover,.deep .term.on{background:#ddd2fb}
+.pit{
+  background:#fff7ed;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:12.5px;line-height:1.8;color:#7c2d12;
+}
+.pit::before{
+  content:'⚠ 여기서 갈린다';display:table;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.pit b{color:#7c2d12}
+.pit .ul li{color:#7c2d12}
+.pit .ul li::before{background:#b45309;opacity:.8}
+.pit table{min-width:0}
+.pit .tbl-wrap{margin:8px 0 4px;background:#fff}
+.rv{background:var(--surface);border:1px solid var(--border);border-left:4px solid #0f766e;border-radius:var(--radius);margin:10px 0;overflow:hidden}
+.rv summary{cursor:pointer;list-style:none;padding:12px 15px;font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.6;display:flex;gap:9px;align-items:baseline}
+.rv summary::-webkit-details-marker{display:none}
+.rv summary i{font-style:normal;flex:none;font-size:11px;font-weight:800;color:#fff;background:#0f766e;border-radius:999px;padding:1px 8px}
+.rv summary::after{content:'답 보기 ▾';margin-left:auto;flex:none;font-size:11px;font-weight:700;color:#0f766e}
+.rv[open] summary::after{content:'접기 ▴'}
+.rv .ans{border-top:1px dashed #99e0d6;background:#f0fdfa;padding:12px 15px;font-size:13px;line-height:1.85;color:#134e4a}
+.rv .ans b{color:#0f3d3a}
+.rv .ans .ul li{color:#134e4a}
+.rv .ans .tbl-wrap{background:#fff;margin:8px 0}
+.rv .ans table{min-width:0}
+.rv .ans pre.code{margin:8px 0}
+.rv .one{display:block;background:#fff;border:1px solid #99e0d6;border-radius:7px;padding:7px 11px;margin-bottom:8px;font-weight:700;color:#0f3d3a}
+
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#map">한눈에 보기</a>
+  <a href="#docs">강의자료</a>
+  <a href="#unsup">9.1 비지도 학습</a>
+  <a href="#cluster">9.2 군집과 유사도</a>
+  <a href="#algos">9.3 알고리즘 종류</a>
+  <a href="#kmeans">9.4 K-평균 절차</a>
+  <a href="#ex1">9.5 예시 1</a>
+  <a href="#ex2">9.6 예시 2 · 초기 중심점</a>
+  <a href="#sse">9.7 성능측도 SSE</a>
+  <a href="#lab">군집화 실습</a>
+  <a href="#review">복습 문제</a>
+  <a href="#summary">핵심 정리</a>
+  <a href="#next">다음 주</a>
+</nav>
+
+<div class="wrap">
+
+<div class="weeknav">
+  <a href="machine-learning.html" class="plan">← 강의계획서</a>
+  <a href="machine-learning-week06.html">6주차 · 다층 퍼셉트론</a>
+  <a href="machine-learning-week07.html">7주차 · K-NN · XAI</a>
+  <a href="machine-learning-week08.html">8주차 · 중간고사</a>
+  <span class="cur">9주차 · 군집화</span>
+</div>
+
+<section class="hero">
+  <p class="kicker">9주차 · 10.29 · 2026-2학기</p>
+  <h1>09. 군집화 — 정답 없이 &lsquo;비슷한 것끼리&rsquo; 묶기</h1>
+  <p>3~7주차는 모두 <b>정답(라벨 y)이 붙은 데이터</b>로 배웠다(지도학습). 이번 주는 처음으로 <b>라벨 없이 특징 벡터 x만</b> 가지고 학습하는 <b>비지도 학습</b>, 그 대표인 <b>군집화</b>를 다룬다. 핵심 알고리즘은 <b>K-평균</b> &mdash; 중심점 K개를 놓고 &lsquo;가장 가까운 중심점에 배정 → 중심점을 평균으로 옮기기&rsquo;를 반복한다. 7주차 kNN에서 쓴 <b>유클리디안 거리</b>를 그대로 다시 쓴다.</p>
+  <div class="chips"><span class="chip">최승호 교수</span><span class="chip">군집화 31p</span><span class="chip">슬라이드 23장</span><span class="chip">K-평균 손계산 2회</span><span class="chip">SSE</span><span class="chip">실습 sklearn · 직접 구현</span></div>
+</section>
+
+<div class="legend">
+  <p class="legend-t">내용이 어디에서 왔는지 <b>뱃지</b>로 구분했습니다</p>
+  <i><span class="bdg bdg-gyo">교안</span><span>교수님 슬라이드에 있는 내용</span></i>
+  <i><span class="bdg bdg-plus">보충설명</span><span>교안에 없거나 짧게 지나간 부분을 따로 찾아 정리한 내용</span></i>
+  <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고(← → 로 넘기기), <span class="hi">노란 형광펜</span>은 꼭 기억할 문장, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선</span>은 누르면 뜻이 뜹니다. 교안 예제의 거리 · 중심점 · SSE는 모두 <b>직접 다시 계산</b>해 확인했습니다.</p>
+</div>
+
+<section class="sec" id="map">
+  <div class="sec-head"><span class="sec-badge">MAP</span><h2 class="sec-title">한눈에 보기<small>교안 하나 — &lsquo;군집화&rsquo; 31p + 실습 노트북</small></h2></div>
+<div class="oneline">
+  <p><b>이번 주 한 줄 요약</b></p>
+  <ul class="ul">
+    <li><b>비지도 학습</b> = 라벨 y 없이 특징 벡터 x만으로 데이터의 패턴 · 상관관계를 찾는다. 군집화 · 차원 축소 · 이상치 탐지 · 밀도 추정</li>
+    <li><b>군집화</b> = 특징 벡터 간 <b>유사도(거리)</b>로 비슷한 관측치끼리 묶는다. <b>결과에 정답이 존재하지 않는다</b></li>
+    <li>알고리즘 세 가지 &mdash; <b>K-평균</b>(단순, k를 미리 정해야) · <b>계층적</b>(k 불필요, 덴드로그램, 계산량 큼) · <b>DBSCAN</b>(k 불필요, 특이한 모양 가능, 밀도가 다양하면 약함)</li>
+    <li><b>K-평균 4단계</b> &mdash; ① 중심점 k개 임의 생성 → ② 가장 가까운 중심점에 배정 → ③ 중심점을 군집 평균으로 갱신 → ④ 종료 조건까지 ②~③ 반복</li>
+    <li><b>초기 중심점에 따라 결과가 달라진다</b> &mdash; 어느 결과가 나은지는 <b>SSE(오차제곱합)</b>로 비교한다. <b>작을수록 좋다</b></li>
+  </ul>
+</div>
+<div class="mapgrid">
+  <a href="#unsup"><b>9.1 비지도 학습</b><span>라벨 없는 데이터 · 지도학습과의 차이 · 키-몸무게 10명</span></a>
+  <a href="#cluster"><b>9.2 군집과 유사도</b><span>군집의 정의 · 정답 없음 · 유클리디안 √41 ≈ 6.40 · 맨하탄 9</span></a>
+  <a href="#algos"><b>9.3 알고리즘 종류</b><span>K-평균 · 계층적(덴드로그램) · DBSCAN 장단점</span></a>
+  <a href="#kmeans"><b>9.4 K-평균 특성 · 절차</b><span>중심점 · 중복 없는 배정 · Step 1~4</span></a>
+  <a href="#ex1"><b>9.5 예시 1</b><span>k = 3 · 거리표 · 동점 · 평균으로 새 중심점</span></a>
+  <a href="#ex2"><b>9.6 예시 2 · 초기 중심점</b><span>같은 데이터, 다른 출발점 · 결과가 달라지는 이유</span></a>
+  <a href="#sse"><b>9.7 성능측도 SSE</b><span>31.46 vs 30.49 · 진짜 제곱합 127.5 vs 112.42 · 종료 조건</span></a>
+  <a href="#lab"><b>군집화 실습</b><span>1000점 · KMeans(5) · 직접 구현 · &lsquo;SSE&rsquo;가 다시 오르는 이유</span></a>
+</div>
+</section>
+
+<section class="sec" id="docs">
+  <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">9주차 강의자료<small>제목을 누르면 앱 실행 없이 화면에서 바로 열립니다</small></h2></div>
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📙</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=ml-w09-clustering">군집화</a>
+      <p>비지도 학습 · 군집화와 유사도 측정 · 군집화 알고리즘의 종류 · K-평균 군집화(예시 2개) · 성능측도 SSE · <b>31페이지</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week09-clustering.pdf" download="기계학습특론_9주차_군집화.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>🐍</span>IPYNB</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week09-lab-clustering.ipynb" download="9주차_군집화_실습.ipynb">군집화 실습 노트북</a>
+      <p>sklearn <code>KMeans(n_clusters=5)</code>와 직접 구현 · 실행 결과 포함 · 읽는 데이터는 <code>clustering_data.csv</code>(1000점 × 2특징)</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week09-lab-clustering.ipynb" download="9주차_군집화_실습.ipynb">⬇ 다운로드</a>
+  </div>
+</div>
+<div class="tip"><b>실습 폴더에 대하여</b> &mdash; 이번에 올린 <b>2026 실습 폴더 두 개는 압축이 풀리지 않아</b> 이 페이지에 반영하지 못했다. 아래 <a class="ext" href="#lab">군집화 실습</a> 절은 7주차 폴더에 미리 들어와 있던 <code>9주차_군집화.ipynb</code>(실행 결과가 저장된 판)를 기준으로 정리했다. 압축을 다시 받아 올리면 달라진 부분을 반영한다. 노트북이 읽는 <code>clustering_data.csv</code>도 아직 사이트에 없다.</div>
+<div class="pit"><b>강의계획서와 다르다</b> &mdash; 계획서의 9주차는 &lsquo;의사결정트리 · 딥러닝 소개&rsquo;였지만 실제 9주차 교안은 <b>군집화</b>다. 계획서 페이지의 9주차 칸도 실제 교안 기준으로 바꿔 두었다.</div>
+</section>
+
+<!-- ===================== 9.1 ===================== -->
+<section class="sec" id="unsup">
+  <div class="sec-head"><span class="sec-badge">9.1</span><h2 class="sec-title">비지도 학습 — 라벨 없이 배운다<small>교안 2 · 3p</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>3p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-03-unsup.jpg" alt="교안 3p — 비지도 학습과 키 몸무게 데이터"><figcaption><b>3p</b> 비지도 학습 &mdash; 키 · 몸무게 10명(라벨 없음)</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>학습 목표와 비지도 학습의 정의 (2 · 3p)</h3>
+  <p>학습 목표는 하나 &mdash; <b>군집화에 대해서 설명할 수 있다.</b></p>
+  <p><b>비지도 학습(Unsupervised learning)</b>은 지도학습 데이터와 다르게 <b>라벨(실제 값, y)이 없는 입력 데이터</b>를 통해 학습하는 방법이다.</p>
+  <ul class="ul">
+    <li>입력 데이터를 통해 데이터의 <b>패턴이나 상관관계</b> 등을 알아낸다</li>
+    <li>라벨 없이 데이터의 <b>특징 벡터(x)</b>를 사용하여 학습을 진행한다</li>
+    <li>군집화 · 차원 축소 · 이상치 탐지 · 밀도 추정 등 다양한 분야에 응용된다</li>
+  </ul>
+  <p>3p의 예는 <b>키(<span class="tex">x_{i1}</span>) · 몸무게(<span class="tex">x_{i2}</span>)</b>만 있는 10명의 데이터다. 7주차 kNN의 키-몸무게 데이터에는 &lsquo;저체중 · 정상 · 비만&rsquo; 라벨이 붙어 있었지만, 여기에는 <b>아무 라벨이 없다</b>. 이번 주 내내 이 10명을 묶는다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>관측치</th><th>x<sub>1</sub></th><th>x<sub>2</sub></th><th>x<sub>3</sub></th><th>x<sub>4</sub></th><th>x<sub>5</sub></th><th>x<sub>6</sub></th><th>x<sub>7</sub></th><th>x<sub>8</sub></th><th>x<sub>9</sub></th><th>x<sub>10</sub></th></tr></thead>
+    <tbody>
+      <tr><td>키 <span class="tex">x_{i1}</span></td><td>170</td><td>169</td><td>172</td><td>175</td><td>176</td><td>178</td><td>180</td><td>181</td><td>183</td><td>185</td></tr>
+      <tr><td>몸무게 <span class="tex">x_{i2}</span></td><td>75</td><td>80</td><td>78</td><td>74</td><td>70</td><td>72</td><td>78</td><td>73</td><td>85</td><td>75</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="fx-note">교안의 〈표1〉 관측값. 9.5 · 9.6 · 9.7절이 모두 이 표를 쓴다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>지금까지 배운 것과 나란히 놓으면</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>지도학습 (3~7주차)</th><th>비지도 학습 (9주차)</th></tr></thead>
+    <tbody>
+      <tr><td>데이터</td><td><span class="tex">\{(\mathbf x_i,\,y_i)\}</span> &mdash; 특징 + <b>정답</b></td><td><span class="tex">\{\mathbf x_i\}</span> &mdash; <b>특징만</b></td></tr>
+      <tr><td>목표</td><td>새 <span class="tex">\mathbf x</span>의 <span class="tex">y</span>를 맞히기</td><td>데이터 안의 <b>구조</b>(무리 · 패턴) 찾기</td></tr>
+      <tr><td>잘했는지 판단</td><td>정답과 비교 &mdash; 정확도 · MSE</td><td>정답이 없으므로 <b>내부 기준</b>으로 &mdash; 9.7절 SSE</td></tr>
+      <tr><td>예</td><td>선형 · 로지스틱 회귀, 퍼셉트론, MLP, kNN</td><td><b>K-평균</b>, 계층적 군집화, DBSCAN, 주성분 분석(PCA)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>왜 라벨 없이 배울까? <b>라벨은 비싸다.</b> 사진 100만 장에 사람이 일일이 이름을 붙이려면 돈과 시간이 든다. 반면 라벨 없는 데이터는 거의 공짜로 쌓인다. 고객 구매 기록을 보고 &lsquo;비슷한 손님끼리&rsquo; 묶는 일(교안의 <b>고객 시장 세분화</b>)처럼, 정답을 미리 정할 수 없는 문제도 많다.</p>
+</div>
+</section>
+
+<!-- ===================== 9.2 ===================== -->
+<section class="sec" id="cluster">
+  <div class="sec-head"><span class="sec-badge">9.2</span><h2 class="sec-title">군집과 유사도 측정 — 가까우면 같은 무리<small>교안 4~7p</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>5 · 7p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-05-no-answer.jpg" alt="교안 5p — 군집화 결과에 정답이 존재하는 것이 아님에 주의"><figcaption><b>5p</b> 군집 1 · 2 · 3 &mdash; 정답은 없다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-07-similarity.jpg" alt="교안 7p — 유클리디안 거리와 맨하탄 거리 예시"><figcaption><b>7p</b> x<sub>4</sub>와 x<sub>7</sub> &mdash; 유클리디안 √41, 맨하탄 9</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>군집화와 군집의 정의 (4 · 5p)</h3>
+  <p><b>군집화(Clustering)</b> &mdash; 라벨이 정해지지 않은 관측 값 특징 벡터 간 <b>유사성을 측정</b>하여 다수의 군집(그룹)으로 나누는 방법이다. 예: <b>고객 시장 세분화, 신체 유형 그룹화, 관련 문서 정리</b>.</p>
+  <p><b>군집(Cluster)</b> &mdash; 유사도가 높은 유한 개의 관측치들이 <b>서로 가깝게 모여 형성된 집합</b>. 즉 비슷한 특성(특징 벡터)을 가진 관측치들의 집합이다.</p>
+  <p>유사도 측정 방법으로는 <b>유클리디안 거리, 맨하탄 거리, 코사인 유사도</b> 등이 있다. 그리고 5p 그림 아래의 경고 &mdash; <span class="hi">군집화 결과에 정답이 존재하는 것이 아님에 주의.</span> 5p는 10명을 빨강(군집1) · 초록(군집2) · 파랑(군집3)으로 묶었지만, 이것이 &lsquo;맞는 답&rsquo;이라서가 아니라 그렇게 <b>묶어 본 하나의 결과</b>일 뿐이다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>유사도 측정 (6 · 7p)</h3>
+  <p>데이터의 특성에 따라 <b>적합한 유사도 측도</b>를 사용하면 더 좋은 성능을 얻을 수 있다. 유클리디안 거리와 맨하탄 거리가 많이 쓰인다. 목표는 두 가지다.</p>
+  <ul class="ul">
+    <li><b>같은 군집</b> 관측 값 간 유사도는 <b>높게</b> &mdash; 유클리디안 거리 값이 <b>작다</b>(관측치 간 거리가 가깝다)</li>
+    <li><b>다른 군집</b> 관측 값 간 유사도는 <b>낮게</b> &mdash; 유클리디안 거리 값이 <b>크다</b>(관측치 간 거리가 멀다)</li>
+  </ul>
+  <p>7p는 <span class="tex">\mathbf x_4=(175,74)</span>와 <span class="tex">\mathbf x_7=(180,78)</span> 사이 거리를 두 방식으로 잰다.</p>
+  <div class="fx">
+    <div class="tex-d">\text{Euclidean}(\mathbf x_4,\mathbf x_7)=\sqrt{\sum_{j=1}^{2}(x_{4j}-x_{7j})^2}=\sqrt{(175-180)^2+(74-78)^2}=\sqrt{25+16}=\sqrt{41}\approx6.40</div>
+    <div class="tex-d">\text{Manhattan}(\mathbf x_4,\mathbf x_7)=\sum_{j=1}^{2}|x_{4j}-x_{7j}|=|175-180|+|74-78|=5+4=9</div>
+    <p class="fx-note">유클리디안은 두 점을 <b>곧장 잇는 직선 길이</b>(직각삼각형의 빗변), 맨하탄은 <b>가로 · 세로로만 걸어간 길이</b>(두 변의 합)다. 그래서 늘 맨하탄 ≥ 유클리디안. 두 식은 <a class="ext" href="machine-learning-week07.html#dist">7주차 7.3절</a>과 똑같다.</p>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>코사인 유사도와 &lsquo;단위&rsquo; 문제</h3>
+  <p>교안이 이름만 든 <b>코사인 유사도</b>는 두 벡터의 <b>길이는 무시하고 방향만</b> 비교한다.</p>
+  <div class="fx"><div class="tex-d">\cos(\mathbf a,\mathbf b)=\frac{\mathbf a\cdot\mathbf b}{\lVert\mathbf a\rVert\,\lVert\mathbf b\rVert}\qquad(1\text{이면 같은 방향},\;0\text{이면 직각})</div>
+  <p class="fx-note">거리와 반대로 <b>클수록 비슷하다</b>. 문서처럼 &lsquo;단어 비율&rsquo;이 중요하고 &lsquo;글 길이&rsquo;는 상관없을 때 쓴다(교안 예시의 <b>관련 문서 정리</b>). <a class="ext" href="nlp-week05.html">자연어처리 5주차</a> 텍스트 유사도와 같은 식이다.</p></div>
+  <p>그리고 거리를 쓸 때는 <b>특징의 단위</b>를 조심해야 한다. 키를 m로 바꿔 1.70 · 1.69 &hellip;로 쓰면 키 차이는 0.01 단위가 되어 거리 계산에서 거의 사라지고, 몸무게만으로 군집이 갈린다. 그래서 실전에서는 군집화 전에 특징마다 <b>표준화</b>(평균 0 · 표준편차 1)를 해 두는 경우가 많다. 교안 예제는 키(cm)와 몸무게(kg)의 범위가 비슷해 그대로 쓴다.</p>
+</div>
+</section>
+
+<!-- ===================== 9.3 ===================== -->
+<section class="sec" id="algos">
+  <div class="sec-head"><span class="sec-badge">9.3</span><h2 class="sec-title">군집화 알고리즘의 종류 — 무엇을 쓸 것인가<small>교안 8~10p</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>8 · 9 · 10p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-08-algos.jpg" alt="교안 8p — K-평균 군집화와 계층적 군집화"><figcaption><b>8p</b> K-평균 · 계층적 군집화</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-09-dbscan.jpg" alt="교안 9p — 밀도기반 군집화 DBSCAN"><figcaption><b>9p</b> 밀도기반 군집화(DBSCAN)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-10-dbscan-dendro.jpg" alt="교안 10p — 밀도기반 군집화와 계층적 군집화 예시"><figcaption><b>10p</b> DBSCAN 결과 · 덴드로그램</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>세 가지 알고리즘의 장단점 (8~10p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>알고리즘</th><th>한 줄 정의</th><th>장점</th><th>단점</th></tr></thead>
+    <tbody>
+      <tr><td><b>K-평균 군집화</b><br>(k-means clustering)</td><td><b>대표적인 분리형</b> 군집화 알고리즘</td><td>절차가 <b>단순하고 직관적</b></td><td>사전에 군집의 수를 의미하는 <b>초매개변수 k를 정해 줘야</b> 한다</td></tr>
+      <tr><td><b>계층적 군집화</b><br>(hierarchical clustering)</td><td>개체들을 <b>가까운 집단부터 차근차근 결합</b></td><td>군집 수 <b>k 지정이 필요 없음</b> · 결과를 트리 형태(<b>덴드로그램</b>)로 시각화 가능</td><td><b>모든 관측치 간 유사도</b>를 연산하므로 관측치가 많을수록 <b>연산량이 기하급수적으로 증가</b></td></tr>
+      <tr><td><b>밀도기반 군집화</b><br>(DBSCAN)</td><td><b>데이터 밀도</b>를 연산하여 군집을 결정</td><td>군집 수 <b>k 지정이 필요 없음</b> · <b>원뿔 모양 등 특이한</b> 관측치 분포도 군집화 가능</td><td>관측치 내 <b>밀도가 다양</b>하게 분포하거나, 특징 벡터의 <b>성분 수가 많으면</b> 성능 하락</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>10p 왼쪽 그림은 DBSCAN 결과 &mdash; 가운데 파란 덩어리와 그것을 <b>초승달처럼 감싼 초록 띠</b>를 서로 다른 군집으로 정확히 나눈다. 띠는 둥글지 않아서 K-평균으로는 이렇게 못 나눈다. 오른쪽은 계층적 군집화의 <b>덴드로그램</b>으로, 아래에서 위로 올라가며 관측치들이 어떤 순서로 합쳐졌는지 보여 준다.</p>
+  <p class="fx-note">DBSCAN = Density-Based Spatial Clustering of Applications with Noise(잡음이 있는 응용을 위한 밀도 기반 공간 군집화).</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>계층적 군집화와 DBSCAN은 실제로 어떻게 도나</h3>
+  <p><b>계층적 군집화(병합형)</b> &mdash; ① 처음에는 관측치 하나하나가 각자 군집이다(10명이면 10개). ② <b>가장 가까운 두 군집</b>을 하나로 합친다. ③ 하나가 남을 때까지 반복한다. 합친 순서와 그때의 거리를 나무로 그린 것이 덴드로그램이다. <b>어느 높이에서 가로로 자르느냐</b>에 따라 군집 수가 정해지므로 k를 미리 정할 필요가 없다. &lsquo;두 군집 사이 거리&rsquo;를 무엇으로 볼지가 선택지다 &mdash; 가장 가까운 두 점(단일 연결), <b>가장 먼 두 점(완전 연결, 10p 그림 제목의 &lsquo;Complete&rsquo;)</b>, 모든 쌍의 평균(평균 연결). 매 단계 모든 군집 쌍의 거리를 봐야 해서 n이 크면 느리다(교안의 단점).</p>
+  <p><b>DBSCAN</b> &mdash; 두 값을 정한다. 반경 <span class="tex">\varepsilon</span>(이웃으로 칠 거리)과 최소 이웃 수 <span class="tex">\text{minPts}</span>.</p>
+  <ul class="ul">
+    <li><b>핵심점</b> &mdash; 반경 <span class="tex">\varepsilon</span> 안에 이웃이 <span class="tex">\text{minPts}</span>개 이상 = &lsquo;붐비는 곳&rsquo;</li>
+    <li>서로 반경 안에 있는 핵심점들을 <b>줄줄이 이어</b> 하나의 군집을 만든다 &mdash; 그래서 초승달 · 고리처럼 휘어진 모양도 따라간다</li>
+    <li>어느 핵심점 근처에도 없는 외톨이 점은 <b>잡음(noise)</b>으로 남긴다 &mdash; 10p 그림의 흩어진 회색 점. 이상치 탐지에도 쓰이는 이유다</li>
+  </ul>
+  <p>약점도 여기서 나온다. <span class="tex">\varepsilon</span>를 하나로 정하니 <b>빽빽한 군집과 성긴 군집이 섞여 있으면</b> 한쪽에 맞추면 다른 쪽이 틀린다(교안의 &lsquo;밀도가 다양하면 성능 하락&rsquo;). 차원이 높으면 모든 점 사이 거리가 비슷해져 &lsquo;붐빈다&rsquo;는 판단 자체가 흐려진다(&lsquo;성분 수가 많으면 성능 하락&rsquo;).</p>
+</div>
+</section>
+
+<!-- ===================== 9.4 ===================== -->
+<section class="sec" id="kmeans">
+  <div class="sec-head"><span class="sec-badge">9.4</span><h2 class="sec-title">K-평균 군집화 — 특성과 수행 절차<small>교안 11~13p</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>11 · 12 · 13p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-11-kmeans-props.jpg" alt="교안 11p — K-평균 군집화의 특성"><figcaption><b>11p</b> K-평균의 특성 &mdash; 중심점(Centroid)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-12-kmeans-k3.jpg" alt="교안 12p — K-평균 군집화 수행 예시 k=3"><figcaption><b>12p</b> 중복 없는 배정 · 수행 예시(k = 3)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-13-procedure.jpg" alt="교안 13p — K-평균 군집화 수행 절차 Step 1~4"><figcaption><b>13p</b> 수행 절차 Step 1~4</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>K-평균 군집화의 특성 (11 · 12p)</h3>
+  <ul class="ul">
+    <li>초매개변수 <b>k에 맞는 군집 수</b>로 군집화를 수행한다</li>
+    <li>각 군집은 <b>하나의 중심점(Centroid)</b>을 가진다 &mdash; 군집에 속하는 관측 값들을 대표하는 점, 즉 <b>관측 값 특징 벡터의 평균값이 성분인 벡터</b></li>
+    <li>모든 관측 값은 k개의 군집 중 <b>적어도 하나</b>에 속한다</li>
+    <li>각 관측 값은 <b>가장 유사한 중심점</b>과 동일한 군집으로 할당된다. 같은 중심에 할당된 관측 값들이 모여 하나의 군집을 이룬다</li>
+    <li>군집 간 <b>중복되는 관측 값이 없다</b> &mdash; 어떠한 관측치도 두 개 이상의 군집에 속하지 않는다</li>
+  </ul>
+  <p>둘째와 다섯째를 합치면 <span class="hi">모든 관측치는 정확히 하나의 군집에 속한다.</span> 이런 방식을 &lsquo;분리형(partitional)&rsquo; 군집화라고 부른다 &mdash; 8p가 K-평균을 &lsquo;대표적인 분리형&rsquo;이라 한 이유다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>수행 절차 Step 1~4 (13p)</h3>
+  <div class="flow">
+    <div class="fl"><b>Step 1. k개의 중심점을 임의로 생성</b><span>이렇게 처음 만든 중심점을 <b>초기 중심점</b>이라고도 한다</span></div>
+    <div class="fl"><b>Step 2. k개의 중심점을 기준으로 모든 관측 값의 군집 할당</b><span>모든 관측 값과 중심점의 유사도를 측정 → <b>가장 유사도가 큰(거리가 가장 작은)</b> 중심점의 군집으로 할당 (유사도 측도: 유클리디안 거리)</span></div>
+    <div class="fl"><b>Step 3. 각 군집의 중심점을 새롭게 정의</b><span>새 중심점 = 각 군집 내 관측 값 특징 벡터의 <b>평균 벡터</b></span></div>
+    <div class="fl"><b>Step 4. 종료 조건까지 Step 2 ~ Step 3 반복</b><span>관측 값에 적합한 종료 조건 &mdash; <b>지정된 횟수만큼 반복</b>, <b>중심점이 변하지 않을 때까지</b> 등 (9.7절: SSE 기준도 가능)</span></div>
+  </div>
+  <div class="fx">
+    <p class="fx-lab">새 중심점 (16p의 수식 참조)</p>
+    <div class="tex-d">\mathbf c_j=\frac{1}{n_j}\sum_{i=1}^{n_j}\mathbf x_i=\left(\frac{1}{n_j}\sum_{i=1}^{n_j}x_{i1},\;\frac{1}{n_j}\sum_{i=1}^{n_j}x_{i2}\right)</div>
+    <p class="fx-note"><span class="tex">\mathbf c_j</span>: 군집 <span class="tex">j</span>의 중심점, <span class="tex">n_j</span>: 군집 <span class="tex">j</span>에 속한 관측치 수. 키는 키끼리, 몸무게는 몸무게끼리 <b>따로 평균</b>을 낸다.</p>
+  </div>
+</div>
+
+<div class="pit"><b>kNN의 k와 K-평균의 K는 같은 글자, 다른 뜻</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>kNN (7주차)</th><th>K-평균 (9주차)</th></tr></thead>
+  <tbody>
+    <tr><td>학습 종류</td><td>지도학습 &mdash; 라벨 있음</td><td>비지도 학습 &mdash; 라벨 없음</td></tr>
+    <tr><td>k의 뜻</td><td><b>물어볼 이웃의 수</b></td><td><b>만들 군집의 수</b></td></tr>
+    <tr><td>&lsquo;가장 가까운&rsquo; 대상</td><td>훈련 데이터의 <b>관측치들</b></td><td><b>중심점</b>(관측치가 아니라 평균으로 만든 점)</td></tr>
+    <tr><td>결과</td><td>새 데이터의 <b>라벨 예측</b></td><td>데이터를 k개 무리로 <b>나눈 결과</b>(무리의 이름은 없다)</td></tr>
+    <tr><td>반복 학습</td><td>없음(저장만 하는 게으른 학습)</td><td>Step 2~3을 <b>수렴할 때까지 반복</b></td></tr>
+  </tbody>
+</table>
+</div>
+공통점은 하나 &mdash; 둘 다 <b>유클리디안 거리로 &lsquo;가장 가까운 것&rsquo;을 고른다</b>.</div>
+
+<div class="deep"><b>왜 하필 &lsquo;평균&rsquo;을 새 중심점으로 쓰나 &mdash; 그리고 왜 반드시 멈추나</b>
+<p>K-평균이 몰래 줄이고 있는 값은 9.7절의 SSE, 즉 <b>각 관측치에서 자기 중심점까지 거리의 제곱 합</b>이다. Step 2와 Step 3은 이 값을 번갈아 줄이는 두 동작이다.</p>
+<ul class="ul">
+  <li><b>Step 2(배정)</b> &mdash; 중심점은 그대로 두고, 각 점을 <b>가장 가까운</b> 중심점으로 옮긴다. 더 가까운 곳으로만 옮기니 SSE는 줄거나 그대로다</li>
+  <li><b>Step 3(갱신)</b> &mdash; 무리는 그대로 두고 중심점을 옮긴다. <b>거리 제곱 합을 가장 작게 만드는 점이 바로 평균</b>이다. 예: 1차원 점 1 · 2 · 6의 평균은 3이고, 3에서 재면 <span class="tex">4+1+9=14</span>. 2에서 재면 <span class="tex">1+0+16=17</span>, 4에서 재면 <span class="tex">9+4+4=17</span> &mdash; 평균에서 가장 작다</li>
+</ul>
+<p>두 단계 모두 SSE를 키우지 않고, 점을 k개로 나누는 방법의 수는 유한하므로 <b>언젠가는 더 바뀌지 않는 상태에 도착</b>한다(수렴). 다만 그곳이 <b>가장 좋은 답(전역 최솟값)이라는 보장은 없다</b> &mdash; 출발점(초기 중심점)에 따라 다른 곳에 멈출 수 있다. 9.6절의 주제다.</p>
+</div>
+</section>
+
+<!-- ===================== 9.5 ===================== -->
+<section class="sec" id="ex1">
+  <div class="sec-head"><span class="sec-badge">9.5</span><h2 class="sec-title">K-평균 예시 1 — 10명을 3무리로<small>교안 14~17p · k = 3</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>14 · 15 · 16 · 17p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-14-ex1-s1.jpg" alt="교안 14p — Step 1 중심점 3개 임의 생성"><figcaption><b>14p</b> Step 1 &mdash; 중심점 3개를 임의로</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-15-ex1-s2.jpg" alt="교안 15p — Step 2 관측값과 중심점 거리표"><figcaption><b>15p</b> Step 2 &mdash; 〈표3〉 거리표로 배정</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-16-ex1-s3.jpg" alt="교안 16p — Step 3 새로운 중심점"><figcaption><b>16p</b> Step 3 &mdash; 평균으로 새 중심점 〈표4〉</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-17-ex1-s4.jpg" alt="교안 17p — Step 4 최종 중심점"><figcaption><b>17p</b> Step 4 &mdash; 〈표5〉 최종 중심점</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>Step 1 — 중심점 3개를 임의로 (14p)</h3>
+  <p>〈표2〉 초기 중심점 &mdash; <span class="tex">\mathbf c_1=(171,73)</span>, <span class="tex">\mathbf c_2=(179,75)</span>, <span class="tex">\mathbf c_3=(187,79)</span>. 그림에 X로 표시한다. &lsquo;임의로&rsquo;라서 아무 데나 놓아도 된다 &mdash; 관측치 위가 아니어도 된다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>Step 2 — 거리를 재고 가장 가까운 중심점에 배정 (15p)</h3>
+  <p>관측치 10개 × 중심점 3개 = 거리 <b>30개</b>를 계산한다. 예를 들어 <span class="tex">\mathbf x_1=(170,75)</span>과 <span class="tex">\mathbf c_1=(171,73)</span>: <span class="tex">\sqrt{(170-171)^2+(75-73)^2}</span> <span class="tex">=\sqrt{1+4}=\sqrt5\approx2.24</span>. 각 행에서 <b>가장 작은 값</b>(굵게)이 그 관측치의 군집이다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>〈표3〉</th><th>c<sub>1</sub> (171, 73)</th><th>c<sub>2</sub> (179, 75)</th><th>c<sub>3</sub> (187, 79)</th><th>배정</th></tr></thead>
+    <tbody>
+      <tr><td>x<sub>1</sub> (170, 75)</td><td><b>2.24</b></td><td>9.00</td><td>17.46</td><td>군집 1</td></tr>
+      <tr><td>x<sub>2</sub> (169, 80)</td><td><b>7.28</b></td><td>11.18</td><td>18.03</td><td>군집 1</td></tr>
+      <tr><td>x<sub>3</sub> (172, 78)</td><td><b>5.10</b></td><td>7.62</td><td>15.03</td><td>군집 1</td></tr>
+      <tr><td>x<sub>4</sub> (175, 74)</td><td><b>4.12</b></td><td><b>4.12</b></td><td>13.00</td><td>동점 → 교안은 군집 1</td></tr>
+      <tr><td>x<sub>5</sub> (176, 70)</td><td><b>5.83</b></td><td><b>5.83</b></td><td>14.21</td><td>동점 → 교안은 군집 2</td></tr>
+      <tr><td>x<sub>6</sub> (178, 72)</td><td>7.07</td><td><b>3.16</b></td><td>11.40</td><td>군집 2</td></tr>
+      <tr><td>x<sub>7</sub> (180, 78)</td><td>10.30</td><td><b>3.16</b></td><td>7.07</td><td>군집 2</td></tr>
+      <tr><td>x<sub>8</sub> (181, 73)</td><td>10.00</td><td><b>2.83</b></td><td>8.49</td><td>군집 2</td></tr>
+      <tr><td>x<sub>9</sub> (183, 85)</td><td>16.97</td><td>10.77</td><td><b>7.21</b></td><td>군집 3</td></tr>
+      <tr><td>x<sub>10</sub> (185, 75)</td><td>14.14</td><td>6.00</td><td><b>4.47</b></td><td>군집 3</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>결과 &mdash; <b>군집 1 = {x<sub>1</sub>, x<sub>2</sub>, x<sub>3</sub>, x<sub>4</sub>}, 군집 2 = {x<sub>5</sub>, x<sub>6</sub>, x<sub>7</sub>, x<sub>8</sub>}, 군집 3 = {x<sub>9</sub>, x<sub>10</sub>}</b>.</p>
+  <div class="tip"><b>교안 〈표3〉과 숫자가 조금 다른 칸</b> &mdash; 교안은 둘째 자리에서 버림을 해서 2.23 · 5.09처럼 0.01씩 작은 값이 있다. 또 <b>x<sub>5</sub>–c<sub>2</sub>가 4.12, x<sub>6</sub>–c<sub>2</sub>가 5.83으로 적혀 있는데</b>, 직접 계산하면 각각 <span class="tex">\sqrt{3^2+5^2}=5.83</span>, <span class="tex">\sqrt{1^2+3^2}=3.16</span>이다(옮겨 적다 생긴 오타로 보인다). 어느 쪽이든 <b>배정 결과는 같다</b>.</div>
+</div>
+
+<div class="pit"><b>거리가 똑같으면 어디로? — 동점(tie)</b> &mdash; x<sub>4</sub>는 c<sub>1</sub> · c<sub>2</sub>까지 둘 다 <span class="tex">\sqrt{17}\approx4.12</span>, x<sub>5</sub>는 둘 다 <span class="tex">\sqrt{34}\approx5.83</span>로 정확히 같다. 교안은 x<sub>4</sub>를 군집 1, x<sub>5</sub>를 군집 2로 보냈다(16p의 평균 계산에서 확인된다). K-평균 정의에는 동점 규칙이 없어서 <b>어느 쪽도 틀리지 않는다</b>. 다만 시험에서 직접 계산할 때는 &lsquo;동점이라 어느 쪽에 두었는지&rsquo;를 한 줄 적어 두면 안전하다. 코드에서는 <code>np.argmin</code>이 <b>번호가 앞선 쪽</b>(c<sub>1</sub>)을 고른다 &mdash; 그러면 x<sub>5</sub>도 군집 1로 간다. 7주차 실습에서 동점 처리 때문에 정확도가 0.80 vs 0.75로 갈렸던 것과 같은 종류의 문제다.</div>
+
+<figure class="fig svgfig">
+  <div class="svg-scroll"><svg viewBox="0 0 640 310" role="img" aria-label="예시 1 Step 2 배정 산점도"><line x1="50" y1="280" x2="620" y2="280" stroke="#334155" stroke-width="1.5"/><line x1="50" y1="280" x2="50" y2="20" stroke="#334155" stroke-width="1.5"/><line x1="86" y1="280" x2="86" y2="284" stroke="#94a3b8"/><text x="86" y="297" font-size="10" text-anchor="middle" fill="#64748b">168</text><line x1="138" y1="280" x2="138" y2="284" stroke="#94a3b8"/><text x="138" y="297" font-size="10" text-anchor="middle" fill="#64748b">170</text><line x1="190" y1="280" x2="190" y2="284" stroke="#94a3b8"/><text x="190" y="297" font-size="10" text-anchor="middle" fill="#64748b">172</text><line x1="242" y1="280" x2="242" y2="284" stroke="#94a3b8"/><text x="242" y="297" font-size="10" text-anchor="middle" fill="#64748b">174</text><line x1="294" y1="280" x2="294" y2="284" stroke="#94a3b8"/><text x="294" y="297" font-size="10" text-anchor="middle" fill="#64748b">176</text><line x1="346" y1="280" x2="346" y2="284" stroke="#94a3b8"/><text x="346" y="297" font-size="10" text-anchor="middle" fill="#64748b">178</text><line x1="398" y1="280" x2="398" y2="284" stroke="#94a3b8"/><text x="398" y="297" font-size="10" text-anchor="middle" fill="#64748b">180</text><line x1="450" y1="280" x2="450" y2="284" stroke="#94a3b8"/><text x="450" y="297" font-size="10" text-anchor="middle" fill="#64748b">182</text><line x1="502" y1="280" x2="502" y2="284" stroke="#94a3b8"/><text x="502" y="297" font-size="10" text-anchor="middle" fill="#64748b">184</text><line x1="554" y1="280" x2="554" y2="284" stroke="#94a3b8"/><text x="554" y="297" font-size="10" text-anchor="middle" fill="#64748b">186</text><line x1="46" y1="244" x2="50" y2="244" stroke="#94a3b8"/><text x="42" y="247" font-size="10" text-anchor="end" fill="#64748b">70</text><line x1="46" y1="179" x2="50" y2="179" stroke="#94a3b8"/><text x="42" y="182" font-size="10" text-anchor="end" fill="#64748b">75</text><line x1="46" y1="114" x2="50" y2="114" stroke="#94a3b8"/><text x="42" y="117" font-size="10" text-anchor="end" fill="#64748b">80</text><line x1="46" y1="49" x2="50" y2="49" stroke="#94a3b8"/><text x="42" y="52" font-size="10" text-anchor="end" fill="#64748b">85</text><text x="620" y="272" font-size="11" text-anchor="end" fill="#334155">키 (cm)</text><text x="56" y="16" font-size="11" fill="#334155">몸무게 (kg)</text><path d="M156.0 197.0L172.0 213.0M156.0 213.0L172.0 197.0" stroke="#65a30d" stroke-width="3"/><text x="174.0" y="221.0" font-size="10.5" font-weight="700" fill="#65a30d">중심점1 (171, 73)</text><path d="M364.0 171.0L380.0 187.0M364.0 187.0L380.0 171.0" stroke="#7c3aed" stroke-width="3"/><text x="382.0" y="195.0" font-size="10.5" font-weight="700" fill="#7c3aed">중심점2 (179, 75)</text><path d="M572.0 119.0L588.0 135.0M572.0 135.0L588.0 119.0" stroke="#0891b2" stroke-width="3"/><text x="570.0" y="143.0" font-size="10.5" font-weight="700" text-anchor="end" fill="#0891b2">중심점3 (187, 79)</text><circle cx="138" cy="179" r="12" fill="#65a30d" fill-opacity=".85"/><text x="138" y="183" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">x1</text><circle cx="112" cy="114" r="12" fill="#65a30d" fill-opacity=".85"/><text x="112" y="118" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">x2</text><circle cx="190" cy="140" r="12" fill="#65a30d" fill-opacity=".85"/><text x="190" y="144" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">x3</text><circle cx="268" cy="192" r="12" fill="#65a30d" fill-opacity=".85"/><text x="268" y="196" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">x4</text><circle cx="294" cy="244" r="12" fill="#7c3aed" fill-opacity=".85"/><text x="294" y="248" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">x5</text><circle cx="346" cy="218" r="12" fill="#7c3aed" fill-opacity=".85"/><text x="346" y="222" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">x6</text><circle cx="398" cy="140" r="12" fill="#7c3aed" fill-opacity=".85"/><text x="398" y="144" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">x7</text><circle cx="424" cy="205" r="12" fill="#7c3aed" fill-opacity=".85"/><text x="424" y="209" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">x8</text><circle cx="476" cy="49" r="12" fill="#0891b2" fill-opacity=".85"/><text x="476" y="53" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">x9</text><circle cx="528" cy="179" r="12" fill="#0891b2" fill-opacity=".85"/><text x="528" y="183" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">x10</text></svg></div>
+  <figcaption>예시 1의 Step 2 배정(교안 15p 그림을 좌표 그대로 다시 그림). × 는 초기 중심점. 가로 = 키, 세로 = 몸무게.</figcaption>
+</figure>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>Step 3 — 무리마다 평균을 내 새 중심점 (16p)</h3>
+  <div class="fx">
+    <div class="tex-d">\mathbf c_1=\left(\tfrac14(170+169+172+175),\;\tfrac14(75+80+78+74)\right)=\left(\tfrac{686}{4},\tfrac{307}{4}\right)=(171.5,\;76.75)</div>
+    <div class="tex-d">\mathbf c_2=\left(\tfrac14(176+178+180+181),\;\tfrac14(70+72+78+73)\right)=(178.75,\;73.25)</div>
+    <div class="tex-d">\mathbf c_3=\left(\tfrac12(183+185),\;\tfrac12(85+75)\right)=(184,\;80)</div>
+    <p class="fx-note">〈표4〉 새로운 중심점 할당. 군집 1은 <span class="tex">n_1=4</span>, 군집 3은 <span class="tex">n_3=2</span>(16p 오른쪽 위 표기). 중심점이 무리의 한가운데로 끌려온다.</p>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>Step 4 — 중심점이 변하지 않을 때까지 반복 (17p)</h3>
+  <p>Step 2~3을 반복해 중심점이 더 바뀌지 않으면 멈춘다. 교안 〈표5〉의 최종 중심점은 <span class="tex">\mathbf c_1=(170.3,\,77.6)</span>, <span class="tex">\mathbf c_2=(176.3,\,72)</span>, <span class="tex">\mathbf c_3=(182.3,\,77.8)</span>이고, 군집은 <b>{x<sub>1</sub>, x<sub>2</sub>, x<sub>3</sub>} · {x<sub>4</sub>, x<sub>5</sub>, x<sub>6</sub>} · {x<sub>7</sub>, x<sub>8</sub>, x<sub>9</sub>, x<sub>10</sub>}</b>이다(각 군집 평균을 내면 표5의 값이 정확히 나온다).</p>
+</div>
+
+<div class="deep"><b>직접 끝까지 돌려 보면 — 교안의 &lsquo;최종&rsquo;은 한 번 더 움직인다</b>
+<p>16p의 중심점 <span class="tex">(171.5,76.75)</span> · <span class="tex">(178.75,73.25)</span> · <span class="tex">(184,80)</span>으로 Step 2를 다시 하면 x<sub>8</sub>(181, 73)은 c<sub>2</sub>까지 <b>2.26</b>, c<sub>3</sub>까지 7.62라 <b>군집 2</b>로 간다. 교안 17p처럼 x<sub>8</sub>을 군집 3에 두어도, 그 상태의 중심점 <span class="tex">(176.33,72)</span> · <span class="tex">(182.25,77.75)</span>에서 다시 재면 x<sub>8</sub>은 c<sub>2</sub>까지 <b>4.77</b>, c<sub>3</sub>까지 <b>4.91</b>로 여전히 c<sub>2</sub>가 더 가깝다 &mdash; 아직 &lsquo;중심점이 변하지 않는&rsquo; 상태가 아니다.</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>반복</th><th>군집 1</th><th>군집 2</th><th>군집 3</th><th>중심점</th></tr></thead>
+  <tbody>
+    <tr><td>1회차 배정</td><td>x1 x2 x3 x4</td><td>x5 x6 x7 x8</td><td>x9 x10</td><td>(171.5, 76.75) · (178.75, 73.25) · (184, 80)</td></tr>
+    <tr><td>2회차 배정</td><td>x1 x2 x3</td><td>x4 x5 x6 <b>x8</b></td><td><b>x7</b> x9 x10</td><td>(170.33, 77.67) · (177.5, 72.25) · (182.67, 79.33)</td></tr>
+    <tr><td>3회차 배정</td><td colspan="3">2회차와 같다 → <b>수렴</b></td><td>변화 없음</td></tr>
+  </tbody>
+</table>
+</div>
+<p>즉 정말로 끝까지 돌리면 예시 1도 <b>{x1, x2, x3} · {x4, x5, x6, x8} · {x7, x9, x10}</b>에서 멈춘다 &mdash; 아래 예시 2의 결과와 같다. 교안은 &lsquo;초기 중심점에 따라 결과가 달라질 수 있다&rsquo;는 메시지를 보여 주려고 반복을 일찍 끊은 것으로 보인다. <b>시험에서는 교안의 흐름(예시 1 SSE &gt; 예시 2 SSE → 예시 2가 더 좋다)을 따르되</b>, 메시지 자체는 사실이다 &mdash; 데이터가 크고 흩어져 있으면 초기 중심점에 따라 실제로 다른 곳에 멈춘다(9.6절).</p>
+</div>
+
+<figure class="fig svgfig">
+  <div class="svg-scroll"><svg viewBox="0 0 640 310" role="img" aria-label="최종 군집 산점도"><line x1="50" y1="280" x2="620" y2="280" stroke="#334155" stroke-width="1.5"/><line x1="50" y1="280" x2="50" y2="20" stroke="#334155" stroke-width="1.5"/><line x1="86" y1="280" x2="86" y2="284" stroke="#94a3b8"/><text x="86" y="297" font-size="10" text-anchor="middle" fill="#64748b">168</text><line x1="138" y1="280" x2="138" y2="284" stroke="#94a3b8"/><text x="138" y="297" font-size="10" text-anchor="middle" fill="#64748b">170</text><line x1="190" y1="280" x2="190" y2="284" stroke="#94a3b8"/><text x="190" y="297" font-size="10" text-anchor="middle" fill="#64748b">172</text><line x1="242" y1="280" x2="242" y2="284" stroke="#94a3b8"/><text x="242" y="297" font-size="10" text-anchor="middle" fill="#64748b">174</text><line x1="294" y1="280" x2="294" y2="284" stroke="#94a3b8"/><text x="294" y="297" font-size="10" text-anchor="middle" fill="#64748b">176</text><line x1="346" y1="280" x2="346" y2="284" stroke="#94a3b8"/><text x="346" y="297" font-size="10" text-anchor="middle" fill="#64748b">178</text><line x1="398" y1="280" x2="398" y2="284" stroke="#94a3b8"/><text x="398" y="297" font-size="10" text-anchor="middle" fill="#64748b">180</text><line x1="450" y1="280" x2="450" y2="284" stroke="#94a3b8"/><text x="450" y="297" font-size="10" text-anchor="middle" fill="#64748b">182</text><line x1="502" y1="280" x2="502" y2="284" stroke="#94a3b8"/><text x="502" y="297" font-size="10" text-anchor="middle" fill="#64748b">184</text><line x1="554" y1="280" x2="554" y2="284" stroke="#94a3b8"/><text x="554" y="297" font-size="10" text-anchor="middle" fill="#64748b">186</text><line x1="46" y1="244" x2="50" y2="244" stroke="#94a3b8"/><text x="42" y="247" font-size="10" text-anchor="end" fill="#64748b">70</text><line x1="46" y1="179" x2="50" y2="179" stroke="#94a3b8"/><text x="42" y="182" font-size="10" text-anchor="end" fill="#64748b">75</text><line x1="46" y1="114" x2="50" y2="114" stroke="#94a3b8"/><text x="42" y="117" font-size="10" text-anchor="end" fill="#64748b">80</text><line x1="46" y1="49" x2="50" y2="49" stroke="#94a3b8"/><text x="42" y="52" font-size="10" text-anchor="end" fill="#64748b">85</text><text x="620" y="272" font-size="11" text-anchor="end" fill="#334155">키 (cm)</text><text x="56" y="16" font-size="11" fill="#334155">몸무게 (kg)</text><path d="M138.6 136.3L154.6 152.3M138.6 152.3L154.6 136.3" stroke="#65a30d" stroke-width="3"/><text x="156.6" y="160.3" font-size="10.5" font-weight="700" fill="#65a30d">중심점1 (170.33, 77.67)</text><path d="M325.0 206.8L341.0 222.8M325.0 222.8L341.0 206.8" stroke="#7c3aed" stroke-width="3"/><text x="343.0" y="230.8" font-size="10.5" font-weight="700" fill="#7c3aed">중심점2 (177.5, 72.25)</text><path d="M459.4 114.7L475.4 130.7M459.4 130.7L475.4 114.7" stroke="#0891b2" stroke-width="3"/><text x="477.4" y="138.7" font-size="10.5" font-weight="700" fill="#0891b2">중심점3 (182.67, 79.33)</text><circle cx="138" cy="179" r="12" fill="#65a30d" fill-opacity=".85"/><text x="138" y="183" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">x1</text><circle cx="112" cy="114" r="12" fill="#65a30d" fill-opacity=".85"/><text x="112" y="118" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">x2</text><circle cx="190" cy="140" r="12" fill="#65a30d" fill-opacity=".85"/><text x="190" y="144" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">x3</text><circle cx="268" cy="192" r="12" fill="#7c3aed" fill-opacity=".85"/><text x="268" y="196" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">x4</text><circle cx="294" cy="244" r="12" fill="#7c3aed" fill-opacity=".85"/><text x="294" y="248" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">x5</text><circle cx="346" cy="218" r="12" fill="#7c3aed" fill-opacity=".85"/><text x="346" y="222" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">x6</text><circle cx="398" cy="140" r="12" fill="#0891b2" fill-opacity=".85"/><text x="398" y="144" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">x7</text><circle cx="424" cy="205" r="12" fill="#7c3aed" fill-opacity=".85"/><text x="424" y="209" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">x8</text><circle cx="476" cy="49" r="12" fill="#0891b2" fill-opacity=".85"/><text x="476" y="53" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">x9</text><circle cx="528" cy="179" r="12" fill="#0891b2" fill-opacity=".85"/><text x="528" y="183" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">x10</text></svg></div>
+  <figcaption>끝까지 반복했을 때의 결과(예시 1 · 예시 2 공통). × 는 최종 중심점 (170.33, 77.67) · (177.5, 72.25) · (182.67, 79.33).</figcaption>
+</figure>
+</section>
+
+<!-- ===================== 9.6 ===================== -->
+<section class="sec" id="ex2">
+  <div class="sec-head"><span class="sec-badge">9.6</span><h2 class="sec-title">K-평균 예시 2 — 초기 중심점을 바꾸면<small>교안 18~25p</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>18 · 20 · 22 · 24 · 25p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-18-ex2-init.jpg" alt="교안 18p — 초기 중심점 설정 변경"><figcaption><b>18p</b> 초기 중심점 변경 〈표6〉</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-20-ex2-s2.jpg" alt="교안 20p — 예시 2 Step 2 거리표"><figcaption><b>20p</b> Step 2 &mdash; 〈표7〉 거리표</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-22-ex2-s3.jpg" alt="교안 22p — 예시 2 Step 3 새 중심점"><figcaption><b>22p</b> Step 3 &mdash; 〈표8〉 새 중심점</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-24-ex2-s4.jpg" alt="교안 24p — 예시 2 Step 4 거리표"><figcaption><b>24p</b> Step 4 &mdash; 〈표9〉 다시 배정 (연습이므로 1회)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-25-compare.jpg" alt="교안 25p — 초기 중심점에 따른 결과 비교"><figcaption><b>25p</b> 예시 1 vs 예시 2 결과 비교</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>왜 초기 중심점을 바꿔 보나 (18p)</h3>
+  <p>초기 중심점을 <b>임의의 값</b>으로 정하는 알고리즘이므로, <b>군집화 결과가 초기 중심점 설정에 따라 다르게 나타나는 경우</b>가 생긴다. 같은 데이터에서 중심점이 다르면 결과가 어떻게 되는지 확인한다. 〈표6〉 새 초기 중심점 &mdash; <span class="tex">\mathbf c_1=(171,74)</span>, <span class="tex">\mathbf c_2=(179,71)</span>, <span class="tex">\mathbf c_3=(182,80)</span>.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>Step 2 → Step 3 → Step 4 (19~24p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>〈표7〉 Step 2</th><th>c<sub>1</sub> (171, 74)</th><th>c<sub>2</sub> (179, 71)</th><th>c<sub>3</sub> (182, 80)</th><th>배정</th></tr></thead>
+    <tbody>
+      <tr><td>x<sub>1</sub></td><td><b>1.41</b></td><td>9.85</td><td>13.00</td><td>1</td></tr>
+      <tr><td>x<sub>2</sub></td><td><b>6.32</b></td><td>13.45</td><td>13.00</td><td>1</td></tr>
+      <tr><td>x<sub>3</sub></td><td><b>4.12</b></td><td>9.90</td><td>10.20</td><td>1</td></tr>
+      <tr><td>x<sub>4</sub></td><td><b>4.00</b></td><td>5.00</td><td>9.22</td><td>1</td></tr>
+      <tr><td>x<sub>5</sub></td><td>6.40</td><td><b>3.16</b></td><td>11.66</td><td>2</td></tr>
+      <tr><td>x<sub>6</sub></td><td>7.28</td><td><b>1.41</b></td><td>8.94</td><td>2</td></tr>
+      <tr><td>x<sub>7</sub></td><td>9.85</td><td>7.07</td><td><b>2.83</b></td><td>3</td></tr>
+      <tr><td>x<sub>8</sub></td><td>10.05</td><td><b>2.83</b></td><td>7.07</td><td>2</td></tr>
+      <tr><td>x<sub>9</sub></td><td>16.28</td><td>14.56</td><td><b>5.10</b></td><td>3</td></tr>
+      <tr><td>x<sub>10</sub></td><td>14.04</td><td>7.21</td><td><b>5.83</b></td><td>3</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>Step 3</b> &mdash; 군집 1 = {x1, x2, x3, x4}, 군집 2 = {x5, x6, x8}, 군집 3 = {x7, x9, x10}의 평균: 〈표8〉 <span class="tex">\mathbf c_1=(171.5,\,76.75)</span>, <span class="tex">\mathbf c_2=(178.3,\,71.6)</span>, <span class="tex">\mathbf c_3=(182.6,\,79.3)</span>. (정확히는 <span class="tex">178.33,\,71.67</span>과 <span class="tex">182.67,\,79.33</span> &mdash; 교안은 버림으로 적었다.)</p>
+  <p><b>Step 4</b> &mdash; 새 중심점으로 다시 거리를 잰다(〈표9〉). 바뀌는 점은 <b>x<sub>4</sub> 하나</b>다: c<sub>1</sub>까지 4.45, c<sub>2</sub>까지 <b>4.07</b> → 군집 2로 이동. 최종 군집은 <b>{x1, x2, x3} · {x4, x5, x6, x8} · {x7, x9, x10}</b>. 교안은 &lsquo;연습이므로 1회만 실시&rsquo;라고 적고 여기서 멈추는데, 실제로 한 번 더 해 봐도 배정이 바뀌지 않으므로 <b>이미 수렴한 결과</b>다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>초기 중심점에 따른 결과 비교 (25p)</h3>
+  <ul class="ul">
+    <li><b>관측 값의 수가 많고 분산이 큰 경우</b> 초기 중심점의 영향을 더 많이 받는다</li>
+    <li>관측 값의 <b>분포를 활용하여 초기 중심점을 정하는 방법</b> 등도 존재한다</li>
+    <li>어떤 결과가 더 군집화를 잘 수행한 결과일까? &rarr; <b>비지도 학습의 성능 측도</b>를 활용한다 (9.7절)</li>
+  </ul>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>초기 중심점 문제를 실제로는 이렇게 푼다</h3>
+  <ul class="ul">
+    <li><b>여러 번 돌려서 가장 좋은 것 고르기</b> &mdash; 초기 중심점을 바꿔 가며 K-평균을 여러 번 돌리고 <b>SSE가 가장 작은 결과</b>를 택한다. 실습의 sklearn <code>KMeans</code>가 기본으로 이렇게 한다(<code>n_init</code> 옵션 &mdash; 실습 절에서 다시)</li>
+    <li><b>K-평균++</b> (k-means++) &mdash; 교안의 &lsquo;분포를 활용해 초기 중심점을 정하는 방법&rsquo;의 대표. 첫 중심점은 관측치 중 하나를 무작위로 고르고, 다음 중심점은 <b>이미 고른 중심점에서 먼 관측치일수록 뽑힐 확률을 높여</b> 고른다. 중심점들이 처음부터 서로 멀리 흩어지므로 한 무리에 중심점 두 개가 몰리는 실패가 줄어든다. sklearn의 기본 초기화 방식이다</li>
+  </ul>
+</div>
+</section>
+
+<!-- ===================== 9.7 ===================== -->
+<section class="sec" id="sse">
+  <div class="sec-head"><span class="sec-badge">9.7</span><h2 class="sec-title">성능측도 — 오차제곱합 SSE<small>교안 26~31p</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>26 · 27 · 28 · 29 · 30p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-26-sse-def.jpg" alt="교안 26p — 오차제곱합 SSE 정의"><figcaption><b>26p</b> SSE 정의 &mdash; 작을수록 좋다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-27-sse-ex1.jpg" alt="교안 27p — 예시 1 SSE 연산 31.46"><figcaption><b>27p</b> 예시 1 &mdash; 〈표10〉 SSE = 31.46</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-28-sse-ex2.jpg" alt="교안 28p — 예시 2 SSE 연산 30.49"><figcaption><b>28p</b> 예시 2 &mdash; 〈표11〉 SSE = 30.49</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-29-sse-stop.jpg" alt="교안 29p — SSE를 종료 조건으로"><figcaption><b>29p</b> SSE를 종료 조건으로도</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-30-sse-square.jpg" alt="교안 30p — 제곱 때문에 오차가 커질수록 SSE가 급격히 커진다"><figcaption><b>30p</b> 제곱 &mdash; 큰 오차에 큰 벌점</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>SSE의 정의 (26p)</h3>
+  <div class="fx">
+    <div class="tex-d">\text{SSE}=\sum_{j=1}^{k}\sum_{i=1}^{n_j}\left(\mathbf x_i-\mathbf c_j\right)^2</div>
+    <p class="fx-note"><span class="tex">\mathbf c_j</span>: 군집 <span class="tex">j</span>의 중심점 · <span class="tex">n_j</span>: 군집 <span class="tex">j</span> 내 관측치의 수 · <span class="tex">k</span>: 사전 정의한 군집의 수. 벡터의 제곱 <span class="tex">(\mathbf x_i-\mathbf c_j)^2</span>은 <b>성분별 차이를 제곱해 더한 값</b>, 즉 <b>유클리디안 거리의 제곱</b> <span class="tex">\lVert\mathbf x_i-\mathbf c_j\rVert^2</span>이다.</p>
+  </div>
+  <p>군집별로 중심점과 군집 내 관측 값의 특징 벡터 차이를 <b>제곱하여 모두 더한다</b>. 즉 <b>중심점과 비슷한 관측 값이 많을수록</b> 좋은 성능으로 평가하고, <span class="hi">SSE 값이 작을수록 오차가 적은 군집화 결과</span>다.</p>
+  <p>읽는 법 &mdash; 바깥 <span class="tex">\sum_{j=1}^{k}</span>는 &lsquo;군집 1부터 k까지 하나씩&rsquo;, 안쪽 <span class="tex">\sum_{i=1}^{n_j}</span>는 &lsquo;그 군집에 속한 관측치 하나씩&rsquo;. 결국 <b>모든 관측치에 대해 &lsquo;자기 중심점까지 거리의 제곱&rsquo;을 한 번씩 더한 것</b>이다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>두 예시의 SSE (27 · 28p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>군집 1</th><th>군집 2</th><th>군집 3</th><th>교안의 SSE</th></tr></thead>
+    <tbody>
+      <tr><td>예시 1 〈표10〉</td><td>x1 2.68 · x2 2.68 · x3 1.69 → <b>7.05</b></td><td>x4 2.40 · x5 2.02 · x6 1.66 → <b>6.08</b></td><td>x7 2.26 · x8 4.91 · x9 7.28 · x10 3.88 → <b>18.33</b></td><td><b>31.46</b></td></tr>
+      <tr><td>예시 2 〈표11〉</td><td>x1 2.68 · x2 2.68 · x3 1.69 → <b>7.05</b></td><td>x4 2.98 · x5 2.70 · x6 0.55 · x8 3.57 → <b>9.87</b></td><td>x7 3.05 · x9 5.67 · x10 4.92 → <b>13.57</b></td><td><b>30.49</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="fx-note">교안 〈표11〉은 군집 2 · 3의 행 이름(x4~x10)이 서로 뒤섞여 인쇄돼 있다. 위 표는 값을 실제 관측치에 맞게 다시 짝지은 것이다(합계는 교안과 같다).</p>
+  <p>29p의 결론 &mdash; <b>SSE가 작은 예시 2의 군집 결과가 더 좋은 성능</b>으로 평가된다. 또 SSE는 <b>K-평균의 종료 조건</b>으로도 쓸 수 있다: <b>SSE 값이 특정 값보다 작아지면 종료</b>, 또는 <b>SSE 값이 더 이상 변하지 않으면 종료</b>.</p>
+  <p>30p &mdash; <b>제곱 연산이 들어가기 때문에 오차가 커질수록 SSE 값이 기하급수적으로 커진다.</b> 중심점에서 2만큼 떨어진 점은 4를, 4만큼 떨어진 점은 16을 더한다. 거리는 2배인데 벌점은 4배다. 멀리 떨어진 점 하나가 SSE를 크게 끌어올린다.</p>
+</div>
+
+<div class="pit"><b>교안의 표 숫자는 &lsquo;제곱하기 전&rsquo; 거리다</b> &mdash; 〈표10〉 · 〈표11〉의 2.68 · 1.69 &hellip;는 각 점에서 중심점까지의 <b>유클리디안 거리</b> 그 자체다. 26p 식대로라면 이 값을 <b>제곱해서</b> 더해야 한다. 직접 계산해 비교하면:
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>교안 방식 (거리의 합)</th><th>식 그대로 (거리 제곱의 합 = 진짜 SSE)</th></tr></thead>
+  <tbody>
+    <tr><td>예시 1</td><td>7.05 + 6.08 + 18.33 = <b>31.46</b></td><td>17.33 + 12.67 + 97.50 = <b>127.50</b></td></tr>
+    <tr><td>예시 2</td><td>7.05 + 9.87 + 13.57 = <b>30.49</b></td><td>17.33 + 29.75 + 65.33 = <b>112.42</b></td></tr>
+  </tbody>
+</table>
+</div>
+<b>결론(예시 2가 더 좋다)은 두 방식 모두 같다.</b> 시험에서 SSE를 계산하라고 하면 <b>식대로 제곱</b>해서 쓰고, 교안 숫자(31.46 · 30.49)가 보기로 나오면 &lsquo;거리 합으로 계산한 값&rsquo;임을 알아보면 된다. 진짜 SSE에서는 예시 1의 x<sub>9</sub>(거리 7.29 → 제곱 53.1)처럼 <b>멀리 떨어진 점 하나가 SSE의 절반 가까이</b>를 차지한다 &mdash; 30p의 &lsquo;오차가 커질수록 급격히 커진다&rsquo;가 바로 이것이다.</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>그럼 k는 어떻게 고르나 — SSE와 엘보 방법</h3>
+  <p>K-평균의 단점은 &lsquo;k를 미리 정해야 한다&rsquo;였다. SSE로 k를 고를 수 있을까? 교안의 10명 데이터로 k를 1~5로 바꿔 가며 <b>가능한 최선의 SSE</b>를 구해 보면(모든 묶음을 다 따져 본 값):</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>k</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>10</th></tr></thead>
+    <tbody>
+      <tr><td>최소 SSE</td><td>440.9</td><td>229.7</td><td><b>112.4</b></td><td>56.7</td><td>40.0</td><td>0</td></tr>
+      <tr><td>직전보다 줄어든 양</td><td>&mdash;</td><td>211.2</td><td>117.3</td><td>55.7</td><td>16.7</td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>k를 늘리면 SSE는 무조건 줄어든다.</b> k = 10이면 점마다 자기만의 중심점을 가져 SSE = 0이다. 그러니 &lsquo;SSE가 가장 작은 k&rsquo;를 고르면 늘 &lsquo;최대한 잘게 쪼개기&rsquo;가 답이 되어 버린다. 그래서 <b>k를 늘려도 SSE가 별로 안 줄기 시작하는 지점</b>, 그래프가 팔꿈치처럼 꺾이는 곳을 고른다 &mdash; <b>엘보(elbow) 방법</b>이다. 위 표에서는 k = 4 → 5에서 감소 폭이 확 줄어 k = 3~4 근처가 후보다. 9.6절 예시 2의 결과(112.42)가 바로 <b>k = 3에서 가능한 최선</b>이라는 것도 확인된다.</p>
+  <p class="fx-note">SSE는 같은 k끼리 비교할 때(예시 1 vs 예시 2) 쓰는 측도이고, 서로 다른 k를 비교할 때는 이렇게 꺾이는 모양을 보거나 실루엣 점수 같은 다른 측도를 함께 쓴다.</p>
+</div>
+</section>
+
+<!-- ===================== 실습 ===================== -->
+<section class="sec" id="lab">
+  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">군집화 실습 — 1000개 점을 5무리로<small>sklearn 버전과 직접 구현 버전 · 노트북에 저장된 출력 기준</small></h2></div>
+
+<div class="note-box"><b>문제 설정</b> &mdash; <code>clustering_data.csv</code>의 점 <b>1000개</b>, 특징 <b>2개</b>(<span class="tex">x_1,\,x_2</span>)를 <b>k = 5</b>개 군집으로 나눈다. 라벨 열은 없다 &mdash; 비지도 학습. 노트북은 ① sklearn으로 한 번, ② 9.4절 Step 1~4를 직접 구현해서 한 번 군집화한다.</div>
+<div class="flow">
+  <div class="fl"><b>(1) 데이터 불러오기</b><span><code>np.genfromtxt('clustering_data.csv', delimiter=',')</code> &mdash; 출력 <code>number of data : 1000</code> · <code>number of feature : 2</code></span></div>
+  <div class="fl"><b>(2) 모델 정의</b><span>sklearn <code>KMeans(n_clusters=5)</code> 또는 직접 구현한 함수 세 개(거리 · 중심점 · 라벨)</span></div>
+  <div class="fl"><b>(3) 학습 과정</b><span><code>model.fit(feature)</code> / 직접 구현은 Step 2~3을 <b>20회</b> 반복</span></div>
+  <div class="fl"><b>(4) 성능 평가</b><span>군집별 색으로 산점도 · 중심점 이동 경로 · 반복별 &lsquo;SSE&rsquo; 출력</span></div>
+</div>
+
+<div class="figs">
+  <figure class="fig"><img width="700" height="700" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-lab-input.jpg" alt="실습 — 군집화 전 입력 데이터 1000점"><figcaption>(1-2) 입력 데이터 &mdash; 눈으로 봐도 덩어리 5개쯤</figcaption></figure>
+  <figure class="fig"><img width="699" height="700" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-lab-sklearn.jpg" alt="실습 — sklearn KMeans k=5 결과"><figcaption>첫 번째 실습 &mdash; sklearn <code>KMeans(n_clusters=5)</code></figcaption></figure>
+  <figure class="fig"><img width="699" height="700" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-lab-mine.jpg" alt="실습 — 직접 구현한 K-평균 k=5 결과"><figcaption>두 번째 실습 &mdash; 직접 구현 (20회 반복)</figcaption></figure>
+  <figure class="fig"><img width="700" height="700" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml9-lab-centroid-path.jpg" alt="실습 — 중심점 이동 경로"><figcaption>(5-2) 중심점 이동 경로 &mdash; 파란 점(초기)에서 빨간 네모(최종)로</figcaption></figure>
+</div>
+<div class="tip"><b>두 결과의 색이 다른데 같은 답이다</b> &mdash; sklearn 결과에서 왼쪽 아래 무리는 초록, 직접 구현에서는 노랑이다. 하지만 <b>묶인 모양</b>은 다섯 무리 모두 같다. 군집 번호(0~4)는 &lsquo;몇 번째로 만들어진 중심점이냐&rsquo;일 뿐 <b>아무 뜻이 없다</b> &mdash; 정답 라벨이 없는 비지도 학습이라서다(9.2절 &lsquo;정답이 존재하지 않는다&rsquo;).</div>
+
+<h3 class="sub-title">첫 번째 실습 — sklearn 네 줄</h3>
+<pre class="code">from sklearn.cluster import KMeans
+model = KMeans(n_clusters=5)                       <span class="cm"># k = 5 짜리 K-평균 모델을 만든다</span>
+model.fit(feature)                                 <span class="cm"># Step 1~4 전부 — 1000×2 배열만 넣는다(라벨 없음)</span>
+predict = pd.DataFrame(model.predict(feature))     <span class="cm"># 각 점이 몇 번 군집(0~4)인지</span></pre>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>줄</th><th>풀이</th></tr></thead>
+  <tbody>
+    <tr><td><code>KMeans(n_clusters=5)</code></td><td>초매개변수 k를 여기서 정한다. 다른 옵션은 기본값 &mdash; 초기화는 <b>k-means++</b>, 초기 중심점을 바꿔 <b>여러 번</b> 돌려 SSE(sklearn 이름으로 <code>inertia_</code>)가 가장 작은 결과를 고른다</td></tr>
+    <tr><td><code>model.fit(feature)</code></td><td>지도학습의 <code>fit(x, y)</code>와 달리 <b>y가 없다</b>. 비지도 학습이라는 표시</td></tr>
+    <tr><td><code>model.predict(feature)</code></td><td>각 점에서 <b>가장 가까운 최종 중심점의 번호</b>를 돌려준다(Step 2를 한 번 더 하는 것)</td></tr>
+    <tr><td><code>plot_cluster(...)</code></td><td><code>x1[label_feature==0]</code>처럼 <b>라벨이 0인 점만 골라</b> 하늘색으로, 1이면 노랑 &hellip; 다섯 번 찍는다</td></tr>
+  </tbody>
+</table>
+</div>
+<p>출력의 <code>FutureWarning: The default value of n_init will change from 10 to 'auto'</code>는 오류가 아니다. &ldquo;초기 중심점을 바꿔 가며 돌리는 횟수(<code>n_init</code>)의 기본값이 곧 10에서 바뀐다&rdquo;는 안내다 &mdash; 9.6절 &lsquo;초기 중심점에 따라 결과가 달라진다&rsquo;를 라이브러리가 <b>10번 돌려 가장 좋은 것 고르기</b>로 처리하고 있었다는 뜻이다. <code>KMeans(n_clusters=5, n_init=10)</code>처럼 직접 적으면 경고가 사라진다.</p>
+
+<h3 class="sub-title">두 번째 실습 — 직접 구현, 줄 단위로</h3>
+<pre class="code"><span class="cm"># (3-1) 한 중심점과 모든 관측치 사이의 유클리디안 거리</span>
+def compute_distance(feature, center):
+    n = np.size(feature, 0)                  <span class="cm"># 관측치 수 1000 (axis=0)</span>
+    m = np.size(feature, 1)                  <span class="cm"># 특징 수 2 (axis=1)</span>
+    distance = np.zeros(shape=(n))
+    for i in range(n):
+        dist = 0
+        for j in range(m):
+            dist = dist + np.power((feature[i][j] - center[j]), 2)   <span class="cm"># 성분별 차이의 제곱을 더하고</span>
+        distance[i] = np.sqrt(dist)          <span class="cm"># 제곱근 → 유클리디안 거리 (9.2)</span>
+    return distance
+
+<span class="cm"># (3-2) 라벨이 value_label인 점들의 평균 = 새 중심점 (Step 3)</span>
+def compute_centroid(feature, label_feature, value_label):
+    ...
+    for i in range(n):
+        if label_feature[i] == value_label:  <span class="cm"># 이 군집에 속한 점만</span>
+            cnt = cnt + 1                    <span class="cm"># 개수 n_j 를 세고</span>
+            centroid += feature[i]           <span class="cm"># 좌표를 더한 뒤</span>
+    centroid = centroid / cnt                <span class="cm"># 개수로 나눈다 → 평균</span>
+    return centroid
+
+<span class="cm"># (3-3) 거리가 가장 작은 중심점의 번호 = 라벨 (Step 2)</span>
+def compute_label(distance):                 <span class="cm"># distance: 1000×5 표 (점 × 중심점)</span>
+    for i in range(n):
+        index_label_feature[i] = np.argmin(distance[i])   <span class="cm"># 다섯 거리 중 가장 작은 칸의 번호</span>
+    return index_label_feature</pre>
+<p class="fx-note">노트북 원본에서 주석을 줄이고 반복문 안쪽을 한 줄로 합쳐 옮겼다(<code>centroid += feature[i]</code>는 원본의 <code>for j in range(m): centroid[j] = centroid[j] + feat[j]</code>와 같은 동작). 세 함수가 9.4절의 거리 계산 · Step 3 · Step 2에 하나씩 대응한다.</p>
+
+<pre class="code">number_cluster, number_iteration = 5, 20
+<span class="cm"># Step 1 — 관측치 중 무작위로 5개를 골라 초기 중심점으로</span>
+for i in range(number_cluster):
+    ran = np.random.randint(0, number_data)
+    while ran not in duplist:                <span class="cm"># (아래 ⚠ 상자 참고)</span>
+        ran = np.random.randint(0, number_data)
+        duplist.append(ran)
+        centroid[i] = feature[ran]
+
+for i in range(number_iteration):            <span class="cm"># Step 4 — 20번 반복 (종료 조건 = 지정 횟수)</span>
+    for k in range(number_cluster):
+        distance[:, k] = compute_distance(feature, centroid[k])   <span class="cm"># 1000×5 거리표 (〈표3〉의 큰 버전)</span>
+    label_feature = compute_label(distance)                       <span class="cm"># Step 2 — 배정</span>
+    for k in range(number_cluster):
+        centroid[k] = compute_centroid(feature, label_feature, k) <span class="cm"># Step 3 — 평균으로 갱신</span>
+    centroid_iteration[i] = centroid                              <span class="cm"># 이동 경로 그림용으로 저장</span>
+    loss = 0
+    for n in range(number_data):
+        loss = loss + distance[n][int(label_feature[n])]          <span class="cm"># 자기 중심점까지 거리를 더한다</span>
+    print("iteration = %4d, SSE = %5.5f" % (i, loss / n))</pre>
+
+<h3 class="sub-title">출력 읽기</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>iteration</th><th>0</th><th>1</th><th>2</th><th>4</th><th>7</th><th>10</th><th>11</th><th>12</th><th>15~19</th></tr></thead>
+  <tbody>
+    <tr><td>출력된 &lsquo;SSE&rsquo;</td><td>3.83076</td><td>3.11137</td><td>3.02923</td><td>2.74116</td><td>2.49098</td><td>2.46633</td><td><b>2.46593</b></td><td>2.46596</td><td>2.46652 (그대로)</td></tr>
+  </tbody>
+</table>
+</div>
+<p>처음 몇 번은 크게 줄다가(중심점이 무리 한가운데로 빠르게 이동), 10회 무렵부터는 거의 변하지 않고, 15회부터는 소수점 다섯째 자리까지 똑같다 &mdash; <b>수렴</b>했다. 중심점 이동 경로 그림에서도 선이 처음에 길게 뻗다가 끝에서 멈춘다. 그런데 자세히 보면 11회의 2.46593에서 15회의 2.46652로 <b>살짝 다시 오른다</b>. 9.4절에서 &lsquo;K-평균은 SSE를 키우지 않는다&rsquo;고 했는데 왜일까?</p>
+
+<div class="pit"><b>출력의 &lsquo;SSE&rsquo;는 사실 SSE가 아니다</b>
+<ul class="ul">
+  <li><b>제곱을 하지 않았다</b> &mdash; <code>loss + distance[n][label]</code>은 거리 자체를 더한다. 교안 27 · 28p의 표와 같은 방식(9.7절 ⚠ 상자)이다. K-평균이 줄여 주는 것은 <b>거리 제곱의 합</b>이지 <b>거리의 합</b>이 아니어서, 거리의 합은 수렴 직전에 아주 조금 오를 수 있다. 11→15회의 미세한 상승이 그것이다</li>
+  <li><b>평균인데 n이 999다</b> &mdash; <code>loss / n</code>의 <code>n</code>은 바로 위 <code>for n in range(number_data)</code>가 끝난 뒤 남은 값 <b>999</b>다(파이썬 반복 변수는 마지막 값 <code>number_data - 1</code>로 남는다). 1000으로 나눠야 할 것을 999로 나눴다. 차이는 0.1%라 그림에는 영향이 없다</li>
+  <li>교안 식대로 고치려면 &mdash; <code>loss = loss + distance[n][label] ** 2</code>로 제곱하고, <code>print(..., loss)</code>로 <b>합 그대로</b> 출력한다. 그러면 반복마다 값이 <b>절대 오르지 않는다</b></li>
+</ul></div>
+
+<div class="pit"><b>초기 중심점 고르는 반복문은 중복을 막지 못한다</b> &mdash; 주석은 &lsquo;중심점의 중복을 막기 위함&rsquo;인데 실제 동작은 이렇다. ① 처음 뽑은 <code>ran</code>은 <code>duplist</code>가 비어 있으니 <code>not in</code>이 참 → 반복문 안으로 들어가 <b>새로 하나를 다시 뽑고</b>, 목록에 넣고, 중심점으로 쓴다. ② 다시 조건을 보면 방금 넣었으니 <code>ran in duplist</code> → 빠져나온다. 즉 <b>매번 무조건 두 번째로 뽑은 번호를 쓰고, 그 번호가 이미 쓴 번호인지는 확인하지 않는다</b>. 1000개 중 5개라 겹칠 확률이 1% 정도로 작아서 대개는 문제가 드러나지 않을 뿐이다. 겹치면 같은 자리에서 출발한 두 중심점 중 하나가 빈 군집이 되어 <code>centroid / cnt</code>에서 0으로 나누기가 생긴다. 의도대로 쓰려면 <code>idx = np.random.choice(number_data, number_cluster, replace=False)</code> 한 줄이면 된다(서로 다른 번호 5개를 뽑는다).</div>
+</section>
+
+<!-- ===================== 복습 ===================== -->
+<section class="sec" id="review">
+  <div class="sec-head"><span class="sec-badge">Q</span><h2 class="sec-title">복습 문제<small>손으로 풀어 보고 답 보기를 누르세요</small></h2></div>
+
+<details class="rv"><summary><i>Q1</i>지도학습과 비지도 학습의 차이를 데이터 관점에서 한 문장으로 쓰고, 비지도 학습의 응용 분야 네 가지를 쓰시오.</summary>
+<div class="ans"><p>지도학습은 특징 벡터 x와 <b>라벨(실제 값) y</b>가 함께 있는 데이터로 학습하고, 비지도 학습은 <b>라벨 없이 특징 벡터 x만으로</b> 데이터의 패턴이나 상관관계를 알아낸다. 응용 분야는 <b>군집화 · 차원 축소 · 이상치 탐지 · 밀도 추정</b>.</p></div></details>
+
+<details class="rv"><summary><i>Q2</i>x<sub>2</sub> = (169, 80)과 x<sub>9</sub> = (183, 85) 사이의 유클리디안 거리와 맨하탄 거리를 구하시오.</summary>
+<div class="ans"><p>차이는 키 14, 몸무게 5. 유클리디안 <span class="tex">\sqrt{14^2+5^2}=\sqrt{196+25}=\sqrt{221}\approx14.87</span>, 맨하탄 <span class="tex">14+5=19</span>.</p></div></details>
+
+<details class="rv"><summary><i>Q3</i>K-평균, 계층적, DBSCAN 중 ① 군집 수를 미리 정해야 하는 것 ② 덴드로그램으로 시각화하는 것 ③ 휘어진 모양의 군집도 찾는 것은?</summary>
+<div class="ans"><p>① <b>K-평균</b>(초매개변수 k) ② <b>계층적 군집화</b> ③ <b>DBSCAN</b>(밀도 기반). 계층적과 DBSCAN은 k 지정이 필요 없다. 계층적의 단점은 관측치가 많을수록 연산량이 기하급수적으로 늘어나는 것, DBSCAN의 단점은 밀도가 다양하거나 특징 성분 수가 많으면 성능이 떨어지는 것.</p></div></details>
+
+<details class="rv"><summary><i>Q4</i>군집 {x<sub>7</sub>(180, 78), x<sub>9</sub>(183, 85), x<sub>10</sub>(185, 75)}의 새 중심점을 구하시오.</summary>
+<div class="ans"><p>키 평균 <span class="tex">(180+183+185)/3=548/3\approx182.67</span>, 몸무게 평균 <span class="tex">(78+85+75)/3=238/3\approx79.33</span>. 새 중심점 <span class="tex">\mathbf c=(182.67,\,79.33)</span> &mdash; 예시 2의 최종 중심점 3이다.</p></div></details>
+
+<details class="rv"><summary><i>Q5</i>위 Q4 군집의 SSE를 26p 식대로 구하시오.</summary>
+<div class="ans"><p>각 점에서 중심점까지 거리의 제곱: x<sub>7</sub> <span class="tex">(-2.67)^2+(-1.33)^2\approx7.11+1.78=8.89</span>, x<sub>9</sub> <span class="tex">0.33^2+5.67^2\approx0.11+32.11=32.22</span>, x<sub>10</sub> <span class="tex">2.33^2+(-4.33)^2\approx5.44+18.78=24.22</span>. 합 <b>≈ 65.33</b>. (교안 〈표11〉의 13.57은 제곱하기 전 거리 2.98 + 5.68 + 4.92의 합이다.)</p></div></details>
+
+<details class="rv"><summary><i>Q6</i>같은 데이터에 K-평균을 두 번 돌렸더니 결과가 다르다. 이유와 둘 중 더 나은 결과를 고르는 방법은?</summary>
+<div class="ans"><p>초기 중심점을 <b>임의로</b> 정하기 때문이다. K-평균은 출발점에서 가까운 &lsquo;더 이상 바뀌지 않는 상태&rsquo;에 멈추므로 출발점이 다르면 멈추는 곳도 다를 수 있다(관측 값 수가 많고 분산이 클수록 영향이 크다). 두 결과의 <b>SSE를 계산해 작은 쪽</b>을 고른다. 실무에서는 여러 번 돌려 SSE가 가장 작은 결과를 택하거나(sklearn <code>n_init</code>), 분포를 이용해 초기 중심점을 고르는 k-means++를 쓴다.</p></div></details>
+
+<details class="rv"><summary><i>Q7</i>SSE를 K-평균의 종료 조건으로 쓰는 방법 두 가지와, SSE에 제곱이 들어가서 생기는 성질을 쓰시오.</summary>
+<div class="ans"><p>종료 조건 &mdash; ① SSE 값이 <b>특정 값보다 작아지면</b> 종료 ② SSE 값이 <b>더 이상 변하지 않으면</b> 종료. 제곱 때문에 <b>오차가 커질수록 SSE가 급격히 커진다</b> &mdash; 중심점에서 먼 점 하나가 SSE를 크게 끌어올린다(거리 2배 → 벌점 4배).</p></div></details>
+</section>
+
+<!-- ===================== 정리 ===================== -->
+<section class="sec" id="summary">
+  <div class="sec-head"><span class="sec-badge">SUM</span><h2 class="sec-title">핵심 정리<small>서술형으로 나올 때 이 흐름으로</small></h2></div>
+<div class="cards">
+  <div class="card2"><b>비지도 학습</b><p>라벨 y 없이 특징 벡터 x만으로 패턴 · 상관관계를 찾는다. 군집화 · 차원 축소 · 이상치 탐지 · 밀도 추정.</p></div>
+  <div class="card2"><b>군집화 · 군집</b><p>유사도로 관측치를 여러 그룹으로 나눈다. 군집 = 유사도가 높은 관측치들이 가깝게 모인 집합. <b>정답이 없다</b>.</p></div>
+  <div class="card2"><b>유사도</b><p>유클리디안 <span class="tex">\sqrt{\sum(x_{1j}-x_{2j})^2}</span> · 맨하탄 <span class="tex">\sum|x_{1j}-x_{2j}|</span> · 코사인. 같은 군집은 거리 작게, 다른 군집은 크게. x<sub>4</sub>-x<sub>7</sub>: √41 ≈ 6.40 vs 9.</p></div>
+  <div class="card2"><b>알고리즘 3종</b><p><b>K-평균</b>(단순 · 직관 / k 필요) · <b>계층적</b>(k 불필요 · 덴드로그램 / 계산량 폭증) · <b>DBSCAN</b>(k 불필요 · 특이한 모양 / 밀도 다양 · 고차원에 약함).</p></div>
+  <div class="card2"><b>K-평균 특성</b><p>군집마다 중심점 하나(= 군집 평균 벡터). 모든 관측치는 정확히 하나의 군집에 · 가장 가까운 중심점의 군집으로.</p></div>
+  <div class="card2"><b>K-평균 4단계</b><p>① 중심점 k개 임의 생성 ② 가장 가까운 중심점에 배정 ③ 군집 평균으로 중심점 갱신 ④ 종료 조건(횟수 · 중심점 불변 · SSE)까지 ②~③ 반복.</p></div>
+  <div class="card2"><b>초기 중심점</b><p>결과가 초기 중심점에 따라 달라진다. 관측치가 많고 분산이 클수록 영향이 크다. 분포를 활용해 정하는 방법(k-means++)도 있다.</p></div>
+  <div class="card2"><b>SSE</b><p><span class="tex">\sum_{j}\sum_{i}(\mathbf x_i-\mathbf c_j)^2</span> &mdash; 작을수록 좋다. 교안: 예시 1 31.46 &gt; 예시 2 30.49 → 예시 2가 더 좋다. 제곱 때문에 큰 오차에 민감 · 종료 조건으로도 쓴다.</p></div>
+</div>
+<div class="note-box"><b>서술형으로 묶는다면</b> &mdash; &ldquo;K-평균 군집화의 절차와 한계를 설명하시오&rdquo;: <b>k개의 중심점을 임의로 놓고, 각 관측치를 유클리디안 거리가 가장 가까운 중심점의 군집에 배정한 뒤, 군집마다 평균 벡터로 중심점을 다시 정하는 과정을 중심점이 변하지 않을 때까지 반복한다.</b> 절차가 단순하고 직관적이지만 ① 군집 수 k를 미리 정해야 하고 ② 결과가 초기 중심점에 따라 달라진다. 서로 다른 결과는 SSE(작을수록 좋다)로 비교한다.</div>
+</section>
+
+<!-- ===================== 다음 ===================== -->
+<section class="sec" id="next">
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주<small>10주차 · 11.5</small></h2></div>
+<div class="note-box"><b>10주차</b> &mdash; 강의계획서상으로는 <b>딥러닝 응용 소개 · 합성곱 신경망(CNN)</b>이다. 다만 이번 주처럼 계획서와 실제 교안이 다를 수 있으니, 자료가 올라오면 그 기준으로 정리한다. 이번 주 내용은 <a class="ext" href="machine-learning-week07.html#dist">7주차 거리 측도</a>와 바로 이어지고, 컴퓨터비전에서도 <a class="ext" href="computer-vision-week06.html">특징 기술자</a>를 K-평균으로 묶어 &lsquo;시각 단어(visual words)&rsquo;를 만드는 데 쓴다.</div>
+</section>
+
+<p class="src">기계학습특론 9주차 강의자료 정리 · 2026학년도 2학기<br>
+교안 &lsquo;군집화&rsquo;(<b>31p</b>)를 절 단위로 정리하고 슬라이드 <b>23장</b>을 캡처해 실었다. 예시 1 · 2의 거리표 · 중심점 · SSE와 엘보 표는 데이터로 직접 다시 계산했다. 교안 〈표3〉의 오기 두 칸, 〈표11〉의 행 이름, SSE를 제곱 없이 더한 점, 예시 1의 &lsquo;최종&rsquo;이 실제로는 한 번 더 움직인다는 점은 계산으로 확인해 따로 표시했다. 실습은 노트북에 저장된 출력값을 근거로 했다(2026 실습 폴더는 압축이 풀리지 않아 미반영).</p>
+
+</div>
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive(){
+    var cur = '';
+    sections.forEach(function(s){ if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function(t){ t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      setTimeout(function(){
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+});
+</script>
+<script>
+/* 슬라이드 확대 보기 — 좌우 이동 · 닫으면 보던 자리로 */
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.sld'));
+  if (!slides.length) return;
+
+  var lb = document.createElement('div');
+  lb.id = 'lb';
+  lb.innerHTML =
+    '<button class="prev" type="button" aria-label="이전 슬라이드">&#10094;</button>' +
+    '<img alt="">' +
+    '<button class="next" type="button" aria-label="다음 슬라이드">&#10095;</button>' +
+    '<button class="x" type="button" aria-label="닫기">&#10005;</button>' +
+    '<p class="cap"></p>';
+  document.body.appendChild(lb);
+
+  var big = lb.querySelector('img'),
+      cap = lb.querySelector('.cap'),
+      bPrev = lb.querySelector('.prev'),
+      bNext = lb.querySelector('.next'),
+      bX = lb.querySelector('.x');
+
+  var idx = -1, openedIdx = -1, savedY = 0, pushed = false, prevRestore = null;
+
+  function lock() {
+    savedY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    document.body.style.position = 'fixed';
+    document.body.style.top = (-savedY) + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  /* html{scroll-behavior:smooth} 때문에 되돌아갈 때 화면이 흘러가지 않도록 잠깐 끈다 */
+  function instantly(fn) {
+    var de = document.documentElement, prev = de.style.scrollBehavior;
+    de.style.scrollBehavior = 'auto';
+    fn();
+    void de.offsetHeight;
+    de.style.scrollBehavior = prev;
+  }
+  function unlock() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    var target = (idx >= 0 && idx !== openedIdx) ? slides[idx] : null;
+    function place() {
+      instantly(function () {
+        window.scrollTo(0, savedY);
+        /* 넘겨 본 슬라이드가 있으면 그 슬라이드 자리로, 아니면 보던 자리 그대로 */
+        if (target) target.scrollIntoView({ block: 'center' });
+      });
+    }
+    place();
+    /* 기기 뒤로가기로 닫을 때 브라우저가 옛 스크롤을 덮어쓰므로 한 프레임 뒤 한 번 더 */
+    if (window.requestAnimationFrame) window.requestAnimationFrame(place);
+    setTimeout(place, 0);
+  }
+
+  function preload(i) {
+    if (i < 0 || i >= slides.length) return;
+    var im = slides[i].querySelector('img');
+    if (im) { var p = new Image(); p.src = im.currentSrc || im.src; }
+  }
+
+  function render(i) {
+    idx = i;
+    var f = slides[i], im = f.querySelector('img'), fc = f.querySelector('figcaption');
+    big.src = im.currentSrc || im.src;
+    big.alt = im.alt || '';
+    cap.innerHTML = '';
+    cap.appendChild(document.createTextNode(fc ? fc.textContent : ''));
+    var num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = (i + 1) + ' / ' + slides.length + ' · ← → 로 넘기기';
+    cap.appendChild(num);
+    bPrev.disabled = (i === 0);
+    bNext.disabled = (i === slides.length - 1);
+    preload(i + 1); preload(i - 1);
+  }
+
+  function open(i) {
+    openedIdx = i;
+    lock();
+    render(i);
+    lb.classList.add('on');
+    if (!pushed && window.history && window.history.pushState) {
+      try {
+        if ('scrollRestoration' in window.history && prevRestore === null) {
+          prevRestore = window.history.scrollRestoration;
+          window.history.scrollRestoration = 'manual';
+        }
+        window.history.pushState({ lb: 1 }, '');
+        pushed = true;
+      } catch (e) { pushed = false; }
+    }
+  }
+  function closeNow() {
+    if (!lb.classList.contains('on')) return;
+    lb.classList.remove('on');
+    unlock();
+    idx = openedIdx = -1;
+    if (prevRestore !== null) {
+      try { window.history.scrollRestoration = prevRestore; } catch (e) {}
+      prevRestore = null;
+    }
+  }
+  function closeByUser() {
+    if (pushed) { pushed = false; window.history.back(); }  /* popstate 가 닫는다 */
+    else { closeNow(); }
+  }
+  function go(step) {
+    var n = idx + step;
+    if (n < 0 || n >= slides.length) return;
+    render(n);
+  }
+
+  slides.forEach(function (f, i) {
+    f.addEventListener('click', function () { open(i); });
+  });
+
+  bPrev.addEventListener('click', function (e) { e.stopPropagation(); go(-1); });
+  bNext.addEventListener('click', function (e) { e.stopPropagation(); go(1); });
+  bX.addEventListener('click', function (e) { e.stopPropagation(); closeByUser(); });
+  big.addEventListener('click', function (e) { e.stopPropagation(); });
+  cap.addEventListener('click', function (e) { e.stopPropagation(); });
+  lb.addEventListener('click', closeByUser);
+
+  window.addEventListener('popstate', function () {
+    if (lb.classList.contains('on')) { pushed = false; closeNow(); }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('on')) return;
+    if (e.key === 'Escape') { e.preventDefault(); closeByUser(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+  });
+
+  /* 모바일 — 좌우로 쓸어 넘기기 */
+  var tx = 0, ty = 0;
+  lb.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) return;
+    tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+  }, { passive: true });
+  lb.addEventListener('touchend', function (e) {
+    if (!e.changedTouches.length) return;
+    var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
+</script>
+
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var terms = document.querySelectorAll('.term');
+  if (!terms.length) return;
+  var tip = document.createElement('div');
+  tip.id = 'tipbox';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  var current = null;
+
+  function hide() {
+    tip.classList.remove('on');
+    if (current) { current.classList.remove('on'); current = null; }
+  }
+  function show(el) {
+    tip.textContent = el.getAttribute('data-tip') || '';
+    tip.classList.add('on');
+    if (current && current !== el) current.classList.remove('on');
+    current = el;
+    el.classList.add('on');
+    var pad = 8;
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+    var top = r.top - t.height - 10;
+    if (top < pad) top = r.bottom + 10;
+    top = Math.min(top, window.innerHeight - t.height - pad);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+  terms.forEach(function (el) {
+    el.addEventListener('mouseenter', function () { show(el); });
+    el.addEventListener('mouseleave', function () { if (current === el) hide(); });
+    el.addEventListener('focus', function () { show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (current === el && tip.classList.contains('on')) hide(); else show(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el); }
+      if (e.key === 'Escape') hide();
+    });
+  });
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide);
+});
+</script>
+<script src="../vendor/katex/katex.min.js"></script>
+<script>
+// .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.
+// KaTeX를 못 불러온 경우에는 원문이 그대로 남아 최소한 읽을 수는 있게 둔다.
+(function () {
+  if (typeof katex === 'undefined') { return; }
+  document.querySelectorAll('.tex, .tex-d').forEach(function (el) {
+    try {
+      katex.render(el.textContent.trim(), el, {
+        displayMode: el.classList.contains('tex-d'),
+        throwOnError: false,
+        strict: false
+      });
+    } catch (e) { if (window.console) { console.error('KaTeX', e, el.textContent); } }
+  });
+})();
+</script>
+
+
+</body>
+</html>
