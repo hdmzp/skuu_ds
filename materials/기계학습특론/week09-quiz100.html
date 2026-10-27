@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>9주차 · 군집화 · 의사결정트리 · 딥러닝 소개 100문제</title>
+<style>
+  :root{
+    --bg:#f4f6fa; --card:#ffffff; --ink:#16202e; --muted:#657189;
+    --line:#e2e8f2; --brand:#1560d8; --brand-deep:#0b3b8c; --brand-soft:#eaf1fe;
+    --ok:#0f8a5f; --ok-soft:#e6f6ef; --no:#d43c4a; --no-soft:#fdecee;
+    --warn:#b7791f; --shadow:0 1px 2px rgba(16,32,64,.05),0 8px 24px rgba(16,32,64,.07);
+    --r:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0e1420; --card:#161e2c; --ink:#e8edf6; --muted:#98a4bb;
+      --line:#273246; --brand:#5b96ff; --brand-deep:#a8c6ff; --brand-soft:#1a2740;
+      --ok:#48c99a; --ok-soft:#122c23; --no:#ff7b88; --no-soft:#33191e;
+      --warn:#e0b25c; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Malgun Gothic","맑은 고딕",system-ui,sans-serif;
+    line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:22px 16px 80px}
+
+  header.top{margin-bottom:18px}
+  .eyebrow{color:var(--brand);font-weight:700;font-size:13px;letter-spacing:.04em}
+  h1{font-size:25px;line-height:1.3;margin:4px 0 6px;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:14px;margin:0}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+
+  /* controls */
+  .controls{padding:14px 16px;margin-bottom:14px}
+  .ctl-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .ctl-row + .ctl-row{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+  .ctl-label{font-size:12px;font-weight:700;color:var(--muted);min-width:52px}
+  .chip{
+    border:1px solid var(--line);background:transparent;color:var(--ink);
+    padding:5px 11px;border-radius:999px;font-size:13px;cursor:pointer;
+    font-family:inherit;transition:.13s; white-space:nowrap;
+  }
+  .chip:hover{border-color:var(--brand);color:var(--brand)}
+  .chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+  .chip.ghost[aria-pressed="true"]{background:var(--brand-soft);color:var(--brand-deep);border-color:var(--brand)}
+  .spacer{flex:1}
+
+  /* progress */
+  .prog{padding:14px 16px;margin-bottom:14px}
+  .prog-head{display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;margin-bottom:9px}
+  .stat{font-size:13px;color:var(--muted)}
+  .stat b{color:var(--ink);font-size:15px;font-variant-numeric:tabular-nums}
+  .stat.ok b{color:var(--ok)} .stat.no b{color:var(--no)}
+  .bar{height:7px;background:var(--line);border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--ok));border-radius:99px;transition:width .3s}
+
+  /* question */
+  .qcard{padding:20px 20px 18px;margin-bottom:14px}
+  .qmeta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
+  .tag{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:.02em}
+  .tag.num{background:var(--brand-deep);color:#fff}
+  @media (prefers-color-scheme: dark){ .tag.num{background:var(--brand-soft);color:var(--brand-deep)} }
+  .tag.sec{background:var(--brand-soft);color:var(--brand-deep)}
+  .tag.d1{background:var(--ok-soft);color:var(--ok)}
+  .tag.d2{background:#fff4e0;color:var(--warn)}
+  .tag.d3{background:var(--no-soft);color:var(--no)}
+  @media (prefers-color-scheme: dark){ .tag.d2{background:#3a2e14} }
+  .qtext{font-size:17.5px;font-weight:600;letter-spacing:-.01em;margin:0 0 16px;line-height:1.55}
+
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{
+    display:flex;gap:11px;align-items:flex-start;text-align:left;width:100%;
+    padding:12px 14px;border:1.5px solid var(--line);background:var(--card);
+    border-radius:11px;cursor:pointer;font:inherit;font-size:15px;color:var(--ink);
+    transition:.13s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--brand);background:var(--brand-soft)}
+  .opt:disabled{cursor:default}
+  .opt .n{
+    flex:none;width:23px;height:23px;border-radius:50%;background:var(--line);color:var(--muted);
+    display:grid;place-items:center;font-size:12.5px;font-weight:700;margin-top:1px;
+  }
+  .opt.correct{border-color:var(--ok);background:var(--ok-soft)}
+  .opt.correct .n{background:var(--ok);color:#fff}
+  .opt.wrong{border-color:var(--no);background:var(--no-soft)}
+  .opt.wrong .n{background:var(--no);color:#fff}
+  .opt .mark{margin-left:auto;font-size:13px;font-weight:700;flex:none;padding-left:8px}
+  .opt.correct .mark{color:var(--ok)} .opt.wrong .mark{color:var(--no)}
+
+  .exp{margin-top:14px;padding:13px 15px;border-radius:11px;background:var(--brand-soft);border-left:3px solid var(--brand);font-size:14.5px}
+  .exp h4{margin:0 0 5px;font-size:12.5px;letter-spacing:.03em;color:var(--brand-deep)}
+  .exp p{margin:0}
+  .exp .ref{display:block;margin-top:7px;font-size:12.5px;color:var(--muted)}
+
+  .nav{display:flex;gap:8px;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+  .btn{
+    border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 16px;border-radius:10px;
+    font:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:.13s;
+  }
+  .btn:hover:not(:disabled){border-color:var(--brand);color:var(--brand)}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+  .btn.primary:hover:not(:disabled){filter:brightness(1.08);color:#fff}
+  .btn.danger{color:var(--no);border-color:var(--no)}
+  .btn.danger:hover{background:var(--no-soft)}
+
+  /* palette */
+  details.pal{padding:0;margin-bottom:14px;overflow:hidden}
+  details.pal summary{padding:13px 16px;cursor:pointer;font-size:14px;font-weight:600;list-style:none;display:flex;align-items:center;gap:8px}
+  details.pal summary::-webkit-details-marker{display:none}
+  details.pal summary::before{content:"▸";color:var(--muted);transition:.15s}
+  details.pal[open] summary::before{transform:rotate(90deg)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:6px;padding:0 16px 16px}
+  .cell{
+    aspect-ratio:1;border:1px solid var(--line);background:transparent;border-radius:8px;
+    font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;
+    font-variant-numeric:tabular-nums;transition:.1s;
+  }
+  .cell:hover{border-color:var(--brand);color:var(--brand)}
+  .cell.o{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+  .cell.x{background:var(--no-soft);border-color:var(--no);color:var(--no)}
+  .cell.cur{outline:2px solid var(--brand);outline-offset:1px}
+
+  /* result */
+  .result{padding:26px 22px;text-align:center}
+  .score{font-size:46px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:6px 0}
+  .score small{font-size:20px;color:var(--muted);font-weight:600}
+  .breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:20px 0 6px;text-align:left}
+  .bd{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .bd .k{font-size:12px;color:var(--muted)}
+  .bd .v{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+  .empty{padding:40px 20px;text-align:center;color:var(--muted);font-size:15px}
+  footer{margin-top:26px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.8}
+  @media (max-width:520px){
+    h1{font-size:21px} .qtext{font-size:16.5px} .opt{font-size:14.5px;padding:11px 12px}
+    .ctl-label{min-width:100%;margin-bottom:-3px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">CHAPTER 9 · 군집화 / 의사결정트리 / 딥러닝 소개</div>
+    <h1>9주차 &middot; 군집화 · 의사결정트리 · 딥러닝 소개 — 100문제</h1>
+    <p class="sub">강의자료 9.1~9.7절 전 범위 · 4지선다 · 난이도 3단계</p>
+  </header>
+
+  <section class="panel controls">
+    <div class="ctl-row">
+      <span class="ctl-label">단원</span>
+      <div id="secChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    </div>
+    <div class="ctl-row">
+      <span class="ctl-label">난이도</span>
+      <div id="diffChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    </div>
+    <div class="ctl-row">
+      <span class="ctl-label">설정</span>
+      <button class="chip ghost" id="shuffleQ" aria-pressed="false">문제 순서 섞기</button>
+      <button class="chip ghost" id="shuffleO" aria-pressed="false">보기 순서 섞기</button>
+      <span class="spacer"></span>
+      <button class="chip" id="reviewBtn">오답 다시 풀기 <b id="wrongCount">0</b></button>
+      <button class="chip" id="resetBtn">처음부터</button>
+    </div>
+  </section>
+
+  <section class="panel prog">
+    <div class="prog-head">
+      <span class="stat">진도 <b><span id="doneN">0</span> / <span id="totalN">0</span></b></span>
+      <span class="stat ok">정답 <b id="okN">0</b></span>
+      <span class="stat no">오답 <b id="noN">0</b></span>
+      <span class="spacer"></span>
+      <span class="stat">정답률 <b id="rate">—</b></span>
+    </div>
+    <div class="bar"><i id="barFill"></i></div>
+  </section>
+
+  <details class="panel pal">
+    <summary>문제 번호로 이동 <span style="color:var(--muted);font-weight:400">(초록 = 정답, 빨강 = 오답)</span></summary>
+    <div class="grid" id="palette"></div>
+  </details>
+
+  <main id="stage"></main>
+
+  <footer>
+    9주차 강의자료(군집화, 의사결정트리의 구조와 개념·정보획득, 딥러닝 기초 소개) 기반 자율 학습용 문제 세트<br>
+    풀이 기록은 이 브라우저에만 저장되며, '처음부터'를 누르면 초기화됩니다.
+  </footer>
+</div>
+
+<script>
+const QUESTIONS = [{"id": 1, "sec": "9.1", "diff": "기초", "q": "비지도학습(Unsupervised learning)의 정의로 가장 적절한 것은?", "opts": ["라벨(실제 값, y)이 주어진 데이터로 입력과 출력의 관계를 학습하는 방법", "라벨(실제 값, y)이 없는 입력 데이터를 통해 데이터의 패턴이나 상관관계를 알아내는 방법", "자신이 한 행동에 대해 보상을 받아 학습하는 방법", "여러 층을 가진 인공신경망을 사용하여 학습하는 방법"], "a": 1, "exp": "비지도학습은 지도학습과 달리 라벨 y가 없는 입력 데이터의 특징 벡터(x)만으로 학습하여 데이터의 패턴이나 상관관계를 알아내는 방법입니다."}, {"id": 2, "sec": "9.1", "diff": "기초", "q": "강의자료에서 비지도학습의 응용 분야로 제시되지 않은 것은?", "opts": ["군집화", "차원 축소", "선형 회귀 분석", "이상치 탐지"], "a": 2, "exp": "강의자료는 비지도학습의 응용으로 군집화, 차원 축소, 이상치 탐지, 밀도 추정을 들었습니다. 선형 회귀는 라벨이 필요한 지도학습입니다."}, {"id": 3, "sec": "9.1", "diff": "기초", "q": "군집화(Clustering)의 정의로 옳은 것은?", "opts": ["라벨이 정해지지 않은 관측 값 특징 벡터 간 유사성을 측정하여 다수의 군집(그룹)으로 나누는 방법", "라벨이 있는 데이터를 이용해 관측치의 연속적인 값을 예측하는 방법", "입력 데이터의 차원을 줄여 저차원으로 표현하는 방법", "데이터의 속성을 나누는 규칙을 트리 형태로 표현하는 방법"], "a": 0, "exp": "군집화는 라벨 없이 관측 값 특징 벡터 간 유사성을 측정하여 여러 군집으로 나누는 비지도학습 기법입니다."}, {"id": 4, "sec": "9.1", "diff": "기초", "q": "군집(Cluster)에 대한 설명으로 옳은 것은?", "opts": ["라벨이 서로 다른 관측치들을 강제로 묶은 집합", "유사도가 가장 낮은 관측치들이 모여 형성된 집합", "군집화 알고리즘이 사용하는 초매개변수의 이름", "유사도가 높은 유한 개의 관측치들이 서로 가깝게 모여 형성된 집합"], "a": 3, "exp": "군집은 유사도가 높은 유한 개의 관측치가 서로 가깝게 모여 형성된 집합, 즉 비슷한 특징 벡터를 가진 관측치들의 집합입니다."}, {"id": 5, "sec": "9.1", "diff": "중급", "q": "강의자료가 군집화의 활용 예시로 제시한 것이 아닌 것은?", "opts": ["고객 시장 세분화", "신체 유형 그룹화", "타이타닉 생존자 예측", "관련 문서 정리"], "a": 2, "exp": "군집화 예시로는 고객 시장 세분화, 신체 유형 그룹화, 관련 문서 정리가 제시되었습니다. 타이타닉 생존자 예측은 라벨이 있는 지도학습(분류) 예시입니다."}, {"id": 6, "sec": "9.1", "diff": "중급", "q": "군집화 결과의 해석에 대한 설명 중 옳은 것은?", "opts": ["군집화 결과에는 항상 하나의 정답이 존재하므로 정확도로 평가한다", "군집화 결과에 정답이 존재하는 것이 아니므로 해석에 주의해야 한다", "군집화는 라벨을 이용해 결과의 정오를 판정한다", "군집화 결과는 초매개변수 k와 무관하게 항상 동일하다"], "a": 1, "exp": "강의자료는 군집화 결과에 정답이 존재하는 것이 아님에 주의하라고 강조합니다. 라벨이 없으므로 정확도로 정오를 판정할 수 없습니다."}, {"id": 7, "sec": "9.1", "diff": "기초", "q": "강의자료가 군집화의 유사도 측정 방법으로 언급한 것을 바르게 묶은 것은?", "opts": ["유클리디안 거리, 맨하탄 거리, 코사인 유사도", "유클리디안 거리, 정보이득, 엔트로피", "맨하탄 거리, 오차제곱합, 교차 엔트로피", "코사인 유사도, 실루엣 계수, 지니 계수"], "a": 0, "exp": "강의자료는 유사도 측정 방법으로 유클리디안 거리, 맨하탄 거리, 코사인 유사도 등을 제시했으며 그중 유클리디안·맨하탄 거리가 많이 사용된다고 설명합니다."}, {"id": 8, "sec": "9.1", "diff": "중급", "q": "같은 군집에 속한 관측 값들 사이에서 기대되는 성질은?", "opts": ["유사도가 낮고 유클리디안 거리가 크다", "유사도가 낮고 유클리디안 거리가 작다", "유사도가 높고 유클리디안 거리가 크다", "유사도가 높고 유클리디안 거리가 작다"], "a": 3, "exp": "같은 군집의 관측 값 간 유사도는 높게, 즉 유클리디안 거리의 값이 작아 관측치 간 거리가 가깝게 나타나야 합니다."}, {"id": 9, "sec": "9.1", "diff": "중급", "q": "서로 다른 군집에 속한 관측 값 사이에서 기대되는 성질은?", "opts": ["유사도가 높아 거리가 가깝다", "유사도와 거리가 모두 0에 수렴한다", "유사도가 낮아 유클리디안 거리의 값이 크다", "유사도는 높지만 거리는 멀다"], "a": 2, "exp": "다른 군집에 속한 관측 값 간 유사도는 낮게, 즉 유클리디안 거리의 값이 크게(멀게) 나타나야 좋은 군집화입니다."}, {"id": 10, "sec": "9.1", "diff": "중급", "q": "유사도 측도의 선택에 대한 설명으로 가장 적절한 것은?", "opts": ["어떤 데이터든 항상 코사인 유사도를 쓰는 것이 최선이다", "데이터의 특성에 따라 적합한 유사도 측도를 사용하면 더 좋은 성능을 얻을 수 있다", "유사도 측도는 군집화 결과에 영향을 주지 않는다", "유사도 측도는 라벨이 있어야만 계산할 수 있다"], "a": 1, "exp": "강의자료는 데이터의 특성에 따라 적합한 유사도 측도를 사용하면 더 좋은 성능을 얻을 수 있다고 설명합니다."}, {"id": 11, "sec": "9.1", "diff": "심화", "q": "강의자료의 키-몸무게 데이터가 비지도 학습 데이터로 분류되는 이유로 가장 적절한 것은?", "opts": ["관측치마다 특징 벡터(키, 몸무게)만 있고 라벨 y가 주어지지 않기 때문", "관측치의 수가 상대적으로 적기 때문", "특징 벡터의 성분이 두 개뿐이기 때문", "키와 몸무게가 연속형 값이기 때문"], "a": 0, "exp": "비지도 학습 데이터의 판별 기준은 라벨(실제 값 y)의 유무입니다. 키-몸무게 데이터는 특징 벡터만 있고 라벨이 없어 비지도 학습 데이터입니다."}, {"id": 12, "sec": "9.2", "diff": "기초", "q": "K-평균 군집화(k-means clustering)의 분류로 옳은 것은?", "opts": ["대표적인 계층형 군집화 알고리즘이다", "대표적인 분리형 군집화 알고리즘이다", "데이터 밀도를 연산하여 군집을 결정하는 알고리즘이다", "군집 결과를 덴드로그램으로 표현하는 알고리즘이다"], "a": 1, "exp": "K-평균 군집화는 대표적인 분리형(분할형) 군집화 알고리즘입니다. 덴드로그램은 계층적 군집화, 밀도 연산은 DBSCAN의 특징입니다."}, {"id": 13, "sec": "9.2", "diff": "기초", "q": "강의자료가 제시한 K-평균 군집화의 장점은?", "opts": ["군집 수 k를 지정할 필요가 없다", "원뿔 모양 등 특이한 분포도 잘 군집화한다", "절차가 단순하고 직관적이다", "결과를 트리 형태로 시각화할 수 있다"], "a": 2, "exp": "K-평균 군집화의 장점은 절차가 단순하고 직관적이라는 점입니다. 나머지는 각각 계층적 군집화·DBSCAN의 장점입니다."}, {"id": 14, "sec": "9.2", "diff": "중급", "q": "강의자료가 제시한 K-평균 군집화의 단점은?", "opts": ["연산량이 관측치 수에 따라 기하급수적으로 증가한다", "밀도가 다양하게 분포하면 성능이 하락한다", "군집화 결과를 시각화할 수 없다", "사전에 군집의 수를 의미하는 초매개변수 k를 정해줘야 한다"], "a": 3, "exp": "K-평균 군집화는 사전에 초매개변수 k를 지정해야 한다는 단점이 있습니다. 1번은 계층적 군집화, 2번은 DBSCAN의 단점입니다."}, {"id": 15, "sec": "9.2", "diff": "기초", "q": "계층적 군집화(hierarchical clustering)의 기본 아이디어는?", "opts": ["개체들을 가까운 집단부터 차근차근 결합하는 방식", "임의의 중심점을 만든 뒤 반복적으로 갱신하는 방식", "밀도가 높은 영역을 찾아 군집을 확장하는 방식", "정보이득이 큰 속성부터 데이터를 분할하는 방식"], "a": 0, "exp": "계층적 군집화는 개체들을 가까운 집단부터 차근차근 결합해 나가는 알고리즘입니다."}, {"id": 16, "sec": "9.2", "diff": "중급", "q": "계층적 군집화의 장점을 바르게 설명한 것은?", "opts": ["관측치 수가 많아도 연산량이 거의 늘지 않는다", "군집 수 k값의 지정이 필요 없고 결과를 덴드로그램으로 시각화할 수 있다", "초기 중심점의 영향을 받지 않으며 항상 SSE가 최소가 된다", "특징 벡터의 성분 수가 많아질수록 성능이 좋아진다"], "a": 1, "exp": "계층적 군집화는 k값 지정이 필요 없고 군집화 결과를 트리 형태(덴드로그램)로 표현해 시각화할 수 있다는 장점이 있습니다."}, {"id": 17, "sec": "9.2", "diff": "중급", "q": "계층적 군집화의 단점으로 옳은 것은?", "opts": ["군집 수 k를 반드시 지정해야 한다", "군집화 결과가 초기 중심점에 따라 달라진다", "모든 관측치 간 유사도를 연산하므로 관측치 수가 많을수록 연산량이 기하급수적으로 증가한다", "원뿔 모양의 분포는 아예 군집화할 수 없다"], "a": 2, "exp": "계층적 군집화는 모든 관측치 쌍의 유사도를 계산해야 하므로 관측치 수가 많아질수록 연산량이 기하급수적으로 증가합니다."}, {"id": 18, "sec": "9.2", "diff": "중급", "q": "덴드로그램(dendrogram)이 보여 주는 것은?", "opts": ["관측치들이 결합되어 가는 과정을 트리 형태로 나타낸 것", "각 군집의 중심점 좌표가 변화하는 궤적", "군집별 오차제곱합(SSE)의 변화 곡선", "밀도가 높은 영역과 낮은 영역의 경계선"], "a": 0, "exp": "덴드로그램은 계층적 군집화에서 관측치들이 결합되는 과정을 트리 형태로 표현해 보여 줍니다."}, {"id": 19, "sec": "9.2", "diff": "기초", "q": "DBSCAN의 정식 명칭과 핵심 아이디어를 바르게 연결한 것은?", "opts": ["Distance-Based Spatial Clustering of Application with Noise · 거리 기반", "Density-Based Statistical Clustering of Attributes with Noise · 통계량 기반", "Decision-Based Spatial Clustering of Application with Noise · 규칙 기반", "Density-Based Spatial Clustering of Application with Noise · 데이터 밀도 기반"], "a": 3, "exp": "DBSCAN은 Density-Based Spatial Clustering of Application with Noise의 약자로, 데이터 밀도를 연산하여 군집을 결정하는 알고리즘입니다."}, {"id": 20, "sec": "9.2", "diff": "중급", "q": "밀도기반 군집화(DBSCAN)의 장점으로 옳은 것은?", "opts": ["관측치 수가 아무리 많아도 연산량이 일정하다", "군집 수 k값의 지정이 필요 없고 원뿔 모양 등 특이한 관측치 분포도 군집화할 수 있다", "군집화 결과를 덴드로그램으로 표현할 수 있다", "항상 각 군집의 평균 벡터를 중심점으로 제공한다"], "a": 1, "exp": "DBSCAN은 k값 지정이 필요 없고, 원뿔 모양처럼 특이한 관측치 분포에 대해서도 군집화가 가능하다는 장점이 있습니다."}, {"id": 21, "sec": "9.2", "diff": "심화", "q": "DBSCAN의 성능이 하락하는 상황으로 옳은 것은?", "opts": ["군집의 개수가 3개 이하로 적을 때", "관측치가 구형으로 고르게 분포할 때", "관측치 내 밀도가 다양하게 분포되어 있거나 특징 벡터의 성분 수가 많을 때", "유클리디안 거리 대신 맨하탄 거리를 사용할 때"], "a": 2, "exp": "DBSCAN은 관측치 내 밀도가 다양하게 분포되어 있거나 특징 벡터의 성분 수(차원)가 많으면 성능이 하락합니다."}, {"id": 22, "sec": "9.2", "diff": "심화", "q": "세 가지 군집화 알고리즘을 군집 수 k의 지정 필요성 측면에서 비교한 것으로 옳은 것은?", "opts": ["k-평균만 k를 사전에 지정해야 하고, 계층적 군집화와 DBSCAN은 지정할 필요가 없다", "세 알고리즘 모두 k를 사전에 지정해야 한다", "계층적 군집화만 k를 사전에 지정해야 한다", "DBSCAN만 k를 사전에 지정해야 한다"], "a": 0, "exp": "강의자료에서 k-평균의 단점은 k를 사전에 지정해야 하는 점이고, 계층적 군집화와 DBSCAN은 공통적으로 k값 지정이 필요 없다는 점을 장점으로 듭니다."}, {"id": 23, "sec": "9.3", "diff": "기초", "q": "K-평균 군집화에서 중심점(Centroid)의 정의로 옳은 것은?", "opts": ["군집에서 가장 멀리 떨어진 관측 값", "군집에 속하는 관측 값들의 특징벡터 평균값을 성분으로 갖는 벡터", "임의로 선택된 하나의 실제 관측 값", "서로 다른 두 군집의 경계 위에 놓인 점"], "a": 1, "exp": "중심점은 군집에 속하는 관측 값들을 대표하는 점으로, 관측 값 특징벡터의 평균값을 성분으로 갖는 벡터입니다."}, {"id": 24, "sec": "9.3", "diff": "중급", "q": "K-평균 군집화의 특성으로 옳지 않은 것은?", "opts": ["각 군집은 하나의 중심점을 가진다", "모든 관측 값은 k개의 군집 중 적어도 하나에 속한다", "하나의 관측치가 두 개 이상의 군집에 동시에 속할 수 있다", "각 관측 값은 가장 유사한 중심점과 동일한 군집으로 할당된다"], "a": 2, "exp": "K-평균 군집화에서는 군집 간 중복되는 관측 값이 없습니다. 즉 어떠한 관측치도 두 개 이상의 군집에 속하지 않습니다."}, {"id": 25, "sec": "9.3", "diff": "중급", "q": "K-평균 군집화 수행 절차를 순서대로 바르게 나열한 것은?", "opts": ["k개의 중심점을 임의로 생성 → 모든 관측 값의 군집 할당 → 각 군집의 중심점 재정의 → 종료조건까지 반복", "모든 관측 값의 군집 할당 → k개의 중심점 생성 → 중심점 재정의 → 종료조건까지 반복", "중심점 재정의 → k개의 중심점 임의 생성 → 관측 값 할당 → 즉시 종료", "덴드로그램 생성 → 군집 절단 → 중심점 계산 → 종료조건까지 반복"], "a": 0, "exp": "Step1 임의의 중심점 k개 생성, Step2 관측 값 군집 할당, Step3 각 군집의 중심점을 평균 벡터로 재정의, Step4 종료조건까지 Step2~Step3 반복입니다."}, {"id": 26, "sec": "9.3", "diff": "기초", "q": "K-평균 군집화의 Step 1에서 수행하는 일은?", "opts": ["각 군집의 평균 벡터를 계산한다", "모든 관측치 쌍의 유사도를 계산한다", "오차제곱합(SSE)의 값을 계산한다", "k개의 중심점을 임의로 생성한다"], "a": 3, "exp": "Step 1은 k개의 중심점을 임의로 생성하는 단계이며, 이때 생성된 중심점을 초기 중심점이라고 부릅니다."}, {"id": 27, "sec": "9.3", "diff": "중급", "q": "K-평균 군집화 Step 2에서 관측 값을 군집에 할당하는 기준은?", "opts": ["관측 값끼리의 코사인 유사도가 가장 큰 쌍부터 차례로 묶는다", "모든 관측 값과 중심점의 유사도를 측정해 가장 유사도가 큰 중심점의 군집으로 할당한다", "관측 값을 각 군집에 무작위로 균등하게 나눈다", "밀도가 가장 높은 영역에 속한 관측 값부터 순서대로 할당한다"], "a": 1, "exp": "Step 2는 모든 관측 값과 중심점의 유사도(유클리디안 거리)를 측정해 가장 유사도가 큰 중심점이 속한 군집으로 할당하는 단계입니다."}, {"id": 28, "sec": "9.3", "diff": "중급", "q": "K-평균 군집화 Step 3에서 새로운 중심점을 정의하는 방법은?", "opts": ["가장 많은 관측 값이 몰린 좌표를 그대로 사용한다", "이전 중심점과 임의의 점의 중간값을 사용한다", "각 군집 내 관측 값 특징벡터의 평균 벡터를 연산하여 할당한다", "군집 내에서 오차가 가장 큰 관측치를 새 중심점으로 삼는다"], "a": 2, "exp": "Step 3에서 새로운 중심점은 각 군집 내 관측 값 특징벡터의 평균 벡터를 연산하여 할당합니다."}, {"id": 29, "sec": "9.3", "diff": "중급", "q": "K-평균 군집화 Step 4의 종료조건 예시로 강의자료가 든 것은?", "opts": ["지정된 횟수만큼 반복하거나 중심점이 변하지 않을 때까지", "모든 군집의 크기(관측치 수)가 같아질 때까지", "덴드로그램의 높이가 일정해질 때까지", "모든 관측치의 라벨이 서로 일치할 때까지"], "a": 0, "exp": "Step 4는 관측 값에 적합한 종료조건을 설정해 Step2~Step3을 반복하는 단계로, 지정된 횟수만큼 반복하거나 중심점이 변하지 않을 때까지가 예시로 제시되었습니다."}, {"id": 30, "sec": "9.3", "diff": "중급", "q": "K-평균 군집화의 초기 중심점에 대한 설명으로 옳은 것은?", "opts": ["초기 중심점을 어떻게 잡아도 군집화 결과는 항상 동일하다", "초기 중심점은 반드시 전체 데이터의 평균으로 정해야 한다", "초기 중심점은 Step 3에서 비로소 계산된다", "초기 중심점 설정에 따라 군집화 결과가 다르게 나타나는 경우가 발생한다"], "a": 3, "exp": "초기 중심점을 임의의 값으로 설정하는 알고리즘을 쓰면 동일한 데이터라도 초기 중심점에 따라 군집화 결과가 달라지는 경우가 발생합니다."}, {"id": 31, "sec": "9.3", "diff": "심화", "q": "초기 중심점의 영향을 상대적으로 더 크게 받는 조건은?", "opts": ["관측 값의 수가 적고 분산이 작을 때", "관측 값의 수가 많고 분산이 클 때", "군집 수 k가 1일 때", "모든 관측 값이 한 점에 모여 있을 때"], "a": 1, "exp": "강의자료는 관측 값의 수가 많고 분산이 큰 경우 초기 중심점의 영향을 더 많이 받는다고 설명합니다."}, {"id": 32, "sec": "9.3", "diff": "심화", "q": "초기 중심점이 서로 다른 두 군집화 결과 중 어느 쪽이 더 잘 수행되었는지 판단하는 방법으로 적절한 것은?", "opts": ["실제 라벨과 비교하여 정확도를 계산한다", "덴드로그램의 높이를 서로 비교한다", "비지도 학습의 성능 측도(예: 오차제곱합 SSE)를 활용한다", "군집의 개수가 더 많은 쪽을 선택한다"], "a": 2, "exp": "군집화에는 정답 라벨이 없으므로 정확도를 쓸 수 없고, 오차제곱합(SSE) 같은 비지도 학습의 성능 측도를 활용해 비교합니다."}, {"id": 33, "sec": "9.3", "diff": "기초", "q": "오차제곱합(SSE, Sum Squared Error)의 계산 방식으로 옳은 것은?", "opts": ["군집별로 중심점과 군집 내 관측 값 특징 벡터의 차이를 제곱하여 모두 더한다", "서로 다른 중심점 사이의 거리를 모두 더한다", "각 군집의 관측치 수를 제곱하여 더한다", "전체 관측 값의 평균과 라벨의 차이를 제곱하여 더한다"], "a": 0, "exp": "SSE는 군집별로 중심점과 군집 내 관측 값 특징 벡터의 차이를 제곱하여 모두 더한 값입니다."}, {"id": 34, "sec": "9.3", "diff": "중급", "q": "SSE 값과 군집화 성능의 관계로 옳은 것은?", "opts": ["SSE 값이 클수록 오차가 적은 좋은 군집화 결과이다", "SSE 값이 작을수록 오차가 적은 좋은 군집화 결과이다", "SSE 값은 성능과 무관하며 군집의 개수만 알려 준다", "SSE 값이 0에 가까울수록 군집이 서로 겹쳐 있다는 뜻이다"], "a": 1, "exp": "중심점의 특징벡터 값과 유사한 관측 값이 많을수록 SSE가 작아지며, SSE 값이 작을수록 오차가 적은 군집화 결과로 평가합니다."}, {"id": 35, "sec": "9.3", "diff": "심화", "q": "오차제곱합(SSE)에 대한 설명으로 옳지 않은 것은?", "opts": ["k-평균 군집화의 종료조건으로 설정할 수 있다", "SSE 값이 특정 값보다 작아지면 종료하도록 설정할 수 있다", "제곱 연산이 들어가기 때문에 오차가 커질수록 값이 기하급수적으로 커진다", "라벨이 있어야만 계산할 수 있는 지도 학습 전용 성능 측도이다"], "a": 3, "exp": "SSE는 중심점과 관측 값의 차이만으로 계산하므로 라벨이 필요 없는 비지도 학습의 성능 측도이며, k-평균의 종료조건으로도 활용할 수 있습니다."}, {"id": 36, "sec": "9.4", "diff": "기초", "q": "강의자료의 타이타닉 생존자 예측(Titanic: Survivor Prediction) 데이터에 대한 설명으로 옳은 것은?", "opts": ["라벨이 없는 비지도 학습 데이터로, 군집화로만 다룰 수 있다", "연속형 라벨을 예측하는 회귀 데이터이다", "생존 여부를 라벨로 갖는 지도 학습(분류) 데이터이며 예시에서는 이름, 나이, 동반 형제, 성별, 생존 여부만 사용한다", "객실 등급과 티켓 요금만을 특징으로 사용하는 데이터이다"], "a": 2, "exp": "타이타닉 데이터는 생존 여부(y)가 라벨인 지도 학습 분류 데이터이며, 강의자료의 예시에서는 이름, 나이, 동반 형제, 성별, 생존 여부만 사용(일부 변경)했습니다."}, {"id": 37, "sec": "9.4", "diff": "기초", "q": "의사결정나무(Decision Tree)의 정의로 옳은 것은?", "opts": ["관측치 간 거리를 계산해 유사한 것끼리 군집으로 나누는 방법", "데이터에 존재하는 속성들을 나누는 일련의 규칙(질문)들을 학습을 통해 찾아 트리 형태로 표현하는 방법", "여러 층의 인공신경망을 쌓아 특징을 추출하는 방법", "관측치의 밀도를 계산해 군집의 경계를 찾는 방법"], "a": 1, "exp": "의사결정나무는 데이터에 존재하는 속성들을 나누는 일련의 규칙(질문)을 학습으로 찾아 트리 형태로 표현하는 방법입니다."}, {"id": 38, "sec": "9.4", "diff": "기초", "q": "의사결정나무의 규칙은 프로그래밍의 무엇에 대한 표현과 유사하다고 설명했는가?", "opts": ["for 반복문", "함수 호출", "재귀 정의", "if-else 문"], "a": 3, "exp": "의사결정나무의 규칙은 프로그래밍의 if-else 문의 표현과 유사하며, 트리는 일종의 분류 과정을 표현한 것입니다."}, {"id": 39, "sec": "9.4", "diff": "중급", "q": "의사결정나무에서 트리의 마지막 노드에 들어가는 값에 대한 설명으로 옳은 것은?", "opts": ["분류문제에서는 예측값이, 회귀문제에서는 클래스가 들어간다", "분류·회귀 모두 다음 분할 조건이 들어간다", "분류문제에서는 클래스가, 회귀문제에서는 예측값이 들어간다", "분류·회귀 모두 해당 노드의 엔트로피 값이 들어간다"], "a": 2, "exp": "트리의 마지막 노드에는 분류문제에서는 클래스가, 회귀문제에서는 예측값이 들어갑니다."}, {"id": 40, "sec": "9.4", "diff": "기초", "q": "뿌리노드(Root Node)의 정의로 옳은 것은?", "opts": ["시작되는 노드로 전체 자료를 포함하는 노드", "자식노드가 없는 노드", "부모노드가 동일한 노드", "노드와 노드를 연결하는 간선"], "a": 0, "exp": "뿌리노드는 트리가 시작되는 노드로 전체 자료를 포함합니다."}, {"id": 41, "sec": "9.4", "diff": "기초", "q": "부모노드(Parent Node)와 자식노드(Child Node)를 바르게 설명한 것은?", "opts": ["부모노드는 노드에서 분리된 하위 노드, 자식노드는 주어진 노드의 상위 노드이다", "부모노드는 주어진 노드의 상위 노드, 자식노드는 노드에서 분리된 하위 노드이다", "부모노드와 자식노드는 항상 같은 높이에 위치한다", "부모노드는 잎노드를, 자식노드는 뿌리노드를 가리키는 말이다"], "a": 1, "exp": "부모노드는 주어진 노드의 상위 노드, 자식노드는 노드에서 분리된 하위 노드를 뜻합니다."}, {"id": 42, "sec": "9.4", "diff": "중급", "q": "형제노드(Sibling Node)의 정의로 옳은 것은?", "opts": ["자식노드가 없는 노드", "전체 자료를 포함하는 시작 노드", "노드와 노드를 연결하는 간선", "부모노드가 동일한 노드"], "a": 3, "exp": "형제노드는 부모노드가 동일한 노드들을 뜻합니다."}, {"id": 43, "sec": "9.4", "diff": "기초", "q": "잎노드(Leaf Node)의 정의로 옳은 것은?", "opts": ["전체 자료를 포함하는 시작 노드", "상위 노드가 존재하지 않는 노드", "자식노드가 없는 노드", "부모노드가 동일한 노드"], "a": 2, "exp": "잎노드는 자식노드가 없는 노드로, 분류문제에서는 클래스가 기입됩니다."}, {"id": 44, "sec": "9.4", "diff": "중급", "q": "트리 구조에서 엣지(Edge)와 높이(Height)를 바르게 설명한 것은?", "opts": ["엣지는 노드와 노드를 연결하는 간선이고, 높이는 뿌리부터 잎노드까지의 깊이이다", "엣지는 잎노드의 개수이고, 높이는 자식노드의 개수이다", "엣지는 뿌리부터 잎노드까지의 깊이이고, 높이는 간선을 부르는 다른 이름이다", "엣지와 높이는 모두 노드의 종류를 구분하는 용어이다"], "a": 0, "exp": "엣지는 노드와 노드를 연결하는 간선이며, 높이는 뿌리부터 잎노드까지의 깊이를 뜻합니다."}, {"id": 45, "sec": "9.4", "diff": "중급", "q": "강의자료가 의사결정나무의 예시로 든 아키네이터(Akinator) 게임의 특징으로 옳은 것은?", "opts": ["후보를 무작위로 제거해 나가는 몬테카를로 방식이다", "스무고개 놀이처럼 질문을 이어 가며 답을 좁혀 나간다", "관측치 사이의 거리를 계산해 가장 가까운 인물을 찾는다", "신경망으로 인물 이미지를 직접 분류한다"], "a": 1, "exp": "아키네이터 게임은 스무고개 놀이와 유사하게 질문(규칙)을 이어 가며 답을 좁혀 나가므로 의사결정나무의 좋은 예시입니다."}, {"id": 46, "sec": "9.4", "diff": "심화", "q": "타이타닉 의사결정나무(남성입니까? → 10세 이상입니까? → 동반 형제가 3명 이상입니까?)에서 8세 남성이고 동반 형제가 3명인 '디카프리오'는 어떤 경로로 분류되는가?", "opts": ["성별 분기에서 곧바로 '생존'으로 분류된다", "'10세 이상입니까?'에서 '예'로 이동해 '사망'으로 분류된다", "'동반 형제가 3명 이상입니까?'에서 '아니오'로 이동해 '생존'으로 분류된다", "'동반 형제가 3명 이상입니까?'에서 '예'로 이동해 '사망'으로 분류된다"], "a": 3, "exp": "남성이므로 첫 질문에서 '예', 8세이므로 '10세 이상입니까?'에서 '아니오', 동반 형제가 3명이므로 '3명 이상' 조건을 만족해 '사망' 잎노드에 도달합니다."}, {"id": 47, "sec": "9.5", "diff": "중급", "q": "분할 속성(Splitting attributes)의 정의로 옳은 것은?", "opts": ["부모 노드에 들어가는 if-else 조건들", "잎노드에 기입되는 클래스나 예측값들", "노드와 노드를 연결하는 간선에 부여된 가중치", "트리의 최대 높이를 정하는 초매개변수"], "a": 0, "exp": "분할 속성은 부모 노드에 들어가는 if-else 조건들을 의미하며, 마지막 노드에는 클래스나 예측치를 기입합니다."}, {"id": 48, "sec": "9.5", "diff": "중급", "q": "의사결정나무에서 분할 속성을 선택하는 기준과 그 이유로 가장 적절한 것은?", "opts": ["가장 많은 자식노드를 만드는 속성을 고른다. 트리가 넓어야 해석이 쉽기 때문이다", "무작위로 속성을 고른다. 어떤 속성을 골라도 결과가 동일하기 때문이다", "어떤 분할 속성이 가장 모호성을 줄일지 파악해 고른다. 그래야 연산적(비용적)으로 효율적인 나무를 만들 수 있기 때문이다", "항상 값의 종류가 가장 많은 속성을 고른다. 값이 많아야 트리 높이가 낮아지기 때문이다"], "a": 2, "exp": "강의자료는 1부터 100까지의 숫자 예측 게임을 예로 들며, 어떤 분할 속성이 가장 모호성을 줄일지 파악해 잘 선택해야 연산적(비용적)으로 효율적인 의사결정나무를 만들 수 있다고 설명합니다."}, {"id": 49, "sec": "9.5", "diff": "기초", "q": "엔트로피(Entropy)의 정의로 옳은 것은?", "opts": ["두 관측치 사이의 거리를 나타내는 값", "데이터 집합이 제공하는 각 사건이 일어날 확률을 통해 계산한 정보량", "분할 전후 분류 정확도의 차이", "잎노드에 저장된 클래스의 개수"], "a": 1, "exp": "엔트로피는 데이터 집합이 제공하는 각 사건이 일어날 확률을 통해 계산한 정보량을 의미합니다."}, {"id": 50, "sec": "9.5", "diff": "중급", "q": "엔트로피의 높고 낮음이 의미하는 바를 바르게 설명한 것은?", "opts": ["낮은 엔트로피는 경우의 수가 많고 정보량과 불확실성이 모두 높다는 뜻이다", "낮은 엔트로피는 경우의 수가 적지만 불확실성은 높다는 뜻이다", "높은 엔트로피는 경우의 수가 많지만 정보량은 낮다는 뜻이다", "낮은 엔트로피는 경우의 수가 적고 정보량도 낮으며 불확실성이 낮다는 뜻이다"], "a": 3, "exp": "낮은 엔트로피 = 경우의 수가 적음 = 낮은 정보량 = 낮은 불확실성이고, 높은 엔트로피 = 경우의 수가 높음 = 높은 정보량 = 높은 불확실성입니다."}, {"id": 51, "sec": "9.5", "diff": "기초", "q": "엔트로피를 측정하는 방법으로 강의자료가 제시한 공식은 누구의 공식인가?", "opts": ["베이즈(Bayes)", "가우스(Gauss)", "샤논(Shannon, Claude Elwood)", "유클리드(Euclid)"], "a": 2, "exp": "엔트로피는 샤논(Shannon, Claude Elwood) 공식을 사용해 측정합니다."}, {"id": 52, "sec": "9.5", "diff": "중급", "q": "엔트로피 계산 공식 h(D) = -Σ p_k log p_k 에서 log의 밑으로 사용하는 값은?", "opts": ["자연상수 e", "2", "10", "데이터 집합의 크기 |D|"], "a": 1, "exp": "강의자료는 log의 밑이 2임에 주의하라고 명시하며, log p_k = log_2 p_k 임을 밝히고 있습니다."}, {"id": 53, "sec": "9.5", "diff": "중급", "q": "엔트로피 공식 h(D) = -Σ_{k=1}^{m} p_k log p_k 에서 m과 p_k가 각각 의미하는 것은?", "opts": ["m은 데이터의 총 개수, p_k는 k번째 관측치의 가중치", "m은 트리의 높이, p_k는 노드 k에서의 분할 비율", "m은 속성의 개수, p_k는 속성 k의 정보이득", "m은 데이터 집합의 특정 속성의 라벨(클래스) 개수, p_k는 라벨 k일 때의 확률"], "a": 3, "exp": "D는 데이터 집합, m은 데이터 집합의 특정 속성의 라벨(클래스)의 개수, p_k는 라벨 k일 때의 확률입니다."}, {"id": 54, "sec": "9.5", "diff": "심화", "q": "컴퓨터 구매 여부 데이터(전체 14건, 구매 9건, 미구매 5건)의 전체 엔트로피 h(D)는 약 얼마인가?", "opts": ["0.693", "0.94", "0.911", "0.247"], "a": 1, "exp": "h(D) = -(9/14)log(9/14) - (5/14)log(5/14) = 0.94 입니다. 0.693은 h_age(D), 0.911은 h_income(D), 0.247은 나이 기준 정보이득입니다."}, {"id": 55, "sec": "9.5", "diff": "기초", "q": "정보이득(Information gain)에 대한 설명으로 옳은 것은?", "opts": ["학습 데이터를 통해 각 노드의 분류 기준(속성)을 선정할 때 각 속성의 효율성에 대한 측도이다", "군집 내 관측치와 중심점의 오차를 제곱해 더한 값이다", "트리의 뿌리부터 잎까지의 깊이를 나타내는 값이다", "잎노드에 도달한 관측치의 비율을 나타내는 값이다"], "a": 0, "exp": "정보이득은 각 노드의 분류 기준(속성)을 선정할 때 각 속성의 효율성에 대한 측도입니다."}, {"id": 56, "sec": "9.5", "diff": "중급", "q": "속성 A에 대한 정보이득 Gain(D, A)를 구하는 식으로 옳은 것은?", "opts": ["h_A(D) - h(D)", "h(D) x h_A(D)", "h(D) - h_A(D)", "h(D) + h_A(D)"], "a": 2, "exp": "Gain(D, A) = h(D) - h_A(D) 로, 전체 엔트로피에서 속성 A로 분류했을 때의 엔트로피를 뺀 값입니다."}, {"id": 57, "sec": "9.6", "diff": "심화", "q": "속성별 엔트로피 h_A(D) = Σ_{v∈Values(A)} (|D_v| / |D|) x h(D_v) 에서 가중치 |D_v| / |D| 가 의미하는 것은?", "opts": ["속성 A가 가질 수 있는 값의 종류 수가 전체 속성 수에서 차지하는 비율", "속성 A의 값이 v인 데이터가 전체 데이터에서 차지하는 개수 비율", "속성 A의 정보이득이 전체 정보이득의 합에서 차지하는 비율", "잎노드의 수가 전체 노드 수에서 차지하는 비율"], "a": 1, "exp": "속성 A로 분류했을 때 A의 모든 클래스의 각 엔트로피를 계산한 후 데이터의 개수만큼 가중치를 부여하며, D_v는 속성 A의 값이 v인 데이터의 집합입니다."}, {"id": 58, "sec": "9.6", "diff": "중급", "q": "정보이득이 크다는 것이 의미하는 바로 옳은 것은?", "opts": ["해당 속성으로 나눌 때 엔트로피가 오히려 커진다는 뜻이다", "해당 속성은 분할 속성으로 부적절하다는 뜻이다", "해당 속성이 가질 수 있는 값의 종류가 많다는 뜻이다", "그 속성을 기준으로 데이터를 분류했을 때 얻을 수 있는 정보량이 많다는 뜻이다"], "a": 3, "exp": "정보이득이 클수록 속성 A를 기준으로 데이터를 분류했을 때 얻을 수 있는 정보량이 많고, A로 나눌 때 엔트로피가 작아지므로 좋은 분할 속성입니다."}, {"id": 59, "sec": "9.6", "diff": "기초", "q": "의사결정나무에서 '성장(grow)'이란 무엇을 의미하는가?", "opts": ["각 노드에서 엔트로피가 최대로 감소하도록 하는 분할 속성을 결정하여 나무를 생성하는 과정", "학습이 끝난 나무의 가지를 잘라내어 단순화하는 과정", "잎노드의 값을 해당 영역의 평균으로 바꾸는 과정", "트리의 최대 높이를 미리 제한해 두는 과정"], "a": 0, "exp": "성장(grow)은 일반적으로 의사결정나무를 생성하는 방법을 뜻하며, 각 노드에서 엔트로피가 최대로 감소하도록 하는 분할 속성을 결정하는 과정입니다."}, {"id": 60, "sec": "9.6", "diff": "기초", "q": "ID3 알고리즘의 정식 명칭으로 옳은 것은?", "opts": ["Information Decision 3", "Iterative Decision Divider 3", "Iterative Dichotomiser 3", "Inductive Dichotomy 3"], "a": 2, "exp": "ID3는 Iterative Dichotomiser 3의 약자로, 반복적으로(iteratively) 데이터를 나누는(divides) 알고리즘입니다."}, {"id": 61, "sec": "9.6", "diff": "중급", "q": "ID3 알고리즘의 탐색 방식에 대한 설명으로 옳은 것은?", "opts": ["바텀업 방식으로 엔트로피를 최소화하는 전역 최적 알고리즘이다", "탑다운 방식으로 정보이득을 최대화하는 탐욕적(greedy) 방식의 최적화 알고리즘이다", "무작위로 속성을 선택해 여러 트리를 만든 뒤 투표하는 알고리즘이다", "잎노드부터 거꾸로 올라가며 분할 속성을 결정하는 알고리즘이다"], "a": 1, "exp": "ID3는 탑다운 방식으로 정보이득을 최대화하는 탐욕적(greedy) 방식의 최적화 알고리즘이며, 각 노드마다 반복적으로 계산된 정보이득을 기반으로 분류 기준을 정합니다."}, {"id": 62, "sec": "9.6", "diff": "중급", "q": "컴퓨터 구매 여부 데이터에서 h(D)=0.94, h_age(D)=0.693일 때 나이(age) 기준 정보이득은?", "opts": ["0.247", "0.151", "0.048", "0.029"], "a": 0, "exp": "Gain(D, age) = 0.94 - 0.693 = 0.247 입니다."}, {"id": 63, "sec": "9.6", "diff": "심화", "q": "수입(income) 속성을 고소득층 4건, 중소득층 6건, 저소득층 4건으로 나누어 계산한 h_income(D)가 0.911일 때, 수입 기준 정보이득은?", "opts": ["0.911", "0.247", "0.151", "0.029"], "a": 3, "exp": "Gain(D, income) = h(D) - h_income(D) = 0.94 - 0.911 = 0.029 로, 네 속성 중 정보이득이 가장 작습니다."}, {"id": 64, "sec": "9.6", "diff": "중급", "q": "학생 여부(student) 속성을 '예' 7건과 '아니오' 7건으로 나누어 계산한 h_student(D)가 0.789일 때, 학생 여부 기준 정보이득은?", "opts": ["0.029", "0.048", "0.151", "0.247"], "a": 2, "exp": "Gain(D, student) = 0.94 - 0.789 = 0.151 입니다."}, {"id": 65, "sec": "9.6", "diff": "중급", "q": "신용 등급(credit) 속성을 '좋음' 8건과 '아주좋음' 6건으로 나누어 계산한 h_credit(D)가 0.892일 때, 신용 등급 기준 정보이득은?", "opts": ["0.029", "0.048", "0.151", "0.247"], "a": 1, "exp": "Gain(D, credit) = 0.94 - 0.892 = 0.048 입니다."}, {"id": 66, "sec": "9.6", "diff": "중급", "q": "네 속성의 정보이득이 나이 0.247, 수입 0.029, 학생 여부 0.151, 신용 등급 0.048일 때 ID3 알고리즘이 선택하는 첫 번째 분할 속성은?", "opts": ["나이", "수입", "학생 여부", "신용 등급"], "a": 0, "exp": "ID3는 각 노드에서 정보이득이 가장 큰 속성을 분류 기준으로 선택하므로, 정보이득 0.247로 가장 큰 '나이'가 첫 번째 분할 속성이 됩니다."}, {"id": 67, "sec": "9.6", "diff": "심화", "q": "나이 속성 기준으로 데이터를 나눈 뒤 '청년' 가지에 대해서는 더 이상 데이터 분류가 필요 없는 이유는?", "opts": ["청년에 해당하는 데이터의 개수가 가장 적기 때문이다", "청년 데이터의 엔트로피가 1로 최대이기 때문이다", "청년에 해당하는 데이터가 모두 컴퓨터를 구매한다는 데이터이기 때문이다", "청년은 나이 속성의 마지막 값이기 때문이다"], "a": 2, "exp": "청년으로 분류된 데이터는 모두 구매(y='구매')이므로 엔트로피가 0이 되어 더 이상 분류할 필요가 없고, 곧바로 '구매' 잎노드가 됩니다."}, {"id": 68, "sec": "9.6", "diff": "심화", "q": "청소년 데이터에서 Gain(D_youth, student)=0.971, 중년 데이터에서 Gain(D_senior, credit)=0.971로 각각 가장 컸다면, 두 번째 분할 속성은 어떻게 정해지는가?", "opts": ["청소년은 신용 등급, 중년은 학생 여부", "청소년은 학생 여부, 중년은 신용 등급", "청소년과 중년 모두 수입", "청소년과 중년 모두 학생 여부"], "a": 1, "exp": "청소년 데이터는 학생 여부로(0.971), 중년 데이터는 신용 등급으로(0.971) 분리할 때 정보이득이 가장 크므로 각각 그 속성이 두 번째 분할 속성이 됩니다."}, {"id": 69, "sec": "9.6", "diff": "중급", "q": "회귀나무(Regression tree)에 대한 설명으로 옳은 것은?", "opts": ["잎노드에 분류 클래스의 이름이 들어간다", "잎노드에 해당 영역의 엔트로피 값이 들어간다", "잎노드에 속성별 정보이득 값이 들어간다", "회귀 데이터의 경우 잎노드가 회귀값(해당 영역 관측치의 평균)인 나무를 만들 수 있다"], "a": 3, "exp": "회귀 데이터에서는 잎노드가 회귀값인 회귀나무를 만들 수 있으며, 회귀값은 각 관측치 영역의 평균값으로 설정합니다."}, {"id": 70, "sec": "9.6", "diff": "심화", "q": "프로야구 선수 연봉 회귀나무 예시에서 '연차 10년 이하'이면서 '50안타 이상'인 영역에 52M, 38M, 30M의 관측치가 있다면 이 영역에 새로 들어온 관측치의 예측 연봉은?", "opts": ["40M", "23M", "50M", "30M"], "a": 0, "exp": "Step1에서 영역을 나누고(분할1: 10년, 분할2: 50안타), Step2에서 영역별 평균값을 잎노드 값으로 설정하므로 (52+38+30)/3 = 40M이 예측값이 됩니다."}, {"id": 71, "sec": "9.7", "diff": "기초", "q": "강의자료가 정의한 '인공지능'으로 옳은 것은?", "opts": ["기계가 경험을 통해 학습하고 새로운 입력 내용에 따라 기존 지식을 조정하며 사람과 같은 방식으로 과제를 수행할 수 있도록 지원하는 기술", "데이터를 분석하고 학습한 내용을 적용해 결정을 내리는 알고리즘", "여러 층을 가진 인공신경망을 사용하여 학습하는 방법", "자신이 한 행동에 대해 보상을 받는 학습 방법"], "a": 0, "exp": "강의자료의 인공지능 정의입니다. 2번은 머신러닝, 3번은 딥러닝, 4번은 강화학습의 정의입니다."}, {"id": 72, "sec": "9.7", "diff": "기초", "q": "강의자료가 정의한 '머신러닝'으로 옳은 것은?", "opts": ["여러 층을 가진 인공신경망을 사용하여 학습하는 방법", "규칙을 사람이 직접 프로그래밍하여 동작시키는 전문가 시스템", "라벨이 없는 데이터를 유사도로 묶어 군집으로 나누는 방법", "데이터를 분석하고 해당 데이터를 통해 학습한 후 정보를 바탕으로 결정 내리기 위해 학습한 내용을 적용하는 알고리즘"], "a": 3, "exp": "머신러닝은 데이터를 분석하고 학습한 후, 정보를 바탕으로 결정을 내리기 위해 학습한 내용을 적용하는 알고리즘입니다."}, {"id": 73, "sec": "9.7", "diff": "기초", "q": "강의자료가 정의한 '딥러닝'으로 옳은 것은?", "opts": ["규칙 기반 시스템으로 지식을 표현하는 방법", "데이터의 밀도를 계산해 군집을 찾는 방법", "여러 층을 가진 인공신경망을 사용하여 학습하는 방법", "정보이득을 최대화하는 분할 속성을 반복적으로 찾는 방법"], "a": 2, "exp": "딥러닝은 여러 층을 가진 인공신경망을 사용하여 학습하는 방법입니다."}, {"id": 74, "sec": "9.7", "diff": "중급", "q": "강의자료의 그림에서 인공지능, 머신러닝, 딥러닝의 포함 관계로 옳은 것은?", "opts": ["딥러닝이 머신러닝을 포함하고 머신러닝이 인공지능을 포함한다", "머신러닝이 인공지능을 포함하고 인공지능이 딥러닝을 포함한다", "세 개념은 서로 겹치지 않는 별개의 분야이다", "인공지능이 머신러닝을 포함하고 머신러닝이 딥러닝을 포함한다"], "a": 3, "exp": "강의자료의 그림은 인공지능 안에 머신러닝이, 머신러닝 안에 딥러닝이 포함되는 관계를 보여 줍니다."}, {"id": 75, "sec": "9.7", "diff": "중급", "q": "강의자료가 '인공지능의 종류'로 든 것은?", "opts": ["전문가 시스템, 규칙 기반 시스템", "결정 트리, 선형 회귀, 퍼셉트론", "CNN, 강화학습, RNN", "K-평균, DBSCAN, 계층적 군집화"], "a": 0, "exp": "인공지능의 종류로는 전문가 시스템과 규칙 기반 시스템을, 머신러닝의 종류로는 결정 트리·선형 회귀·퍼셉트론을, 딥러닝의 종류로는 CNN·강화학습·RNN을 들었습니다."}, {"id": 76, "sec": "9.7", "diff": "기초", "q": "강의자료가 '머신러닝의 종류'로 든 것은?", "opts": ["전문가 시스템, 규칙 기반 시스템", "결정 트리, 선형 회귀, 퍼셉트론", "CNN, 강화학습, RNN", "Batch normalization, Max pooling, ReLU"], "a": 1, "exp": "머신러닝의 종류로는 결정 트리, 선형 회귀, 퍼셉트론이 제시되었습니다."}, {"id": 77, "sec": "9.7", "diff": "기초", "q": "강의자료가 '딥러닝의 종류'로 든 것은?", "opts": ["전문가 시스템, 규칙 기반 시스템", "결정 트리, 선형 회귀, 퍼셉트론", "K-평균, DBSCAN, ID3", "CNN, 강화학습, RNN"], "a": 3, "exp": "딥러닝의 종류로는 CNN, 강화학습, RNN이 제시되었습니다."}, {"id": 78, "sec": "9.7", "diff": "기초", "q": "강의자료가 제시한 딥러닝 모델의 학습 방법 세 가지는?", "opts": ["훈련 학습, 검증 학습, 테스트 학습", "지도 학습, 전이 학습, 앙상블 학습", "지도 학습, 비지도 학습, 강화학습", "군집 학습, 회귀 학습, 분류 학습"], "a": 2, "exp": "학습 방법은 정답이 있는 지도 학습, 정답이 없는 비지도 학습, 보상을 받는 강화학습의 세 가지로 제시되었습니다."}, {"id": 79, "sec": "9.7", "diff": "중급", "q": "강화학습의 정의로 옳은 것은?", "opts": ["자신이 한 행동에 대해 보상을 받는 학습 방법", "정답이 있는 데이터로 입력과 출력의 관계를 학습하는 방법", "정답이 없는 데이터로 패턴을 찾는 학습 방법", "학습된 모델을 검증 데이터로 추가 학습하는 방법"], "a": 0, "exp": "강화학습은 자신이 한 행동에 대해 보상을 받는 학습 방법입니다."}, {"id": 80, "sec": "9.7", "diff": "기초", "q": "Training data의 정의로 옳은 것은?", "opts": ["학습된 딥러닝 모델을 검증하기 위한 데이터", "학습이 완료된 모델을 테스트하기 위한 데이터", "라벨이 전혀 부여되지 않은 데이터", "딥러닝 모델을 학습하기 위한 데이터"], "a": 3, "exp": "Training data는 딥러닝 모델을 학습하기 위한 데이터입니다."}, {"id": 81, "sec": "9.7", "diff": "중급", "q": "Validation data의 역할로 옳은 것은?", "opts": ["모델을 처음 학습시키기 위한 데이터이다", "학습에 전혀 사용하지 않고 최종 성능만 측정하는 데이터이다", "학습된 딥러닝 모델을 검증하기 위한 데이터이다", "어노테이션 결과를 저장해 두는 데이터이다"], "a": 2, "exp": "Validation data는 학습된 딥러닝 모델을 검증하기 위한 데이터이며, 검증 데이터를 적용해 추가 학습을 진행합니다."}, {"id": 82, "sec": "9.7", "diff": "중급", "q": "Test data의 정의로 옳은 것은?", "opts": ["학습 도중 모델을 검증하기 위해 사용하는 데이터", "학습 완료된 딥러닝 모델을 테스트하기 위한, 학습하지 않은 데이터", "모델 학습의 초기 파라미터를 정하기 위한 데이터", "레이블링이 되어 있지 않아 사용할 수 없는 데이터"], "a": 1, "exp": "Test data는 학습이 완료된 딥러닝 모델을 테스트하기 위한, 학습에 사용하지 않은 데이터입니다."}, {"id": 83, "sec": "9.7", "diff": "기초", "q": "강의자료가 제시한 딥러닝 데이터 세트 구축 비율은?", "opts": ["Training data 60%, Validation data 20%, Test data 20%", "Training data 80%, Validation data 10%, Test data 10%", "Training data 50%, Validation data 25%, Test data 25%", "Training data 70%, Validation data 20%, Test data 10%"], "a": 0, "exp": "강의자료는 Training data 60%, Validation data 20%, Test data 20%의 비율을 제시합니다."}, {"id": 84, "sec": "9.7", "diff": "중급", "q": "강의자료가 설명한 딥러닝의 학습·검증·테스트 절차를 바르게 나열한 것은?", "opts": ["테스트 데이터로 학습 → 검증 데이터로 검증 → 학습 데이터로 테스트", "검증 데이터로 학습 → 학습 데이터로 검증 → 테스트 데이터로 테스트", "학습 데이터로 학습 → 테스트 데이터로 추가 학습 → 검증 데이터로 테스트", "초기 학습 데이터로 모델 학습 → 검증 데이터를 적용해 추가 학습 → 학습하지 않은 테스트 데이터로 테스트"], "a": 3, "exp": "초기 학습 데이터로 모델을 학습하고, 학습된 모델에 검증 데이터를 적용해 추가 학습을 진행한 뒤, 학습하지 않은 테스트 데이터로 최종 테스트합니다."}, {"id": 85, "sec": "9.7", "diff": "기초", "q": "Convolution layer의 역할로 옳은 것은?", "opts": ["특징을 정규화하는 레이어", "특징을 활성화하는 함수", "특징 연산을 하는 레이어", "모델을 최적화하는 방법"], "a": 2, "exp": "Convolution layer는 특징 연산을 하는 레이어입니다."}, {"id": 86, "sec": "9.7", "diff": "중급", "q": "Normalization layer의 종류로 강의자료가 든 것은?", "opts": ["Batch normalization, Instance normalization", "Max pooling, Average pooling", "L1 regularization, L2 regularization", "Adam, Nadam"], "a": 0, "exp": "Normalization layer의 종류로는 Batch normalization과 Instance normalization이 제시되었습니다."}, {"id": 87, "sec": "9.7", "diff": "중급", "q": "Pooling layer의 역할과 종류를 바르게 짝지은 것은?", "opts": ["특징 연산 · Convolution, Deconvolution", "특징 활성화 · ReLU, Leaky ReLU", "모델 최적화 · Adam, Nadam", "특징 추출 · Max pooling, Average pooling"], "a": 3, "exp": "Pooling layer는 특징을 추출하는 레이어이며 종류로는 Max pooling과 Average pooling이 있습니다."}, {"id": 88, "sec": "9.7", "diff": "중급", "q": "Activation function의 역할과 종류를 바르게 짝지은 것은?", "opts": ["손실을 계산하는 함수 · Crossentropy, MSE", "특징을 활성화하는 함수 · ReLU, eLU, Leaky ReLU", "특징을 정규화하는 레이어 · Batch, Instance normalization", "학습 설정을 정하는 값 · Epoch, Seed"], "a": 1, "exp": "Activation function은 특징을 활성화하는 함수이며 ReLU, eLU, Leaky ReLU 등이 있습니다."}, {"id": 89, "sec": "9.7", "diff": "중급", "q": "딥러닝 모델의 목적 로스인 Loss function의 종류로 옳은 것은?", "opts": ["Adam, Nadam", "Max pooling, Average pooling", "Crossentropy, MSE Loss", "L1 regularization, L2 regularization"], "a": 2, "exp": "Loss function은 딥러닝 모델의 목적 로스로, Crossentropy와 MSE Loss 등이 있습니다."}, {"id": 90, "sec": "9.7", "diff": "중급", "q": "딥러닝 모델의 최적화 방법(Optimizator)의 예로 강의자료가 든 것은?", "opts": ["ReLU, eLU", "Crossentropy, MSE", "Batch normalization, Instance normalization", "Adam, Nadam"], "a": 3, "exp": "Optimizator는 딥러닝 모델의 최적화 방법으로 Adam, Nadam 등이 있습니다."}, {"id": 91, "sec": "9.7", "diff": "중급", "q": "Regularization function에 대한 설명으로 옳은 것은?", "opts": ["딥러닝 모델 학습에 도움이 되는 방법으로 L1 regularization, L2 regularization이 있다", "손실을 계산하는 함수로 Crossentropy, MSE가 있다", "특징을 추출하는 레이어로 Max pooling, Average pooling이 있다", "모델의 최적화 방법으로 Adam, Nadam이 있다"], "a": 0, "exp": "Regularization function은 딥러닝 모델 학습에 도움이 되는 방법으로, L1 regularization과 L2 regularization이 있습니다."}, {"id": 92, "sec": "9.7", "diff": "중급", "q": "강의자료가 든 학습 파라미터와 그 의미를 바르게 짝지은 것은?", "opts": ["Epoch는 초기 설정 값, Seed는 학습 수", "Learning rate는 학습 수, Epoch는 학습률", "Epoch는 학습 수, Seed는 초기 설정 값, Learning rate는 학습률", "Batch data는 학습률, Seed는 학습 수"], "a": 2, "exp": "학습 설정에 필요한 파라미터로 Epoch(학습 수), Seed(초기 설정 값), Learning rate(학습률)가 제시되었습니다."}, {"id": 93, "sec": "9.7", "diff": "심화", "q": "Batch data가 의미하는 것은?", "opts": ["검증에 사용하는 데이터의 개수", "전체 학습 반복 횟수", "초기 가중치를 정하는 난수 값", "학습 데이터에서 한 번에 넣는 입력 데이터 사이즈"], "a": 3, "exp": "Batch data는 학습 데이터에서 입력 데이터 사이즈를 뜻합니다. 반복 횟수는 Epoch, 초기 설정 값은 Seed입니다."}, {"id": 94, "sec": "9.7", "diff": "심화", "q": "과적합(Overfitting)의 정의와 증상을 바르게 설명한 것은?", "opts": ["학습이 덜 된 경우로 Training Accuracy와 Test Accuracy가 모두 감소한다", "학습 데이터를 과하게 학습(암기)한 경우로 Training Accuracy는 증가하고 Test Accuracy는 감소한다", "학습이 적절한 경우로 Test Accuracy가 Training Accuracy보다 증가한다", "데이터 구축 비율을 잘못 나눈 경우로 Validation Accuracy만 증가한다"], "a": 1, "exp": "과적합은 학습 데이터를 과하게 학습(암기)한 경우로, Training Accuracy는 증가하지만 Test Accuracy는 감소합니다."}, {"id": 95, "sec": "9.7", "diff": "심화", "q": "Underfitting의 정의와 증상을 바르게 설명한 것은?", "opts": ["학습이 덜 되어 있는 경우로 Training Accuracy와 Test Accuracy가 둘 다 감소한다", "학습 데이터를 암기한 경우로 Training Accuracy만 증가한다", "학습이 적절한 경우로 두 정확도가 모두 최고치에 도달한다", "테스트 데이터를 학습에 함께 사용한 경우를 뜻한다"], "a": 0, "exp": "Underfitting은 학습이 덜 되어 있는 경우로 Training Accuracy와 Test Accuracy가 둘 다 감소합니다."}, {"id": 96, "sec": "9.7", "diff": "심화", "q": "강의자료가 '적절한 학습'의 신호로 제시한 것은?", "opts": ["Training Accuracy만 크게 증가하는 경우", "Training Accuracy와 Test Accuracy가 모두 감소하는 경우", "Test Accuracy가 0에 수렴하는 경우", "Training Accuracy보다 Test Accuracy가 증가되는 경우"], "a": 3, "exp": "강의자료는 학습이 적절하게 된 경우를 Training Accuracy보다 Test Accuracy가 증가되는 경우로 설명합니다."}, {"id": 97, "sec": "9.7", "diff": "기초", "q": "강의자료가 소개한 딥러닝 관련 프레임워크로 옳은 것은?", "opts": ["사이킷런, 판다스, 넘파이", "OpenCV, MATLAB, R", "텐서플로, 케라스, 파이토치", "Yolo_mark, Labelme, OpenLabeling"], "a": 2, "exp": "딥러닝 관련 프레임워크로 텐서플로, 케라스, 파이토치가 소개되었습니다. 4번은 어노테이션 툴의 예입니다."}, {"id": 98, "sec": "9.7", "diff": "심화", "q": "구글 코랩(Google Colab) 사용 방법에 대한 설명으로 옳지 않은 것은?", "opts": ["구글 계정으로 로그인한 뒤 'Google colab'을 검색해 접속한다", "작성한 노트북은 py 파일로만 저장할 수 있고 ipynb 파일로는 내려받을 수 없다", "새 노트를 클릭해 작업 환경을 구축한다", "화살표를 클릭하거나 런타임 모두 실행으로 코드를 실행한다"], "a": 1, "exp": "강의자료는 파일 → 다운로드 메뉴에서 ipynb 파일과 py 파일 모두 내려받을 수 있다고 설명합니다."}, {"id": 99, "sec": "9.7", "diff": "심화", "q": "아나콘다 가상환경의 생성 및 실행 명령을 바르게 짝지은 것은?", "opts": ["생성: conda create --name 가상환경이름 python=버전 / 실행: conda activate py36", "생성: conda activate 가상환경이름 / 실행: conda create py36", "생성: pip install 가상환경이름 / 실행: pip activate py36", "생성: conda new 가상환경이름 / 실행: conda run py36"], "a": 0, "exp": "가상환경은 conda create --name 가상환경이름 python=버전 으로 만들고, conda activate py36 처럼 실행합니다."}, {"id": 100, "sec": "9.7", "diff": "심화", "q": "어노테이션 툴(Annotation tool)에 대한 설명으로 옳지 않은 것은?", "opts": ["딥러닝 모델 학습에 필요한 데이터를 만들고 가공하는 툴이다", "결과 출력 형식으로는 json, xml, csv 등이 있다", "Yolo_mark는 물체 검출, Labelme는 세그멘테이션 레이블링에 주로 사용된다", "기존 오픈소스 어노테이션 툴만으로 실세계의 모든 레이블링 요구사항을 해결할 수 있다"], "a": 3, "exp": "강의자료는 기존 오픈소스만으로는 모든 레이블링을 해결할 수 없으며, 실세계의 다양한 요구사항에 맞춰 새로운 어노테이션 툴을 직접 제작해야 한다고 설명합니다."}];
+
+const SECTIONS = {
+  "9.1": "비지도 학습과 군집화의 개념",
+  "9.2": "군집화 알고리즘의 종류",
+  "9.3": "k-평균 군집화 절차와 성능 측도",
+  "9.4": "의사결정나무와 트리 구조",
+  "9.5": "분할 속성 · 엔트로피와 정보이득",
+  "9.6": "ID3 알고리즘과 나무의 성장 · 회귀나무",
+  "9.7": "딥러닝 기초 소개"
+};
+const DIFFS = ["기초","중급","심화"];
+const DIFFCLS = {"기초":"d1","중급":"d2","심화":"d3"};
+const KEY = "mlx_week9_quiz_v1";
+
+/* ---------- state ---------- */
+let state = {
+  answers:{},           // id -> chosen original option index
+  secFilter:"ALL",
+  diffFilter:"ALL",
+  shuffleQ:false,
+  shuffleO:false,
+  reviewMode:false,
+  order:[],             // array of question ids in display order
+  optOrder:{},          // id -> array of original indices
+  cursor:0
+};
+
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify({
+    answers:state.answers, shuffleQ:state.shuffleQ, shuffleO:state.shuffleO,
+    secFilter:state.secFilter, diffFilter:state.diffFilter, optOrder:state.optOrder
+  })); }catch(e){}
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY); if(!raw) return;
+    const d = JSON.parse(raw);
+    if(d && typeof d==="object"){
+      state.answers = d.answers||{};
+      state.shuffleQ = !!d.shuffleQ; state.shuffleO = !!d.shuffleO;
+      state.secFilter = d.secFilter||"ALL"; state.diffFilter = d.diffFilter||"ALL";
+      state.optOrder = d.optOrder||{};
+    }
+  }catch(e){}
+}
+
+/* ---------- helpers ---------- */
+function shuffled(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function optOrderFor(q){
+  if(!state.shuffleO) return [0,1,2,3];
+  if(!state.optOrder[q.id]) { state.optOrder[q.id] = shuffled([0,1,2,3]); save(); }
+  return state.optOrder[q.id];
+}
+function isWrong(q){ return q.id in state.answers && state.answers[q.id] !== q.a; }
+function isRight(q){ return state.answers[q.id] === q.a; }
+
+function buildOrder(keepCursor){
+  let pool = QUESTIONS.filter(q =>
+    (state.secFilter==="ALL" || q.sec===state.secFilter) &&
+    (state.diffFilter==="ALL" || q.diff===state.diffFilter)
+  );
+  if(state.reviewMode && state.reviewIds && state.reviewIds.length)
+    pool = state.reviewIds.map(id=>byId[id]);
+  let ids = pool.map(q=>q.id);
+  if(state.shuffleQ) ids = shuffled(ids);
+  state.order = ids;
+  if(!keepCursor) state.cursor = 0;
+  if(state.cursor >= ids.length) state.cursor = Math.max(0, ids.length-1);
+}
+
+const byId = {}; QUESTIONS.forEach(q => byId[q.id]=q);
+
+/* ---------- rendering ---------- */
+const $ = s => document.querySelector(s);
+const stage = $("#stage");
+
+function renderChips(){
+  const sc = $("#secChips"); sc.innerHTML="";
+  const mk = (label,val,cur,handler)=>{
+    const b=document.createElement("button");
+    b.className="chip"; b.textContent=label;
+    b.setAttribute("aria-pressed", String(cur===val));
+    b.onclick=()=>handler(val); return b;
+  };
+  sc.appendChild(mk("전체 "+QUESTIONS.length+"문항","ALL",state.secFilter,setSec));
+  Object.keys(SECTIONS).forEach(k=>{
+    const n = QUESTIONS.filter(q=>q.sec===k).length;
+    sc.appendChild(mk(k+" "+SECTIONS[k]+" ("+n+")",k,state.secFilter,setSec));
+  });
+  const dc = $("#diffChips"); dc.innerHTML="";
+  dc.appendChild(mk("전체","ALL",state.diffFilter,setDiff));
+  DIFFS.forEach(d=>{
+    const n = QUESTIONS.filter(q=>q.diff===d).length;
+    dc.appendChild(mk(d+" ("+n+")",d,state.diffFilter,setDiff));
+  });
+  $("#shuffleQ").setAttribute("aria-pressed", String(state.shuffleQ));
+  $("#shuffleO").setAttribute("aria-pressed", String(state.shuffleO));
+  $("#reviewBtn").setAttribute("aria-pressed", String(state.reviewMode));
+}
+
+function setSec(v){ state.secFilter=v; state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+function setDiff(v){ state.diffFilter=v; state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+
+function renderProgress(){
+  const ids = state.order;
+  const done = ids.filter(id=> id in state.answers).length;
+  const ok = ids.filter(id=> isRight(byId[id])).length;
+  const no = done - ok;
+  $("#doneN").textContent = done;
+  $("#totalN").textContent = ids.length;
+  $("#okN").textContent = ok;
+  $("#noN").textContent = no;
+  $("#rate").textContent = done ? Math.round(ok/done*100)+"%" : "—";
+  $("#barFill").style.width = ids.length ? (done/ids.length*100)+"%" : "0%";
+  $("#wrongCount").textContent = QUESTIONS.filter(isWrong).length;
+}
+
+function renderPalette(){
+  const p = $("#palette"); p.innerHTML="";
+  state.order.forEach((id,i)=>{
+    const q = byId[id];
+    const b=document.createElement("button");
+    b.className="cell" + (id in state.answers ? (isRight(q)?" o":" x") : "") + (i===state.cursor?" cur":"");
+    b.textContent = q.id;
+    b.title = q.sec+" · "+q.diff;
+    b.onclick=()=>{ state.cursor=i; renderAll(); window.scrollTo({top:0,behavior:"smooth"}); };
+    p.appendChild(b);
+  });
+}
+
+function renderQuestion(){
+  stage.innerHTML="";
+  if(!state.order.length){
+    const d=document.createElement("div"); d.className="panel empty";
+    d.textContent = state.reviewMode ? "틀린 문제가 없습니다. 잘하셨어요!" : "조건에 맞는 문제가 없습니다. 필터를 바꿔 보세요.";
+    stage.appendChild(d); return;
+  }
+  const idx = state.cursor;
+  const q = byId[state.order[idx]];
+  const answered = q.id in state.answers;
+  const order = optOrderFor(q);
+
+  const card=document.createElement("section"); card.className="panel qcard";
+
+  const meta=document.createElement("div"); meta.className="qmeta";
+  meta.innerHTML =
+    '<span class="tag num">'+ (idx+1) +' / '+ state.order.length +'</span>' +
+    '<span class="tag sec">'+ q.sec +' '+ SECTIONS[q.sec] +'</span>' +
+    '<span class="tag '+ DIFFCLS[q.diff] +'">'+ q.diff +'</span>' +
+    '<span style="margin-left:auto;font-size:12px;color:var(--muted)">문제 '+ q.id +'번</span>';
+  card.appendChild(meta);
+
+  const h=document.createElement("h2"); h.className="qtext"; h.textContent=q.q; card.appendChild(h);
+
+  const wrap=document.createElement("div"); wrap.className="opts";
+  order.forEach((orig,pos)=>{
+    const b=document.createElement("button"); b.className="opt"; b.type="button";
+    b.innerHTML = '<span class="n">'+(pos+1)+'</span><span class="t"></span>';
+    b.querySelector(".t").textContent = q.opts[orig];
+    if(answered){
+      b.disabled = true;
+      if(orig===q.a){ b.classList.add("correct"); b.insertAdjacentHTML("beforeend",'<span class="mark">정답</span>'); }
+      else if(orig===state.answers[q.id]){ b.classList.add("wrong"); b.insertAdjacentHTML("beforeend",'<span class="mark">내 선택</span>'); }
+    } else {
+      b.onclick=()=>{ state.answers[q.id]=orig; save(); renderAll(); };
+    }
+    wrap.appendChild(b);
+  });
+  card.appendChild(wrap);
+
+  if(answered){
+    const e=document.createElement("div"); e.className="exp";
+    const good = isRight(q);
+    e.innerHTML = '<h4>'+(good?'✓ 정답입니다':'✕ 다시 확인해 보세요')+'</h4><p></p>'+
+                  '<span class="ref">관련 단원 · '+q.sec+' '+SECTIONS[q.sec]+'</span>';
+    e.querySelector("p").textContent = q.exp;
+    if(!good){ e.style.background="var(--no-soft)"; e.style.borderLeftColor="var(--no)"; e.querySelector("h4").style.color="var(--no)"; }
+    card.appendChild(e);
+  }
+
+  const nav=document.createElement("div"); nav.className="nav";
+  const prev=document.createElement("button"); prev.className="btn"; prev.textContent="← 이전";
+  prev.disabled = idx===0; prev.onclick=()=>{ state.cursor--; renderAll(); };
+  const next=document.createElement("button"); next.className="btn primary";
+  next.textContent = idx===state.order.length-1 ? "결과 보기 →" : "다음 →";
+  next.onclick=()=>{
+    if(idx===state.order.length-1){ showResult(); }
+    else { state.cursor++; renderAll(); }
+  };
+  const redo=document.createElement("button"); redo.className="btn"; redo.textContent="이 문제 다시";
+  redo.disabled = !answered;
+  redo.onclick=()=>{ delete state.answers[q.id]; save(); renderAll(); };
+  nav.appendChild(prev); nav.appendChild(redo);
+  const sp=document.createElement("span"); sp.className="spacer"; nav.appendChild(sp);
+  nav.appendChild(next);
+  card.appendChild(nav);
+
+  stage.appendChild(card);
+}
+
+function showResult(){
+  const ids = state.order;
+  const done = ids.filter(id=> id in state.answers).length;
+  const ok = ids.filter(id=> isRight(byId[id])).length;
+  const card=document.createElement("section"); card.className="panel result";
+  const pct = done ? Math.round(ok/done*100) : 0;
+  let msg = pct>=90?"완벽합니다. 1주차 내용을 확실히 이해했어요."
+          : pct>=75?"좋습니다. 틀린 문제만 복습하면 충분해요."
+          : pct>=50?"절반 이상 맞혔습니다. 오답 노트를 한 번 더 돌려 보세요."
+          : "해설을 읽으며 오답부터 차근히 정리해 봅시다.";
+
+  const per = {};
+  Object.keys(SECTIONS).forEach(k=>{
+    const sub = ids.map(i=>byId[i]).filter(q=>q.sec===k && (q.id in state.answers));
+    if(sub.length) per[k] = [sub.filter(isRight).length, sub.length];
+  });
+
+  card.innerHTML =
+    '<div class="eyebrow">결과</div>'+
+    '<div class="score">'+ok+' <small>/ '+done+' 정답</small></div>'+
+    '<div class="stat" style="font-size:15px">정답률 <b>'+pct+'%</b> · '+msg+'</div>'+
+    '<div class="breakdown">'+ Object.keys(per).map(k=>
+       '<div class="bd"><div class="k">'+k+' '+SECTIONS[k]+'</div><div class="v">'+per[k][0]+' / '+per[k][1]+'</div></div>'
+     ).join('') +'</div>';
+
+  const nav=document.createElement("div"); nav.className="nav";
+  const back=document.createElement("button"); back.className="btn"; back.textContent="← 문제로 돌아가기";
+  back.onclick=()=>renderAll();
+  const rev=document.createElement("button"); rev.className="btn primary";
+  const wn = QUESTIONS.filter(isWrong).length;
+  rev.textContent="틀린 문제 "+wn+"개 다시 풀기"; rev.disabled = wn===0;
+  rev.onclick=()=>enterReview();
+  nav.appendChild(back);
+  const sp=document.createElement("span"); sp.className="spacer"; nav.appendChild(sp);
+  nav.appendChild(rev);
+  card.appendChild(nav);
+
+  stage.innerHTML=""; stage.appendChild(card);
+  renderProgress(); renderPalette();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function enterReview(){
+  const wrongIds = QUESTIONS.filter(isWrong).map(q=>q.id);
+  if(!wrongIds.length){
+    state.reviewMode=false; buildOrder(false); renderAll();
+    alert("틀린 문제가 없습니다.");
+    return;
+  }
+  wrongIds.forEach(id=> delete state.answers[id]);
+  state.reviewMode = true;
+  state.reviewIds = wrongIds;
+  state.order = state.shuffleQ ? shuffled(wrongIds) : wrongIds.slice();
+  state.cursor = 0;
+  save(); renderAll(); window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function renderAll(){ renderChips(); renderProgress(); renderPalette(); renderQuestion(); }
+
+/* ---------- events ---------- */
+$("#shuffleQ").onclick=()=>{ state.shuffleQ=!state.shuffleQ; buildOrder(false); save(); renderAll(); };
+$("#shuffleO").onclick=()=>{
+  state.shuffleO=!state.shuffleO;
+  if(!state.shuffleO) state.optOrder={};
+  save(); renderAll();
+};
+$("#reviewBtn").onclick=()=>{
+  if(state.reviewMode){ state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+  else enterReview();
+};
+$("#resetBtn").onclick=()=>{
+  state.answers={}; state.optOrder={}; state.reviewMode=false;
+  buildOrder(false); save(); renderAll(); window.scrollTo({top:0,behavior:"smooth"});
+};
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT") return;
+  if(e.key==="ArrowRight" && state.cursor < state.order.length-1){ state.cursor++; renderAll(); }
+  if(e.key==="ArrowLeft" && state.cursor>0){ state.cursor--; renderAll(); }
+  if(["1","2","3","4"].includes(e.key)){
+    const btns = document.querySelectorAll(".opt:not(:disabled)");
+    const b = btns[Number(e.key)-1]; if(b) b.click();
+  }
+});
+
+/* ---------- init ---------- */
+load();
+buildOrder(false);
+// resume at first unanswered
+const firstUn = state.order.findIndex(id=> !(id in state.answers));
+state.cursor = firstUn === -1 ? 0 : firstUn;
+renderAll();
+</script>
+</body>
+</html>

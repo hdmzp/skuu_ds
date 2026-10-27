@@ -96,6 +96,16 @@ TERMS = {
    'BoW','문서 벡터','임베딩','단어 임베딩','분포 가설','Word2Vec','CBOW','Skip-gram','윈도우','네거티브 샘플링','서브샘플링',
    'FastText','OOV','전이 학습','유추','Doc2Vec','SBERT','정적 임베딩','문맥 임베딩','ELMo','BERT','다의어',
  ],
+ 'ml-w09': [
+   '비지도학습','비지도 학습','라벨','특징 벡터','패턴','군집화','군집','유사도','유클리디안','맨하탄','코사인',
+   'K-평균','k-평균','계층적 군집화','덴드로그램','DBSCAN','밀도','분리형','초매개변수',
+   '중심점','Centroid','초기 중심점','종료조건','평균 벡터','오차제곱합','SSE',
+   '의사결정나무','타이타닉','if-else','뿌리노드','부모노드','자식노드','형제노드','잎노드','엣지','높이','아키네이터',
+   '분할 속성','엔트로피','샤논','정보량','불확실성','정보이득','ID3','탐욕적','탑다운','성장','회귀나무',
+   '인공지능','머신러닝','딥러닝','강화학습','지도 학습','Training data','Validation data','Test data',
+   'Convolution','Normalization','Pooling','Activation','Loss function','Adam','Regularization',
+   'Epoch','Seed','Learning rate','Batch','과적합','Overfitting','Underfitting','텐서플로','파이토치','코랩','Colab','아나콘다','conda','어노테이션',
+ ],
  'nlp-w09': [
    '질의응답','정보 검색','정답 유형','질문 유형','질의 재생성','의문사','오류 전파','불리언','TF-IDF','BM25','코사인','어휘 불일치',
    '정답 후보','순위화','개체명','지식베이스','SPARQL','기계독해','MRC','Retriever','Reader','DPR','밀집 검색','RAG','환각','F1','Factoid',
@@ -245,5 +255,7 @@ build('nlp-w07', 'materials/자연어처리/week07-quiz100.html', 'courses/quiz/
       {'title': '7주차 · 개체명 인식, 언어 모델, 그리고 정보 추출', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week07-quiz100.html'})
 build('ml-w07', 'materials/기계학습특론/week07-quiz100.html', 'courses/quiz/ml-w07.js',
       {'title': '7주차 · k 최근접 이웃과 XAI', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week07-quiz100.html'})
+build('ml-w09', 'materials/기계학습특론/week09-quiz100.html', 'courses/quiz/ml-w09.js',
+      {'title': '9주차 · 군집화 · 의사결정트리 · 딥러닝 소개', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week09-quiz100.html'})
 build('nlp-w09', 'materials/자연어처리/week09-quiz100.html', 'courses/quiz/nlp-w09.js',
       {'title': '9주차 · 질의응답, 기계번역, 그리고 대화 시스템', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week09-quiz100.html'})
