@@ -261,6 +261,38 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .bdg-plus{background:#f0fdfa;color:#0f766e;border:1px solid #99e0d6}
 .bdg-quiz{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
 .tbl-wrap{position:relative}
+/* ===== 대면 강의 상자: 핑크(필기) · 초록(팩트체크) · 네온(트렌드) ===== */
+.lec,.fix,.neon{border-radius:var(--radius);padding:13px 16px;margin:12px 0;font-size:13px;line-height:1.85}
+.lec::before,.fix::before,.neon::before{display:table;font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:8px}
+.lec{background:#fdf2f8;border:1px solid #f9a8d4;border-left:4px solid #db2777;color:#4a1d36}
+.lec::before{content:'🎙 대면 강의 필기';background:#db2777;color:#fff}
+.lec b{color:#831843}
+.lec .ul li{color:#4a1d36}.lec .ul li::before{background:#db2777}
+.fix{background:#f0fdf4;border:1px solid #86efac;border-left:4px solid #16a34a;color:#14532d}
+.fix::before{content:'✅ 팩트체크 · 바로잡기';background:#16a34a;color:#fff}
+.fix b{color:#14532d}
+.fix .ul li{color:#14532d}.fix .ul li::before{background:#16a34a}
+.neon{background:#0b1224;border:1px solid #39ff88;border-left:4px solid #39ff88;color:#dbe7ff;
+  box-shadow:0 0 0 1px rgba(57,255,136,.15),0 0 18px rgba(57,255,136,.18),inset 0 0 22px rgba(125,249,255,.05)}
+.neon::before{content:'⚡ 최근 트렌드';background:#39ff88;color:#04120a;box-shadow:0 0 10px rgba(57,255,136,.7)}
+.neon b{color:#7df9ff}
+.neon .ul li{color:#dbe7ff}.neon .ul li b{color:#7df9ff}.neon .ul li::before{background:#39ff88;opacity:1;box-shadow:0 0 6px #39ff88}
+.neon a.ext{color:#ff7ad9}
+.boxkey{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center;font-size:12.5px;color:var(--muted);margin:4px 0 12px}
+.bk{font-size:11px;font-weight:700;padding:2px 10px;border-radius:999px;white-space:nowrap}
+.lec-k{background:#db2777;color:#fff}.fix-k{background:#16a34a;color:#fff}
+.neon-k{background:#0b1224;color:#39ff88;border:1px solid #39ff88;box-shadow:0 0 8px rgba(57,255,136,.45)}
+.deep-k{background:#6d28d9;color:#fff}
+.bigmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin:12px 0 16px}
+.bigmap a{display:grid;grid-template-columns:auto 1fr;gap:2px 9px;align-items:start;text-decoration:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;color:var(--ink)}
+.bigmap a:hover{border-color:#db2777;box-shadow:0 4px 12px rgba(219,39,119,.12)}
+.bigmap i{grid-row:span 2;font-style:normal;font-weight:800;font-size:12px;color:#fff;background:linear-gradient(135deg,#db2777,#16a34a);width:24px;height:24px;border-radius:50%;display:grid;place-items:center}
+.bigmap b{font-size:12.5px}.bigmap span{font-size:11.5px;color:var(--muted);line-height:1.5}
+table.folds td.te{background:#fce7f3;color:#9d174d;font-weight:700;text-align:center}
+table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
+.sub-title[id^="lec-"]{scroll-margin-top:64px}
+.fix[id]{scroll-margin-top:64px}
+
 .pt[id],.sub-title[id],.pt p[id]{scroll-margin-top:64px}
 .bdg-pres{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
 
@@ -484,6 +516,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <a href="#entropy">9.5 엔트로피 · 정보이득</a>
   <a href="#id3">9.6 ID3 · 회귀나무</a>
   <a href="#dl">9.7 딥러닝 기초</a>
+  <a href="#lecture">대면 강의 · 큰 그림</a>
   <a href="#review">복습 문제</a>
   <a href="#summary">핵심 정리</a>
   <a href="#next">다음 주</a>
@@ -503,13 +536,14 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <p class="kicker">9주차 · 10.29 · 2026-2학기</p>
   <h1>09. 군집화 · 의사결정나무 · 딥러닝 소개</h1>
   <p>3~7주차는 모두 <b>정답(라벨 y)이 붙은 데이터</b>로 배웠다(지도학습). 이번 주는 처음으로 <b>라벨 없이 특징 벡터 x만</b> 가지고 학습하는 <b>비지도 학습</b>, 그 대표인 <b>군집화</b>를 다룬다. 핵심 알고리즘은 <b>K-평균</b> &mdash; 중심점 K개를 놓고 &lsquo;가장 가까운 중심점에 배정 → 중심점을 평균으로 옮기기&rsquo;를 반복한다. 7주차 kNN에서 쓴 <b>유클리디안 거리</b>를 그대로 다시 쓴다. 이어서 지도학습으로 돌아가 <b>의사결정나무</b>(엔트로피 · 정보이득 · ID3 · 회귀나무)를 배우고, 다음 주부터 이어질 <b>딥러닝의 기초</b>(데이터 나누기 · 구성 요소 · 과적합 · 개발 환경)를 훑는다.</p>
-  <div class="chips"><span class="chip">최승호 교수</span><span class="chip">군집화 31p</span><span class="chip">슬라이드 23장</span><span class="chip">K-평균 손계산 2회</span><span class="chip">SSE</span><span class="chip">실습 sklearn · 직접 구현</span><span class="chip">정보이득 0.247</span><span class="chip">100문제 9.1~9.7</span></div>
+  <div class="chips"><span class="chip">최승호 교수</span><span class="chip">군집화 31p</span><span class="chip">슬라이드 23장</span><span class="chip">K-평균 손계산 2회</span><span class="chip">SSE</span><span class="chip">실습 sklearn · 직접 구현</span><span class="chip">정보이득 0.247</span><span class="chip">100문제 9.1~9.7</span><span class="chip">대면 강의 · 큰 그림</span></div>
 </section>
 
 <div class="legend">
   <p class="legend-t">내용이 어디에서 왔는지 <b>뱃지</b>로 구분했습니다</p>
   <i><span class="bdg bdg-gyo">교안</span><span>교수님 슬라이드에 있는 내용</span></i>
   <i><span class="bdg bdg-plus">보충설명</span><span>교안에 없거나 짧게 지나간 부분을 따로 찾아 정리한 내용</span></i>
+  <i><span class="bk lec-k">🎙 대면</span><span>대면 강의 필기(핑크) · <b style="color:#16a34a">팩트체크</b>(초록) · 최근 트렌드(네온) 상자는 <a class="ext" href="#lecture">대면 강의 절</a>에 있습니다</span></i>
   <i><span class="bdg bdg-quiz">100문제</span><span>교안 PDF가 아직 없어(9.4~9.7) 100문제의 문항 · 해설에 나온 강의 내용으로 정리한 부분</span></i>
   <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고(← → 로 넘기기), <span class="hi">노란 형광펜</span>은 꼭 기억할 문장, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선</span>은 누르면 뜻이 뜹니다. 교안 예제의 거리 · 중심점 · SSE는 모두 <b>직접 다시 계산</b>해 확인했습니다.</p>
 </div>
@@ -540,6 +574,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
   <a href="#entropy"><b>9.5 엔트로피 · 정보이득</b><span>샤논 · log₂ · h(D) = 0.94 · Gain = h(D) − h<sub>A</sub>(D)</span></a>
   <a href="#id3"><b>9.6 ID3 · 회귀나무</b><span>나이 0.247 → 학생 · 신용 0.971 · 연봉 평균 40M</span></a>
   <a href="#dl"><b>9.7 딥러닝 기초</b><span>AI ⊃ ML ⊃ DL · 60/20/20 · 레이어 · 과적합 · Colab · conda</span></a>
+  <a href="#lecture"><b>대면 강의 — AI 연구의 큰 그림</b><span>자기지도 · nested CV · AUC · 연합학습 · 지식 증류 · XAI · 파운데이션 · 양자 · 디지털 트윈</span></a>
 </div>
 </section>
 
@@ -1000,6 +1035,8 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 <section class="sec" id="lab">
   <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">군집화 실습 — 1000개 점을 5무리로<small>sklearn 버전과 직접 구현 버전 · 노트북에 저장된 출력 기준</small></h2></div>
 
+<div class="lec"><b>9주차 실습 과제 제출</b> &mdash; 대면 강의 공지: <b>&lsquo;의사결정트리 구조&rsquo;만 제출해도 된다.</b> 군집화는 다음 주에 빠르게 다시 설명한다. 아래 군집화 실습은 미리 보는 용도로 두고, 과제는 <a class="ext" href="#id3">9.6절</a>의 컴퓨터 구매 나무처럼 분할 속성과 잎노드를 그린 구조를 준비하면 된다.</div>
+
 <div class="note-box"><b>문제 설정</b> &mdash; <code>clustering_data.csv</code>의 점 <b>1000개</b>, 특징 <b>2개</b>(<span class="tex">x_1,\,x_2</span>)를 <b>k = 5</b>개 군집으로 나눈다. 라벨 열은 없다 &mdash; 비지도 학습. 노트북은 ① sklearn으로 한 번, ② 9.3절 Step 1~4를 직접 구현해서 한 번 군집화한다.</div>
 <div class="flow">
   <div class="fl"><b>(1) 데이터 불러오기</b><span><code>np.genfromtxt('clustering_data.csv', delimiter=',')</code> &mdash; 출력 <code>number of data : 1000</code> · <code>number of feature : 2</code></span></div>
@@ -1455,6 +1492,428 @@ for i in range(number_iteration):            <span class="cm"># Step 4 — 20번
 </div>
 </section>
 
+<!-- ===================== 대면 강의 ===================== -->
+<section class="sec" id="lecture">
+  <div class="sec-head"><span class="sec-badge">대면</span><h2 class="sec-title">대면 강의 — AI 연구의 큰 그림<small>패러다임 · 실험 설계 · 평가 · 연합학습 · 지식 증류 · XAI · 파운데이션 모델 · 보안 · 양자 · 디지털 트윈</small></h2></div>
+
+<div class="boxkey">
+  <span class="bk lec-k">🎙 대면 강의 필기</span><span>교수님이 말씀하신 내용을 다듬어 옮김</span>
+  <span class="bk fix-k">✅ 팩트체크</span><span>필기와 문헌이 다른 곳, 이름이 틀린 곳을 바로잡음</span>
+  <span class="bk neon-k">⚡ 최근 트렌드</span><span>2023~2026 흐름 · 찾아볼 키워드</span>
+  <span class="bk deep-k">🔎 한 걸음 더</span><span>개념을 끝까지 파고드는 설명</span>
+</div>
+
+<div class="note-box"><b>이 절을 읽는 법</b> &mdash; 교재 진도와 별개로, 교수님이 &lsquo;AI 연구를 하려면 이 정도 지도는 머릿속에 있어야 한다&rsquo;는 취지로 빠르게 훑은 내용이다. 하나의 연구 과정을 따라가면 순서가 자연스럽다 &mdash; <b>데이터를 어떻게 얻고(패러다임 · 수집) → 어떻게 믿을 만하게 실험하고(교차검증 · 시드) → 무엇으로 평가하고(지표) → 여러 곳의 모델을 어떻게 합치고 가볍게 만들고(연합학습 · 증류) → 결과를 어떻게 설명하고(XAI) → 큰 흐름(파운데이션 모델)과 다음 연구 주제(보안 · 양자 · 디지털 트윈)는 무엇인가</b>.</div>
+
+<div class="bigmap">
+  <a href="#lec-paradigm"><i>1</i><b>학습 패러다임</b><span>지도 · 자기지도 · 준지도 · 약지도 · 비지도 · 강화</span></a>
+  <a href="#lec-data"><i>2</i><b>데이터 · 배치</b><span>공개 데이터 · 증강 · 합성 · 배치 크기</span></a>
+  <a href="#lec-cv"><i>3</i><b>믿을 만한 실험</b><span>k-fold · nested CV · 시드 반복</span></a>
+  <a href="#lec-metrics"><i>4</i><b>평가 · 손실</b><span>정밀도 · 재현율 · AUC · 95% CI · R² · MAPE</span></a>
+  <a href="#lec-fl"><i>5</i><b>합치고 가볍게</b><span>연합학습 · 지식 증류 · 협력 학습</span></a>
+  <a href="#lec-xai"><i>6</i><b>설명하기</b><span>Explainable vs Interpretable · SHAP · Grad-CAM · CoT</span></a>
+  <a href="#lec-arch"><i>7</i><b>큰 흐름</b><span>CNN · RNN · Transformer → LLM · VLM</span></a>
+  <a href="#lec-frontier"><i>8</i><b>다음 연구 주제</b><span>AI 보안 · 양자 · 디지털 트윈 · 에이전트</span></a>
+</div>
+
+<div class="lec"><b>과제 · 진도 공지</b>
+<ul class="ul">
+  <li><b>9주차 실습 과제는 &lsquo;의사결정트리 구조&rsquo;만 제출해도 된다.</b> (<a class="ext" href="#id3">9.6 ID3</a>의 완성 나무를 직접 그려 보는 연습이 그대로 도움이 된다)</li>
+  <li><b>군집화(9.1~9.3)는 다음 주에 빠르게 설명</b>할 예정이다</li>
+  <li>뒤 주차는 <b>컴퓨터비전</b>(영상 인식 · 이미지 분류 등)에 초점이 맞춰져 있다</li>
+</ul></div>
+
+<!-- ---------- 1. 학습 패러다임 ---------- -->
+<h3 class="sub-title" id="lec-paradigm">1 · 학습 패러다임 — 라벨을 얼마나, 어떻게 쓰나</h3>
+
+<div class="lec"><b>필기 정리</b> &mdash; 대표적인 기법으로 지도학습 계열의 <b>self-supervised · semi-supervised · weakly supervised</b>를 들었다. 연구는 보통 <b>SOTA(State of the Art, 현재 최고 성능)를 베이스라인으로 삼고 그것을 넘어서는 것</b>을 목표로 한다. 지도학습은 <b>가장 안정적인 성능</b>을 낼 수 있지만 라벨링에 <b>공수와 비용</b>이 든다. 강화학습은 <b>Physical AI</b>에서 주로 필요하다(예: 로봇청소기).</div>
+
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>패러다임</th><th>정답(라벨)은?</th><th>핵심 아이디어</th><th>대표 예</th></tr></thead>
+  <tbody>
+    <tr><td><b>지도학습</b></td><td>사람이 붙인 정답이 <b>전부</b> 있다</td><td>입력 → 정답 대응을 그대로 배운다</td><td>3~7주차 모델 전부, 9.4 의사결정나무</td></tr>
+    <tr><td><b>자기지도</b> (self-supervised)</td><td>사람 라벨 <b>없음</b> &mdash; 데이터가 <b>스스로 문제를 낸다</b></td><td>데이터 일부를 가리고 맞히기, 같은 사진의 두 변형을 같다고 맞히기</td><td>GPT의 다음 단어 예측 · BERT의 빈칸 맞히기 · MAE(이미지 조각 복원) · SimCLR(대조 학습)</td></tr>
+    <tr><td><b>준지도</b> (semi-supervised)</td><td><b>조금</b> 있고 나머지는 없다</td><td>라벨 있는 소수로 배운 모델이 라벨 없는 다수에 <b>가짜 라벨</b>(pseudo-label)을 붙여 다시 배운다</td><td>Pseudo-labeling · FixMatch · 의료 영상(전문의 라벨은 비싸다)</td></tr>
+    <tr><td><b>약지도</b> (weakly supervised)</td><td>있긴 한데 <b>거칠거나 부정확</b>하다</td><td>싼 라벨로 비싼 과제를 푼다</td><td>&lsquo;사진에 고양이 있음&rsquo;(이미지 단위 라벨)만으로 고양이 <b>픽셀 영역</b>(분할) 학습 · 해시태그 · 규칙으로 자동 생성한 라벨</td></tr>
+    <tr><td><b>비지도</b></td><td>없음</td><td>데이터 안의 구조 찾기</td><td>9.1~9.3 군집화, 차원 축소</td></tr>
+    <tr><td><b>강화학습</b></td><td>정답 대신 <b>보상</b></td><td>행동 → 보상 → 더 좋은 행동</td><td>게임 AI · 로봇 보행 · LLM의 RLHF</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="fix"><b>자기지도는 &lsquo;지도학습의 한 종류&rsquo;라고만 외우면 헷갈린다</b> &mdash; 손실 함수 모양은 지도학습과 같다(정답과 비교해 오차를 줄인다). 하지만 그 정답을 <b>사람이 아니라 데이터 자체가</b> 만든다. 그래서 교과서마다 &lsquo;비지도의 한 갈래&rsquo; 또는 &lsquo;지도와 비지도 사이&rsquo;로 분류가 갈린다. 시험에서는 <b>&ldquo;사람 라벨 없이 데이터에서 정답을 만들어 지도학습처럼 학습한다&rdquo;</b>로 쓰면 어느 쪽 분류든 틀리지 않는다. 오늘날 LLM · VLM 같은 <b>파운데이션 모델의 사전학습이 거의 다 자기지도</b>라서 가장 중요한 칸이다(<a class="ext" href="#lec-arch">7절</a>).</div>
+
+<div class="deep"><b>SOTA와 베이스라인</b>
+<ul class="ul">
+  <li><b>베이스라인</b> &mdash; 내 방법이 정말 좋은지 비교할 기준 모델. 논문에서는 &lsquo;가장 단순한 방법(로지스틱 회귀 등)&rsquo;과 &lsquo;현재 SOTA&rsquo;를 둘 다 베이스라인으로 넣는 것이 정석이다</li>
+  <li><b>SOTA</b>는 특정 <b>데이터셋 + 지표</b>에서의 최고 기록이다(Papers with Code 류의 리더보드). 데이터셋이나 지표가 바뀌면 SOTA도 바뀐다 &mdash; &lsquo;SOTA를 넘었다&rsquo;는 말에는 항상 <b>어떤 벤치마크에서 어떤 지표로</b>가 붙어야 한다</li>
+  <li>함정 &mdash; 같은 조건에서 비교하지 않으면(데이터 분할 · 전처리 · 시드가 다르면) 0.5%p 차이는 우연일 수 있다. 그래서 <a class="ext" href="#lec-cv">3절</a>의 반복 실험과 <a class="ext" href="#lec-metrics">4절</a>의 신뢰구간이 필요하다</li>
+</ul></div>
+
+<h3 class="sub-title" id="lec-tasks">지도학습으로 푸는 과제 네 가지</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>과제</th><th>출력</th><th>예</th><th>이 과목에서</th></tr></thead>
+  <tbody>
+    <tr><td><b>분류</b> (Classification)</td><td>범주 하나</td><td>스팸 / 정상, 질병 유무, 이미지 속 물체 이름</td><td>4주차 로지스틱 회귀 · 7주차 kNN · 9.4 나무 &mdash; <b>가장 많이 쓰인다</b>(라벨링 비용은 크다)</td></tr>
+    <tr><td><b>예측</b> (Prediction · 회귀)</td><td>연속값</td><td>집값, 내일 전력 수요, 주가</td><td>3주차 선형 회귀 · 9.6 회귀나무</td></tr>
+    <tr><td><b>분할</b> (Segmentation)</td><td>픽셀마다 범주</td><td>자율주행 도로 · 의료 영상의 종양 영역</td><td>12주차(계획) &mdash; 컴퓨터비전 과제</td></tr>
+    <tr><td><b>생성</b> (Generative)</td><td>새 데이터</td><td>글 · 이미지 · 음성 · 영상 &mdash; <b>모달리티(데이터 종류)</b>에 따라 모델이 달라진다</td><td>13주차(계획) 이미지 생성</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="fx-note">&lsquo;Prediction&rsquo;은 넓게는 모든 출력을 뜻하지만, 강의에서 분류와 나란히 놓은 것은 <b>연속값 예측(회귀 · 시계열 예측)</b>이다. 그래서 아래 4절의 지표도 분류(Accuracy …)와 예측(R² · MAE …)으로 나뉜다.</p>
+
+<h3 class="sub-title" id="lec-rl">강화학습과 Physical AI</h3>
+<div class="deep"><b>강화학습 한 장 요약</b> &mdash; <b>에이전트</b>가 <b>상태</b>(state)를 보고 <b>행동</b>(action)을 하면 환경이 <b>보상</b>(reward)과 다음 상태를 돌려준다. 목표는 앞으로 받을 보상의 합이 최대가 되는 <b>정책</b>(policy, 상태 → 행동 규칙)을 찾는 것이다. 정답을 알려 주는 사람이 없고, 좋은 행동인지는 <b>한참 뒤에야</b> 알 수 있다는 점(지연 보상)이 지도학습과 다르다. 로봇청소기라면 상태 = 센서 · 지도, 행동 = 전진 · 회전, 보상 = 청소한 면적 + / 충돌 −.</div>
+<div class="fix"><b>로봇청소기 예시는 &lsquo;원리 설명용&rsquo;으로 받아들이자</b> &mdash; 지금 팔리는 로봇청소기 대부분은 강화학습 정책보다 <b>SLAM(지도 작성 + 위치 추정) + 경로 계획 알고리즘 + 장애물 인식(CNN)</b>으로 움직인다. 강화학습이 실제로 빛을 보는 곳은 <b>사람이 규칙을 짜기 어려운 동작</b>이다 &mdash; 4족 · 2족 로봇 보행, 로봇 팔의 물건 집기. 이때 실제 로봇으로 수백만 번 넘어질 수 없으니 <b>시뮬레이터에서 학습하고 현실로 옮긴다(sim-to-real)</b>. 시뮬레이터의 마찰 · 무게를 일부러 매번 바꿔 가며 학습시키는 <b>도메인 무작위화</b>가 대표 기법이다.</div>
+<div class="neon"><b>Physical AI 트렌드</b>
+<ul class="ul">
+  <li><b>Physical AI</b> &mdash; 화면 속이 아니라 <b>물리 세계에서 움직이는 AI</b>(로봇 · 자율주행 · 드론). 2025년 무렵부터 업계 키워드로 크게 떴다</li>
+  <li><b>World model</b> &mdash; 행동하면 세상이 어떻게 바뀔지 예측하는 모델. 로봇 학습용 가상 데이터를 대량으로 만들어 준다(예: NVIDIA Cosmos 계열)</li>
+  <li><b>VLA</b>(Vision-Language-Action) &mdash; 카메라 영상 + 말로 된 지시를 받아 <b>로봇 동작</b>을 바로 출력하는 파운데이션 모델. 7절의 VLM에 &lsquo;행동&rsquo;을 붙인 것</li>
+  <li>흐름 &mdash; 시뮬레이터가 점점 <b>디지털 트윈 · 생성형 월드 모델</b>로 바뀌고, 로봇 정책도 파운데이션 모델을 바탕으로 한다는 전망(<a class="ext" href="#lec-twin">8절 디지털 트윈</a>과 이어진다)</li>
+</ul></div>
+
+<!-- ---------- 2. 데이터 · 배치 ---------- -->
+<h3 class="sub-title" id="lec-data">2 · 데이터를 빨리 모으는 법, 그리고 배치 크기</h3>
+<div class="lec"><b>필기 정리</b> &mdash; 어떻게 하면 데이터를 빨리 모을까? <b>공개 데이터를 내려받는다.</b> 데이터 증강도 가능하지만 그건 &lsquo;수집&rsquo;이 아니라 <b>기법</b>이다. 배치 사이즈는 보통 <b>2의 배수</b>를 쓴다 &mdash; 컴퓨터가 2진수로 돌아가기 때문이다.</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>방법</th><th>무엇</th><th>주의</th></tr></thead>
+  <tbody>
+    <tr><td><b>공개 데이터</b></td><td>Kaggle · Hugging Face Datasets · UCI 저장소 · <b>AI Hub</b>(한국어 · 국내 데이터) · 공공데이터포털 · 학회 벤치마크(ImageNet, COCO 등)</td><td><b>라이선스</b>(상업 이용 가능?) · 내 문제와 분포가 같은지</td></tr>
+    <tr><td><b>데이터 증강</b></td><td>있는 데이터를 변형해 늘리기 &mdash; 이미지 회전 · 뒤집기 · 자르기 · 색 변화, 텍스트 동의어 치환 · 역번역</td><td>정답이 바뀌는 변형은 금지(숫자 6을 뒤집으면 9). <b>검증 · 테스트에는 증강하지 않는다</b></td></tr>
+    <tr><td><b>합성 데이터</b></td><td>시뮬레이터 · 생성형 AI로 만든 데이터(아래 <a class="ext" href="#lec-genaug">생성형 증강</a>)</td><td>진짜와의 차이(도메인 갭)</td></tr>
+    <tr><td><b>직접 라벨링</b></td><td><a class="ext" href="#dl-tools">9.7 어노테이션 툴</a>로 만들기</td><td>가장 비싸지만 가장 내 문제에 맞다</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="fix" id="lec-batch"><b>&lsquo;배치는 2의 배수여야 한다&rsquo;는 절반만 맞는 관습이다</b>
+<ul class="ul">
+  <li><b>근거로 드는 것</b> &mdash; GPU는 연산을 32개 스레드 묶음(warp) 단위로 처리하고, 텐서 코어는 행렬 크기가 8의 배수일 때 효율이 좋다. 메모리도 2의 거듭제곱 단위로 정렬된다. 그래서 32 · 64 · 128 · 256처럼 쓰는 <b>습관</b>이 생겼다</li>
+  <li><b>실제로 재 보면</b> &mdash; Sebastian Raschka(2022)의 벤치마크와 W&amp;B의 실험에서 <b>128과 129처럼 2의 거듭제곱이 아닌 크기도 학습 속도 · 성능 차이가 거의 없었다</b>. 요즘 프레임워크와 GPU 라이브러리가 알아서 크기를 맞춰 주기 때문이다</li>
+  <li><b>진짜 기준</b> &mdash; ① <b>GPU 메모리에 들어가는 가장 큰 값</b> ② 학습이 안정적인지(너무 작으면 기울기가 요동, 너무 크면 일반화가 나빠질 수 있다) ③ 학습률과 함께 조정. 2의 거듭제곱은 이 범위 안에서 고르는 <b>무난한 기본값</b>일 뿐이다</li>
+  <li>용어도 하나 &mdash; 필기의 &lsquo;2의 배수&rsquo;는 정확히는 <b>2의 거듭제곱</b>(2, 4, 8, …, 128)이다. 6이나 100도 2의 배수다</li>
+</ul></div>
+
+<!-- ---------- 3. 실험 설계 ---------- -->
+<h3 class="sub-title" id="lec-cv">3 · 믿을 만한 실험 — k-fold, nested CV, 그리고 시드</h3>
+<div class="lec"><b>필기 정리</b> &mdash; AI를 학습시킬 때 쓰는 심화 기법(일반화된 모델을 찾을 수 있는 <b>공신력 있는</b> 방법)으로 ① <b>k-fold cross-validation</b> ② <b>nested cross-validation</b>이 있다. 여기에 <b>seed</b>를 바꿔 실험을 여러 번 돌린다(실험의 안정성). 시드는 AI의 초기값이다. 시드 다섯 개와 이 두 기법을 함께 돌리면 <b>시간이 엄청 오래 걸린다</b>.</div>
+<div class="fix"><b>이름 바로잡기</b> &mdash; 필기의 &lsquo;Nesled crossvalidation&rsquo;은 <b>Nested cross-validation(중첩 교차검증)</b>이다. nested = 둥지처럼 <b>안에 하나가 더 들어 있는</b> 구조라는 뜻이다.</div>
+
+<div class="pt plus" id="lec-kfold">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>왜 데이터를 한 번만 나누면 안 되나 — k-fold 교차검증</h3>
+  <p>9.7절처럼 학습 60 · 검증 20 · 테스트 20으로 <b>한 번</b> 나누면, 어떤 20%가 테스트에 걸렸느냐에 따라 점수가 운 좋게 높거나 낮게 나올 수 있다. 데이터가 수백 개뿐이면 이 운의 영향이 크다. <b>k-fold</b>는 데이터를 k등분해 <b>돌아가며 한 칸씩 시험지로 쓴다</b>.</p>
+  <div class="tbl-wrap">
+  <table class="folds">
+    <thead><tr><th>5-fold</th><th>1조각</th><th>2조각</th><th>3조각</th><th>4조각</th><th>5조각</th><th>점수</th></tr></thead>
+    <tbody>
+      <tr><td>1회차</td><td class="te">시험</td><td class="tr">학습</td><td class="tr">학습</td><td class="tr">학습</td><td class="tr">학습</td><td>0.86</td></tr>
+      <tr><td>2회차</td><td class="tr">학습</td><td class="te">시험</td><td class="tr">학습</td><td class="tr">학습</td><td class="tr">학습</td><td>0.82</td></tr>
+      <tr><td>3회차</td><td class="tr">학습</td><td class="tr">학습</td><td class="te">시험</td><td class="tr">학습</td><td class="tr">학습</td><td>0.88</td></tr>
+      <tr><td>4회차</td><td class="tr">학습</td><td class="tr">학습</td><td class="tr">학습</td><td class="te">시험</td><td class="tr">학습</td><td>0.84</td></tr>
+      <tr><td>5회차</td><td class="tr">학습</td><td class="tr">학습</td><td class="tr">학습</td><td class="tr">학습</td><td class="te">시험</td><td>0.85</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>결과는 <b>평균 ± 표준편차</b>로 보고한다 &mdash; 위 예(설명용 숫자)는 <b>0.85 ± 0.02</b>. 모든 데이터가 정확히 한 번씩 시험에 쓰이므로 데이터를 낭비하지 않고, 점수가 얼마나 흔들리는지도 함께 보인다. 분류에서 클래스 비율이 치우쳐 있으면 조각마다 비율을 똑같이 맞추는 <b>stratified k-fold</b>를 쓴다. k는 보통 5 또는 10.</p>
+</div>
+
+<div class="pt plus" id="lec-nested">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>nested CV — 초매개변수를 고른 데이터로 성적을 매기면 안 된다</h3>
+  <p>문제는 <b>초매개변수 튜닝</b>이다(kNN의 k, 나무의 최대 깊이, 학습률 …). k-fold 점수가 가장 좋은 설정을 고른 뒤 <b>그 점수를 그대로 성능으로 보고</b>하면, 그 시험지를 보고 설정을 고른 셈이라 점수가 실제보다 <b>낙관적으로 부풀려진다</b>. Cawley &amp; Talbot(JMLR 2010)은 이 부풀림이 <b>알고리즘 사이의 성능 차이만큼 클 수 있다</b>고 보였다.</p>
+  <p><b>해결</b> &mdash; 교차검증을 <b>두 겹</b>으로 한다.</p>
+  <div class="flow">
+    <div class="fl"><b>바깥 고리 (outer, 예: 5-fold)</b><span>성적을 매기는 용도. 바깥 시험 조각은 <b>튜닝에 절대 쓰지 않는다</b></span></div>
+    <div class="fl"><b>안쪽 고리 (inner, 예: 3-fold)</b><span>바깥 학습 조각 <b>안에서만</b> 다시 k-fold를 돌려 초매개변수를 고른다</span></div>
+    <div class="fl"><b>고른 설정으로 바깥 학습 조각 전체를 다시 학습 → 바깥 시험 조각으로 채점</b><span>바깥 5번을 반복해 평균 ± 표준편차</span></div>
+  </div>
+  <p>수능에 비유하면 &mdash; 안쪽 고리는 <b>모의고사로 공부 방법을 고르는</b> 과정이고, 바깥 고리는 <b>한 번도 안 본 수능</b>이다. 모의고사 점수로 수능 점수를 대신 보고하지 않는 것과 같다.</p>
+</div>
+
+<div class="deep"><b>왜 &lsquo;엄청 오래&rsquo; 걸리나 — 직접 세어 보기</b>
+<p>초매개변수 후보 10개, 안쪽 3-fold, 바깥 5-fold, 시드 5개라면 학습 횟수는</p>
+<div class="fx"><div class="tex-d">\underbrace{5}_{\text{시드}}\times\underbrace{5}_{\text{바깥}}\times\underbrace{3}_{\text{안쪽}}\times\underbrace{10}_{\text{후보}}=750\;\text{번}\;\;+\;\;5\times5=25\;\text{번(고른 설정으로 다시 학습)}</div></div>
+<p>모델 하나 학습에 1시간이면 <b>약 32일</b>이다. 그래서 딥러닝처럼 학습이 비싼 경우에는 바깥만 k-fold로 하고 안쪽은 검증 세트 하나로 대신하거나, 후보를 줄이는 방법(무작위 탐색 · 베이지안 최적화)을 함께 쓴다. Wainer &amp; Cawley(2021)는 &lsquo;초매개변수가 적은 일반적인 경우에는 nested CV가 과할 수 있다&rsquo;고도 했다 &mdash; <b>엄밀함과 비용 사이의 선택</b>이다.</p></div>
+
+<div class="pt plus" id="lec-seed">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>시드(seed) — &lsquo;우연&rsquo;을 고정하고, 또 일부러 바꿔 본다</h3>
+  <p>딥러닝 학습에는 무작위가 여러 군데 들어간다 &mdash; <b>가중치 초기값, 데이터 섞는 순서, 드롭아웃, 데이터 분할</b>. 컴퓨터의 난수는 시작값 하나(시드)에서 정해진 규칙으로 만들어지므로, <b>시드를 고정하면 같은 결과가 재현</b>된다(9.7의 &lsquo;Seed = 초기 설정 값&rsquo;).</p>
+  <ul class="ul">
+    <li><b>고정하는 이유</b> &mdash; 재현성. 남이 내 실험을 똑같이 다시 돌릴 수 있어야 한다</li>
+    <li><b>여러 개로 바꿔 보는 이유</b> &mdash; 안정성. 시드 42에서만 SOTA를 넘고 시드 7에서는 못 넘는다면, 그건 방법이 좋은 게 아니라 <b>운</b>이다. 그래서 시드 3~5개로 반복해 <b>평균 ± 표준편차</b>를 쓴다</li>
+  </ul>
+  <pre class="code"><span class="fn">import</span> random, numpy <span class="fn">as</span> np, torch
+seed = <span class="st">42</span>
+random.seed(seed)            <span class="cm"># 파이썬 기본 난수</span>
+np.random.seed(seed)         <span class="cm"># NumPy 난수 (데이터 섞기 · 분할)</span>
+torch.manual_seed(seed)      <span class="cm"># PyTorch 난수 (가중치 초기값 · 드롭아웃)</span></pre>
+  <p class="fx-note">세 줄이 필요한 이유 &mdash; 라이브러리마다 <b>난수 발생기가 따로</b> 있어서 하나만 고정하면 나머지는 여전히 무작위다. GPU 연산 일부는 이렇게 해도 미세하게 달라질 수 있다.</p>
+</div>
+
+<!-- ---------- 4. 평가 · 손실 ---------- -->
+<h3 class="sub-title" id="lec-metrics">4 · 평가지표와 손실 함수 — 하나만 보지 말 것</h3>
+<div class="lec"><b>필기 정리</b> &mdash; 분류의 평가지표는 <b>Accuracy · Recall · Precision</b>(<b>95% 신뢰구간</b>도 같이 넣는다)과 <b>AUC</b>. 예측(회귀)은 <b>R² · MAE · MAPE</b> 등 기본 지표가 있다. <b>평가지표는 하나만 쓰지 말고 여러 개를 같이 봐야 한다.</b> <span class="tex">\hat y-y</span>로 cost function · loss function을 구하는데, <b>손실 함수도 평가지표도 새로 만들 수 있다</b> &mdash; 다만 기본 지표와 비슷하게 나오는지 증명은 필요하다.</div>
+<div class="fix"><b>&lsquo;AVC score&rsquo; → AUC</b> &mdash; <b>AUC</b>(Area Under the ROC Curve, ROC 곡선 아래 넓이)다. 필기할 때 U가 V로 들린 것으로 보인다.</div>
+
+<div class="pt plus" id="lec-cls-metrics">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>분류 지표 — 혼동 행렬 하나에서 전부 나온다</h3>
+  <p>환자 200명 중 실제 환자 50명, 모델이 &lsquo;환자&rsquo;라고 한 사람 45명(그중 진짜 40명)이라고 하자(설명용 숫자).</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>모델: 환자</th><th>모델: 정상</th></tr></thead>
+    <tbody>
+      <tr><td><b>실제 환자 50</b></td><td>TP = 40 (맞힌 환자)</td><td>FN = 10 (놓친 환자)</td></tr>
+      <tr><td><b>실제 정상 150</b></td><td>FP = 5 (괜히 겁준 사람)</td><td>TN = 145</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>지표</th><th>식</th><th>값</th><th>묻는 질문</th></tr></thead>
+    <tbody>
+      <tr><td><b>Accuracy</b></td><td><span class="tex">\frac{TP+TN}{\text{전체}}</span></td><td>185/200 = <b>0.925</b></td><td>전체 중 몇 개 맞혔나</td></tr>
+      <tr><td><b>Precision</b> (정밀도)</td><td><span class="tex">\frac{TP}{TP+FP}</span></td><td>40/45 = <b>0.889</b></td><td>&lsquo;환자&rsquo;라고 한 것 중 진짜는?</td></tr>
+      <tr><td><b>Recall</b> (재현율 · 민감도)</td><td><span class="tex">\frac{TP}{TP+FN}</span></td><td>40/50 = <b>0.800</b></td><td>진짜 환자 중 몇 명을 찾았나</td></tr>
+      <tr><td><b>F1</b></td><td><span class="tex">\frac{2PR}{P+R}</span></td><td><b>0.842</b></td><td>정밀도 · 재현율의 조화 평균</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>왜 하나만 보면 안 되나</b> &mdash; 이 데이터에서 &lsquo;모두 정상&rsquo;이라고만 답하는 엉터리 모델도 Accuracy가 150/200 = <b>0.75</b>다. 환자는 한 명도 못 찾았는데(Recall 0) 숫자는 그럴듯하다. 클래스가 치우치면 Accuracy가 거짓말을 한다. 의료라면 놓치는 것(FN)이 치명적이라 <b>Recall</b>을, 스팸 필터라면 정상 메일을 버리는 것(FP)이 치명적이라 <b>Precision</b>을 먼저 본다.</p>
+  <p><b>AUC</b> &mdash; 모델은 사실 &lsquo;환자일 확률 0.73&rsquo;처럼 점수를 내고, 몇 점부터 환자로 볼지(임계값)는 사람이 정한다. 임계값을 0부터 1까지 움직이며 (거짓 양성률, 재현율)을 찍은 곡선이 <b>ROC 곡선</b>, 그 아래 넓이가 <b>AUC</b>다. <b>임계값과 무관하게</b> &lsquo;아무 환자 한 명과 아무 정상 한 명을 뽑았을 때 환자 쪽에 더 높은 점수를 줄 확률&rsquo;로 읽는다. 1.0이면 완벽, 0.5면 동전 던지기.</p>
+</div>
+
+<div class="deep"><b>95% 신뢰구간 — &lsquo;0.90&rsquo;이 아니라 &lsquo;0.90 ± 0.04&rsquo;</b>
+<p>테스트 200개에서 Accuracy 0.90이 나왔다면, 다른 200개로 시험했을 때도 정확히 0.90일까? 아니다. 정규 근사로 구하면</p>
+<div class="fx"><div class="tex-d">0.90\pm1.96\sqrt{\frac{0.90\times0.10}{200}}=0.90\pm0.042\;\;\Longrightarrow\;\;[0.858,\;0.942]</div></div>
+<p>즉 상대 모델이 0.88이면 <b>구간이 겹쳐서 &lsquo;더 좋다&rsquo;고 단정할 수 없다</b>. 실무에서는 테스트 데이터를 복원 추출로 1000번 다시 뽑아 지표를 계산하고 가운데 95% 범위를 쓰는 <b>부트스트랩</b>이 가장 흔하다(AUC처럼 식이 복잡한 지표에도 쓸 수 있다). 3절의 &lsquo;평균 ± 표준편차&rsquo;와 함께 쓰면 &lsquo;우연이 아니다&rsquo;를 보여 줄 수 있다.</p></div>
+
+<div class="pt plus" id="lec-reg-metrics">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>예측(회귀) 지표 — 같은 오차, 다른 눈금</h3>
+  <p>실제 <span class="tex">y=[3,\,5,\,8]</span>, 예측 <span class="tex">\hat y=[2.5,\,5.5,\,9]</span>. 오차 <span class="tex">\hat y-y=[-0.5,\,0.5,\,1]</span>.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>지표</th><th>계산</th><th>값</th><th>특징</th></tr></thead>
+    <tbody>
+      <tr><td><b>MAE</b></td><td>|오차| 평균 = (0.5 + 0.5 + 1)/3</td><td><b>0.667</b></td><td>단위가 원래 값과 같아 읽기 쉽다 · 이상치에 덜 민감</td></tr>
+      <tr><td><b>MSE / RMSE</b></td><td>(0.25 + 0.25 + 1)/3 = 0.5 → √0.5</td><td>0.5 / <b>0.707</b></td><td>큰 오차에 큰 벌점(제곱 · 9.3의 SSE와 같은 성질). 학습 손실로 가장 흔함</td></tr>
+      <tr><td><b>MAPE</b></td><td>(0.5/3 + 0.5/5 + 1/8)/3</td><td><b>13.1%</b></td><td>&lsquo;평균 몇 % 틀리나&rsquo; &mdash; 실제값이 0 근처면 폭발한다</td></tr>
+      <tr><td><b>R²</b></td><td>1 − SS<sub>res</sub>/SS<sub>tot</sub> = 1 − 1.5/12.67</td><td><b>0.882</b></td><td>&lsquo;평균만 찍는 모델보다 얼마나 나은가&rsquo;. 1이 완벽, 0이면 평균과 같음, 음수도 가능</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>교수님 말씀대로 &lsquo;고리타분한&rsquo; 지표지만 각자 보는 곳이 달라서 <b>세트로</b> 쓴다. 예: MAE는 작은데 RMSE가 크다 → 대부분 잘 맞히지만 <b>가끔 크게 틀린다</b>는 신호.</p>
+</div>
+
+<div class="pt plus" id="lec-loss">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>손실 함수 vs 평가지표 — 그리고 새로 만들기</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>손실(cost · loss) 함수</th><th>평가지표</th></tr></thead>
+    <tbody>
+      <tr><td>누가 보나</td><td><b>모델</b>(학습 중 경사하강법이 줄인다)</td><td><b>사람</b>(학습이 끝나고 성적표로 본다)</td></tr>
+      <tr><td>조건</td><td><b>미분 가능</b>해야 한다</td><td>미분 못 해도 된다(Accuracy, F1)</td></tr>
+      <tr><td>예</td><td>MSE · 크로스 엔트로피(3 · 4주차)</td><td>Accuracy · F1 · AUC · MAE · R²</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>새 손실 함수의 실제 예</b> &mdash; 기존 손실이 문제에 안 맞을 때 만든다.</p>
+  <ul class="ul">
+    <li><b>Focal loss</b>(Lin et al., 2017) &mdash; 물체 검출에서 배경이 99%라 쉬운 배경만 배우는 문제를 풀려고, <b>이미 잘 맞히는 샘플의 손실을 깎고 어려운 샘플에 집중</b>하게 만든 크로스 엔트로피의 변형</li>
+    <li><b>Dice loss</b> &mdash; 분할(segmentation)에서 작은 종양 영역처럼 <b>겹치는 넓이</b>를 직접 키우도록 만든 손실</li>
+    <li><b>대조 손실</b>(contrastive) &mdash; 1절 자기지도 학습의 핵심. 같은 사진의 두 변형은 가깝게, 다른 사진은 멀게</li>
+  </ul>
+  <p><b>새 평가지표를 만들 때의 &lsquo;증명&rsquo;</b> &mdash; ① 기존 지표와 <b>상관이 높은지</b>(같은 모델들의 순위가 비슷하게 나오는지) ② 그런데도 기존 지표가 놓치는 무엇을 잡는지 ③ 사람이 매긴 평가와 맞는지. 예: 번역의 BLEU 이후 나온 COMET · BERTScore가 &lsquo;사람 평가와의 상관&rsquo;으로 자신을 증명했다(<a class="ext" href="nlp-week09.html">자연어처리 9주차</a>).</p>
+</div>
+
+<!-- ---------- 5. 연합학습 · 증류 ---------- -->
+<h3 class="sub-title" id="lec-fl">5 · 연합학습 · 지식 증류 · 협력 학습 — 여러 모델을 합치고 가볍게</h3>
+<div class="lec"><b>필기 정리</b> &mdash; 표준화할 수 있는 기법으로 <b>연합학습</b>이 많이 쓰인다. 모델들 간의 가중치를 표준화하는 방법으로 <b>공동 모델</b>을 만든다. 트리 형태는 <b>계층 구조</b>로 운영한다. 각 모델을 <b>경량화</b>할 필요도 있다. 공동 모델을 각 모델에 적용할 때(top → down, server → local) <b>지식 증류</b>(Knowledge Distillation)를 쓴다 &mdash; 이게 기본 베이스다. <b>cooperative</b> 공동 학습 기법도 있다. 요즘엔 잘 안 하지만, 생성형 AI로 <b>증강</b>하거나 <b>도메인을 바꾸는 translation</b>도 있다.</div>
+<div class="fix"><b>연합학습의 핵심은 &lsquo;표준화&rsquo;보다 &lsquo;데이터를 옮기지 않는 것&rsquo;</b> &mdash; 연합학습(Federated Learning)이 풀려는 문제는 <b>데이터를 한곳에 모을 수 없는 상황</b>이다(병원마다 환자 데이터 · 휴대폰마다 키보드 입력 · 개인정보 규제). 그래서 <b>데이터 대신 모델(가중치)만</b> 주고받는다. 필기의 &lsquo;가중치 간 표준화&rsquo;는 여러 곳에서 온 가중치를 <b>하나로 합치는(aggregation) 규칙</b>을 말한 것으로 보면 정확하다.</div>
+
+<div class="pt plus" id="lec-fedavg">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>연합학습 FedAvg — 한 라운드에 일어나는 일</h3>
+  <div class="flow">
+    <div class="fl"><b>① 서버가 공동 모델을 나눠 준다</b><span>현재 전역 가중치 <span class="tex">w</span>를 참여 기관(클라이언트) k곳에 보낸다</span></div>
+    <div class="fl"><b>② 각자 자기 데이터로 몇 번 학습</b><span>병원 A는 A의 환자 데이터로만 → <span class="tex">w_A</span>. 데이터는 <b>병원 밖으로 나가지 않는다</b></span></div>
+    <div class="fl"><b>③ 가중치만 서버로 보낸다</b><span>원본 데이터가 아니라 숫자 배열(가중치 · 업데이트)만</span></div>
+    <div class="fl"><b>④ 데이터 양으로 가중 평균</b><span><span class="tex">w\leftarrow\sum_k\frac{n_k}{n}w_k</span> &mdash; 데이터가 많은 곳의 모델을 더 크게 반영. 이것이 McMahan et al.(2017)의 <b>FedAvg</b></span></div>
+  </div>
+  <p class="fx-note">9.6의 정보이득에서 <span class="tex">|D_v|/|D|</span>로 가중치를 준 것과 같은 아이디어다 &mdash; <b>많이 본 쪽의 말을 더 믿는다</b>.</p>
+  <ul class="ul">
+    <li><b>계층형 연합학습(트리 구조)</b> &mdash; 기기 → 지역 서버(엣지) → 중앙 서버처럼 <b>여러 층으로 모아</b> 통신량을 줄인다. 필기의 &lsquo;트리 형태는 계층 구조로 운영&rsquo;이 이것이다</li>
+    <li><b>경량화가 필요한 이유</b> &mdash; 휴대폰 · IoT 기기가 직접 학습하고 매 라운드 가중치를 보내야 하니 모델이 작아야 한다. 방법: <b>양자화</b>(32비트 실수 → 8비트 정수), <b>가지치기</b>(작은 가중치 제거), <b>지식 증류</b>(아래)</li>
+    <li><b>어려운 점</b> &mdash; 기관마다 데이터 분포가 다르다(non-IID: 소아과 vs 노인 병원). 가중치만 보내도 원본을 일부 추정하는 공격이 있어 <b>보안 집계 · 차분 프라이버시</b>를 덧붙인다(<a class="ext" href="#lec-sec">8절 보안</a>)</li>
+    <li>실제 예 &mdash; 구글 Gboard 다음 단어 추천, 여러 병원 공동 의료 영상 모델</li>
+  </ul>
+</div>
+
+<div class="pt plus" id="lec-kd">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>지식 증류(Knowledge Distillation) — 큰 선생님의 &lsquo;말투&rsquo;까지 배우는 작은 학생</h3>
+  <p>Hinton · Vinyals · Dean(2015)이 이름 붙인 방법이다. 크고 정확한 <b>선생님(teacher)</b> 모델의 지식을 작고 빠른 <b>학생(student)</b> 모델에 옮긴다. 핵심은 학생이 정답 라벨(&lsquo;고양이&rsquo;)만 배우는 게 아니라 <b>선생님이 낸 확률 분포 전체</b>를 흉내 낸다는 것이다.</p>
+  <p><b>왜 확률 분포가 더 많은 걸 가르치나</b> &mdash; 고양이 사진에 선생님이 낸 점수(logit)가 고양이 4, 개 1, 자동차 0이라 하자. 온도 <span class="tex">T</span>를 넣은 소프트맥스로 확률을 만든다.</p>
+  <div class="fx">
+    <div class="tex-d">p_i=\frac{\exp(z_i/T)}{\sum_j\exp(z_j/T)}</div>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th></th><th>고양이</th><th>개</th><th>자동차</th></tr></thead>
+      <tbody>
+        <tr><td>정답 라벨 (hard)</td><td>1</td><td>0</td><td>0</td></tr>
+        <tr><td>선생님, <span class="tex">T=1</span></td><td>0.936</td><td>0.047</td><td>0.017</td></tr>
+        <tr><td>선생님, <span class="tex">T=4</span> (soft)</td><td>0.543</td><td><b>0.257</b></td><td><b>0.200</b></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="fx-note">정답 라벨은 &lsquo;개와 자동차는 똑같이 틀렸다&rsquo;고만 말한다. 온도를 올린 선생님의 분포는 <b>&lsquo;이 고양이는 자동차보다 개를 조금 더 닮았다&rsquo;</b>는 정보를 담고 있다 &mdash; 이 작은 확률들의 비율을 Hinton은 <b>dark knowledge</b>라 불렀다. 온도가 높을수록 분포가 부드러워져 이 정보가 잘 보인다.</p>
+  </div>
+  <div class="fx"><div class="tex-d">L=(1-\alpha)\,\underbrace{\mathrm{CE}\big(y,\;p^{s}_{T=1}\big)}_{\text{정답 라벨과}}+\alpha\,T^{2}\,\underbrace{\mathrm{KL}\big(p^{t}_{T}\,\big\|\,p^{s}_{T}\big)}_{\text{선생님 분포와}}</div>
+  <p class="fx-note">학생의 손실 = 정답과의 크로스 엔트로피 + 선생님 분포와의 차이(KL 발산). <span class="tex">T^2</span>를 곱하는 이유 &mdash; 온도로 나누면 기울기가 <span class="tex">1/T^2</span>만큼 작아지므로 크기를 되돌려 놓는다. 학습이 끝난 학생은 <span class="tex">T=1</span>로 쓴다.</p></div>
+  <ul class="ul">
+    <li><b>성과 예</b> &mdash; DistilBERT(2019)는 BERT를 증류해 크기 40% 감소 · 속도 60% 향상 · 언어 이해 성능 97% 유지. 요즘 &lsquo;작은 LLM&rsquo;들도 큰 LLM이 만든 답변 · 확률로 학습하는 증류를 많이 쓴다</li>
+    <li><b>종류</b> &mdash; 출력(확률) 증류 · 중간층 특징 증류(FitNets) · 자기 증류(자기 자신의 이전 버전이 선생님)</li>
+    <li><b>연합학습과의 연결</b> &mdash; 필기의 &lsquo;server → local&rsquo;. 서버의 큰 공동 모델을 선생님으로 삼아 기기에 맞는 <b>작은 로컬 모델</b>을 증류해 내려보내거나, 반대로 여러 로컬 모델의 출력을 모아 서버 모델을 증류한다(FedDF · FedMD 계열). 가중치 대신 <b>출력만 주고받으므로 기관마다 모델 구조가 달라도</b> 된다는 장점이 있다</li>
+  </ul>
+</div>
+
+<div class="pt plus" id="lec-coop">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>협력(cooperative · collaborative) 학습 — 모델끼리 서로 가르친다</h3>
+  <ul class="ul">
+    <li><b>Co-training</b>(Blum &amp; Mitchell, 1998) &mdash; 같은 데이터를 <b>두 관점</b>(예: 웹페이지의 본문 / 링크 문구)으로 보는 모델 두 개가 서로에게 자신 있는 예측을 가짜 라벨로 넘겨준다. 1절 준지도 학습의 원조</li>
+    <li><b>Deep Mutual Learning</b>(2018) &mdash; 선생님 없이 <b>같은 급의 학생 여럿이 서로의 확률 분포를 흉내</b> 내며 함께 학습. 증류의 &lsquo;동료 버전&rsquo;</li>
+    <li><b>Split learning</b> &mdash; 모델을 앞부분(기기) · 뒷부분(서버)으로 잘라 나눠 학습. 연합학습의 친척</li>
+    <li><b>앙상블</b> &mdash; 여러 모델의 예측을 투표 · 평균. 학습은 따로, 예측만 협력</li>
+  </ul>
+</div>
+
+<div class="pt plus" id="lec-genaug">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>생성형 AI로 증강 · 도메인 바꾸기(translation)</h3>
+  <ul class="ul">
+    <li><b>생성형 증강</b> &mdash; 희귀한 경우(드문 질병 영상, 사고 직전 장면)를 생성 모델로 만들어 데이터를 보충</li>
+    <li><b>도메인 변환</b> &mdash; 데이터의 &lsquo;스타일&rsquo;을 바꾼다. 낮 → 밤, 맑음 → 비, 시뮬레이터 화면 → 실제 사진 같은 화면. 짝지은 데이터 없이 바꾸는 <b>CycleGAN</b>(2017)이 대표였고, 지금은 확산 모델(diffusion)로 많이 한다</li>
+    <li>교수님이 &lsquo;요즘은 잘 안 한다&rsquo;고 한 이유로 짐작되는 것 &mdash; 생성 데이터의 <b>품질 · 진짜와의 차이 검증</b>이 어렵고, 생성 데이터만 반복해 학습하면 모델이 점점 망가지는 <b>model collapse</b> 문제가 보고되었으며, 대신 처음부터 큰 파운데이션 모델을 미세조정하는 쪽이 대세가 됐다</li>
+  </ul>
+</div>
+
+<!-- ---------- 6. XAI ---------- -->
+<h3 class="sub-title" id="lec-xai">6 · 설명 가능한 AI — Explainable vs Interpretable</h3>
+<div class="lec"><b>필기 정리</b> &mdash; 입력 → AI → 출력(왜 그런지 모름). ① 출력을 거꾸로 입력과 연결시키는 <b>Explainable AI</b> ② 모델 자체 · 내부를 해석하는 <b>Interpretable AI</b>. 의사결정을 위해서는 ②번 쪽이 많이 쓰인다 &mdash; <b>SHAP, IME, Grad-CAM</b>…(전통 기법들). 그러나 단순한 파라미터만 나온다. 요즘엔 <b>CoT</b>가 많이 쓰인다(교수님은 이것도 한물갔다고).</div>
+<div class="fix"><b>두 용어의 문헌상 구분과, 기법 이름 바로잡기</b>
+<ul class="ul">
+  <li><b>문헌의 일반적 구분</b>(Rudin, <i>Nature Machine Intelligence</i> 2019) &mdash; <b>Interpretable</b> = 모델 <b>자체가 투명</b>해서 사람이 그대로 읽을 수 있는 것(9.4의 의사결정나무, 선형 회귀의 계수). <b>Explainable</b> = 블랙박스는 그대로 두고 <b>밖에서 설명을 덧붙이는</b> 것(사후 설명, post-hoc). Rudin은 &ldquo;중요한 결정에는 블랙박스를 설명하려 하지 말고 처음부터 해석 가능한 모델을 쓰라&rdquo;고 주장했다</li>
+  <li>이 기준으로 보면 <b>SHAP · LIME · Grad-CAM은 모두 사후 설명(Explainable 쪽)</b>이다 &mdash; 모델 내부 구조를 읽는 게 아니라 입력을 바꿔 보거나 기울기를 이용해 &lsquo;어느 입력이 출력에 얼마나 기여했나&rsquo;를 계산한다. 다만 기울기 · 내부 활성값을 쓰는 Grad-CAM 같은 방법을 &lsquo;모델 내부를 들여다본다&rsquo;는 뜻으로 ②에 넣는 설명도 있어, 교수님 구분은 그런 의미로 이해하면 된다</li>
+  <li><b>&lsquo;gradGAM&rsquo; → Grad-CAM</b>(Gradient-weighted Class Activation Mapping)</li>
+  <li><b>&lsquo;IME&rsquo;</b>는 실제로 있는 기법이다 &mdash; Štrumbelj &amp; Kononenko(2010)의 <b>Interactions-based Method for Explanation</b>, 섀플리 값을 표본추출로 근사한 방법으로 <b>SHAP의 직계 선배</b>다. 다만 강의에서 <b>LIME</b>을 말씀하셨을 가능성도 있어 둘 다 아래에 정리했다</li>
+  <li>7주차 XAI 교안의 &lsquo;설명 가능성 곡선&rsquo;(<a class="ext" href="machine-learning-week07.html#xai">7주차 7.6</a>)과 같은 이야기다 &mdash; 규칙 기반 · 결정 트리 · 선형 회귀는 해석 가능, 딥러닝은 블랙박스</li>
+</ul></div>
+
+<div class="pt plus" id="lec-xai-methods">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>기법 하나씩 — SHAP · IME · LIME · Grad-CAM</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>기법</th><th>아이디어</th><th>결과물</th><th>쓰는 곳</th></tr></thead>
+    <tbody>
+      <tr><td><b>SHAP</b><br>(Lundberg &amp; Lee, 2017)</td><td>게임이론의 <b>섀플리 값</b> &mdash; 특징들을 &lsquo;팀원&rsquo;으로 보고, 모든 조합에서 한 특징이 들어올 때 예측이 얼마나 변하는지 평균 내 <b>공정하게 기여도를 나눈다</b></td><td>특징별 기여도(+/−). <b>기여도 합 = 예측 − 평균 예측</b></td><td>표 데이터(대출 · 의료). 가장 많이 쓰인다</td></tr>
+      <tr><td><b>IME</b><br>(Štrumbelj &amp; Kononenko, 2010)</td><td>SHAP과 같은 섀플리 값을, 특징 부분집합을 <b>무작위 표본추출</b>해 근사</td><td>특징별 기여도</td><td>SHAP 이전의 모델 불문(model-agnostic) 방법. 느리다</td></tr>
+      <tr><td><b>LIME</b><br>(Ribeiro et al., 2016)</td><td>설명할 데이터 <b>하나 주변</b>에서 입력을 조금씩 바꿔 예측을 모은 뒤, 그 동네에서만 통하는 <b>간단한 선형 모델</b>로 흉내</td><td>그 예측 하나에 대한 특징 가중치</td><td>표 · 텍스트 · 이미지(슈퍼픽셀)</td></tr>
+      <tr><td><b>Grad-CAM</b><br>(Selvaraju et al., 2017)</td><td>CNN의 마지막 합성곱 층 특징 지도에, &lsquo;고양이&rsquo; 점수의 <b>기울기</b>로 가중치를 매겨 더한다</td><td><b>열 지도(heatmap)</b> &mdash; 사진의 어디를 보고 고양이라 했나</td><td>이미지 분류 · 의료 영상. 뒤 주차 컴퓨터비전과 바로 연결</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>&lsquo;단순한 파라미터만 나온다&rsquo;의 뜻</b> &mdash; 이 기법들이 주는 것은 &lsquo;나이 +0.3, 소득 −0.1&rsquo; 같은 <b>숫자 목록</b>이나 열 지도다. &lsquo;<b>왜</b> 나이가 중요한가&rsquo;를 문장으로 설명해 주지는 않고, 특징끼리의 상호작용 · 인과는 잘 드러나지 않는다. 또 설명 기법마다 결과가 다를 수 있고, 일부러 속이도록 만든 모델에 SHAP · LIME이 넘어가는 사례도 보고되었다 &mdash; 설명도 <b>검증 대상</b>이다.</p>
+</div>
+
+<div class="neon" id="lec-cot"><b>CoT와 그 다음 — 최근 설명 가능성 연구의 흐름</b>
+<ul class="ul">
+  <li><b>CoT</b>(Chain-of-Thought, Wei et al., 2022) &mdash; LLM에게 &ldquo;단계별로 생각해 보자&rdquo;처럼 <b>풀이 과정을 글로 쓰게</b> 하면 정답률이 오르고, 그 풀이가 곧 사람이 읽을 수 있는 &lsquo;설명&rsquo;이 된다</li>
+  <li><b>교수님이 &lsquo;한물갔다&rsquo;고 한 맥락</b> &mdash; ① 프롬프트 기법으로서의 CoT는 2024~2025년 <b>추론 모델</b>(OpenAI o1, DeepSeek-R1 등)이 학습 단계에서 생각하는 과정을 아예 내장하면서 &lsquo;따로 쓰는 요령&rsquo;이 아니게 됐다 ② <b>CoT가 진짜 이유를 말한다는 보장이 없다</b> &mdash; Turpin et al.(2023)은 보기 순서 같은 편향으로 답을 바꿔 놓아도 모델이 그 사실을 풀이에서 언급하지 않고 그럴듯하게 합리화한다는 것을 보였다(<b>faithfulness 문제</b>)</li>
+  <li><b>지금 뜨는 쪽</b> &mdash; <b>기계적 해석 가능성</b>(mechanistic interpretability): 모델 내부 뉴런 · 회로가 어떤 개념을 표현하는지 직접 찾는다(희소 오토인코더로 &lsquo;특징&rsquo; 수백만 개를 뽑아내는 연구 등). 교수님 분류의 ② &lsquo;모델 내부를 해석&rsquo;이 LLM 시대에 다시 돌아온 셈이다</li>
+</ul></div>
+
+<!-- ---------- 7. 큰 흐름 ---------- -->
+<h3 class="sub-title" id="lec-arch">7 · CNN → RNN → Transformer → LLM · VLM (파운데이션 모델)</h3>
+<div class="lec"><b>필기 정리</b> &mdash; 이 흐름을 알아야 전체 구조가 이해된다. 파운데이션 모델은 너무 거대해서 <b>데이터가 없으면 못 만든다</b>.</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>구조</th><th>대표 시점</th><th>잘하는 것</th><th>한계 → 다음으로</th></tr></thead>
+  <tbody>
+    <tr><td><b>CNN</b></td><td>LeNet(1989~1998) · <b>AlexNet(2012)</b>이 ImageNet을 휩쓸며 딥러닝 붐</td><td>이미지 &mdash; 가까운 픽셀끼리 보는 필터(합성곱)를 공유</td><td>순서 있는 데이터(문장 · 음성)에 약함</td></tr>
+    <tr><td><b>RNN · LSTM</b></td><td>RNN(1980년대) · LSTM(1997) · seq2seq 번역(2014)</td><td>순서 데이터 &mdash; 이전 상태를 기억하며 한 단계씩</td><td>한 단계씩이라 <b>병렬화가 안 되고</b> 긴 문장 앞부분을 잊는다</td></tr>
+    <tr><td><b>Transformer</b></td><td>&ldquo;Attention Is All You Need&rdquo;(2017)</td><td><b>어텐션</b>으로 모든 단어가 모든 단어를 한 번에 본다 → 병렬 학습 · 긴 문맥</td><td>규모를 키울수록 계속 좋아진다는 것이 발견됨</td></tr>
+    <tr><td><b>LLM</b></td><td>BERT(2018) · GPT-3(2020) · ChatGPT(2022)</td><td>거대한 텍스트로 <b>자기지도</b> 사전학습 → 대화 · 추론</td><td>텍스트만 앎</td></tr>
+    <tr><td><b>VLM</b></td><td>CLIP(2021) · GPT-4V 등(2023~)</td><td>이미지 + 텍스트를 함께 이해</td><td>→ 행동까지 붙이면 VLA(1절 Physical AI)</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="fix"><b>화살표는 &lsquo;시간 순서&rsquo;가 아니라 &lsquo;주도권이 넘어간 순서&rsquo;</b> &mdash; RNN은 1980년대, LSTM은 1997년, CNN(LeNet)은 1989년 무렵으로 둘 다 오래됐고, RNN이 CNN 다음에 나온 것이 아니다. 이미지는 CNN, 순서 데이터는 RNN이 각자 주력이던 시기가 있었고, 2017년 Transformer가 나온 뒤 <b>텍스트에서 시작해 이미지(ViT, 2020)까지</b> 하나의 구조로 통일되어 간 흐름으로 이해하면 정확하다.</div>
+<div class="deep"><b>파운데이션 모델이란</b> &mdash; 이 용어는 스탠퍼드 보고서 &ldquo;On the Opportunities and Risks of Foundation Models&rdquo;(Bommasani et al., 2021)가 붙였다. 정의는 <b>&lsquo;대규모 데이터로 (대개 자기지도로) 폭넓게 학습해, 다양한 하위 과제에 맞춰 고쳐 쓸(adapt) 수 있는 모델&rsquo;</b>. 예로 BERT · GPT-3 · CLIP을 들었다. &lsquo;기초(foundation)&rsquo;라는 이름은 그 위에 많은 응용이 올라가지만 그 자체는 미완성이라는 뜻을 담았고, 보고서는 <b>하나의 기초 모델에 결함이 있으면 그 위의 모든 응용으로 퍼진다</b>는 위험도 강조했다. 교수님 말씀대로 데이터 · 계산 비용 때문에 대부분의 연구자는 직접 만들기보다 <b>공개 파운데이션 모델을 가져와 미세조정 · 증류</b>(5절)한다.</div>
+
+<!-- ---------- 8. 다음 연구 주제 ---------- -->
+<h3 class="sub-title" id="lec-frontier">8 · 다음 연구 주제 — 보안 · 양자 · 디지털 트윈 · 에이전트</h3>
+<div class="lec"><b>필기 정리</b> &mdash; AI 모델들도 <b>공격</b>을 많이 받고 보안 이슈가 많다. 보안 쪽은 덜 되어 있지만 필요한 분야다(<b>보안 AI</b>). AI 모델은 &lsquo;실수&rsquo; 기반 계산인데 요즘 뜨는 것이 <b>양자</b>다. <b>양자 + 보안 AI</b>를 만들면 의미 있는 결과가 나오지 않을까? 요즘은 <b>에이전트 · 툴 자동화</b>가 이슈지만 이제 그 이외의 것을 봐야 할 때다. <b>디지털 트윈 + AI</b>가 안 되어 있는 부분이다(의료 · 국방 · 경제 &mdash; 도메인이 없어서, 비용이 많이 드는 분야라서).</div>
+
+<div class="pt plus" id="lec-sec">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>AI 보안 — 모델은 어떻게 공격받나</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>공격</th><th>무엇을</th><th>예</th></tr></thead>
+    <tbody>
+      <tr><td><b>적대적 예제</b> (adversarial example)</td><td>사람 눈에 안 보이는 잡음으로 <b>예측을 뒤집는다</b></td><td>판다 사진에 미세한 잡음 → &lsquo;긴팔원숭이&rsquo; 99%(Goodfellow et al., 2015) · 정지 표지판에 스티커</td></tr>
+      <tr><td><b>데이터 오염 · 백도어</b></td><td>학습 데이터에 독을 탄다</td><td>특정 무늬가 있으면 무조건 &lsquo;통과&rsquo;로 분류하게 심어 두기</td></tr>
+      <tr><td><b>모델 탈취 · 멤버십 추론</b></td><td>질문만 반복해 모델을 복제하거나, <b>이 사람 데이터가 학습에 쓰였는지</b> 알아낸다</td><td>의료 모델에서 특정 환자 포함 여부 노출 &mdash; 5절 연합학습이 막으려는 것</td></tr>
+      <tr><td><b>프롬프트 인젝션</b></td><td>LLM에게 숨은 지시를 먹여 원래 규칙을 무시하게 함</td><td>OWASP의 &lsquo;LLM 애플리케이션 10대 위험&rsquo; 2025판에서도 <b>1위</b>. 웹페이지 · 메일에 숨긴 지시를 에이전트가 읽고 실행하는 간접 인젝션이 특히 문제</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>방어 쪽 키워드 &mdash; 적대적 학습(공격 예제를 섞어 학습), 차분 프라이버시, 보안 집계, 레드팀, 입력 · 출력 필터. <b>&lsquo;보안 AI&rsquo;는 두 방향</b>이다: <b>AI를 지키는 보안</b>(위 표)과 <b>AI로 하는 보안</b>(침입 · 악성코드 탐지).</p>
+</div>
+
+<div class="pt plus" id="lec-quantum">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>&lsquo;실수&rsquo; 기반 AI와 양자 — 기대와 현실</h3>
+  <p><b>&lsquo;실수 기반 계산&rsquo;</b> &mdash; 지금의 AI는 가중치를 <b>부동소수점 실수</b>(FP32 · FP16 · BF16, 경량화하면 INT8 정수)로 저장하고 행렬 곱을 반복한다. GPU가 이 실수 행렬 곱에 특화된 칩이다. <b>양자 컴퓨터</b>는 0과 1을 동시에 겹쳐 가질 수 있는 <b>큐비트</b>로 계산해 특정 문제(소인수분해, 양자 시스템 시뮬레이션)에서 압도적으로 빠를 수 있다.</p>
+  <div class="fix" style="margin:10px 0"><b>양자 머신러닝(QML)은 &lsquo;아직 연구 단계&rsquo;</b> &mdash; 리뷰 논문들(2024~2025)의 공통 결론은 <b>실용적인 학습 문제에서 고전 컴퓨터를 확실히 이긴 사례는 아직 없다</b>는 것이다. 지금의 양자 기기는 잡음이 많고 큐비트 수가 적으며(NISQ 시대), 데이터를 양자 상태로 넣는 비용도 크다. 양자 알고리즘이 빠르다고 발표된 뒤 <b>비슷하게 빠른 고전 알고리즘이 발견되는 &lsquo;역양자화(dequantization)&rsquo;</b>도 여러 번 있었다(Tang, 2019의 추천 시스템). 당분간은 고전 + 양자를 섞은 <b>하이브리드</b>가 현실적이라는 시각이 많다.</div>
+  <p><b>&lsquo;양자 + 보안&rsquo;을 연구 주제로 볼 때 갈래</b></p>
+  <ul class="ul">
+    <li><b>양자 위협에 대비한 암호</b> &mdash; 큰 양자 컴퓨터가 나오면 지금의 RSA · 타원곡선 암호가 깨진다. 그래서 미국 NIST가 2024년 8월 <b>양자내성암호(PQC)</b> 표준 FIPS 203(ML-KEM) · 204(ML-DSA) · 205(SLH-DSA)를 확정했다. AI 시스템(연합학습 통신, 모델 배포)에 PQC를 적용하는 연구가 &lsquo;양자 + 보안 + AI&rsquo;의 가장 현실적인 교차점이다</li>
+    <li><b>양자 키 분배(QKD)</b> &mdash; 도청하면 흔적이 남는 양자 성질로 키를 나누는 통신 보안</li>
+    <li><b>양자 머신러닝으로 보안 문제 풀기</b> &mdash; 이상 탐지 등에 양자 커널을 써 보는 연구. 위 박스처럼 아직 우위가 증명되지 않아 <b>&lsquo;고전 모델과 공정하게 비교했는가&rsquo;</b>가 심사의 핵심이 된다</li>
+  </ul>
+</div>
+
+<div class="pt plus" id="lec-twin">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>디지털 트윈 + AI — 교수님이 &lsquo;생략&rsquo;하신 부분 풀어 쓰기</h3>
+  <p><b>디지털 트윈</b>은 실제 대상(공장 설비, 도시, 환자, 전투 공간)을 컴퓨터 안에 <b>쌍둥이처럼 복제</b>하고, 센서 데이터로 <b>실시간 동기화</b>하는 가상 모델이다. 단순한 3D 모형이나 한 번 돌리는 시뮬레이션과 다른 점은 <b>현실 ↔ 가상이 계속 데이터를 주고받는다</b>는 것이다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>AI가 하는 일</th><th>뜻</th><th>예</th></tr></thead>
+    <tbody>
+      <tr><td><b>대리 모델</b> (surrogate)</td><td>무거운 물리 시뮬레이션을 빠른 AI가 흉내 → 실시간 계산</td><td>엔진 내부 온도를 몇 시간 대신 몇 초에</td></tr>
+      <tr><td><b>이상 탐지 · 예지 정비</b></td><td>트윈이 예상한 값과 실제 센서가 어긋나면 경고</td><td>고장 나기 전 부품 교체</td></tr>
+      <tr><td><b>&lsquo;만약에&rsquo; 실험</b> (what-if)</td><td>현실에서는 위험 · 비싼 시도를 트윈에서 먼저</td><td>이 약을 쓰면 이 환자는? 이 작전이면?</td></tr>
+      <tr><td><b>AI 학습장</b></td><td>트윈 안에서 강화학습 · 합성 데이터 생성</td><td>1절 Physical AI의 sim-to-real</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>&lsquo;도메인이 없어서 안 되어 있다&rsquo;의 뜻</b>으로 읽을 수 있는 것 &mdash; 디지털 트윈은 <b>해당 분야의 깊은 지식 + 그 분야의 데이터</b>가 있어야 만든다. 의료(환자 생리 데이터 · 규제), 국방(보안상 데이터 비공개), 경제(사람 행동이라 모델링이 어렵다)는 AI 연구자가 혼자 접근하기 어려운 도메인이고, 센서 · 모델링 · 검증에 <b>비용(COST)</b>이 크게 든다. 그래서 &lsquo;AI 기술은 있는데 도메인과 연결이 안 된&rsquo; 빈 곳이 많다 &mdash; 연구 기회라는 말씀으로 보인다.</p>
+</div>
+
+<div class="neon"><b>에이전트 · 툴 자동화 — 그리고 &lsquo;그 이외&rsquo;</b>
+<ul class="ul">
+  <li><b>에이전트</b> &mdash; LLM이 답만 하는 게 아니라 <b>도구(검색 · 코드 실행 · API)를 스스로 골라 쓰며</b> 여러 단계 작업을 끝내는 시스템. 도구를 연결하는 표준 규격(예: Model Context Protocol, 2024)까지 나오며 2025년의 가장 큰 화두였다</li>
+  <li>교수님 메시지 &mdash; 이 분야는 이미 사람이 몰려 있으니, <b>석사 연구 주제로는 덜 붐비는 교차점</b>을 보라는 것. 이 수업에서 언급된 후보를 묶으면:
+    <ul class="ul">
+      <li><b>보안 AI</b> &mdash; 에이전트가 늘수록 프롬프트 인젝션 같은 공격면도 커진다</li>
+      <li><b>양자 + 보안</b> &mdash; PQC를 적용한 연합학습 · 모델 배포</li>
+      <li><b>디지털 트윈 + AI</b> &mdash; 의료 · 국방 · 제조 도메인</li>
+      <li><b>연합학습 + 지식 증류</b> &mdash; 데이터를 못 모으는 기관들의 공동 모델 + 기기별 경량 모델</li>
+    </ul>
+  </li>
+</ul></div>
+
+<div class="good"><b>이 절을 한 문단으로</b> &mdash; 라벨 비용 때문에 자기지도 · 준지도 · 약지도가 발전했고, 오늘날 파운데이션 모델은 거대한 데이터의 자기지도 학습으로 만든다. 실험은 k-fold · nested CV · 여러 시드로 &lsquo;운&rsquo;을 걸러 내고, 성능은 여러 지표를 신뢰구간과 함께 보고한다. 데이터를 모을 수 없을 때는 연합학습으로 가중치만 합치고, 지식 증류로 작고 빠른 모델을 만든다. 블랙박스는 SHAP · Grad-CAM 같은 사후 설명이나 해석 가능한 모델로 설명하되, 설명 자체도 검증해야 한다. 다음 연구는 보안 · 양자 · 디지털 트윈처럼 AI가 아직 깊이 들어가지 못한 교차점에 있다.</div>
+</section>
+
 <!-- ===================== 복습 ===================== -->
 <section class="sec" id="review">
   <div class="sec-head"><span class="sec-badge">Q</span><h2 class="sec-title">복습 문제<small>손으로 풀어 보고 답 보기를 누르세요</small></h2></div>
@@ -1504,7 +1963,7 @@ for i in range(number_iteration):            <span class="cm"># Step 4 — 20번
 <!-- ===================== 다음 ===================== -->
 <section class="sec" id="next">
   <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주<small>10주차 · 11.5</small></h2></div>
-<div class="note-box"><b>10주차</b> &mdash; 강의계획서상으로는 <b>딥러닝 응용 소개 · 합성곱 신경망(CNN)</b>이다. 9.7절에서 이름만 훑은 Convolution · Pooling · Activation 레이어가 본격적으로 나온다. 자료가 올라오면 그 기준으로 정리한다. 이번 주 내용은 <a class="ext" href="machine-learning-week07.html#dist">7주차 거리 측도</a>와 바로 이어지고, 컴퓨터비전에서도 <a class="ext" href="computer-vision-week06.html">특징 기술자</a>를 K-평균으로 묶어 &lsquo;시각 단어(visual words)&rsquo;를 만드는 데 쓴다.</div>
+<div class="note-box"><b>10주차</b> &mdash; 대면 강의 공지로는 <b>군집화를 빠르게 다시 설명</b>하고, 이후 주차는 <b>컴퓨터비전(영상 인식 · 이미지 분류)</b> 중심이다. 강의계획서상으로는 <b>딥러닝 응용 소개 · 합성곱 신경망(CNN)</b>이다. 9.7절에서 이름만 훑은 Convolution · Pooling · Activation 레이어가 본격적으로 나온다. 자료가 올라오면 그 기준으로 정리한다. 이번 주 내용은 <a class="ext" href="machine-learning-week07.html#dist">7주차 거리 측도</a>와 바로 이어지고, 컴퓨터비전에서도 <a class="ext" href="computer-vision-week06.html">특징 기술자</a>를 K-평균으로 묶어 &lsquo;시각 단어(visual words)&rsquo;를 만드는 데 쓴다.</div>
 </section>
 
 <p class="src">기계학습특론 9주차 강의자료 정리 · 2026학년도 2학기<br>
