@@ -269,7 +269,7 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .lec b{color:#831843}
 .lec .ul li{color:#4a1d36}.lec .ul li::before{background:#db2777}
 .fix{background:#f0fdf4;border:1px solid #86efac;border-left:4px solid #16a34a;color:#14532d}
-.fix::before{content:'✅ 팩트체크';background:#16a34a;color:#fff}
+.fix::before{content:'🌿 개념 정리';background:#16a34a;color:#fff}
 .fix b{color:#14532d}
 .fix .ul li{color:#14532d}.fix .ul li::before{background:#16a34a}
 .neon{background:#0b1224;border:1px solid #39ff88;border-left:4px solid #39ff88;color:#dbe7ff;
@@ -551,7 +551,7 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   <p class="legend-t">내용이 어디에서 왔는지 <b>뱃지</b>로 구분했습니다</p>
   <i><span class="bdg bdg-gyo">교안</span><span>교수님 슬라이드에 있는 내용</span></i>
   <i><span class="bdg bdg-plus">보충설명</span><span>교안에 없거나 짧게 지나간 부분을 따로 찾아 정리한 내용</span></i>
-  <i><span class="bk lec-k">🎙 대면</span><span>대면 강의 필기(핑크) · <b style="color:#16a34a">팩트체크</b>(초록) · 최근 트렌드(네온) 상자는 <a class="ext" href="#lecture">대면 강의 절</a>에 있습니다</span></i>
+  <i><span class="bk lec-k">🎙 대면</span><span>대면 강의 필기(핑크) · <b style="color:#16a34a">개념 정리</b>(초록) · 최근 트렌드(네온) 상자는 <a class="ext" href="#lecture">대면 강의 절</a>에 있습니다</span></i>
   <i><span class="bdg bdg-quiz">100문제</span><span>교안이 올라오기 전(9.4~9.7) 100문제의 문항 · 해설에 나온 강의 내용으로 정리한 부분</span></i>
   <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고(← → 로 넘기기), <span class="hi">노란 형광펜</span>은 꼭 기억할 문장, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선</span>은 누르면 뜻이 뜹니다. 교안 예제의 거리 · 중심점 · SSE는 모두 <b>직접 다시 계산</b>해 확인했습니다.</p>
 </div>
@@ -2549,7 +2549,7 @@ score = model.evaluate(x_test, y_test, verbose=0)
 
 <div class="boxkey">
   <span class="bk lec-k">🎙 대면 강의 필기</span><span>교수님이 말씀하신 내용을 다듬어 옮김</span>
-  <span class="bk fix-k">✅ 팩트체크</span><span>필기와 문헌의 설명이 다른 곳을 짚음</span>
+  <span class="bk fix-k">🌿 개념 정리</span><span>필기 내용을 문헌 기준으로 더 풀어 쓴 설명</span>
   <span class="bk neon-k">⚡ 최근 트렌드</span><span>2023~2026 흐름 · 찾아볼 키워드</span>
   <span class="bk deep-k">🔎 한 걸음 더</span><span>개념을 끝까지 파고드는 설명</span>
 </div>
@@ -2577,7 +2577,7 @@ score = model.evaluate(x_test, y_test, verbose=0)
 <!-- ---------- 1. 학습 패러다임 ---------- -->
 <h3 class="sub-title" id="lec-paradigm">1 · 학습 패러다임 — 라벨을 얼마나, 어떻게 쓰나</h3>
 
-<div class="lec"><b>필기 정리</b> &mdash; 대표적인 기법으로 지도학습 계열의 <b>self-supervised · semi-supervised · weakly supervised</b>를 들었다. 연구는 보통 <b>SOTA(State of the Art, 현재 최고 성능)를 베이스라인으로 삼고 그것을 넘어서는 것</b>을 목표로 한다. 지도학습은 <b>가장 안정적인 성능</b>을 낼 수 있지만 라벨링에 <b>공수와 비용</b>이 든다. 강화학습은 <b>Physical AI</b>에서 주로 필요하다(예: 로봇청소기).</div>
+<div class="lec"><b>필기 정리</b> &mdash; 라벨을 얼마나 쓰느냐에 따라 지도학습 · <b>자기지도(self-supervised) · 준지도(semi-supervised) · 약지도(weakly supervised)</b> · 비지도 · 강화학습으로 나뉜다. 연구는 보통 <b>SOTA(State of the Art, 현재 최고 성능)를 베이스라인으로 삼고 그것을 넘어서는 것</b>을 목표로 한다. 지도학습은 <b>가장 안정적인 성능</b>을 낼 수 있지만 라벨링에 <b>공수와 비용</b>이 든다. 강화학습은 로봇처럼 <b>물리 세계에서 움직이는 Physical AI</b>에서 주로 필요하다(예: 로봇 보행 · 물건 집기).</div>
 
 <div class="tbl-wrap">
 <table>
@@ -2593,7 +2593,7 @@ score = model.evaluate(x_test, y_test, verbose=0)
 </table>
 </div>
 
-<div class="fix"><b>자기지도는 &lsquo;지도학습의 한 종류&rsquo;라고만 외우면 헷갈린다</b> &mdash; 손실 함수 모양은 지도학습과 같다(정답과 비교해 오차를 줄인다). 하지만 그 정답을 <b>사람이 아니라 데이터 자체가</b> 만든다. 그래서 교과서마다 &lsquo;비지도의 한 갈래&rsquo; 또는 &lsquo;지도와 비지도 사이&rsquo;로 분류가 갈린다. 시험에서는 <b>&ldquo;사람 라벨 없이 데이터에서 정답을 만들어 지도학습처럼 학습한다&rdquo;</b>로 쓰면 어느 쪽 분류든 틀리지 않는다. 오늘날 LLM · VLM 같은 <b>파운데이션 모델의 사전학습이 거의 다 자기지도</b>라서 가장 중요한 칸이다(<a class="ext" href="#lec-arch">7절</a>).</div>
+<div class="fix"><b>자기지도 학습은 어디에 속하나</b> &mdash; 손실 함수 모양은 지도학습과 같다(정답과 비교해 오차를 줄인다). 하지만 그 정답을 <b>사람이 아니라 데이터 자체가</b> 만든다. 그래서 교과서마다 &lsquo;비지도의 한 갈래&rsquo; 또는 &lsquo;지도와 비지도 사이&rsquo;로 분류가 갈린다. 시험에서는 <b>&ldquo;사람 라벨 없이 데이터에서 정답을 만들어 지도학습처럼 학습한다&rdquo;</b>로 쓰면 어느 쪽 분류든 틀리지 않는다. 오늘날 LLM · VLM 같은 <b>파운데이션 모델의 사전학습이 거의 다 자기지도</b>라서 가장 중요한 칸이다(<a class="ext" href="#lec-arch">7절</a>).</div>
 
 <div class="deep"><b>SOTA와 베이스라인</b>
 <ul class="ul">
@@ -2617,8 +2617,8 @@ score = model.evaluate(x_test, y_test, verbose=0)
 <p class="fx-note">&lsquo;Prediction&rsquo;은 넓게는 모든 출력을 뜻하지만, 강의에서 분류와 나란히 놓은 것은 <b>연속값 예측(회귀 · 시계열 예측)</b>이다. 그래서 아래 4절의 지표도 분류(Accuracy …)와 예측(R² · MAE …)으로 나뉜다.</p>
 
 <h3 class="sub-title" id="lec-rl">강화학습과 Physical AI</h3>
-<div class="deep"><b>강화학습 한 장 요약</b> &mdash; <b>에이전트</b>가 <b>상태</b>(state)를 보고 <b>행동</b>(action)을 하면 환경이 <b>보상</b>(reward)과 다음 상태를 돌려준다. 목표는 앞으로 받을 보상의 합이 최대가 되는 <b>정책</b>(policy, 상태 → 행동 규칙)을 찾는 것이다. 정답을 알려 주는 사람이 없고, 좋은 행동인지는 <b>한참 뒤에야</b> 알 수 있다는 점(지연 보상)이 지도학습과 다르다. 로봇청소기라면 상태 = 센서 · 지도, 행동 = 전진 · 회전, 보상 = 청소한 면적 + / 충돌 −.</div>
-<div class="fix"><b>로봇청소기 예시는 &lsquo;원리 설명용&rsquo;으로 받아들이자</b> &mdash; 지금 팔리는 로봇청소기 대부분은 강화학습 정책보다 <b>SLAM(지도 작성 + 위치 추정) + 경로 계획 알고리즘 + 장애물 인식(CNN)</b>으로 움직인다. 강화학습이 실제로 빛을 보는 곳은 <b>사람이 규칙을 짜기 어려운 동작</b>이다 &mdash; 4족 · 2족 로봇 보행, 로봇 팔의 물건 집기. 이때 실제 로봇으로 수백만 번 넘어질 수 없으니 <b>시뮬레이터에서 학습하고 현실로 옮긴다(sim-to-real)</b>. 시뮬레이터의 마찰 · 무게를 일부러 매번 바꿔 가며 학습시키는 <b>도메인 무작위화</b>가 대표 기법이다.</div>
+<div class="deep"><b>강화학습 한 장 요약</b> &mdash; <b>에이전트</b>가 <b>상태</b>(state)를 보고 <b>행동</b>(action)을 하면 환경이 <b>보상</b>(reward)과 다음 상태를 돌려준다. 목표는 앞으로 받을 보상의 합이 최대가 되는 <b>정책</b>(policy, 상태 → 행동 규칙)을 찾는 것이다. 정답을 알려 주는 사람이 없고, 좋은 행동인지는 <b>한참 뒤에야</b> 알 수 있다는 점(지연 보상)이 지도학습과 다르다. 로봇 팔이라면 상태 = 관절 각도 · 카메라 영상, 행동 = 관절 움직임, 보상 = 물건을 집으면 + / 떨어뜨리면 −.</div>
+<div class="fix"><b>강화학습이 실제로 쓰이는 곳</b> &mdash; 강화학습이 빛을 보는 곳은 <b>사람이 규칙을 짜기 어려운 동작</b>이다 &mdash; 4족 · 2족 로봇 보행, 로봇 팔의 물건 집기. 이때 실제 로봇으로 수백만 번 넘어질 수 없으니 <b>시뮬레이터에서 학습하고 현실로 옮긴다(sim-to-real)</b>. 시뮬레이터의 마찰 · 무게를 일부러 매번 바꿔 가며 학습시키는 <b>도메인 무작위화</b>가 대표 기법이다.</div>
 <div class="neon"><b>Physical AI 트렌드</b>
 <ul class="ul">
   <li><b>Physical AI</b> &mdash; 화면 속이 아니라 <b>물리 세계에서 움직이는 AI</b>(로봇 · 자율주행 · 드론). 2025년 무렵부터 업계 키워드로 크게 떴다</li>
@@ -2629,7 +2629,7 @@ score = model.evaluate(x_test, y_test, verbose=0)
 
 <!-- ---------- 2. 데이터 · 배치 ---------- -->
 <h3 class="sub-title" id="lec-data">2 · 데이터를 빨리 모으는 법, 그리고 배치 크기</h3>
-<div class="lec"><b>필기 정리</b> &mdash; 어떻게 하면 데이터를 빨리 모을까? <b>공개 데이터를 내려받는다.</b> 데이터 증강도 가능하지만 그건 &lsquo;수집&rsquo;이 아니라 <b>기법</b>이다. 배치 사이즈는 보통 <b>2의 거듭제곱</b>(32 · 64 · 128 …)을 쓴다 &mdash; 컴퓨터가 2진수로 돌아가기 때문이다.</div>
+<div class="lec"><b>필기 정리</b> &mdash; 어떻게 하면 데이터를 빨리 모을까? <b>공개 데이터를 내려받는다.</b> 데이터 증강도 가능하지만 그건 &lsquo;수집&rsquo;이 아니라 <b>기법</b>이다. 배치 사이즈는 관례적으로 <b>2의 거듭제곱</b>(32 · 64 · 128 …)을 많이 쓰지만, 실제로 정하는 기준은 <b>GPU 메모리에 들어가는 크기와 학습 안정성</b>이다.</div>
 <div class="tbl-wrap">
 <table>
   <thead><tr><th>방법</th><th>무엇</th><th>주의</th></tr></thead>
@@ -2641,11 +2641,11 @@ score = model.evaluate(x_test, y_test, verbose=0)
   </tbody>
 </table>
 </div>
-<div class="fix" id="lec-batch"><b>&lsquo;배치는 2의 거듭제곱이어야 한다&rsquo;는 절반만 맞는 관습이다</b>
+<div class="fix" id="lec-batch"><b>배치 크기는 무엇을 기준으로 정하나</b>
 <ul class="ul">
-  <li><b>근거로 드는 것</b> &mdash; GPU는 연산을 32개 스레드 묶음(warp) 단위로 처리하고, 텐서 코어는 행렬 크기가 8의 배수일 때 효율이 좋다. 메모리도 2의 거듭제곱 단위로 정렬된다. 그래서 32 · 64 · 128 · 256처럼 쓰는 <b>습관</b>이 생겼다</li>
+  <li><b>2의 거듭제곱 관례가 생긴 이유</b> &mdash; GPU는 연산을 32개 스레드 묶음(warp) 단위로 처리하고, 텐서 코어는 행렬 크기가 8의 배수일 때 효율이 좋다. 메모리도 2의 거듭제곱 단위로 정렬된다. 그래서 32 · 64 · 128 · 256처럼 쓰는 <b>습관</b>이 생겼다</li>
   <li><b>실제로 재 보면</b> &mdash; Sebastian Raschka(2022)의 벤치마크와 W&amp;B의 실험에서 <b>128과 129처럼 2의 거듭제곱이 아닌 크기도 학습 속도 · 성능 차이가 거의 없었다</b>. 요즘 프레임워크와 GPU 라이브러리가 알아서 크기를 맞춰 주기 때문이다</li>
-  <li><b>진짜 기준</b> &mdash; ① <b>GPU 메모리에 들어가는 가장 큰 값</b> ② 학습이 안정적인지(너무 작으면 기울기가 요동, 너무 크면 일반화가 나빠질 수 있다) ③ 학습률과 함께 조정. 2의 거듭제곱은 이 범위 안에서 고르는 <b>무난한 기본값</b>일 뿐이다</li>
+  <li><b>실제 기준</b> &mdash; ① <b>GPU 메모리에 들어가는 가장 큰 값</b> ② 학습이 안정적인지(너무 작으면 기울기가 요동, 너무 크면 일반화가 나빠질 수 있다) ③ 학습률과 함께 조정. 2의 거듭제곱은 이 범위 안에서 고르는 <b>무난한 기본값</b>일 뿐이다</li>
 </ul></div>
 
 <!-- ---------- 3. 실험 설계 ---------- -->
@@ -2778,8 +2778,7 @@ torch.manual_seed(seed)      <span class="cm"># PyTorch 난수 (가중치 초기
 
 <!-- ---------- 5. 연합학습 · 증류 ---------- -->
 <h3 class="sub-title" id="lec-fl">5 · 연합학습 · 지식 증류 · 협력 학습 — 여러 모델을 합치고 가볍게</h3>
-<div class="lec"><b>필기 정리</b> &mdash; 표준화할 수 있는 기법으로 <b>연합학습</b>이 많이 쓰인다. 모델들 간의 가중치를 표준화하는 방법으로 <b>공동 모델</b>을 만든다. 트리 형태는 <b>계층 구조</b>로 운영한다. 각 모델을 <b>경량화</b>할 필요도 있다. 공동 모델을 각 모델에 적용할 때(top → down, server → local) <b>지식 증류</b>(Knowledge Distillation)를 쓴다 &mdash; 이게 기본 베이스다. <b>cooperative</b> 공동 학습 기법도 있다. 요즘엔 잘 안 하지만, 생성형 AI로 <b>증강</b>하거나 <b>도메인을 바꾸는 translation</b>도 있다.</div>
-<div class="fix"><b>연합학습의 핵심은 &lsquo;표준화&rsquo;보다 &lsquo;데이터를 옮기지 않는 것&rsquo;</b> &mdash; 연합학습(Federated Learning)이 풀려는 문제는 <b>데이터를 한곳에 모을 수 없는 상황</b>이다(병원마다 환자 데이터 · 휴대폰마다 키보드 입력 · 개인정보 규제). 그래서 <b>데이터 대신 모델(가중치)만</b> 주고받는다. 필기의 &lsquo;가중치 간 표준화&rsquo;는 여러 곳에서 온 가중치를 <b>하나로 합치는(aggregation) 규칙</b>을 말한 것으로 보면 정확하다.</div>
+<div class="lec"><b>필기 정리</b> &mdash; 데이터를 한곳에 모을 수 없을 때 <b>연합학습</b>이 많이 쓰인다. 데이터는 각자 두고 <b>모델 가중치만 모아 합쳐서</b> 하나의 <b>공동 모델</b>을 만든다. 트리 형태는 <b>계층 구조</b>로 운영한다. 각 모델을 <b>경량화</b>할 필요도 있다. 공동 모델을 각 모델에 적용할 때(top → down, server → local) <b>지식 증류</b>(Knowledge Distillation)를 쓴다 &mdash; 이게 기본 베이스다. <b>cooperative</b> 공동 학습 기법도 있다. 요즘엔 잘 안 하지만, 생성형 AI로 <b>증강</b>하거나 <b>도메인을 바꾸는 translation</b>도 있다.</div>
 
 <div class="pt plus" id="lec-fedavg">
   <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>연합학습 FedAvg — 한 라운드에 일어나는 일</h3>
@@ -2846,11 +2845,11 @@ torch.manual_seed(seed)      <span class="cm"># PyTorch 난수 (가중치 초기
 
 <!-- ---------- 6. XAI ---------- -->
 <h3 class="sub-title" id="lec-xai">6 · 설명 가능한 AI — Explainable vs Interpretable</h3>
-<div class="lec"><b>필기 정리</b> &mdash; 입력 → AI → 출력(왜 그런지 모름). ① 출력을 거꾸로 입력과 연결시키는 <b>Explainable AI</b> ② 모델 자체 · 내부를 해석하는 <b>Interpretable AI</b>. 의사결정을 위해서는 ②번 쪽이 많이 쓰인다 &mdash; <b>SHAP, IME, Grad-CAM</b>…(전통 기법들). 그러나 단순한 파라미터만 나온다. 요즘엔 <b>CoT</b>가 많이 쓰인다(교수님은 이것도 한물갔다고).</div>
-<div class="fix"><b>두 용어의 문헌상 구분</b>
+<div class="lec"><b>필기 정리</b> &mdash; 입력 → AI → 출력(왜 그런지 모름). 이를 설명하는 길은 둘이다. ① <b>Explainable AI</b> &mdash; 블랙박스 모델은 그대로 두고 <b>출력을 거꾸로 입력과 연결</b>해 설명한다(사후 설명). <b>SHAP · IME · LIME · Grad-CAM</b> 같은 전통 기법이 여기에 속하고, 결과는 특징별 기여도 숫자나 열 지도 정도라 <b>단순하다</b>. ② <b>Interpretable AI</b> &mdash; 의사결정나무 · 선형 모델처럼 <b>모델 자체를 사람이 해석</b>할 수 있게 만든다. 중요한 의사결정일수록 ②가 권장된다. 요즘 LLM에서는 <b>CoT</b>(풀이 과정 쓰게 하기)가 많이 쓰였지만, 교수님은 이것도 이미 지나간 흐름이라고 보셨다.</div>
+<div class="fix"><b>두 용어를 나누는 기준</b>
 <ul class="ul">
-  <li><b>문헌의 일반적 구분</b>(Rudin, <i>Nature Machine Intelligence</i> 2019) &mdash; <b>Interpretable</b> = 모델 <b>자체가 투명</b>해서 사람이 그대로 읽을 수 있는 것(9.4의 의사결정나무, 선형 회귀의 계수). <b>Explainable</b> = 블랙박스는 그대로 두고 <b>밖에서 설명을 덧붙이는</b> 것(사후 설명, post-hoc). Rudin은 &ldquo;중요한 결정에는 블랙박스를 설명하려 하지 말고 처음부터 해석 가능한 모델을 쓰라&rdquo;고 주장했다</li>
-  <li>이 기준으로 보면 <b>SHAP · LIME · Grad-CAM은 모두 사후 설명(Explainable 쪽)</b>이다 &mdash; 모델 내부 구조를 읽는 게 아니라 입력을 바꿔 보거나 기울기를 이용해 &lsquo;어느 입력이 출력에 얼마나 기여했나&rsquo;를 계산한다. 다만 기울기 · 내부 활성값을 쓰는 Grad-CAM 같은 방법을 &lsquo;모델 내부를 들여다본다&rsquo;는 뜻으로 ②에 넣는 설명도 있어, 교수님 구분은 그런 의미로 이해하면 된다</li>
+  <li><b>출처</b>(Rudin, <i>Nature Machine Intelligence</i> 2019) &mdash; <b>Interpretable</b> = 모델 <b>자체가 투명</b>해서 사람이 그대로 읽을 수 있는 것(9.4의 의사결정나무, 선형 회귀의 계수). <b>Explainable</b> = 블랙박스는 그대로 두고 <b>밖에서 설명을 덧붙이는</b> 것(사후 설명, post-hoc). Rudin은 &ldquo;중요한 결정에는 블랙박스를 설명하려 하지 말고 처음부터 해석 가능한 모델을 쓰라&rdquo;고 주장했다</li>
+  <li><b>SHAP · LIME · Grad-CAM이 &lsquo;사후 설명&rsquo;인 이유</b> &mdash; 모델 내부 구조를 읽는 게 아니라 입력을 바꿔 보거나 기울기를 이용해 &lsquo;어느 입력이 출력에 얼마나 기여했나&rsquo;를 계산한다. 모델이 무엇이든 붙일 수 있다는 장점이 있지만, 설명이 원래 모델을 완벽히 따라가지는 못한다(근사)</li>
   <li>7주차 XAI 교안의 &lsquo;설명 가능성 곡선&rsquo;(<a class="ext" href="machine-learning-week07.html#xai">7주차 7.6</a>)과 같은 이야기다 &mdash; 규칙 기반 · 결정 트리 · 선형 회귀는 해석 가능, 딥러닝은 블랙박스</li>
 </ul></div>
 
@@ -2892,7 +2891,7 @@ torch.manual_seed(seed)      <span class="cm"># PyTorch 난수 (가중치 초기
   </tbody>
 </table>
 </div>
-<div class="fix"><b>화살표는 &lsquo;시간 순서&rsquo;가 아니라 &lsquo;주도권이 넘어간 순서&rsquo;</b> &mdash; RNN은 1980년대, LSTM은 1997년, CNN(LeNet)은 1989년 무렵으로 둘 다 오래됐고, RNN이 CNN 다음에 나온 것이 아니다. 이미지는 CNN, 순서 데이터는 RNN이 각자 주력이던 시기가 있었고, 2017년 Transformer가 나온 뒤 <b>텍스트에서 시작해 이미지(ViT, 2020)까지</b> 하나의 구조로 통일되어 간 흐름으로 이해하면 정확하다.</div>
+<div class="fix"><b>화살표 읽는 법 — 주도권이 넘어간 순서</b> &mdash; CNN(LeNet, 1989 무렵)과 RNN(1980년대) · LSTM(1997)은 둘 다 오래된 구조로, <b>이미지는 CNN, 순서 데이터는 RNN</b>이 각자 주력이던 시기가 있었다. 2017년 Transformer가 나온 뒤 <b>텍스트에서 시작해 이미지(ViT, 2020)까지</b> 하나의 구조로 통일되었고, 그 위에서 규모를 키운 것이 LLM · VLM이다.</div>
 <div class="deep"><b>파운데이션 모델이란</b> &mdash; 이 용어는 스탠퍼드 보고서 &ldquo;On the Opportunities and Risks of Foundation Models&rdquo;(Bommasani et al., 2021)가 붙였다. 정의는 <b>&lsquo;대규모 데이터로 (대개 자기지도로) 폭넓게 학습해, 다양한 하위 과제에 맞춰 고쳐 쓸(adapt) 수 있는 모델&rsquo;</b>. 예로 BERT · GPT-3 · CLIP을 들었다. &lsquo;기초(foundation)&rsquo;라는 이름은 그 위에 많은 응용이 올라가지만 그 자체는 미완성이라는 뜻을 담았고, 보고서는 <b>하나의 기초 모델에 결함이 있으면 그 위의 모든 응용으로 퍼진다</b>는 위험도 강조했다. 교수님 말씀대로 데이터 · 계산 비용 때문에 대부분의 연구자는 직접 만들기보다 <b>공개 파운데이션 모델을 가져와 미세조정 · 증류</b>(5절)한다.</div>
 
 <!-- ---------- 8. 다음 연구 주제 ---------- -->
