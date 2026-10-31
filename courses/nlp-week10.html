@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자연어처리 | 10주차 수업내용</title>
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0c1a3a">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+.exam{background:#fef2f2;border:2px solid var(--red);border-radius:var(--radius);padding:11px 15px;font-size:12.5px;color:#7f1d1d;line-height:1.7;margin:0 0 12px;display:flex;gap:9px;align-items:flex-start}
+.exam .tag{flex-shrink:0;background:var(--red);color:#fff;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;margin-top:1px}
+table.exam-table th{background:#fdecec}
+table.exam-table td:first-child{background:#fef7f7}
+.pipe{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:14px 0}
+.pipe .st{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:12px;font-weight:700;text-align:center;line-height:1.5;flex:1 1 100px;min-width:88px}
+.pipe .st small{display:block;font-size:10px;font-weight:400;color:var(--muted);margin-top:2px}
+.pipe .st.raw{background:#f1f0ec;color:var(--muted)}
+.pipe .st.app{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pipe .arrow{color:var(--muted);font-size:14px;flex:0 0 auto}
+.cycle{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.cyc{background:var(--accent);color:#fff;border-radius:8px;padding:12px 12px 11px;font-size:12.5px;font-weight:700;text-align:center}
+.cyc em{display:block;font-style:normal;font-size:10.5px;font-weight:400;color:#dbe4f7;margin-top:4px;line-height:1.5}
+.cyc.dim{background:#7d9ad6}
+@media(max-width:480px){.cycle{grid-template-columns:1fr 1fr}}
+.cyc-note{grid-column:1/-1;background:#fff7ed;border:1px solid #f59e0b;border-radius:8px;padding:9px 12px;font-size:11.5px;color:#78350f;text-align:center}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+
+/* 주차 내비 */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .out{color:#c9f24b}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 용어 · 약어 표 — 좁은 화면에서도 가로 스크롤 없이 읽히게 */
+#terms table{min-width:0}
+#terms td:first-child{white-space:normal;width:1%;font-size:12.5px}
+#terms td{padding:9px 11px}
+
+/* 수식 카드 · 풀이 예제 (기계학습특론 페이지와 같은 규칙) */
+.fx{background:#f8faff;border:1px solid #cfdcf5;border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:10px 0}
+.fx-lab{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.fx-note{font-size:12px;color:#4b5563;line-height:1.7;margin-top:7px}
+.fx-note b{color:var(--ink)}
+.tex-d{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:9px 2px 5px;text-align:center}
+.tex-d .katex{font-size:1.08em}
+.ex{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin:10px 0}
+.ex-q{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.65;background:#f1f0ec;border-radius:7px;padding:9px 12px;margin-bottom:4px}
+.ex-q em{font-style:normal;color:var(--red);font-size:11px;font-weight:700;display:block;margin-bottom:3px}
+.step{display:grid;grid-template-columns:20px 1fr;gap:9px;align-items:baseline;font-size:12.5px;color:#4b5563;line-height:1.75;padding:5px 0}
+.step i{font-style:normal;font-weight:700;color:var(--accent);font-size:11.5px}
+.ex-ans{margin-top:8px;background:#f0fdf4;border:1px solid #22c55e;border-radius:8px;padding:9px 12px;font-size:12.5px;color:#14532d;line-height:1.7}
+.ex-ans b{color:var(--green)}
+.figs > .note-box{margin:0}
+/* 편집 거리 DP 표 */
+.lev table{min-width:0;width:auto;margin:0 auto;font-family:'Consolas','D2Coding',ui-monospace,monospace}
+.lev th,.lev td{text-align:center;padding:6px 10px;white-space:nowrap}
+.lev td.on{background:#fde68a;font-weight:700;color:#7c2d12}
+/* ===== 개념 하이라이트(형광펜) + 툴팁 ===== */
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);
+  border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+td .term,th .term{font-weight:700}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;
+  left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+/* ===== 심화 — 한 걸음 더 ===== */
+.deep{
+  background:#f7f5ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:13px 16px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.deep::before{
+  content:'🔎 한 걸음 더 — 심화 개념';display:table;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:8px;
+}
+.deep b{color:#2e1065}
+.deep .ul li{color:#3b2a6b}
+.deep .ul li::before{background:#6d28d9;opacity:.75}
+.deep .tbl-wrap{margin:9px 0 4px;background:#fff}
+.deep pre.code{margin:9px 0}
+.deep .fx{background:#fff;border-color:#d8cdf7;border-left-color:#6d28d9;margin:9px 0}
+.deep .fx-lab{color:#6d28d9}
+.deep .term{background:#ede7ff;color:#5b21b6;border-bottom-color:#6d28d9}
+.deep .term:hover,.deep .term.on{background:#ddd2fb}
+/* ===== 오답 포인트 — 문제에서 갈린 지점 ===== */
+.pit{
+  background:#fff7ed;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:12.5px;line-height:1.8;color:#7c2d12;
+}
+.pit::before{
+  content:'⚠ 여기서 갈린다';display:table;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.pit b{color:#7c2d12}
+.pit .ul li{color:#7c2d12}
+.pit .ul li::before{background:#b45309;opacity:.8}
+.pit table{min-width:0}
+.pit .tbl-wrap{margin:8px 0 4px;background:#fff}
+
+/* ===== 필기 구분 — 실시간 강의 강조 / 내 복습 필기 ===== */
+.live{
+  background:#fffaf3;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#7c2d12;
+}
+.live::before{
+  content:'🎙 실시간 강의 강조';display:table;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.live b{color:#7c2d12}
+.live .ul li{color:#7c2d12}
+.live .ul li::before{background:#b45309;opacity:.75}
+.mynote{
+  background:#f5f3ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.mynote::before{
+  content:'📝 내 복습 필기 · 추가 개념';display:table;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.mynote b{color:#2e1065}
+.mynote .ul li{color:#3b2a6b}
+.mynote .ul li::before{background:#6d28d9;opacity:.75}
+.mynote table{min-width:0}
+.mynote .tbl-wrap{margin:8px 0 4px;background:#fff}
+.mynote pre.code{margin:9px 0}
+.mynote .fx{background:#fff;border-color:#d8cdf7;border-left-color:#6d28d9;margin:9px 0}
+/* 분류 알고리즘 바로가기 카드 */
+.algo{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:9px;margin:12px 0}
+.algo a{display:block;background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:11px 13px;text-decoration:none;color:inherit;transition:border-color .12s,transform .12s}
+.algo a:hover{border-color:var(--accent);transform:translateY(-1px)}
+.algo a b{display:block;font-size:13.5px;color:var(--ink)}
+.algo a small{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}
+.algo a span{display:block;font-size:12px;color:#4b5563;line-height:1.65}
+.algo a em{display:block;font-style:normal;font-size:11px;color:var(--accent);font-weight:700;margin-top:6px}
+/* 재현율 점 그림 */
+.dots{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0 4px}
+.dots i{width:15px;height:15px;border-radius:50%;display:inline-block}
+.dots i.tp{background:#16a34a}
+.dots i.fn{background:#fff;border:2px solid #dc2626}
+.dots i.fp{background:#f59e0b}
+.dots-lab{font-size:11.5px;color:#4b5563}
+/* 시그모이드 그림 */
+.sig{display:block;width:100%;max-width:420px;height:auto;margin:8px auto 2px;background:#fff;border:1px solid #d8cdf7;border-radius:8px}
+/* ===== 복습하기 ===== */
+.rv{background:var(--surface);border:1px solid var(--border);border-left:4px solid #0f766e;border-radius:var(--radius);margin:10px 0;overflow:hidden}
+.rv summary{cursor:pointer;list-style:none;padding:12px 15px;font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.6;display:flex;gap:9px;align-items:baseline}
+.rv summary::-webkit-details-marker{display:none}
+.rv summary i{font-style:normal;flex:none;font-size:11px;font-weight:800;color:#fff;background:#0f766e;border-radius:999px;padding:1px 8px}
+.rv summary::after{content:'답 보기 ▾';margin-left:auto;flex:none;font-size:11px;font-weight:700;color:#0f766e}
+.rv[open] summary::after{content:'접기 ▴'}
+.rv .ans{border-top:1px dashed #99e0d6;background:#f0fdfa;padding:12px 15px;font-size:13px;line-height:1.85;color:#134e4a}
+.rv .ans b{color:#0f3d3a}
+.rv .ans .ul li{color:#134e4a}
+.rv .ans .tbl-wrap{background:#fff;margin:8px 0}
+.rv .ans table{min-width:0}
+.rv .ans pre.code{margin:8px 0}
+.rv .one{display:block;background:#fff;border:1px solid #99e0d6;border-radius:7px;padding:7px 11px;margin-bottom:8px;font-weight:700;color:#0f3d3a}
+/* 범례 */
+.mark-legend{display:flex;flex-wrap:wrap;gap:8px 18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px 14px;margin:-14px 0 26px;font-size:12.5px;color:#4b5563;line-height:1.6}
+.mark-legend span{display:inline-flex;align-items:center;gap:6px}
+.hi{background:linear-gradient(transparent 58%,#ffe9a8 58%);font-weight:700;color:var(--ink);padding:0 1px}
+.mark-legend i{width:12px;height:12px;border-radius:3px;display:inline-block;flex-shrink:0}
+/* 7주차 추가: 한 줄 요약 · SVG 도식 */
+.oneline{background:#16233f;color:#e7edf9;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+.oneline > p{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:#c9f24b}
+.oneline .ul li{color:#c5d0e8;font-size:13px}
+.oneline .ul li b{color:#fff}
+.oneline .ul li::before{background:#c9f24b;opacity:.9}
+.oneline .hi{color:#16233f}
+.svgfig{padding:11px 11px 9px}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:560px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#docs">강의자료</a>
+  <a href="#goal">개요</a>
+  <a href="#tm-intro">10.1.1 토픽 모델링 개요</a>
+  <a href="#tm-bow">10.1.2 BoW · 문서-단어 행렬</a>
+  <a href="#lsa">10.1.3 LSA</a>
+  <a href="#lda">10.1.4 LDA</a>
+  <a href="#tm-eval">10.1.5 평가 · 구현</a>
+  <a href="#sa-intro">10.2.1 감성 분석 개요</a>
+  <a href="#sa-types">10.2.2 유형 · 용어</a>
+  <a href="#sa-apps">10.2.3 응용 분야</a>
+  <a href="#sa-tools">10.2.4 도구</a>
+  <a href="#sa-train">10.2.5 데이터 · 학습 · 평가</a>
+  <a href="#mrc-intro">10.3.1 기계 독해 개요</a>
+  <a href="#mrc-bert">10.3.2 BERT 질의응답</a>
+  <a href="#mrc-eval">10.3.3 평가 · 동향</a>
+  <a href="#wrap10">10.4 요약 · 실습</a>
+  <a href="#lab">실습 노트북</a>
+  <a href="#hw">과제 · 제출</a>
+  <a href="#next">다음 주 예고</a>
+</nav>
+
+<div class="wrap">
+
+<div class="weeknav">
+  <a href="nlp.html" class="plan">← 강의계획서</a>
+  <a href="nlp-week07.html">7주차 · 개체명 인식 · 언어 모델 · 정보 추출</a>
+  <a href="nlp-week08.html">8주차 · 중간 정리 · 700제</a>
+  <a href="nlp-week09.html">9주차 · 질의응답 · 기계번역 · 대화 시스템</a>
+  <span class="cur">10주차 · 토픽 모델링 · 감성 분석 · 기계 독해</span>
+</div>
+
+<section class="hero">
+  <p class="kicker">10주차 · 11.2 ~ 11.8 · 2026-2학기</p>
+  <h1>CHAPTER 10 — 토픽 모델링, 감성 분석, 그리고 기계 이해</h1>
+  <p>핵심 질문은 &ldquo;<b>문서의 주제와 감정을 어떻게 파악하는가?</b>&rdquo;이다. 한 문서를 세 방향에서 읽는다 &mdash; <b>무엇에 관한 글인가</b>(10.1 토픽 모델링, 주제 발견), <b>어떤 감정을 담고 있는가</b>(10.2 감성 분석, 태도 판별), <b>무엇을 묻고 답할 수 있는가</b>(10.3 기계 독해, 내용 이해). 세 과제 모두 텍스트를 수치로 바꿔 처리한다는 공통점이 있지만, 학습 방식은 각각 <b>비지도 · 지도 · 사전학습 모델의 미세조정</b>으로 다르다.</p>
+  <div class="chips"><span class="chip">LSA = SVD</span><span class="chip">LDA = 디리클레 · α · β</span><span class="chip">혼란도 vs 응집도</span><span class="chip">극성 −1~+1 · 강도</span><span class="chip">ABSA</span><span class="chip">TF-IDF + 로지스틱 회귀</span><span class="chip">SQuAD · KorQuAD</span><span class="chip">BERT span · EM/F1</span><span class="chip">교안 73p</span><span class="chip">100문제</span></div>
+</section>
+
+<div class="mark-legend">
+  <span><i style="background:#eef6ff;border:1px solid #1b3f8b"></i><b class="term" tabindex="0" data-tip="이렇게 파란 형광펜이 칠해진 말에 손을 올리거나(모바일은 탭) 하면 짧은 설명이 뜹니다.">어려운 용어</b> — 커서를 올리면(모바일은 탭) 설명이 뜹니다</span>
+  <span><i style="background:#f7f5ff;border:1px solid #6d28d9"></i><b>🔎 한 걸음 더</b> — 교안 한 줄을 끝까지 파고든 심화 설명</span>
+  <span><i style="background:#fff7ed;border:1px solid #b45309"></i><b>⚠ 여기서 갈린다</b> — 헷갈리기 쉬운 지점을 정면으로 비교</span>
+</div>
+
+<!-- ===================== 강의자료 ===================== -->
+<section class="sec" id="docs">
+  <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">10주차 강의자료<small>제목을 누르면 앱 실행 없이 화면에서 바로 열립니다</small></h2></div>
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📘</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=nlp-w10-slides">자연어처리 CHAPTER 10 — 토픽 모델링, 감성 분석, 그리고 기계 이해</a>
+      <p>10.1 토픽 모델링(BoW · LSA · LDA · 평가) / 10.2 감성 분석(유형 · 응용 · 도구 · 학습 · 평가) / 10.3 기계 독해(유형 · SQuAD · BERT · EM/F1) / 10.4 요약 · <b>73페이지</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week10-slides.pdf" download="자연어처리_10주차_토픽모델링_감성분석_기계이해.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>☁️</span>Claude</div>
+    <div class="doc-main">
+      <a class="doc-open" href="https://claude.ai/artifact/GT9fhUJsDGDrRVoWWUN4pG" target="_blank" rel="noopener">10주차 100문제 — 다른 기기에서 이어 풀기(Claude 계정 저장) ↗</a>
+      <p>폰 · 태블릿 · PC 어디서 열어도 <b>같은 풀이 기록</b>이 이어진다. 답을 고르면 해설 아래에 <b>이 페이지의 개념 바로가기</b>와 핵심 · 함정 정리가 붙는다(정답이어도 펼쳐 둔다). 북마크 · 개념 슬라이서가 있고, 마지막 결과 화면은 원래 문제지와 같은 모양이라 <b>그대로 캡처해 제출</b>하면 된다</p>
+    </div>
+    <a class="doc-dl" href="https://claude.ai/artifact/GT9fhUJsDGDrRVoWWUN4pG" target="_blank" rel="noopener">열기 ↗</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📝</span>HTML</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week10-quiz100.html" target="_blank" rel="noopener">10주차 토픽 모델링 · 감성 분석 · 기계 이해 100문제 (원본) ↗</a>
+      <p>교수님이 올린 원본 문제지 · 기록이 이 브라우저에만 남는다 · 절별 문제는 아래 각 절 제목 옆 버튼으로도 열린다 · <b>10.2.5 데이터 · 학습 · 평가가 11문항으로 가장 많다</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week10-quiz100.html" download="자연어처리_10주차_100문제.html">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>🐍</span>IPYNB</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week10-lab.ipynb" download="10주차_실습_문제.ipynb">10주차 실습 노트북 (문제) — 이것을 풀어 제출</a>
+      <p>[실습 1] 토픽 모델링 · [실습 2] 감성 분석 · [실습 3] 기계 독해 + <b>과제 3문항(100점)</b> · 실습 3만 <code>transformers</code> 모델을 내려받는다</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week10-lab.ipynb" download="10주차_실습_문제.ipynb">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>✅</span>IPYNB</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week10-lab-solution.ipynb" download="10주차_실습_정답.ipynb">10주차 실습 노트북 (정답)</a>
+      <p>출력이 비어 있는 상태로 올라왔다 · 아래 <a class="ext" href="#lab">실습 절</a>의 실습 1 · 2 수치는 <b>정답 노트북을 직접 실행해 얻은 값</b>이고, 실습 3(질의응답 모델)은 실행하지 못해 코드 해설만 붙였다</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week10-lab-solution.ipynb" download="10주차_실습_정답.ipynb">⬇ 다운로드</a>
+  </div>
+</div>
+</section>
+
+<!-- ===================== 개요 ===================== -->
+<section class="sec" id="goal">
+  <div class="sec-head"><span class="sec-badge">GOAL</span><h2 class="sec-title">학습 목표와 10주차 개요<small>교안 2 · 3p · 한 문서를 세 방향에서 읽는다</small></h2></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>질문</th><th>과제</th><th>무엇을 하나</th><th>주된 학습 방식</th><th>9주차와의 연결</th></tr></thead>
+  <tbody>
+    <tr><td>무엇에 관한 글인가?</td><td><b>10.1 토픽 모델링</b></td><td>주제 발견</td><td><b>비지도 학습</b></td><td>기계학습특론 9주차 군집화와 같은 &lsquo;정답 없는&rsquo; 학습</td></tr>
+    <tr><td>어떤 감정을 담고 있는가?</td><td><b>10.2 감성 분석</b></td><td>태도 판별</td><td><b>지도 학습</b></td><td><a class="ext" href="nlp-week05.html">5주차 텍스트 분류</a>의 응용</td></tr>
+    <tr><td>무엇을 묻고 답할 수 있는가?</td><td><b>10.3 기계 독해</b></td><td>내용 이해</td><td><b>사전학습 모델의 미세조정</b></td><td><a class="ext" href="nlp-week09.html#mrc">9주차 9.1.3 MRC</a>를 더 깊게</td></tr>
+  </tbody>
+</table>
+</div>
+<p>교안 56p의 대비가 이 표의 요약이다 &mdash; 토픽 모델링은 <b>&lsquo;무엇에 관한 글인가&rsquo;</b>, 감성 분석은 <b>&lsquo;어떤 태도인가&rsquo;</b>, 기계 독해는 <b>&lsquo;무엇이라고 말하고 있는가&rsquo;</b>를 다룬다. 앞의 둘은 단어의 통계적 분포만으로도 꽤 풀리지만, 기계 독해는 문장 사이의 관계와 문맥을 파악해야 한다.</p>
+</section>
+
+<!-- ===================== 10.1.1 ===================== -->
+<section class="sec" id="tm-intro">
+  <div class="sec-head"><span class="sec-badge">10.1.1</span><h2 class="sec-title">토픽 모델링이란<small>교안 4~14p · 정답 없이 주제를 찾는다</small></h2></div>
+
+<h3 class="sub-title" id="tm-def">정의 — 비지도 학습으로 주제를 찾는다 (교안 5 · 6p)</h3>
+<div class="note-box"><b>토픽 모델링</b>은 문서 모음에서 <b>의미를 포착하는 간단한 방법</b>이다. 문서 안 단어(토큰)에 통계 분석을 한 뒤, 그 통계로 문서를 토픽에 자동으로 할당한다.
+<ul class="ul">
+  <li><b>문서</b> &mdash; <b>의미상 하나로 묶이는 단어들의 집합</b>. 프로젝트에 따라 트윗만큼 짧을 수도, 기사만큼 길 수도 있다</li>
+  <li><b>비지도 학습</b> &mdash; 훈련할 때 &lsquo;이 문서는 스포츠 토픽&rsquo; 같은 <b>정답 예시를 주지 않는다</b>. 알고리즘이 스스로 토픽을 찾는다</li>
+  <li><b>이점</b> &mdash; 흥미로운 토픽을 발견할 뿐 아니라, 텍스트에 토픽 레이블을 붙이는 <b>수작업을 줄여 준다</b></li>
+  <li>대표 알고리즘 &mdash; <b>잠재 의미 분석(LSA)</b>과 <b>잠재 디리클레 할당(LDA)</b></li>
+</ul></div>
+
+<h3 class="sub-title" id="tm-latent">토픽은 &lsquo;잠재적&rsquo;이다 · 토픽 개수 K (교안 7 · 8p)</h3>
+<ul class="ul">
+  <li>목표는 문서 집합을 분류하는 데 쓸 토픽들을 찾는 것이다. 그런데 <b>어떤 토픽이 있는지 미리 알 수 없으므로</b> 토픽은 <b>잠재적(latent)</b>이다</li>
+  <li>토픽에는 <b>이름이 없다</b>. 단지 몇몇 문서가 서로 비슷하다고 추측할 뿐이라, 찾은 토픽이 사람이 아는 주제와 꼭 들어맞지 않을 수 있다</li>
+  <li>토픽은 여러 문서가 <b>공유하는</b> 잠재 요인이므로 <b>토픽 개수는 문서 개수보다 훨씬 적어야</b> 한다</li>
+  <li><b>K는 하이퍼파라미터</b>다. 문서가 많거나 다양하면 늘리고, 작은 집합이면 줄인다. 정량 지표(응집도 · 혼란도)와 정성 평가를 함께 써서 정한다(<a class="ext" href="#tm-metric">10.1.5</a>)</li>
+</ul>
+<div class="pit"><b>&lsquo;잠재적&rsquo;의 뜻을 바꿔 친 보기에 주의</b> &mdash; 잠재적인 이유는 &ldquo;미리 알 수 없어서&rdquo;다. &ldquo;항상 확률값이라서&rdquo;(그건 LDA의 출력 형태), &ldquo;사람이 미리 이름을 붙여 둬서&rdquo;(정반대 &mdash; 이름은 결과를 본 뒤 사람이 붙인다), &ldquo;토픽이 문서보다 많아서&rdquo;(정반대 &mdash; 훨씬 적어야 한다)는 모두 틀렸다.</div>
+
+<h3 class="sub-title" id="tm-apps">적용 분야 여섯 가지 (교안 9~14p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>분야</th><th>무엇을 하나 · 예</th></tr></thead>
+  <tbody>
+    <tr><td><b>테마 찾기</b></td><td>문서 모음에 어떤 테마가 있는지 파악하고 분류 &mdash; 법률 검색에서 문서를 테마별로, 고객 문의(VOC) 로그에서 반복되는 불만 유형 발견</td></tr>
+    <tr><td><b>탐색적 데이터 분석</b></td><td>본격 모델링 전에 데이터를 자연스럽게 묶어 보고, 고르게 분포하는지 한쪽으로 치우쳤는지 파악 &mdash; 알고리즘 선택에 유리한 위치</td></tr>
+    <tr><td><b>문서 클러스터링</b></td><td>BoW · TF-IDF는 어휘 크기만큼 차원이 커서 거리 계산이 잘 안 된다 → <b>토픽 분포를 먼저 구한 뒤 그 위에서 군집화</b>하면 더 안정적</td></tr>
+    <tr><td><b>차원 축소</b></td><td>문서는 단어 수만큼 차원이 크다 &mdash; 예: <b>어휘 20,000개의 문서 벡터 → 토픽 20개의 벡터</b></td></tr>
+    <tr><td><b>역사적 분석</b></td><td>시기별로 나눠 토픽 분포를 비교 &mdash; 연도별 신문 기사의 사회적 이슈 등장 · 소멸, 논문 초록의 연구 주제 흐름</td></tr>
+    <tr><td><b>추천 및 검색</b></td><td>문서를 토픽 벡터로 표현하면 <b>단어가 정확히 겹치지 않아도</b> 의미가 비슷한 문서를 찾는다(의미 기반 색인) &mdash; 읽은 문서와 토픽 분포가 가까운 문서 추천</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>문서 클러스터링 · 차원 축소 · 검색이 사실 같은 이야기인 이유</b> &mdash; 세 응용 모두 &lsquo;20,000차원 단어 공간 → 20차원 토픽 공간&rsquo;이라는 한 번의 변환을 다르게 쓴 것이다. 고차원에서는 모든 점이 서로 비슷하게 멀어져 거리가 무의미해진다(차원의 저주, <a class="ext" href="nlp-week05.html">5주차</a>). 토픽 공간에서는 &lsquo;football&rsquo;과 &lsquo;soccer&rsquo;처럼 다른 단어가 같은 토픽 축에 모이므로, 단어가 겹치지 않는 문서끼리도 가깝게 놓인다 &mdash; 9주차에서 본 <a class="ext" href="nlp-week09.html#ir-tfidf">어휘 불일치(lexical gap)</a>를 줄이는 또 하나의 방법이다. 실습 1-5의 &lsquo;토픽 공간에서의 문서 유사도&rsquo; 셀이 이것을 직접 보여 준다.</div>
+</section>
+
+<!-- ===================== 10.1.2 ===================== -->
+<section class="sec" id="tm-bow">
+  <div class="sec-head"><span class="sec-badge">10.1.2</span><h2 class="sec-title">단어 모음 · 문서-단어 행렬 · 토픽 모델의 가정<small>교안 15~17p</small></h2></div>
+
+<h3 class="sub-title" id="bow">단어 모음(Bag of Words) (교안 15p)</h3>
+<p>알고리즘을 보기 전에 먼저 가정을 하나 둔다 &mdash; 문서를 <b>단어 모음(BoW)</b>으로 취급한다. 문서의 <b>구조 · 순서 · 문법을 무시</b>하고 단어 개수만 쓴다는 뜻이다. 그러면 개수와 확률에 기대는 알고리즘을 쓸 수 있지만, 순서를 버리는 대가로 <b>약간의 정보를 잃는다</b>(&lsquo;개가 사람을 물었다&rsquo;와 &lsquo;사람이 개를 물었다&rsquo;가 같은 BoW다). BoW는 <b>각 고유 단어와 그 단어의 정수형 출현 개수를 담은 사전</b>이다(<a class="ext" href="nlp-week05.html">5주차 5.1.2</a>).</p>
+
+<h3 class="sub-title" id="dtm">문서-단어 행렬과 TF-IDF (교안 16p)</h3>
+<p>문서 모음 전체를 하나의 행렬로 쓴 것이 <b>문서-단어 행렬(Document-Term Matrix)</b>이다 &mdash; <b>행은 문서, 열은 어휘 사전의 단어, 원소는 출현 빈도</b>.</p>
+<div class="fx">
+  <div class="tex-d">\mathrm{TF\text{-}IDF}(t,d)=\mathrm{TF}(t,d)\times\mathrm{IDF}(t),\qquad\mathrm{IDF}(t)=\log\frac{N}{df(t)}</div>
+  <p class="fx-note">단순 빈도는 &lsquo;the&rsquo;, &lsquo;그리고&rsquo;처럼 <b>자주 나오지만 변별력 없는 단어</b>에 큰 값을 준다. IDF는 단어가 나온 문서 수 <span class="tex">df(t)</span>가 <b>적을수록</b> 커져 희귀한 단어를 강조한다. 모든 문서에 나오는 단어는 <span class="tex">\log(N/N)=0</span>이다. 9주차 IR 기반 QA의 문서 검색과 같은 식이다.</p>
+</div>
+
+<h3 class="sub-title" id="tm-assume">토픽 모델링 알고리즘의 공통 가정 (교안 17p)</h3>
+<div class="flow">
+  <div class="fl"><b>① 토픽에는 단어들의 집합이 들어 있다</b><span>스포츠 토픽 = {football, team, goal, match …}</span></div>
+  <div class="fl"><b>② 문서는 일련의 토픽들로 구성된다</b><span>한 문서가 여러 토픽을 섞어 가질 수 있다</span></div>
+  <div class="fl"><b>③ 토픽은 보이지 않는 &lsquo;숨겨진 단어 생성기&rsquo;다</b><span>관측되는 것은 단어뿐이다</span></div>
+</div>
+<p>이 가정 위에서 알고리즘들은 <b>토픽을 찾는 방법</b>에 따라 갈린다 &mdash; LSA는 선형대수로, LDA는 확률 모형으로. &ldquo;토픽은 사람이 사전에 이름과 범위를 정해 줘야 한다&rdquo;는 가정에 없다 &mdash; 이름 붙이기는 결과를 해석하는 단계의 일이다.</p>
+</section>
+
+<!-- ===================== 10.1.3 ===================== -->
+<section class="sec" id="lsa">
+  <div class="sec-head"><span class="sec-badge">10.1.3</span><h2 class="sec-title">잠재 의미 분석 LSA<small>교안 18~20p · 문서-단어 행렬을 특이값 분해한다</small></h2></div>
+
+<h3 class="sub-title" id="lsa-def">개념과 동작 방식 (교안 18p)</h3>
+<p><b>LSA(Latent Semantic Analysis)</b>는 특히 <b>문서 색인의 의미 검색</b>에 쓰인다. 목표는 문서와 단어의 바탕에 있는 <b>잠재적인 토픽</b>을 찾는 것이고, 그 토픽이 문서 속 단어 분포를 주도한다고 가정한다. 입력은 문서-단어 행렬이다.</p>
+
+<h3 class="sub-title" id="svd">특이값 분해 SVD (교안 19p)</h3>
+<div class="fx">
+  <div class="tex-d">A_{(N\times M)}\;\approx\;U_{(N\times K)}\;\Sigma_{(K\times K)}\;V^\top_{(K\times M)}\qquad(N:\text{문서 수},\;M:\text{어휘 수},\;K:\text{토픽 수})</div>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>행렬</th><th>크기</th><th>뜻</th></tr></thead>
+  <tbody>
+    <tr><td><b>U</b></td><td>N × K</td><td><b>문서-토픽</b> 행렬 &mdash; 각 문서가 어떤 토픽으로 구성되는지</td></tr>
+    <tr><td><b>Σ</b></td><td>K × K</td><td><b>토픽 중요도</b>를 나타내는 <b>대각 행렬(특이값)</b></td></tr>
+    <tr><td><b>Vᵀ</b></td><td>K × M</td><td><b>토픽-단어</b> 행렬 &mdash; 각 단어가 어떤 토픽과 관련되는지</td></tr>
+  </tbody>
+</table>
+</div>
+<p>상위 K개의 특이값만 남기는 <b>절단된 SVD(Truncated SVD)</b>로 차원을 줄인다. 행렬을 전치하면 단어-문서 기준으로도 똑같이 전개할 수 있다.</p>
+<div class="deep"><b>크기 맞추기 요령과 &lsquo;왜 상위 K개인가&rsquo;</b> &mdash; 곱이 성립하려면 안쪽 크기가 맞아야 한다: <span class="tex">(N\times K)(K\times K)(K\times M)=(N\times M)</span>. 그래서 U의 행은 문서, Vᵀ의 열은 단어다. 특이값은 큰 순서로 정렬되어 있고, 큰 특이값일수록 원래 행렬의 변동을 많이 설명한다. 그래서 상위 K개만 남기면 &lsquo;원 행렬에 가장 가까운 K차원 근사&rsquo;가 된다(Eckart–Young 정리). 실습에서는 <code>TruncatedSVD</code>의 <code>explained_variance_ratio_</code>가 각 성분이 설명하는 몫이다. 9주차 컴퓨터비전의 8점 알고리즘이 &lsquo;가장 <b>작은</b> 특이값&rsquo;을 쓴 것과 반대로, LSA는 &lsquo;가장 <b>큰</b> 특이값들&rsquo;을 쓴다 &mdash; 앞은 잡음 속 영공간을, 뒤는 신호의 주성분을 찾기 때문이다.</div>
+
+<h3 class="sub-title" id="lsa-proscons">장점 · 단점 · 구현 (교안 20p)</h3>
+<div class="cards">
+  <div class="card2"><b>장점</b><ul class="ul"><li>구현이 간단하고 계산이 빠르다</li><li><b>동의어 문제를 어느 정도 완화</b>한다 &mdash; 함께 나오는 단어들이 같은 토픽 축에 묶인다</li><li>문서 간 의미적 유사도 계산에 바로 쓸 수 있다</li></ul></div>
+  <div class="card2"><b>단점</b><ul class="ul"><li>결과에 <b>음수</b>가 섞여 토픽을 <b>확률로 해석하기 어렵다</b></li><li>새 문서는 기존 분해 결과로 사영(fold-in)할 수 있지만, 어휘 · 잠재 공간을 갱신하려면 <b>재분해</b>가 필요하다</li><li><b>다의어</b> 문제를 제대로 다루지 못한다 &mdash; &lsquo;bank&rsquo;(은행 / 강둑)가 한 벡터에 섞인다</li></ul></div>
+</div>
+<p>구현 &mdash; scikit-learn <b><code>TruncatedSVD</code></b>, gensim <b><code>LsiModel</code></b>. &ldquo;K를 지정할 필요가 없다&rdquo;는 LSA의 단점 목록에도 없고 사실도 아니다 &mdash; LSA도 K(<code>n_components</code>)를 정해야 한다.</p>
+<div class="pit"><b>실습에서 드러나는 LSA의 함정 — 성분 0은 &lsquo;평균 방향&rsquo;</b> &mdash; TF-IDF 행렬은 모든 원소가 0 이상이라, SVD의 첫 성분은 보통 &lsquo;모든 문서가 공통으로 가진 방향&rsquo;을 잡는다. 그래서 그대로 argmax 하면 <b>거의 모든 문서가 토픽 0으로 몰린다</b>. 정답 노트북은 K개 토픽을 쓰려고 <b>K + 1개</b> 성분을 뽑고, 성분 0을 빼고 배정한다. 또 SVD 특이벡터의 <b>부호는 임의</b>라(벡터 전체에 −1을 곱해도 같은 분해다) 성분마다 문서 점수 합이 양수가 되도록 부호를 맞춘다. LDA는 결과가 확률이라 이런 처리가 필요 없다 &mdash; 두 방법의 중요한 차이다.<br>
+<b>단, 직접 실행해 보면 이 가정이 늘 맞지는 않는다</b> &mdash; 24문장 실습 데이터에서는 성분 0이 평균 방향이 아니라 <b>스포츠 토픽</b>(team, game, match, football …)으로 나왔다. 그래서 성분 0을 빼면 스포츠 문서가 2 · 1 · 5로 흩어진다. 성분 0을 <b>포함</b>해 배정하면 8 · 8 · 6 · 2로 오히려 세 주제와 더 잘 맞는다(<a class="ext" href="#lab1">실습 1 실행 결과</a>). &lsquo;성분 0 제외&rsquo;는 규칙이 아니라 <b>상위 단어를 보고 판단할 일</b>이다.</div>
+</section>
+
+<!-- ===================== 10.1.4 ===================== -->
+<section class="sec" id="lda">
+  <div class="sec-head"><span class="sec-badge">10.1.4</span><h2 class="sec-title">잠재 디리클레 할당 LDA<small>교안 21~23p · 문서가 만들어지는 과정을 확률로 가정한다</small></h2></div>
+
+<h3 class="sub-title" id="lda-gen">생성 과정 (교안 21p)</h3>
+<p><b>LDA(Latent Dirichlet Allocation)</b>는 문서가 만들어지는 과정을 확률적으로 가정한 <b>생성 모형</b>이다. <b>각 문서는 여러 토픽의 혼합</b>이고, <b>각 토픽은 여러 단어의 확률 분포</b>다.</p>
+<div class="flow">
+  <div class="fl"><b>1. 문서 d의 토픽 분포 θ를 디리클레 분포에서 뽑는다</b><span>예: 이 문서는 스포츠 0.7 · 금융 0.2 · 요리 0.1</span></div>
+  <div class="fl"><b>2. 문서의 각 단어 위치마다 토픽 z를 θ에서 뽑는다</b><span>이번 자리는 &lsquo;스포츠&rsquo;</span></div>
+  <div class="fl"><b>3. 선택된 토픽 z의 단어 분포 φ에서 실제 단어 w를 뽑는다</b><span>스포츠 토픽에서 &lsquo;goal&rsquo;</span></div>
+</div>
+<p>관측되는 것은 <b>단어 w뿐</b>이다. 그래서 거꾸로 <b>θ와 φ를 추정</b>하는 것이 학습이다. 생성 순서는 &lsquo;분포 θ → 토픽 z → 단어 w&rsquo;이고, 단어를 먼저 뽑거나 SVD로 θ · φ를 직접 계산하는 것이 아니다.</p>
+<div class="deep"><b>디리클레 분포는 &lsquo;확률 분포를 뽑는 분포&rsquo;</b> &mdash; 주사위 하나를 던지면 숫자가 나오고, 디리클레 분포에서 한 번 뽑으면 <b>합이 1인 확률 벡터 하나</b>가 나온다(예: [0.7, 0.2, 0.1]). 그래서 &lsquo;문서마다 다른 토픽 비율&rsquo;을 만드는 데 딱 맞는다. 7주차 언어 모델이 &lsquo;앞 단어 → 다음 단어&rsquo;의 확률을 셌다면, LDA는 &lsquo;문서 → 토픽 → 단어&rsquo;라는 두 단계 확률로 문서를 설명한다(<a class="ext" href="nlp-week07.html#lm">7주차</a>).</div>
+
+<h3 class="sub-title" id="lda-hyper">하이퍼파라미터 α · β · K와 추론 (교안 22p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>하이퍼파라미터</th><th>무엇의 사전 분포</th><th>작으면</th><th>크면</th></tr></thead>
+  <tbody>
+    <tr><td><b>α (알파)</b></td><td><b>문서-토픽</b> 분포 θ</td><td>문서가 <b>소수의 토픽에 집중</b></td><td>여러 토픽에 고르게 퍼짐</td></tr>
+    <tr><td><b>β (베타)</b></td><td><b>토픽-단어</b> 분포 φ</td><td>토픽이 <b>소수의 단어로 뚜렷</b>해짐</td><td>많은 단어에 퍼짐</td></tr>
+    <tr><td><b>K</b></td><td>&mdash;</td><td colspan="2">토픽의 개수 &mdash; 분석자가 <b>직접 지정</b></td></tr>
+  </tbody>
+</table>
+</div>
+<p><b>추론 방법</b> &mdash; <b>깁스 샘플링(Gibbs Sampling)</b>과 <b>변분 추론(Variational Inference)</b>이 주로 쓰인다. scikit-learn의 <code>LatentDirichletAllocation</code>은 변분 추론이고, <code>doc_topic_prior</code>가 α, <code>topic_word_prior</code>가 β다(None이면 1/K).</p>
+<div class="pit"><b>α와 β를 바꿔 친 보기</b> &mdash; 이름의 앞 글자로 외우면 쉽다. <b>α는 문서(document) 쪽</b>, <b>β는 단어 쪽</b>. &ldquo;작으면 소수에 집중, 크면 고르게&rdquo;는 둘 다 같은 방향이고, 집중하는 대상만 다르다 &mdash; α가 작으면 <b>문서가</b> 소수 토픽에, β가 작으면 <b>토픽이</b> 소수 단어에. 그리고 둘 다 <b>K를 자동으로 정해 주지 않는다</b>.</div>
+
+<h3 class="sub-title" id="lda-result">결과 해석 · 장점 · 단점 (교안 23p)</h3>
+<ul class="ul">
+  <li>각 토픽은 <b>확률이 높은 상위 단어 목록</b>으로 제시되고, <b>토픽의 이름은 사람이 붙인다</b></li>
+  <li>각 문서는 토픽에 대한 <b>확률 분포</b>라서 <b>합이 1</b>이다 &mdash; 한 문서가 한 토픽에만 배정되는 것이 아니다</li>
+</ul>
+<div class="cards">
+  <div class="card2"><b>장점</b><ul class="ul"><li>결과가 <b>확률</b>이라 해석이 직관적이다</li><li>학습된 모델로 <b>새 문서의 토픽 분포도 추론</b>할 수 있다</li></ul></div>
+  <div class="card2"><b>단점</b><ul class="ul"><li><b>K를 미리 정해야</b> 한다</li><li><b>짧은 문서</b>(트윗 등)에서 성능이 떨어진다 &mdash; 단어가 몇 개뿐이라 토픽 비율을 추정할 근거가 부족하다</li><li><b>단어 순서를 무시</b>하므로 문맥을 활용하지 못한다</li></ul></div>
+</div>
+<p>&ldquo;결과에 음수 포함 · 문서 추가 시 재분해&rdquo;는 LSA의 단점이다 &mdash; 두 알고리즘의 장단점을 섞은 보기가 잘 나온다.</p>
+</section>
+
+<!-- ===================== 10.1.5 ===================== -->
+<section class="sec" id="tm-eval">
+  <div class="sec-head"><span class="sec-badge">10.1.5</span><h2 class="sec-title">LSA vs LDA · 토픽 개수 평가 · 구현 · 한국어<small>교안 24~27p</small></h2></div>
+
+<h3 class="sub-title" id="lsa-vs-lda">LSA와 LDA의 비교 (교안 24p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>LSA</th><th>LDA</th></tr></thead>
+  <tbody>
+    <tr><td><b>기반 이론</b></td><td><b>선형대수</b>의 특이값 분해</td><td><b>베이지안 확률</b> 모형</td></tr>
+    <tr><td><b>결과의 형태</b></td><td>실수 값(<b>음수 포함</b>)</td><td>확률 값(<b>0 이상, 합이 1</b>)</td></tr>
+    <tr><td><b>해석 가능성</b></td><td>상대적으로 어려움</td><td>일반적으로 <b>더 직관적</b></td></tr>
+    <tr><td><b>속도</b></td><td>상대적으로 <b>빠름</b> &mdash; 대규모 초기 탐색에 적합</td><td>상대적으로 느림(반복 추론)</td></tr>
+    <tr><td><b>입력</b></td><td><b>TF-IDF</b> 행렬</td><td><b>원시 빈도(Count)</b> 행렬</td></tr>
+    <tr><td><b>구현</b></td><td><code>TruncatedSVD</code> · <code>LsiModel</code></td><td><code>LatentDirichletAllocation</code> · <code>LdaModel</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 class="sub-title" id="tm-metric">토픽 개수의 선택 — 혼란도와 응집도 (교안 25p)</h3>
+<div class="cards">
+  <div class="card2"><b>혼란도 Perplexity</b><p>모델이 <b>새 문서를 얼마나 잘 예측</b>하는지. <b>낮을수록 좋다</b>. 단, <b>혼란도가 낮다고 사람이 보기에 좋은 토픽이라는 보장은 없다</b>.</p></div>
+  <div class="card2"><b>응집도 Coherence</b><p>한 토픽의 <b>상위 단어들이 서로 얼마나 자주 함께 등장</b>하는지. <b>높을수록</b> 사람이 이해하기 좋은 토픽이다. gensim <code>CoherenceModel</code>로 계산.</p></div>
+</div>
+<p>실무에서는 K를 바꿔 가며 곡선을 그린다 &mdash; <b>응집도는 최댓값(상승이 멈추는 지점)</b>, <b>혼란도는 엘보</b>를 기준으로 K를 고른다. 7주차 퍼플렉서티와 같은 지표다(&lsquo;낮을수록 덜 헷갈린다&rsquo;, <a class="ext" href="nlp-week07.html#ppl">7주차 7.2.5</a>).</p>
+<div class="pit"><b>두 지표가 다른 K를 가리킬 때</b> &mdash; 혼란도는 &lsquo;새 단어를 얼마나 잘 맞히나&rsquo;라는 <b>통계적</b> 기준이라, K를 늘려 토픽을 잘게 쪼갤수록 대개 좋아진다. 하지만 잘게 쪼갠 토픽은 상위 단어가 뒤섞여 사람이 읽기 어렵다. 응집도는 &lsquo;상위 단어가 하나의 주제로 읽히나&rsquo;에 더 가깝다. 그래서 교안은 <b>정량 지표와 정성 평가를 함께</b> 보라고 한다 &mdash; 과제 1이 정확히 이것을 묻는다. &ldquo;두 지표가 항상 같은 K를 가리킨다&rdquo;, &ldquo;응집도가 높으면 혼란도도 반드시 낮다&rdquo;는 틀렸다.</div>
+
+<h3 class="sub-title" id="tm-impl">실제 구현 (교안 26p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>라이브러리</th><th>제공하는 것</th></tr></thead>
+  <tbody>
+    <tr><td><b>scikit-learn</b></td><td><code>CountVectorizer</code> · <code>TfidfVectorizer</code>로 문서-단어 행렬, <code>TruncatedSVD</code>(LSA) · <code>LatentDirichletAllocation</code>(LDA). <b>LSA에는 TfidfVectorizer, LDA에는 원시 빈도(CountVectorizer)</b></td></tr>
+    <tr><td><b>gensim</b></td><td><code>LdaModel</code>(LDA) · <code>LsiModel</code>(LSI) · 토픽 품질을 재는 <code>CoherenceModel</code></td></tr>
+    <tr><td><b>pyLDAvis</b></td><td>토픽 모델링 결과를 대화형으로 시각화 &mdash; 감성 분석 라이브러리가 아니다</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>왜 LDA에는 TF-IDF를 넣지 않나</b> &mdash; LDA의 생성 과정은 &lsquo;단어를 하나씩 <b>뽑는다</b>&rsquo;이고, 문서-단어 행렬의 원소는 &lsquo;그 단어가 몇 번 뽑혔나&rsquo;라는 <b>개수</b>여야 확률 모형과 맞는다. TF-IDF의 0.37 같은 실수는 &lsquo;0.37번 뽑혔다&rsquo;가 되어 모형의 가정에 맞지 않는다. LSA는 행렬을 그냥 선형대수로 분해할 뿐이라 가중치 행렬을 넣어도 된다 &mdash; 오히려 흔한 단어를 눌러 주니 낫다.</div>
+
+<h3 class="sub-title" id="tm-korean">한국어 토픽 모델링 시 유의 사항 (교안 27p)</h3>
+<ul class="ul">
+  <li>한국어는 <b>교착어</b>라 공백 단위로 나누면 같은 단어가 여러 형태로 흩어진다 &mdash; &lsquo;학교가&rsquo;, &lsquo;학교를&rsquo;, &lsquo;학교에&rsquo; → 모두 &lsquo;학교&rsquo;로 정규화해야 한다(&ldquo;고립어라 공백 분리로 충분&rdquo;은 틀렸다)</li>
+  <li><b>KoNLPy(Okt, Mecab 등)</b> 형태소 분석기로 <b>명사를 추출</b>하는 전처리가 필요하다(<a class="ext" href="nlp-week04.html">4주차</a>)</li>
+  <li><b>불용어</b> &mdash; &lsquo;것&rsquo;, &lsquo;수&rsquo;, &lsquo;등&rsquo;, &lsquo;때&rsquo; 같은 의존명사는 토픽 해석을 방해하므로 제거하고, <b>한 글자 단어</b>는 대부분 잡음이라 빼는 것이 일반적이다</li>
+</ul>
+</section>
+
+<!-- ===================== 10.2.1 ===================== -->
+<section class="sec" id="sa-intro">
+  <div class="sec-head"><span class="sec-badge">10.2.1</span><h2 class="sec-title">감성 분석이란 · 왜 필요한가<small>교안 28~32p</small></h2></div>
+
+<h3 class="sub-title" id="sa-def">정의 (교안 30p)</h3>
+<div class="note-box"><b>감성 분석(Sentiment Analysis)</b>은 <b>작성된 콘텐츠나 처리한 오디오</b>에 담긴 감성을 찾아내도록 컴퓨터를 학습시키는 NLP 분야다. 사람의 감정을 찾아내는 모델을 만드는 일이고, 먼저 <b>어떤 종류의 감정을 찾을지 정하는 것</b>에서 시작한다. 찾으려는 <b>감정 수준</b>은 대부분 사람이 <b>슬픈지 행복한지, 만족스러운지 불만족스러운지, 관심이 있는지 없는지</b>다.</div>
+<p>교안이 다루는 차례(29p) &mdash; 소개와 필요성 → 감성의 유형과 용어 → 감성 분석의 수준 → 응용 분야 → 도구 → 데이터 → 모델 학습과 평가 → 어려운 이유.</p>
+
+<h3 class="sub-title" id="sa-why">왜 자동화된 감성 분석이 필요한가 (교안 31p)</h3>
+<p>머신러닝 프로젝트는 사람과 비슷하게 동작하는 애플리케이션을 만들려 하고, 성공 여부를 &lsquo;사람 수준에 얼마나 가까운가&rsquo;로 잰다. 제품 리뷰라면 프로그램이 리뷰어의 느낌을 계속 찾아내야 한다. 그런데 <b>사람이 수천 건의 책 · 영화 리뷰를 읽는 것은 비현실적</b>이다 &mdash; 바로 여기가 자동화가 필요한 지점이다.</p>
+
+<h3 class="sub-title" id="sa-growth">감성 분석이 성장한 네 가지 이유 (교안 32p)</h3>
+<div class="flow">
+  <div class="fl"><b>① 온라인 콘텐츠의 빠른 성장</b><span>기업이 사람들의 느낌을 이해하고 대응하는 데 쓴다</span></div>
+  <div class="fl"><b>② 감성이 의사결정을 주도</b><span>고객 감성을 이해하는 기업은 <b>구매 결정을 예측하고 구체화</b>하는 데 큰 이점</span></div>
+  <div class="fl"><b>③ 소셜 미디어 콘텐츠</b><span>그곳의 의견과 감성이 비즈니스 가치의 핵심</span></div>
+  <div class="fl"><b>④ NLP 기술의 발전</b><span>적용 범위가 넓어졌다</span></div>
+</div>
+</section>
+
+<!-- ===================== 10.2.2 ===================== -->
+<section class="sec" id="sa-types">
+  <div class="sec-head"><span class="sec-badge">10.2.2</span><h2 class="sec-title">감성의 유형 · 주요 용어 · 분석 수준<small>교안 33~37p · 극성과 강도</small></h2></div>
+
+<h3 class="sub-title" id="sa-kinds">감성의 네 가지 유형 (교안 33 · 34p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>유형</th><th>무엇을 판별하나</th><th>왜</th></tr></thead>
+  <tbody>
+    <tr><td><b>감정</b></td><td>행복한지 슬픈지, 만족스러운지 불만족스러운지</td><td>고객 만족도를 높이려고 기업이 자주 쓴다</td></tr>
+    <tr><td><b>능동성 혹은 수동성</b></td><td>화자가 능동적 태도인지 수동적 태도인지</td><td>의견이 <b>실제 행동(구매 · 이탈)</b>으로 이어질 가능성을 가늠하려고</td></tr>
+    <tr><td><b>어조</b></td><td>사실도 순수한 감정도 아닌 특정한 느낌</td><td>특정 상황에서 자주 쓰이는 단어 · 문구가 있다</td></tr>
+    <tr><td><b>주관성 혹은 객관성</b></td><td>개인의 <b>의견 표현</b>인지, <b>참 · 거짓으로 판단 가능한 사실</b>에 가까운지</td><td>사실 문장을 걸러 내고 의견 문장만 분석하려고</td></tr>
+  </tbody>
+</table>
+</div>
+<p>보기에 &lsquo;문법성&rsquo;이 섞여 나오면 감성의 유형이 아니다.</p>
+
+<h3 class="sub-title" id="polarity">주요 용어 — 분류 · 지도 학습 · 극성 · 강도 (교안 35 · 36p)</h3>
+<ul class="ul">
+  <li><b>분류</b> &mdash; 텍스트 문서에 하나 이상의 클래스를 할당. 감성 분석에서는 긍정 · 부정 · 중립 같은 감성 클래스</li>
+  <li><b>지도 학습</b> &mdash; 데이터와 레이블된 목적 변수를 함께 준다. 긍정이면 <b>1</b>, 부정이면 <b>0</b></li>
+</ul>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>스케일</th><th>범위</th><th>읽는 법</th></tr></thead>
+  <tbody>
+    <tr><td><b>극성(polarity)</b> &mdash; TextBlob</td><td><b>−1 ~ +1</b></td><td>+1에 가까울수록 긍정, −1에 가까울수록 부정, <b>0은 중립</b></td></tr>
+    <tr><td><b>분류 모델의 확률 출력</b></td><td><b>0 ~ 1</b></td><td>1에 가까울수록 긍정, 0에 가까울수록 부정, <b>0.5 부근은 판단이 애매한 문서</b></td></tr>
+    <tr><td><b>강도(intensity)</b></td><td>0 ~ 1</td><td>극성 점수의 <b>절댓값</b> &mdash; 1에 가까울수록 강하고, 0에 가까울수록 약하다</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="pit"><b>두 스케일에서 &lsquo;가운데&rsquo;의 뜻이 다르다</b> &mdash; 극성의 0은 &lsquo;<b>중립</b>&rsquo;(감정이 없다)이고, 확률의 0.5는 &lsquo;<b>애매하다</b>&rsquo;(모델이 확신하지 못한다)이다. 확률 0.5인 문장은 실제로는 강한 긍정과 강한 부정이 섞여 있을 수도 있다. 그리고 강도는 방향을 버린 크기다 &mdash; 극성 −0.8과 +0.8은 방향은 반대지만 강도는 둘 다 0.8로 같다. 100문제 해설은 강도를 &lsquo;양 극단에 대한 점수의 근접성&rsquo;이라 표현한다 &mdash; 같은 뜻이다(절댓값이 클수록 ±1 끝에 가깝다).</div>
+
+<h3 class="sub-title" id="sa-levels">감성 분석의 세 수준 (교안 37p)</h3>
+<div class="flow">
+  <div class="fl"><b>문서 수준 (Document-level)</b><span>리뷰 한 건 전체에 레이블 하나 &mdash; 가장 단순하지만, 긍정과 부정이 섞이면 정보를 잃는다</span></div>
+  <div class="fl"><b>문장 수준 (Sentence-level)</b><span>문장 단위로 판정. 주관적 문장과 객관적 문장을 먼저 가르기도 한다</span></div>
+  <div class="fl"><b>속성 기반 (ABSA)</b><span>&lsquo;배터리는 좋은데 화면이 어둡다&rsquo; → 배터리 긍정 / 화면 부정. 제품 개선 지점을 구체적으로 찾아 실무 활용도가 높다</span></div>
+</div>
+<p>단순한 것에서 세밀한 것 순서는 <b>문서 → 문장 → 속성</b>이다. ABSA는 <a class="ext" href="nlp-week01.html">1주차</a>에서 &lsquo;배송은 빠른데 품질은 별로&rsquo;로 처음 만났다.</p>
+</section>
+
+<!-- ===================== 10.2.3 ===================== -->
+<section class="sec" id="sa-apps">
+  <div class="sec-head"><span class="sec-badge">10.2.3</span><h2 class="sec-title">감성 분석의 응용 분야<small>교안 38~42p · 금융 · 제품 · 소셜 미디어 · 브랜드 · 고객 상호작용</small></h2></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>분야</th><th>핵심</th><th>예 · 포인트</th></tr></thead>
+  <tbody>
+    <tr><td id="sa-finance"><b>금융 시장 감성</b> (38p)</td><td>시장은 경제 원칙만이 아니라 인간의 감성에 크게 영향받는다. 금융 시장 감성 = <b>증권에 대한 투자자들의 전반적인 관점</b></td><td>뉴스 · 소셜 미디어 기사에서 시장 감성을 찾아 <b>미래 시장 가격을 예측</b>하는 모델</td></tr>
+    <tr><td><b>제품 만족도</b> (39p)</td><td>고객이 제품 · 서비스를 어떻게 느끼는지</td><td><b>아마존</b>은 광범위한 리뷰 데이터를 제품 개선과 감성 분석 서비스의 <b>학습 데이터</b>로 쓴다. <b>별점과 리뷰 텍스트의 불일치</b>로 신뢰할 수 없는 리뷰를 걸러 낸다</td></tr>
+    <tr><td><b>소셜 미디어 감성</b> (40p)</td><td>전 세계 사람이 매일 쓰는 주요 소통 매체 &mdash; 거대하고 계속 느는 언어 데이터</td><td>기업 · 단체가 그곳의 언급을 처리하고 이해할 필요가 커졌다</td></tr>
+    <tr><td><b>브랜드 모니터링</b> (41p)</td><td>부정적 대화는 <b>브랜드 위험</b>, 긍정적 상호작용은 <b>성장 가능성</b></td><td>그래서 기업은 사람을 배치해 브랜드 의견을 모니터링한다</td></tr>
+    <tr><td><b>고객 상호작용</b> (42p)</td><td>온라인 채팅 · 전화 통화 중 고객의 느낌</td><td>상호작용에서 생기는 <b>대량의 텍스트와 음성 데이터</b>를 처리해 만족도 인사이트 → 수익</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="pit"><b>소셜 미디어는 &lsquo;정제된&rsquo; 데이터가 아니다</b> &mdash; 소셜 미디어가 핵심 영역인 이유는 양과 영향력 때문이지, 텍스트가 깨끗해서가 아니다. 오히려 이모티콘 · 신조어 · 초성체가 많아 감성 분석을 어렵게 만든다(<a class="ext" href="#sa-hard">10.2.5 어려운 이유</a>). 그래서 소셜 미디어 전용 도구인 VADER가 따로 있다.</div>
+</section>
+
+<!-- ===================== 10.2.4 ===================== -->
+<section class="sec" id="sa-tools">
+  <div class="sec-head"><span class="sec-badge">10.2.4</span><h2 class="sec-title">감성 분석에 쓰는 도구<small>교안 43~47p · 클라우드 · 파이썬 NLP 라이브러리 · 딥러닝 · TextBlob · VADER</small></h2></div>
+
+<h3 class="sub-title" id="sa-toolkinds">도구 세 갈래의 장단점 (교안 43~45p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>도구</th><th>장점</th><th>단점</th></tr></thead>
+  <tbody>
+    <tr><td><b>클라우드 NLP 서비스</b></td><td>NLP · 감성 분석 지식이 거의 필요 없음 · 자체 연산 기능 제공으로 연산 부담 감소 · 일반 회사가 직접 하는 것 이상으로 확장 · 알고리즘과 데이터의 자동 개선 · 업데이트</td><td>분석할 문서를 서비스에 보내야 하므로 <b>프라이버시 보호가 부족</b></td></tr>
+    <tr><td><b>파이썬 NLP 라이브러리</b><br><small>NLTK · spaCy · gensim · TextBlob</small></td><td>최신 연구가 반영되고 잘 선택된 데이터셋이 있음</td><td>복잡한 비즈니스 사례에 <b>충분히 유연하지 않을</b> 수 있고, 원하는 형태로 결과를 돌려주지 않을 수 있음</td></tr>
+    <tr><td><b>딥러닝 라이브러리</b></td><td>복잡한 요구에 맞춰 유연하게 개발 · 방대한 텍스트로 학습된 모델을 <b>미세조정하는 전이 학습</b></td><td>머신러닝 · 딥러닝 지식, 많은 리소스와 데이터가 필요</td></tr>
+  </tbody>
+</table>
+</div>
+<p>&ldquo;클라우드 서비스는 문서를 외부에 보내지 않아 프라이버시가 뛰어나다&rdquo;는 정반대다. &lsquo;pyLDAvis&rsquo;는 감성 분석 라이브러리가 아니라 토픽 시각화 도구다.</p>
+
+<h3 class="sub-title" id="textblob">TextBlob과 VADER (교안 46 · 47p)</h3>
+<pre class="code">from textblob import TextBlob             <span class="cm"># 2. TextBlob 클래스 불러오기</span>
+sentence = "But you are late again!"      <span class="cm"># 3. 문자열</span>
+blob = TextBlob(sentence)                 <span class="cm"># 4. TextBlob 객체 생성</span>
+blob.sentiment                            <span class="cm"># 5. sentiment 속성</span>
+<span class="out">Sentiment(polarity=-0.58, subjectivity=0.6)</span></pre>
+<ul class="ul">
+  <li><b>TextBlob</b> &mdash; NLP용 파이썬 라이브러리. API가 간단해 파이썬에서 감성 분석을 하는 <b>가장 쉬운 방법</b>. 결과는 극성(−1~+1)과 주관성(0~1) 두 숫자다. 학습 없이 <b>사전(lexicon)</b>에 적힌 단어별 점수로 판정한다</li>
+  <li>예시 해석 &mdash; &lsquo;late&rsquo;(늦은)가 부정적이라 극성 −0.58, 화자의 불만이 담긴 의견이라 주관성 0.6</li>
+  <li><b>VADER</b> &mdash; <b>소셜 미디어 텍스트에 특화된 규칙 기반</b> 도구. <b>이모티콘과 강조 표현</b>(&ldquo;GREAT!!!&rdquo;, &ldquo;:)&rdquo;)을 함께 고려한다</li>
+</ul>
+<div class="pit"><b>값의 순서를 바꿔 친 보기</b> &mdash; 교안의 결과는 <b>polarity = −0.58, subjectivity = 0.6</b>이다. 극성이 음수(부정), 주관성은 0 이상이다. &ldquo;polarity = −0.6, subjectivity = 0.58&rdquo;처럼 두 값을 맞바꾸거나 극성 부호를 뒤집은 보기에 속지 말자. 감성 점수를 읽는 속성은 <code>sentiment</code>다(<code>polarity_score()</code> 같은 메서드가 아니다).</div>
+</section>
+
+<!-- ===================== 10.2.5 ===================== -->
+<section class="sec" id="sa-train">
+  <div class="sec-head"><span class="sec-badge">10.2.5</span><h2 class="sec-title">감성 분석 데이터 · 모델 학습 · 평가 · 어려운 이유<small>교안 48~54p · 100문제에서 가장 비중이 큰 절(11문항)</small></h2></div>
+
+<h3 class="sub-title" id="sa-data">감성 분석 데이터의 이해 (교안 48~50p)</h3>
+<p>감성 분석은 <b>텍스트 분류의 한 종류</b>이고, 감성 값이 적힌 목적 변수 열이 있는 <b>지도 학습 데이터셋</b>으로 학습한다.</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>데이터셋</th><th>규모</th><th>레이블</th></tr></thead>
+  <tbody>
+    <tr><td>Amazon 리뷰</td><td><b>1,000</b>문장</td><td rowspan="3">긍정 <b>1</b> / 부정 <b>0</b><br><small>UCI Sentiment Labelled Sentences</small></td></tr>
+    <tr><td>Yelp 리뷰</td><td><b>1,000</b>문장</td></tr>
+    <tr><td>IMDb 리뷰</td><td><b>748</b>문장</td></tr>
+    <tr><td>한국어 &mdash; <b>NSMC</b></td><td colspan="2">네이버 영화 리뷰 데이터셋 (KorQuAD · SQuAD는 기계 독해 데이터셋)</td></tr>
+  </tbody>
+</table>
+</div>
+<pre class="code">imdb_reviews = pd.read_table(IMDB_DATA_FILE, names=COLUMN_NAMES)   <span class="cm"># 탭으로 나뉜 파일 → (Review, Sentiment)</span>
+imdb_reviews.Sentiment.value_counts()                               <span class="cm"># 레이블별 문장 수</span>
+imdb_counts = imdb_reviews.Sentiment.value_counts().to_frame()</pre>
+<div class="pit"><b>value_counts()의 함정</b> &mdash; <code>value_counts()</code>는 <b>빈도 내림차순</b>으로 정렬한다. 긍정이 386, 부정이 362라면 결과의 첫 행은 레이블 1(긍정)이다. 여기에 습관처럼 <code>['Negative', 'Positive']</code> 순으로 이름을 붙이면 <b>이름과 숫자가 뒤바뀐다</b>. 그래서 정답 노트북은 <code>['Negative' if i == 0 else 'Positive' for i in counts.index]</code>처럼 <b>실제 인덱스 값을 보고</b> 이름을 붙인다. 리뷰 텍스트는 그대로 모델에 넣을 수 없고 피처 벡터로 바꿔야 한다(50p).</div>
+
+<h3 class="sub-title" id="sa-pipeline">감성 모델 학습 다섯 단계 (교안 51p)</h3>
+<div class="flow">
+  <div class="fl"><b>1. 학습 / 테스트 분할</b><span>테스트는 전체의 일부</span></div>
+  <div class="fl"><b>2. 텍스트 전처리</b><span>필요 없는 문자 · 불용어 제거 등</span></div>
+  <div class="fl"><b>3. 피처 추출</b><span>텍스트 → 수치형 벡터</span></div>
+  <div class="fl"><b>4. 모델 학습</b><span>알고리즘 유형에 따라 다르다</span></div>
+  <div class="fl"><b>5. 처음 보는 문서의 감성 예측</b><span>모델 = 학습한 데이터의 표현을 담은 객체</span></div>
+</div>
+
+<h3 class="sub-title" id="sa-features">피처 추출 방법 (교안 52p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>방법</th><th>설명</th></tr></thead>
+  <tbody>
+    <tr><td><b>BoW</b> (CountVectorizer)</td><td>단어 등장 횟수를 그대로 &mdash; 가장 간단</td></tr>
+    <tr><td><b>TF-IDF</b> (TfidfVectorizer)</td><td>흔한 단어를 눌러 변별력 있는 단어 강조 &mdash; 감성 분석의 기본</td></tr>
+    <tr><td><b>N-gram</b></td><td><b>&lsquo;not good&rsquo;</b>처럼 두 단어가 붙어야 의미가 사는 경우를 포착. <code>ngram_range=(1, 2)</code> = <b>단어 하나 + 두 단어 묶음</b>을 함께</td></tr>
+    <tr><td>워드 임베딩 · 사전학습 언어 모델</td><td>Word2Vec · BERT로 문맥을 반영한 표현(<a class="ext" href="nlp-week06.html">6주차</a>)</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>&lsquo;not good&rsquo;을 바이그램이 살리는 원리 — 그리고 불용어 제거의 역설</b> &mdash; 유니그램만 쓰면 &ldquo;not good&rdquo;은 {not, good} 두 피처다. &lsquo;good&rsquo;은 긍정 가중치가 크므로 문장 전체가 긍정 쪽으로 끌린다. 바이그램을 더하면 &lsquo;not good&rsquo;이라는 별도 피처가 생기고, 학습 데이터에서 이 묶음이 주로 부정 리뷰에 나왔다면 큰 <b>음의</b> 가중치를 받는다. 그런데 영어 불용어 목록(<code>stop_words='english'</code>)에는 &lsquo;not&rsquo;, &lsquo;no&rsquo;가 들어 있다 &mdash; 불용어를 지우면 &lsquo;not good&rsquo;이 &lsquo;good&rsquo;이 되어 버린다. 그래서 정답 노트북은 감성 분석에서 <code>stop_words=None</code>을 쓴다. 토픽 모델링(불용어 제거가 기본)과 정반대인 이유다.</div>
+
+<h3 class="sub-title" id="sa-metric">감성 모델의 평가 (교안 53p)</h3>
+<div class="fx">
+  <div class="tex-d">\text{정확도}=\frac{TP+TN}{\text{전체}}\quad\text{정밀도}=\frac{TP}{TP+FP}\quad\text{재현율}=\frac{TP}{TP+FN}\quad F1=\frac{2\cdot\text{정밀도}\cdot\text{재현율}}{\text{정밀도}+\text{재현율}}</div>
+  <p class="fx-note"><b>정밀도</b> = 긍정이라 <b>예측한 것</b> 중 실제 긍정의 비율, <b>재현율</b> = <b>실제 긍정</b> 중 찾아낸 비율, F1 = 둘의 조화 평균(<a class="ext" href="nlp-week05.html">5주차 5.2.5</a>). 클래스가 <b>불균형</b>하면 정확도만 보면 잘못 판단할 수 있어 <b>F1을 함께</b> 본다.</p>
+</div>
+
+<h3 class="sub-title" id="sa-hard">감성 분석이 어려운 이유 (교안 54p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>어려움</th><th>예</th><th>왜 어려운가</th></tr></thead>
+  <tbody>
+    <tr><td><b>부정 표현</b></td><td>&lsquo;이 영화는 좋지 않다&rsquo;</td><td>&lsquo;좋다&rsquo;만 보면 긍정으로 오판</td></tr>
+    <tr><td><b>반어와 풍자</b></td><td>&lsquo;정말 훌륭한 서비스네요, 두 시간 기다렸습니다&rsquo;</td><td>표면은 긍정, 실제 감성은 부정</td></tr>
+    <tr><td><b>도메인 의존성</b></td><td>&lsquo;예측 가능한&rsquo;</td><td>영화 리뷰에서는 부정(뻔하다), 자동차 리뷰에서는 긍정(믿을 만하다)</td></tr>
+    <tr><td><b>비교 표현</b></td><td>&lsquo;A보다는 낫다&rsquo;</td><td>A와 B 중 무엇에 대한 평가인지 판단해야</td></tr>
+    <tr><td>정제되지 않은 표현</td><td>이모티콘 · 신조어 · 초성체</td><td>사전에 없고 형태가 제각각</td></tr>
+  </tbody>
+</table>
+</div>
+<p>이 때문에 <b>규칙 기반 도구보다 문맥을 학습하는 사전학습 언어 모델이 유리</b>하다. 정답 노트북의 새 문장 예측에서 &ldquo;The movie was not good at all&rdquo;이 바로 부정 표현 사례로 들어 있다(<a class="ext" href="#lab">실습 2</a>).</p>
+</section>
+
+<!-- ===================== 10.3.1 ===================== -->
+<section class="sec" id="mrc-intro">
+  <div class="sec-head"><span class="sec-badge">10.3.1</span><h2 class="sec-title">기계 독해란 · 과제 유형 · 데이터셋<small>교안 55~61p</small></h2></div>
+
+<h3 class="sub-title" id="mrc-def">정의와 필요성 (교안 56 · 57p)</h3>
+<div class="note-box"><b>기계 독해(Machine Reading Comprehension)</b>는 <b>주어진 지문(context)을 읽고 그에 대한 질문(question)에 답하는</b> 과제다. 단어 통계만으로는 풀 수 없고 <b>문장 사이의 관계와 문맥</b>을 파악해야 하므로, 언어 이해 능력을 재는 대표 벤치마크다. 검색 엔진의 답변 요약 · 챗봇 · 문서 기반 질의응답의 핵심 기술이다.</div>
+<div class="cards">
+  <div class="card2"><b>정보 접근 방식의 변화</b><p>기존 검색은 관련 <b>문서 목록</b>을 돌려주지만 사용자는 <b>답</b>을 원한다 → 기계 독해는 문서에서 답이 되는 부분을 <b>직접 찾아 제시</b>한다(<a class="ext" href="nlp-week09.html#qa-vs-ir">9주차 IR vs QA</a>)</p></div>
+  <div class="card2"><b>업무 자동화</b><p>계약서 · 매뉴얼 · 사규 같은 방대한 내부 문서에서 필요한 조항을 즉시 찾는다</p></div>
+  <div class="card2"><b>언어 이해 능력의 척도</b><p>정답이 명확히 정의되어 있어 모델의 이해 수준을 <b>정량적으로 비교</b>할 수 있다</p></div>
+</div>
+
+<h3 class="sub-title" id="mrc-types">기계 독해 과제의 네 유형 (교안 58 · 59p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>유형</th><th>형태</th><th>대표 데이터셋</th><th>특징</th></tr></thead>
+  <tbody>
+    <tr><td><b>빈칸 채우기</b> (Cloze)</td><td>지문의 특정 단어를 가리고 맞히기</td><td>CNN/Daily Mail, CBT</td><td>자동으로 대량 생성 가능, 실제 질의응답과는 거리가 있다</td></tr>
+    <tr><td><b>객관식</b> (Multiple Choice)</td><td>보기 중 정답 고르기</td><td>RACE, MCTest</td><td>평가가 간단, 보기가 있어야만 동작</td></tr>
+    <tr><td><b>추출형</b> (Extractive / Span)</td><td>정답이 지문 안 <b>연속된 구간</b>이라 가정하고 <b>시작 · 끝 위치</b> 예측</td><td>SQuAD, KorQuAD, Natural Questions</td><td>가장 널리 연구된 형태 · <b>이번 실습의 유형</b></td></tr>
+    <tr><td><b>추상형</b> (Abstractive / Generative)</td><td>지문에 없는 표현으로 답 생성</td><td>MS MARCO, NarrativeQA</td><td>자연스러운 답변, <b>환각</b> 위험</td></tr>
+  </tbody>
+</table>
+</div>
+<p>9주차의 &lsquo;추출형 vs 생성형&rsquo; 구분(<a class="ext" href="nlp-week09.html#qa-types">9.1.1</a>)이 여기서 네 유형으로 넓어졌다. 유형과 데이터셋의 짝을 바꿔 친 보기가 잘 나온다 &mdash; <b>Cloze = CNN/Daily Mail · CBT</b>, <b>객관식 = RACE · MCTest</b>, <b>추출형 = SQuAD · KorQuAD</b>, <b>추상형 = MS MARCO · NarrativeQA</b>.</p>
+
+<h3 class="sub-title" id="squad">대표 데이터셋 — SQuAD · KorQuAD (교안 60p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>데이터셋</th><th>내용</th></tr></thead>
+  <tbody>
+    <tr><td><b>SQuAD 1.1</b></td><td>위키피디아 문단 기반, 약 <b>10만</b> 개의 질문-답변 쌍. <b>모든 질문의 답이 지문 안에 반드시 있다</b></td></tr>
+    <tr><td><b>SQuAD 2.0</b></td><td><b>답할 수 없는 질문 약 5만 개</b>를 추가 &mdash; &lsquo;답이 없다&rsquo;고 판단하는 능력까지 평가. 실제 서비스에서는 답이 없는 경우를 정확히 거절하는 것이 중요하기 때문</td></tr>
+    <tr><td><b>KorQuAD 1.0 / 2.0</b></td><td><b>한국어 위키피디아</b> 기반, SQuAD와 같은 형식. 2.0은 <b>표와 목록이 포함된 긴 문서 전체</b>가 대상 (번역본도, 객관식도, 감성 데이터도 아니다)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 class="sub-title" id="squad-format">SQuAD 데이터 형식 (교안 61p)</h3>
+<pre class="code">context  = "세종대왕은 1443년에 훈민정음을 창제하였다."    <span class="cm"># 지문(문단)</span>
+question = "훈민정음은 언제 창제되었는가?"                  <span class="cm"># 질문</span>
+answers  = {'text': '1443년', 'answer_start': 6}           <span class="cm"># 정답 문자열 + 지문 내 시작 '문자' 위치</span></pre>
+<div class="deep"><b>answer_start = 6을 손으로 세기 — 그리고 왜 토큰 위치로 바꿔야 하나</b> &mdash; 문자열은 0부터 센다: 세(0) 종(1) 대(2) 왕(3) 은(4) 공백(5) <b>1(6)</b>4 4 3 년. 공백도 한 글자라 &lsquo;1443년&rsquo;은 6번째 문자에서 시작한다. 그런데 모델은 문자가 아니라 <b>토큰</b>을 본다. &lsquo;1443년&rsquo;이 토크나이저에서 [&lsquo;144&rsquo;, &lsquo;##3&rsquo;, &lsquo;##년&rsquo;]처럼 쪼개지면, 정답은 &lsquo;6번째 문자&rsquo;가 아니라 &lsquo;k번째 토큰부터 k+2번째 토큰까지&rsquo;여야 학습할 수 있다. 그래서 문자 위치 → 토큰 위치로 바꾸는 전처리(오프셋 매핑)가 필요하다. 9주차 실습의 <code>return_offsets_mapping=True</code>가 바로 이 일을 했다(<a class="ext" href="nlp-week09.html#lab">9주차 실습</a>).</div>
+</section>
+
+<!-- ===================== 10.3.2 ===================== -->
+<section class="sec" id="mrc-bert">
+  <div class="sec-head"><span class="sec-badge">10.3.2</span><h2 class="sec-title">기계 독해 모델의 발전 · BERT 질의응답의 원리<small>교안 62~65p</small></h2></div>
+
+<h3 class="sub-title" id="mrc-history">모델의 발전 세 단계 (교안 62 · 63p)</h3>
+<div class="flow">
+  <div class="fl"><b>전통적 파이프라인</b><span>형태소 분석 · 개체명 인식 · 구문 분석을 단계별로 → 규칙으로 답 찾기. 단계마다 <b>오류 누적</b>, 새 도메인 적용 어려움(<a class="ext" href="nlp-week09.html#ir-3stage">9주차 오류 전파</a>)</span></div>
+  <div class="fl"><b>신경망 기반 (2016~2018)</b><span><b>BiDAF</b>(2017): 질문 → 지문, 지문 → 질문 <b>양방향 어텐션</b> 흐름 · <b>DrQA</b>(2017): 문서 검색기 + 독해기. 지문과 질문을 각각 LSTM으로 인코딩해 어텐션으로 상호작용. <b>사람 수준에는 못 미쳤지만 종단간(end-to-end) 학습의 가능성</b>을 보였다</span></div>
+  <div class="fl"><b>사전학습 언어 모델 (2018~)</b><span><b>BERT</b>를 대규모 말뭉치로 사전학습한 뒤 기계 독해 데이터로 <b>미세조정</b>. SQuAD 1.1에서 <b>단일 모델이 사람(F1 91.2)에 필적</b>, <b>앙상블은 F1 93.2로 사람을 넘었다</b>. 최근에는 LLM이 미세조정 없이도 기계 독해를 한다</span></div>
+</div>
+<p><b>핵심 아이디어</b> &mdash; 언어에 대한 일반 지식은 사전학습에서 얻고, 과제별 지식만 소량 데이터로 배운다. 출력층에는 시작 · 끝 위치를 예측하는 <b>출력 차원 2인 선형 계층 하나</b>(= 시작 벡터 S, 끝 벡터 E)만 추가하면 된다. 수치 짝 주의 &mdash; <b>사람 91.2</b>, <b>앙상블 93.2</b>, 둘 다 <b>F1</b>이다.</p>
+
+<h3 class="sub-title" id="bert-qa">BERT 기반 질의응답의 동작 원리 (교안 64 · 65p)</h3>
+<pre class="code">입력 :  [CLS] 질문 토큰들 [SEP] 지문 토큰들 [SEP]          <span class="cm"># 하나의 시퀀스, 세그먼트 임베딩으로 질문/지문 구분</span>
+        ↓ BERT
+각 토큰 i의 최종 은닉 벡터 hᵢ
+시작 로짓 sᵢ = S · hᵢ ,  끝 로짓 eᵢ = E · hᵢ            <span class="cm"># S, E는 학습되는 벡터 (모든 토큰이 공유)</span>
+softmax → 각 토큰이 정답의 시작 / 끝일 확률</pre>
+<div class="fx">
+  <div class="tex-d">(\hat i,\hat j)=\arg\max_{i\le j}\;(s_i+e_j)\qquad\mathcal L=\tfrac12\big[\mathrm{CE}(\text{start})+\mathrm{CE}(\text{end})\big]</div>
+  <p class="fx-note"><b>예측</b> &mdash; <span class="tex">s_i+e_j</span>를 최대로 만드는 (i, j)를 고르되 <b>i ≤ j</b>(시작이 끝보다 앞)를 지킨다. 고른 토큰 구간을 원래 문자열 위치로 되돌려 정답 문자열을 낸다. <b>학습</b> &mdash; 정답 시작 위치와 끝 위치에 대한 <b>교차 엔트로피 손실의 평균</b>을 최소화한다.</p>
+</div>
+<div class="deep"><b>9주차의 &lsquo;P(start)·P(end)&rsquo;와 10주차의 &lsquo;sᵢ + eⱼ&rsquo;는 같은 말이다</b> &mdash; 9주차 교안은 <span class="tex">\arg\max P(\text{start}=i)\cdot P(\text{end}=j)</span>로 썼다(<a class="ext" href="nlp-week09.html#mrc">9.1.3</a>). 확률은 로짓의 softmax이고 log를 취해도 argmax는 바뀌지 않는다: <span class="tex">\log P_s(i)+\log P_e(j)=s_i+e_j-\text{(정규화 상수)}</span>. 정규화 상수는 i, j에 무관하므로 &lsquo;확률의 곱 최대&rsquo; = &lsquo;로짓의 합 최대&rsquo;다. 그래서 &ldquo;s × e를 최소로&rdquo;나 &ldquo;i ≥ j&rdquo;는 틀린 보기다. 또 시작과 끝은 <b>서로 다른 벡터 S와 E</b>로 계산한다 &mdash; 같은 벡터를 쓰면 시작과 끝을 구별할 수 없다.</div>
+
+<h3 class="sub-title" id="long-doc">긴 문서 처리 — stride (교안 65p)</h3>
+<p>BERT의 최대 입력 길이(보통 <b>512 토큰</b>)를 넘는 문서는 <b>겹치는 구간(stride)을 두고 잘라</b> 여러 번 처리한 뒤 <b>가장 점수가 높은 답</b>을 고른다. 겹치게 자르는 이유는 정답이 잘린 경계에 걸쳐 두 조각으로 나뉘는 것을 막기 위해서다. 앞 512 토큰만 쓰거나 문서를 요약해 넣는 것이 아니다.</p>
+</section>
+
+<!-- ===================== 10.3.3 ===================== -->
+<section class="sec" id="mrc-eval">
+  <div class="sec-head"><span class="sec-badge">10.3.3</span><h2 class="sec-title">기계 독해 평가 · HuggingFace 파이프라인 · 한계와 동향<small>교안 66~68p</small></h2></div>
+
+<h3 class="sub-title" id="em-f1">평가 지표 — EM과 F1 (교안 66p)</h3>
+<div class="cards">
+  <div class="card2"><b>EM (Exact Match)</b><p>예측이 정답 문자열과 <b>완전히 일치</b>하는 비율. <b>대소문자 · 관사 · 구두점을 제거하는 정규화</b> 후 비교한다.</p></div>
+  <div class="card2"><b>F1</b><p>예측과 정답을 <b>토큰 다중집합(Counter)</b>으로 보고 겹침을 잰다. 정밀도 = 겹친 토큰 수 / 예측 토큰 수, 재현율 = 겹친 토큰 수 / 정답 토큰 수. 부분 정답에도 점수를 주므로 <b>EM보다 관대</b>하다.</p></div>
+</div>
+<p><b>정답이 여러 개</b>면 각 정답에 대해 계산한 값 중 <b>최댓값</b>을 쓴다(평균이 아니다).</p>
+<div class="deep"><b>실습 코드로 직접 계산해 보기</b> &mdash; 정답 노트북의 <code>normalize_answer</code>는 소문자화 → 구두점 제거 → 관사(a, an, the) 제거 → 공백 정리를 한다. 그래서 <code>exact_match_score('Brazil', 'the Brazil')</code>는 <b>1.0</b>이다(관사가 사라지면 같다). <code>f1_score_qa('seven million square kilometers', 'seven million')</code>은 예측 토큰 4개, 정답 토큰 2개, 겹침 2개라 precision = 2/4 = 0.5, recall = 2/2 = 1, F1 = <span class="tex">2\cdot0.5\cdot1/1.5\approx0.667</span>이다. 그런데 이 문항의 정답 목록에는 <code>"seven million square kilometers"</code>도 있으므로, 최댓값 규칙에 따라 실제 채점은 F1 = 1.0이 된다 &mdash; 정답을 여러 개 주는 이유다.<br>
+<b>한국어 주의</b> &mdash; 이 정규화는 영어 기준이라 한국어 조사를 떼지 못한다. 정답 &lsquo;1443년&rsquo;에 예측 &lsquo;1443년에&rsquo;면 공백 토큰이 달라 EM 0 · F1 0이 된다. 9주차에서 본 것처럼 KorQuAD 공식 평가는 <b>문자 단위</b> F1을 쓴다(<a class="ext" href="nlp-week09.html#qa-eval">9.1.3</a>).</div>
+
+<h3 class="sub-title" id="hf-pipeline">HuggingFace 파이프라인으로 기계 독해 (교안 67p)</h3>
+<pre class="code">from transformers import pipeline
+qa = pipeline("question-answering",
+              model="distilbert-base-cased-distilled-squad")     <span class="cm"># SQuAD 1.1로 미세조정된 경량 모델</span>
+result = qa(question=question, context=context)
+result['answer'], result['score'], result['start'], result['end']   <span class="cm"># 답 · 신뢰도 · 문자 시작 · 끝</span></pre>
+<p>한국어는 KorQuAD로 학습된 모델을 <code>model</code> 인자에 지정하면 된다(정답 노트북: <code>monologg/koelectra-small-v2-distilled-korquad-384</code>, 9주차 실습과 같은 모델). 태스크 이름은 <code>"question-answering"</code>이다 &mdash; <code>"sentiment-analysis"</code>로 바꾼 보기, 결과 키에 <code>polarity</code>(TextBlob의 값)를 섞은 보기에 주의.</p>
+
+<h3 class="sub-title" id="mrc-limits">한계와 최신 동향 (교안 68p)</h3>
+<div class="cards">
+  <div class="card2"><b>한계</b><ul class="ul"><li><b>지문이 주어져야만</b> 동작 &mdash; 지문 밖 지식은 못 쓴다</li><li>여러 문단에 걸친 추론(<b>multi-hop</b>)에 약하다</li><li>지문에 없는 내용을 그럴듯하게 만드는 <b>환각</b></li></ul></div>
+  <div class="card2"><b>최신 동향</b><ul class="ul"><li><b>오픈 도메인 QA</b> &mdash; 대규모 문서 집합에서 관련 문단을 <b>먼저 검색</b>한 뒤 독해</li><li><b>RAG</b> &mdash; 검색된 근거 문서를 언어 모델 입력에 붙여 답을 생성 → <b>근거 제시와 최신 정보 반영</b></li></ul></div>
+</div>
+<p>9주차의 <a class="ext" href="nlp-week09.html#retriever-reader">Retriever–Reader</a>와 <a class="ext" href="nlp-week09.html#rag">RAG</a>가 바로 이 동향이다. 정답 노트북 3-5는 <b>SQuAD 1.1로 학습된 모델이 &lsquo;답이 없다&rsquo;를 배우지 않았기 때문에</b> 답 없는 질문에도 지문 어딘가를 억지로 답한다는 것을 보여 준다 &mdash; SQuAD 2.0이 나온 이유이고, 신뢰도(score) 임계값으로 거르는 것이 흔한 대응이다.</p>
+</section>
+
+<!-- ===================== 10.4 ===================== -->
+<section class="sec" id="wrap10">
+  <div class="sec-head"><span class="sec-badge">10.4</span><h2 class="sec-title">요약 · 실습 구성 · 참고서적<small>교안 69~72p</small></h2></div>
+<div class="cards">
+  <div class="card2"><b>토픽 모델링 (69p)</b><ul class="ul"><li>토픽 모델링과 활용 분야</li><li>BoW와 문서-단어 행렬</li><li>LSA의 동작 원리(특이값 분해)</li><li>LDA의 동작 원리(문서 생성 과정과 디리클레 분포)</li><li>토픽 개수 선택과 응집도 평가</li></ul></div>
+  <div class="card2"><b>감성 분석 (70p)</b><ul class="ul"><li>감성 분석과 응용 분야</li><li>감성의 유형과 극성 · 강도 등 용어</li><li>다양한 도구</li><li>TextBlob 실습</li><li>데이터 불러오기</li><li>모델 학습과 평가 지표</li></ul></div>
+  <div class="card2"><b>기계 독해 (71p)</b><ul class="ul"><li>개념과 필요성</li><li>빈칸 채우기 · 객관식 · 추출형 · 추상형</li><li>SQuAD · KorQuAD 구조</li><li>BERT 기반 스팬 예측</li><li><b>EM과 F1</b>로 평가</li><li>오픈 도메인 QA · RAG</li></ul></div>
+</div>
+<p>요약 항목을 다른 주제 칸으로 옮겨 친 보기가 잘 나온다 &mdash; <b>EM · F1은 기계 독해</b>, <b>BoW · 문서-단어 행렬은 토픽 모델링</b>, <b>극성 · 강도는 감성 분석</b> 칸이다.</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>실습</th><th>과제</th><th>순서</th></tr></thead>
+  <tbody>
+    <tr><td><b>[실습 1]</b></td><td>토픽 모델링</td><td><b>문서-단어 행렬 구성 → LSA(TruncatedSVD) → LDA</b> → numpy LSA 직접 구현 → K 바꾸기</td></tr>
+    <tr><td><b>[실습 2]</b></td><td>감성 분석</td><td><b>TF-IDF + 로지스틱 회귀</b> 학습 · 평가 → 새 문장 예측 · 가중치 해석 · 오분류 분석</td></tr>
+    <tr><td><b>[실습 3]</b></td><td>기계 독해</td><td><b>HuggingFace 파이프라인</b>으로 질의응답 → <b>EM / F1 직접 구현</b>으로 채점 → 답 없는 질문 실험</td></tr>
+  </tbody>
+</table>
+</div>
+<p><b>참고서적(72p)</b> &mdash; 국내 교재 4권과 함께 <b>Devlin et al., BERT, NAACL 2019</b>, <b>Blei, Ng, Jordan, Latent Dirichlet Allocation, JMLR 2003</b>. (Vaswani 2017은 Transformer, Mikolov 2013은 Word2Vec 논문이다.)</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>약어 · 용어</th><th>풀네임 · 원어</th><th>뜻</th></tr></thead>
+  <tbody>
+    <tr><td><b>DTM</b></td><td>Document-Term Matrix</td><td>문서-단어 행렬 &mdash; 행 문서, 열 단어, 원소 빈도</td></tr>
+    <tr><td><b>LSA · LSI</b></td><td>Latent Semantic Analysis / Indexing</td><td>잠재 의미 분석 &mdash; 문서-단어 행렬의 절단 SVD</td></tr>
+    <tr><td><b>SVD</b></td><td>Singular Value Decomposition</td><td>A = UΣVᵀ &mdash; 문서-토픽 · 특이값 · 토픽-단어</td></tr>
+    <tr><td><b>LDA</b></td><td>Latent Dirichlet Allocation</td><td>잠재 디리클레 할당 &mdash; 문서 = 토픽 혼합, 토픽 = 단어 분포</td></tr>
+    <tr><td><b>α · β</b></td><td>doc_topic_prior · topic_word_prior</td><td>문서-토픽 · 토픽-단어 분포의 디리클레 사전</td></tr>
+    <tr><td><b>ABSA</b></td><td>Aspect-Based Sentiment Analysis</td><td>속성 기반 감성 분석</td></tr>
+    <tr><td><b>VADER</b></td><td>Valence Aware Dictionary and sEntiment Reasoner</td><td>소셜 미디어용 규칙 기반 감성 도구</td></tr>
+    <tr><td><b>NSMC</b></td><td>Naver Sentiment Movie Corpus</td><td>네이버 영화 리뷰 감성 데이터</td></tr>
+    <tr><td><b>MRC</b></td><td>Machine Reading Comprehension</td><td>기계 독해</td></tr>
+    <tr><td><b>SQuAD · KorQuAD</b></td><td>Stanford / Korean Question Answering Dataset</td><td>추출형 기계 독해 데이터셋</td></tr>
+    <tr><td><b>BiDAF · DrQA</b></td><td>Bi-Directional Attention Flow · Document Reader QA</td><td>2017년 신경망 기계 독해 모델</td></tr>
+    <tr><td><b>EM · F1</b></td><td>Exact Match · F1 score</td><td>완전 일치 · 토큰 겹침 조화평균</td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
+<!-- ===================== 실습 ===================== -->
+<section class="sec" id="lab">
+  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">10주차 실습 노트북 — 실제 실행 결과<small>정답 노트북을 직접 실행한 값 · scikit-learn 1.9 · 실습 3은 코드 해설</small></h2></div>
+<p>정답 노트북은 출력 없이 올라왔다. 아래 수치는 실습 1 · 2와 과제 1 · 2의 정답 코드를 그대로 실행해 얻었다(<code>random_state=42</code>라 같은 버전이면 같은 값이 나온다). 실습 2는 온라인 UCI 데이터 <b>2,748문장</b>을 내려받는 데 성공했다 &mdash; 내려받지 못하면 노트북이 40문장짜리 백업 데이터로 바꾸므로 수치가 크게 달라진다.</p>
+
+<h3 class="sub-title" id="lab1">[실습 1] 토픽 모델링 — 24문장 · 3주제</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>단계</th><th>코드 핵심</th><th>실제 출력</th></tr></thead>
+  <tbody>
+    <tr><td>문서-단어 행렬</td><td><code>CountVectorizer(stop_words='english', max_df=0.9)</code></td><td><b>(24, 131)</b> &mdash; 문서 24 × 어휘 131. TF-IDF 행렬도 같은 크기</td></tr>
+    <tr><td>IDF</td><td><code>tfidf_vec.idf_</code></td><td>가장 작은 값 market · team 2.609(여러 문서에 등장) / 가장 큰 값 affect · analysts … 3.526(한 문서에만)</td></tr>
+    <tr><td>LSA</td><td><code>TruncatedSVD(n_components=4)</code></td><td>U <b>(24, 4)</b> · Vᵀ <b>(4, 131)</b> · 설명분산 [0.053 0.037 0.052 0.055], 합 <b>0.198</b></td></tr>
+    <tr><td>LDA</td><td><code>LatentDirichletAllocation(3, max_iter=50)</code></td><td>θ <b>(24, 3)</b> · 행 합계 <b>1.0</b>(확률이니까)</td></tr>
+    <tr><td>직접 구현 LSA</td><td><code>np.linalg.svd(X, full_matrices=False)</code></td><td>특이값 [1.314 1.186 1.156 1.124] &mdash; sklearn [1.313 1.184 1.152 1.122]과 거의 같다</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="cards">
+  <div class="card2"><b>LSA 상위 단어 (TF-IDF)</b><pre class="code">성분 0 : team, game, match, football, goal, won
+성분 1 : market, stock, season, earnings, bank
+성분 2 : salt, recipe, cook, butter, sugar, tomato
+성분 3 : sugar, butter, mix, flour, dough, dessert</pre><p>세 주제가 성분 0 · 1 · 2에 깔끔하게 나왔고, 남는 성분 3은 &lsquo;베이킹&rsquo;이라는 요리의 하위 주제다.</p></div>
+  <div class="card2"><b>LDA 상위 단어 (Count)</b><pre class="code">토픽 0 : team, match, game, won, coach, final
+토픽 1 : market, stock, season, earnings, price
+토픽 2 : oil, tomato, recipe, minutes, sugar, butter</pre><p>문서별 확률은 0.90 안팎으로 한쪽에 몰린다(예: 문서 0 = [0.915, 0.042, 0.043]). 하지만 스포츠 문서 2 · 5(scored, stadium)는 토픽 1로 잘못 갔다.</p></div>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>LSA 배정 (성분 0 제외)</th><th>토픽 0</th><th>토픽 1</th><th>토픽 2</th></tr></thead>
+  <tbody>
+    <tr><td>cooking</td><td>0</td><td><b>6</b></td><td>2</td></tr>
+    <tr><td>finance</td><td><b>8</b></td><td>0</td><td>0</td></tr>
+    <tr><td>sports</td><td>2</td><td>1</td><td><b>5</b></td></tr>
+  </tbody>
+</table>
+</div>
+<p>노트북의 &lsquo;성분 0 = 평균 방향&rsquo; 가정 때문에 스포츠 축(성분 0)을 버리고 베이킹 축(성분 3)을 남겼다 &mdash; 그래서 sports 행이 흩어진다. 성분 0을 포함한 배정은 <b>[8, 8, 6, 2]</b>로 주제 개수와 더 잘 맞는다(<a class="ext" href="#lsa-proscons">10.1.3 함정 상자</a>). <b>토픽 공간 유사도</b> &mdash; &ldquo;The football team won the championship…&rdquo;에 가장 가까운 문서 세 개는 모두 sports(0.996 · 0.991 · 0.991)였다.</p>
+
+<h3 class="sub-title" id="lab1-k">K 바꾸기 · 과제 1 정답 코드 출력</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>K</th><th>LDA 혼란도 (실습 1-6)</th><th>LSA 설명분산 합 (과제 1)</th><th>LDA 로그가능도 (과제 1)</th><th>상위 단어를 보면</th></tr></thead>
+  <tbody>
+    <tr><td>2</td><td><b>210.7</b> (최저)</td><td>0.0924</td><td><b>−904.98</b> (최대)</td><td>스포츠 토픽에 sugar · butter가 섞인다 &mdash; 요리가 흡수됨</td></tr>
+    <tr><td><b>3</b></td><td>243.3</td><td>0.1375</td><td>−921.30</td><td><b>스포츠 · 금융 · 요리가 정확히 셋</b></td></tr>
+    <tr><td>4</td><td>271.1</td><td>0.1924</td><td>−930.98</td><td>stadium + sugar, tomato + goal처럼 뒤섞인다</td></tr>
+    <tr><td>5 / 6</td><td>317.9 (K=5)</td><td>0.3026 (K=6)</td><td>−974.95 (K=6)</td><td>올림픽 · 기록 같은 작은 토픽, 나머지는 잡탕</td></tr>
+    <tr><td>8</td><td>&mdash;</td><td>0.3980</td><td>−978.92</td><td>&mdash;</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="pit"><b>지표만 따르면 K = 2, 상위 단어를 보면 K = 3</b> &mdash; 혼란도는 K가 커질수록 계속 나빠지고 로그가능도도 K = 2에서 최대라, 정량 지표만 보면 K = 2를 고르게 된다. 하지만 K = 2는 요리 주제를 스포츠 토픽에 흡수해 버린다. 반면 LSA 설명분산은 K를 늘릴수록 단조롭게 늘어 &lsquo;최대&rsquo;로는 고를 수 없다. 24문장처럼 작은 데이터에서 <b>학습 데이터로 잰</b> 혼란도는 이렇게 믿기 어렵다. 그래서 과제 1은 <b>정성 평가를 함께</b> 쓰라고 요구한다 &mdash; 답안에는 &ldquo;정량 지표는 K = 2를 가리키지만 상위 단어가 세 주제로 깔끔히 나뉘는 K = 3을 고른다&rdquo;처럼 <b>두 근거가 어긋난 이유</b>를 쓰는 것이 핵심이다(<a class="ext" href="#tm-metric">10.1.5</a>).</div>
+
+<h3 class="sub-title" id="lab2">[실습 2] 감성 분석 — UCI 2,748문장 · TF-IDF(1,2) + 로지스틱 회귀</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>항목</th><th>실제 출력</th></tr></thead>
+  <tbody>
+    <tr><td>데이터</td><td>2,748문장(imdb · amazon · yelp) · Positive <b>1,386</b> / Negative <b>1,362</b></td></tr>
+    <tr><td>분할 (75 / 25, stratify)</td><td>학습 <b>2,061</b> · 테스트 <b>687</b> · 학습 긍정 비율 0.50</td></tr>
+    <tr><td>피처</td><td><b>(2061, 19798)</b> &mdash; 바이그램을 넣어 어휘가 2만 개 가까이로 불었다. 예: &lsquo;10 minutes&rsquo;, &lsquo;10 of&rsquo;</td></tr>
+    <tr><td>정확도</td><td>학습 <b>0.983</b> · 테스트 <b>0.820</b> &mdash; 차이가 커서 과적합 기미가 있다</td></tr>
+    <tr><td>테스트 지표</td><td>정밀도 <b>0.825</b> · 재현율 <b>0.815</b> · F1 <b>0.820</b></td></tr>
+    <tr><td>혼동 행렬</td><td>TN 281 · FP 60 · FN 64 · TP 282 → 오분류 <b>124 / 687</b></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>혼동 행렬로 지표를 손으로 검산하기</b> &mdash; 정밀도 = 282 / (282 + 60) = <b>0.825</b>, 재현율 = 282 / (282 + 64) = <b>0.815</b>, 정확도 = (281 + 282) / 687 = <b>0.820</b>. 긍정 · 부정이 거의 반반이라 정확도와 F1이 같게 나왔다 &mdash; 클래스가 불균형하면 두 값이 벌어진다(<a class="ext" href="#sa-metric">10.2.5</a>).</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>새 문장</th><th>긍정 확률</th><th>읽는 법</th></tr></thead>
+  <tbody>
+    <tr><td>I really love this product it works great</td><td><b>0.935</b></td><td>강한 긍정</td></tr>
+    <tr><td>This is the worst service I have ever received</td><td>0.281</td><td>부정</td></tr>
+    <tr><td>The movie was not good at all</td><td><b>0.229</b></td><td>&lsquo;good&rsquo;이 있는데도 부정 &mdash; 불용어를 지우지 않아(stop_words=None) &lsquo;not&rsquo;과 &lsquo;not good&rsquo; 피처가 살아 있다</td></tr>
+    <tr><td>It is okay but nothing special</td><td><b>0.420</b></td><td>0.5 부근 = <b>모델이 애매해하는</b> 문장(중립이 아니라 불확실, <a class="ext" href="#polarity">10.2.2</a>)</td></tr>
+  </tbody>
+</table>
+</div>
+<p><b>오분류 사례</b> &mdash; &ldquo;We've have gotten a much better service from the pizza place next door…&rdquo;(정답 부정 → 예측 긍정)은 교안 54p의 <b>비교 표현</b>, &ldquo;Gets the job done.&rdquo;(긍정 → 부정)은 감성 단어가 없는 <b>담백한 긍정</b>이다. &ldquo;the battery is dying&rdquo;은 도메인 지식이 있어야 부정으로 읽힌다. TextBlob 셀은 설치되어 있지 않아 건너뛰었다(<code>!pip install textblob</code> 후 실행).</p>
+
+<h3 class="sub-title" id="lab2-sweep">과제 2 정답 코드 출력 — 벡터라이저 × N-gram</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>순위</th><th>벡터라이저</th><th>ngram_range</th><th>테스트 정확도</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><b>Count</b></td><td><b>(1, 2)</b></td><td><b>0.8239</b></td></tr>
+    <tr><td>2</td><td>TF-IDF</td><td>(1, 1)</td><td>0.8224</td></tr>
+    <tr><td>2</td><td>TF-IDF</td><td>(1, 2)</td><td>0.8224</td></tr>
+    <tr><td>4</td><td>TF-IDF</td><td>(1, 3)</td><td>0.8180</td></tr>
+    <tr><td>5</td><td>Count</td><td>(1, 1)</td><td>0.8166</td></tr>
+    <tr><td>6</td><td>Count</td><td>(1, 3)</td><td>0.8122</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="warn"><b>여섯 조합의 차이가 0.012밖에 안 된다</b> &mdash; 테스트 687문장에서 0.0015는 한 문장 차이다. 1위와 6위도 8문장 차이라 &ldquo;Count (1, 2)가 확실히 낫다&rdquo;고 말하기 어렵다. 답안에서 &lsquo;왜 차이가 났는지&rsquo;를 쓸 때는 (1, 3)이 오히려 떨어진 이유(트라이그램은 대부분 한 번만 나와 잡음 피처만 늘린다)처럼 <b>방향이 분명한 것</b>을 근거로 쓰는 편이 안전하다. 그리고 과제 원문(셀 [64])은 <b>stop_words 비교와 F1 점수</b>도 요구하는데 정답 코드는 정확도만, ngram만 바꾼다 &mdash; 제출할 때는 <code>stop_words='english'</code> 조합과 <code>f1_score</code> 열을 추가하자(<a class="ext" href="#sa-features">불용어 제거의 역설</a>).</div>
+
+<h3 class="sub-title" id="lab3">[실습 3] 기계 독해 — 코드 해설 (모델은 실행하지 않음)</h3>
+<ul class="ul">
+  <li><b>3-1 데이터</b> &mdash; 지문 두 개(Amazon 열대우림, BERT)와 SQuAD 형식 예제 <b>6개</b>. <code>answer_start = 290 → 'Brazil'</code>로 문자 위치를 검증한다(실제 실행 확인)</li>
+  <li><b>3-2 파이프라인</b> &mdash; <code>pipeline("question-answering", model="distilbert-base-cased-distilled-squad")</code>로 답 · score · start · end를 얻는다</li>
+  <li><b>3-3 · 3-4 EM / F1 직접 구현</b> &mdash; <code>normalize_answer</code> → <code>exact_match_score</code> · <code>f1_score_qa</code>(Counter 교집합) → 정답이 여러 개면 <code>metric_max_over_ground_truths</code>로 <b>최댓값</b>(<a class="ext" href="#em-f1">10.3.3 손계산</a>)</li>
+  <li><b>3-5 한국어</b> &mdash; <code>monologg/koelectra-small-v2-distilled-korquad-384</code>(KorQuAD 학습) 모델로 바꿔 한국어 지문에 답한다</li>
+  <li><b>3-6 답이 없는 질문</b> &mdash; SQuAD 1.1 모델은 거절을 배우지 않아 엉뚱한 구간을 답한다. <b>score가 낮게 나오는 것</b>을 보고 임계값을 정하는 것이 과제 3의 5번이다</li>
+</ul>
+</section>
+
+<!-- ===================== 과제 ===================== -->
+<section class="sec" id="hw">
+  <div class="sec-head"><span class="sec-badge">HW</span><h2 class="sec-title">과제 · 제출<small>실행 결과가 포함된 .ipynb 1개 · 서술형 답은 마크다운 셀</small></h2></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>과제</th><th>배점</th><th>요구 사항 (셀 [64] 상세 + 셀 [65] 요약)</th><th>정답 코드</th></tr></thead>
+  <tbody>
+    <tr><td><b>과제 1</b> 토픽 개수 K</td><td>30</td><td>K = 2~6으로 LDA 학습 → <b>혼란도 그래프</b> · 토픽별 상위 단어 6개 → 정량 + 정성으로 K를 고르고 <b>근거 3문장 이상</b>. 요약본은 LSA 설명분산 · LDA 로그가능도 비교</td><td><code>compare_topic_counts((2,3,4,6,8))</code> &mdash; 설명분산 · 로그가능도 표만 낸다</td></tr>
+    <tr><td><b>과제 2</b> 감성 분류 개선</td><td>30</td><td>Count / TF-IDF × (1,1) / (1,2) × stop_words None / english 중 <b>4조합 이상</b> → <b>정확도와 F1</b> 표 → 최고 · 최저 조합과 이유. (심화) MultinomialNB · LinearSVC</td><td><code>sweep_vectorizers()</code> &mdash; 6조합 정확도만</td></tr>
+    <tr><td><b>과제 3</b> 기계 독해 채점</td><td>40</td><td>5문장 이상 지문 직접 작성 · 질문 5개(<b>1개 이상 답 없는 질문</b>) → EM / F1 채점 → 틀린 사례 <b>2개 이상 유형 분류</b> → <b>신뢰도 임계값</b>과 근거. 요약본은 &lsquo;서로 다른 주제 5쌍 · 실패 사례 하나&rsquo;</td><td><code>my_qa_set()</code> &mdash; 한국어 지문 5개, 답 없는 질문 없음</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="pit"><b>과제 설명이 두 벌이고, 정답 코드는 짧은 쪽만 따른다</b> &mdash; 노트북 끝에 과제 설명이 두 번(셀 [64] 상세판, 셀 [65] 배점판) 나오는데 요구 사항이 다르다. 안전하게 가려면 <b>두 설명을 모두 만족</b>시키자.
+<ul class="ul">
+  <li>과제 1 &mdash; 혼란도 그래프 + 상위 단어 6개 + LSA 설명분산 · LDA 로그가능도 표를 모두 넣는다. 서술은 위 표처럼 &lsquo;지표는 K = 2, 단어는 K = 3&rsquo;의 어긋남을 다룬다</li>
+  <li>과제 2 &mdash; stop_words 축과 F1 열을 추가한다. <code>stop_words='english'</code>는 &lsquo;not&rsquo;을 지워 성능이 떨어질 가능성이 크다 &mdash; 그것이 &lsquo;가장 나쁜 조합의 이유&rsquo;가 된다</li>
+  <li>과제 3 &mdash; 정답 코드는 <b>한국어 지문을 영어 모델(distilbert-squad)</b>에 넣는다. 한국어로 쓸 거면 3-5의 koelectra KorQuAD 모델을 쓰고, 정규화가 조사를 못 떼는 문제(&lsquo;1443년에&rsquo; vs &lsquo;1443년&rsquo;)도 실패 유형으로 적을 수 있다. <b>답 없는 질문 1개 이상</b>도 꼭 넣자</li>
+</ul></div>
+</section>
+
+
+<!-- ===================== 다음 주 ===================== -->
+<section class="sec" id="next">
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>11주차 — 자연어처리 딥러닝 Ⅰ (11.9 ~ 11.15)</small></h2></div>
+<div class="note-box"><b>11주차</b>는 강의계획서상 <b>자연어처리 딥러닝 Ⅰ</b> &mdash; 딥러닝 기초 · 단어 벡터 추론 · CNN이다. 이번 주까지 TF-IDF · 로지스틱 회귀 같은 고전 방법과 BERT를 &lsquo;가져다 쓰는&rsquo; 법을 봤다면, 다음 주부터는 신경망을 직접 쌓는다.
+<ul class="ul">
+  <li><b>12주차</b> &mdash; RNN · Seq2Seq · 어텐션(9주차 신경망 번역을 자세히)</li>
+  <li>이번 주 손계산 거리 &mdash; <b>SVD 행렬 크기, α · β의 방향, 극성 · 확률 · 강도의 범위, 정밀도 · 재현율 · F1, answer_start, EM · F1</b>. 그리고 비교표 &mdash; <b>LSA vs LDA, 혼란도 vs 응집도, 기계 독해 네 유형과 데이터셋, SQuAD 1.1 vs 2.0</b></li>
+</ul></div>
+</section>
+
+<p class="src">자연어처리 10주차 (CHAPTER 10) 강의자료 정리 · 2026학년도 2학기<br>
+원본 교안 73페이지를 절 단위로 정리하고, <b>10주차 실습 정답 노트북의 실습 1 · 2를 직접 실행해 얻은 실제 출력값</b>을 붙였다(실습 3의 질의응답 모델은 실행하지 않았다). 100문제의 절 구분(10.1.1 ~ 10.4)과 같은 번호를 사용해, 절 제목 옆 버튼으로 해당 절의 문제를 바로 풀 수 있다.</p>
+
+</div>
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive(){
+    var cur = '';
+    sections.forEach(function(s){ if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function(t){ t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      setTimeout(function(){
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+
+  /* ---- 개념 설명 말풍선 (형광펜 용어) ---- */
+  var terms = document.querySelectorAll('.term');
+  if (!terms.length) return;
+  var tip = document.createElement('div');
+  tip.id = 'tipbox';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  var current = null;
+
+  function hide() {
+    tip.classList.remove('on');
+    if (current) { current.classList.remove('on'); current = null; }
+  }
+  function show(el) {
+    tip.textContent = el.getAttribute('data-tip') || '';
+    tip.classList.add('on');
+    if (current && current !== el) current.classList.remove('on');
+    current = el;
+    el.classList.add('on');
+    var pad = 8;
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+    var top = r.top - t.height - 10;
+    if (top < pad) top = r.bottom + 10;
+    top = Math.min(top, window.innerHeight - t.height - pad);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+  terms.forEach(function (el) {
+    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+    el.addEventListener('mouseenter', function () { show(el); });
+    el.addEventListener('mouseleave', function () { if (current === el) hide(); });
+    el.addEventListener('focus', function () { show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (current === el && tip.classList.contains('on')) hide(); else show(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el); }
+      if (e.key === 'Escape') hide();
+    });
+  });
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide);
+});
+</script>
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script src="../vendor/katex/katex.min.js"></script>
+<script>
+// .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.
+// KaTeX를 못 불러온 경우에는 원문이 그대로 남아 최소한 읽을 수는 있게 둔다.
+(function () {
+  if (typeof katex === 'undefined') { return; }
+  document.querySelectorAll('.tex, .tex-d').forEach(function (el) {
+    try {
+      katex.render(el.textContent.trim(), el, {
+        displayMode: el.classList.contains('tex-d'),
+        throwOnError: false,
+        strict: false
+      });
+    } catch (e) { if (window.console) { console.error('KaTeX', e, el.textContent); } }
+  });
+})();
+</script>
+
+<script src="quiz/nlp-w10.js?v=1"></script>
+<script src="quiz/inline-quiz.js?v=2"></script>
+
+</body>
+</html>

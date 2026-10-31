@@ -106,6 +106,14 @@ TERMS = {
    'Convolution','Normalization','Pooling','Activation','Loss function','Adam','Regularization',
    'Epoch','Seed','Learning rate','Batch','과적합','Overfitting','Underfitting','텐서플로','파이토치','코랩','Colab','아나콘다','conda','어노테이션',
  ],
+ 'nlp-w10': [
+   '토픽 모델링','토픽','잠재','비지도 학습','문서-단어 행렬','DTM','BoW','단어 모음','TF-IDF','IDF','LSA','LSI','SVD','특이값','Truncated SVD',
+   'LDA','디리클레','생성 모형','α','β','Gibbs','깁스 샘플링','변분 추론','혼란도','Perplexity','응집도','Coherence','pyLDAvis','gensim','KoNLPy','교착어',
+   '감성 분석','감성','극성','polarity','강도','주관성','능동성','어조','ABSA','속성 기반','TextBlob','VADER','NSMC','value_counts','N-gram','ngram_range',
+   '정확도','정밀도','재현율','F1','혼동 행렬','부정 표현','반어','도메인 의존성','클라우드','전이 학습',
+   '기계 독해','기계독해','MRC','Cloze','빈칸 채우기','객관식','추출형','추상형','SQuAD','KorQuAD','answer_start','BiDAF','DrQA','BERT',
+   '시작 위치','끝 위치','stride','EM','Exact Match','정규화','pipeline','distilbert','오픈 도메인','RAG','환각','multi-hop',
+ ],
  'nlp-w09': [
    '질의응답','정보 검색','정답 유형','질문 유형','질의 재생성','의문사','오류 전파','불리언','TF-IDF','BM25','코사인','어휘 불일치',
    '정답 후보','순위화','개체명','지식베이스','SPARQL','기계독해','MRC','Retriever','Reader','DPR','밀집 검색','RAG','환각','F1','Factoid',
@@ -259,3 +267,5 @@ build('ml-w09', 'materials/기계학습특론/week09-quiz100.html', 'courses/qui
       {'title': '9주차 · 군집화 · 의사결정트리 · 딥러닝 소개', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week09-quiz100.html'})
 build('nlp-w09', 'materials/자연어처리/week09-quiz100.html', 'courses/quiz/nlp-w09.js',
       {'title': '9주차 · 질의응답, 기계번역, 그리고 대화 시스템', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week09-quiz100.html'})
+build('nlp-w10', 'materials/자연어처리/week10-quiz100.html', 'courses/quiz/nlp-w10.js',
+      {'title': '10주차 · 토픽 모델링, 감성 분석, 그리고 기계 이해', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week10-quiz100.html'})
