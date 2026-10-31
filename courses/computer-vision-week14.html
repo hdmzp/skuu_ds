@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>컴퓨터비전 | 14주차 수업내용</title>
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0c1a3a">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+@media(max-width:560px){.fl{grid-template-columns:1fr;gap:4px}}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+
+/* 주차 내비 */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* ===== 필기 표기 ===== */
+.hw{color:#b45309;font-weight:700;background:#fff7ed;border-radius:3px;padding:0 3px}
+.legend{
+  display:flex;flex-wrap:wrap;gap:9px 16px;align-items:center;
+  background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius);
+  padding:13px 15px;margin:0 0 24px;font-size:12px;color:var(--muted);line-height:1.6;
+}
+.legend i{font-style:normal;display:flex;align-items:center;gap:7px}
+.legend .legend-t{flex:0 0 100%;font-size:12.5px;font-weight:700;color:var(--ink)}
+.legend .legend-t2{flex:0 0 100%;font-size:11.5px;color:var(--muted);border-top:1px dashed var(--border);padding-top:10px;margin-top:1px}
+
+/* ===== 주차 내비 ===== */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* ===== 자료별 구분 ===== */
+.matbar{
+  background:linear-gradient(135deg,#122250,#24407f);color:#fff;border-radius:14px;
+  padding:16px 18px;margin:34px 0 18px;box-shadow:0 6px 18px rgba(18,34,80,.15);
+}
+.matbar .tagline{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--lime)}
+.matbar h2{font-size:clamp(16px,3.6vw,20px);font-weight:700;line-height:1.3;margin:5px 0 4px}
+.matbar p{font-size:12.5px;color:#c9d3ee;line-height:1.65}
+.matbar .acts{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.matbar .acts a{
+  font-size:12px;font-weight:700;text-decoration:none;border-radius:8px;padding:6px 12px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;
+}
+.matbar .acts a.primary{background:var(--lime);border-color:var(--lime);color:#16233f}
+.partbar{
+  display:flex;align-items:center;gap:10px;margin:26px 0 14px;
+  font-size:13px;font-weight:700;color:var(--accent);
+}
+.partbar::after{content:'';flex:1;height:1px;background:var(--border)}
+.partbar b{background:var(--accent-light);border:1px solid #c4d2ee;border-radius:999px;padding:4px 11px;font-size:11.5px}
+
+/* ===== 한눈에 보기 ===== */
+.mapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px;margin-top:10px}
+.mapgrid a{
+  display:block;text-decoration:none;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:9px;padding:10px 13px;transition:.15s;
+}
+.mapgrid a:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(18,34,80,.1)}
+.mapgrid b{display:block;font-size:12.5px;color:var(--ink)}
+.mapgrid span{font-size:11.5px;color:var(--muted);line-height:1.55}
+
+/* ===== 개념 하이라이트 + 툴팁 ===== */
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);
+  border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;
+  left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+
+/* ===== 행렬 ===== */
+.mtx{display:inline-flex;align-items:center;gap:4px;vertical-align:middle;margin:0 2px}
+.mtx .br{display:inline-block;width:7px;align-self:stretch;border:2px solid var(--ink);border-right:none;border-radius:3px 0 0 3px}
+.mtx .br.r{border:2px solid var(--ink);border-left:none;border-radius:0 3px 3px 0}
+.mtx .cells{display:grid;gap:2px 12px;padding:5px 2px;font-size:12.5px;text-align:center}
+.mtx .cells span{min-width:26px;line-height:1.5}
+.eq{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;justify-content:center;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 14px;margin:10px 0;
+}
+.eq .op{font-size:14px;font-weight:700;color:var(--muted)}
+/* ===== 변환 카드 ===== */
+.xf{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px}
+.xf-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:4px}
+.xf-head h4{font-size:14.5px;font-weight:700}
+.xf-head .en{font-size:11.5px;color:var(--muted)}
+.xf-dof{margin-left:auto;background:var(--accent);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.xf p{font-size:13px;color:#4b5563;line-height:1.78}
+.xf-keep{font-size:12.5px;color:#166534;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.65}
+.xf-sol{font-size:12.5px;color:#1b3f8b;background:#eef6ff;border:1px solid #c4d2ee;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.7}
+
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .st{color:#c9f24b}
+pre.code .fn{color:#7ec8ff}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 함수 카드 */
+.fnc{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:var(--radius);padding:13px 15px;margin:11px 0}
+.fnc h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fnc .sig{
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;color:#1b3f8b;
+  background:#eef2fb;border:1px solid #dbe3f5;border-radius:6px;padding:7px 10px;margin:7px 0 9px;
+  overflow-x:auto;white-space:pre;
+}
+.fnc dl{display:grid;grid-template-columns:minmax(88px,auto) 1fr;gap:5px 12px;font-size:12.5px;line-height:1.65}
+.fnc dt{font-weight:700;color:var(--ink)}
+.fnc dd{color:#4b5563}
+@media(max-width:440px){.fnc dl{grid-template-columns:1fr;gap:2px}.fnc dd{margin-bottom:6px}}
+
+/* 수식 카드 · 풀이 예제 (기계학습특론 페이지와 같은 규칙) */
+.fx{background:#f8faff;border:1px solid #cfdcf5;border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:10px 0}
+.fx-lab{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.fx-note{font-size:12px;color:#4b5563;line-height:1.7;margin-top:7px}
+.fx-note b{color:var(--ink)}
+.tex-d{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:9px 2px 5px;text-align:center}
+.tex-d .katex{font-size:1.08em}
+.ex{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin:10px 0}
+.ex-q{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.65;background:#f1f0ec;border-radius:7px;padding:9px 12px;margin-bottom:4px}
+.ex-q em{font-style:normal;color:var(--red);font-size:11px;font-weight:700;display:block;margin-bottom:3px}
+.step{display:grid;grid-template-columns:minmax(20px,auto) 1fr;gap:9px;align-items:baseline;font-size:12.5px;color:#4b5563;line-height:1.75;padding:5px 0}
+.step i{font-style:normal;font-weight:700;color:var(--accent);font-size:11.5px}
+.ex-ans{margin-top:8px;background:#f0fdf4;border:1px solid #22c55e;border-radius:8px;padding:9px 12px;font-size:12.5px;color:#14532d;line-height:1.7}
+.ex-ans b{color:var(--green)}
+.figs > .note-box{margin:0}
+/* 편집 거리 DP 표 */
+.lev table{min-width:0;width:auto;margin:0 auto;font-family:'Consolas','D2Coding',ui-monospace,monospace}
+.lev th,.lev td{text-align:center;padding:6px 10px;white-space:nowrap}
+.lev td.on{background:#fde68a;font-weight:700;color:#7c2d12}
+
+/* ===== 출처 뱃지 ===== */
+.bdg{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.02em;padding:3px 9px;border-radius:999px;white-space:nowrap;line-height:1.5}
+.bdg-gyo{background:#eef2fb;color:#1b3f8b;border:1px solid #c4d2ee}
+.bdg-flip{background:#fff7ed;color:#b45309;border:1px solid #f0c48a}
+.bdg-live{background:#fdf0f5;color:#9d174d;border:1px solid #f3bcd2}
+.bdg-plus{background:#f0fdfa;color:#0f766e;border:1px solid #99e0d6}
+.bdg-pres{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
+.bdg-exam{background:#fef2f2;color:#b91c1c;border:1px solid #fca5a5}
+
+/* ===== 개념 카드 ===== */
+.pt{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin:11px 0}
+.pt-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;font-weight:700;line-height:1.45;margin-bottom:7px}
+.pt > p{font-size:13.5px;color:#3f4854;line-height:1.85}
+.pt > p + p{margin-top:9px}
+.pt > p b{color:var(--ink)}
+.pt.gyo{border-left-color:#1b3f8b}
+.pt.flip{border-left-color:#b45309}
+.pt.live{border-left-color:#9d174d}
+.pt.plus{border-left-color:#0f766e}
+.pt.pres{border-left-color:#6d28d9}
+.deep{background:#f5f3ff;border:1px solid #c4b5fd;border-left:4px solid #7c3aed;border-radius:0 var(--radius) var(--radius) 0;padding:11px 14px;margin:12px 0;font-size:13px;color:#3f4854;line-height:1.8}
+.deep b:first-child{color:#6d28d9}
+.pit{background:#fff7ed;border:1px solid #f0c48a;border-left:4px solid #ea580c;border-radius:0 var(--radius) var(--radius) 0;padding:11px 14px;margin:12px 0}
+.pit p{font-size:13px;color:#3f4854;line-height:1.8}
+.pit p + p{margin-top:7px}
+.pit .pit-h{font-size:12.5px;font-weight:800;color:#c2410c;margin-bottom:3px}
+.pt .sub-title{margin:18px 0 8px}
+.hi{background:linear-gradient(transparent 58%,#ffe9a8 58%);font-weight:700;color:var(--ink);padding:0 1px}
+.pt pre.code{margin:9px 0}
+
+/* 커널(마스크) 격자 */
+.kmat{display:inline-grid;grid-template-columns:repeat(3,26px);border:1.5px solid #1f2937;border-radius:3px;overflow:hidden;background:#fff;font:700 12px/24px Consolas,'D2Coding',ui-monospace,monospace;text-align:center;vertical-align:middle}
+.kmat.k2{grid-template-columns:repeat(2,26px)}
+.kmat.k1{grid-template-columns:26px}
+.kmat span{border:1px solid #d6dbe3;height:24px}
+.kmat .p{background:#dbeafe;color:#1e3a8a}
+.kmat .n{background:#fee2e2;color:#991b1b}
+.kmat .z{color:#9ca3af}
+.kmat.hl{box-shadow:0 0 0 3px #f59e0b}
+.kpair{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
+.kbox{display:inline-flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--muted);line-height:1.4}
+.kbox b{font-size:11.5px;color:var(--ink)}
+.kbox em{font-style:normal;font-weight:700;color:#4b5563}
+.kbox.win em{color:#b45309}
+.ktbl td{vertical-align:middle}
+.ktbl td .kpair{justify-content:flex-start}
+.cmp{display:grid;grid-template-columns:repeat(3,auto);gap:12px 16px;justify-content:center;align-items:center;margin:12px 0}
+.cmp .mid{display:flex;align-items:center;justify-content:center}
+.dia{display:block;width:100%;max-width:580px;height:auto;margin:10px auto 4px;background:#fff;border:1px solid var(--border);border-radius:8px}
+.dia-cap{font-size:11.5px;color:var(--muted);text-align:center;line-height:1.6;margin-bottom:8px}
+.patch{display:inline-grid;grid-template-columns:repeat(3,30px);border:1.5px solid #1f2937;font:700 11px/30px Consolas,monospace;text-align:center}
+.patch span{height:30px}
+.chain{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}
+.chain span{min-width:44px;text-align:center;border-radius:6px;padding:4px 2px;font:700 12px/1.3 Consolas,monospace}
+.chain small{display:block;font:600 10px/1.3 'Pretendard',sans-serif}
+.chain .s{background:#1f2937;color:#fff}
+.chain .wk{background:#dcfce7;color:#14532d;border:1px solid #22c55e}
+.chain .wd{background:#fee2e2;color:#991b1b;border:1px dashed #ef4444}
+.pt-figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px;margin:10px 0}
+.pt-figs .sld{margin:0}
+table.acc{min-width:0}
+.acc td,.acc th{text-align:center;font-family:Consolas,monospace;padding:6px 6px;white-space:nowrap}
+.acc td.h1{background:#fef3c7}
+.acc td.h3{background:#b45309;color:#fff;font-weight:800}
+.chain .d{background:#f3f4f6;color:#9ca3af;border:1px dashed #d1d5db}
+
+/* 본문 속 짧은 보충 설명 상자 */
+.qa{background:#f0fdfa;border:1px solid #99e0d6;border-left:4px solid #0f766e;
+  border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:11px 0;
+  font-size:13px;line-height:1.85;color:#134e4a}
+.qa::before{content:'보충설명';display:table;font-size:10.5px;font-weight:800;letter-spacing:.02em;
+  padding:3px 9px;border-radius:999px;margin-bottom:7px;background:#e3f7f3;color:#0f766e;border:1px solid #99e0d6}
+.qa b{color:#0f3d3a}
+.qa .ul li{color:#134e4a}
+.qa .ul li::before{background:#0f766e;opacity:.8}
+
+/* ===== 슬라이드 모아보기 ===== */
+.deck{background:#efeeea;border:1px solid var(--border);border-radius:var(--radius);padding:12px 12px 14px;margin-bottom:20px}
+.deck-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.deck-h span{font-size:11px;font-weight:400;color:var(--muted)}
+.deck-t{font-size:12px;font-weight:700;color:var(--accent);margin:13px 0 7px;padding-left:8px;border-left:3px solid var(--accent)}
+.deck-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.sld{background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px;margin:0;cursor:zoom-in;transition:box-shadow .15s,transform .15s}
+.sld:hover{box-shadow:0 6px 16px rgba(18,34,80,.13);transform:translateY(-2px)}
+.sld img{display:block;width:100%;height:auto;border-radius:4px;background:#fff}
+.sld figcaption{font-size:11px;color:var(--muted);line-height:1.5;margin-top:6px;text-align:center}
+.sld figcaption b{color:var(--accent)}
+
+/* ===== 한 줄 요약 ===== */
+.oneline{background:#16233f;color:#e7edf9;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+.oneline > p{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--lime)}
+.oneline .ul li{color:#c5d0e8;font-size:13px}
+.oneline .ul li b{color:#fff}
+.oneline .ul li::before{background:var(--lime);opacity:.9}
+
+/* ===== 슬라이드 확대 보기 ===== */
+#lb{position:fixed;inset:0;background:rgba(9,15,31,.94);display:none;align-items:center;justify-content:center;
+  z-index:400;padding:52px 60px 64px;cursor:zoom-out;-webkit-user-select:none;user-select:none}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:80vh;border-radius:8px;background:#fff;box-shadow:0 18px 50px rgba(0,0,0,.45);cursor:default}
+#lb .cap{position:absolute;left:0;right:0;bottom:18px;text-align:center;color:#d9e1f3;font-size:12.5px;line-height:1.6;padding:0 20px;cursor:default}
+#lb .cap b{color:#fff}
+#lb .cap .num{display:block;font-size:11px;color:#9fb0d4;margin-top:4px;letter-spacing:.04em}
+#lb button{
+  position:absolute;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;
+  border-radius:50%;width:44px;height:44px;font-size:20px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .15s;
+  font-family:inherit;padding:0;
+}
+#lb button:hover{background:rgba(255,255,255,.22)}
+#lb button:disabled{opacity:.25;cursor:default}
+#lb .prev{left:12px;top:50%;transform:translateY(-50%)}
+#lb .next{right:12px;top:50%;transform:translateY(-50%)}
+#lb .x{right:12px;top:12px;width:38px;height:38px;font-size:17px}
+@media(max-width:560px){
+  #lb{padding:48px 10px 92px}
+  #lb .prev{left:50%;top:auto;bottom:16px;transform:translateX(-64px)}
+  #lb .next{right:50%;top:auto;bottom:16px;transform:translateX(64px)}
+  #lb .cap{bottom:70px}
+}
+
+.kg{display:block;width:108px;height:42px;margin:0 auto}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:640px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#map">한눈에 보기</a>
+  <a href="#gen">01 생성 모델 개요</a>
+  <a href="#pixelcnn">02 PixelCNN</a>
+  <a href="#ae">03 오토인코더</a>
+  <a href="#vae">04 VAE</a>
+  <a href="#gan">05 GAN</a>
+  <a href="#diffusion">06 확산 모델</a>
+  <a href="#wrapup">07 학기 정리</a>
+  <a href="#summary">핵심 정리</a>
+  <a href="#next">과제 · 기말</a>
+</nav>
+
+<div class="wrap">
+
+<div class="weeknav">
+  <a href="computer-vision.html" class="plan">← 강의계획서</a>
+  <a href="computer-vision-week12.html">12주차 · Classification (2)</a>
+  <a href="computer-vision-week13.html">13주차 · Detection &amp; Segmentation</a>
+  <span class="cur">14주차 · Generative Model &amp; Wrap Up</span>
+  <a href="computer-vision-assignments.html">과제 · 논문 발표</a>
+</div>
+
+<section class="hero">
+  <p class="kicker">14주차 · 12.2 · 2026-2학기</p>
+  <h1>14. 영상 생성 모델과 학기 정리 — 같은 분포에서 새 영상을 뽑는다</h1>
+  <p>11~13주차는 영상을 받아 &lsquo;무엇 · 어디 · 어떤 모양&rsquo;을 답하는 <b>판별 모델</b>이었다. 마지막 주는 반대 방향, 학습 데이터와 <b>같은 분포에서 새 영상을 만들어 내는 생성 모델</b>이다. 밀도를 직접 계산하는 <b>PixelCNN</b>(픽셀을 하나씩), 잠재 변수 z를 두고 하한(ELBO)을 최대화하는 <b>VAE</b>, 밀도를 포기하고 판별자와 겨루는 <b>GAN</b>, 노이즈를 조금씩 걷어 내는 <b>확산 모델</b>을 차례로 보고, 1주차 카메라 모델부터 이번 주까지 <b>한 학기 전체를 한 장의 지도</b>로 정리한다.</p>
+  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 60p</span><span class="chip">p<sub>model</sub>(x) ≈ p<sub>data</sub>(x)</span><span class="chip">명시적 vs 암묵적 밀도</span><span class="chip">자기회귀 · 마스크 A/B</span><span class="chip">ELBO · 재매개변수화</span><span class="chip">minimax · DCGAN</span><span class="chip">DDPM · ε 예측</span><span class="chip">학기 지도</span></div>
+</section>
+
+<div class="legend">
+  <p class="legend-t">내용이 어디에서 왔는지 <b>뱃지</b>로 구분했습니다</p>
+  <i><span class="bdg bdg-gyo">교안</span><span>교수님 슬라이드에 있는 내용 (영어 교안을 한국어로 옮김)</span></i>
+  <i><span class="bdg bdg-plus">보충설명</span><span>교안에 없거나 짧게 지나간 부분을 따로 찾아 정리한 내용</span></i>
+  <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고, <span class="hi">노란 형광펜</span>은 <b>꼭 기억할 문장</b>, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선</span>은 누르면 뜻이 뜹니다. 쪽수는 <b>슬라이드 오른쪽 아래에 찍힌 번호</b>(= PDF 쪽수)다.</p>
+</div>
+
+<section class="sec" id="map">
+  <div class="sec-head"><span class="sec-badge">MAP</span><h2 class="sec-title">한눈에 보기<small>Generative Model → Wrap up</small></h2></div>
+
+<div class="oneline">
+  <p><b>이번 주 한 줄 요약</b></p>
+  <ul class="ul">
+    <li>지도 학습은 정답(레이블)을 주고, 비지도 학습은 구조를 스스로 찾는다. 판별 모델은 <b>경계</b>를, 생성 모델은 <b>데이터 분포</b>를 배운다</li>
+    <li>생성 모델의 목표: <span class="hi"><span class="tex">p_{model}(x)\approx p_{data}(x)</span>를 배우고 거기서 새 x를 뽑는다</span>. 밀도를 <b>명시적</b>으로(PixelCNN · VAE · 확산) 또는 <b>암묵적</b>으로(GAN)</li>
+    <li><b>PixelCNN</b>: 연쇄 법칙 <span class="tex">p(x)=\prod p(x_i|x_{&lt;i})</span>, 마스크 합성곱. 가능도를 정확히 계산 · 최적화 쉬움 / 한 픽셀씩이라 느림</li>
+    <li><b>오토인코더</b>: X → 인코더 → 작은 Z → 디코더 → X̂, 재구성 손실. 그런데 Z 공간을 몰라 <b>생성은 못 한다</b></li>
+    <li><b>VAE</b>: z를 확률 분포로 · <span class="tex">q_\phi(z|x)</span>로 사후 분포 근사 · <b>ELBO = 재구성 − KL</b> 최대화 · 재매개변수화 트릭. 잠재 공간이 해석 가능 / 흐릿한 샘플</li>
+    <li><b>GAN</b>: 밀도를 포기하고 노이즈 → 영상 변환만 배운다. 판별자(진짜/가짜)와 생성자의 <b>minimax 게임</b>. DCGAN · CGAN · CycleGAN · StyleGAN · SRGAN</li>
+    <li><b>확산 모델</b>: 전방(가우시안 노이즈를 T단계 추가, 고정 마르코프 연쇄) → 역방(신경망이 노이즈 <span class="tex">\epsilon</span>을 예측해 단계별 제거). 품질 최고 · Stable Diffusion · DALL-E 2 · Imagen</li>
+  </ul>
+</div>
+
+<div class="mapgrid">
+  <a href="#gen"><b>01 생성 모델 개요</b><span>지도 vs 비지도 · 판별 vs 생성 · 밀도 추정 · 생성 모델 분류 체계</span></a>
+  <a href="#pixelcnn"><b>02 PixelCNN</b><span>자기회귀 · 연쇄 법칙 · 마스크 A · B · 장단점</span></a>
+  <a href="#ae"><b>03 오토인코더</b><span>차원 축소 · 재구성 손실 · 인코더 · 디코더 · 변형 · 응용 · 한계</span></a>
+  <a href="#vae"><b>04 VAE</b><span>잠재 z · 근사 사후 분포 · 재매개변수화 · ELBO 유도 · 잠재 공간 · 장단점</span></a>
+  <a href="#gan"><b>05 GAN</b><span>판별자 · 생성자 · minimax 목적 함수 · DCGAN · 벡터 연산 · GAN의 발전</span></a>
+  <a href="#diffusion"><b>06 확산 모델</b><span>전방 · 역방 과정 · 잡음 제거 U-Net · L<sub>simple</sub> · 활용 · 대표 모델 · 세 모델 비교</span></a>
+  <a href="#wrapup"><b>07 학기 정리</b><span>Early → Middle → High-level Vision · 주차별 핵심 · 각 주차 페이지 링크</span></a>
+</div>
+</section>
+
+<div class="matbar">
+  <p class="tagline">14주차 강의 · Image Generative Model &amp; Wrap Up</p>
+  <h2>14. Image Generative Model &amp; Wrap Up</h2>
+  <p>60페이지 · 생성 모델(개요 · PixelCNN · VAE · GAN · 확산 모델) → 학기 정리 순서다.</p>
+  <div class="acts">
+    <a class="primary" href="pdf-viewer.html?doc=cv-w14-gen">뷰어로 보기</a>
+    <a href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week14-generative-wrapup.pdf" download="컴퓨터비전_14주차_Generative_Model_Wrap_Up.pdf">⬇ 다운로드</a>
+  </div>
+</div>
+
+<!-- ===================== 01 ===================== -->
+<section class="sec" id="gen">
+  <div class="sec-head"><span class="sec-badge">01</span><h2 class="sec-title">생성 모델 — 개요<small>교안 3~7p</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>4p · 5p · 6p · 7p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-04.jpg" alt="교안 4p — 지도 vs 비지도 학습"><figcaption><b>4p</b> 지도 vs 비지도 학습</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-05.jpg" alt="교안 5p — 판별 모델 vs 생성 모델"><figcaption><b>5p</b> 판별 모델 vs 생성 모델</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-06.jpg" alt="교안 6p — 생성 모델링의 목표"><figcaption><b>6p</b> 생성 모델링의 목표</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-07.jpg" alt="교안 7p — 생성 모델 분류 체계"><figcaption><b>7p</b> 생성 모델 분류 체계</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>지도 vs 비지도, 판별 vs 생성 (4 · 5p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>내용</th></tr></thead>
+    <tbody>
+      <tr><td><b>지도 학습</b></td><td>사람 &lsquo;선생님&rsquo;이 문제와 답을 짝지은 <b>레이블 데이터</b>를 준다</td></tr>
+      <tr><td><b>비지도 학습</b></td><td>레이블도 지시도 없이, 컴퓨터가 데이터의 <b>바탕 구조 · 패턴</b>을 스스로 찾는다</td></tr>
+      <tr><td><b>판별 모델</b></td><td>대부분 지도 학습에 쓴다. 확률 추정 · 최대 가능도로 데이터를 클래스로 나누는 <b>경계</b>를 배운다 &mdash; <span class="tex">p(y|x)</span></td></tr>
+      <tr><td><b>생성 모델</b></td><td>이름대로 <b>새 데이터 점을 만들 수</b> 있다. 보통 비지도 문제에 쓴다 &mdash; <span class="tex">p(x)</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>생성 모델링의 목표와 분류 체계 (6 · 7p)</h3>
+  <p>학습 데이터가 주어지면, <b>같은 분포에서 새 표본을 생성</b>한다. 목표는 두 가지다 &mdash; ① <span class="tex">p_{data}(x)</span>를 근사하는 <span class="tex">p_{model}(x)</span>를 배운다 ② <span class="tex">p_{model}(x)</span>에서 새 x를 뽑는다. 이것을 <b>밀도 추정</b> 문제로 세운다.</p>
+  <ul class="ul">
+    <li><b>명시적 밀도 추정</b> &mdash; <span class="tex">p_{model}(x)</span>를 명시적으로 정의하고 푼다</li>
+    <li><b>암묵적 밀도 추정</b> &mdash; 명시적으로 정의하지 않고, <span class="tex">p_{model}(x)</span>에서 <b>표본을 뽑을 수 있는</b> 모델만 배운다</li>
+  </ul>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th colspan="2">갈래 (7p)</th><th>모델</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="3"><b>명시적 밀도</b></td><td>계산 가능한(tractable) 밀도</td><td>Fully Visible Belief Net · <b>PixelRNN / PixelCNN</b></td></tr>
+      <tr><td>근사 밀도 &mdash; 변분</td><td><b>VAE</b></td></tr>
+      <tr><td>근사 밀도 &mdash; 확산</td><td><b>DDPM</b> · LDM · SD</td></tr>
+      <tr><td rowspan="2"><b>암묵적 밀도</b></td><td>직접</td><td><b>GAN</b></td></tr>
+      <tr><td>확률적</td><td>GSN · 볼츠만 머신</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+</section>
+
+<!-- ===================== 02 ===================== -->
+<section class="sec" id="pixelcnn">
+  <div class="sec-head"><span class="sec-badge">02</span><h2 class="sec-title">PixelCNN — 픽셀을 하나씩 조건부로<small>교안 8~11p · CVPR 2016</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>9p · 10p · 11p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-09.jpg" alt="교안 9p — PixelCNN — 자기회귀 · 연쇄 법칙"><figcaption><b>9p</b> PixelCNN — 자기회귀 · 연쇄 법칙</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-10.jpg" alt="교안 10p — 마스크 A · B"><figcaption><b>10p</b> 마스크 A · B</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-11.jpg" alt="교안 11p — PixelCNN 장단점"><figcaption><b>11p</b> PixelCNN 장단점</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>자기회귀 모델과 마스크 합성곱 (9 · 10p)</h3>
+  <p>PixelCNN의 목적은 픽셀 분포 <span class="tex">p(x)</span>를 모델링하는 것이다(<span class="tex">x=(x_0,\dots,x_n)</span>은 영상의 픽셀 값 벡터). 이를 위해 <b>자기회귀 모델</b>을 쓴다 &mdash; 결합 분포에 평범한 <b>연쇄 법칙</b>을 적용한다.</p>
+  <div class="fx"><div class="tex-d">p(\mathbf x)=p(x_0)\prod_{i=1}^{n}p(x_i\,|\,x_{&lt;i}),\qquad p(x_{i,R}|x_{&lt;i})\,p(x_{i,G}|x_{&lt;i},x_{i,R})\,p(x_{i,B}|x_{&lt;i},x_{i,R},x_{i,G})</div>
+  <p class="fx-note">왼쪽 위부터 래스터 순서로, 앞서 생성된 픽셀들(context)을 조건으로 다음 픽셀의 256단계 분포를 예측한다. 한 픽셀 안에서도 R → G → B 순서다.</p></div>
+  <ul class="ul">
+    <li>RNN 대신 <b>합성곱 층을 쌓는다</b> &mdash; 이미 생성된 근처 픽셀로 목표 픽셀을 생성한다</li>
+    <li>합성곱은 병렬화가 쉬워 <b>PixelRNN보다 학습이 훨씬 빠르다</b></li>
+    <li><b>마스크 A</b> &mdash; 앞서 생성된 픽셀(context)과 목표 픽셀에서 <b>이미 생성된 채널</b>에만 의존한다. <b>맨 첫 층</b>에 쓴다(자기 자신을 보면 안 되므로)</li>
+    <li><b>마스크 B</b> &mdash; 마스크 A에서 <b>같은 채널로의 연결을 허용</b>하도록 완화한 것. <b>둘째 층부터</b> 쓴다</li>
+  </ul>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>장단점 (11p)</h3>
+  <div class="cards">
+    <div class="card2"><h4>장점</h4><p>가능도 <span class="tex">p(x)</span>를 <b>명시적으로 계산</b>할 수 있다 · <b>최적화가 쉽다</b>(그냥 픽셀별 분류의 교차 엔트로피)</p></div>
+    <div class="card2"><h4>단점</h4><p><b>순차 생성</b>이라 느리다 &mdash; 32×32×3 영상이면 3,072번 차례로 예측해야 한다</p></div>
+  </div>
+</div>
+</section>
+
+<!-- ===================== 03 ===================== -->
+<section class="sec" id="ae">
+  <div class="sec-head"><span class="sec-badge">03</span><h2 class="sec-title">오토인코더 — 줄였다가 되살린다<small>교안 12~19p</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>13p · 14p · 15p · 16p · 17p · 18p · 19p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-13.jpg" alt="교안 13p — 계산 가능 vs 불가능한 밀도"><figcaption><b>13p</b> 계산 가능 vs 불가능한 밀도</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-14.jpg" alt="교안 14p — 차원 축소 · 다양체"><figcaption><b>14p</b> 차원 축소 · 다양체</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-15.jpg" alt="교안 15p — 오토인코더 — 재구성 손실"><figcaption><b>15p</b> 오토인코더 — 재구성 손실</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-16.jpg" alt="교안 16p — 인코더 · 디코더 · L2 손실"><figcaption><b>16p</b> 인코더 · 디코더 · L2 손실</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-17.jpg" alt="교안 17p — 잡음 제거 · 적층 오토인코더"><figcaption><b>17p</b> 잡음 제거 · 적층 오토인코더</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-18.jpg" alt="교안 18p — 오토인코더 응용"><figcaption><b>18p</b> 오토인코더 응용</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-19.jpg" alt="교안 19p — 오토인코더로는 생성 못 한다"><figcaption><b>19p</b> 오토인코더로는 생성 못 한다</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>왜 잠재 변수인가 · 차원 축소 (13 · 14p)</h3>
+  <p>PixelRNN/CNN은 계산 가능한 밀도를 정의하고 학습 데이터의 가능도를 최적화한다. VAE는 <b>잠재 변수 z를 둔 계산 불가능한 밀도</b> <span class="tex">p_\theta(x)=\int p_\theta(z)p_\theta(x|z)dz</span>를 정의한다 &mdash; 픽셀 사이에 의존성이 없어 <b>모든 픽셀을 동시에</b> 생성할 수 있지만, 직접 최적화할 수 없어 <b>가능도의 하한</b>을 유도해 최적화한다.</p>
+  <p>14p &mdash; 가장 중요한 특징을 찾는 <b>차원 축소</b>. MNIST 데이터를 2D 다양체로 펼치면 엉킨 다양체가 숫자별로 풀린다(스위스 롤 예). 선형(PCA · LDA)과 비선형(<b>오토인코더</b> · t-SNE · Isomap · LLE)으로 나뉜다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>오토인코더의 구조와 손실 (15 · 16p)</h3>
+  <p>레이블 없는 학습 데이터에서 <b>저차원 특징 표현</b>을 배우는 비지도 방법이다. <b>재구성 손실</b>로 학습한다 &mdash; 특징이 원래 데이터(입력 자기 자신)를 재구성하도록 훈련된다. 입력은 무엇이든 될 수 있다(데이터에 대한 가정이 없다). Z는 보통 X보다 작다 &mdash; 데이터 변이의 <b>의미 있는 요인</b>을 잡게 하려고.</p>
+  <div class="fx"><div class="tex-d">L=\sum_{X\in D}\lVert X-g(h(X))\rVert^2=\lVert X-\hat X\rVert^2</div>
+  <p class="fx-note">인코더 <span class="tex">h(X)</span>: 임베딩 · 다양체 학습 · 특징 추출. <b>지도 모델의 초기화</b>에 쓸 수 있다. 디코더 <span class="tex">g(Z)</span>: 학습이 끝나면 더 쓰지 않는다. 손실은 L2(소프트맥스 등도 가능).</p></div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>변형 · 응용 · 한계 (17~19p)</h3>
+  <p><b>변형</b> &mdash; 기본 오토인코더, 입력에 무작위 노이즈 · 드롭아웃을 넣고 깨끗한 원본을 복원하게 하는 <b>잡음 제거(denoising) 오토인코더</b>, 여러 겹 쌓은 <b>적층(stacked) 오토인코더</b>. <b>응용</b> &mdash; 이상 탐지 · 영상 채색 · 영상 잡음 제거.</p>
+  <p><b>한계</b>(19p) &mdash; 오토인코더는 데이터를 재구성하고, 지도 모델 초기화용 특징을 배울 수 있으며, 그 특징은 학습 데이터의 변이 요인을 잡는다. <span class="hi">하지만 Z의 공간을 모르기 때문에 새 영상을 생성할 수는 없다.</span> 오토인코더를 생성 모델로 만들 수 있을까? → VAE.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>&lsquo;Z 공간을 모른다&rsquo;는 말의 뜻 · 이상 탐지 원리</h3>
+  <p>학습된 오토인코더의 Z들은 공간 여기저기 불규칙하게 흩어져 있고 사이사이에 빈 곳이 많다. 아무 Z나 골라 디코더에 넣으면 그 Z가 학습 때 본 적 없는 빈 곳일 가능성이 커서 의미 없는 영상이 나온다. VAE는 Z가 <b>표준 정규 분포 근처에 모이도록</b> KL 항으로 강제해, <span class="tex">N(0,I)</span>에서 뽑기만 하면 되게 만든다.</p>
+  <p><b>이상 탐지</b>: 정상 데이터로만 학습하면 정상은 잘 재구성되고, 본 적 없는 이상 데이터는 재구성 오차 <span class="tex">\lVert X-\hat X\rVert^2</span>가 크다. 오차가 임곗값을 넘으면 이상으로 판정한다(공장 불량 · 의료 영상).</p>
+</div>
+</section>
+
+<!-- ===================== 04 ===================== -->
+<section class="sec" id="vae">
+  <div class="sec-head"><span class="sec-badge">04</span><h2 class="sec-title">변분 오토인코더 VAE — 잠재 공간을 확률로<small>교안 20~26p · ICLR 2014</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>20p · 21p · 22p · 23p · 24p · 25p · 26p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-20.jpg" alt="교안 20p — VAE — 잠재 z에서 생성"><figcaption><b>20p</b> VAE — 잠재 z에서 생성</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-21.jpg" alt="교안 21p — 가능도 최대화"><figcaption><b>21p</b> 가능도 최대화</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-22.jpg" alt="교안 22p — 근사 사후 분포 · 재매개변수화"><figcaption><b>22p</b> 근사 사후 분포 · 재매개변수화</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-23.jpg" alt="교안 23p — ELBO 유도"><figcaption><b>23p</b> ELBO 유도</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-24.jpg" alt="교안 24p — 해석 가능한 잠재 공간"><figcaption><b>24p</b> 해석 가능한 잠재 공간</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-25.jpg" alt="교안 25p — VAE 생성 예"><figcaption><b>25p</b> VAE 생성 예</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-26.jpg" alt="교안 26p — VAE 장단점"><figcaption><b>26p</b> VAE 장단점</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>오토인코더에 확률을 입히기 (20 · 21p)</h3>
+  <p>오토인코더에 <b>확률적 해석</b>을 더해 모델에서 표본을 뽑아 데이터를 생성하게 한다. 학습 데이터가 <b>관측되지 않은(잠재) 표현 z의 분포</b>에서 생성되었다고 가정한다 &mdash; x는 영상, z는 x를 만드는 잠재 요인(속성 · 방향 등)이다. VAE는 잠재 속성을 확률로 기술하고, 학습 데이터 x가 주어졌을 때 생성 모델의 진짜 모수 <span class="tex">\theta^*</span>를 추정한다 &mdash; <b>학습 데이터의 가능도를 최대화</b>하도록 모수를 배운다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>근사 사후 분포와 재매개변수화 트릭 (22p)</h3>
+  <p>데이터 가능도 <span class="tex">p_\theta(x)=\int p_\theta(z)p_\theta(x|z)dz</span>는 모든 z에 대해 <span class="tex">p(x|z)</span>를 계산해야 해서 <b>계산할 수 없다</b>. <b>해법</b>: <span class="tex">p_\theta(x|z)</span>와 함께, 진짜 사후 분포 <span class="tex">p_\theta(z|x)</span>를 근사하는 <span class="tex">q_\phi(z|x)</span>(인코더)를 배운다. 이 근사 사후 분포 덕분에 <b>계산 가능한 가능도 하한</b>을 유도해 최적화할 수 있다. <b>변분 추론</b>은 관측 데이터 X만으로 모르는 사후 분포를 근사하는 것이다.</p>
+  <div class="flow">
+    <div class="fl"><b>인코더 <span class="tex">q_\phi(z|x)</span></b><span>평균 <span class="tex">\mu_{z|x}</span>와 공분산 <span class="tex">\Sigma_{z|x}</span>를 출력</span></div>
+    <div class="fl"><b>재매개변수화 트릭</b><span><span class="tex">\epsilon\sim N(0,I)</span>를 뽑아 <span class="tex">z=\mu+\Sigma^{1/2}\epsilon</span></span></div>
+    <div class="fl"><b>디코더 <span class="tex">g_\theta(z)</span></b><span>z에서 영상 <span class="tex">\hat x</span> 생성</span></div>
+  </div>
+</div>
+
+<div class="warn"><b>교안 22p 표기 오타</b> &mdash; 그림의 노이즈 분포가 <span class="tex">N(1,0)</span>으로 적혀 있지만 <b>표준 정규 분포 <span class="tex">N(0,1)</span></b>(평균 0, 분산 1)이어야 한다. 분산이 0이면 노이즈가 아니다. 또 본문 첫 줄의 <span class="tex">q_\theta(Z|X)</span>는 그림 · 다음 쪽 표기대로 <span class="tex">q_\phi(Z|X)</span>(인코더 모수는 φ)다.</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>ELBO 유도 (23p)</h3>
+  <div class="fx"><div class="tex-d">\begin{aligned}\log p_\theta(x^{(i)})&amp;=\mathbf E_{z\sim q_\phi(z|x^{(i)})}\big[\log p_\theta(x^{(i)})\big]\qquad(\text{z와 무관})\\&amp;=\mathbf E_z\Big[\log\frac{p_\theta(x^{(i)}|z)p_\theta(z)}{p_\theta(z|x^{(i)})}\cdot\frac{q_\phi(z|x^{(i)})}{q_\phi(z|x^{(i)})}\Big]\qquad(\text{베이즈 규칙 , 1 곱하기})\\&amp;=\underbrace{\mathbf E_z\big[\log p_\theta(x^{(i)}|z)\big]}_{\text{재구성 오차}}-\underbrace{D_{KL}\big(q_\phi(z|x^{(i)})\,\|\,p_\theta(z)\big)}_{\text{정규화 오차}}+\underbrace{D_{KL}\big(q_\phi(z|x^{(i)})\,\|\,p_\theta(z|x^{(i)})\big)}_{\ge0}\end{aligned}</div>
+  <p class="fx-note">마지막 KL 항은 계산할 수 없지만 <b>항상 0 이상</b>이다. 그래서 앞의 두 항 <span class="tex">\mathcal L(x^{(i)},\theta,\phi)</span>는 로그 가능도의 <b>하한(ELBO, Evidence Lower BOund)</b>이고, 이것을 최대화한다. 첫 항은 디코더가 z에서 x를 잘 되살리게(재구성), 둘째 항은 인코더 분포를 사전 분포 <span class="tex">N(0,I)</span>에 가깝게(정규화) 만든다.</p></div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>학습된 잠재 공간과 장단점 (24~26p)</h3>
+  <p><b>해석 가능한 변이 요인</b>(24p) &mdash; MNIST에서 <span class="tex">z_1,z_2</span>를 바꾸면 숫자 모양이 연속적으로 변하고, 얼굴에서는 <span class="tex">z_1</span>이 <b>표정(미소)</b>, <span class="tex">z_2</span>가 <b>고개 방향</b>을 맡는다. 25p는 CIFAR-10 · LFW 얼굴 생성 예다.</p>
+  <div class="cards">
+    <div class="card2"><h4>장점</h4><p>생성 모델에 대한 원리적 접근 · <b>해석 가능한 잠재 공간</b> · <span class="tex">q(z|x)</span> 추론이 가능해 다른 과제의 특징 표현으로 쓸 수 있다</p></div>
+    <div class="card2"><h4>단점</h4><p>가능도의 <b>하한</b>(근사)을 최대화한다 · 실제 가능도를 쓰는 PixelRNN/CNN만큼 평가가 좋지 않다 · 최신 GAN보다 샘플이 <b>흐릿하고 품질이 낮다</b></p></div>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>재매개변수화가 왜 필요한가 · KL 항의 닫힌 식</h3>
+  <p>z를 <span class="tex">N(\mu,\sigma^2)</span>에서 그냥 &lsquo;뽑으면&rsquo; 뽑기 연산에는 기울기가 없어 인코더까지 역전파가 끊긴다. <span class="tex">z=\mu+\sigma\odot\epsilon,\;\epsilon\sim N(0,I)</span>로 쓰면 무작위성은 입력 쪽 ε로 빠지고, z는 μ · σ에 대해 <b>미분 가능한</b> 식이 된다.</p>
+  <p>인코더가 대각 가우시안을 내고 사전 분포가 <span class="tex">N(0,I)</span>이면 KL 항은 닫힌 식이다: <span class="tex">D_{KL}=\frac12\sum_j\big(\mu_j^2+\sigma_j^2-\log\sigma_j^2-1\big)</span>. μ = 0, σ = 1이면 0이 된다 &mdash; 인코더 출력이 표준 정규 분포에서 벗어날수록 벌점이 커진다.</p>
+</div>
+</section>
+
+<!-- ===================== 05 ===================== -->
+<section class="sec" id="gan">
+  <div class="sec-head"><span class="sec-badge">05</span><h2 class="sec-title">GAN — 판별자와 겨루며 배운다<small>교안 27~35p · NeurIPS 2014</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>28p · 29p · 30p · 31p · 32p · 33p · 34p · 35p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-28.jpg" alt="교안 28p — 밀도를 포기하고 표본만"><figcaption><b>28p</b> 밀도를 포기하고 표본만</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-29.jpg" alt="교안 29p — 판별자로 학습 신호를"><figcaption><b>29p</b> 판별자로 학습 신호를</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-30.jpg" alt="교안 30p — 두 사람의 게임"><figcaption><b>30p</b> 두 사람의 게임</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-31.jpg" alt="교안 31p — minimax 목적 함수"><figcaption><b>31p</b> minimax 목적 함수</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-32.jpg" alt="교안 32p — DCGAN 구조"><figcaption><b>32p</b> DCGAN 구조</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-33.jpg" alt="교안 33p — DCGAN 생성 표본"><figcaption><b>33p</b> DCGAN 생성 표본</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-34.jpg" alt="교안 34p — 잠재 벡터 연산"><figcaption><b>34p</b> 잠재 벡터 연산</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-35.jpg" alt="교안 35p — GAN의 발전"><figcaption><b>35p</b> GAN의 발전</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>밀도를 포기하고 표본만 (28 · 29p)</h3>
+  <p>PixelRNN/CNN은 계산 가능한 밀도, VAE는 잠재 z를 둔 계산 불가능한 밀도(하한 최적화)를 다뤘다. <b>밀도를 명시적으로 모델링하는 것을 포기하고 표본을 뽑는 능력만 원한다면?</b> &mdash; 쉽게 뽑을 수 있는 <b>단순한 분포(무작위 노이즈)</b>에서 뽑고, 그것을 학습 분포로 바꾸는 <b>변환</b>을 배운다.</p>
+  <p>그런데 어떤 z가 어떤 학습 영상으로 가야 하는지 모르므로 <b>재구성으로 학습할 수 없다</b>. 사람이 모든 출력을 검사할 수도 없다. 해법 &mdash; <span class="hi">생성한 영상이 데이터 분포 안(&lsquo;진짜&rsquo;)인지 아닌지 가려내는 판별자 네트워크를 쓴다.</span> 진짜/가짜 학습 신호에는 사람의 레이블이 필요 없다(비지도).</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>두 사람의 게임 · minimax 목적 함수 (30 · 31p)</h3>
+  <div class="cards">
+    <div class="card2"><h4>판별자 D</h4><p>진짜 영상과 가짜 영상을 <b>가려내려</b> 한다. 입력은 학습 데이터의 진짜 영상이거나 생성자가 만든 가짜, 출력은 입력이 진짜일 확률(시그모이드), 목적은 진짜 vs 가짜 이진 분류(교차 엔트로피)</p></div>
+    <div class="card2"><h4>생성자 G</h4><p>진짜처럼 보이는 영상을 만들어 판별자를 <b>통과하려</b> 한다</p></div>
+  </div>
+  <div class="fx"><div class="tex-d">\min_{\theta_g}\max_{\theta_d}\Big[\mathbb E_{x\sim p_{data}}\log D_{\theta_d}(x)+\mathbb E_{z\sim p(z)}\log\big(1-D_{\theta_d}(G_{\theta_g}(z))\big)\Big]</div>
+  <p class="fx-note">번갈아 푼다 &mdash; 판별자는 이 식에 대해 <b>경사 상승</b>(<span class="tex">\max_{\theta_d}</span>: 진짜에 1, 가짜에 0), 생성자는 <span class="tex">\min_{\theta_g}\mathbb E_z\log(1-D(G(z)))</span>로 <b>경사 하강</b>(판별자를 속여 <span class="tex">D(G(z))\to1</span>). 한쪽은 최대화, 다른 쪽은 최소화하는 <b>minimax 게임</b>으로 함께 학습한다.</p></div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>DCGAN과 벡터 연산 (32~34p)</h3>
+  <p><b>DCGAN</b>(ICLR 2016) &mdash; 생성자는 100차원 z를 4×4×512에서 시작해 <b>5×5 전치 합성곱(stride 2)</b> 네 번으로 8×8×256 → 16×16×128 → 32×32×64 → <b>64×64×3</b>까지 키운다. 판별자는 그 반대의 합성곱 네트워크다. 원래 GAN 논문은 대부분 완전 연결 층을 썼는데, CIFAR-10에서 <b>전치 합성곱(G) + 합성곱(D)</b> 조합이 훨씬 선명한 표본을 냈다(33p).</p>
+  <p><b>해석 가능한 벡터 연산</b>(34p) &mdash; 왼쪽을 보는 얼굴 네 장과 오른쪽을 보는 얼굴 네 장의 z 평균 차이로 &lsquo;<b>돌리기(turn)</b>&rsquo; 벡터를 만들고, 무작위 표본에 이 축을 따라 보간해 더하면 얼굴이 돌아간다. 잠재 공간에서 의미가 선형으로 정렬된다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>GAN의 발전 (35p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>모델</th><th>특징</th></tr></thead>
+    <tbody>
+      <tr><td><b>Vanilla GAN</b></td><td>생성자 · 판별자 모두 다층 퍼셉트론</td></tr>
+      <tr><td><b>Conditional GAN</b></td><td>두 네트워크에 클래스 레이블 같은 <b>추가 정보</b> → 조건에 맞는 데이터 생성</td></tr>
+      <tr><td><b>DCGAN</b></td><td>CNN 사용 &mdash; 영상 데이터에 효과적, 고품질 · 고해상도</td></tr>
+      <tr><td><b>CycleGAN</b></td><td><b>짝이 없는</b> 영상 대 영상 변환(여름 풍경 → 겨울)</td></tr>
+      <tr><td><b>Text to Image GAN</b></td><td>문장 설명으로 영상 생성 &mdash; 언어와 시각을 잇는다</td></tr>
+      <tr><td><b>StyleGAN</b></td><td>고품질 · 사실적, 생성 영상의 <b>스타일 제어</b>(얼굴 특징 바꾸기)</td></tr>
+      <tr><td><b>SRGAN</b></td><td>저해상도 → 고해상도, 세부를 잃지 않는 <b>초해상도</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>최적의 판별자 · 실제로 쓰는 생성자 손실 · 모드 붕괴</h3>
+  <p>G를 고정하면 최적 판별자는 <span class="tex">D^*(x)=\frac{p_{data}(x)}{p_{data}(x)+p_g(x)}</span>이고, 이때 목적 함수는 <span class="tex">-\log4+2\,JSD(p_{data}\|p_g)</span>가 된다 &mdash; 생성자는 두 분포의 젠슨-섀넌 발산을 줄이는 셈이고, <span class="tex">p_g=p_{data}</span>에서 <span class="tex">D^*=0.5</span>(구별 불가)다.</p>
+  <p>학습 초반에는 가짜가 형편없어 <span class="tex">D(G(z))\approx0</span>이고, 그 근처에서 <span class="tex">\log(1-D)</span>는 평평해 생성자 기울기가 거의 없다. 그래서 실제로는 <span class="tex">\max_{\theta_g}\mathbb E_z\log D(G(z))</span>(<b>비포화 손실</b>)로 바꿔 쓴다. 또 생성자가 판별자를 속이기 쉬운 몇 가지 영상만 반복해 만드는 <b>모드 붕괴</b>가 GAN의 대표적 불안정성이다 &mdash; 44p 비교에서 GAN이 &lsquo;다양성(mode coverage)&rsquo;을 놓치는 이유다.</p>
+</div>
+</section>
+
+<!-- ===================== 06 ===================== -->
+<section class="sec" id="diffusion">
+  <div class="sec-head"><span class="sec-badge">06</span><h2 class="sec-title">확산 모델 — 노이즈를 단계별로 걷어 낸다<small>교안 36~44p · DDPM, NeurIPS 2020</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>37p · 38p · 39p · 40p · 41p · 43p · 44p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-37.jpg" alt="교안 37p — 확산 모델 한마디"><figcaption><b>37p</b> 확산 모델 한마디</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-38.jpg" alt="교안 38p — 전방 확산 과정"><figcaption><b>38p</b> 전방 확산 과정</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-39.jpg" alt="교안 39p — 역방 확산 과정"><figcaption><b>39p</b> 역방 확산 과정</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-40.jpg" alt="교안 40p — 잡음 제거 U-Net과 손실"><figcaption><b>40p</b> 잡음 제거 U-Net과 손실</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-41.jpg" alt="교안 41p — 확산 모델 활용"><figcaption><b>41p</b> 확산 모델 활용</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-43.jpg" alt="교안 43p — 확산 모델 요점"><figcaption><b>43p</b> 확산 모델 요점</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-44.jpg" alt="교안 44p — 네 생성 모델 비교 · 삼중고"><figcaption><b>44p</b> 네 생성 모델 비교 · 삼중고</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>한마디로 (37p)</h3>
+  <p>확산 모델은 학습 데이터에 <b>가우시안 노이즈를 더해 망가뜨리고</b>(확산 과정), 그 노이즈 과정을 <b>한 단계씩 거꾸로 되돌려 원래 정보를 복원하는 법</b>을 배운다(역 · 잡음 제거 과정). 학습이 끝나면 <span class="hi">무작위 가우시안 노이즈를 뽑아 학습한 잡음 제거 과정에 통과시켜</span> 새 데이터를 만든다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>전방 확산과 역방 확산 (38 · 39p)</h3>
+  <div class="fx"><div class="tex-d">q(\mathbf x_t|\mathbf x_{t-1})=\mathcal N\big(\mathbf x_t;\sqrt{1-\beta_t}\,\mathbf x_{t-1},\,\beta_t\mathbf I\big),\qquad q(\mathbf x_t|\mathbf x_0)=\mathcal N\big(\mathbf x_t;\sqrt{\bar\alpha_t}\,\mathbf x_0,\,(1-\bar\alpha_t)\mathbf I\big)</div>
+  <p class="fx-note"><b>전방 과정</b> &mdash; 입력 영상에 가우시안 노이즈를 총 <b>T단계</b>에 걸쳐 조금씩 더한다(조건부 가우시안). t 시점의 영상이 t+1 시점으로 가는 <b>고정된 마르코프 연쇄</b>로 본다. <span class="tex">\bar\alpha_t=\prod_{s\le t}(1-\beta_s)</span>라서 한 번에 t단계로 건너뛸 수 있다. 38p 아래는 선형 · 시그모이드 · 이차 노이즈 일정(scheduling)이다.</p></div>
+  <div class="fx"><div class="tex-d">p_\theta(\mathbf x_{0:T})=p(\mathbf x_T)\prod_{t=1}^{T}p_\theta(\mathbf x_{t-1}|\mathbf x_t),\qquad p_\theta(\mathbf x_{t-1}|\mathbf x_t)=\mathcal N\big(\mathbf x_{t-1};\boldsymbol\mu_\theta(\mathbf x_t,t),\boldsymbol\Sigma_\theta(\mathbf x_t,t)\big)</div>
+  <p class="fx-note"><b>역방 과정</b> &mdash; 진짜 <span class="tex">q(\mathbf x_{t-1}|\mathbf x_t)</span>는 계산할 수 없으므로 신경망 <span class="tex">p_\theta</span>로 근사한다(변분 하한 사용). 신경망의 역할은 일반적으로 t 시점 영상에 들어 있는 <b>노이즈 전체를 예측</b>하는 것이고, 그 예측을 실제로 더한 노이즈와 비교해 학습한다. 39p 오른쪽은 2D 스위스 롤 데이터에서 노이즈가 다시 롤 모양으로 모이는 예다.</p></div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>잡음 제거 신경망과 손실 (40p)</h3>
+  <div class="fx"><div class="tex-d">L_{simple}(\theta)=\mathbb E_{t,\mathbf x_0,\boldsymbol\epsilon}\Big[\big\lVert\boldsymbol\epsilon-\boldsymbol\epsilon_\theta\big(\sqrt{\bar\alpha_t}\,\mathbf x_0+\sqrt{1-\bar\alpha_t}\,\boldsymbol\epsilon,\;t\big)\big\rVert^2\Big]</div>
+  <p class="fx-note">잡음 제거 신경망은 <b>U-Net</b>(13주차)이고, 시간 t는 시간 표현 → 완전 연결 층을 거쳐 각 층에 들어간다. 원래 손실은 정규화(KL) · 잡음 제거 과정(단계별 KL 합) · 재구성 세 항이지만, DDPM은 이를 &lsquo;<b>더한 노이즈 ε를 맞히는 제곱 오차</b>&rsquo;로 단순화했다. 생성은 <span class="tex">t=T=1000</span>의 <span class="tex">\mathbf x_{1000}\sim N(0,I)</span>에서 시작해 U-Net으로 노이즈를 예측하고 빼기를 반복한다.</p></div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>활용 · 대표 모델 · 요점 (41~43p)</h3>
+  <ul class="ul">
+    <li><b>활용</b> &mdash; 프롬프트(문장 · 조건)로 영상 생성 · 초해상도 · 도메인 적응과 스타일 전이 · <b>인페인팅</b>(빠지거나 망가진 부분 채우기) · <b>아웃페인팅</b>(테두리 밖으로 영상 확장)</li>
+    <li><b>대표 모델</b> &mdash; GLIDE · Stable Diffusion · DALL-E 2 · Midjourney · Deep Dream Generator · Imagen · Firefly</li>
+    <li><b>요점</b> &mdash; 단순한 시작 분포를 일련의 가역 연산으로 원하는 복잡한 분포로 바꿔 데이터가 만들어지는 과정을 흉내 낸다. 전통적 생성 모델보다 <b>영상 품질이 좋고</b>, 잠재 공간이 해석 가능하며, 과적합에 강하다. 텍스트 → 비디오, 영상 → 영상 변환, 영상 검색 등에 쓰인다</li>
+  </ul>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>네 생성 모델 한눈에 (44p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>모델</th><th>학습 방식</th><th>세 가지 바람 중</th></tr></thead>
+    <tbody>
+      <tr><td><b>자기회귀</b> (PixelCNN)</td><td>앞의 변수가 주어졌을 때 각 변수의 조건부 분포를 배운다</td><td>&mdash;</td></tr>
+      <tr><td><b>VAE</b></td><td>변분 하한을 최대화</td><td><b>빠른 샘플링 · 다양성</b> / 품질이 약하다</td></tr>
+      <tr><td><b>GAN</b></td><td>적대적 학습</td><td><b>고품질 · 빠른 샘플링</b> / 다양성이 약하다</td></tr>
+      <tr><td><b>확산 모델</b></td><td>가우시안 노이즈를 점점 더한 뒤 거꾸로</td><td><b>고품질 · 다양성</b> / 샘플링이 느리다</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>44p의 세 원(고품질 샘플 · 빠른 샘플링 · 다양성)은 <b>생성 모델의 삼중고(trilemma)</b>라 불린다 &mdash; 셋을 모두 갖춘 모델은 없다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>숫자로 보는 전방 과정 · 왜 노이즈를 예측하나</h3>
+  <p><span class="tex">\bar\alpha_t=0.25</span>인 시점이라면 <span class="tex">\mathbf x_t=0.5\,\mathbf x_0+\sqrt{0.75}\,\boldsymbol\epsilon\approx0.5\,\mathbf x_0+0.87\,\boldsymbol\epsilon</span> &mdash; 원본은 절반만, 노이즈가 더 크게 섞여 있다. <span class="tex">t\to T</span>이면 <span class="tex">\bar\alpha_T\approx0</span>이라 <span class="tex">\mathbf x_T\approx\boldsymbol\epsilon</span>, 순수한 노이즈다. 학습은 아무 t나 골라 이 식으로 <b>한 번에</b> <span class="tex">\mathbf x_t</span>를 만들고, 신경망이 섞인 ε를 맞히게 하면 된다 &mdash; T단계를 다 돌 필요가 없어 학습이 단순하다.</p>
+  <p>노이즈 ε를 알면 <span class="tex">\mathbf x_0=(\mathbf x_t-\sqrt{1-\bar\alpha_t}\,\boldsymbol\epsilon)/\sqrt{\bar\alpha_t}</span>로 원본을 추정할 수 있으므로 &lsquo;노이즈 예측&rsquo;과 &lsquo;원본 예측&rsquo;은 같은 일이다. 다만 노이즈는 늘 표준 정규 분포라 크기가 일정해 학습이 안정적이다. 생성이 느린 것(수백~1,000단계)이 단점이라 DDIM 같은 빠른 샘플러, 잠재 공간에서 확산하는 <b>LDM(Stable Diffusion)</b>이 나왔다.</p>
+</div>
+</section>
+
+<!-- ===================== 07 ===================== -->
+<section class="sec" id="wrapup">
+  <div class="sec-head"><span class="sec-badge">07</span><h2 class="sec-title">학기 정리 — 한 장의 지도<small>교안 45~59p · Wrap up</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>46p · 48p · 49p · 50p · 51p · 52p · 53p · 54p · 55p · 56p · 57p · 58p · 59p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-46.jpg" alt="교안 46p — 수업 개관 — Early · Middle · High"><figcaption><b>46p</b> 수업 개관 — Early · Middle · High</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-48.jpg" alt="교안 48p — 정리 — 카메라 모델"><figcaption><b>48p</b> 정리 — 카메라 모델</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-49.jpg" alt="교안 49p — 정리 — 선형 필터"><figcaption><b>49p</b> 정리 — 선형 필터</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-50.jpg" alt="교안 50p — 정리 — 영상 피라미드"><figcaption><b>50p</b> 정리 — 영상 피라미드</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-51.jpg" alt="교안 51p — 정리 — 지역 특징 검출"><figcaption><b>51p</b> 정리 — 지역 특징 검출</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-52.jpg" alt="교안 52p — 정리 — 특징 기술자"><figcaption><b>52p</b> 정리 — 특징 기술자</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-53.jpg" alt="교안 53p — 정리 — 특징 매칭"><figcaption><b>53p</b> 정리 — 특징 매칭</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-54.jpg" alt="교안 54p — 정리 — 스테레오 비전"><figcaption><b>54p</b> 정리 — 스테레오 비전</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-55.jpg" alt="교안 55p — 정리 — 모션 트래킹"><figcaption><b>55p</b> 정리 — 모션 트래킹</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-56.jpg" alt="교안 56p — 정리 — 분류 (1)"><figcaption><b>56p</b> 정리 — 분류 (1)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-57.jpg" alt="교안 57p — 정리 — 분류 (2)"><figcaption><b>57p</b> 정리 — 분류 (2)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-58.jpg" alt="교안 58p — 정리 — 검출 · 분할"><figcaption><b>58p</b> 정리 — 검출 · 분할</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv14-59.jpg" alt="교안 59p — 정리 — 영상 생성 모델"><figcaption><b>59p</b> 정리 — 영상 생성 모델</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>수업 개관 (46p)</h3>
+  <p>입력 → 픽셀 → 영상 → 비디오 → 기계학습 순서로, <b>초기 시각(Early Vision)</b> · <b>중간 수준 시각(Middle-level)</b> · <b>고수준 시각(High-level)</b>을 지나왔다. 아래 표의 주차를 누르면 그 주 교안 정리로 간다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>단계</th><th>주차</th><th>교안 정리 (48~59p)</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="2"><b>입력</b></td><td><a class="ext" href="computer-vision-week02-1.html">2주차</a></td><td><b>기하 카메라 모델</b> &mdash; 강체 · 유사 · 어파인 · 원근 변환, 내부(<span class="tex">f,s_x,s_y,s_\theta,o_x,o_y</span>) · 외부(R, t) 모수</td></tr>
+      <tr><td><a class="ext" href="computer-vision-week03.html">3주차</a></td><td><b>선형 필터</b> &mdash; 가우시안 · 가우시안 미분 필터, 소벨 에지</td></tr>
+      <tr><td rowspan="3"><b>픽셀</b><br><small>Early</small></td><td><a class="ext" href="computer-vision-week04.html">4주차</a></td><td><b>영상 피라미드</b> &mdash; 가우시안 · 라플라시안 피라미드, 보간, 웨이블릿</td></tr>
+      <tr><td><a class="ext" href="computer-vision-week05.html">5주차</a></td><td><b>지역 특징 검출</b> &mdash; 에지(Prewitt · Sobel · Robert) · 직선(Canny · 허프) · 코너(Harris) · 블롭(LoG)</td></tr>
+      <tr><td><a class="ext" href="computer-vision-week06.html">6주차</a></td><td><b>특징 기술자</b> &mdash; SIFT · SURF · HOG · BRIEF · ORB</td></tr>
+      <tr><td rowspan="2"><b>영상</b><br><small>Middle</small></td><td><a class="ext" href="computer-vision-week07.html">7주차</a></td><td><b>특징 매칭</b> &mdash; 맞춤 · RANSAC, 정렬(호모그래피 · 정류 · 스티칭)</td></tr>
+      <tr><td><a class="ext" href="computer-vision-week09.html">9주차</a></td><td><b>스테레오 비전</b> &mdash; 에피폴라 기하 · 본질 · 기본 행렬, 정류 · 매칭 · 시차와 깊이</td></tr>
+      <tr><td><b>비디오</b></td><td><a class="ext" href="computer-vision-week10.html">10주차</a></td><td><b>모션 트래킹</b> &mdash; 광류(Lucas-Kanade · Horn-Schunck), 추적(KLT · Mean shift · CAMshift)</td></tr>
+      <tr><td rowspan="4"><b>기계학습</b><br><small>High</small></td><td><a class="ext" href="computer-vision-week11.html">11주차</a></td><td><b>분류 (1)</b> &mdash; Bag of words, KNN · Naive Bayes · SVM</td></tr>
+      <tr><td><a class="ext" href="computer-vision-week12.html">12주차</a></td><td><b>분류 (2)</b> &mdash; CNN, AlexNet · ResNet, Vision Transformer</td></tr>
+      <tr><td><a class="ext" href="computer-vision-week13.html">13주차</a></td><td><b>검출 · 분할</b> &mdash; R-CNN(Fast · Faster) · SSD · YOLO, FCN(의미) · Mask R-CNN(인스턴스), 데이터셋 · 평가</td></tr>
+      <tr><td>14주차</td><td><b>영상 생성 모델</b> &mdash; 학습 데이터와 같은 분포에서 새 표본 생성</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>47p 감사의 글 &mdash; 이 수업 자료는 CMU 16-385(Gkioulekas), Cornell CS5670(Snavely · Davis), Stanford CS131 · CS231n(Fei-Fei Li 등), UPenn CIS581(Jianbo Shi) 등 여러 강의를 바탕으로 만들어졌다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>기말 대비 — 주차를 가로지르는 연결 일곱 개</h3>
+  <ul class="ul">
+    <li><b>가우시안 피라미드</b>(4주차) → SIFT의 스케일 공간(6주차) → <b>피라미드 LK</b>(10주차) → SSD · FPN의 다중 크기 특징(13주차)</li>
+    <li><b>구조 텐서 <span class="tex">M=A^\top A</span></b> &mdash; Harris 코너(5주차) = LK 광류의 2×2 행렬(10주차) = KLT의 &lsquo;좋은 특징&rsquo;</li>
+    <li><b>RANSAC</b>(7주차) → 호모그래피 · 기본 행렬 추정(7 · 9주차)의 이상점 제거</li>
+    <li><b>SVD</b> &mdash; 호모그래피 DLT(7주차) · 8점 알고리즘(9주차)은 가장 작은 특이값 벡터</li>
+    <li><b>합성곱</b> &mdash; 3주차 손으로 고른 필터 → 12주차 학습하는 필터 → 13 · 14주차 전치 합성곱(업샘플링 · 생성)</li>
+    <li><b>지역 특징 → 표현</b> &mdash; SIFT(6주차) → BoW 히스토그램(11주차) → CNN 특징 지도(12주차) → ViT 패치 토큰(12주차)</li>
+    <li><b>평가 지표</b> &mdash; 정밀도 · 재현율 · F1 · AP · IoU(13주차)는 매칭(7주차) · 검출 · 분할 모두에 쓰인다</li>
+  </ul>
+  <p>중간고사 서술형 기출 형식은 <a class="ext" href="computer-vision-week08.html#exam">8주차 자료집</a>에 모아 두었다 &mdash; &lsquo;정의 · 비교 · 단계 서술&rsquo;이 반복된다.</p>
+</div>
+</section>
+
+<section class="sec" id="summary">
+  <div class="sec-head"><span class="sec-badge">SUM</span><h2 class="sec-title">핵심 정리<small>서술형으로 나올 때 이 흐름으로</small></h2></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>개념</th><th>한 줄</th><th>숫자 · 식</th></tr></thead>
+  <tbody>
+    <tr><td>판별 vs 생성</td><td>경계를 배운다(지도) vs 분포를 배워 새 데이터를 만든다(비지도)</td><td><span class="tex">p(y|x)</span> vs <span class="tex">p(x)</span></td></tr>
+    <tr><td>생성 모델 목표</td><td>분포 근사 + 표본 추출 · 명시적 vs 암묵적 밀도</td><td><span class="tex">p_{model}(x)\approx p_{data}(x)</span></td></tr>
+    <tr><td>PixelCNN</td><td>자기회귀 · 마스크 A(첫 층) · B(둘째 층부터) · 정확한 가능도 / 느림</td><td><span class="tex">p(x)=\prod p(x_i|x_{&lt;i})</span></td></tr>
+    <tr><td>오토인코더</td><td>인코더 → 작은 Z → 디코더 · 재구성 · 잡음 제거 · 적층 · Z 공간을 몰라 생성 불가</td><td><span class="tex">\lVert X-g(h(X))\rVert^2</span></td></tr>
+    <tr><td>VAE</td><td>근사 사후 <span class="tex">q_\phi(z|x)</span> · 재매개변수화 · ELBO 최대화 · 해석 가능 / 흐릿함</td><td><span class="tex">\mathbf E[\log p(x|z)]-D_{KL}(q\|p(z))</span></td></tr>
+    <tr><td>GAN</td><td>노이즈 → 영상 변환 · D(진짜/가짜) vs G · minimax · DCGAN(전치 합성곱) · 고품질 / 다양성↓</td><td><span class="tex">\min_G\max_D\mathbb E\log D(x)+\mathbb E\log(1-D(G(z)))</span></td></tr>
+    <tr><td>확산 모델</td><td>전방(고정 마르코프 노이즈 T단계) · 역방(U-Net이 ε 예측) · 고품질 · 다양성 / 느림</td><td><span class="tex">\lVert\epsilon-\epsilon_\theta(\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\epsilon,t)\rVert^2</span></td></tr>
+    <tr><td>학기 흐름</td><td>Early(필터 · 피라미드 · 특징) → Middle(매칭 · 스테레오 · 모션) → High(분류 · 검출 · 분할 · 생성)</td><td>&mdash;</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note-box"><b>서술형으로 묶는다면</b> &mdash; &ldquo;VAE · GAN · 확산 모델을 비교하시오&rdquo;: <b>VAE는 잠재 변수를 두고 가능도의 하한(ELBO = 재구성 − KL)을 최대화해 잠재 공간이 해석 가능하지만 샘플이 흐릿하다. GAN은 밀도를 포기하고 판별자와의 minimax 게임으로 생성자를 학습해 선명하지만 불안정하고 모드 붕괴가 있다. 확산 모델은 노이즈를 더하는 고정 과정을 거꾸로 되돌리는 신경망(ε 예측)을 학습해 품질과 다양성이 모두 좋지만 생성이 느리다.</b> 44p의 삼중고 그림으로 마무리하면 된다.</div>
+</section>
+
+<section class="sec" id="next">
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">과제 · 기말고사<small>HW3 마감 12/2 · 15주차 기말고사</small></h2></div>
+<div class="warn"><b>HW3 제출 마감 &mdash; 12월 2일(이번 주 수업일)</b>. <a class="ext" href="computer-vision-assignments.html#hw3">과제 · 논문 발표</a></div>
+<div class="note-box"><b>15주차(12.9) &mdash; 기말고사</b>. 오프라인 시험(퇴계인문관 31705호). 범위와 형식은 강의계획서와 수업 공지를 따른다. 위 <a class="ext" href="#wrapup">07 학기 정리</a>의 주차별 표와 연결 일곱 개를 출발점으로, 각 주차 페이지의 &lsquo;핵심 정리&rsquo; 표와 &lsquo;서술형으로 묶는다면&rsquo; 상자를 다시 보면 된다.</div>
+</section>
+
+<p class="src">출처 — 컴퓨터비전 14. Image Generative Model &amp; Wrap Up (2026-2학기, 60페이지)<br>
+영어 교안을 korean-translation 규칙(하다체 · 번역투 피하기)에 따라 절 단위로 한국어로 옮겨 정리하고 도식 · 예시 슬라이드 <b>49장</b>을 캡처해 실었다. &lsquo;보충설명&rsquo; 뱃지가 붙은 부분(Z 공간과 이상 탐지 · 재매개변수화와 KL 닫힌 식 · 최적 판별자와 비포화 손실 · 전방 과정 숫자 예 · 주차를 가로지르는 연결)은 교안에 없는 내용을 따로 계산하거나 찾아 정리한 것이다. 22p 표기 오타는 노란 상자로 표시했다. 강의 전에 미리 만든 페이지라, 수업에서 강조한 내용은 수업 뒤에 덧붙인다.</p>
+
+</div>
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive() {
+    var cur = '';
+    sections.forEach(function (s) { if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function (t) { t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      setTimeout(function () {
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+
+  /* ---- 개념 설명 말풍선 ---- */
+  var terms = document.querySelectorAll('.term');
+  if (!terms.length) return;
+  var tip = document.createElement('div');
+  tip.id = 'tipbox';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  var current = null;
+
+  function hide() {
+    tip.classList.remove('on');
+    if (current) { current.classList.remove('on'); current = null; }
+  }
+  function show(el) {
+    tip.textContent = el.getAttribute('data-tip') || '';
+    tip.classList.add('on');
+    if (current && current !== el) current.classList.remove('on');
+    current = el;
+    el.classList.add('on');
+    var pad = 8;
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+    var top = r.top - t.height - 10;
+    if (top < pad) top = r.bottom + 10;
+    top = Math.min(top, window.innerHeight - t.height - pad);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+  terms.forEach(function (el) {
+    el.addEventListener('mouseenter', function () { show(el); });
+    el.addEventListener('mouseleave', function () { if (current === el) hide(); });
+    el.addEventListener('focus', function () { show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (current === el && tip.classList.contains('on')) hide(); else show(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el); }
+      if (e.key === 'Escape') hide();
+    });
+  });
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide);
+});
+</script>
+
+<script>
+/* 슬라이드 확대 보기 — 좌우 이동 · 닫으면 보던 자리로 */
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.sld'));
+  if (!slides.length) return;
+
+  var lb = document.createElement('div');
+  lb.id = 'lb';
+  lb.innerHTML =
+    '<button class="prev" type="button" aria-label="이전 슬라이드">&#10094;</button>' +
+    '<img alt="">' +
+    '<button class="next" type="button" aria-label="다음 슬라이드">&#10095;</button>' +
+    '<button class="x" type="button" aria-label="닫기">&#10005;</button>' +
+    '<p class="cap"></p>';
+  document.body.appendChild(lb);
+
+  var big = lb.querySelector('img'),
+      cap = lb.querySelector('.cap'),
+      bPrev = lb.querySelector('.prev'),
+      bNext = lb.querySelector('.next'),
+      bX = lb.querySelector('.x');
+
+  var idx = -1, openedIdx = -1, savedY = 0, pushed = false, prevRestore = null, fromRef = false;
+
+  function lock() {
+    savedY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    document.body.style.position = 'fixed';
+    document.body.style.top = (-savedY) + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  /* html{scroll-behavior:smooth} 때문에 되돌아갈 때 화면이 흘러가지 않도록 잠깐 끈다 */
+  function instantly(fn) {
+    var de = document.documentElement, prev = de.style.scrollBehavior;
+    de.style.scrollBehavior = 'auto';
+    fn();
+    void de.offsetHeight;
+    de.style.scrollBehavior = prev;
+  }
+  function unlock() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    /* 개념 카드의 썸네일로 연 경우에는 넘겨 봤어도 읽던 자리로 돌아간다 */
+    var target = (!fromRef && idx >= 0 && idx !== openedIdx) ? slides[idx] : null;
+    function place() {
+      instantly(function () {
+        window.scrollTo(0, savedY);
+        /* 넘겨 본 슬라이드가 있으면 그 슬라이드 자리로, 아니면 보던 자리 그대로 */
+        if (target) target.scrollIntoView({ block: 'center' });
+      });
+    }
+    place();
+    /* 기기 뒤로가기로 닫을 때 브라우저가 옛 스크롤을 덮어쓰므로 한 프레임 뒤 한 번 더 */
+    if (window.requestAnimationFrame) window.requestAnimationFrame(place);
+    setTimeout(place, 0);
+  }
+
+  function preload(i) {
+    if (i < 0 || i >= slides.length) return;
+    var im = slides[i].querySelector('img');
+    if (im) { var p = new Image(); p.src = im.currentSrc || im.src; }
+  }
+
+  function render(i) {
+    idx = i;
+    var f = slides[i], im = f.querySelector('img'), fc = f.querySelector('figcaption');
+    big.src = im.currentSrc || im.src;
+    big.alt = im.alt || '';
+    cap.innerHTML = '';
+    cap.appendChild(document.createTextNode(fc ? fc.textContent : ''));
+    var num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = (i + 1) + ' / ' + slides.length + ' · ← → 로 넘기기';
+    cap.appendChild(num);
+    bPrev.disabled = (i === 0);
+    bNext.disabled = (i === slides.length - 1);
+    preload(i + 1); preload(i - 1);
+  }
+
+  function open(i) {
+    openedIdx = i;
+    lock();
+    render(i);
+    lb.classList.add('on');
+    if (!pushed && window.history && window.history.pushState) {
+      try {
+        if ('scrollRestoration' in window.history && prevRestore === null) {
+          prevRestore = window.history.scrollRestoration;
+          window.history.scrollRestoration = 'manual';
+        }
+        window.history.pushState({ lb: 1 }, '');
+        pushed = true;
+      } catch (e) { pushed = false; }
+    }
+  }
+  function closeNow() {
+    if (!lb.classList.contains('on')) return;
+    lb.classList.remove('on');
+    unlock();
+    idx = openedIdx = -1;
+    fromRef = false;
+    if (prevRestore !== null) {
+      try { window.history.scrollRestoration = prevRestore; } catch (e) {}
+      prevRestore = null;
+    }
+  }
+  function closeByUser() {
+    if (pushed) { pushed = false; window.history.back(); }  /* popstate 가 닫는다 */
+    else { closeNow(); }
+  }
+  function go(step) {
+    var n = idx + step;
+    if (n < 0 || n >= slides.length) return;
+    render(n);
+  }
+
+  slides.forEach(function (f, i) {
+    f.addEventListener('click', function () { open(i); });
+  });
+  window.__lbOpenFig = function (f) {
+    var i = slides.indexOf(f);
+    if (i >= 0) { fromRef = true; open(i); }
+  };
+
+  bPrev.addEventListener('click', function (e) { e.stopPropagation(); go(-1); });
+  bNext.addEventListener('click', function (e) { e.stopPropagation(); go(1); });
+  bX.addEventListener('click', function (e) { e.stopPropagation(); closeByUser(); });
+  big.addEventListener('click', function (e) { e.stopPropagation(); });
+  cap.addEventListener('click', function (e) { e.stopPropagation(); });
+  lb.addEventListener('click', closeByUser);
+
+  window.addEventListener('popstate', function () {
+    if (lb.classList.contains('on')) { pushed = false; closeNow(); }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('on')) return;
+    if (e.key === 'Escape') { e.preventDefault(); closeByUser(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+  });
+
+  /* 모바일 — 좌우로 쓸어 넘기기 */
+  var tx = 0, ty = 0;
+  lb.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) return;
+    tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+  }, { passive: true });
+  lb.addEventListener('touchend', function (e) {
+    if (!e.changedTouches.length) return;
+    var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
+</script>
+
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script src="slide-ref.js?v=2"></script>
+<script src="../vendor/katex/katex.min.js"></script>
+<script>
+// .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.
+// KaTeX를 못 불러온 경우에는 원문이 그대로 남아 최소한 읽을 수는 있게 둔다.
+(function () {
+  if (typeof katex === 'undefined') { return; }
+  document.querySelectorAll('.tex, .tex-d').forEach(function (el) {
+    try {
+      katex.render(el.textContent.trim(), el, {
+        displayMode: el.classList.contains('tex-d'),
+        throwOnError: false,
+        strict: false
+      });
+    } catch (e) { if (window.console) { console.error('KaTeX', e, el.textContent); } }
+  });
+})();
+</script>
+
+</body>
+</html>

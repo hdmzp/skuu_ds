@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>컴퓨터비전 | 13주차 수업내용</title>
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0c1a3a">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+@media(max-width:560px){.fl{grid-template-columns:1fr;gap:4px}}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+
+/* 주차 내비 */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* ===== 필기 표기 ===== */
+.hw{color:#b45309;font-weight:700;background:#fff7ed;border-radius:3px;padding:0 3px}
+.legend{
+  display:flex;flex-wrap:wrap;gap:9px 16px;align-items:center;
+  background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius);
+  padding:13px 15px;margin:0 0 24px;font-size:12px;color:var(--muted);line-height:1.6;
+}
+.legend i{font-style:normal;display:flex;align-items:center;gap:7px}
+.legend .legend-t{flex:0 0 100%;font-size:12.5px;font-weight:700;color:var(--ink)}
+.legend .legend-t2{flex:0 0 100%;font-size:11.5px;color:var(--muted);border-top:1px dashed var(--border);padding-top:10px;margin-top:1px}
+
+/* ===== 주차 내비 ===== */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* ===== 자료별 구분 ===== */
+.matbar{
+  background:linear-gradient(135deg,#122250,#24407f);color:#fff;border-radius:14px;
+  padding:16px 18px;margin:34px 0 18px;box-shadow:0 6px 18px rgba(18,34,80,.15);
+}
+.matbar .tagline{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--lime)}
+.matbar h2{font-size:clamp(16px,3.6vw,20px);font-weight:700;line-height:1.3;margin:5px 0 4px}
+.matbar p{font-size:12.5px;color:#c9d3ee;line-height:1.65}
+.matbar .acts{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.matbar .acts a{
+  font-size:12px;font-weight:700;text-decoration:none;border-radius:8px;padding:6px 12px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;
+}
+.matbar .acts a.primary{background:var(--lime);border-color:var(--lime);color:#16233f}
+.partbar{
+  display:flex;align-items:center;gap:10px;margin:26px 0 14px;
+  font-size:13px;font-weight:700;color:var(--accent);
+}
+.partbar::after{content:'';flex:1;height:1px;background:var(--border)}
+.partbar b{background:var(--accent-light);border:1px solid #c4d2ee;border-radius:999px;padding:4px 11px;font-size:11.5px}
+
+/* ===== 한눈에 보기 ===== */
+.mapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px;margin-top:10px}
+.mapgrid a{
+  display:block;text-decoration:none;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:9px;padding:10px 13px;transition:.15s;
+}
+.mapgrid a:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(18,34,80,.1)}
+.mapgrid b{display:block;font-size:12.5px;color:var(--ink)}
+.mapgrid span{font-size:11.5px;color:var(--muted);line-height:1.55}
+
+/* ===== 개념 하이라이트 + 툴팁 ===== */
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);
+  border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;
+  left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+
+/* ===== 행렬 ===== */
+.mtx{display:inline-flex;align-items:center;gap:4px;vertical-align:middle;margin:0 2px}
+.mtx .br{display:inline-block;width:7px;align-self:stretch;border:2px solid var(--ink);border-right:none;border-radius:3px 0 0 3px}
+.mtx .br.r{border:2px solid var(--ink);border-left:none;border-radius:0 3px 3px 0}
+.mtx .cells{display:grid;gap:2px 12px;padding:5px 2px;font-size:12.5px;text-align:center}
+.mtx .cells span{min-width:26px;line-height:1.5}
+.eq{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;justify-content:center;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 14px;margin:10px 0;
+}
+.eq .op{font-size:14px;font-weight:700;color:var(--muted)}
+/* ===== 변환 카드 ===== */
+.xf{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px}
+.xf-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:4px}
+.xf-head h4{font-size:14.5px;font-weight:700}
+.xf-head .en{font-size:11.5px;color:var(--muted)}
+.xf-dof{margin-left:auto;background:var(--accent);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.xf p{font-size:13px;color:#4b5563;line-height:1.78}
+.xf-keep{font-size:12.5px;color:#166534;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.65}
+.xf-sol{font-size:12.5px;color:#1b3f8b;background:#eef6ff;border:1px solid #c4d2ee;border-radius:8px;padding:7px 11px;margin-top:9px;line-height:1.7}
+
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .st{color:#c9f24b}
+pre.code .fn{color:#7ec8ff}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 함수 카드 */
+.fnc{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:var(--radius);padding:13px 15px;margin:11px 0}
+.fnc h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fnc .sig{
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;color:#1b3f8b;
+  background:#eef2fb;border:1px solid #dbe3f5;border-radius:6px;padding:7px 10px;margin:7px 0 9px;
+  overflow-x:auto;white-space:pre;
+}
+.fnc dl{display:grid;grid-template-columns:minmax(88px,auto) 1fr;gap:5px 12px;font-size:12.5px;line-height:1.65}
+.fnc dt{font-weight:700;color:var(--ink)}
+.fnc dd{color:#4b5563}
+@media(max-width:440px){.fnc dl{grid-template-columns:1fr;gap:2px}.fnc dd{margin-bottom:6px}}
+
+/* 수식 카드 · 풀이 예제 (기계학습특론 페이지와 같은 규칙) */
+.fx{background:#f8faff;border:1px solid #cfdcf5;border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:10px 0}
+.fx-lab{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.fx-note{font-size:12px;color:#4b5563;line-height:1.7;margin-top:7px}
+.fx-note b{color:var(--ink)}
+.tex-d{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:9px 2px 5px;text-align:center}
+.tex-d .katex{font-size:1.08em}
+.ex{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin:10px 0}
+.ex-q{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.65;background:#f1f0ec;border-radius:7px;padding:9px 12px;margin-bottom:4px}
+.ex-q em{font-style:normal;color:var(--red);font-size:11px;font-weight:700;display:block;margin-bottom:3px}
+.step{display:grid;grid-template-columns:minmax(20px,auto) 1fr;gap:9px;align-items:baseline;font-size:12.5px;color:#4b5563;line-height:1.75;padding:5px 0}
+.step i{font-style:normal;font-weight:700;color:var(--accent);font-size:11.5px}
+.ex-ans{margin-top:8px;background:#f0fdf4;border:1px solid #22c55e;border-radius:8px;padding:9px 12px;font-size:12.5px;color:#14532d;line-height:1.7}
+.ex-ans b{color:var(--green)}
+.figs > .note-box{margin:0}
+/* 편집 거리 DP 표 */
+.lev table{min-width:0;width:auto;margin:0 auto;font-family:'Consolas','D2Coding',ui-monospace,monospace}
+.lev th,.lev td{text-align:center;padding:6px 10px;white-space:nowrap}
+.lev td.on{background:#fde68a;font-weight:700;color:#7c2d12}
+
+/* ===== 출처 뱃지 ===== */
+.bdg{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.02em;padding:3px 9px;border-radius:999px;white-space:nowrap;line-height:1.5}
+.bdg-gyo{background:#eef2fb;color:#1b3f8b;border:1px solid #c4d2ee}
+.bdg-flip{background:#fff7ed;color:#b45309;border:1px solid #f0c48a}
+.bdg-live{background:#fdf0f5;color:#9d174d;border:1px solid #f3bcd2}
+.bdg-plus{background:#f0fdfa;color:#0f766e;border:1px solid #99e0d6}
+.bdg-pres{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
+.bdg-exam{background:#fef2f2;color:#b91c1c;border:1px solid #fca5a5}
+
+/* ===== 개념 카드 ===== */
+.pt{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin:11px 0}
+.pt-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;font-weight:700;line-height:1.45;margin-bottom:7px}
+.pt > p{font-size:13.5px;color:#3f4854;line-height:1.85}
+.pt > p + p{margin-top:9px}
+.pt > p b{color:var(--ink)}
+.pt.gyo{border-left-color:#1b3f8b}
+.pt.flip{border-left-color:#b45309}
+.pt.live{border-left-color:#9d174d}
+.pt.plus{border-left-color:#0f766e}
+.pt.pres{border-left-color:#6d28d9}
+.deep{background:#f5f3ff;border:1px solid #c4b5fd;border-left:4px solid #7c3aed;border-radius:0 var(--radius) var(--radius) 0;padding:11px 14px;margin:12px 0;font-size:13px;color:#3f4854;line-height:1.8}
+.deep b:first-child{color:#6d28d9}
+.pit{background:#fff7ed;border:1px solid #f0c48a;border-left:4px solid #ea580c;border-radius:0 var(--radius) var(--radius) 0;padding:11px 14px;margin:12px 0}
+.pit p{font-size:13px;color:#3f4854;line-height:1.8}
+.pit p + p{margin-top:7px}
+.pit .pit-h{font-size:12.5px;font-weight:800;color:#c2410c;margin-bottom:3px}
+.pt .sub-title{margin:18px 0 8px}
+.hi{background:linear-gradient(transparent 58%,#ffe9a8 58%);font-weight:700;color:var(--ink);padding:0 1px}
+.pt pre.code{margin:9px 0}
+
+/* 커널(마스크) 격자 */
+.kmat{display:inline-grid;grid-template-columns:repeat(3,26px);border:1.5px solid #1f2937;border-radius:3px;overflow:hidden;background:#fff;font:700 12px/24px Consolas,'D2Coding',ui-monospace,monospace;text-align:center;vertical-align:middle}
+.kmat.k2{grid-template-columns:repeat(2,26px)}
+.kmat.k1{grid-template-columns:26px}
+.kmat span{border:1px solid #d6dbe3;height:24px}
+.kmat .p{background:#dbeafe;color:#1e3a8a}
+.kmat .n{background:#fee2e2;color:#991b1b}
+.kmat .z{color:#9ca3af}
+.kmat.hl{box-shadow:0 0 0 3px #f59e0b}
+.kpair{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
+.kbox{display:inline-flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--muted);line-height:1.4}
+.kbox b{font-size:11.5px;color:var(--ink)}
+.kbox em{font-style:normal;font-weight:700;color:#4b5563}
+.kbox.win em{color:#b45309}
+.ktbl td{vertical-align:middle}
+.ktbl td .kpair{justify-content:flex-start}
+.cmp{display:grid;grid-template-columns:repeat(3,auto);gap:12px 16px;justify-content:center;align-items:center;margin:12px 0}
+.cmp .mid{display:flex;align-items:center;justify-content:center}
+.dia{display:block;width:100%;max-width:580px;height:auto;margin:10px auto 4px;background:#fff;border:1px solid var(--border);border-radius:8px}
+.dia-cap{font-size:11.5px;color:var(--muted);text-align:center;line-height:1.6;margin-bottom:8px}
+.patch{display:inline-grid;grid-template-columns:repeat(3,30px);border:1.5px solid #1f2937;font:700 11px/30px Consolas,monospace;text-align:center}
+.patch span{height:30px}
+.chain{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}
+.chain span{min-width:44px;text-align:center;border-radius:6px;padding:4px 2px;font:700 12px/1.3 Consolas,monospace}
+.chain small{display:block;font:600 10px/1.3 'Pretendard',sans-serif}
+.chain .s{background:#1f2937;color:#fff}
+.chain .wk{background:#dcfce7;color:#14532d;border:1px solid #22c55e}
+.chain .wd{background:#fee2e2;color:#991b1b;border:1px dashed #ef4444}
+.pt-figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px;margin:10px 0}
+.pt-figs .sld{margin:0}
+table.acc{min-width:0}
+.acc td,.acc th{text-align:center;font-family:Consolas,monospace;padding:6px 6px;white-space:nowrap}
+.acc td.h1{background:#fef3c7}
+.acc td.h3{background:#b45309;color:#fff;font-weight:800}
+.chain .d{background:#f3f4f6;color:#9ca3af;border:1px dashed #d1d5db}
+
+/* 본문 속 짧은 보충 설명 상자 */
+.qa{background:#f0fdfa;border:1px solid #99e0d6;border-left:4px solid #0f766e;
+  border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:11px 0;
+  font-size:13px;line-height:1.85;color:#134e4a}
+.qa::before{content:'보충설명';display:table;font-size:10.5px;font-weight:800;letter-spacing:.02em;
+  padding:3px 9px;border-radius:999px;margin-bottom:7px;background:#e3f7f3;color:#0f766e;border:1px solid #99e0d6}
+.qa b{color:#0f3d3a}
+.qa .ul li{color:#134e4a}
+.qa .ul li::before{background:#0f766e;opacity:.8}
+
+/* ===== 슬라이드 모아보기 ===== */
+.deck{background:#efeeea;border:1px solid var(--border);border-radius:var(--radius);padding:12px 12px 14px;margin-bottom:20px}
+.deck-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.deck-h span{font-size:11px;font-weight:400;color:var(--muted)}
+.deck-t{font-size:12px;font-weight:700;color:var(--accent);margin:13px 0 7px;padding-left:8px;border-left:3px solid var(--accent)}
+.deck-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.sld{background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px;margin:0;cursor:zoom-in;transition:box-shadow .15s,transform .15s}
+.sld:hover{box-shadow:0 6px 16px rgba(18,34,80,.13);transform:translateY(-2px)}
+.sld img{display:block;width:100%;height:auto;border-radius:4px;background:#fff}
+.sld figcaption{font-size:11px;color:var(--muted);line-height:1.5;margin-top:6px;text-align:center}
+.sld figcaption b{color:var(--accent)}
+
+/* ===== 한 줄 요약 ===== */
+.oneline{background:#16233f;color:#e7edf9;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+.oneline > p{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--lime)}
+.oneline .ul li{color:#c5d0e8;font-size:13px}
+.oneline .ul li b{color:#fff}
+.oneline .ul li::before{background:var(--lime);opacity:.9}
+
+/* ===== 슬라이드 확대 보기 ===== */
+#lb{position:fixed;inset:0;background:rgba(9,15,31,.94);display:none;align-items:center;justify-content:center;
+  z-index:400;padding:52px 60px 64px;cursor:zoom-out;-webkit-user-select:none;user-select:none}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:80vh;border-radius:8px;background:#fff;box-shadow:0 18px 50px rgba(0,0,0,.45);cursor:default}
+#lb .cap{position:absolute;left:0;right:0;bottom:18px;text-align:center;color:#d9e1f3;font-size:12.5px;line-height:1.6;padding:0 20px;cursor:default}
+#lb .cap b{color:#fff}
+#lb .cap .num{display:block;font-size:11px;color:#9fb0d4;margin-top:4px;letter-spacing:.04em}
+#lb button{
+  position:absolute;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;
+  border-radius:50%;width:44px;height:44px;font-size:20px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .15s;
+  font-family:inherit;padding:0;
+}
+#lb button:hover{background:rgba(255,255,255,.22)}
+#lb button:disabled{opacity:.25;cursor:default}
+#lb .prev{left:12px;top:50%;transform:translateY(-50%)}
+#lb .next{right:12px;top:50%;transform:translateY(-50%)}
+#lb .x{right:12px;top:12px;width:38px;height:38px;font-size:17px}
+@media(max-width:560px){
+  #lb{padding:48px 10px 92px}
+  #lb .prev{left:50%;top:auto;bottom:16px;transform:translateX(-64px)}
+  #lb .next{right:50%;top:auto;bottom:16px;transform:translateX(64px)}
+  #lb .cap{bottom:70px}
+}
+
+.kg{display:block;width:108px;height:42px;margin:0 auto}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:640px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#map">한눈에 보기</a>
+  <a href="#overview">01 검출 · 분할 개요</a>
+  <a href="#rcnn">02 R-CNN 계열</a>
+  <a href="#onestage">03 YOLO · SSD</a>
+  <a href="#fcn">04 의미 분할 · FCN</a>
+  <a href="#maskrcnn">05 Mask R-CNN</a>
+  <a href="#dataset">06 데이터셋</a>
+  <a href="#eval">07 평가 지표</a>
+  <a href="#summary">핵심 정리</a>
+  <a href="#next">과제 · 다음 주</a>
+</nav>
+
+<div class="wrap">
+
+<div class="weeknav">
+  <a href="computer-vision.html" class="plan">← 강의계획서</a>
+  <a href="computer-vision-week11.html">11주차 · Classification (1)</a>
+  <a href="computer-vision-week12.html">12주차 · Classification (2)</a>
+  <span class="cur">13주차 · Detection &amp; Segmentation</span>
+  <a href="computer-vision-week14.html">14주차 · Generative Model &amp; Wrap Up</a>
+  <a href="computer-vision-assignments.html">과제 · 논문 발표</a>
+</div>
+
+<section class="hero">
+  <p class="kicker">13주차 · 11.25 · 2026-2학기</p>
+  <h1>13. 검출과 분할 — 어디에, 어떤 모양으로 있나</h1>
+  <p>12주차의 CNN은 영상 한 장에 레이블 하나를 붙였다. 이번 주는 질문을 넓힌다 &mdash; <b>검출(detection)</b>은 &lsquo;무엇이 <b>어디에</b> 있나&rsquo;(분류 + 상자 회귀), <b>분할(segmentation)</b>은 &lsquo;각 물체의 <b>정확한 모양</b>은 무엇인가&rsquo;(픽셀마다 레이블)다. 검출은 후보 영역을 먼저 뽑는 <b>2단계</b>(R-CNN → Fast → Faster R-CNN)와 한 번에 예측하는 <b>1단계</b>(YOLO · SSD)로 나뉘고, 분할은 줄였다 키우는 <b>인코더-디코더</b>(FCN · U-Net)와 검출에 마스크 가지를 단 <b>Mask R-CNN</b>으로 이어진다. 마지막으로 데이터셋과 <b>IoU · 정밀도 · 재현율 · mAP · ROC</b> 같은 평가 지표를 정리한다.</p>
+  <div class="chips"><span class="chip">최재영 교수</span><span class="chip">교안 59p</span><span class="chip">분류 + 위치(회귀)</span><span class="chip">2단계 vs 1단계</span><span class="chip">RoI Pool → RoI Align</span><span class="chip">RPN · 앵커</span><span class="chip">IoU · NMS</span><span class="chip">FCN · 전치 합성곱</span><span class="chip">mAP · ROC-AUC</span></div>
+</section>
+
+<div class="legend">
+  <p class="legend-t">내용이 어디에서 왔는지 <b>뱃지</b>로 구분했습니다</p>
+  <i><span class="bdg bdg-gyo">교안</span><span>교수님 슬라이드에 있는 내용 (영어 교안을 한국어로 옮김)</span></i>
+  <i><span class="bdg bdg-plus">보충설명</span><span>교안에 없거나 짧게 지나간 부분을 따로 찾아 정리한 내용</span></i>
+  <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고, <span class="hi">노란 형광펜</span>은 <b>꼭 기억할 문장</b>, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선</span>은 누르면 뜻이 뜹니다. 쪽수는 <b>슬라이드 오른쪽 아래에 찍힌 번호</b>(= PDF 쪽수)다.</p>
+</div>
+
+<section class="sec" id="map">
+  <div class="sec-head"><span class="sec-badge">MAP</span><h2 class="sec-title">한눈에 보기<small>Detection → Segmentation → Dataset / Evaluation</small></h2></div>
+
+<div class="oneline">
+  <p><b>이번 주 한 줄 요약</b></p>
+  <ul class="ul">
+    <li>분류(무엇이) &lt; 검출(무엇이 어디에, 상자) &lt; 분할(정확한 모양, 픽셀). 분할은 <b>의미 · 인스턴스 · 판옵틱</b> 세 종류</li>
+    <li><b>2단계 검출기</b>: 영역 제안 → 영역마다 분류 + 상자 회귀(정확). <b>1단계</b>: 제안 없이 한 번에(빠름, 작은 물체 무리에 약함)</li>
+    <li><b>R-CNN</b>: 선택적 탐색 2,000개 → 영역마다 CNN(50초/장). <b>Fast</b>: 영상 전체에 CNN 한 번 + <b>RoI Pool</b>(2초). <b>Faster</b>: 선택적 탐색 대신 <b>RPN + 앵커</b>(0.2초, 250배)</li>
+    <li><b>YOLO</b>: S×S 격자 · 칸마다 상자 + 신뢰도 + 클래스 확률 → <b>NMS</b>. <b>SSD</b>: 여러 크기의 특징 지도마다 기본 상자 → 크기가 다른 물체</li>
+    <li><b>FCN</b>: 완전 연결 없이 합성곱만 · 내려갔다(풀링 · strided conv) 올라온다(언풀링 · <b>전치 합성곱</b>). U-Net이 대표</li>
+    <li><b>Mask R-CNN</b> = Faster R-CNN + 마스크 가지(RoI마다 28×28) · <b>RoI Align</b>(어긋남 해결) · <span class="tex">L=L_{cls}+L_{box}+L_{mask}</span></li>
+    <li>평가: <b>IoU</b> = 겹친 넓이 / 합친 넓이 · 정밀도 · 재현율 · F1 · <b>AP = PR 곡선 아래 넓이</b>, mAP = 클래스 평균 · ROC-AUC</li>
+  </ul>
+</div>
+
+<div class="mapgrid">
+  <a href="#overview"><b>01 검출 · 분할 개요</b><span>세 과제 · 검출 = 분류 + 회귀 · 발전사 · 1단계 vs 2단계 · 분할 세 종류 · 전통 방법들</span></a>
+  <a href="#rcnn"><b>02 R-CNN 계열</b><span>선택적 탐색 · 상자 회귀 · RoI Pool · RPN과 앵커 · 속도 비교</span></a>
+  <a href="#onestage"><b>03 YOLO · SSD</b><span>격자 예측 · 손실 세 항 · IoU와 신뢰도 · NMS · YOLO 계보 · 다중 크기 기본 상자</span></a>
+  <a href="#fcn"><b>04 의미 분할 · FCN</b><span>슬라이딩 윈도의 문제 · 완전 합성곱 · 인코더-디코더 · 언풀링 · 전치 합성곱 · U-Net</span></a>
+  <a href="#maskrcnn"><b>05 Mask R-CNN</b><span>마스크 가지 · C×28×28 · RoI Align · 다중 과제 손실</span></a>
+  <a href="#dataset"><b>06 데이터셋</b><span>Pascal VOC · MS COCO · ImageNet · KITTI · CIFAR · MNIST</span></a>
+  <a href="#eval"><b>07 평가 지표</b><span>혼동 행렬 · 정확도 · 정밀도 · 재현율 · PR 곡선 · AP · mAP · F1 · ROC · IoU</span></a>
+</div>
+</section>
+
+<div class="matbar">
+  <p class="tagline">13주차 강의 · Detection &amp; Segmentation</p>
+  <h2>13. Detection &amp; Segmentation</h2>
+  <p>59페이지 · 개요 → 물체 검출(R-CNN · Fast/Faster · YOLO · SSD) → 분할(인코더-디코더 · Mask R-CNN) → 데이터셋 · 평가 순서다.</p>
+  <div class="acts">
+    <a class="primary" href="pdf-viewer.html?doc=cv-w13-detseg">뷰어로 보기</a>
+    <a href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week13-detection-segmentation.pdf" download="컴퓨터비전_13주차_Detection_Segmentation.pdf">⬇ 다운로드</a>
+  </div>
+</div>
+
+<!-- ===================== 01 ===================== -->
+<section class="sec" id="overview">
+  <div class="sec-head"><span class="sec-badge">01</span><h2 class="sec-title">검출과 분할 — 개요<small>교안 3~11p</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>4p · 5p · 6p · 7p · 8p · 9p · 10p · 11p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-04.jpg" alt="교안 4p — 분류 · 검출 · 분할"><figcaption><b>4p</b> 분류 · 검출 · 분할</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-05.jpg" alt="교안 5p — 검출 = 분류 + 위치"><figcaption><b>5p</b> 검출 = 분류 + 위치</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-06.jpg" alt="교안 6p — 물체 검출의 발전사"><figcaption><b>6p</b> 물체 검출의 발전사</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-07.jpg" alt="교안 7p — 2단계 검출기"><figcaption><b>7p</b> 2단계 검출기</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-08.jpg" alt="교안 8p — 1단계 검출기"><figcaption><b>8p</b> 1단계 검출기</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-09.jpg" alt="교안 9p — 의미 · 인스턴스 · 판옵틱 분할"><figcaption><b>9p</b> 의미 · 인스턴스 · 판옵틱 분할</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-10.jpg" alt="교안 10p — 분할 방법 (1)"><figcaption><b>10p</b> 분할 방법 (1)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-11.jpg" alt="교안 11p — 분할 방법 (2)"><figcaption><b>11p</b> 분할 방법 (2)</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>컴퓨터비전 과제의 세 단계 (4 · 5p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>과제</th><th>질문</th><th>출력</th></tr></thead>
+    <tbody>
+      <tr><td><b>영상 분류</b></td><td>영상에 무엇이 있나? &mdash; 가장 기본</td><td>영상 전체에 레이블 하나(&lsquo;고양이&rsquo;, &lsquo;풍경&rsquo;)</td></tr>
+      <tr><td><b>물체 검출</b></td><td>어떤 물체들이 <b>어디에</b> 있나?</td><td>물체마다 <b>경계 상자(bounding box)</b> + 레이블</td></tr>
+      <tr><td><b>영상 분할</b></td><td>물체의 <b>정확한 모양</b>은?</td><td><b>픽셀마다</b> 레이블 &mdash; 물체 윤곽을 그리는 디지털 마스크</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>5p &mdash; <span class="hi">물체 검출 = 분류 + 위치 찾기(회귀)</span>. 영상에 무엇이 있는지와, 검출된 물체가 영상의 어디에 있는지를 함께 답한다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>발전사와 1단계 vs 2단계 (6~8p)</h3>
+  <p>6p 연표 &mdash; 전통적 방법(VJ 2001 · HOG 2005 · DPM 2008)에서 2012년 AlexNet 이후 딥러닝 기반으로 넘어가며 두 갈래로 나뉜다. <b>2단계</b>: RCNN(2014) · SPPNet · Fast RCNN(2015) · Faster RCNN(2015, 앵커) · Pyramid Networks(2017). <b>1단계</b>: YOLO(2016) · SSD(2016, 다중 해상도) · RetinaNet(2017).</p>
+  <div class="cards">
+    <div class="card2"><h4>2단계 검출기 <em>7p</em></h4><p>① 전통 비전 방법이나 심층 신경망으로 <b>물체 영역을 제안</b>하고, ② 제안된 영역에서 뽑은 특징으로 <b>물체를 분류</b>하며 <b>상자를 회귀</b>한다. RCNN · Faster R-CNN · Mask R-CNN · G-RCNN.</p></div>
+    <div class="card2"><h4>1단계 검출기 <em>8p</em></h4><p><b>영역 제안 단계 없이</b> 영상 위에서 상자를 바로 예측한다. 시간이 덜 걸려 <b>실시간</b> 응용에 쓴다. 추론 속도를 우선해 매우 빠르지만 <b>모양이 불규칙한 물체</b>나 <b>작은 물체 무리</b>는 덜 잘 잡는다. YOLO 계열 · SSD · RetinaNet.</p></div>
+  </div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>분할의 세 종류와 방법들 (9~11p)</h3>
+  <p><b>목표</b> &mdash; 영상을 여러 조각으로 나눠 단순화하고 분석해, 컴퓨터가 영상 내용을 이해하기 쉽게 한다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>종류</th><th>무엇을 나누나</th><th>9p 예</th></tr></thead>
+    <tbody>
+      <tr><td><b>의미 분할</b> (semantic)</td><td>픽셀마다 <b>클래스</b>. 같은 클래스의 개체는 구분하지 않는다</td><td>사람 둘이 같은 색 &lsquo;person&rsquo;</td></tr>
+      <tr><td><b>인스턴스 분할</b> (instance)</td><td><b>셀 수 있는 물체마다</b> 따로. 배경(하늘 · 땅)은 다루지 않는다</td><td>person 1 · person 2 · boat 1</td></tr>
+      <tr><td><b>판옵틱 분할</b> (panoptic)</td><td>둘을 합친다 &mdash; 모든 픽셀에 클래스, 물체에는 개체 번호까지</td><td>sky · grass + person 1 · person 2</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>방법</b>(10 · 11p) &mdash; <b>경계 기반</b>(영역을 가르는 에지 검출로 윤곽 추출), <b>영역 기반</b>(색 · 질감 같은 유사도로 픽셀 묶기), <b>군집 기반</b>(비슷한 특징의 픽셀을 군집화), <b>능동 윤곽(Snakes)</b>(여러 힘을 받아 물체 경계를 따라가는 유연한 곡선), <b>딥러닝 기반</b>(CNN · U-Net · Mask R-CNN), <b>그래프 기반</b>(영상을 그래프로 보고 픽셀 연결로 나누기), <b>워터셰드</b>(밝기를 분지로 보고 물을 채우듯 나누기 &mdash; 밝기 차이가 뚜렷한 물체에 유용).</p>
+</div>
+</section>
+
+<!-- ===================== 02 ===================== -->
+<section class="sec" id="rcnn">
+  <div class="sec-head"><span class="sec-badge">02</span><h2 class="sec-title">R-CNN 계열 — 영역을 제안하고 분류한다<small>교안 12~21p</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>13p · 14p · 15p · 16p · 17p · 18p · 19p · 20p · 21p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-13.jpg" alt="교안 13p — 물체가 여럿이면 계산이 너무 많다"><figcaption><b>13p</b> 물체가 여럿이면 계산이 너무 많다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-14.jpg" alt="교안 14p — 선택적 탐색 — 영역 제안"><figcaption><b>14p</b> 선택적 탐색 — 영역 제안</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-15.jpg" alt="교안 15p — R-CNN"><figcaption><b>15p</b> R-CNN</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-16.jpg" alt="교안 16p — 상자 회귀"><figcaption><b>16p</b> 상자 회귀</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-17.jpg" alt="교안 17p — Fast R-CNN"><figcaption><b>17p</b> Fast R-CNN</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-18.jpg" alt="교안 18p — RoI Pool"><figcaption><b>18p</b> RoI Pool</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-19.jpg" alt="교안 19p — Faster R-CNN — 2단계"><figcaption><b>19p</b> Faster R-CNN — 2단계</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-20.jpg" alt="교안 20p — RPN과 앵커 상자"><figcaption><b>20p</b> RPN과 앵커 상자</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-21.jpg" alt="교안 21p — R-CNN · Fast · Faster 속도 비교"><figcaption><b>21p</b> R-CNN · Fast · Faster 속도 비교</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>왜 영역 제안이 필요한가 (13 · 14p)</h3>
+  <p>물체가 하나면 분류 + 상자 좌표 4개를 뽑는 <b>회귀 문제</b>다. 물체가 여러 개면 몇 개인지 모르므로, 엄청나게 많은 <b>위치 · 크기 · 종횡비</b>에 CNN을 적용해야 해 계산이 너무 비싸다.</p>
+  <p><b>영역 제안 &mdash; 선택적 탐색(Selective Search)</b>: 물체를 담고 있을 것 같은 &lsquo;뭉툭한(blobby)&rsquo; 영역을 찾는다. 비교적 빨라서 CPU에서 몇 초 만에 <b>영역 제안 2,000개</b>를 낸다. 물체는 여러 크기로 있고, 한 물체가 다른 물체 안에 들어 있기도 하다(TV 안의 소녀).</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>R-CNN과 상자 회귀 (15 · 16p)</h3>
+  <p><b>R-CNN(Regions with CNN)</b> &mdash; 선택적 탐색으로 물체 후보 상자(<b>관심 영역, RoI</b>)를 여럿 찾고, <b>영역마다 따로</b> 특징을 뽑아 분류한다(잘라 크기를 맞춘 뒤 CNN → SVM 분류 + 상자 회귀).</p>
+  <div class="fx"><div class="tex-d">\hat g_x=p_wd_x(\mathbf p)+p_x,\;\;\hat g_y=p_hd_y(\mathbf p)+p_y,\;\;\hat g_w=p_w\exp(d_w(\mathbf p)),\;\;\hat g_h=p_h\exp(d_h(\mathbf p))</div>
+  <p class="fx-note"><b>상자 회귀</b> &mdash; 제안 상자 <span class="tex">\mathbf p=(p_x,p_y,p_w,p_h)</span>를 정답 상자 g 쪽으로 보정한다. 학습 목표는 <span class="tex">t_x=(g_x-p_x)/p_w,\;t_y=(g_y-p_y)/p_h,\;t_w=\log(g_w/p_w),\;t_h=\log(g_h/p_h)</span>이고, 손실은 <span class="tex">\mathcal L_{reg}=\sum_{i\in\{x,y,w,h\}}(t_i-d_i(\mathbf p))^2+\lambda\lVert\mathbf w\rVert^2</span>이다.</p></div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>왜 상자 크기로 나누고 로그를 쓰나</h3>
+  <p>중심 이동을 상자 너비 · 높이로 나누면 <b>크기에 무관한</b> 목표가 된다 &mdash; 큰 상자에서 10픽셀 어긋남과 작은 상자에서 1픽셀 어긋남을 같은 비율로 다룬다. 크기는 비율의 <b>로그</b>라서 2배 커지는 것과 절반이 되는 것이 <span class="tex">\pm\log2</span>로 대칭이고, 예측을 exp로 되돌리면 너비가 늘 양수다. 예: <span class="tex">p=(100,100,50,40)</span>, <span class="tex">g=(110,96,60,40)</span>이면 <span class="tex">t=(0.2,\,-0.1,\,\log1.2\approx0.18,\,0)</span>.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>Fast R-CNN과 RoI Pool (17 · 18p)</h3>
+  <p>R-CNN의 계산 비효율을 고친다 &mdash; <span class="hi">RoI마다 CNN을 돌리지 않고, 영상 전체에 CNN을 한 번 돌린 특징 지도에서 RoI를 잘라 낸다.</span></p>
+  <p><b>RoI Pool(특징 자르기)</b> &mdash; ① 제안 영역을 특징 지도의 격자 칸에 <b>맞춰 붙인다(snap)</b> ② 대략 같은 크기의 2×2(실제로는 7×7) 하위 영역으로 나눈다 ③ 하위 영역마다 최대 풀링. <b>입력 영역의 크기가 달라도 영역 특징은 늘 같은 크기</b>가 되어 완전 연결 층에 넣을 수 있다. <b>문제</b>: 격자에 맞춰 붙이면서 영역 특징이 <b>조금 어긋난다</b> &mdash; 05절의 RoI Align이 해결한다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>Faster R-CNN — 영역 제안 네트워크 (19~21p)</h3>
+  <p>Fast R-CNN에도 남은 병목(CPU의 선택적 탐색)을 <b>영역 제안 네트워크(RPN)</b>로 바꿔, 제안까지 신경망이 만든다. Faster R-CNN은 <b>2단계 검출기</b>다.</p>
+  <div class="cards">
+    <div class="card2"><h4>1단계: 영상마다 한 번</h4><p>백본 네트워크 · 영역 제안 네트워크</p></div>
+    <div class="card2"><h4>2단계: 영역마다 한 번</h4><p>특징 자르기(RoI pool / align) · 물체 클래스 예측 · 상자 오프셋 예측</p></div>
+  </div>
+  <p><b>RPN과 앵커 상자</b>(20p) &mdash; 800×800 영상을 CNN에 넣어 8×8 특징 지도를 얻고, 특징 지도의 각 칸에 미리 정한 크기 · 종횡비의 <b>앵커 상자</b> k개를 놓는다. 앵커마다 &lsquo;물체인가(object O / X)&rsquo;와 상자 보정값 <span class="tex">(t_x,t_y,t_w,t_h)</span>를 예측한다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>모델 (21p)</th><th>영상당 테스트 시간</th><th>속도 향상</th><th>mAP</th></tr></thead>
+    <tbody>
+      <tr><td>R-CNN</td><td>50초</td><td>1배</td><td>66.0%</td></tr>
+      <tr><td>Fast R-CNN</td><td>2초</td><td>25배</td><td>66.9%</td></tr>
+      <tr><td><b>Faster R-CNN</b></td><td><b>0.2초</b></td><td><b>250배</b></td><td>66.9%</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+</section>
+
+<!-- ===================== 03 ===================== -->
+<section class="sec" id="onestage">
+  <div class="sec-head"><span class="sec-badge">03</span><h2 class="sec-title">1단계 검출기 — YOLO와 SSD<small>교안 22~30p</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>22p · 23p · 24p · 25p · 26p · 27p · 28p · 29p · 30p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-22.jpg" alt="교안 22p — YOLO 모델 — S×S 격자"><figcaption><b>22p</b> YOLO 모델 — S×S 격자</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-23.jpg" alt="교안 23p — YOLOv1 구조"><figcaption><b>23p</b> YOLOv1 구조</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-24.jpg" alt="교안 24p — YOLO 손실 세 부분"><figcaption><b>24p</b> YOLO 손실 세 부분</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-25.jpg" alt="교안 25p — IoU와 신뢰도"><figcaption><b>25p</b> IoU와 신뢰도</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-26.jpg" alt="교안 26p — NMS"><figcaption><b>26p</b> NMS</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-27.jpg" alt="교안 27p — YOLO 계보"><figcaption><b>27p</b> YOLO 계보</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-28.jpg" alt="교안 28p — SSD"><figcaption><b>28p</b> SSD</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-29.jpg" alt="교안 29p — 다중 크기 기본 상자"><figcaption><b>29p</b> 다중 크기 기본 상자</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-30.jpg" alt="교안 30p — SSD 구조와 예측"><figcaption><b>30p</b> SSD 구조와 예측</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>YOLO 모델과 구조 (22 · 23p)</h3>
+  <p><b>YOLO(You Only Look Once)</b> &mdash; 입력을 <b>S×S 격자</b>로 나누고, 칸마다 <b>상자 B개 + 신뢰도</b>와 <b>클래스 확률 지도</b>를 한꺼번에 예측한 뒤 <b>NMS</b>로 정리한다. 클래스별 신뢰도는 <span class="tex">\Pr(\text{Class}_i|\text{Object})\cdot\Pr(\text{Object})\cdot\text{IoU}^{truth}_{pred}=\Pr(\text{Class}_i)\cdot\text{IoU}^{truth}_{pred}</span>다. YOLOv1은 GoogLeNet을 본떠 <b>합성곱 층 24개 + 완전 연결 층 2개</b>다(Redmon 등 2015).</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>손실 함수 세 부분 (24p)</h3>
+  <div class="fx"><div class="tex-d">\underbrace{\lambda_{coord}\sum_{i=0}^{S^2}\sum_{j=0}^{B}\mathbb 1^{obj}_{ij}\Big[(x_i-\hat x_i)^2+(y_i-\hat y_i)^2+(\sqrt{w_i}-\sqrt{\hat w_i})^2+(\sqrt{h_i}-\sqrt{\hat h_i})^2\Big]}_{\text{위치 손실}}\\+\underbrace{\sum_{i,j}\mathbb 1^{obj}_{ij}(C_i-\hat C_i)^2+\lambda_{noobj}\sum_{i,j}\mathbb 1^{noobj}_{ij}(C_i-\hat C_i)^2}_{\text{신뢰도 손실}}+\underbrace{\sum_{i=0}^{S^2}\mathbb 1^{obj}_i\sum_{c\in\text{classes}}(p_i(c)-\hat p_i(c))^2}_{\text{분류 손실}}</div>
+  <p class="fx-note"><span class="tex">\mathbb 1^{obj}_{ij}</span>는 칸 i의 j번째 상자가 그 물체를 맡았을 때 1이다. 원 논문은 <span class="tex">\lambda_{coord}=5,\;\lambda_{noobj}=0.5</span>를 썼다 &mdash; 대부분의 칸에는 물체가 없으므로, 빈 칸의 신뢰도 항이 학습을 압도하지 않게 줄이고 위치 항은 키운다. 너비 · 높이에 <b>제곱근</b>을 씌운 것은 큰 상자의 작은 오차보다 작은 상자의 같은 오차를 더 무겁게 보려는 것이다.</p></div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>IoU · 신뢰도 · NMS (25 · 26p)</h3>
+  <p><b>IoU 임곗값 = 0.5</b>일 때 IoU ≈ 0.3인 예측은 <b>거짓 양성(FP)</b>, IoU ≈ 0.7은 <b>참 양성(TP)</b>이다. 같은 IoU 0.3도 임곗값이 0.2면 TP가 된다. <b>신뢰도 임곗값</b>을 올리면 정밀도가 오르고 재현율이 내려간다(25p 곡선).</p>
+  <div class="flow">
+    <div class="fl"><b>1. 물체 점수가 가장 높은 상자를 고른다</b><span></span></div>
+    <div class="fl"><b>2. 이 상자와 나머지 상자의 겹침(IoU)을 비교한다</b><span></span></div>
+    <div class="fl"><b>3. IoU가 50%보다 큰 상자를 지운다</b><span>같은 물체를 가리키는 중복</span></div>
+    <div class="fl"><b>4. 다음으로 점수가 높은 상자로 간다</b><span></span></div>
+    <div class="fl"><b>5. 2~4를 반복한다</b><span>NMS(Non-Maximum Suppression)</span></div>
+  </div>
+  <p>27p &mdash; YOLO 계보: v1(2015) · v2(2016) · v3(2018) · v4 · v5(2020) · … · v8(2023) · v9(2024).</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>SSD — 여러 크기의 특징 지도에서 (28~30p)</h3>
+  <p><b>SSD(Single Shot MultiBox Detector)</b>는 <span class="hi">CNN의 피라미드형 특징 계층을 써서 여러 크기의 물체를 효율적으로 검출하려 한 첫 시도 중 하나</span>다. VGG-16 뒤에 크기가 점점 작아지는 추가 특징 층(38×38 → 19×19 → 10×10 → 5×5 → 3×3 → 1×1)을 붙이고, <b>층마다 기본 상자(default box, 앵커)</b>에서 위치 보정 <span class="tex">\Delta(cx,cy,w,h)</span>와 클래스 신뢰도 <span class="tex">(c_1,\dots,c_p)</span>를 예측한다.</p>
+  <div class="fx"><div class="tex-d">s_k=s_{min}+\frac{s_{max}-s_{min}}{m-1}(k-1),\qquad k\in[1,m]</div>
+  <p class="fx-note">k번째 특징 지도의 기본 상자 크기. 29p &mdash; <b>8×8 지도</b>(촘촘, 작은 상자)는 작은 고양이를, <b>4×4 지도</b>(성김, 큰 상자)는 큰 개를 맡는다.</p></div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>NMS 손으로 돌려 보기 · s<sub>k</sub> 숫자 예</h3>
+  <p>상자 A(0.9), B(0.8), C(0.7)가 있고 IoU(A,B)=0.7, IoU(A,C)=0.1, IoU(B,C)=0.2라면 &mdash; A를 남기고 A와 0.5 넘게 겹친 B를 지운다 → 남은 C는 A와 거의 안 겹치므로 남는다. 결과 <b>{A, C}</b>: 두 물체다.</p>
+  <p>SSD 원 논문 값 <span class="tex">s_{min}=0.2,\;s_{max}=0.9,\;m=6</span>이면 <span class="tex">s_k=0.2,0.34,0.48,0.62,0.76,0.9</span> &mdash; 앞 층(고해상도)은 영상의 20% 크기 상자를, 마지막 층은 90% 크기 상자를 맡는다.</p>
+</div>
+</section>
+
+<!-- ===================== 04 ===================== -->
+<section class="sec" id="fcn">
+  <div class="sec-head"><span class="sec-badge">04</span><h2 class="sec-title">의미 분할 — 완전 합성곱 신경망<small>교안 31~38p</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>32p · 33p · 34p · 35p · 36p · 37p · 38p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-32.jpg" alt="교안 32p — 의미 분할 — 픽셀마다 레이블"><figcaption><b>32p</b> 의미 분할 — 픽셀마다 레이블</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-33.jpg" alt="교안 33p — 슬라이딩 윈도"><figcaption><b>33p</b> 슬라이딩 윈도</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-34.jpg" alt="교안 34p — 완전 합성곱 — 한 번에"><figcaption><b>34p</b> 완전 합성곱 — 한 번에</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-35.jpg" alt="교안 35p — 인코더-디코더"><figcaption><b>35p</b> 인코더-디코더</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-36.jpg" alt="교안 36p — 언풀링 · 최대 언풀링"><figcaption><b>36p</b> 언풀링 · 최대 언풀링</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-37.jpg" alt="교안 37p — 전치 합성곱"><figcaption><b>37p</b> 전치 합성곱</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-38.jpg" alt="교안 38p — FCN 정리 · U-Net"><figcaption><b>38p</b> FCN 정리 · U-Net</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>세 가지 설계와 각각의 문제 (32~35p)</h3>
+  <p><b>의미 분할</b> &mdash; 영상의 <b>각 픽셀</b>에 범주 레이블을 붙인다. 개체는 구분하지 않고 픽셀만 본다(소 두 마리 = 한 덩어리 &lsquo;cow&rsquo;).</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>설계</th><th>방법</th><th>문제</th></tr></thead>
+    <tbody>
+      <tr><td><b>슬라이딩 윈도</b> (33p)</td><td>픽셀마다 주변 패치를 잘라 CNN으로 중심 픽셀 분류</td><td>겹치는 패치의 특징을 다시 계산 &mdash; <b>매우 비효율</b></td></tr>
+      <tr><td><b>완전 합성곱</b> (34p)</td><td>합성곱 층만 쌓아 <b>모든 픽셀을 한 번에</b> 예측</td><td>원래 해상도로 합성곱을 계속하면 <b>계산 · 메모리가 너무 크다</b></td></tr>
+      <tr><td><b>인코더-디코더</b> (35p)</td><td>네트워크 <b>안에서 내려갔다(downsampling) 올라온다(upsampling)</b></td><td>&lsquo;올리는 법&rsquo;이 필요 → 36 · 37p</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Long · Shelhamer · Darrell, &ldquo;Fully Convolutional Networks for Semantic Segmentation&rdquo;(CVPR 2015) · Noh 등, &ldquo;Learning Deconvolution Network&rdquo;(ICCV 2015).</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>올리는 방법 — 언풀링과 전치 합성곱 (36 · 37p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>방법</th><th>2×2 [1 2; 3 4] → 4×4</th></tr></thead>
+    <tbody>
+      <tr><td><b>최근접 이웃</b> 언풀링</td><td>값을 2×2로 복사: [1 1 2 2; 1 1 2 2; 3 3 4 4; 3 3 4 4]</td></tr>
+      <tr><td><b>&lsquo;Bed of Nails&rsquo;</b></td><td>왼쪽 위에만 두고 나머지 0: [1 0 2 0; 0 0 0 0; 3 0 4 0; 0 0 0 0]</td></tr>
+      <tr><td><b>최대 언풀링</b> (max unpooling)</td><td>앞에서 최대 풀링할 때 <b>최댓값이 있던 자리</b>를 기억해 두고, 짝을 이룬 업샘플링 층에서 그 자리에 값을 되돌려 놓는다</td></tr>
+      <tr><td><b>전치 합성곱</b> (transpose conv) &mdash; 학습 가능</td><td>보통 합성곱은 커널로 입력 원소들을 <b>모아 줄이지만</b>, 전치 합성곱은 입력 원소 하나를 커널로 <b>퍼뜨려</b> 입력보다 <b>큰 출력</b>을 만든다. 겹치는 곳은 더한다</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>정리</b>(38p) &mdash; 내려가기는 <b>풀링 · strided 합성곱</b>, 올라오기는 <b>언풀링 · strided 전치 합성곱</b>. 대표 구조가 <b>U-Net</b>(MICCAI 2015, 의료 영상 분할)이다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>전치 합성곱 손계산 · U-Net의 &lsquo;U&rsquo;와 건너뛰기 연결</h3>
+  <p>37p 기본 연산: 입력 [0 1; 2 3], 커널 [0 1; 2 3], stride 1. 입력 값마다 커널을 곱해 그 자리에 놓고 더한다 &mdash; 0·K는 전부 0, 1·K = [0 1; 2 3]은 오른쪽으로 한 칸, 2·K = [0 2; 4 6]은 아래로 한 칸, 3·K = [0 3; 6 9]는 대각선으로 한 칸. 합하면 <b>[0 0 1; 0 4 6; 4 12 9]</b>(3×3). 출력 크기는 <span class="tex">(w_{in}-1)s+k=(2-1)\cdot1+2=3</span>, stride 2면 <span class="tex">(2-1)\cdot2+2=4</span>.</p>
+  <p>U-Net은 인코더가 줄이며 잃은 <b>세밀한 위치 정보</b>를, 같은 해상도의 인코더 특징을 디코더에 <b>이어 붙여(skip connection)</b> 되살린다. 그림을 그리면 U자다. 12주차 ResNet의 건너뛰기가 &lsquo;더하기&rsquo;였다면 U-Net은 &lsquo;이어 붙이기&rsquo;다.</p>
+</div>
+</section>
+
+<!-- ===================== 05 ===================== -->
+<section class="sec" id="maskrcnn">
+  <div class="sec-head"><span class="sec-badge">05</span><h2 class="sec-title">Mask R-CNN — 인스턴스 분할<small>교안 39~42p · ICCV 2017</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>39p · 40p · 41p · 42p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-39.jpg" alt="교안 39p — Mask R-CNN"><figcaption><b>39p</b> Mask R-CNN</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-40.jpg" alt="교안 40p — Faster R-CNN + 마스크 가지"><figcaption><b>40p</b> Faster R-CNN + 마스크 가지</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-41.jpg" alt="교안 41p — RoI Align"><figcaption><b>41p</b> RoI Align</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-42.jpg" alt="교안 42p — 마스크 예측과 다중 과제 손실"><figcaption><b>42p</b> 마스크 예측과 다중 과제 손실</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>Faster R-CNN + 마스크 가지 (39 · 40p)</h3>
+  <p>He 등, &ldquo;Mask R-CNN&rdquo;(ICCV 2017). 분류 · 상자에 <b>마스크 예측</b>을 더한다 &mdash; <span class="hi">RoI마다 동작하는 작은 마스크 네트워크를 붙여 28×28 이진 마스크를 예측한다.</span></p>
+  <ul class="ul">
+    <li><b>Faster R-CNN + FCN(마스크 가지)</b> &mdash; CNN + RPN → RoI Align → 256×14×14 → 합성곱 → 합성곱</li>
+    <li>출력: 분류 점수 <b>C</b>, 클래스별 상자 좌표 <b>4·C</b>, 클래스마다 마스크 <b>C×28×28</b></li>
+    <li><b>RoI Pooling → RoI Align</b></li>
+    <li><b>클래스와 마스크 예측을 분리</b> &mdash; 마스크는 클래스마다 따로 예측하고, 분류 가지가 고른 클래스의 마스크만 쓴다</li>
+    <li><b>다중 과제 손실</b> <span class="tex">L=L_{cls}+L_{box}+L_{mask}</span>(42p)</li>
+  </ul>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>RoI Align (41p)</h3>
+  <p>RoI Pool과 비교하면 &mdash; ① 격자에 <b>맞춰 붙이지 않는다(no snap)</b> ② 각 하위 영역 안의 규칙적인 점에서 <b>쌍선형 보간</b>으로 값을 뽑는다 ③ 하위 영역마다 최대 풀링. 소수점 위치를 반올림하지 않으므로 특징이 원래 영역과 <b>정확히 정렬</b>된다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>왜 분할에는 RoI Align이 꼭 필요한가</h3>
+  <p>특징 지도가 영상보다 32배 작다고 하자. 영상 좌표 x = 100인 경계는 특징 지도에서 100/32 = 3.125다. RoI Pool은 이를 3으로 반올림한다 &mdash; 영상으로 되돌리면 <b>4픽셀</b> 어긋난다. 상자 분류에는 별 문제가 없지만, 픽셀 단위 마스크에서는 경계가 통째로 밀린다. RoI Align은 3.125 위치의 값을 이웃 네 칸으로 쌍선형 보간해 읽으므로 어긋남이 없다. 원 논문에서 이것만으로 마스크 AP가 크게 올랐다.</p>
+</div>
+</section>
+
+<!-- ===================== 06 ===================== -->
+<section class="sec" id="dataset">
+  <div class="sec-head"><span class="sec-badge">06</span><h2 class="sec-title">데이터셋<small>교안 43~49p</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>44p · 45p · 46p · 47p · 48p · 49p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-44.jpg" alt="교안 44p — Pascal VOC"><figcaption><b>44p</b> Pascal VOC</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-45.jpg" alt="교안 45p — MS COCO"><figcaption><b>45p</b> MS COCO</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-46.jpg" alt="교안 46p — ImageNet"><figcaption><b>46p</b> ImageNet</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-47.jpg" alt="교안 47p — KITTI"><figcaption><b>47p</b> KITTI</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-48.jpg" alt="교안 48p — CIFAR-10/100"><figcaption><b>48p</b> CIFAR-10/100</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-49.jpg" alt="교안 49p — MNIST"><figcaption><b>49p</b> MNIST</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>대표 데이터셋 여섯 (44~49p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>데이터셋</th><th>내용</th><th>규모 · 형식</th></tr></thead>
+    <tbody>
+      <tr><td><b>Pascal VOC</b></td><td>물체 클래스 인식용 표준 데이터 + 접근 도구 · 방법 비교 · 2005~2012 대회(종료)</td><td><b>XML</b> 형식, <b>20개 범주</b> · Annotations · ImageSets(train/test/trainval/val) · JPEGImages · SegmentationClass · SegmentationObject</td></tr>
+      <tr><td><b>MS COCO</b></td><td>대규모 검출 · 분할 · 캡션 데이터셋</td><td><b>JSON</b> 형식 · info · licenses · images · annotations(범주 · 상자 · 분할 마스크) · categories</td></tr>
+      <tr><td><b>ImageNet</b></td><td>ILSVRC(2010~2017)로 대규모 검출 · 분류 평가 · <b>WordNet 계층</b>으로 정리</td><td><b>1,400만 장 이상</b> 고해상도, 수천 범주</td></tr>
+      <tr><td><b>KITTI</b></td><td>실제 주행 벤치마크 &mdash; 스테레오 · 광류 · 시각 주행 거리계 · 3D 검출 · 3D 추적</td><td>카를스루에 시내 · 시골 · 고속도로 주행, 영상당 차 최대 15대 · 보행자 30명</td></tr>
+      <tr><td><b>CIFAR-10/100</b></td><td>32×32 컬러 영상</td><td>10: 60,000장, 클래스당 6,000 (학습 50,000 · 테스트 10,000) / 100: 클래스당 600 (학습 500 · 테스트 100), 20개 상위 클래스</td></tr>
+      <tr><td><b>MNIST</b></td><td>손글씨 숫자</td><td>학습 60,000 · 테스트 10,000</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>KITTI는 <a class="ext" href="computer-vision-week09.html">9주차 스테레오</a> · <a class="ext" href="computer-vision-week10.html">10주차 광류</a>의 대표 벤치마크이기도 하다. 그 밖에 약 10,000개의 기계학습 데이터셋이 paperswithcode에 정리되어 있다.</p>
+</div>
+</section>
+
+<!-- ===================== 07 ===================== -->
+<section class="sec" id="eval">
+  <div class="sec-head"><span class="sec-badge">07</span><h2 class="sec-title">평가 지표<small>교안 50~58p</small></h2></div>
+
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>50p · 51p · 54p · 55p · 57p · 58p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-50.jpg" alt="교안 50p — 혼동 행렬"><figcaption><b>50p</b> 혼동 행렬</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-51.jpg" alt="교안 51p — 정확도 — 두 병원 예"><figcaption><b>51p</b> 정확도 — 두 병원 예</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-54.jpg" alt="교안 54p — 정밀도-재현율 맞바꿈"><figcaption><b>54p</b> 정밀도-재현율 맞바꿈</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-55.jpg" alt="교안 55p — AP와 mAP"><figcaption><b>55p</b> AP와 mAP</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-57.jpg" alt="교안 57p — ROC 곡선과 AUC"><figcaption><b>57p</b> ROC 곡선과 AUC</figcaption></figure>
+    <figure class="sld"><img width="1100" height="778" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv13-58.jpg" alt="교안 58p — IoU"><figcaption><b>58p</b> IoU</figcaption></figure>
+  </div>
+</div>
+
+<h3 class="sub-title">개념 정리</h3>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>혼동 행렬과 네 지표 (50~53 · 56p)</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>칸</th><th>뜻 (암 진단 예)</th></tr></thead>
+    <tbody>
+      <tr><td><b>TP</b></td><td>실제 양성을 양성으로 &mdash; 암 환자를 암으로 맞힘</td></tr>
+      <tr><td><b>TN</b></td><td>실제 음성을 음성으로 &mdash; 건강한 사람을 건강하다고 맞힘</td></tr>
+      <tr><td><b>FP</b></td><td>음성인데 양성으로 &mdash; 건강한 사람에게 암이라고 함</td></tr>
+      <tr><td><b>FN</b></td><td>양성인데 음성으로 &mdash; 암 환자를 놓침</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <ul class="ul">
+    <li><b>정확도</b> = (TP + TN) / 전체 &mdash; 직관적이지만 <b>클래스가 불균형하면 오해를 부른다</b></li>
+    <li><b>정밀도</b> = TP / (TP + FP) &mdash; 양성 예측 중 진짜 양성의 비율. <b>거짓 양성의 비용이 클 때</b> 중요</li>
+    <li><b>재현율</b> = TP / (TP + FN) &mdash; 실제 양성 중 찾아낸 비율. <b>양성을 놓치는 비용이 클 때</b> 중요. 민감도 · 참 양성률(TPR)이라고도 한다</li>
+    <li><b>F1</b> = 정밀도와 재현율의 <b>조화 평균</b>. F1을 최대화하면 둘을 동시에 최대화하는 셈이라 정확도와 함께 많이 쓴다</li>
+  </ul>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>교안의 두 병원 예를 직접 계산하면</h3>
+  <p>실제는 두 병원 모두 [건강, 건강, 건강, 건강, <b>암</b>] &mdash; 암 환자 1명.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>예측</th><th>TP · FP · FN · TN</th><th>정확도</th><th>정밀도</th><th>재현율</th></tr></thead>
+    <tbody>
+      <tr><td><b>병원 A</b></td><td>건강 · 건강 · 건강 · <b>암</b> · <b>건강</b></td><td>0 · 1 · 1 · 3</td><td><b>0.6</b></td><td>0 / 1 = <b>0</b></td><td>0 / 1 = <b>0</b></td></tr>
+      <tr><td><b>병원 B</b></td><td>건강 · 건강 · <b>암</b> · <b>암</b> · <b>암</b></td><td>1 · 2 · 0 · 2</td><td><b>0.6</b></td><td>1 / 3 ≈ <b>0.33</b></td><td>1 / 1 = <b>1</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>정확도는 둘 다 0.6으로 같지만, A는 암 환자를 <b>놓쳤고</b> B는 찾아냈다(대신 건강한 두 명을 재검사로 보낸다). 암 진단처럼 놓치는 비용이 크면 <b>재현율</b>로 보면 B가 훨씬 낫다 &mdash; 정확도만 보면 안 되는 이유다.</p>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>PR 곡선 · AP · mAP (54 · 55p)</h3>
+  <p><b>정밀도-재현율</b>은 클래스가 매우 불균형할 때 예측 성공을 재는 유용한 척도다. 정보 검색에서 정밀도는 결과의 <b>적합성</b>, 재현율은 진짜 적합한 결과를 <b>얼마나 많이</b> 돌려주는지다. <b>PR 곡선</b>은 확률 임곗값을 바꿔 가며 참 양성률(재현율)과 양성 예측도(정밀도)의 맞바꿈을 요약한다.</p>
+  <div class="fx"><div class="tex-d">AP=\int_{r=0}^{1}p(r)\,dr,\qquad mAP=\frac1{N_{cls}}\sum_{c}AP_c</div>
+  <p class="fx-note"><b>AP</b>는 PR 곡선 아래 넓이로, 곡선을 값 하나(0~1)로 요약한다. 여러 신뢰도 임곗값에 걸쳐 정밀도와 재현율이 <b>모두 높을 때</b> 높고, 어느 하나라도 낮으면 낮다. <b>mAP</b>는 클래스별 AP의 평균이다 &mdash; 검출 논문의 &lsquo;mAP 66.9%&rsquo;(21p)가 이것이다.</p></div>
+</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>ROC 곡선과 IoU (57 · 58p)</h3>
+  <p><b>ROC 곡선</b> &mdash; 모든 분류 임곗값에서의 성능을 보여 주는 그래프로, 가로축 <b>FPR = FP / (FP + TN)</b>(위양성률, fall-out), 세로축 <b>TPR = TP / (TP + FN)</b>(= 재현율)이다. 왼쪽 위(0, 1)가 완벽한 분류기, 대각선이 무작위 분류기다. <b>AUC</b>(곡선 아래 넓이)는 ROC 곡선 전체의 &lsquo;전반적인&rsquo; 위치를 1차원 지표 하나로 요약한다.</p>
+  <div class="fx"><div class="tex-d">\text{IoU}=\frac{\text{Area of Overlap}}{\text{Area of Union}}\qquad(\text{58p 예}:\;21{,}600/35{,}000=0.618)</div>
+  <p class="fx-note"><b>IoU</b>는 정답 상자와 예측 상자가 얼마나 가까운지를 0~1로 잰다. 두 상자가 완전히 겹치면 1(완벽한 예측)이다. 검출의 TP · FP 판정은 IoU 임곗값(보통 0.5)으로 한다.</p></div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>IoU 손계산 · PR과 ROC는 언제 무엇을</h3>
+  <p>정답 상자 (0, 0)~(4, 4), 예측 상자 (2, 2)~(6, 6)이면 겹친 넓이 2×2 = 4, 합친 넓이 16 + 16 − 4 = 28 → IoU = 4 / 28 ≈ <b>0.14</b>. 한 변 길이의 절반만 밀려도 IoU는 0.5 아래로 크게 떨어진다 &mdash; 0.5가 생각보다 엄격한 기준인 이유다.</p>
+  <p>ROC는 TN을 쓰므로, 음성(배경)이 압도적으로 많은 검출 문제에서는 FPR이 늘 작게 나와 곡선이 좋아 보인다. 그래서 검출 · 검색처럼 <b>음성이 너무 많은</b> 과제는 TN을 쓰지 않는 <b>PR 곡선 · AP</b>로 평가한다. NLP 10주차 감성 분석의 정밀도 · 재현율 · F1과 같은 식이다(<a class="ext" href="nlp-week10.html#sa-metric">NLP 10.2.5</a>).</p>
+</div>
+</section>
+
+<section class="sec" id="summary">
+  <div class="sec-head"><span class="sec-badge">SUM</span><h2 class="sec-title">핵심 정리<small>서술형으로 나올 때 이 흐름으로</small></h2></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>개념</th><th>한 줄</th><th>숫자 · 식</th></tr></thead>
+  <tbody>
+    <tr><td>세 과제</td><td>분류(레이블 하나) · 검출(상자 + 레이블) · 분할(픽셀 레이블)</td><td>검출 = 분류 + 회귀</td></tr>
+    <tr><td>분할 세 종류</td><td>의미(클래스) · 인스턴스(개체) · 판옵틱(둘 다)</td><td>&mdash;</td></tr>
+    <tr><td>2단계 vs 1단계</td><td>제안 → 분류 · 회귀(정확) / 제안 없이 한 번에(빠름, 작은 물체 무리에 약함)</td><td>R-CNN 계열 / YOLO · SSD · RetinaNet</td></tr>
+    <tr><td>R-CNN</td><td>선택적 탐색 2,000개 → 영역마다 CNN → SVM + 상자 회귀</td><td>50초 · mAP 66.0%</td></tr>
+    <tr><td>상자 회귀</td><td>크기로 나눈 중심 이동 · 크기 비의 로그</td><td><span class="tex">t_x=(g_x-p_x)/p_w,\;t_w=\log(g_w/p_w)</span></td></tr>
+    <tr><td>Fast R-CNN</td><td>영상 전체 CNN 한 번 + RoI Pool(고정 크기, 어긋남 있음)</td><td>2초 · 25배</td></tr>
+    <tr><td>Faster R-CNN</td><td>RPN + 앵커로 제안까지 신경망 · 2단계</td><td>0.2초 · 250배 · 66.9%</td></tr>
+    <tr><td>YOLO</td><td>S×S 격자 · 칸마다 상자 B개 + 신뢰도 + 클래스 · 손실 = 위치 + 신뢰도 + 분류 · NMS</td><td>v1: Conv 24 + FC 2</td></tr>
+    <tr><td>NMS</td><td>최고 점수 상자 남기고 IoU &gt; 0.5 지우기 반복</td><td>&mdash;</td></tr>
+    <tr><td>SSD</td><td>여러 크기 특징 지도 · 층마다 기본 상자</td><td><span class="tex">s_k=s_{min}+\frac{s_{max}-s_{min}}{m-1}(k-1)</span></td></tr>
+    <tr><td>FCN</td><td>합성곱만 · 내려갔다(풀링 · strided conv) 올라오기(언풀링 · 전치 합성곱) · U-Net</td><td>전치 합성곱 출력 <span class="tex">(w-1)s+k</span></td></tr>
+    <tr><td>Mask R-CNN</td><td>Faster R-CNN + 마스크 가지 · RoI Align(보간, 반올림 없음) · 클래스 · 마스크 분리</td><td>C×28×28, <span class="tex">L_{cls}+L_{box}+L_{mask}</span></td></tr>
+    <tr><td>데이터셋</td><td>VOC(XML · 20) · COCO(JSON) · ImageNet(1,400만 · WordNet) · KITTI(주행) · CIFAR · MNIST</td><td>&mdash;</td></tr>
+    <tr><td>지표</td><td>정확도(불균형에 약함) · 정밀도(FP 비용) · 재현율(FN 비용) · F1(조화 평균) · AP · mAP · ROC-AUC · IoU</td><td><span class="tex">AP=\int_0^1p(r)dr</span></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note-box"><b>서술형으로 묶는다면</b> &mdash; &ldquo;R-CNN에서 Faster R-CNN까지의 발전을 설명하시오&rdquo;: <b>R-CNN(선택적 탐색 + 영역마다 CNN, 느림) → Fast R-CNN(CNN을 영상에 한 번, RoI Pool로 특징 자르기) → Faster R-CNN(영역 제안까지 RPN · 앵커로, 종단간) → Mask R-CNN(마스크 가지 + RoI Align)</b>. 각 단계가 &lsquo;무엇을 병목으로 보고 무엇으로 바꿨나&rsquo;를 한 줄씩 붙이면 된다. &ldquo;1단계와 2단계 비교&rdquo;에는 <b>속도 · 정확도 · 작은 물체</b>의 맞바꿈을 쓴다.</div>
+</section>
+
+<section class="sec" id="next">
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">과제 · 다음 주<small>HW3 마감 12/2 · 14주차 Generative Model &amp; Wrap Up</small></h2></div>
+<div class="warn"><b>HW3 마감 &mdash; 12월 2일(14주차 수업일)</b>. 범위 11~13주차(BoW-SVM, CNN). <a class="ext" href="computer-vision-assignments.html#hw3">과제 · 논문 발표</a></div>
+<div class="note-box"><b>14주차(12.2) &mdash; Image Generative Model &amp; Wrap Up</b>. 지금까지는 영상을 받아 &lsquo;무엇 · 어디 · 어떤 모양&rsquo;을 답했다. 다음 주는 반대로 <b>영상을 만들어 내는</b> 생성 모델(오토인코더 · GAN · 확산 모델)이다. 이번 주 FCN의 인코더-디코더와 전치 합성곱이 생성 모델의 디코더로 그대로 이어진다. &rarr; <a class="ext" href="computer-vision-week14.html">14주차 수업내용</a></div>
+</section>
+
+<p class="src">출처 — 컴퓨터비전 13. Detection &amp; Segmentation (2026-2학기, 59페이지)<br>
+영어 교안을 korean-translation 규칙(하다체 · 번역투 피하기)에 따라 절 단위로 한국어로 옮겨 정리하고 도식 · 예시 슬라이드 <b>49장</b>을 캡처해 실었다. &lsquo;보충설명&rsquo; 뱃지가 붙은 부분(상자 회귀 목표의 이유와 숫자 예 · NMS와 s<sub>k</sub> 예 · 전치 합성곱 손계산과 U-Net · RoI Align의 필요성 · 두 병원 예 계산 · IoU 손계산과 PR vs ROC)은 교안에 없는 내용을 따로 계산하거나 찾아 정리한 것이다. 강의 전에 미리 만든 페이지라, 수업에서 강조한 내용은 수업 뒤에 덧붙인다.</p>
+
+</div>
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive() {
+    var cur = '';
+    sections.forEach(function (s) { if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function (t) { t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      setTimeout(function () {
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+
+  /* ---- 개념 설명 말풍선 ---- */
+  var terms = document.querySelectorAll('.term');
+  if (!terms.length) return;
+  var tip = document.createElement('div');
+  tip.id = 'tipbox';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  var current = null;
+
+  function hide() {
+    tip.classList.remove('on');
+    if (current) { current.classList.remove('on'); current = null; }
+  }
+  function show(el) {
+    tip.textContent = el.getAttribute('data-tip') || '';
+    tip.classList.add('on');
+    if (current && current !== el) current.classList.remove('on');
+    current = el;
+    el.classList.add('on');
+    var pad = 8;
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+    var top = r.top - t.height - 10;
+    if (top < pad) top = r.bottom + 10;
+    top = Math.min(top, window.innerHeight - t.height - pad);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+  terms.forEach(function (el) {
+    el.addEventListener('mouseenter', function () { show(el); });
+    el.addEventListener('mouseleave', function () { if (current === el) hide(); });
+    el.addEventListener('focus', function () { show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (current === el && tip.classList.contains('on')) hide(); else show(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el); }
+      if (e.key === 'Escape') hide();
+    });
+  });
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide);
+});
+</script>
+
+<script>
+/* 슬라이드 확대 보기 — 좌우 이동 · 닫으면 보던 자리로 */
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.sld'));
+  if (!slides.length) return;
+
+  var lb = document.createElement('div');
+  lb.id = 'lb';
+  lb.innerHTML =
+    '<button class="prev" type="button" aria-label="이전 슬라이드">&#10094;</button>' +
+    '<img alt="">' +
+    '<button class="next" type="button" aria-label="다음 슬라이드">&#10095;</button>' +
+    '<button class="x" type="button" aria-label="닫기">&#10005;</button>' +
+    '<p class="cap"></p>';
+  document.body.appendChild(lb);
+
+  var big = lb.querySelector('img'),
+      cap = lb.querySelector('.cap'),
+      bPrev = lb.querySelector('.prev'),
+      bNext = lb.querySelector('.next'),
+      bX = lb.querySelector('.x');
+
+  var idx = -1, openedIdx = -1, savedY = 0, pushed = false, prevRestore = null, fromRef = false;
+
+  function lock() {
+    savedY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    document.body.style.position = 'fixed';
+    document.body.style.top = (-savedY) + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  /* html{scroll-behavior:smooth} 때문에 되돌아갈 때 화면이 흘러가지 않도록 잠깐 끈다 */
+  function instantly(fn) {
+    var de = document.documentElement, prev = de.style.scrollBehavior;
+    de.style.scrollBehavior = 'auto';
+    fn();
+    void de.offsetHeight;
+    de.style.scrollBehavior = prev;
+  }
+  function unlock() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    /* 개념 카드의 썸네일로 연 경우에는 넘겨 봤어도 읽던 자리로 돌아간다 */
+    var target = (!fromRef && idx >= 0 && idx !== openedIdx) ? slides[idx] : null;
+    function place() {
+      instantly(function () {
+        window.scrollTo(0, savedY);
+        /* 넘겨 본 슬라이드가 있으면 그 슬라이드 자리로, 아니면 보던 자리 그대로 */
+        if (target) target.scrollIntoView({ block: 'center' });
+      });
+    }
+    place();
+    /* 기기 뒤로가기로 닫을 때 브라우저가 옛 스크롤을 덮어쓰므로 한 프레임 뒤 한 번 더 */
+    if (window.requestAnimationFrame) window.requestAnimationFrame(place);
+    setTimeout(place, 0);
+  }
+
+  function preload(i) {
+    if (i < 0 || i >= slides.length) return;
+    var im = slides[i].querySelector('img');
+    if (im) { var p = new Image(); p.src = im.currentSrc || im.src; }
+  }
+
+  function render(i) {
+    idx = i;
+    var f = slides[i], im = f.querySelector('img'), fc = f.querySelector('figcaption');
+    big.src = im.currentSrc || im.src;
+    big.alt = im.alt || '';
+    cap.innerHTML = '';
+    cap.appendChild(document.createTextNode(fc ? fc.textContent : ''));
+    var num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = (i + 1) + ' / ' + slides.length + ' · ← → 로 넘기기';
+    cap.appendChild(num);
+    bPrev.disabled = (i === 0);
+    bNext.disabled = (i === slides.length - 1);
+    preload(i + 1); preload(i - 1);
+  }
+
+  function open(i) {
+    openedIdx = i;
+    lock();
+    render(i);
+    lb.classList.add('on');
+    if (!pushed && window.history && window.history.pushState) {
+      try {
+        if ('scrollRestoration' in window.history && prevRestore === null) {
+          prevRestore = window.history.scrollRestoration;
+          window.history.scrollRestoration = 'manual';
+        }
+        window.history.pushState({ lb: 1 }, '');
+        pushed = true;
+      } catch (e) { pushed = false; }
+    }
+  }
+  function closeNow() {
+    if (!lb.classList.contains('on')) return;
+    lb.classList.remove('on');
+    unlock();
+    idx = openedIdx = -1;
+    fromRef = false;
+    if (prevRestore !== null) {
+      try { window.history.scrollRestoration = prevRestore; } catch (e) {}
+      prevRestore = null;
+    }
+  }
+  function closeByUser() {
+    if (pushed) { pushed = false; window.history.back(); }  /* popstate 가 닫는다 */
+    else { closeNow(); }
+  }
+  function go(step) {
+    var n = idx + step;
+    if (n < 0 || n >= slides.length) return;
+    render(n);
+  }
+
+  slides.forEach(function (f, i) {
+    f.addEventListener('click', function () { open(i); });
+  });
+  window.__lbOpenFig = function (f) {
+    var i = slides.indexOf(f);
+    if (i >= 0) { fromRef = true; open(i); }
+  };
+
+  bPrev.addEventListener('click', function (e) { e.stopPropagation(); go(-1); });
+  bNext.addEventListener('click', function (e) { e.stopPropagation(); go(1); });
+  bX.addEventListener('click', function (e) { e.stopPropagation(); closeByUser(); });
+  big.addEventListener('click', function (e) { e.stopPropagation(); });
+  cap.addEventListener('click', function (e) { e.stopPropagation(); });
+  lb.addEventListener('click', closeByUser);
+
+  window.addEventListener('popstate', function () {
+    if (lb.classList.contains('on')) { pushed = false; closeNow(); }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('on')) return;
+    if (e.key === 'Escape') { e.preventDefault(); closeByUser(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+  });
+
+  /* 모바일 — 좌우로 쓸어 넘기기 */
+  var tx = 0, ty = 0;
+  lb.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) return;
+    tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+  }, { passive: true });
+  lb.addEventListener('touchend', function (e) {
+    if (!e.changedTouches.length) return;
+    var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
+</script>
+
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script src="slide-ref.js?v=2"></script>
+<script src="../vendor/katex/katex.min.js"></script>
+<script>
+// .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.
+// KaTeX를 못 불러온 경우에는 원문이 그대로 남아 최소한 읽을 수는 있게 둔다.
+(function () {
+  if (typeof katex === 'undefined') { return; }
+  document.querySelectorAll('.tex, .tex-d').forEach(function (el) {
+    try {
+      katex.render(el.textContent.trim(), el, {
+        displayMode: el.classList.contains('tex-d'),
+        throwOnError: false,
+        strict: false
+      });
+    } catch (e) { if (window.console) { console.error('KaTeX', e, el.textContent); } }
+  });
+})();
+</script>
+
+</body>
+</html>
