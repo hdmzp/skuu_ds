@@ -563,7 +563,7 @@ table.acc{min-width:0}
 
 <div class="pt gyo">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>동영상과 영상 움직임 (4 · 5p)</h3>
-  <p><b>동영상은 시간에 따라 찍은 프레임의 연속</b>이다. 그래서 영상 데이터는 이제 공간 (x, y)와 <b>시간 t</b>의 함수 <span class="tex">I(x,y,t)</span>다.</p>
+  <p><b>동영상은 시간에 따라 찍은 프레임의 연속</b>이다(그래서 영어로 <b>moving pictures</b>라고도 한다). 영상 데이터는 이제 공간 (x, y)와 <b>시간 t</b>의 함수 <span class="tex">I(x,y,t)</span>다 &mdash; <span class="hi">2차원 영상 (x, y)에 시간축 t가 더해져 3차원 데이터를 처리하는 셈이다.</span> 지금까지의 필터 · 미분이 x, y 두 방향이었다면 이번 주부터는 <b>t 방향의 미분</b>(프레임 사이 변화)이 새로 들어온다.</p>
   <p>3차원 점 <span class="tex">\vec X</span>는 시공간 경로 <span class="tex">\vec X(t)</span>를 따라 움직이고, 그 속도는 <span class="tex">\vec V=d\vec X(t)/dt=(dX/dt,\,dY/dt,\,dZ/dt)^\top</span>이다. 초점 거리 <span class="tex">f</span>로 원근 투영하면 영상 평면에는 2차원 경로가 생긴다.</p>
   <div class="fx"><div class="tex-d">\vec x(t)=(x(t),y(t))=\Big(\frac{fX(t)}{Z(t)},\frac{fY(t)}{Z(t)}\Big),\qquad \vec u=\Big(\frac{dx(t)}{dt},\frac{dy(t)}{dt}\Big)^{\!\top}</div>
   <p class="fx-note">영상에서 관측하는 2차원 순간 속도 <span class="tex">\vec u</span>는 3차원 속도를 영상 평면에 투영한 것이다. 이번 주 내내 구하려는 (u, v)가 바로 이것이다. (교안 5p의 &lsquo;nodal length&rsquo;는 focal length, 즉 초점 거리를 말한다.)</p></div>
@@ -571,6 +571,7 @@ table.acc{min-width:0}
 
 <div class="pt gyo">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>움직임이 왜 유용한가 · 세 가지 상황 (6 · 7p)</h3>
+  <p>정지 영상 한 장으로도 많은 것을 추측할 수 있지만(무엇이 · 어디에 있는지), <b>어디로 가는지 · 무엇을 하는 중인지</b> 같은 더 자세한 부분은 <b>이전 · 이후 프레임의 움직임</b>을 알아야 확인할 수 있다. 사진 속 손을 든 사람이 인사하는 중인지 공을 던지는 중인지는 앞뒤 프레임이 있어야 가려진다.</p>
   <p>움직임은 세상에 대한 <b>풍부한 정보원</b>이다 &mdash; <b>분할</b>(같이 움직이는 픽셀끼리 묶기), <b>시차를 이용한 표면 구조</b>, <b>인식</b>, <b>행동 이해</b>, <b>장면의 동적 변화 이해</b>. 6p의 교차로 사진은 차량마다 붙은 빨간 화살표(광류)만으로 어느 차가 어디로 가는지 보여 준다.</p>
   <div class="tbl-wrap">
   <table>
@@ -630,6 +631,17 @@ table.acc{min-width:0}
   </table>
   </div>
   <p>두 가정을 합치면, 아주 작은 시공간 간격에서 <span class="hi">연속한 두 프레임 사이의 밝기가 같다</span>.</p>
+  <p>광류가 붙잡는 단서는 결국 <b>명암(밝기)의 변화</b> 하나다 &mdash; 무엇이 움직였는지는 모르고, <b>어느 픽셀의 밝기가 어디로 옮겨 갔는지</b>만 본다. 그래서 광류 방법들은 다음 두 일관성에 기댄다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>일관성</th><th>뜻</th><th>이번 주에서 어디에 쓰이나</th></tr></thead>
+    <tbody>
+      <tr><td><b>시간 일관성</b> (temporal coherence)</td><td>한 점은 <b>짧은 시간 동안 조금만</b> 움직이고 밝기도 그대로다</td><td>위 두 가정(밝기 항상성 · 작은 움직임) &mdash; 프레임 사이를 테일러 전개로 이을 수 있는 이유</td></tr>
+      <tr><td><b>공간 일관성</b> (spatial coherence)</td><td><b>이웃한 픽셀은 비슷하게</b> 움직인다(같은 물체 위에 있으니까)</td><td>식이 모자란 문제를 푸는 추가 가정 &mdash; LK는 &lsquo;이웃이 똑같이&rsquo;, HS는 &lsquo;이웃이 비슷하게&rsquo;</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>그리고 명암 변화에만 기대는 만큼 <b>약점도 명암에서 온다</b>. 조명이 바뀌면 물체가 가만히 있어도 밝기가 변해 &lsquo;움직였다&rsquo;고 착각하고, 물체가 크게 돌거나(각도) 커지면(크기) 같은 점의 밝기 패턴이 달라져 짝을 못 찾는다. 그래서 좋은 움직임 추정은 <b>밝기 · 각도 · 크기 변화에 강건</b>해야 하고, 그 보완책이 03절의 피라미드(큰 움직임 · 크기)와 06절 KLT의 &lsquo;잘 추적되는 점 고르기&rsquo;다.</p>
   <div class="fx"><div class="tex-d">I(x+u\delta t,\;y+v\delta t,\;t+\delta t)=I(x,y,t)</div></div>
 </div>
 
@@ -677,6 +689,20 @@ table.acc{min-width:0}
 </div>
 
 <div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>u와 v는 그냥 &lsquo;한 프레임 동안 몇 칸 움직였나&rsquo;다</h3>
+  <p>수식이 어렵게 보이는 건 기호 때문이다. 뜻만 보면 단순하다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>기호</th><th>쉬운 뜻</th><th>예</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tex">u</span></td><td>그 픽셀이 다음 프레임까지 <b>가로(오른쪽 +)</b>로 몇 픽셀 움직였나</td><td>u = 2 → 오른쪽으로 2칸</td></tr>
+      <tr><td><span class="tex">v</span></td><td>그 픽셀이 다음 프레임까지 <b>세로(아래쪽 +)</b>로 몇 픽셀 움직였나</td><td>v = −1 → 위로 1칸</td></tr>
+      <tr><td><span class="tex">(u,v)</span></td><td>그 픽셀의 <b>움직임 화살표</b> &mdash; 이게 &lsquo;광류&rsquo;다</td><td>(2, −1) → 오른쪽 위로 비스듬히</td></tr>
+    </tbody>
+  </table></div>
+  <p>영상의 모든 픽셀에 이런 화살표를 하나씩 그린 것이 <b>광류 장(flow field)</b>이다 &mdash; 6p 교차로 사진의 빨간 화살표들. 우리가 아는 것은 밝기가 얼마나 변했는지(<span class="tex">I_x,I_y,I_t</span>)이고, 모르는 것이 이 화살표(<span class="tex">u,v</span>)다. 이번 주의 모든 수식은 결국 <b>&ldquo;밝기 변화로부터 화살표를 거꾸로 알아내기&rdquo;</b>다.</p>
+</div>
+
+<div class="pt plus">
   <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>식 하나로 알 수 있는 것 — 법선 흐름</h3>
   <p>식을 <span class="tex">\nabla I\cdot(u,v)=-I_t</span>로 읽으면, 식 하나가 알려 주는 것은 흐름 벡터의 <b>기울기 방향 성분</b>뿐이다. 그 크기는 <span class="tex">-I_t/\lVert\nabla I\rVert</span>이고, 이것을 <b>법선 흐름(normal flow)</b>이라 한다. 기울기와 수직인 방향, 즉 <b>경계를 따라가는 방향</b>의 성분은 식에 아무 영향을 주지 않으므로 알 수 없다. 03절의 조리개 문제가 바로 이 사실을 그림으로 보여 준다.</p>
 </div>
@@ -709,6 +735,7 @@ table.acc{min-width:0}
   <p class="fx-note">미지수 2개에 식 25개 &mdash; 식이 너무 많아 모두를 정확히 만족하는 해는 보통 없다. 그래서 <b>최소제곱 근사</b> <span class="tex">\hat x=\arg\min_x\lVert Ax-b\rVert^2</span>를 구하고, 이것은 <span class="tex">A^\top A\hat x=A^\top b</span>를 푸는 것과 같다.</p></div>
   <div class="fx"><div class="tex-d">\underbrace{\begin{bmatrix}\sum_{p\in P}I_xI_x&amp;\sum_{p\in P}I_xI_y\\ \sum_{p\in P}I_yI_x&amp;\sum_{p\in P}I_yI_y\end{bmatrix}}_{A^\top A}\begin{bmatrix}u\\v\end{bmatrix}=-\underbrace{\begin{bmatrix}\sum_{p\in P}I_xI_t\\ \sum_{p\in P}I_yI_t\end{bmatrix}}_{A^\top b},\qquad x=(A^\top A)^{-1}A^\top b</div>
   <p class="fx-note">합은 패치 P 안의 모든 픽셀 p에 대해 더한다. 25×2 문제가 <b>2×2 연립방정식</b>으로 줄어든다.</p></div>
+  <p><b>왜 &lsquo;국소(local)&rsquo; 방법인가</b> &mdash; LK는 <b>작은 패치(이웃)</b> 하나만 보고 그 안의 흐름을 정한다. 그래서 한계도 국소성에서 나온다. 패치 안이 밋밋하거나 줄무늬 하나뿐이면 식을 아무리 모아도 방향을 정할 수 없고(아래 조리개 문제), 패치 바깥의 정보는 전혀 쓰지 못한다. <span class="hi">이 국소성의 한계를 &lsquo;영상 전체를 한 번에 보자&rsquo;로 풀려고 한 것이 04절 Horn-Schunck다.</span></p>
 </div>
 
 <div class="pt plus">
@@ -720,6 +747,7 @@ table.acc{min-width:0}
 <div class="pt gyo">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>이발소 기둥 착시와 조리개 문제 (25~28p)</h3>
   <p><b>이발소 기둥(barber's pole)</b>은 실제로는 <b>옆으로 돌지만</b> 줄무늬가 <b>위로 올라가는 것처럼</b> 보인다. 작은 구멍으로 줄무늬를 보면 방향이 더 모호해진다(25p). 26 · 27p는 &ldquo;작게 보이는 영상 패치 안에서 선은 어느 방향으로 움직이나?&rdquo;를 묻는다 &mdash; 패치 안의 직선은 선을 따라 미끄러지는 움직임이 보이지 않으므로 <b>선에 수직인 성분만</b> 알 수 있다. 이것이 <b>조리개 문제(aperture problem)</b>다.</p>
+  <p><b>보이는 방향은 창(조리개)의 모양 · 크기에 따라 달라진다</b> &mdash; 사선 줄무늬를 작은 동그란 구멍으로 보면 줄무늬에 수직인 방향, 즉 <b>약간 사선으로 비스듬히 넘어가는 듯한</b> 느낌을 받는다. 세로로 긴 창(기둥 모양)으로 보면 줄무늬 끝이 창의 긴 변을 따라 미끄러지므로 <b>위아래로</b>, 가로로 긴 창으로 보면 <b>옆으로</b> 움직이는 것처럼 보인다. 실제 움직임은 하나인데 창이 무엇을 보여 주느냐에 따라 뇌가 다르게 해석하는 것이다. LK의 <b>윈도우 크기</b>도 같다 &mdash; 창이 작으면 줄무늬 하나만 들어와 방향이 모호하고, 창을 키워 <b>모서리나 다른 방향의 무늬</b>가 함께 들어오면 방향이 정해진다(대신 너무 키우면 &lsquo;패치 안 흐름이 같다&rsquo; 가정이 깨진다).</p>
   <p>28p 숫자 예 &mdash; 이전 프레임 <span class="tex">H(x,y)=y</span>(행마다 밝기 1, 2, 3, …: 가로줄 무늬)가 광류 <b>(1, 1)</b>로 움직여 <span class="tex">I(x,y)</span>가 되었다. 점 (3, 3)에서 기울기를 구하면</p>
   <div class="fx"><div class="tex-d">I_x(3,3)=0,\quad I_y(3,3)=1,\quad I_t(3,3)=I(3,3)-H(3,3)=-1\;\Rightarrow\;0\cdot u+1\cdot v-1=0\;\Rightarrow\;v=1</div>
   <p class="fx-note"><span class="hi">광류의 v는 복원했지만 u는 복원하지 못한다 &mdash; 이것이 조리개 문제다.</span> 가로줄 무늬는 x 방향으로 아무리 밀어도 똑같아 보이므로 <span class="tex">I_x=0</span>이고, u는 식에서 사라진다. 패치 전체가 이런 모양이면 <span class="tex">A^\top A</span>의 한 행이 0이 되어 역행렬이 없다.</p></div>
@@ -778,6 +806,16 @@ table.acc{min-width:0}
   <p class="fx-note"><span class="tex">\Delta=\partial^2/\partial x^2+\partial^2/\partial y^2</span>이고, 실제로는 <span class="tex">\Delta u(x,y)\approx\bar u(x,y)-u(x,y)</span>로 잰다. <span class="tex">\bar u(x,y)</span>는 (x, y) 주변에서 잰 u의 <b>가중 평균</b>이다.</p></div>
 </div>
 
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>Horn-Schunck를 쉽게 — &lsquo;전체를 한 장의 고무판처럼&rsquo;</h3>
+  <p>LK가 &ldquo;픽셀마다 <b>주변 작은 창</b>만 보고 화살표를 정한다&rdquo;였다면, HS는 &ldquo;<b>영상 전체의 화살표를 한꺼번에</b> 정하되, 두 가지 점수의 합이 가장 작아지는 배치를 고른다&rdquo;이다.</p>
+  <div class="cards">
+    <div class="card2"><h4>① 밝기 점수 <em>데이터 항</em></h4><p>각 픽셀의 화살표 (u, v)가 <b>밝기 변화와 맞아야</b> 한다 &mdash; <span class="tex">I_xu+I_yv+I_t</span>가 0에서 멀수록 벌점.</p></div>
+    <div class="card2"><h4>② 매끄러움 점수 <em>매끄러움 항</em></h4><p><b>이웃한 픽셀끼리 화살표가 비슷해야</b> 한다 &mdash; 옆 픽셀과 u, v의 <b>차이</b>가 클수록 벌점. 같은 물체 위의 점들은 함께 움직이기 때문이다.</p></div>
+  </div>
+  <p>&ldquo;영상 1과 영상 2 사이에서 u, v의 차가 최소가 된다&rdquo;는 말은 정확히는 <b>②번 &mdash; 이웃 픽셀 사이 u, v의 차이(변화량)가 최소</b>가 되게 하라는 뜻이다(①번은 두 영상의 밝기 차이를 설명하라는 쪽). 비유하면 영상 위에 <b>탄력 있는 고무판</b>을 덮은 것과 같다. 모서리처럼 단서가 뚜렷한 곳은 밝기 점수가 고무판을 정확한 방향으로 잡아당기고, 밋밋한 곳은 단서가 없으니 <b>이웃에 끌려가</b> 비슷하게 움직인다. 그래서 LK가 비워 둔 곳까지 <b>모든 픽셀에 화살표가 채워진다(조밀)</b>. α는 고무판의 <b>뻣뻣함</b>이다 &mdash; 클수록 판이 덜 휘어 흐름이 더 매끄러워진다.</p>
+</div>
+
 <div class="warn"><b>교안 35p 용어 오류</b> &mdash; 슬라이드는 <span class="tex">\Delta</span>를 &lsquo;Lagrange operator&rsquo;라 부르지만, 이 연산자는 <b>라플라스 연산자(Laplacian)</b>다. &lsquo;라그랑주&rsquo;는 바로 앞의 오일러-라그랑주 방정식에서 온 이름이다. 서술형에서는 &lsquo;라플라시안&rsquo;으로 쓰자. 또 <span class="tex">\Delta u\approx\bar u-u</span>는 엄밀히는 비례식(<span class="tex">\Delta u\approx\kappa(\bar u-u)</span>)이고, 상수 <span class="tex">\kappa</span>를 <span class="tex">\alpha</span>에 흡수해 쓴 것이다.</div>
 
 <div class="pt gyo">
@@ -792,6 +830,18 @@ table.acc{min-width:0}
     <div class="fl"><b>3. <span class="tex">u^{k+1},v^{k+1}</span>로 갱신한다</b><span>이웃 평균 − 밝기 오차 보정</span></div>
     <div class="fl"><b>4. 오차 척도가 만족될 때까지 반복한다</b><span>39p · 40p 장난감 자동차 예 &mdash; 모든 픽셀에 화살표가 채워진다</span></div>
   </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>크래머 공식은 &lsquo;2원 연립방정식을 바로 푸는 공식&rsquo;일 뿐이다</h3>
+  <p>36p에서 하는 일은 <b>미지수 2개(u, v) · 식 2개짜리 연립방정식을 픽셀마다 푸는 것</b>이다. 중학교 때 가감법 · 대입법으로 풀던 그 문제를, 행렬식(det)의 비율로 한 번에 답을 쓰는 공식이 <b>크래머 공식</b>이다.</p>
+  <div class="fx"><p class="fx-lab">크래머 공식 (2 × 2)</p>
+  <div class="tex-d">\begin{cases}a\,u+b\,v=e\\ c\,u+d\,v=f\end{cases}\quad\Longrightarrow\quad u=\frac{ed-bf}{ad-bc},\qquad v=\frac{af-ec}{ad-bc}</div>
+  <p class="fx-note">분모는 계수 행렬의 행렬식 <span class="tex">ad-bc</span>, 분자는 그 행렬에서 <b>구하려는 미지수의 열을 오른쪽 값 (e, f)로 바꿔 넣은</b> 행렬의 행렬식이다. u를 구할 땐 첫째 열을, v를 구할 땐 둘째 열을 바꾼다. 그게 전부다.</p></div>
+  <p>HS에 넣으면 <span class="tex">a=I_x^2+\alpha^2,\;b=c=I_xI_y,\;d=I_y^2+\alpha^2,\;e=\alpha^2\bar u-I_xI_t,\;f=\alpha^2\bar v-I_yI_t</span>이고, 정리하면 분모가 <span class="tex">\alpha^2(\alpha^2+I_x^2+I_y^2)</span>로 깔끔해져 위의 해 <span class="tex">u=\bar u-I_x\frac{I_x\bar u+I_y\bar v+I_t}{\alpha^2+I_x^2+I_y^2}</span>가 나온다. <b>크래머 공식 자체는 새 이론이 아니라 계산 도구</b>이고, 시험에서 볼 것은 결과식의 뜻(바로 아래 상자)이다.</p>
+  <div class="fx"><p class="fx-lab">숫자로 한 번 — α² = 1, I<sub>x</sub> = 2, I<sub>y</sub> = 1, I<sub>t</sub> = −3, 이웃 평균 ū = v̄ = 0</p>
+  <div class="tex-d">\begin{bmatrix}5&amp;2\\2&amp;2\end{bmatrix}\begin{bmatrix}u\\v\end{bmatrix}=\begin{bmatrix}6\\3\end{bmatrix}\;\Rightarrow\;\det=5\cdot2-2\cdot2=6,\quad u=\frac{6\cdot2-2\cdot3}{6}=1,\quad v=\frac{5\cdot3-6\cdot2}{6}=0.5</div>
+  <p class="fx-note">결과식으로도 같다 &mdash; <span class="tex">u=0-2\cdot\frac{0+0-3}{1+4+1}=1,\;v=0-1\cdot\frac{-3}{6}=0.5</span>. 이 픽셀은 오른쪽으로 1칸, 아래로 반 칸 움직였다. 실제로는 이웃 평균 ū, v̄가 계속 바뀌므로 이 계산을 모든 픽셀에서 <b>여러 번 반복</b>한다(38p).</p></div>
 </div>
 
 <div class="pt plus">
