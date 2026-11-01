@@ -478,6 +478,7 @@ table.acc{min-width:0}
   <a href="#depth">08 시차와 깊이</a>
   <a href="#summary">핵심 정리</a>
   <a href="#next">과제 · 다음 주</a>
+  <a href="#pres">학생 논문 발표 4편</a>
 </nav>
 
 <div class="wrap">
@@ -504,6 +505,7 @@ table.acc{min-width:0}
   <i><span class="bdg bdg-gyo">교안</span><span>교수님 슬라이드에 있는 내용 (영어 교안을 한국어로 옮김)</span></i>
   <i><span class="bdg bdg-flip">플립러닝</span><span>사전 강의에서 말로 설명한 내용 &mdash; 제목에 교안 뱃지와 함께 붙은 곳은 둘을 하나로 이어 풀어 쓴 것</span></i>
   <i><span class="bdg bdg-plus">보충설명</span><span>교안에 없거나 짧게 지나간 부분을 따로 찾아 정리한 내용</span></i>
+  <i><span class="bdg bdg-pres">학생발표</span><span>학생 논문 발표에서 다룬 내용 — <a class="ext" href="#pres">맨 아래 절</a>에 모아 두었습니다</span></i>
   <i><span class="bdg bdg-exam">기말</span><span>강의에서 힘주어 다뤄 기말고사에 나올 가능성이 높아 보이는 내용</span></i>
   <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고, <span class="hi">노란 형광펜</span>은 <b>꼭 기억할 문장</b>, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선</span>은 누르면 뜻이 뜹니다. 쪽수는 <b>슬라이드 오른쪽 아래에 찍힌 번호</b>(= PDF 쪽수)다.</p>
 </div>
@@ -1442,9 +1444,394 @@ Z[valid] = f * b / disp[valid]       <span class="cm"># Z = bf / d</span></pre>
 <section class="sec" id="next">
   <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">과제 · 학생 발표 · 다음 주<small>HW2 마감 11/4 · 10주차 Motion Tracking</small></h2></div>
 <div class="warn"><b>HW2 제출 마감 &mdash; 11월 4일(10주차 수업일)</b>. 범위는 5~7주차(특징 검출 · 기술 · 매칭). 과제 내용은 <a class="ext" href="computer-vision-assignments.html">과제 · 논문 발표</a> 페이지에 모아 두었다.</div>
-<div class="tip"><b>9주차 학생 발표</b> &mdash; 바탕화면 <code>컴_9주차/학생발표</code> 폴더가 아직 비어 있다. 발표 자료가 올라오면 이 페이지 아래에 절을 추가한다.</div>
+<div class="tip"><b>9주차 학생 발표 4편</b> &mdash; AnyNet · AR 안경 스테레오 · FoundationStereo · ZeroStereo. 이 페이지 맨 아래 <a class="ext" href="#pres">학생 논문 발표 절</a>에 정리했다.</div>
 <div class="note-box"><b>10주차(11.4) &mdash; Motion Tracking</b>. Motion · Optical Flow(Lucas-Kanade, Horn-Schunck)와 Visual Tracking(KLT, Mean shift, Cam shift). 이번 주가 <b>두 카메라 · 같은 시각</b>의 대응이었다면, 다음 주는 <b>한 카메라 · 이어지는 시각</b>의 대응이다 &mdash; 짝이 옆으로 밀린 양(시차) 대신, 시간에 따라 움직인 양(광류)을 구한다. &rarr; <a class="ext" href="computer-vision-week10.html">10주차 수업내용 열기</a></div>
 </section>
+
+<!-- ===================== 학생 발표 ===================== -->
+<section class="sec" id="pres">
+  <div class="sec-head"><span class="sec-badge">발표</span><h2 class="sec-title">학생 논문 발표 4편 — 학습하는 스테레오 매칭<small>9주차 발표 · 빠르게 만들거나, 처음 보는 장면에도 통하게 만들거나</small></h2></div>
+
+<div class="oneline">
+  <p><b>네 발표를 한 줄로 꿰면</b></p>
+  <ul class="ul">
+    <li>오늘 교안의 스테레오 파이프라인 &mdash; <b>정류 → 같은 줄에서 짝 찾기(DSI) → 시차 d → <span class="tex">Z=bf/d</span></b> &mdash; 은 네 논문 모두 그대로다. 바뀐 것은 <b>짝 찾기 점수(SAD · NCC)를 신경망 특징으로 바꾼 &lsquo;비용 볼륨(cost volume)&rsquo;</b>과, 그 위에서 시차를 고르는 방법이다</li>
+    <li><b>빠르게</b> &mdash; <b>AnyNet(2019)</b>은 거친 해상도에서 먼저 답을 내고 잔차만 고쳐 가며 &lsquo;언제 멈춰도 쓸 만한 답&rsquo;을 낸다. <b>AR 안경 논문(2025)</b>은 비용 볼륨과 <b>정류 전처리 자체</b>를 가볍게 만들어, 안경테가 휘어 카메라가 틀어져도 버틴다</li>
+    <li><b>처음 보는 장면에도</b> &mdash; <b>FoundationStereo(2025)</b>는 합성 데이터 <b>100만 쌍</b> + 단안 깊이 거대 모델의 지식으로 <b>미세 조정 없이</b> 일반화한다. <b>ZeroStereo(2025)</b>는 반대로 <b>사진 한 장</b>에서 오른쪽 영상을 <b>생성</b>해 학습 데이터를 만든다</li>
+  </ul>
+</div>
+
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📕</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-w09-pres-anynet">① 홍성무 — Anytime Stereo Image Depth Estimation on Mobile Devices (AnyNet)</a>
+      <p>Wang et al.(Cornell), <b>ICRA 2019</b> · 코드 <a class="ext" href="https://github.com/mileyan/AnyNet" target="_blank" rel="noopener">mileyan/AnyNet</a></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week09-presentation-hong-anynet.pdf" download="컴퓨터비전_9주차_학생발표_홍성무_AnyNet.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📕</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-w09-pres-arglass">② 강연빈 — Efficient Depth Estimation for Unstable Stereo Camera Systems on AR Glasses</a>
+      <p>Yongfan Liu &amp; Hyoukjun Kwon, <b>CVPR 2025</b> · <a class="ext" href="https://openaccess.thecvf.com/content/CVPR2025/papers/Liu_Efficient_Depth_Estimation_for_Unstable_Stereo_Camera_Systems_on_AR_CVPR_2025_paper.pdf" target="_blank" rel="noopener">논문</a> · 코드 <a class="ext" href="https://github.com/UCI-ISA-Lab/MultiHeadDepth-HomoDepth" target="_blank" rel="noopener">UCI-ISA-Lab/MultiHeadDepth-HomoDepth</a></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week09-presentation-kang-arglasses.pdf" download="컴퓨터비전_9주차_학생발표_강연빈_AR_Glasses_Stereo.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📕</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-w09-pres-foundation">③ 박인혁 — FoundationStereo: Zero-Shot Stereo Matching</a>
+      <p>Bowen Wen et al.(NVIDIA), <b>CVPR 2025</b> · 코드 <a class="ext" href="https://github.com/NVlabs/FoundationStereo" target="_blank" rel="noopener">NVlabs/FoundationStereo</a></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week09-presentation-park-foundationstereo.pdf" download="컴퓨터비전_9주차_학생발표_박인혁_FoundationStereo.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📕</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-w09-pres-zerostereo">④ 최소연 — ZeroStereo: Zero-shot Stereo Matching from Single Images</a>
+      <p>2025 · 발표 자료에 학회 표기는 없다 · 단일 영상 + 확산 모델 인페인팅으로 스테레오 학습 데이터 생성</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week09-presentation-choi-zerostereo.pdf" download="컴퓨터비전_9주차_학생발표_최소연_ZeroStereo.pdf">⬇ 다운로드</a>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>네 발표를 읽기 전에 — 비용 볼륨은 07절 DSI의 신경망 판이다</h3>
+  <p>07절 DSI는 한 줄(행)에 대해 &lsquo;왼쪽 픽셀 i와 오른쪽 픽셀 j의 매칭 점수 C(i, j)&rsquo;를 표로 만든 것이었다. <b>비용 볼륨</b>은 이것을 <b>영상 전체 · 시차 후보 전체</b>로 넓힌 4차원 텐서다: [특징 채널 C, 시차 후보 D, 높이 H, 너비 W]. 차이는 두 가지뿐이다 &mdash; 비교 대상이 <b>픽셀 패치</b>가 아니라 <b>CNN 특징</b>이고, 점수가 SAD · NCC가 아니라 <b>특징의 거리 · 내적 · 코사인</b>이다(강연빈 발표 6p 표가 정확히 이 대비).</p>
+  <ul class="ul">
+    <li><b>3D 합성곱</b>으로 이 볼륨을 다듬는다 &mdash; 가림 · 흐림 · 무늬 없는 곳에서 이웃 시차와 일관되게 고친다(07절 &lsquo;최적 경로&rsquo;의 역할)</li>
+    <li><b>soft-argmin</b>으로 시차를 고른다 &mdash; 점수가 가장 좋은 후보 하나(argmin)를 고르면 미분이 안 되므로, 후보별 확률(softmax)로 가중 평균한 <span class="tex">\hat d=\sum_d d\cdot\operatorname{softmax}(-c_d)</span>를 쓴다. 정수가 아닌 <b>서브픽셀 시차</b>도 자연스럽게 나온다</li>
+    <li><b>문제는 크기</b> &mdash; H × W × D에 비례한다. 1242 × 375 영상에 시차 192단계면 픽셀당 192칸 &mdash; 네 논문의 고민이 모두 여기서 출발한다</li>
+  </ul>
+</div>
+
+<!-- ---------- ① AnyNet ---------- -->
+<h3 class="sub-title">① 홍성무 — AnyNet (ICRA 2019) · 언제 물어봐도 그때까지의 최선을 답한다</h3>
+
+<div class="deck">
+  <div class="deck-h">발표 슬라이드 모아보기 <span>홍성무 · 3p · 4p · 5p · 7p · 9p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-hong-03.jpg" alt="발표 3p — 문제 — 고정밀 대형 vs 저해상도 경량"><figcaption><b>3p</b> 문제 — 고정밀 대형 vs 저해상도 경량</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-hong-04.jpg" alt="발표 4p — Anytime — 단계별로 점점 정확하게"><figcaption><b>4p</b> Anytime — 단계별로 점점 정확하게</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-hong-05.jpg" alt="발표 5p — 네 단계 파이프라인과 시간 · 오차"><figcaption><b>5p</b> 네 단계 파이프라인과 시간 · 오차</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-hong-07.jpg" alt="발표 7p — Stage 1만 전체 시차, 이후는 잔차만"><figcaption><b>7p</b> Stage 1만 전체 시차, 이후는 잔차만</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-hong-09.jpg" alt="발표 9p — TX2 추론 시간과 3-픽셀 오차율"><figcaption><b>9p</b> TX2 추론 시간과 3-픽셀 오차율</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>배경과 문제 — 정확하면 느리고, 빠르면 뭉개진다</h3>
+  <p>스테레오 카메라는 LiDAR보다 <b>싸고 가볍고 전력이 적게</b> 들며 색 · 질감 같은 문맥까지 준다. 핵심 관계는 오늘 교안의 <span class="tex">Z=fB/d</span>다. 그런데 비용 볼륨의 연산량은 <b>H × W × M(시차 범위)</b>으로 세제곱처럼 불어난다.</p>
+  <div class="cards">
+    <div class="card2"><h4>선택지 1 &mdash; 고정밀 대형 모델</h4><p>PSMNet · GC-Net. 오차율 2~4%대지만 모수 <b>520만 개</b>, 로봇용 보드 <b>Jetson TX2에서 한 장에 3초 이상</b> &mdash; 장애물을 피하기 전에 부딪힌다</p></div>
+    <div class="card2"><h4>선택지 2 &mdash; 저해상도 경량 모델</h4><p>빠르지만 입력을 줄이면서 <b>물체 경계가 뭉개지고</b> 오차가 급증 &mdash; 멈춰서 물건을 집는 정밀 작업이 안 된다</p></div>
+  </div>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>핵심 개념 — Anytime: 단계마다 답을 내고 다음 단계는 &lsquo;고치기&rsquo;만</h3>
+  <p>처음부터 완벽한 고해상도 답을 구하지 않는다. <span class="hi">각 단계는 해상도(W, H)를 낮추거나 시차 범위(M)를 좁히거나 둘 중 하나를 반드시 지키고, 앞 단계의 특징 지도와 시차를 다음 단계가 재활용한다.</span> 그래서 시간이 갈수록 깊이가 정확해지고, <b>언제 물어봐도 그때까지의 최선</b>을 돌려준다 &mdash; 초기 답은 즉각 회피 기동에, 뒤 단계는 정밀한 경로 계획에 충분하다.</p>
+  <div class="flow">
+    <div class="fl"><b>Stage 1 · 1/16 해상도 · 전체 시차 범위(M = 12)</b><span>28.9 ms · 약 35 FPS · KITTI-15 오차 14.0%</span></div>
+    <div class="fl"><b>Stage 2 · 1/8 · 지도 1을 2배 키워 warping, 잔차만</b><span>48.8 ms · 약 20 FPS · 9.7%</span></div>
+    <div class="fl"><b>Stage 3 · 1/4 · 지도 2를 2배 키워 warping, 잔차만</b><span>87.9 ms · 약 11 FPS · 6.8%</span></div>
+    <div class="fl"><b>Stage 4 · SPNet으로 경계 선명화</b><span>97.3 ms · 약 10 FPS · 6.2%</span></div>
+  </div>
+  <ul class="ul">
+    <li><b>U-Net 특징 추출기</b> &mdash; 좌우 영상에서 1/16 · 1/8 · 1/4 특징을 뽑는다. 1/16은 전역 문맥, 1/8 · 1/4는 국소 세부. Stage 1은 1/16까지만 계산해 첫 지연을 줄인다</li>
+    <li><b>시차 네트워크</b> &mdash; 거리 기반 비용 볼륨 → 3D 합성곱으로 가림 · 흐림 정규화 → <b>soft-argmax</b>로 연속 시차</li>
+    <li><b>잔차 탐색</b> &mdash; Stage 2 · 3은 warping 뒤 <b>M = 5(±2픽셀)</b>만 탐색한다. 원본 해상도로 환산하면 Stage 1이 192px 전 범위, Stage 2가 ±16px, Stage 3이 ±8px 보정이다</li>
+  </ul>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>왜 ±2픽셀이 원본에서 ±16 · ±8인가 · warping이 하는 일 — 10주차 피라미드 LK와 같은 생각</h3>
+  <p>1/8 해상도의 1픽셀은 원본의 8픽셀이다. 그래서 1/8에서 ±2 = 원본 ±16, 1/4에서 ±2 = 원본 ±8. <b>Warping</b>은 앞 단계 시차만큼 오른쪽 특징을 미리 옮겨 두는 것이라, 남은 일은 &lsquo;이미 거의 맞춘 상태에서 몇 칸 더 밀까&rsquo;뿐이다. 이것은 <a class="ext" href="computer-vision-week10.html#lk">10주차 피라미드 Lucas-Kanade</a>의 &lsquo;거친 단계에서 큰 움직임을 잡고, 위 단계에서는 잔여 움직임만 푼다&rsquo;와 정확히 같은 구조다 &mdash; 시차는 &lsquo;가로 방향 광류&rsquo;이기 때문이다.</p>
+  <p>연산량으로 보면, 원본 1/4 해상도에서 192단계를 전부 탐색하는 대신 <b>5단계</b>만 보므로 그 단계의 비용 볼륨이 약 <b>1/10</b>로 줄어든다(1/4 해상도의 전 범위는 48단계).</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>실험과 결과</h3>
+  <p><b>Jetson TX2</b>(드론 · 로봇에 실제로 쓰는 저전력 보드)에서 측정했다. 학습은 합성 데이터 <b>Scene Flow 22,000쌍</b>, 평가는 실제 주행 영상 <b>KITTI-2012 · 2015</b>(1242×375)로 미세 조정 후 했다. 모수는 PSMNet 5,200,000 · StereoNet 400,000 · <b>AnyNet 40,000</b>개다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>3-픽셀 오차율</th><th>Stage 1</th><th>Stage 2</th><th>Stage 3</th><th>Stage 4</th></tr></thead>
+    <tbody>
+      <tr><td>TX2 추론 시간</td><td>28.9 ms</td><td>48.8 ms</td><td>87.9 ms</td><td>97.3 ms</td></tr>
+      <tr><td>KITTI-2012</td><td>15.1 ± 1.1%</td><td>9.9 ± 0.6%</td><td><b>5.7 ± 0.4%</b></td><td>6.1 ± 0.3%</td></tr>
+      <tr><td>KITTI-2015</td><td>14.0 ± 0.7%</td><td>9.7 ± 0.7%</td><td>6.8 ± 0.6%</td><td><b>6.2 ± 0.6%</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <ul class="ul">
+    <li><b>3-픽셀 오차율</b> &mdash; 예측 시차가 정답(LiDAR)과 <b>3픽셀 넘게</b> 틀린 픽셀의 비율</li>
+    <li>TX2에서 30 FPS 이상을 내는 모델은 AnyNet과 StereoNet뿐이고, AnyNet의 오차율이 약 <b>10%p 낮다</b>. 10~35 FPS 모든 시간 예산에서 기존 CNN · OpenCV 방법보다 오차가 가장 낮다</li>
+    <li><b>기여</b> &mdash; 속도와 정확도를 실시간으로 조절하는 첫 스테레오 네트워크. 발표는 이를 &lsquo;위험할 땐 반사적으로(35 FPS 보행 · 주행 모드), 정밀 작업 땐 집중해서(10 FPS 파지 모드)&rsquo;라는 로봇 비전 인터페이스로 해석했다</li>
+  </ul>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>표에서 하나 더 읽을 것 — KITTI-2012에서는 Stage 4가 오히려 나쁘다</h3>
+  <p>KITTI-2012에서 Stage 3(5.7%) → Stage 4(6.1%)로 오차가 <b>늘었다</b>. SPNet은 경계를 날카롭게 다듬는 필터라, 정적인 장면(카메라만 움직이는 2012)에서는 이미 충분한 결과를 오히려 흔들 수 있다는 뜻이다. &lsquo;단계가 늘면 늘 좋아진다&rsquo;가 아니라 <b>마지막 단계의 이득은 데이터에 따라 다르다</b> &mdash; 질문이 나오면 짚을 만한 지점이다.</p>
+</div>
+
+<!-- ---------- ② AR 안경 ---------- -->
+<h3 class="sub-title">② 강연빈 — AR 안경의 불안정한 스테레오 (CVPR 2025) · 정류를 신경망 안으로</h3>
+
+<div class="deck">
+  <div class="deck-h">발표 슬라이드 모아보기 <span>강연빈 · 3p · 4p · 5p · 6p · 7p · 8p · 9p · 10p · 11p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-kang-03.jpg" alt="발표 3p — 배경 — 고전 스테레오 네 단계"><figcaption><b>3p</b> 배경 — 고전 스테레오 네 단계</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-kang-04.jpg" alt="발표 4p — 문제 1 — 안경테가 휘면 카메라가 틀어진다"><figcaption><b>4p</b> 문제 1 — 안경테가 휘면 카메라가 틀어진다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-kang-05.jpg" alt="발표 5p — 문제 2 — 전처리 + 비용 볼륨 = 지연의 59.5%"><figcaption><b>5p</b> 문제 2 — 전처리 + 비용 볼륨 = 지연의 59.5%</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-kang-06.jpg" alt="발표 6p — DSI vs 비용 볼륨"><figcaption><b>6p</b> DSI vs 비용 볼륨</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-kang-07.jpg" alt="발표 7p — MultiHeadDepth 구조"><figcaption><b>7p</b> MultiHeadDepth 구조</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-kang-08.jpg" alt="발표 8p — HomoDepth — 호모그래피 헤드 공유"><figcaption><b>8p</b> HomoDepth — 호모그래피 헤드 공유</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-kang-09.jpg" alt="발표 9p — RPE — 정류 위치 부호화"><figcaption><b>9p</b> RPE — 정류 위치 부호화</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-kang-10.jpg" alt="발표 10p — 정확도 · 지연 결과"><figcaption><b>10p</b> 정확도 · 지연 결과</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-kang-11.jpg" alt="발표 11p — 한계와 장치별 지연"><figcaption><b>11p</b> 한계와 장치별 지연</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>두 가지 문제 — 카메라가 틀어지고, 전처리가 느리다</h3>
+  <p>AR에서 가상 물체를 현실에 자연스럽게 합성하려면 정확한 깊이가 필요하다. 배경은 오늘 교안 그대로다 &mdash; <b>에피폴라 제약 → 정류 → 같은 행 매칭 → 시차에서 깊이</b>.</p>
+  <div class="cards">
+    <div class="card2"><h4>문제 1 &mdash; 불안정한 카메라</h4><p>AR 안경테는 쓰는 사람에 따라 <b>휘거나 위치가 달라진다</b> → 두 카메라의 상대 자세(<b>외부 모수</b>)가 바뀌어, 미리 구한 보정 · 정류 정보가 부정확해진다(Meta Aria Gen2 예)</p></div>
+    <div class="card2"><h4>문제 2 &mdash; 높은 지연</h4><p>기존 ARGOS 알고리즘을 분석하면 <b>전처리(정류) 30.2% + 비용 볼륨 29.3%</b>가 전체 지연의 <b>약 59.5%</b>다</p></div>
+  </div>
+  <p>목표 &mdash; <span class="hi">정류와 비용 볼륨의 비용을 줄이면서도 정확한 깊이를 얻는다.</span></p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>제안 1 — MultiHeadDepth: 비용 볼륨을 가볍게</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>DSI (오늘 교안)</th><th>비용 볼륨 (신경망)</th></tr></thead>
+    <tbody>
+      <tr><td>비교 대상</td><td>픽셀 패치</td><td>CNN 특징</td></tr>
+      <tr><td>유사도</td><td>SAD · SSD · NCC</td><td>코사인 유사도</td></tr>
+      <tr><td>저장하는 값</td><td colspan="2">시차 후보별 매칭 점수</td></tr>
+      <tr><td>출력 형태</td><td>행별 C(i, j)</td><td>[N, max_disparity, H, W]</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>코사인 유사도는 <b>노름 계산과 나눗셈</b>이 필요해 GPU · NPU에서 비효율적인 병목이 된다. MultiHeadDepth는 특징을 <b>여러 헤드로 나누고</b>, <b>LayerNorm + 내적</b>으로 유사도를 계산하며, <b>그룹 점별(group-pointwise) 합성곱</b>으로 비용 볼륨의 역할은 유지하면서 연산을 줄인다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>LayerNorm + 내적이 왜 코사인을 대신하나 — 오늘 교안 NCC와 같은 식</h3>
+  <p>코사인은 <span class="tex">\frac{a\cdot b}{\lVert a\rVert\lVert b\rVert}</span>다. 벡터마다 <b>평균을 빼고 표준편차로 나누는</b> LayerNorm을 먼저 해 두면, 두 벡터의 내적을 길이로 나눈 값이 곧 <b>정규화 상호상관(NCC)</b>이다 &mdash; 오늘 08절 유사도 척도의 NCC가 &lsquo;밝기 차이를 보정한 코사인&rsquo;이었던 것과 같다. 정규화는 시차 후보마다가 아니라 <b>특징마다 한 번</b>만 하면 되므로, 시차 후보 D개에 대해 반복되는 나눗셈 · 노름이 사라지고 <b>내적만</b> 남는다. 헤드로 나누는 것은 12주차 ViT의 다중 헤드 어텐션처럼 여러 종류의 유사도를 따로 보려는 것이다.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>제안 2 — HomoDepth와 RPE: 영상을 펴지 않고 위치 정보만 준다</h3>
+  <ul class="ul">
+    <li><b>HomoDepth</b> &mdash; <b>깊이 헤드</b>와 <b>호모그래피 헤드</b>가 인코더를 공유하는 다중 과제 구조. 카메라 정렬 관계(호모그래피)를 네트워크가 <b>직접 추정</b>해 명시적 정류에 대한 의존을 줄인다</li>
+    <li><b>RPE(Rectification Positional Encoding)</b> &mdash; 예측한 호모그래피로 좌 · 우 영상의 위치 관계를 부호화한다. 영상을 <b>실제로 warp하지 않고</b> 매칭에 필요한 위치 정보만 네트워크에 준다. 다중 헤드 비용 볼륨에서 <b>외형 유사도 + 위치 유사도</b>를 함께 쓴다</li>
+    <li>목표 &mdash; 정류 과정의 <b>정보 손실</b>(보간으로 흐려짐 · 가장자리 잘림)과 <b>전처리 비용</b>을 함께 줄인다</li>
+  </ul>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>정류가 왜 호모그래피 하나인가 — 오늘 06절과의 연결</h3>
+  <p>06절에서 정류는 &lsquo;<b>영상마다 호모그래피 하나씩</b>&rsquo;(53p)이었다. 카메라 중심은 그대로 두고 방향만 돌리는 변환은 3D 장면과 무관하게 영상 평면 사이의 호모그래피가 된다(7주차: 회전만 하는 카메라). 그래서 안경테가 휘어 카메라가 <b>조금 돌아간</b> 정도라면, 바뀐 정류를 3×3 행렬 하나로 다시 표현할 수 있고 &mdash; 이것을 네트워크가 매 프레임 예측하게 한 것이 HomoDepth다. 반대로 카메라가 <b>옮겨지면</b>(기준선 변화) 호모그래피 하나로는 정확하지 않다 &mdash; 발표의 한계 1번이 이것이다.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>결과와 한계</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>지표 (논문 Table 4)</th><th>ARGOS<br><small>전처리 없음</small></th><th>전처리 + ARGOS</th><th>전처리 + MultiHeadDepth</th><th>HomoDepth</th></tr></thead>
+    <tbody>
+      <tr><td>AbsRel, DTU ↓</td><td>0.122</td><td>0.109</td><td>0.099</td><td><b>0.098</b></td></tr>
+      <tr><td>AbsRel, DTU_df ↓</td><td>0.183</td><td>0.115</td><td>0.107</td><td><b>0.087</b></td></tr>
+      <tr><td>AbsRel, Sceneflow_persp ↓</td><td>0.232</td><td>0.121</td><td>0.114</td><td><b>0.097</b></td></tr>
+      <tr><td>지연, CPU (ms)</td><td>811.0</td><td>1068.3</td><td>884.4</td><td><b>761.2</b></td></tr>
+      <tr><td>지연, GPU (ms)</td><td>109.0</td><td>312.5</td><td>312.6</td><td><b>84.5</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>AbsRel</b>(평균 상대 오차 <span class="tex">|\hat Z-Z|/Z</span>)은 낮을수록 좋다. 발표의 요약 &mdash; MultiHeadDepth는 정확도 <b>11.8~30.3% 향상</b> · 지연 <b>22.9~25.2% 감소</b>, HomoDepth는 명시적 정류 없이 종단간 지연 <b>최대 44.5% 감소</b>.</p>
+  <p><b>한계</b> &mdash; ① 깊이 변화가 큰 3D 장면에서는 호모그래피 하나의 근사가 부정확할 수 있다 ② 호모그래피 예측 오류가 깊이 성능으로 번진다 ③ 상용 AR 안경이 아닌 대리 플랫폼(Orin Nano · Snapdragon)에서 지연을 쟀다 ④ 장시간 착용 · 실제 프레임 변형 환경의 검증이 부족하다. 결론: <b>새 스테레오 기하를 만든 것이 아니라, 기존 스테레오 비전을 실제 AR 환경에 맞게 재설계한 연구</b>.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>표의 지연 숫자를 읽을 때 주의할 것</h3>
+  <p>같은 전처리 조건에서 MultiHeadDepth의 지연은 CPU 1068.3 → 884.4 ms(약 <b>17%</b> 감소)이고, GPU는 312.5 → 312.6 ms로 <b>거의 같다</b>. GPU에서는 전처리(정류)가 지연의 대부분을 차지하기 때문이다 &mdash; 그래서 전처리를 없앤 HomoDepth가 GPU에서 84.5 ms로 크게 앞선다. 발표의 &lsquo;22.9~25.2% 감소&rsquo;는 논문의 다른 측정 조건(모델 부분만)에서 나온 값이고, 발표 11p Table 5에서도 Orin Nano GPU는 ARGOS 209 · MultiHeadDepth 216 · HomoDepth 203 ms로 차이가 작다. 발표자가 적어 둔 대로 <b>&ldquo;ARGOS와 비교할 때 전처리 포함 여부를 확인해야 한다&rdquo;</b>.</p>
+</div>
+
+<!-- ---------- ③ FoundationStereo ---------- -->
+<h3 class="sub-title">③ 박인혁 — FoundationStereo (CVPR 2025) · 스테레오에도 파운데이션 모델을</h3>
+
+<div class="deck">
+  <div class="deck-h">발표 슬라이드 모아보기 <span>박인혁 · 3p · 4p · 5p · 6p · 7p · 8p · 9p · 10p · 11p · 12p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="779" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-park-03.jpg" alt="발표 3p — 기존 방법의 세 한계"><figcaption><b>3p</b> 기존 방법의 세 한계</figcaption></figure>
+    <figure class="sld"><img width="1100" height="779" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-park-04.jpg" alt="발표 4p — 전체 구조 네 단계"><figcaption><b>4p</b> 전체 구조 네 단계</figcaption></figure>
+    <figure class="sld"><img width="1100" height="779" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-park-05.jpg" alt="발표 5p — FSD 100만 쌍 · 자기 큐레이션"><figcaption><b>5p</b> FSD 100만 쌍 · 자기 큐레이션</figcaption></figure>
+    <figure class="sld"><img width="1100" height="779" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-park-06.jpg" alt="발표 6p — Side-Tuning Adapter"><figcaption><b>6p</b> Side-Tuning Adapter</figcaption></figure>
+    <figure class="sld"><img width="1100" height="779" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-park-07.jpg" alt="발표 7p — 하이브리드 비용 볼륨 · APC"><figcaption><b>7p</b> 하이브리드 비용 볼륨 · APC</figcaption></figure>
+    <figure class="sld"><img width="1100" height="779" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-park-08.jpg" alt="발표 8p — Disparity Transformer"><figcaption><b>8p</b> Disparity Transformer</figcaption></figure>
+    <figure class="sld"><img width="1100" height="779" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-park-09.jpg" alt="발표 9p — 반복 정제 · 학습 설정"><figcaption><b>9p</b> 반복 정제 · 학습 설정</figcaption></figure>
+    <figure class="sld"><img width="1100" height="779" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-park-10.jpg" alt="발표 10p — 제로샷 일반화 결과"><figcaption><b>10p</b> 제로샷 일반화 결과</figcaption></figure>
+    <figure class="sld"><img width="1100" height="779" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-park-11.jpg" alt="발표 11p — ETH3D 미세 조정 모델과 비교"><figcaption><b>11p</b> ETH3D 미세 조정 모델과 비교</figcaption></figure>
+    <figure class="sld"><img width="1100" height="779" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-park-12.jpg" alt="발표 12p — 한계와 토론 — 데이터인가 구조인가"><figcaption><b>12p</b> 한계와 토론 — 데이터인가 구조인가</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>배경과 문제 — 벤치마크는 포화인데 새 장면에는 약하다</h3>
+  <p><b>파운데이션 모델</b>은 대규모 데이터로 학습해 처음 보는 도메인에서도 <b>추가 학습 없이(제로샷)</b> 동작하는 범용 모델이다(SAM · DepthAnything). 스테레오 매칭은 주요 벤치마크 성능이 포화 수준이지만 여전히 <b>대상 도메인 미세 조정</b>이 주된 방식이고, 스테레오 파운데이션 모델은 없었다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>기존의 한계</th><th>FoundationStereo의 대응</th></tr></thead>
+    <tbody>
+      <tr><td><b>학습 데이터 부족</b> &mdash; 주로 Scene Flow(약 4만 쌍)</td><td>① <b>FSD 데이터셋</b>(100만 쌍) + 자기 큐레이션</td></tr>
+      <tr><td><b>Sim-to-Real 격차</b> &mdash; 합성으로 배운 모델을 실제에 쓸 때의 도메인 차이</td><td>② <b>STA</b>(Side-Tuning Adapter) &mdash; 실제 영상으로 배운 단안 깊이 모델의 지식</td></tr>
+      <tr><td><b>비국소 정보 부족</b> &mdash; 3D CNN · GRU는 국소 연산 위주, 트랜스포머 방식은 비용 볼륨 · 반복 정제가 없어 정확도가 낮다</td><td>③ <b>AHCF</b>(Attentive Hybrid Cost Filtering)</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>구조 네 단계와 세 가지 장치</h3>
+  <div class="flow">
+    <div class="fl"><b>01 특징 추출(STA)</b><span>좌우 영상에서 CNN 특징 + DepthAnythingV2 특징을 뽑아 결합</span></div>
+    <div class="fl"><b>02 비용 볼륨 구성</b><span>시차 후보별로 좌우 특징을 비교해 4D 비용 볼륨</span></div>
+    <div class="fl"><b>03 비용 필터링(AHCF)</b><span>볼륨을 걸러 초기 시차 추정</span></div>
+    <div class="fl"><b>04 반복 정제(GRU)</b><span>ConvGRU로 반복 갱신해 최종 시차 지도</span></div>
+  </div>
+  <ul class="ul">
+    <li><b>FSD(FoundationStereo Dataset)</b> &mdash; NVIDIA Omniverse의 <b>경로 추적(path tracing)</b>으로 조명 · 반사를 사실적으로 렌더링한 1280×720 <b>100만 쌍</b>. 실내 · 실외 · 주행 · 떠 있는 물체 장면, 기준선 · 초점 거리 · 카메라 자세 · 조명 · 배치를 표본마다 무작위화(<b>도메인 무작위화</b>). <b>자기 큐레이션</b>: 초기 모델로 FSD를 재평가해 BP-2(2px 넘게 틀린 픽셀 비율)가 60%를 넘는 <b>모호한 표본</b>을 새로 생성한 표본으로 바꾸기를 2회 반복</li>
+    <li><b>STA</b> &mdash; 세 설계안 (a) DepthAnythingV2 특징만 (b) CNN–ViT 양방향 교환 (c) <b>ViT 특징을 줄여 CNN 특징과 연결</b> 중 (c)가 가장 좋았다. ViT는 <b>얼리고(frozen)</b> 가벼운 CNN(EdgeNeXt)만 학습한다(ViT를 미세 조정하면 성능이 떨어졌다). 단안 깊이 <b>출력값</b>은 스케일이 모호하므로 깊이 대신 <b>내부 잠재 특징</b>을 쓴다</li>
+    <li><b>AHCF</b> &mdash; ① <b>하이브리드 비용 볼륨</b>: 채널을 8그룹으로 나눈 <b>그룹 상관</b> + 좌우 특징을 14채널로 줄여 <b>연결(concat)</b>(단안 지식 보존), 1/4 해상도 C × D/4 × H/4 × W/4 ② <b>APC(Axial-Planar Convolution)</b>: 3×3×3 3D 합성곱을 <b>공간 방향</b>과 <b>시차 방향</b> 합성곱으로 분해해, 시차 방향 커널을 키워도 부담이 적다(약 17에서 포화) ③ <b>Disparity Transformer</b>: 픽셀 위치마다 <b>시차 후보 전체를 한 시퀀스로</b> 셀프 어텐션(1/16로 줄인 볼륨, 블록 4개, FlashAttention), APC 경로와 <b>병렬</b>로 계산해 더한다. 4D 전체보다 시차 축에만 어텐션한 쪽이 낫다(Middlebury BP-2 2.25 → 1.97)</li>
+    <li><b>초기 시차</b> &mdash; 시차 축 softmax → 확률 가중 평균(<b>soft-argmin</b>)으로 1/4 해상도 초기 시차. <b>반복 정제</b> &mdash; 현재 시차로 볼륨 값을 조회 → ConvGRU가 갱신량 예측 → 1/16 · 1/8 · 1/4 세 단계 연동 → 학습 22회 · 추론 32회 반복 후 convex upsampling. A100 32장으로 200K 반복 학습, <b>평가 벤치마크 데이터는 학습에 쓰지 않았다</b>(제로샷)</li>
+  </ul>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>결과 — 제로샷으로 네 벤치마크 모두 최고</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>제로샷 (논문 Table 2)</th><th>Middlebury BP-2</th><th>ETH3D BP-1</th><th>KITTI-12 D1</th><th>KITTI-15 D1</th></tr></thead>
+    <tbody>
+      <tr><td>Selective-IGEV*</td><td>7.5</td><td>3.4</td><td>3.2</td><td>4.5</td></tr>
+      <tr><td>Ours (Scene Flow만)</td><td>5.5</td><td>1.8</td><td>3.2</td><td>4.9</td></tr>
+      <tr><td><b>Ours</b></td><td><b>1.1</b></td><td><b>0.5</b></td><td><b>2.3</b></td><td><b>2.8</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <ul class="ul">
+    <li>Scene Flow만으로 학습해도 기존 방법보다 대체로 낫고, 자연 영상(in-the-wild)에서도 정성적으로 우수하다(비교 모델은 4개 벤치마크로 학습한 체크포인트)</li>
+    <li><b>ETH3D</b> &mdash; ETH3D를 쓰지 않은 제로샷인데 BP-0.5 <b>2.31</b>로 미세 조정한 기존 최고(3.06)보다 낮고, EPE 0.13은 최고(0.12)와 비슷하다. ETH3D로 50K step 더 학습하면 1.26 / 0.26 / 0.09로 <b>모든 지표 1위</b>(제출 시점 ETH3D · Middlebury 리더보드 1위)</li>
+  </ul>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>한계와 토론 — 성능은 데이터 덕인가, 구조 덕인가</h3>
+  <ul class="ul">
+    <li><b>속도</b> &mdash; A100에서 375×1242 영상 한 장에 <b>0.7초</b>. 실시간에 제약 → 증류 · 가지치기(후속 연구 Fast-FoundationStereo)</li>
+    <li><b>투명 물체</b> &mdash; FSD에 비중이 적다</li>
+    <li><b>발표자 의견</b> &mdash; 기존 모델을 FSD 포함 같은 데이터로 학습한 비교가 없어 <b>구조의 기여도가 불명확</b>하다. 논문 근거는 두 가지다 &mdash; 같은 데이터(Scene Flow)로도 기존보다 낫다(구조 + STA 효과, Table 2) / 같은 구조에 FSD를 더하면 Middlebury BP-2 2.34 → <b>1.15</b>(데이터 효과, Table 7)</li>
+    <li><b>관련 연구</b> &mdash; Yan 등(CVPR 2026)은 구조(RAFT-Stereo)를 고정하고 합성 데이터 요소를 통제 실험했다: <b>떠 있는 물체 배치 · 기준선 · 재질 다양성</b>이 효과적이고 조명 변화는 효과가 미미하며, 약 16만 쌍(WMGStereo-150k)으로 FSD와 경쟁력 있는 성능을 냈다. 발표자의 결론 &mdash; <b>데이터는 규모만큼 설계 원칙도 중요하다</b></li>
+  </ul>
+</div>
+
+<!-- ---------- ④ ZeroStereo ---------- -->
+<h3 class="sub-title">④ 최소연 — ZeroStereo (2025) · 사진 한 장으로 오른쪽 사진을 만든다</h3>
+
+<div class="deck">
+  <div class="deck-h">발표 슬라이드 모아보기 <span>최소연 · 2p · 3p · 4p · 5p · 6p · 7p · 9p · 12p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-choi-02.jpg" alt="발표 2p — 연구 질문 — 영상 한 장으로?"><figcaption><b>2p</b> 연구 질문 — 영상 한 장으로?</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-choi-03.jpg" alt="발표 3p — 관련 연구 — MfS · NeRF-Stereo"><figcaption><b>3p</b> 관련 연구 — MfS · NeRF-Stereo</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-choi-04.jpg" alt="발표 4p — ZeroStereo 전체 구조"><figcaption><b>4p</b> ZeroStereo 전체 구조</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-choi-05.jpg" alt="발표 5p — DAv2 · ADS · 순방향 warping"><figcaption><b>5p</b> DAv2 · ADS · 순방향 warping</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-choi-06.jpg" alt="발표 6p — 확산 인페인팅 미세 조정 · 추론"><figcaption><b>6p</b> 확산 인페인팅 미세 조정 · 추론</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-choi-07.jpg" alt="발표 7p — TCG — 반전 일관성 신뢰도"><figcaption><b>7p</b> TCG — 반전 일관성 신뢰도</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-choi-09.jpg" alt="발표 9p — ZeroStereo 손실"><figcaption><b>9p</b> ZeroStereo 손실</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv9-pres-choi-12.jpg" alt="발표 12p — 기존 방법과 비교"><figcaption><b>12p</b> 기존 방법과 비교</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>연구 질문 — 스테레오 쌍 없이 학습 데이터를 만들 수 있을까</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>기존 접근</th><th>문제</th></tr></thead>
+    <tbody>
+      <tr><td>실제 스테레오 데이터</td><td>정답 시차가 있는 실제 데이터가 부족하다</td></tr>
+      <tr><td>합성 데이터</td><td>실제 영상과 도메인 차이</td></tr>
+      <tr><td>자기 지도 학습</td><td>정답 없이 학습하지만, 가려지거나 모호한 영역에서 <b>광도 손실</b>의 신뢰도가 떨어진다</td></tr>
+      <tr><td>MfS-Stereo</td><td>단일 영상 깊이 추정 + 순방향 warping으로 오른쪽 영상 생성 &mdash; 가려진 영역을 <b>임의 배경으로</b> 채워 부자연스럽다</td></tr>
+      <tr><td>NeRF-Stereo</td><td>3D 재구성으로 가려진 영역 생성 &mdash; <b>여러 시점</b> 영상이 필요하고 먼 물체는 부정확</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>ZeroStereo</b>는 단일 영상 방식을 유지하면서 &mdash; <span class="hi">가려진 영역을 <b>확산 모델 인페인팅</b>으로 복원하고, <b>ADS</b>와 <b>TCG</b>로 시차 분포와 가짜 정답(pseudo label)의 신뢰도를 개선한다.</span></p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>① 영상 생성 — 깊이 → 시차 → 순방향 warping → 확산 인페인팅</h3>
+  <div class="flow">
+    <div class="fl"><b>DAv2 깊이 추정</b><span>왼쪽 영상의 상대 깊이를 정규화된 <b>역깊이 지도 D</b>로 (가까울수록 값이 큼 &mdash; <span class="tex">d=fB/Z</span>처럼 시차와 같은 방향)</span></div>
+    <div class="fl"><b>ADS(Adaptive Disparity Selection)</b><span>가짜 시차 <span class="tex">d=D\times s\times w</span> &mdash; s는 시차 크기 조절 계수, w는 영상 너비(픽셀)</span></div>
+    <div class="fl"><b>순방향 warping</b><span>d만큼 왼쪽 픽셀을 옮기면, 픽셀마다 이동량이 달라 <b>가려졌던 영역이 빈 곳</b>으로 드러난다 → 임시 오른쪽 영상 + 인페인팅 마스크 <span class="tex">M_{inp}</span>(1 = 복원 필요)</span></div>
+    <div class="fl"><b>확산 인페인팅</b><span>미세 조정한 Stable Diffusion v2 Inpainting, DDIM 50단계 → 빈 영역만 생성 픽셀로 채우고 나머지는 유지(마스크 블렌딩)</span></div>
+  </div>
+  <p>인페인팅 모델의 <b>미세 조정</b> &mdash; 정답 시차가 있는 합성 스테레오로 warping 영상 · 빈 영역 마스크를 만들고, <b>진짜 오른쪽 영상</b>을 복원 목표로 삼는다. VAE는 얼리고 U-Net만 노이즈 예측으로 학습한다(<a class="ext" href="computer-vision-week14.html#diffusion">14주차 확산 모델</a>의 구조 그대로).</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>② 신뢰도 — TCG: 좌우 반전해도 같은 답이 나오나</h3>
+  <p><b>TCG(Training-Free Confidence Generation)</b> &mdash; 같은 장면의 실제 깊이 관계는 변하지 않지만(invariant), DAv2의 예측은 달라질 수 있다는 점을 이용한다. 원본 영상에서 역깊이 D를, <b>좌우 반전</b> 영상에서 D′을 예측해 다시 반전한 <span class="tex">H^{-1}(D')</span>와 픽셀별로 비교한다. <span class="hi">차이가 작을수록 신뢰도 C가 높다.</span> 추가 학습이 필요 없다.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>③ 학습 — 신뢰도로 두 손실을 섞는다</h3>
+  <p>왼쪽 원본 + 생성한 오른쪽 영상을 스테레오 모델(RAFT-Stereo · IGEV-Stereo)에 넣어 시차 <span class="tex">\tilde d</span>를 예측하고, 가짜 시차 d · 신뢰도 C · 비가림 마스크 <span class="tex">M_{noc}</span> · <span class="tex">M_{inp}</span>로 손실을 계산한다.</p>
+  <div class="fx"><div class="tex-d">L_{Zero}=C\odot L_d+\mu\,(1-C)\odot L_{np},\qquad L_d=\lVert\tilde d-d\rVert_1,\qquad L_p=\beta\,\frac{1-\mathrm{SSIM}(I_l,I_r^{\,l})}{2}+(1-\beta)\lVert I_l-I_r^{\,l}\rVert_1</div>
+  <p class="fx-note"><b>신뢰도가 높은 곳</b>은 가짜 정답 d를 그대로 믿는 <b>시차 손실</b> <span class="tex">L_d</span>를, <b>낮은 곳</b>은 예측 시차로 오른쪽 영상을 왼쪽 시점으로 <b>역방향 warping</b>해 원본과 비교하는 <b>광도 손실</b> <span class="tex">L_{np}=M_{noc}\odot\tilde M^{inp}_r\odot L_p</span>를 쓴다. 광도 손실은 가리지 않고 생성되지 않은 유효 영역에서만, SSIM과 L1을 섞어 계산한다.</p></div>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>결과와 한계</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>오류율 (%) ↓</th><th>KITTI-15 · &gt;3px</th><th>Middlebury-T (H) · &gt;2px</th><th>ETH3D · &gt;1px</th></tr></thead>
+    <tbody>
+      <tr><td>NS-RAFT-Stereo (NeRF-Stereo 데이터)</td><td>5.65</td><td>9.44</td><td>2.79</td></tr>
+      <tr><td><b>Zero-RAFT-Stereo</b></td><td><b>4.53</b></td><td><b>4.45</b></td><td><b>2.13</b></td></tr>
+      <tr><td>NS-IGEV-Stereo</td><td>5.88</td><td>10.67</td><td>3.58</td></tr>
+      <tr><td><b>Zero-IGEV-Stereo</b></td><td><b>4.73</b></td><td><b>7.07</b></td><td><b>1.90</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>같은 증강 조건에서 두 모델 모두 기존 방법보다 오류율이 낮다(실제 장면 예: &gt;2px 25.80% → <b>13.73%</b>). <b>절제 실험</b> &mdash; 인페인팅만으로는 효과가 제한적이고, <b>ADS · TCG · ZeroStereo 손실을 결합해야</b> 전반적으로 좋아진다. 지표는 EPE(평균 시차 오차, px)와 &gt;N px 오류 비율, Noc는 가리지 않은 영역.</p>
+  <p><b>한계</b> &mdash; 확산 인페인팅은 복잡한 장면에서 복원 실패 · 색 불일치가 생길 수 있고, 순방향 warping은 <b>투명한 물체 · 그물망</b> 구조에서 정확한 변환이 어렵다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>FoundationStereo와 ZeroStereo — 같은 목표, 반대 방향</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th></th><th>FoundationStereo</th><th>ZeroStereo</th></tr></thead>
+    <tbody>
+      <tr><td>목표</td><td colspan="2">처음 보는 실제 장면에서 미세 조정 없이 잘 되는 스테레오 매칭(제로샷)</td></tr>
+      <tr><td>데이터</td><td><b>렌더링한 합성 스테레오</b> 100만 쌍(정답 시차 정확)</td><td><b>실제 단일 영상</b>에서 오른쪽 영상 생성(정답은 가짜 · 신뢰도로 보정)</td></tr>
+      <tr><td>단안 깊이 모델의 쓰임</td><td>DepthAnythingV2의 <b>잠재 특징</b>을 네트워크 안에 넣는다(STA)</td><td>DepthAnythingV2의 <b>깊이 출력</b>으로 학습 데이터를 만든다</td></tr>
+      <tr><td>무엇을 새로 만드나</td><td>네트워크 구조(AHCF) + 데이터셋</td><td>데이터 생성 파이프라인 + 손실(기존 RAFT · IGEV 그대로)</td></tr>
+      <tr><td>Sim-to-Real 격차를 줄이는 법</td><td>사실적 렌더링 + 실제 영상으로 배운 특징</td><td>처음부터 <b>실제 영상</b>으로 학습</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>두 논문 모두 단안 깊이 거대 모델(DepthAnythingV2)을 빌려 쓴다는 점이 흥미롭다 &mdash; 6주차 &lsquo;다른 목적으로 학습된 거대 모델의 특징을 빌린다&rsquo;(내 발표 SD + DINO)와 같은 흐름이다. 그리고 넷 모두 마지막에는 오늘 교안의 <b>soft 버전 DSI + <span class="tex">Z=bf/d</span></b>로 돌아온다.</p>
+</div>
+</section>
+
 
 <p class="src">출처 — 컴퓨터비전 09. Stereo Vision (2026-2학기, 79페이지)<br>
 영어 교안을 korean-translation 규칙(하다체 · 번역투 피하기)에 따라 절 단위로 한국어로 옮겨 정리하고 도식 · 예시 슬라이드 <b>57장</b>을 캡처해 실었다. &lsquo;보충설명&rsquo; 뱃지가 붙은 부분(에피폴 성질의 이유 · E와 F 비교 · l'=Fx 읽기 · 정규화와 rank 2 · 선형 삼각측량 · [t×] · R_rect 만들기 · DSI 경로 · 정류에서 호모그래피와 E/F의 역할 · 에피폴 무한대의 뜻 · R과 R_rect 구분 · 반비례 숫자 표 · DSI 손계산 · 75p 필기 유도 · 척도 숫자 비교 · 에너지 최소화 · OpenCV 코드 풀이)은 교안에 없는 내용을 따로 계산하거나 찾아 정리한 것이다.</p>
