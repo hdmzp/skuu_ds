@@ -1039,8 +1039,9 @@ footer{margin-top:28px;text-align:center;font-size:.78rem;color:var(--muted)}
     for(var n = 1; n <= WK_TOTAL; n++){
       if(WK_SUBJECTS.some(function(s){ return s.weeks[n] && s.weeks[n].p; })) latest = n;
     }
-    // 기본 선택 = 자료가 올라온 가장 최근 주차 (미리 올린 다음 주 교안까지 포함)
-    var selected = latest;
+    // 기본 선택 = 오늘이 속한 주차 (미래 주차 교안을 미리 올려도 들어오면 이번 주가 먼저 보인다)
+    // 학기 전이면 1주차, 학기가 끝났으면 자료가 올라온 가장 최근 주차
+    var selected = inTerm ? nowWeek : (nowWeek < 1 ? 1 : latest);
     if(wkNowEl) wkNowEl.textContent = inTerm ? ('오늘은 ' + nowWeek + '주차 · 최신 자료 ' + latest + '주차') : ('최신 자료 ' + latest + '주차');
 
     var chips = '';
