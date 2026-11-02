@@ -586,6 +586,14 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
     <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week10-quiz100.html" download="기계학습특론_10주차_딥러닝CNN_100문제.html">⬇ 다운로드</a>
   </div>
   <div class="doc">
+    <div class="doc-ico"><span>✨</span>Claude</div>
+    <div class="doc-main">
+      <a class="doc-open" href="https://claude.ai/artifact/YMAbsgKVzAZkddKWv5jjEA" target="_blank" rel="noopener">100문제 Claude 버전 ↗</a>
+      <p>폰 · 태블릿 · PC 어디서 풀어도 진행이 이어진다(Claude 계정 동기화) · 해설 아래 <b>📘 개념 바로가기</b>로 이 페이지의 해당 상자(핵심 · 함정)로 연결 · 북마크 · 단원 접기 · 결과 화면은 원본 문제지와 같다</p>
+    </div>
+    <a class="doc-dl" href="https://claude.ai/artifact/YMAbsgKVzAZkddKWv5jjEA" target="_blank" rel="noopener">열기 ↗</a>
+  </div>
+  <div class="doc">
     <div class="doc-ico"><span>🐍</span>IPYNB</div>
     <div class="doc-main">
       <a class="doc-open" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week10-lab.ipynb" download="10주차_딥러닝분류_실습_PyTorch_문제.ipynb">실습 노트북 (문제) — 이것을 풀어 제출</a>
@@ -635,7 +643,7 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   </div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="goals">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>학습 목표 (2p)</h3>
   <ul class="ul">
     <li>다층 퍼셉트론을 이용하여 <b>이미지 분류</b>하기</li>
@@ -644,7 +652,7 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   </ul>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="basics">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>MLP와 CNN은 학습 원리가 같다 (3p)</h3>
   <p>신경망이 학습하고 파라미터를 최적화하는 <b>기본 원리는 CNN과 MLP 모두 동일</b>하다. 교안이 드는 공통점은 네 가지다.</p>
   <div class="tbl-wrap"><table>
@@ -676,19 +684,19 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   </div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="mlp-struct">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>MLP의 구조 (4p)</h3>
   <p>뉴런이 <b>층 모양</b>으로 모여 있고, <b>인접한 층과 층 사이의 모든 뉴런이 가중치가 있는 연결</b>을 갖는다(완전 연결). 구조는 <b>입력층 하나 + 은닉층 하나 이상 + 출력층 하나</b>다.</p>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="flatten">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>입력층 — 이미지를 벡터로 편다 (5 · 6 · 7p)</h3>
   <p>컴퓨터에게 28×28 이미지는 <b>28×28 행렬</b>이고, 각 원소는 <b>0~255</b>의 밝기 값이다. 그런데 MLP는 모양이 <b>(1, n)인 1차원 벡터만</b> 입력받는다. 그래서 (x, y) 모양의 행렬을 (1, n) 벡터로 바꾸는 <b>이미지 벡터 변환(image flattening)</b>이 필요하다.</p>
   <div class="fx"><div class="tex-d">\underbrace{28\times28}_{\text{행렬}}\;\longrightarrow\;\underbrace{(1\times784)}_{\text{벡터}},\qquad \mathbf x=[\text{row}_1,\text{row}_2,\ldots,\text{row}_{28}]</div>
   <p class="fx-note">1행 28개, 그 뒤에 2행 28개, … 28행까지 <b>행을 차례로 이어 붙인다</b>. 그래서 입력층 노드는 <b>784개</b>다. 케라스에서는 <code>Flatten(input_shape=(28, 28))</code>이 이 일을 하고, <b>입력 이미지 크기를 반드시 인수로 지정</b>해야 한다(첫 층이라 앞에서 모양을 알려 줄 층이 없다).</p></div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="hidden-out">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>은닉층 · 출력층 (8 · 9p)</h3>
   <ul class="ul">
     <li><b>은닉층</b> &mdash; 이론적으로 <b>원하는 수만큼</b> 둘 수 있고, 각 층의 뉴런 수도 원하는 만큼 정한다. 모델 설계의 일이 곧 <b>층을 설계하는 것</b>이다. 교안은 <code>Dense(512, activation='relu')</code>를 두 번 쌓는다</li>
@@ -720,7 +728,7 @@ model.summary()</pre>
   </div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="param-calc">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>Param # 를 손으로 맞춰 보기 (10~12p)</h3>
   <p><code>model.summary()</code>의 <b>Param #</b>는 그 층의 <b>파라미터(가중치) 수</b>이고, 학습은 이 가중치들이 조정되는 과정이다.</p>
   <div class="tbl-wrap"><table>
@@ -736,7 +744,7 @@ model.summary()</pre>
   <p class="fx-note">규칙은 하나다 &mdash; <span class="tex">(\text{앞 층 노드 수}\times\text{이 층 노드 수})+\text{이 층 노드 수(편향)}</span>. 노드마다 편향이 하나씩이라 뒤에 더하는 수는 <b>이 층의 노드 수</b>다. 100문제의 응용 예처럼 512 → 5클래스면 <span class="tex">512\times5+5=2{,}565</span>. 교안 11 · 12p는 층 이름을 &lsquo;Dense_1층과 Dense_2층을 잇는&rsquo; 식으로 쓰는데, summary 표에서는 이것이 각각 <b>dense_1 · dense_2 · dense_3의 Param #</b>다.</p>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="mlp-cons">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>MLP의 두 가지 단점 (13p)</h3>
   <div class="cards">
     <div class="card2"><h4>① 파라미터가 너무 많다</h4><p>크지 않은 망도 <b>669,706개</b>를 학습해야 한다. 입력이 커지면 첫 Dense 층이 폭발한다(아래 보충설명).</p></div>
@@ -767,12 +775,12 @@ model.summary()</pre>
   </div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="cnn-why">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>CNN은 왜 생겼나 (14p)</h3>
   <p>이미지를 1차원 벡터로 변환하면서 <b>손실되는 정보</b>와 <b>전결합층(Fully-connected layer)의 계산 복잡도</b>를 고려해 이미지 입력을 다루려고 CNN이 탄생했다. CNN은 <b>2차원 이미지 행렬을 그대로</b> 입력받으므로 <b>픽셀 값에 숨어 있는 패턴</b>을 이해할 수 있다 &mdash; 10.3의 두 단점에 대한 정확한 답이다.</p>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="cnn-layers">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>층마다 배우는 특징이 깊어진다 (15p)</h3>
   <div class="flow">
     <div class="fl"><b>첫 번째 층</b><span>기본적인 특징 &mdash; <b>모서리, 직선</b></span></div>
@@ -783,7 +791,7 @@ model.summary()</pre>
   <p>15p 고양이 그림 &mdash; 아래층이 귀 · 코 · 수염의 선과 곡선을 찾고, 위층이 그것을 조합해 &lsquo;고양이&rsquo;를 판정한다. 19p의 사진(구체적인 특징 → 약간 추상적인 특징 → 추상적인 특징)은 실제 CNN이 추출한 특징 맵이 층을 거치며 <b>점 · 선 → 눈 · 코 → 얼굴 전체</b>로 바뀌는 모습이다.</p>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="cnn-37">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>전체 구조와 숫자 3 · 7 예시 (16 · 17p)</h3>
   <p>CNN은 <b>입력층 / 특징 추출을 담당하는 합성곱층 / 분류를 담당하는 전결합층 / 예측 결과 출력</b>으로 이루어진다. 줄이면 <span class="hi">특징 추출 / 분류 / 예측</span>의 구조다.</p>
   <div class="flow">
@@ -794,7 +802,7 @@ model.summary()</pre>
   </div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="cnn-extract">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>특징 추출과 분류를 들여다보기 (18 · 19p)</h3>
   <p><b>특징 추출</b>은 비유하면 &ldquo;큰 이미지를 여러 개의 작은 특징 맵으로 나눈 뒤 쌓아 벡터로 만드는 과정&rdquo;이다. 숫자 3 흑백 이미지는 <b>깊이 1</b>로 들어와, 특징이 네 가지면 <b>깊이 4</b>가 된다. 합성곱층을 차례로 지나면 크기는 작아지고 특징 가짓수가 늘어 <b>깊이가 깊어진다</b>.</p>
   <div class="warn"><b>&lsquo;조각으로 나눈다&rsquo;는 비유일 뿐이다</b> &mdash; 교안이 굵게 강조한 문장: CNN은 실제로 이미지를 여러 조각으로 <b>분할하지 않는다</b>. 다른 사물이 찍힌 이미지와 구분되는 <b>의미 있는 특징을 추출해 다른 특징과 함께 쌓아 둔다</b>. 100문제에서 &ldquo;입력 이미지를 실제로 잘라 따로 저장한다&rdquo;가 오답 보기로 나온다.</div>
@@ -819,7 +827,7 @@ model.summary()</pre>
   </div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="cnn-elems">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>CNN의 기본 요소 (20p)</h3>
   <div class="tbl-wrap"><table>
     <thead><tr><th>요소</th><th>하는 일</th></tr></thead>
@@ -832,12 +840,12 @@ model.summary()</pre>
   <p>기본 구성 요소를 둘로 나누면 <b>합성곱층(특징 추출)</b>과 <b>전결합층(분류)</b>이다.</p>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="conv-def">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>합성곱이란 — 이미지 위를 오가는 확대경 (21 · 22p)</h3>
   <p>합성곱층은 CNN의 핵심이다. <b>이미지 위를 픽셀 단위로 오가며 특징을 찾는 확대경</b>처럼, 이미지에 찍힌 사물을 구분 짓는 특징을 추출한다. 수학의 합성곱은 <b>두 함수를 인수로 새 함수를 만드는 연산</b>이고, CNN에서는 <b>첫 번째 인수가 입력 이미지, 두 번째 인수가 합성곱 필터</b>다. 필터를 입력 이미지 위로 옮기며 필터가 놓인 작은 조각을 처리하고, 그 결과를 모아 새 이미지 &mdash; <b>특징 맵</b> &mdash; 을 만든다.</p>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="kernel">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>커널 · 수용 영역 · 커널 값 = 가중치 (23 · 24p)</h3>
   <ul class="ul">
     <li>가운데 놓인 <b>3×3 행렬이 합성곱 필터 = 커널(kernel)</b>이다. 커널은 입력 위를 픽셀 단위로 움직이며 각 위치에서 값을 계산하고, 그 값들을 모아 &lsquo;합성곱 연산을 거친&rsquo; 새 이미지를 다음 층으로 넘긴다</li>
@@ -862,7 +870,7 @@ model.summary()</pre>
   <p>이 필터는 <b>왼쪽 열에 −, 오른쪽 열에 +</b>를 준다(컴퓨터비전 3주차의 <a class="ext" href="computer-vision-week03.html">소벨 필터</a>와 같은 모양). 그래서 <b>오른쪽이 왼쪽보다 밝으면 양수, 어두우면 음수</b> &mdash; 세로 경계를 찾는 필터다. 이 수용 영역은 왼쪽(3, 2, 2)이 오른쪽(1, 2, 1)보다 약간 밝아서 −3이 나왔다. 24p의 243도 같은 필터로 같은 계산을 한 결과다. <span class="hi">CNN은 이런 필터 값을 사람이 정하지 않고 데이터로 학습한다</span> &mdash; 그래서 학습된 첫 층 필터가 실제로 경계 검출기 모양이 된다(15p &lsquo;모서리 · 직선&rsquo;).</p>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="fmap">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>특징 맵과 필터 수 (25 · 26p)</h3>
   <p>필터는 이미지 위를 이동하며 <b>입력 전체를 덮는다</b>. 한 번 움직일 때마다 가중합이 계산되어 필터 중심 픽셀의 새 값이 정해지고, 이렇게 만든 이미지를 <b>특징 맵(feature map)</b> 또는 <b>활성화 맵(activation map)</b>이라고 한다. 합성곱층에는 필터가 <b>하나 이상</b> 있고, <b>필터 수만큼 특징 맵이 출력</b>되므로 <span class="hi">필터 수가 다음 층의 깊이를 결정한다</span>.</p>
 <pre class="code">from keras.layers import Conv2D
@@ -895,7 +903,7 @@ model.add(Conv2D(filters=16, kernel_size=2, strides=1, padding='same', activatio
   </div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="ksize-stride">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>커널 크기와 스트라이드 (27 · 28p)</h3>
   <ul class="ul">
     <li><b>커널</b>은 가중치가 담긴 행렬로, 입력 위를 이동하며 특징을 추출한다. <b>커널 크기</b>는 필터의 <b>너비 × 높이</b>(3×3, 5×5 …)이고 합성곱층을 만들 때 필요한 파라미터 중 하나다</li>
@@ -904,7 +912,7 @@ model.add(Conv2D(filters=16, kernel_size=2, strides=1, padding='same', activatio
   </ul>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="padding">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>제로 패딩 (29p)</h3>
   <p><b>제로 패딩(zero-padding)</b>은 이미지 <b>둘레에 픽셀 값이 0인 추가 픽셀</b>을 덧붙이는 것이다. 주목적은 <span class="hi">합성곱을 거친 출력 이미지의 크기를 입력과 같게 유지하는 것</span>이다. 패딩 값이 2면 둘레에 두 픽셀씩 덧붙인다(29p 그림: 4×4 이미지 → 8×8).</p>
 </div>
@@ -926,7 +934,7 @@ model.add(Conv2D(filters=16, kernel_size=2, strides=1, padding='same', activatio
   <p>패딩 없이 3×3을 쌓으면 층마다 둘레가 1칸씩 깎여, 깊게 쌓을수록 이미지가 빨리 사라지고 <b>가장자리 픽셀이 계산에 덜 참여</b>한다. 그래서 대부분의 CNN은 &lsquo;same&rsquo; 패딩으로 크기를 지키고, <b>크기를 줄이는 일은 풀링(또는 스트라이드 2)에 맡긴다</b>.</p>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="pooling">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>풀링층과 최대 풀링 (30~32p)</h3>
   <p><b>풀링(pooling)</b>은 <b>최대 · 평균 같은 통계 함수</b>로 입력 크기를 줄여 다음 층에 넘긴다. 목적은 합성곱층이 만든 특징 맵을 <b>다운샘플링</b>해 계산 복잡도를 낮추는 것이고, 보통 <b>합성곱층 사이에 끼워 넣는다</b>.</p>
   <p><b>최대 풀링(max pooling)</b> &mdash; 앞 합성곱층의 특징 맵 위로 창을 옮기며 <b>창 안의 최댓값</b>을 출력 픽셀로 삼는다. 스트라이드 2인 2×2 풀링은 4×4를 <b>2×2</b>로 줄인다. 31p 예:</p>
@@ -962,7 +970,7 @@ model.add(Conv2D(filters=16, kernel_size=2, strides=1, padding='same', activatio
   </div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="shape-flow">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>층을 지날 때 모양이 어떻게 바뀌나 (33~35p)</h3>
   <div class="tbl-wrap"><table>
     <thead><tr><th>층</th><th>가로 · 세로</th><th>깊이</th><th>교안 예</th></tr></thead>
@@ -975,12 +983,12 @@ model.add(Conv2D(filters=16, kernel_size=2, strides=1, padding='same', activatio
   <p class="fx-note">34p 그림의 14×14 → 10×10은 2×2 풀링 하나로는 나오지 않는 값이다(14 → 7). 그림은 &lsquo;풀링을 거칠수록 줄어든다&rsquo;는 흐름을 보여 주는 예시로 읽으면 된다.</p>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="fc">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>전결합층 — 분류는 결국 MLP가 한다 (36 · 37p)</h3>
   <p>추출한 특징으로 실제 분류를 하려면 MLP를 쓴다 &mdash; <b>MLP는 분류에 효과적</b>이기 때문이다. 구성은 <b>① (1, n) 1차원 벡터 입력</b>(Flatten) <b>② 은닉층 하나 이상 ③ 출력층(활성화 함수 소프트맥스)</b>이다. 37p 그림: 5×5×40 특징 맵을 1차원(1, 1000)으로 펴고 → 전결합층 64 → 소프트맥스 10개가 <span class="tex">P_0\ldots P_9</span>를 낸다.</p>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="keras-cnn">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>케라스 CNN 모델과 summary (38~40p)</h3>
 <pre class="code">from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
