@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>11주차 딥러닝 이미지 분류 100문제</title>
+<style>
+  :root{
+    --bg:#f4f6fa; --card:#ffffff; --ink:#16202e; --muted:#657189;
+    --line:#e2e8f2; --brand:#1560d8; --brand-deep:#0b3b8c; --brand-soft:#eaf1fe;
+    --ok:#0f8a5f; --ok-soft:#e6f6ef; --no:#d43c4a; --no-soft:#fdecee;
+    --warn:#b7791f; --shadow:0 1px 2px rgba(16,32,64,.05),0 8px 24px rgba(16,32,64,.07);
+    --r:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0e1420; --card:#161e2c; --ink:#e8edf6; --muted:#98a4bb;
+      --line:#273246; --brand:#5b96ff; --brand-deep:#a8c6ff; --brand-soft:#1a2740;
+      --ok:#48c99a; --ok-soft:#122c23; --no:#ff7b88; --no-soft:#33191e;
+      --warn:#e0b25c; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Malgun Gothic","맑은 고딕",system-ui,sans-serif;
+    line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:22px 16px 80px}
+
+  header.top{margin-bottom:18px}
+  .eyebrow{color:var(--brand);font-weight:700;font-size:13px;letter-spacing:.04em}
+  h1{font-size:25px;line-height:1.3;margin:4px 0 6px;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:14px;margin:0}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+
+  /* controls */
+  .controls{padding:14px 16px;margin-bottom:14px}
+  .ctl-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .ctl-row + .ctl-row{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+  .ctl-label{font-size:12px;font-weight:700;color:var(--muted);min-width:52px}
+  .chip{
+    border:1px solid var(--line);background:transparent;color:var(--ink);
+    padding:5px 11px;border-radius:999px;font-size:13px;cursor:pointer;
+    font-family:inherit;transition:.13s; white-space:nowrap;
+  }
+  .chip:hover{border-color:var(--brand);color:var(--brand)}
+  .chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+  .chip.ghost[aria-pressed="true"]{background:var(--brand-soft);color:var(--brand-deep);border-color:var(--brand)}
+  .spacer{flex:1}
+
+  /* progress */
+  .prog{padding:14px 16px;margin-bottom:14px}
+  .prog-head{display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;margin-bottom:9px}
+  .stat{font-size:13px;color:var(--muted)}
+  .stat b{color:var(--ink);font-size:15px;font-variant-numeric:tabular-nums}
+  .stat.ok b{color:var(--ok)} .stat.no b{color:var(--no)}
+  .bar{height:7px;background:var(--line);border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--ok));border-radius:99px;transition:width .3s}
+
+  /* question */
+  .qcard{padding:20px 20px 18px;margin-bottom:14px}
+  .qmeta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
+  .tag{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:.02em}
+  .tag.num{background:var(--brand-deep);color:#fff}
+  @media (prefers-color-scheme: dark){ .tag.num{background:var(--brand-soft);color:var(--brand-deep)} }
+  .tag.sec{background:var(--brand-soft);color:var(--brand-deep)}
+  .tag.d1{background:var(--ok-soft);color:var(--ok)}
+  .tag.d2{background:#fff4e0;color:var(--warn)}
+  .tag.d3{background:var(--no-soft);color:var(--no)}
+  @media (prefers-color-scheme: dark){ .tag.d2{background:#3a2e14} }
+  .qtext{font-size:17.5px;font-weight:600;letter-spacing:-.01em;margin:0 0 16px;line-height:1.55}
+
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{
+    display:flex;gap:11px;align-items:flex-start;text-align:left;width:100%;
+    padding:12px 14px;border:1.5px solid var(--line);background:var(--card);
+    border-radius:11px;cursor:pointer;font:inherit;font-size:15px;color:var(--ink);
+    transition:.13s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--brand);background:var(--brand-soft)}
+  .opt:disabled{cursor:default}
+  .opt .n{
+    flex:none;width:23px;height:23px;border-radius:50%;background:var(--line);color:var(--muted);
+    display:grid;place-items:center;font-size:12.5px;font-weight:700;margin-top:1px;
+  }
+  .opt.correct{border-color:var(--ok);background:var(--ok-soft)}
+  .opt.correct .n{background:var(--ok);color:#fff}
+  .opt.wrong{border-color:var(--no);background:var(--no-soft)}
+  .opt.wrong .n{background:var(--no);color:#fff}
+  .opt .mark{margin-left:auto;font-size:13px;font-weight:700;flex:none;padding-left:8px}
+  .opt.correct .mark{color:var(--ok)} .opt.wrong .mark{color:var(--no)}
+
+  .exp{margin-top:14px;padding:13px 15px;border-radius:11px;background:var(--brand-soft);border-left:3px solid var(--brand);font-size:14.5px}
+  .exp h4{margin:0 0 5px;font-size:12.5px;letter-spacing:.03em;color:var(--brand-deep)}
+  .exp p{margin:0}
+  .exp .ref{display:block;margin-top:7px;font-size:12.5px;color:var(--muted)}
+
+  .nav{display:flex;gap:8px;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+  .btn{
+    border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 16px;border-radius:10px;
+    font:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:.13s;
+  }
+  .btn:hover:not(:disabled){border-color:var(--brand);color:var(--brand)}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+  .btn.primary:hover:not(:disabled){filter:brightness(1.08);color:#fff}
+  .btn.danger{color:var(--no);border-color:var(--no)}
+  .btn.danger:hover{background:var(--no-soft)}
+
+  /* palette */
+  details.pal{padding:0;margin-bottom:14px;overflow:hidden}
+  details.pal summary{padding:13px 16px;cursor:pointer;font-size:14px;font-weight:600;list-style:none;display:flex;align-items:center;gap:8px}
+  details.pal summary::-webkit-details-marker{display:none}
+  details.pal summary::before{content:"▸";color:var(--muted);transition:.15s}
+  details.pal[open] summary::before{transform:rotate(90deg)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:6px;padding:0 16px 16px}
+  .cell{
+    aspect-ratio:1;border:1px solid var(--line);background:transparent;border-radius:8px;
+    font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;
+    font-variant-numeric:tabular-nums;transition:.1s;
+  }
+  .cell:hover{border-color:var(--brand);color:var(--brand)}
+  .cell.o{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+  .cell.x{background:var(--no-soft);border-color:var(--no);color:var(--no)}
+  .cell.cur{outline:2px solid var(--brand);outline-offset:1px}
+
+  /* result */
+  .result{padding:26px 22px;text-align:center}
+  .score{font-size:46px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:6px 0}
+  .score small{font-size:20px;color:var(--muted);font-weight:600}
+  .breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:20px 0 6px;text-align:left}
+  .bd{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .bd .k{font-size:12px;color:var(--muted)}
+  .bd .v{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+  .empty{padding:40px 20px;text-align:center;color:var(--muted);font-size:15px}
+  footer{margin-top:26px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.8}
+  @media (max-width:520px){
+    h1{font-size:21px} .qtext{font-size:16.5px} .opt{font-size:14.5px;padding:11px 12px}
+    .ctl-label{min-width:100%;margin-bottom:-3px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">CHAPTER 11 · 딥러닝 이미지 분류</div>
+    <h1>11주차 &middot; 딥러닝 이미지 분류 — 100문제</h1>
+    <p class="sub">강의자료 11.1~11.7절 전 범위 · 4지선다 · 난이도 3단계</p>
+  </header>
+
+  <section class="panel controls">
+    <div class="ctl-row">
+      <span class="ctl-label">단원</span>
+      <div id="secChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    </div>
+    <div class="ctl-row">
+      <span class="ctl-label">난이도</span>
+      <div id="diffChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    </div>
+    <div class="ctl-row">
+      <span class="ctl-label">설정</span>
+      <button class="chip ghost" id="shuffleQ" aria-pressed="false">문제 순서 섞기</button>
+      <button class="chip ghost" id="shuffleO" aria-pressed="false">보기 순서 섞기</button>
+      <span class="spacer"></span>
+      <button class="chip" id="reviewBtn">오답 다시 풀기 <b id="wrongCount">0</b></button>
+      <button class="chip" id="resetBtn">처음부터</button>
+    </div>
+  </section>
+
+  <section class="panel prog">
+    <div class="prog-head">
+      <span class="stat">진도 <b><span id="doneN">0</span> / <span id="totalN">0</span></b></span>
+      <span class="stat ok">정답 <b id="okN">0</b></span>
+      <span class="stat no">오답 <b id="noN">0</b></span>
+      <span class="spacer"></span>
+      <span class="stat">정답률 <b id="rate">—</b></span>
+    </div>
+    <div class="bar"><i id="barFill"></i></div>
+  </section>
+
+  <details class="panel pal">
+    <summary>문제 번호로 이동 <span style="color:var(--muted);font-weight:400">(초록 = 정답, 빨강 = 오답)</span></summary>
+    <div class="grid" id="palette"></div>
+  </details>
+
+  <main id="stage"></main>
+
+  <footer>
+    11주차 강의자료(딥러닝 이미지 분류) 기반 자율 학습용 문제 세트<br>
+    풀이 기록은 이 브라우저에만 저장되며, '처음부터'를 누르면 초기화됩니다.
+  </footer>
+</div>
+
+<script>
+const QUESTIONS = [{"id": 1, "sec": "11.1", "diff": "기초", "q": "강의자료가 설명한 '딥러닝 모델 예측 과정'을 가장 정확하게 기술한 것은?", "opts": ["해당 영상을 딥러닝 모델에 입력하면 그 영상에 대한 정답이 모델에서 예측되어 나오는 과정", "정답 레이블을 입력해 원본 영상을 역으로 복원해 내는 과정", "여러 모델의 가중치를 평균 내어 하나의 모델로 합치는 과정", "영상의 해상도를 높여 화질을 개선하는 과정"], "a": 0, "exp": "강의자료는 예측 과정을 '해당 영상을 딥러닝 모델에 입력하면 해당 영상에 대한 정답이 모델에서 예측이 되어서 나오는 과정'으로 정의한다."}, {"id": 2, "sec": "11.1", "diff": "기초", "q": "강의자료가 정의한 '이미지 분류'의 설명으로 옳은 것은?", "opts": ["카테고리를 정하지 않고 모델이 스스로 새로운 클래스를 생성하는 것", "사전에 정의한 카테고리 내에서 딥러닝 모델 예측이 수행되고 오차를 이용해 모델이 학습하는 것", "이미지 안 물체의 위치를 사각형 좌표로 찾아내는 것", "이미지의 픽셀 하나하나에 클래스를 부여하는 것"], "a": 1, "exp": "이미지 분류는 사전에 정의한 카테고리 내에서 예측을 수행하고 그 오차로 모델을 학습시키는 작업이다. 위치 검출이나 픽셀 단위 분류는 다른 과제이다."}, {"id": 3, "sec": "11.1", "diff": "기초", "q": "이미지 분류에서 학습이 끝난 뒤 수행하는 작업으로 강의자료가 함께 언급한 것은?", "opts": ["학습에 사용한 오차를 다시 카테고리 정의에 반영하는 작업", "이미지의 픽셀값을 원래 범위로 되돌리는 작업", "학습된 모델을 가지고 이미지에 대해서 테스트하는 작업", "모델의 층 수를 자동으로 늘려 주는 작업"], "a": 2, "exp": "강의자료는 이미지 분류를 '예측·학습'과 '학습된 모델로 이미지를 테스트하는 작업'의 두 가지로 함께 설명한다."}, {"id": 4, "sec": "11.1", "diff": "기초", "q": "강의자료가 이미지 분류의 대표적인 모델로 제시한 것은?", "opts": ["의사결정트리(Decision Tree)", "서포트 벡터 머신(SVM)", "K-평균 군집화(K-means)", "CNN 모델(Convolutional Neural Network)"], "a": 3, "exp": "강의자료는 이미지 분류의 대표 모델로 CNN(Convolutional Neural Network)을 제시한다."}, {"id": 5, "sec": "11.1", "diff": "기초", "q": "CNN이 특징을 찾기 위해 반복적으로 사용한다고 설명된 두 연산은?", "opts": ["Convolution 연산과 Pool 연산", "정규화 연산과 표준화 연산", "행렬 분해 연산과 고윳값 분해 연산", "경사하강 연산과 역전파 연산"], "a": 0, "exp": "강의자료는 CNN이 Convolution과 Pool 연산을 반복적으로 사용하면서 불변하는 특징을 찾는다고 설명한다."}, {"id": 6, "sec": "11.1", "diff": "중급", "q": "강의자료의 서술에 따르면 CNN이 Convolution과 Pool을 반복해서 찾아내는 것은 무엇인가?", "opts": ["각 클래스의 사전 확률", "손실 함수의 전역 최솟값", "이미지의 원본 픽셀값 그대로의 목록", "불변하는 특징(feature)"], "a": 3, "exp": "CNN은 Convolution과 Pool의 반복을 통해 '불변하는 특징'을 찾아내고, 그 특징을 분류에 사용한다."}, {"id": 7, "sec": "11.1", "diff": "중급", "q": "CNN에서 Fully Connected(FC) layer가 담당하는 역할로 옳은 것은?", "opts": ["입력 이미지의 크기를 원본으로 복원한다", "커널의 가중치를 임의로 초기화한다", "앞에서 추출된 특징을 입력데이터로 받아 Classification을 수행한다", "특징 맵의 해상도를 절반으로 줄인다"], "a": 2, "exp": "강의자료의 CNN 개념도에서 FC layer는 Convolution·Pool로 추출한 특징을 입력받아 Classification을 수행하는 부분이다."}, {"id": 8, "sec": "11.1", "diff": "중급", "q": "강의자료의 CNN Concept 그림에서 Convolution과 Pool이 반복되는 구간에 붙은 이름은?", "opts": ["Data augmentation", "Regularization", "Post-processing", "Feature extraction"], "a": 3, "exp": "Concept 그림은 Convolution·Pool 구간을 Feature extraction, FC layer 이후를 Training and Classification으로 구분해 표시한다."}, {"id": 9, "sec": "11.1", "diff": "중급", "q": "강의자료의 CNN Concept 그림에 나타난 처리 순서를 올바르게 나열한 것은?", "opts": ["Image → Convolution → Pool → Convolution → FC layer → Classification", "Image → Pool → Convolution → FC layer → Convolution → Classification", "Image → FC layer → Convolution → Pool → Convolution → Classification", "Image → Convolution → FC layer → Pool → Convolution → Classification"], "a": 0, "exp": "Concept 그림은 Image에서 시작해 Convolution, Pool, Convolution을 거쳐 FC layer로 가고 최종적으로 Classification을 출력하는 순서로 그려져 있다."}, {"id": 10, "sec": "11.1", "diff": "중급", "q": "이미지 분류에서 '오차'가 하는 역할을 강의자료의 설명에 맞게 고르면?", "opts": ["예측 결과를 사람이 보기 좋게 시각화하는 데 쓰인다", "오차를 이용해서 딥러닝 모델이 학습한다", "오차가 클수록 카테고리 수를 자동으로 늘린다", "오차는 테스트 단계에서만 계산된다"], "a": 1, "exp": "강의자료는 '사전에 정의한 카테고리 내에서 예측이 수행되고 오차를 이용해서 딥러닝 모델이 학습하는 것'이라고 명시한다."}, {"id": 11, "sec": "11.1", "diff": "기초", "q": "강의자료의 예측 과정 도식에서 '숫자 영상'과 '모델에서 예측된 결과' 사이에 위치하는 것은?", "opts": ["원-핫 인코더", "딥러닝 모델", "혼동 행렬", "ROC 커브"], "a": 1, "exp": "도식은 '숫자 영상 → 딥러닝 모델 → 모델에서 예측된 결과' 순서로 구성되어 있다."}, {"id": 12, "sec": "11.1", "diff": "심화", "q": "강의자료의 CNN 설명에 비추어 옳지 않은 것은?", "opts": ["Convolution과 Pool 연산을 반복적으로 사용한다", "반복 연산을 통해 불변하는 특징을 찾는다", "추출된 특징을 Fully Connected layer로 보낸다", "Fully Connected layer가 특징 추출을 담당하고 Convolution이 분류를 담당한다"], "a": 3, "exp": "역할이 반대로 서술되어 있다. 특징 추출은 Convolution·Pool 구간이 담당하고, 분류는 FC layer가 담당한다."}, {"id": 13, "sec": "11.1", "diff": "심화", "q": "강의자료의 CNN 개념에서 특징 추출 결과를 FC layer로 보내는 이유를 가장 잘 설명한 것은?", "opts": ["FC layer가 이미지의 채널 수를 3으로 되돌리기 때문", "추출된 특징을 입력데이터로 삼아 Classification을 수행하기 위해", "FC layer가 커널 크기를 자동으로 결정해 주기 때문", "FC layer에서 다시 Convolution을 반복하기 위해"], "a": 1, "exp": "강의자료는 반복 연산으로 찾은 특징을 '입력데이터로 Fully Connected layer에 보내 Classification을 수행함'이라고 설명한다."}, {"id": 14, "sec": "11.2", "diff": "기초", "q": "강의자료가 앞서 설명한 CNN에서 gray scale 이미지는 어떤 형태로 다루어졌는가?", "opts": ["픽셀값의 2차원 행렬", "픽셀값의 1차원 벡터", "픽셀값의 4차원 텐서", "픽셀값의 스칼라 하나"], "a": 0, "exp": "강의자료는 앞서 살펴본 CNN이 gray scale 이미지를 픽셀값의 2차원 행렬로 다룬다고 설명한다."}, {"id": 15, "sec": "11.2", "diff": "기초", "q": "강의자료에서 실제 컬러 이미지가 갖는 3차원 행렬의 구성 요소로 옳은 것은?", "opts": ["시간, 채널, 배치", "너비, 높이, 깊이", "행, 열, 레이블", "커널, 스트라이드, 패딩"], "a": 1, "exp": "실제 이미지는 너비, 높이, 깊이를 가진 3차원 형태의 행렬로 표현된다."}, {"id": 16, "sec": "11.2", "diff": "기초", "q": "RGB 이미지라고 할 때 강의자료가 말한 '깊이'의 값은?", "opts": ["1", "2", "3", "4"], "a": 2, "exp": "RGB 이미지는 채널별로 하나씩, 즉 깊이가 3이다."}, {"id": 17, "sec": "11.2", "diff": "중급", "q": "강의자료에서 컬러 이미지의 각 픽셀값이 나타내는 것은?", "opts": ["픽셀이 속한 클래스의 확률", "해당 위치의 에지 강도", "이미지 전체의 평균 밝기", "원색의 강도"], "a": 3, "exp": "강의자료는 각 픽셀값이 원색의 강도로 표현된다고 설명한다."}, {"id": 18, "sec": "11.2", "diff": "중급", "q": "컬러 이미지에 합성곱 커널을 이동시키며 특징 맵을 계산하려면 커널은 몇 차원이어야 하는가?", "opts": ["3차원", "1차원", "2차원", "4차원"], "a": 0, "exp": "입력이 3차원(너비·높이·깊이)이므로 강의자료는 커널도 3차원이어야 한다고 명시한다."}, {"id": 19, "sec": "11.2", "diff": "중급", "q": "컬러 이미지의 합성곱 연산에서 색상 채널과 필터의 관계로 옳은 것은?", "opts": ["모든 채널이 하나의 필터를 공유한다", "채널 수보다 항상 하나 적은 수의 필터를 가진다", "필터는 채널과 무관하게 무작위로 배정된다", "색상 채널별로 별도의 필터를 가진다"], "a": 3, "exp": "강의자료는 컬러 이미지 합성곱이 '색상 채널별로 별도의 필터를 가짐'이라고 설명한다."}, {"id": 20, "sec": "11.2", "diff": "중급", "q": "컬러 이미지 합성곱에서 각 필터가 채널 이미지 위를 이동하며 수행하는 계산은?", "opts": ["겹쳐진 픽셀 중 최댓값만 골라 남긴다", "겹쳐진 픽셀값의 표준편차를 구한다", "겹쳐진 픽셀끼리 값을 곱하고 곱한 값을 모두 합해 픽셀 값을 계산한다", "겹쳐진 픽셀값을 정렬해 중앙값을 취한다"], "a": 2, "exp": "합성곱은 겹쳐진 픽셀끼리 곱한 뒤 그 곱들을 모두 더해 출력 픽셀 값을 만든다. 최댓값을 취하는 것은 풀링 연산이다."}, {"id": 21, "sec": "11.2", "diff": "중급", "q": "컬러 이미지에서 최종 특징 맵의 픽셀 값은 어떻게 만들어지는가?", "opts": ["빨간색 채널의 계산 결과만 사용한다", "가장 큰 채널 값 하나를 고른다", "채널별 결과 중 가장 작은 값을 취한다", "세 채널의 픽셀 값을 모아 특징 맵의 픽셀 값을 계산한다"], "a": 3, "exp": "강의자료는 각 채널에서 계산한 값을 모아(합쳐) 특징 맵의 픽셀 값을 계산한다고 설명한다."}, {"id": 22, "sec": "11.2", "diff": "심화", "q": "강의자료의 그림처럼 컬러 이미지에 2개의 필터를 사용해 합성곱을 수행하면 생성되는 Feature map은?", "opts": ["필터마다 하나씩, 총 2개의 특징 맵이 생성된다", "필터 수와 무관하게 항상 1개만 생성된다", "입력 채널 수와 같은 3개가 생성된다", "필터 수와 채널 수를 곱한 6개가 생성된다"], "a": 0, "exp": "강의자료의 '2개의 필터를 이용했을 때 Feature map 생성되는 과정' 그림처럼, 필터 하나가 특징 맵 하나를 만들므로 2개의 특징 맵이 생성된다."}, {"id": 23, "sec": "11.2", "diff": "기초", "q": "강의자료가 소개한 CIFAR-10 데이터 셋의 이미지 크기와 총 장수는?", "opts": ["28by28 흑백 이미지 7만 장", "32by32 컬러 이미지 6만 장", "64by64 컬러 이미지 10만 장", "224by224 컬러 이미지 1만 장"], "a": 1, "exp": "CIFAR-10은 32by32 크기의 컬러 이미지 6만 장으로 구성된다."}, {"id": 24, "sec": "11.2", "diff": "기초", "q": "CIFAR-10 데이터 셋의 클래스 구성으로 옳은 것은?", "opts": ["클래스당 1천 장씩 60가지 클래스", "클래스당 100장씩 600가지 클래스", "클래스당 6천 장씩 10가지 클래스", "클래스당 3만 장씩 2가지 클래스"], "a": 2, "exp": "CIFAR-10은 클래스당 6천 장씩 10가지 클래스로 분류된 데이터 셋이다."}, {"id": 25, "sec": "11.2", "diff": "기초", "q": "강의자료가 CIFAR-10을 어떤 분야의 데이터 셋으로 소개했는가?", "opts": ["자연어 번역 문제 데이터 셋", "음성 인식 문제 데이터 셋", "시계열 예측 문제 데이터 셋", "컴퓨터 비전 분야에서 널리 알려진 사물인식 문제 데이터 셋"], "a": 3, "exp": "CIFAR-10은 컴퓨터 비전 분야에서 널리 알려진 사물인식 문제 데이터 셋으로 소개된다."}, {"id": 26, "sec": "11.2", "diff": "심화", "q": "컬러 이미지의 합성곱 연산에 대한 설명으로 옳지 않은 것은?", "opts": ["커널을 입력 이미지 위로 이동시키며 특징 맵을 계산한다", "각 필터는 자신이 담당하는 채널 이미지 위를 이동한다", "입력이 3채널이어도 커널은 2차원이면 충분하다", "세 채널의 계산 결과를 모아 특징 맵의 픽셀 값을 만든다"], "a": 2, "exp": "강의자료는 컬러 이미지에서 특징 맵을 계산하려면 커널도 3차원이어야 한다고 명시하므로, 2차원으로 충분하다는 설명은 틀렸다."}, {"id": 27, "sec": "11.2", "diff": "심화", "q": "흑백 이미지의 합성곱과 비교했을 때 컬러 이미지 합성곱의 가장 큰 차이점은?", "opts": ["곱셈 대신 나눗셈을 사용해 특징 맵을 만든다", "커널이 깊이 방향으로 확장되어 채널별 결과를 합산한다는 점", "특징 맵이 항상 입력보다 커진다는 점", "커널을 이동시키지 않고 한 번만 적용한다는 점"], "a": 1, "exp": "흑백은 2차원 행렬과 2차원 커널이지만, 컬러는 깊이를 가진 3차원 입력과 3차원 커널을 사용해 채널별 계산 결과를 모아 하나의 특징 맵 픽셀을 만든다."}, {"id": 28, "sec": "11.3", "diff": "기초", "q": "강의자료가 제시한 컬러 이미지 분류 단계의 순서로 옳은 것은?", "opts": ["데이터 셋 읽어 들이기 → 이미지 전 처리 → 모델 구조 정의 → 모델 컴파일 → 모델 학습 → val acc가 높은 모델 사용 → 모델 평가", "모델 구조 정의 → 데이터 셋 읽어 들이기 → 이미지 전 처리 → 모델 학습 → 모델 컴파일 → 모델 평가 → val acc가 높은 모델 사용", "이미지 전 처리 → 데이터 셋 읽어 들이기 → 모델 컴파일 → 모델 구조 정의 → 모델 평가 → 모델 학습 → val acc가 높은 모델 사용", "데이터 셋 읽어 들이기 → 모델 학습 → 이미지 전 처리 → 모델 구조 정의 → 모델 컴파일 → 모델 평가 → val acc가 높은 모델 사용"], "a": 0, "exp": "강의자료의 7단계는 1) 데이터 셋 읽어 들이기 2) 이미지 전 처리 3) 모델 구조 정의 4) 모델 컴파일 5) 모델 학습 6) val acc가 높은 모델 사용 7) 모델 평가 순이다."}, {"id": 29, "sec": "11.3", "diff": "기초", "q": "1단계 '데이터 셋 읽어 들이기'에서 데이터를 나누어야 하는 세 가지는?", "opts": ["학습 / 증강 / 압축", "학습 / 검증 / 테스트", "훈련 / 배포 / 폐기", "입력 / 출력 / 잔차"], "a": 1, "exp": "강의자료는 데이터 셋을 읽어 들여 학습/검증/테스트로 분할해야 한다고 설명한다."}, {"id": 30, "sec": "11.3", "diff": "기초", "q": "케라스에서 CIFAR 데이터 셋을 읽어 들이기 위해 제공되는 메서드는?", "opts": ["fit_generator()", "to_categorical()", "load_data()", "evaluate()"], "a": 2, "exp": "케라스 라이브러리는 CIFAR 데이터 셋을 읽어 들이는 load_data() 메서드를 제공한다."}, {"id": 31, "sec": "11.3", "diff": "중급", "q": "강의자료의 1단계 소스코드 `(x_train, y_train), (x_test, y_test) = cifar10.load_data()`에 대한 설명으로 옳은 것은?", "opts": ["학습 데이터만 반환하고 테스트 데이터는 따로 내려받아야 한다", "반환값은 정규화가 끝난 실수형 배열이다", "레이블이 이미 원-핫 인코딩된 상태로 반환된다", "미리 무작위로 섞은 데이터를 학습 데이터와 테스트 데이터로 분할해 반환한다"], "a": 3, "exp": "강의자료 코드 주석은 load_data()가 '미리 무작위로 섞은 데이터를 학습 데이터와 테스트 데이터로 분할한다'고 설명한다. 정규화와 원-핫 인코딩은 이후 전처리 단계에서 수행한다."}, {"id": 32, "sec": "11.3", "diff": "기초", "q": "2단계 '이미지 전 처리'에서 강의자료가 강조한 대표적 작업은?", "opts": ["이미지의 확장자를 통일하기", "이미지의 파일 이름 정렬하기", "이미지의 픽셀값 정규화 하기", "이미지를 흑백으로 변환하기"], "a": 2, "exp": "강의자료는 전 처리 단계에서 데이터 클린징과 함께 '이미지의 픽셀값 정규화 하기'를 대표 작업으로 제시한다."}, {"id": 33, "sec": "11.3", "diff": "중급", "q": "강의자료의 전처리 코드 `x_train = x_train.astype('float32')/255`가 수행하는 일은?", "opts": ["픽셀값을 정수형으로 반올림한다", "픽셀값 구간을 [0, 255]에서 [0, 1]로 바꾸어 정규화한다", "이미지 크기를 255배로 확대한다", "클래스 레이블을 0~255 범위로 재배정한다"], "a": 1, "exp": "코드 주석대로 픽셀값의 구간을 [0, 255]에서 [0, 1]로 바꾸어 정규화하는 작업이다."}, {"id": 34, "sec": "11.3", "diff": "중급", "q": "강의자료에서 픽셀값 정규화를 학습 데이터와 테스트 데이터에 모두 적용한 이유로 가장 타당한 것은?", "opts": ["테스트 데이터의 레이블을 숨기기 위해", "테스트 데이터의 개수를 줄이기 위해", "모델이 입력으로 받는 값의 범위를 동일하게 맞추기 위해", "테스트 정확도를 인위적으로 높이기 위해"], "a": 2, "exp": "강의자료 코드는 x_train과 x_test 모두에 /255 정규화를 적용한다. 학습 때와 같은 스케일의 입력을 주어야 모델이 일관되게 동작한다."}, {"id": 35, "sec": "11.3", "diff": "기초", "q": "레이블에 원-핫 인코딩(one-hot encoding)을 적용하는 이유로 강의자료가 든 것은?", "opts": ["텍스트 레이블을 컴퓨터가 다룰 수 있는 숫자 형태로 변환해야 하기 때문", "레이블의 개수를 줄이기 위해", "이미지 용량을 줄이기 위해", "학습 속도를 255배 빠르게 하기 위해"], "a": 0, "exp": "데이터셋 이미지에는 텍스트 레이블이 부여되어 있으므로, 컴퓨터가 다룰 수 있는 숫자 형태로 바꾸기 위해 원-핫 인코딩을 사용한다."}, {"id": 36, "sec": "11.3", "diff": "중급", "q": "강의자료가 예로 든 CIFAR-10의 레이블 목록에 포함되지 않는 것은?", "opts": ["automobile", "frog", "tiger", "truck"], "a": 2, "exp": "강의자료의 CIFAR-10 레이블은 [airplane, automobile, bird, cat, deer, dog, frog, horse, ship, truck] 10개이며 tiger는 포함되지 않는다."}, {"id": 37, "sec": "11.3", "diff": "중급", "q": "강의자료의 원-핫 인코딩 예시 표에서 'dog' 레이블을 가진 이미지의 인코딩 결과는?", "opts": ["모든 열의 값이 1이 된다", "dog 열만 1이고 나머지 열은 모두 0이 된다", "dog 열만 0이고 나머지 열은 모두 1이 된다", "dog 열에 클래스 번호인 5가 들어간다"], "a": 1, "exp": "원-핫 인코딩은 해당 클래스에 대응하는 열만 1로, 나머지 열은 0으로 표기하는 방식이다."}, {"id": 38, "sec": "11.3", "diff": "중급", "q": "강의자료의 케라스 소스 코드에서 레이블에 원-핫 인코딩을 적용할 때 사용한 함수는?", "opts": ["keras.utils.normalize", "keras.preprocessing.image_dataset_from_directory", "np.argmax", "keras.utils.to_categorical"], "a": 3, "exp": "코드는 `y_train = keras.utils.to_categorical(y_train, num_classes)` 형태로 to_categorical을 사용해 원-핫 인코딩을 적용한다."}, {"id": 39, "sec": "11.3", "diff": "심화", "q": "강의자료의 코드 `num_classes = len(np.unique(y_train))`가 하는 일은?", "opts": ["y_train에 등장하는 서로 다른 레이블의 개수를 세어 클래스 수를 구한다", "y_train의 전체 샘플 수를 센다", "y_train을 오름차순으로 정렬한다", "y_train의 결측값을 제거한다"], "a": 0, "exp": "np.unique로 중복을 제거한 뒤 길이를 세므로, 데이터에 존재하는 클래스의 개수를 얻게 되고 이 값이 to_categorical의 클래스 수로 쓰인다."}, {"id": 40, "sec": "11.3", "diff": "기초", "q": "강의자료가 정의한 '훈련 데이터'는 무엇인가?", "opts": ["모델의 성능을 최종 판단하기 위해 사용되는 데이터", "레이블이 없는 데이터", "학습에서 제외하고 보관만 하는 데이터", "모델을 학습하는 데 사용하는 데이터"], "a": 3, "exp": "훈련 데이터는 모델을 학습하는 데 사용하는 데이터로 정의된다."}, {"id": 41, "sec": "11.3", "diff": "중급", "q": "강의자료가 정의한 '검증 데이터'의 목적으로 옳은 것은?", "opts": ["최종 성능 수치를 논문에 보고하기 위한 데이터", "학습 속도를 높이기 위해 일부만 뽑은 데이터", "훈련 데이터에 치우치지 않도록 하기 위한 별도의 데이터", "레이블 오류를 수정하기 위한 데이터"], "a": 2, "exp": "검증 데이터는 모델이 훈련 데이터에 치우치지 않도록 하기 위해 따로 마련한 별도의 데이터이다."}, {"id": 42, "sec": "11.3", "diff": "기초", "q": "강의자료가 정의한 '테스트 데이터'의 용도는?", "opts": ["가중치를 갱신하는 데 사용한다", "에포크마다 조기 종료 여부를 판단하는 데 사용한다", "데이터 증강의 원본으로 사용한다", "모델의 성능을 최종 판단하기 위해 사용한다"], "a": 3, "exp": "테스트 데이터는 모델의 성능을 최종 판단하기 위해 사용되는 데이터이다."}, {"id": 43, "sec": "11.3", "diff": "심화", "q": "강의자료의 케라스 구현 `(x_train, x_valid) = x_train[5000:], x_train[:5000]`에 대한 설명으로 옳은 것은?", "opts": ["기존 훈련 데이터셋의 앞 5000개를 검증 데이터셋으로, 나머지를 훈련 데이터셋으로 나눈다", "테스트 데이터셋에서 5000개를 떼어 검증에 사용한다", "훈련 데이터를 5000배로 증강한다", "5000번째 이후의 데이터를 모두 버린다"], "a": 0, "exp": "슬라이싱 결과 x_train[:5000]이 검증 데이터셋, x_train[5000:]이 새 훈련 데이터셋이 되며 y에도 동일한 분할을 적용한다."}, {"id": 44, "sec": "11.4", "diff": "중급", "q": "3단계 '모델 구조 정의하기'에서 강의자료가 권한 접근 방법은?", "opts": ["층 수와 커널 크기를 난수로 정한 뒤 그대로 사용한다", "기존 유명한 신경망 구조를 따라서 만들어 본 후 하나씩 수정해 보면서 영향성을 분석한다", "한 번에 가장 깊은 모델을 만들어 수정 없이 사용한다", "전결합층만으로 구성된 모델부터 만들어야 한다"], "a": 1, "exp": "강의자료는 유명한 신경망 구조를 먼저 따라 만들고, 하나씩 수정하며 그 영향을 분석하는 방식을 권한다."}, {"id": 45, "sec": "11.4", "diff": "기초", "q": "강의자료의 CIFAR-10 실습에서 3단계에 구현해 보기로 한 모델은?", "opts": ["ResNet50의 완전 버전", "AlexNet의 간략 버전", "Transformer 인코더", "DenseNet-264"], "a": 1, "exp": "강의자료는 3단계에서 AlexNet의 간략 버전을 구현해 보고자 한다고 밝히고 있다."}, {"id": 46, "sec": "11.4", "diff": "심화", "q": "강의자료의 모델 구조 코드에서 첫 번째 합성곱층의 설정으로 옳은 것은?", "opts": ["filters=64, kernel_size=3, padding='valid'", "filters=32, kernel_size=5, padding='same'", "filters=16, kernel_size=2, padding='same', input_shape=(32, 32, 3)", "filters=16, kernel_size=7, padding='valid', input_shape=(224, 224, 3)"], "a": 2, "exp": "코드는 `model.add(Conv2D(filters=16, kernel_size=2, padding='same', activation='relu', input_shape=(32, 32, 3)))`로 첫 합성곱층을 정의한다."}, {"id": 47, "sec": "11.4", "diff": "중급", "q": "강의자료의 모델 코드에서 input_shape 인자를 지정한 곳은?", "opts": ["모든 합성곱층", "Flatten층", "출력층인 Dense층", "첫 번째 합성곱층에만"], "a": 3, "exp": "코드 주석대로 입력 모양(input_shape)은 첫 번째 합성곱층에만 지정한다."}, {"id": 48, "sec": "11.4", "diff": "심화", "q": "32×32 입력에 MaxPooling2D(pool_size=2)를 세 번 적용했을 때 강의자료의 model.summary()가 보여 준 마지막 풀링층의 출력 공간 크기는?", "opts": ["16×16", "8×8", "2×2", "4×4"], "a": 3, "exp": "32 → 16 → 8 → 4로 절반씩 줄어들어 max_pooling2d_3의 출력은 (None, 4, 4, 64)가 된다."}, {"id": 49, "sec": "11.4", "diff": "중급", "q": "강의자료의 모델에서 Dropout 층을 추가한 목적은?", "opts": ["과적합을 피하기 위해", "특징 맵의 채널 수를 늘리기 위해", "학습률을 자동으로 조정하기 위해", "입력 이미지 크기를 맞추기 위해"], "a": 0, "exp": "코드 주석은 Dropout을 '과적합을 피하기 위한 드롭아웃층'으로 설명하며, 비율은 각각 30%와 40%로 설정되어 있다."}, {"id": 50, "sec": "11.4", "diff": "기초", "q": "강의자료의 모델 코드에서 Flatten() 층의 역할은?", "opts": ["채널 수를 절반으로 줄인다", "특징 맵을 1차원 특징 벡터로 변환한다", "이미지에 패딩을 추가한다", "가중치를 초기화한다"], "a": 1, "exp": "코드 주석대로 Flatten()은 특징 맵을 1차원 특징 벡터로 변환해 전결합층에 넣을 수 있게 한다."}, {"id": 51, "sec": "11.4", "diff": "중급", "q": "강의자료의 model.summary() 결과에서 첫 번째 전결합층(dense_1)의 노드 수와 활성화 함수는?", "opts": ["10개, softmax", "1024개, relu", "500개, relu", "4096개, relu"], "a": 2, "exp": "코드는 `model.add(Dense(500, activation='relu'))`로 첫 번째 전결합층을 500노드, relu로 정의한다."}, {"id": 52, "sec": "11.4", "diff": "기초", "q": "강의자료 모델의 출력층 설정으로 옳은 것은?", "opts": ["노드 10개, softmax 활성화 함수", "노드 10개, relu 활성화 함수", "노드 1개, sigmoid 활성화 함수", "노드 500개, softmax 활성화 함수"], "a": 0, "exp": "코드 주석은 '출력층은 노드가 10개인 전결합층이며, 소프트맥스 함수를 활성화 함수로 사용하므로 각 클래스의 확률을 출력한다'고 설명한다."}, {"id": 53, "sec": "11.4", "diff": "중급", "q": "강의자료 모델의 출력층에서 softmax를 사용해 얻는 결과는?", "opts": ["특징 맵의 평균값", "각 클래스의 확률", "입력 이미지의 재구성 결과", "손실 함수의 기울기"], "a": 1, "exp": "소프트맥스 활성화 함수를 사용하면 출력층이 각 클래스에 속할 확률을 출력한다."}, {"id": 54, "sec": "11.4", "diff": "중급", "q": "강의자료의 '이미지 분류 모델 구현' 절에서 강의자료가 짚은 구현 과정의 포인트 두 가지는?", "opts": ["학습률 스케줄 설계와 배치 정규화 위치 결정", "데이터 증강 기법 선택과 옵티마이저 선택", "추출된 특징 맵을 분류할 수 있도록 모양을 변환하는 과정과 클래스 수에 따른 Output 사이즈 설정", "이미지 파일 포맷 변환과 압축률 조정"], "a": 2, "exp": "강의자료는 컨볼루션으로 추출된 특징 맵을 분류 가능한 모양으로 변환하는 과정과, 클래스 수에 맞춰 모델의 Output 사이즈를 설정하는 것을 구현 포인트로 든다."}, {"id": 55, "sec": "11.4", "diff": "중급", "q": "CIFAR-10 대신 클래스가 100개인 데이터셋으로 바꾼다면, 강의자료의 구현 포인트에 따라 반드시 수정해야 하는 부분은?", "opts": ["첫 합성곱층의 kernel_size", "Flatten층의 위치", "MaxPooling2D의 pool_size", "출력층 Dense의 노드 수(Output 사이즈)"], "a": 3, "exp": "강의자료는 '클래스 수에 따른 딥 러닝 모델 Output 사이즈 설정'을 구현 포인트로 명시한다. 클래스가 100개면 출력층 노드도 100개가 되어야 한다."}, {"id": 56, "sec": "11.4", "diff": "심화", "q": "강의자료의 model.summary() 실행 결과에 나타난 파라미터 정보로 옳은 것은?", "opts": ["Total params 528,054, Non-trainable params 0", "Total params 528,054, Non-trainable params 512,500", "Total params 5,010, Trainable params 0", "Total params 138,000,000, Non-trainable params 0"], "a": 0, "exp": "실행 결과는 Total params 528,054, Trainable params 528,054, Non-trainable params 0으로 출력된다."}, {"id": 57, "sec": "11.4", "diff": "기초", "q": "4단계 '모델 컴파일 하기'에서 설정해야 한다고 강의자료가 제시한 세 가지는?", "opts": ["배치 크기, 에포크 수, 셔플 여부", "손실 함수, 최적화 알고리즘, 평가지표", "커널 크기, 스트라이드, 패딩", "훈련·검증·테스트 데이터 비율"], "a": 1, "exp": "강의자료는 학습을 시작하기 전에 손실함수, 최적화 알고리즘, 학습 과정 모니터링에 사용할 평가지표 등을 설정해야 한다고 설명한다."}, {"id": 58, "sec": "11.4", "diff": "기초", "q": "강의자료가 정의한 '손실 함수'는 무엇인가?", "opts": ["가중치를 무작위로 초기화하는 규칙", "클래스별 데이터 개수를 세는 함수", "입력 이미지를 정규화하는 함수", "학습 데이터를 대상으로 신경망의 성능을 파악하는 측정 수단"], "a": 3, "exp": "손실 함수는 학습 데이터를 대상으로 신경망의 성능을 파악하는 측정 수단으로 정의된다."}, {"id": 59, "sec": "11.4", "diff": "중급", "q": "강의자료가 정의한 '최적화 알고리즘'의 역할은?", "opts": ["클래스 불균형을 자동으로 보정한다", "특징 맵의 크기를 줄인다", "손실 값이 최소가 되도록 가중치와 편향을 최적화한다", "학습 데이터를 섞어 준다"], "a": 2, "exp": "최적화 알고리즘은 손실 값이 최소가 되도록 파라미터(가중치와 편향)를 최적화하기 위해 사용하는 알고리즘이다."}, {"id": 60, "sec": "11.4", "diff": "기초", "q": "강의자료에서 metrics=['accuracy']가 의미하는 바는?", "opts": ["손실 함수를 정확도로 대체한다는 뜻", "최적화 알고리즘을 정확도 기반으로 바꾼다는 뜻", "정확도가 100%가 될 때까지 학습한다는 뜻", "학습 및 테스트 과정에서 사용할 평가지표로 정확도를 쓴다는 뜻"], "a": 3, "exp": "평가지표는 학습 및 테스트 과정에서 모니터링할 지표를 뜻하며, metrics=['accuracy']는 정확도를 사용한다는 의미이다."}, {"id": 61, "sec": "11.4", "diff": "중급", "q": "강의자료의 모델 컴파일 소스 코드에서 사용한 손실 함수와 최적화 알고리즘은?", "opts": ["loss='categorical_crossentropy', optimizer='rmsprop'", "loss='mean_squared_error', optimizer='sgd'", "loss='binary_crossentropy', optimizer='adam'", "loss='sparse_categorical_crossentropy', optimizer='adagrad'"], "a": 0, "exp": "코드는 `model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])`이다."}, {"id": 62, "sec": "11.4", "diff": "기초", "q": "5단계 '모델 학습하기'에서 케라스가 학습을 시작하기 위해 호출하는 메서드는?", "opts": ["compile()", "fit()", "predict()", "summary()"], "a": 1, "exp": "강의자료는 케라스에서 .fit()을 호출하여 학습이 진행된다고 설명한다."}, {"id": 63, "sec": "11.4", "diff": "중급", "q": "강의자료의 학습 코드 `model.fit(x_train, y_train, batch_size=32, epochs=100, ...)`에서 지정된 배치 크기와 에포크 수는?", "opts": ["배치 크기 100, 에포크 32", "배치 크기 32, 에포크 100", "배치 크기 5000, 에포크 10", "배치 크기 1, 에포크 528"], "a": 1, "exp": "코드는 batch_size=32, epochs=100으로 학습을 수행하며 validation_data로 검증 데이터를 전달한다."}, {"id": 64, "sec": "11.4", "diff": "중급", "q": "강의자료의 학습 코드에서 ModelCheckpoint의 save_best_only=True 설정이 하는 일은?", "opts": ["에포크마다 모든 가중치를 새 파일로 저장한다", "성능이 개선된 경우에만 가중치를 파일에 저장한다", "학습이 끝난 뒤 마지막 가중치만 저장한다", "가중치를 저장하지 않고 로그만 남긴다"], "a": 1, "exp": "save_best_only=True는 검증 손실이 개선되었을 때만 model.weights.best.hdf5에 가중치를 저장하게 한다. 학습 로그의 'val_loss improved ... saving model'이 그 결과다."}, {"id": 65, "sec": "11.4", "diff": "중급", "q": "강의자료의 학습 로그 해석에서 loss·acc와 val_loss·val_acc의 차이는?", "opts": ["loss·acc는 테스트 데이터, val_loss·val_acc는 학습 데이터에 대한 값이다", "loss·acc는 학습 데이터, val_loss·val_acc는 검증 데이터에 대한 오차와 정확도이다", "둘 다 학습 데이터에 대한 값이며 계산 시점만 다르다", "loss·acc는 배치 단위, val_loss·val_acc는 픽셀 단위 값이다"], "a": 1, "exp": "강의자료는 Loss와 acc를 학습 데이터에 대한 오차와 정확도, Val_loss와 val_acc를 검증 데이터에 대한 오차와 정확도로 설명한다."}, {"id": 66, "sec": "11.4", "diff": "중급", "q": "강의자료가 한 에포크가 끝날 때마다 주시하라고 한 바람직한 변화 방향은?", "opts": ["val_loss는 증가하고 val_acc는 감소해야 한다", "val_loss와 val_acc가 모두 증가해야 한다", "val_loss는 감소하고 val_acc는 증가해야 한다", "val_loss와 val_acc가 모두 일정해야 한다"], "a": 2, "exp": "강의자료는 에포크마다 val_loss가 감소하고 val_acc가 증가해야 한다고 설명한다."}, {"id": 67, "sec": "11.4", "diff": "심화", "q": "강의자료의 6단계와 7단계에 해당하는 코드를 순서대로 바르게 짝지은 것은?", "opts": ["model.evaluate(...) → model.load_weights(...)", "model.compile(...) → model.fit(...)", "model.summary() → model.predict(...)", "model.load_weights('model.weights.best.hdf5') → model.evaluate(x_test, y_test, verbose=0)"], "a": 3, "exp": "6단계에서 load_weights()로 val_acc가 가장 좋았던 가중치를 읽어 들이고, 7단계에서 evaluate()로 테스트 정확도를 계산한다."}, {"id": 68, "sec": "11.4", "diff": "심화", "q": "강의자료의 7단계에서 `print('\\n', 'Test accuracy:', score[1])`처럼 score의 두 번째 값을 출력하는 이유는?", "opts": ["score[0]은 손실 값이고 score[1]이 metrics로 지정한 정확도이기 때문", "score[1]이 학습에 걸린 시간이기 때문", "score[1]이 검증 데이터의 개수이기 때문", "score[1]이 가장 큰 클래스 번호이기 때문"], "a": 0, "exp": "evaluate()는 컴파일 시 지정한 손실과 평가지표를 순서대로 반환하므로, loss가 score[0], accuracy가 score[1]이 된다."}, {"id": 69, "sec": "11.5", "diff": "중급", "q": "강의자료가 제시한 이미지 분류 유명 딥러닝 모델의 발전 순서로 옳은 것은?", "opts": ["ResNet → VGGNet → DenseNet → Inception → EfficientNet → MobileNet → ViT", "VGGNet → ResNet → Inception → DenseNet → MobileNet → EfficientNet → ViT", "VGGNet → Inception → ResNet → MobileNet → DenseNet → ViT → EfficientNet", "ViT → EfficientNet → MobileNet → DenseNet → Inception → ResNet → VGGNet"], "a": 1, "exp": "강의자료는 VGGNet -> ResNet -> Inception -> DenseNet -> MobileNet -> EfficientNet -> ViT 순으로 소개한다."}, {"id": 70, "sec": "11.5", "diff": "기초", "q": "VGGNet에 대한 강의자료의 설명으로 옳은 것은?", "opts": ["2015년 ILSVRC 1위를 한 Microsoft의 모델", "2014년 ILSVRC에서 2위를 한 Oxford 대학교의 모델", "2012년 ILSVRC 1위를 한 Toronto 대학교의 모델", "2016년 발표된 Google의 모델"], "a": 1, "exp": "VGGNet은 2014년 ILSVRC에서 2위를 한, Oxford 대학교에서 만든 모델이다."}, {"id": 71, "sec": "11.5", "diff": "중급", "q": "VGGNet이 컨볼루션 커널 사이즈를 가장 작은 3by3으로 고정한 이유는?", "opts": ["연산량을 0으로 만들기 위해", "패딩을 사용하지 않기 위해", "깊이의 영향만을 최대한 확인하기 위해", "컬러 채널 수와 크기를 맞추기 위해"], "a": 2, "exp": "VGGNet은 깊이의 영향만을 최대한 확인하고자 커널 크기를 3by3으로 고정하고 층 수만 바꾸어 실험했다."}, {"id": 72, "sec": "11.5", "diff": "중급", "q": "VGGNet이 깊이에 따른 성능 변화를 비교하기 위해 제안한 모델 구성의 수는?", "opts": ["6가지", "2가지", "10가지", "16가지"], "a": 0, "exp": "강의자료는 깊이에 따른 성능 변화를 비교하기 위해 6가지 방법의 모델을 제안·실험했다고 설명한다."}, {"id": 73, "sec": "11.5", "diff": "기초", "q": "강의자료에 따르면 VGGNet은 Keras Applications에서 무엇으로 제공되는가?", "opts": ["ResNet50", "DenseNet121", "InceptionV3", "VGG16"], "a": 3, "exp": "강의자료는 Keras Applications가 VGG16으로 VGGNet 구현을 제공한다고 밝히며 tf.keras.applications.VGG16(...) 코드를 함께 보여 준다."}, {"id": 74, "sec": "11.5", "diff": "심화", "q": "강의자료의 VGGNet 구현 코드에서 Flatten() 이후에 이어지는 층 구성으로 옳은 것은?", "opts": ["Dense(units=4096, relu) 두 개 뒤에 Dense(units=2, softmax)", "Dense(units=1000, softmax) 한 개", "Dense(units=500, relu) 뒤에 Dense(units=10, softmax)", "GlobalAveragePooling2D 뒤에 Dense(units=1000, softmax)"], "a": 0, "exp": "코드는 Flatten() 다음에 units=4096인 relu 전결합층 두 개를 두고, 마지막에 units=2인 softmax 출력층을 붙이는 형태로 작성되어 있다."}, {"id": 75, "sec": "11.5", "diff": "기초", "q": "ResNet에 대한 강의자료의 설명으로 옳은 것은?", "opts": ["2014년 ILSVRC에서 2위를 한 모델", "2015년 ILSVRC에서 1위를 한 모델", "ILSVRC에 출전하지 않은 모델", "모바일 전용으로 설계된 모델"], "a": 1, "exp": "ResNet은 2015년 ILSVRC에서 1위를 한 모델이다."}, {"id": 76, "sec": "11.5", "diff": "중급", "q": "강의자료가 밝힌 ResNet의 핵심 내용 중 '연산량 줄이기'와 직접 관련된 것은?", "opts": ["1by1을 결합한 block을 제안한 것", "입력 이미지를 절반으로 줄인 것", "활성화 함수를 제거한 것", "커널 크기를 7by7로 키운 것"], "a": 0, "exp": "ResNet은 연산량을 줄이기 위해 1by1 컨볼루션을 결합한 block(병목 구조)을 제안했다."}, {"id": 77, "sec": "11.5", "diff": "중급", "q": "ResNet이 Skip connect를 제안한 이유로 강의자료가 든 것은?", "opts": ["파라미터 수를 0으로 만들기 위해", "입력 채널을 1개로 줄이기 위해", "기울기 소실과 폭발을 해결하기 위해", "배치 크기를 자동으로 조절하기 위해"], "a": 2, "exp": "강의자료는 기울기 소실과 폭발을 해결하기 위해 Skip connect를 제안했다고 설명한다."}, {"id": 78, "sec": "11.5", "diff": "기초", "q": "강의자료가 정의한 '기울기 소실'은 어떤 현상인가?", "opts": ["학습률이 너무 커져 손실이 발산하는 현상", "특징 맵의 채널 수가 계속 늘어나는 현상", "배치 크기가 커질수록 정확도가 떨어지는 현상", "Layer가 깊어질수록 경사가 사라지는 현상"], "a": 3, "exp": "강의자료는 기울기 소실을 'Layer가 깊어질수록 경사가 사라지는 현상'으로 정의한다."}, {"id": 79, "sec": "11.5", "diff": "심화", "q": "강의자료의 ResNet 코드에서 Identity block의 마지막 부분에 나타나는 연산은?", "opts": ["layers.MaxPooling2D로 크기를 줄인 뒤 Activation을 적용", "layers.concatenate로 채널을 이어 붙인 뒤 Activation을 적용", "layers.Dense로 클래스 수만큼 출력한 뒤 softmax를 적용", "layers.add([x, input_tensor]) 후 Activation('relu')를 적용"], "a": 3, "exp": "Identity block은 변환된 x에 입력 텐서를 그대로 더하는 layers.add([x, input_tensor])를 수행한 뒤 relu를 적용한다. 이것이 Skip connect의 구현이다."}, {"id": 80, "sec": "11.5", "diff": "심화", "q": "강의자료의 ResNet 코드에서 Conv block이 Identity block과 다른 점은?", "opts": ["지름길(shortcut) 경로에도 Conv2D와 BatchNormalization을 적용한다", "활성화 함수로 relu 대신 softmax를 사용한다", "BatchNormalization을 전혀 사용하지 않는다", "입력 텐서를 더하지 않고 곱한다"], "a": 0, "exp": "Conv block은 shortcut = layers.Conv2D(filters3, (1,1), strides=strides)(input_tensor) 후 BatchNormalization을 거쳐 더하는 반면, Identity block은 입력 텐서를 그대로 더한다."}, {"id": 81, "sec": "11.5", "diff": "중급", "q": "강의자료가 설명한 Inception의 핵심 아이디어는?", "opts": ["모든 레이어의 특징맵을 서로 연결한다", "컨볼루션 layer에서 사용하는 커널을 개선하여 연산의 복잡도를 줄이고 파라미터 수를 적게 사용한다", "입력 이미지를 224by224로 고정한다", "모든 층에 드롭아웃을 삽입한다"], "a": 1, "exp": "Inception은 커널을 개선해 연산 복잡도를 줄이고 파라미터 수를 적게 사용함으로써 파라미터와 속도를 함께 개선했다."}, {"id": 82, "sec": "11.5", "diff": "중급", "q": "강의자료에 따르면 Inception module을 통해 얻을 수 있는 것은?", "opts": ["학습 데이터 양의 증가", "입력 해상도의 자동 확대", "채널 수 조절이 가능해지고 파라미터 수가 감소한다", "기울기 폭발의 완전한 제거"], "a": 2, "exp": "강의자료는 Inception module을 통해 채널 수를 조절할 수 있고 파라미터 수가 감소한다고 설명한다."}, {"id": 83, "sec": "11.5", "diff": "심화", "q": "강의자료의 Inception 코드에서 branch1x1, branch5x5, branch3x3dbl, branch_pool을 만든 뒤 수행하는 연산은?", "opts": ["각 브랜치의 평균을 구해 하나의 값으로 만든다", "가장 성능이 좋은 브랜치 하나만 남기고 나머지를 버린다", "브랜치들을 순차적으로 연결해 깊이를 늘린다", "layers.concatenate로 브랜치들을 채널 축으로 이어 붙인다"], "a": 3, "exp": "Inception module은 서로 다른 커널을 적용한 여러 브랜치의 결과를 채널 축(axis=channel_axis)으로 concatenate하여 하나의 출력을 만든다."}, {"id": 84, "sec": "11.6", "diff": "기초", "q": "강의자료가 설명한 DenseNet의 핵심 방법은?", "opts": ["커널을 1by1로만 구성하는 방법", "레이어를 건너뛰어 입력을 더하는 방법", "모든 레이어의 특징맵을 연결하는 방법(Dense block)", "입력 이미지 크기를 층마다 두 배로 키우는 방법"], "a": 2, "exp": "DenseNet은 모든 레이어의 특징맵을 연결하는 Dense block을 핵심으로 한다."}, {"id": 85, "sec": "11.6", "diff": "중급", "q": "DenseNet이 특징맵 수를 적게 사용하는 이유로 강의자료가 든 것은?", "opts": ["특징맵이 많으면 정확도가 반드시 떨어지기 때문", "특징맵을 계속해서 연결하면 채널 수가 많아질 수 있기 때문", "케라스가 특징맵 수를 제한하기 때문", "입력 이미지가 흑백이기 때문"], "a": 1, "exp": "모든 레이어의 특징맵을 이어 붙이면 채널 수가 급격히 늘어날 수 있으므로, DenseNet은 레이어당 특징맵 수를 적게 사용한다."}, {"id": 86, "sec": "11.6", "diff": "심화", "q": "강의자료의 DenseNet 코드에서 dense_block들 사이에 transition_block(x, 0.5, ...)이 배치된 구조가 뜻하는 바는?", "opts": ["dense block마다 클래스 수만큼 출력을 만든다", "dense block을 건너뛰어 입력을 그대로 전달한다", "dense block 사이에 전이층을 두어 채널·해상도를 줄여 준다", "dense block의 가중치를 초기화한다"], "a": 2, "exp": "코드는 conv2~conv5의 dense_block 사이에 transition_block(pool2~pool4)을 두는 형태로, 전이층이 특징맵을 압축(0.5)해 채널 증가를 억제한다."}, {"id": 87, "sec": "11.6", "diff": "기초", "q": "강의자료가 밝힌 MobileNet의 목표는?", "opts": ["ImageNet에서 최고 정확도를 달성하는 것", "레이블 없는 데이터로 학습하는 것", "가장 깊은 신경망을 만드는 것", "모바일 기기에서 서빙 가능한 가벼운 모델을 연구하는 것"], "a": 3, "exp": "MobileNet의 목표는 모바일 기기에서 서빙 가능한 가벼운 모델을 연구하는 것이다."}, {"id": 88, "sec": "11.6", "diff": "중급", "q": "강의자료가 정의한 Depthwise Convolution은?", "opts": ["채널 방향으로 1by1 컨볼루션을 적용하는 연산", "모든 채널에 동일한 하나의 커널을 적용하는 연산", "공간 방향으로 Feature map의 각 채널마다 각기 다른 커널을 사용하는 연산", "특징 맵의 최댓값만 남기는 연산"], "a": 2, "exp": "Depthwise Convolution은 공간 방향으로 Feature map의 각 채널마다 서로 다른 커널을 사용하는 연산이다."}, {"id": 89, "sec": "11.6", "diff": "중급", "q": "강의자료가 정의한 Pointwise Convolution은?", "opts": ["채널 방향으로 1by1 컨볼루션을 수행하는 연산", "공간 방향으로 3by3 컨볼루션을 수행하는 연산", "특징 맵을 1차원으로 펴는 연산", "입력 이미지에 패딩을 추가하는 연산"], "a": 0, "exp": "Pointwise Convolution은 1by1 Convolution으로, 채널 방향으로 1by1 컨볼루션을 수행한다."}, {"id": 90, "sec": "11.6", "diff": "중급", "q": "강의자료에 따르면 Depthwise Separable Convolution은 무엇의 결합인가?", "opts": ["Convolution + Pooling", "Depthwise Convolution + Pointwise Convolution", "Skip connect + Batch Normalization", "Dense block + Transition block"], "a": 1, "exp": "Depthwise Separable Convolution은 Depthwise Convolution과 Pointwise Convolution을 결합한 것이며, MobileNet의 핵심 구성 요소이다."}, {"id": 91, "sec": "11.6", "diff": "기초", "q": "EfficientNet이 조절 대상으로 삼은 세 가지 요소는?", "opts": ["학습률, 배치 크기, 에포크 수", "드롭아웃 비율, 가중치 감쇠, 모멘텀", "손실 함수, 최적화 알고리즘, 평가지표", "모델의 깊이, 너비, 입력 이미지의 크기"], "a": 3, "exp": "EfficientNet은 모델의 깊이(depth), 너비(width), 입력 이미지 크기(resolution) 세 가지를 조절한다."}, {"id": 92, "sec": "11.6", "diff": "심화", "q": "강의자료의 Compound Scaling 수식 depth: d=α^φ, width: w=β^φ, resolution: r=γ^φ에서 각 상수의 결정 방식으로 옳은 것은?", "opts": ["α, β, γ는 Small grid search로 결정되고 φ는 주어진 연산량에 따라 사용자가 결정한다", "α, β, γ와 φ 모두 사용자가 임의로 정한다", "φ는 grid search로 결정되고 α, β, γ는 항상 1로 고정된다", "α, β, γ는 학습 중 역전파로 갱신되는 파라미터이다"], "a": 0, "exp": "강의자료는 Compound Scaling이 'Small grid search로 결정되는 상수(알파, 베타, 감마)와 주어진 연산량에 따라 사용자가 결정하는 상수(파이)'로 구성된다고 설명한다."}, {"id": 93, "sec": "11.7", "diff": "심화", "q": "강의자료의 '정확도 측정 방법'에서 소개한 평가 방법과 그 대상을 짝지은 것으로 옳지 않은 것은?", "opts": ["Confusion matrix - 이전 수업 자료에 기재된 평가 방법", "Top 5 Accuracy - 가장 높은 5개의 정확도", "AUC - ROC 곡선 아래 영역", "Specificity - 질병(False) 있는 사람을 얼마나 잘 찾아내는가"], "a": 3, "exp": "질병(False) 있는 사람을 잘 찾아내는 정도는 Sensitivity이고, Specificity는 정상(True)을 얼마나 잘 찾아내는가에 대한 값이다."}, {"id": 94, "sec": "11.7", "diff": "기초", "q": "강의자료가 정의한 Top 1 Accuracy와 Top 5 Accuracy를 바르게 설명한 것은?", "opts": ["Top 1은 상위 1개 클래스, Top 5는 상위 5개 클래스를 기준으로 한 정확도", "Top 1은 첫 번째 에포크, Top 5는 다섯 번째 에포크의 정확도", "Top 1은 학습 정확도, Top 5는 검증 정확도", "Top 1은 이미지 1장, Top 5는 이미지 5장에 대한 정확도"], "a": 0, "exp": "강의자료는 Top 1 Accuracy를 '가장 높은 1개의 정확도', Top 5 Accuracy를 '가장 높은 5개의 정확도'로 설명한다."}, {"id": 95, "sec": "11.7", "diff": "중급", "q": "강의자료가 정의한 Sensitivity는 무엇을 나타내는 값인가?", "opts": ["정상(True)을 얼마나 잘 찾아내는가", "ROC 곡선의 기울기", "전체 데이터 중 학습에 쓴 비율", "질병(False) 있는 사람을 얼마나 잘 찾아내는가"], "a": 3, "exp": "강의자료는 Sensitivity를 '질병(False) 있는 사람을 얼마나 잘 찾아 내는가에 대한 값'으로 설명한다."}, {"id": 96, "sec": "11.7", "diff": "중급", "q": "강의자료가 정의한 Specificity는 무엇을 나타내는 값인가?", "opts": ["전체 예측 중 맞힌 비율", "오차의 표준편차", "정상(True)을 얼마나 잘 찾아내는가에 대한 값", "클래스 개수에 대한 값"], "a": 2, "exp": "강의자료는 Specificity를 '정상(True)을 얼마나 잘 찾아내는가에 대한 값'으로 설명한다."}, {"id": 97, "sec": "11.7", "diff": "기초", "q": "강의자료가 설명한 AUC의 정의로 옳은 것은?", "opts": ["ROC 곡선의 최댓값", "혼동 행렬의 대각합", "정확도와 재현율의 조화 평균", "ROC 곡선 아래 영역"], "a": 3, "exp": "AUC는 ROC 곡선 아래 영역을 뜻하며, 값이 높다는 것은 클래스를 구별하는 모델의 성능이 좋다는 의미이다."}, {"id": 98, "sec": "11.7", "diff": "중급", "q": "강의자료가 설명한 ROC Curve는 어떤 그래프인가?", "opts": ["모든 임계 값에서 분류 모델의 성능을 보여주는 그래프", "에포크별 손실 값을 보여주는 그래프", "클래스별 데이터 개수를 보여주는 그래프", "가중치 분포를 보여주는 그래프"], "a": 0, "exp": "ROC Curve는 모든 임계 값(threshold)에서 분류 모델의 성능을 보여주는 그래프이다."}, {"id": 99, "sec": "11.7", "diff": "중급", "q": "강의자료에 따르면 ROC 커브가 어느 방향으로 갈수록 좋은 모델인가?", "opts": ["오른쪽 하단", "왼쪽 상단", "오른쪽 상단을 지나 대각선에 가까워질수록", "왼쪽 하단"], "a": 1, "exp": "강의자료는 'ROC 커브에서 왼쪽 상단으로 가면 갈수록 좋은 것'이라고 설명하며, 이는 AUC가 커지는 방향이다."}, {"id": 100, "sec": "11.7", "diff": "심화", "q": "강의자료가 소개한 이미지 분류 오픈 데이터 세트와 ImageNet 기준 최신 모델에 대한 설명으로 옳은 것은?", "opts": ["오픈 데이터 세트로 COCO와 Pascal VOC를 제시했다", "최신 모델 1위로 VGG16을 제시했다", "오픈 데이터 세트로 Cifar 10·Cifar 100·Image Net·MNIST·Fashion MNIST·SVHN·STL-10을 들고, 최신 모델 1위로 CoAtNet-7을 제시했다", "최신 모델 목록에 ViT-G/14는 포함되지 않았다"], "a": 2, "exp": "강의자료의 '이미지 분류 오픈 데이터' 절은 Cifar 10, Cifar 100, Image Net, MNIST, Fashion MNIST, SVHN, STL-10을 오픈 데이터 세트로 들고, '현재 이미지 분류 최신 모델' 절은 CoAtNet-7, ViT-G/14, CoAtNet-6, V-MoE-15B, Meta Pseudo Labels, SwinV2-G 순으로 최신 모델을 제시한다."}];
+
+const SECTIONS = {
+  "11.1": "딥러닝 이미지 분류 개요와 CNN 개념",
+  "11.2": "컬러 이미지의 합성곱 연산과 CIFAR-10",
+  "11.3": "데이터 셋 읽기와 이미지 전처리(1~2단계)",
+  "11.4": "모델 구조 정의·컴파일·학습·평가(3~7단계)",
+  "11.5": "대표 CNN 아키텍처 (1) VGGNet·ResNet·Inception",
+  "11.6": "대표 CNN 아키텍처 (2) DenseNet·MobileNet·EfficientNet",
+  "11.7": "정확도 측정 방법·오픈 데이터·최신 모델"
+};
+const DIFFS = ["기초","중급","심화"];
+const DIFFCLS = {"기초":"d1","중급":"d2","심화":"d3"};
+const KEY = "mlx_week11_quiz_v1";
+
+/* ---------- state ---------- */
+let state = {
+  answers:{},           // id -> chosen original option index
+  secFilter:"ALL",
+  diffFilter:"ALL",
+  shuffleQ:false,
+  shuffleO:false,
+  reviewMode:false,
+  order:[],             // array of question ids in display order
+  optOrder:{},          // id -> array of original indices
+  cursor:0
+};
+
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify({
+    answers:state.answers, shuffleQ:state.shuffleQ, shuffleO:state.shuffleO,
+    secFilter:state.secFilter, diffFilter:state.diffFilter, optOrder:state.optOrder
+  })); }catch(e){}
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY); if(!raw) return;
+    const d = JSON.parse(raw);
+    if(d && typeof d==="object"){
+      state.answers = d.answers||{};
+      state.shuffleQ = !!d.shuffleQ; state.shuffleO = !!d.shuffleO;
+      state.secFilter = d.secFilter||"ALL"; state.diffFilter = d.diffFilter||"ALL";
+      state.optOrder = d.optOrder||{};
+    }
+  }catch(e){}
+}
+
+/* ---------- helpers ---------- */
+function shuffled(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function optOrderFor(q){
+  if(!state.shuffleO) return [0,1,2,3];
+  if(!state.optOrder[q.id]) { state.optOrder[q.id] = shuffled([0,1,2,3]); save(); }
+  return state.optOrder[q.id];
+}
+function isWrong(q){ return q.id in state.answers && state.answers[q.id] !== q.a; }
+function isRight(q){ return state.answers[q.id] === q.a; }
+
+function buildOrder(keepCursor){
+  let pool = QUESTIONS.filter(q =>
+    (state.secFilter==="ALL" || q.sec===state.secFilter) &&
+    (state.diffFilter==="ALL" || q.diff===state.diffFilter)
+  );
+  if(state.reviewMode && state.reviewIds && state.reviewIds.length)
+    pool = state.reviewIds.map(id=>byId[id]);
+  let ids = pool.map(q=>q.id);
+  if(state.shuffleQ) ids = shuffled(ids);
+  state.order = ids;
+  if(!keepCursor) state.cursor = 0;
+  if(state.cursor >= ids.length) state.cursor = Math.max(0, ids.length-1);
+}
+
+const byId = {}; QUESTIONS.forEach(q => byId[q.id]=q);
+
+/* ---------- rendering ---------- */
+const $ = s => document.querySelector(s);
+const stage = $("#stage");
+
+function renderChips(){
+  const sc = $("#secChips"); sc.innerHTML="";
+  const mk = (label,val,cur,handler)=>{
+    const b=document.createElement("button");
+    b.className="chip"; b.textContent=label;
+    b.setAttribute("aria-pressed", String(cur===val));
+    b.onclick=()=>handler(val); return b;
+  };
+  sc.appendChild(mk("전체 "+QUESTIONS.length+"문항","ALL",state.secFilter,setSec));
+  Object.keys(SECTIONS).forEach(k=>{
+    const n = QUESTIONS.filter(q=>q.sec===k).length;
+    sc.appendChild(mk(k+" "+SECTIONS[k]+" ("+n+")",k,state.secFilter,setSec));
+  });
+  const dc = $("#diffChips"); dc.innerHTML="";
+  dc.appendChild(mk("전체","ALL",state.diffFilter,setDiff));
+  DIFFS.forEach(d=>{
+    const n = QUESTIONS.filter(q=>q.diff===d).length;
+    dc.appendChild(mk(d+" ("+n+")",d,state.diffFilter,setDiff));
+  });
+  $("#shuffleQ").setAttribute("aria-pressed", String(state.shuffleQ));
+  $("#shuffleO").setAttribute("aria-pressed", String(state.shuffleO));
+  $("#reviewBtn").setAttribute("aria-pressed", String(state.reviewMode));
+}
+
+function setSec(v){ state.secFilter=v; state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+function setDiff(v){ state.diffFilter=v; state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+
+function renderProgress(){
+  const ids = state.order;
+  const done = ids.filter(id=> id in state.answers).length;
+  const ok = ids.filter(id=> isRight(byId[id])).length;
+  const no = done - ok;
+  $("#doneN").textContent = done;
+  $("#totalN").textContent = ids.length;
+  $("#okN").textContent = ok;
+  $("#noN").textContent = no;
+  $("#rate").textContent = done ? Math.round(ok/done*100)+"%" : "—";
+  $("#barFill").style.width = ids.length ? (done/ids.length*100)+"%" : "0%";
+  $("#wrongCount").textContent = QUESTIONS.filter(isWrong).length;
+}
+
+function renderPalette(){
+  const p = $("#palette"); p.innerHTML="";
+  state.order.forEach((id,i)=>{
+    const q = byId[id];
+    const b=document.createElement("button");
+    b.className="cell" + (id in state.answers ? (isRight(q)?" o":" x") : "") + (i===state.cursor?" cur":"");
+    b.textContent = q.id;
+    b.title = q.sec+" · "+q.diff;
+    b.onclick=()=>{ state.cursor=i; renderAll(); window.scrollTo({top:0,behavior:"smooth"}); };
+    p.appendChild(b);
+  });
+}
+
+function renderQuestion(){
+  stage.innerHTML="";
+  if(!state.order.length){
+    const d=document.createElement("div"); d.className="panel empty";
+    d.textContent = state.reviewMode ? "틀린 문제가 없습니다. 잘하셨어요!" : "조건에 맞는 문제가 없습니다. 필터를 바꿔 보세요.";
+    stage.appendChild(d); return;
+  }
+  const idx = state.cursor;
+  const q = byId[state.order[idx]];
+  const answered = q.id in state.answers;
+  const order = optOrderFor(q);
+
+  const card=document.createElement("section"); card.className="panel qcard";
+
+  const meta=document.createElement("div"); meta.className="qmeta";
+  meta.innerHTML =
+    '<span class="tag num">'+ (idx+1) +' / '+ state.order.length +'</span>' +
+    '<span class="tag sec">'+ q.sec +' '+ SECTIONS[q.sec] +'</span>' +
+    '<span class="tag '+ DIFFCLS[q.diff] +'">'+ q.diff +'</span>' +
+    '<span style="margin-left:auto;font-size:12px;color:var(--muted)">문제 '+ q.id +'번</span>';
+  card.appendChild(meta);
+
+  const h=document.createElement("h2"); h.className="qtext"; h.textContent=q.q; card.appendChild(h);
+
+  const wrap=document.createElement("div"); wrap.className="opts";
+  order.forEach((orig,pos)=>{
+    const b=document.createElement("button"); b.className="opt"; b.type="button";
+    b.innerHTML = '<span class="n">'+(pos+1)+'</span><span class="t"></span>';
+    b.querySelector(".t").textContent = q.opts[orig];
+    if(answered){
+      b.disabled = true;
+      if(orig===q.a){ b.classList.add("correct"); b.insertAdjacentHTML("beforeend",'<span class="mark">정답</span>'); }
+      else if(orig===state.answers[q.id]){ b.classList.add("wrong"); b.insertAdjacentHTML("beforeend",'<span class="mark">내 선택</span>'); }
+    } else {
+      b.onclick=()=>{ state.answers[q.id]=orig; save(); renderAll(); };
+    }
+    wrap.appendChild(b);
+  });
+  card.appendChild(wrap);
+
+  if(answered){
+    const e=document.createElement("div"); e.className="exp";
+    const good = isRight(q);
+    e.innerHTML = '<h4>'+(good?'✓ 정답입니다':'✕ 다시 확인해 보세요')+'</h4><p></p>'+
+                  '<span class="ref">관련 단원 · '+q.sec+' '+SECTIONS[q.sec]+'</span>';
+    e.querySelector("p").textContent = q.exp;
+    if(!good){ e.style.background="var(--no-soft)"; e.style.borderLeftColor="var(--no)"; e.querySelector("h4").style.color="var(--no)"; }
+    card.appendChild(e);
+  }
+
+  const nav=document.createElement("div"); nav.className="nav";
+  const prev=document.createElement("button"); prev.className="btn"; prev.textContent="← 이전";
+  prev.disabled = idx===0; prev.onclick=()=>{ state.cursor--; renderAll(); };
+  const next=document.createElement("button"); next.className="btn primary";
+  next.textContent = idx===state.order.length-1 ? "결과 보기 →" : "다음 →";
+  next.onclick=()=>{
+    if(idx===state.order.length-1){ showResult(); }
+    else { state.cursor++; renderAll(); }
+  };
+  const redo=document.createElement("button"); redo.className="btn"; redo.textContent="이 문제 다시";
+  redo.disabled = !answered;
+  redo.onclick=()=>{ delete state.answers[q.id]; save(); renderAll(); };
+  nav.appendChild(prev); nav.appendChild(redo);
+  const sp=document.createElement("span"); sp.className="spacer"; nav.appendChild(sp);
+  nav.appendChild(next);
+  card.appendChild(nav);
+
+  stage.appendChild(card);
+}
+
+function showResult(){
+  const ids = state.order;
+  const done = ids.filter(id=> id in state.answers).length;
+  const ok = ids.filter(id=> isRight(byId[id])).length;
+  const card=document.createElement("section"); card.className="panel result";
+  const pct = done ? Math.round(ok/done*100) : 0;
+  let msg = pct>=90?"완벽합니다. 1주차 내용을 확실히 이해했어요."
+          : pct>=75?"좋습니다. 틀린 문제만 복습하면 충분해요."
+          : pct>=50?"절반 이상 맞혔습니다. 오답 노트를 한 번 더 돌려 보세요."
+          : "해설을 읽으며 오답부터 차근히 정리해 봅시다.";
+
+  const per = {};
+  Object.keys(SECTIONS).forEach(k=>{
+    const sub = ids.map(i=>byId[i]).filter(q=>q.sec===k && (q.id in state.answers));
+    if(sub.length) per[k] = [sub.filter(isRight).length, sub.length];
+  });
+
+  card.innerHTML =
+    '<div class="eyebrow">결과</div>'+
+    '<div class="score">'+ok+' <small>/ '+done+' 정답</small></div>'+
+    '<div class="stat" style="font-size:15px">정답률 <b>'+pct+'%</b> · '+msg+'</div>'+
+    '<div class="breakdown">'+ Object.keys(per).map(k=>
+       '<div class="bd"><div class="k">'+k+' '+SECTIONS[k]+'</div><div class="v">'+per[k][0]+' / '+per[k][1]+'</div></div>'
+     ).join('') +'</div>';
+
+  const nav=document.createElement("div"); nav.className="nav";
+  const back=document.createElement("button"); back.className="btn"; back.textContent="← 문제로 돌아가기";
+  back.onclick=()=>renderAll();
+  const rev=document.createElement("button"); rev.className="btn primary";
+  const wn = QUESTIONS.filter(isWrong).length;
+  rev.textContent="틀린 문제 "+wn+"개 다시 풀기"; rev.disabled = wn===0;
+  rev.onclick=()=>enterReview();
+  nav.appendChild(back);
+  const sp=document.createElement("span"); sp.className="spacer"; nav.appendChild(sp);
+  nav.appendChild(rev);
+  card.appendChild(nav);
+
+  stage.innerHTML=""; stage.appendChild(card);
+  renderProgress(); renderPalette();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function enterReview(){
+  const wrongIds = QUESTIONS.filter(isWrong).map(q=>q.id);
+  if(!wrongIds.length){
+    state.reviewMode=false; buildOrder(false); renderAll();
+    alert("틀린 문제가 없습니다.");
+    return;
+  }
+  wrongIds.forEach(id=> delete state.answers[id]);
+  state.reviewMode = true;
+  state.reviewIds = wrongIds;
+  state.order = state.shuffleQ ? shuffled(wrongIds) : wrongIds.slice();
+  state.cursor = 0;
+  save(); renderAll(); window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function renderAll(){ renderChips(); renderProgress(); renderPalette(); renderQuestion(); }
+
+/* ---------- events ---------- */
+$("#shuffleQ").onclick=()=>{ state.shuffleQ=!state.shuffleQ; buildOrder(false); save(); renderAll(); };
+$("#shuffleO").onclick=()=>{
+  state.shuffleO=!state.shuffleO;
+  if(!state.shuffleO) state.optOrder={};
+  save(); renderAll();
+};
+$("#reviewBtn").onclick=()=>{
+  if(state.reviewMode){ state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+  else enterReview();
+};
+$("#resetBtn").onclick=()=>{
+  state.answers={}; state.optOrder={}; state.reviewMode=false;
+  buildOrder(false); save(); renderAll(); window.scrollTo({top:0,behavior:"smooth"});
+};
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT") return;
+  if(e.key==="ArrowRight" && state.cursor < state.order.length-1){ state.cursor++; renderAll(); }
+  if(e.key==="ArrowLeft" && state.cursor>0){ state.cursor--; renderAll(); }
+  if(["1","2","3","4"].includes(e.key)){
+    const btns = document.querySelectorAll(".opt:not(:disabled)");
+    const b = btns[Number(e.key)-1]; if(b) b.click();
+  }
+});
+
+/* ---------- init ---------- */
+load();
+buildOrder(false);
+// resume at first unanswered
+const firstUn = state.order.findIndex(id=> !(id in state.answers));
+state.cursor = firstUn === -1 ? 0 : firstUn;
+renderAll();
+</script>
+</body>
+</html>

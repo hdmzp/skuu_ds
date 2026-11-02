@@ -96,6 +96,19 @@ TERMS = {
    'BoW','문서 벡터','임베딩','단어 임베딩','분포 가설','Word2Vec','CBOW','Skip-gram','윈도우','네거티브 샘플링','서브샘플링',
    'FastText','OOV','전이 학습','유추','Doc2Vec','SBERT','정적 임베딩','문맥 임베딩','ELMo','BERT','다의어',
  ],
+ 'ml-w11': [
+   '이미지 분류','예측','카테고리','CNN','Convolution','Pool','불변하는 특징','Fully Connected','Feature extraction','Classification',
+   '컬러 이미지','gray scale','깊이','RGB','3차원','커널','필터','특징 맵','Feature map','CIFAR-10','32by32',
+   'load_data','정규화','원-핫 인코딩','one-hot','to_categorical','np.unique','훈련 데이터','검증 데이터','테스트 데이터','x_valid',
+   'AlexNet','Conv2D','MaxPooling2D','Dropout','Flatten','Dense','softmax','input_shape','528,054','Output 사이즈',
+   '손실 함수','최적화 알고리즘','평가지표','categorical_crossentropy','rmsprop','metrics','fit','batch_size','epochs','ModelCheckpoint','save_best_only',
+   'val_loss','val_acc','load_weights','evaluate','score',
+   'VGGNet','VGG16','ILSVRC','3by3','ResNet','Skip connect','기울기 소실','1by1','Identity block','Conv block','Inception','Inception module','concatenate',
+   'DenseNet','Dense block','transition_block','MobileNet','Depthwise Convolution','Pointwise Convolution','Depthwise Separable Convolution',
+   'EfficientNet','Compound Scaling','grid search','ViT',
+   'Confusion matrix','Top 1 Accuracy','Top 5 Accuracy','Sensitivity','Specificity','AUC','ROC','임계 값',
+   'Cifar 100','Image Net','MNIST','Fashion MNIST','SVHN','STL-10','CoAtNet-7','ViT-G/14','SwinV2-G',
+ ],
  'ml-w10': [
    '다층 퍼셉트론','MLP','합성곱 신경망','CNN','가중치','편향','하이퍼파라미터','오차 함수','활성화 함수','최적화','경사 하강법','순방향','손실 함수',
    '입력층','은닉층','출력층','행렬','0~255','1차원 벡터','이미지 벡터 변환','flattening','Flatten','784','input_shape','Dense','소프트맥스','softmax','클래스 수',
@@ -280,3 +293,5 @@ build('nlp-w10', 'materials/자연어처리/week10-quiz100.html', 'courses/quiz/
       {'title': '10주차 · 토픽 모델링, 감성 분석, 그리고 기계 이해', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week10-quiz100.html'})
 build('ml-w10', 'materials/기계학습특론/week10-quiz100.html', 'courses/quiz/ml-w10.js',
       {'title': '10주차 · 합성곱 신경망(CNN)', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week10-quiz100.html'})
+build('ml-w11', 'materials/기계학습특론/week11-quiz100.html', 'courses/quiz/ml-w11.js',
+      {'title': '11주차 · 딥러닝 이미지 분류', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week11-quiz100.html'})

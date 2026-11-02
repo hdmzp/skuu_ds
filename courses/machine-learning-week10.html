@@ -525,6 +525,7 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   <a href="machine-learning-week08.html">8주차 · 중간고사</a>
   <a href="machine-learning-week09.html">9주차 · 군집화 · 의사결정나무 · 딥러닝</a>
   <span class="cur">10주차 · 합성곱 신경망(CNN)</span>
+  <a href="machine-learning-week11.html">11주차 · 이미지 분류</a>
 </div>
 
 <section class="hero">
@@ -618,6 +619,8 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   </div>
 </div>
 <div class="warn"><b>실습이 말하는 &lsquo;강의자료 PART 1~6&rsquo;은 이번 교안과 다르다</b> &mdash; 실습 노트북과 README는 &ldquo;10주차 강의자료 PART 1~6(47쪽)&rdquo;을 기준으로 단계를 대응시키는데(PART 2 CNN 기본 요소, PART 3 학습 안정화, PART 4 잔차 연결, PART 5 누수 · 불균형 · 캘리브레이션), 폴더에 올라온 교안은 41쪽짜리 <b>&lsquo;합성곱 신경망&rsquo; 원본</b> 하나뿐이다. 개정판 교안이 따로 올라오면 그 기준으로 다시 맞춘다. 실습의 출력 크기 · 파라미터 수 · 수용영역 공식은 <a class="ext" href="#stride">10.6</a>과 <a class="ext" href="#keras">10.7</a>에 미리 풀어 두었다.</div>
+
+<div class="note-box"><b>강의영상 제목과 교안 이름이 다르다</b> &mdash; 10주차 플립러닝 영상 &lsquo;<b>MRI 데이터를 이용한 진단</b>&rsquo;은 이 주의 교안 &lsquo;<b>합성곱 신경망</b>&rsquo;(10주차_딥러닝CNN.pdf)을 그대로 쓴다 &mdash; 예: 영상의 &lsquo;Convolution Neural Network 구조&rsquo; 고양이 그림 슬라이드 = 교안 <b>15p</b> = 이 페이지 <a class="ext" href="#cnn">10.4</a>. 제목의 MRI는 실습 주제(뇌 MRI 종양 분류)에서 왔다.</div>
 </section>
 
 <!-- ===================== 10.1 ===================== -->
@@ -1148,7 +1151,7 @@ model.summary()</pre>
 <!-- ===================== 다음 ===================== -->
 <section class="sec" id="next">
   <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주<small>11주차 · 딥러닝 : 이미지 분류</small></h2></div>
-<div class="note-box"><b>11주차</b> &mdash; 강의계획서상 <b>이미지 분류 모델 구현</b>이다. 이번 주 실습의 6~7절(ResNet-18 직접 구현, ResNet-50 · ConvNeXt-T 전이학습)이 그 예고편이다. 컴퓨터비전 과목의 <a class="ext" href="computer-vision-week11.html">11주차 Classification (1)</a>과 같은 주제를 서로 다른 각도에서 보게 된다 &mdash; 이번 주 10.5의 &lsquo;학습된 필터가 경계 검출기 모양이 된다&rsquo;는 컴퓨터비전 3 · 5 · 6주차의 손으로 설계한 필터 · 특징과 바로 이어진다.</div>
+<div class="note-box"><b>11주차</b> &mdash; 강의계획서상 <b>이미지 분류 모델 구현</b>이다. <a class="ext" href="machine-learning-week11.html">11주차 수업내용(이미지 분류)</a>에 정리했다. 이번 주 실습의 6~7절(ResNet-18 직접 구현, ResNet-50 · ConvNeXt-T 전이학습)이 그 예고편이다. 컴퓨터비전 과목의 <a class="ext" href="computer-vision-week11.html">11주차 Classification (1)</a>과 같은 주제를 서로 다른 각도에서 보게 된다 &mdash; 이번 주 10.5의 &lsquo;학습된 필터가 경계 검출기 모양이 된다&rsquo;는 컴퓨터비전 3 · 5 · 6주차의 손으로 설계한 필터 · 특징과 바로 이어진다.</div>
 </section>
 
 <p class="src">기계학습특론 10주차 강의자료 정리 · 2026학년도 2학기<br>
