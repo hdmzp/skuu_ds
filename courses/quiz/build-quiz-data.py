@@ -96,6 +96,15 @@ TERMS = {
    'BoW','문서 벡터','임베딩','단어 임베딩','분포 가설','Word2Vec','CBOW','Skip-gram','윈도우','네거티브 샘플링','서브샘플링',
    'FastText','OOV','전이 학습','유추','Doc2Vec','SBERT','정적 임베딩','문맥 임베딩','ELMo','BERT','다의어',
  ],
+ 'ml-w10': [
+   '다층 퍼셉트론','MLP','합성곱 신경망','CNN','가중치','편향','하이퍼파라미터','오차 함수','활성화 함수','최적화','경사 하강법','순방향','손실 함수',
+   '입력층','은닉층','출력층','행렬','0~255','1차원 벡터','이미지 벡터 변환','flattening','Flatten','784','input_shape','Dense','소프트맥스','softmax','클래스 수',
+   'Param #','파라미터 수','401,920','262,656','5,130','669,706','공간적 특징','픽셀 간의 관계',
+   '특징 맵','feature map','특징 추출','분류','예측','전결합층','Fully connected','모서리','직선','깊이','발화',
+   '합성곱층','풀링층','확대경','합성곱 필터','커널','kernel','수용 영역','receptive field','무작위','활성화 맵','filters','Conv2D',
+   '커널 크기','스트라이드','stride','패딩','제로 패딩','zero-padding','풀링','최대 풀링','max pooling','다운 샘플링','MaxPooling2D',
+   'batch_size','None','channels','Output-shape','CONV_1','POOL_1','CONV_2','POOL_2','3136',
+ ],
  'ml-w09': [
    '비지도학습','비지도 학습','라벨','특징 벡터','패턴','군집화','군집','유사도','유클리디안','맨하탄','코사인',
    'K-평균','k-평균','계층적 군집화','덴드로그램','DBSCAN','밀도','분리형','초매개변수',
@@ -269,3 +278,5 @@ build('nlp-w09', 'materials/자연어처리/week09-quiz100.html', 'courses/quiz/
       {'title': '9주차 · 질의응답, 기계번역, 그리고 대화 시스템', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week09-quiz100.html'})
 build('nlp-w10', 'materials/자연어처리/week10-quiz100.html', 'courses/quiz/nlp-w10.js',
       {'title': '10주차 · 토픽 모델링, 감성 분석, 그리고 기계 이해', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week10-quiz100.html'})
+build('ml-w10', 'materials/기계학습특론/week10-quiz100.html', 'courses/quiz/ml-w10.js',
+      {'title': '10주차 · 합성곱 신경망(CNN)', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week10-quiz100.html'})
