@@ -600,6 +600,14 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
     <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week11-quiz100.html" download="기계학습특론_11주차_딥러닝_이미지분류_100문제.html">⬇ 다운로드</a>
   </div>
   <div class="doc">
+    <div class="doc-ico"><span>✨</span>Claude</div>
+    <div class="doc-main">
+      <a class="doc-open" href="https://claude.ai/artifact/9sfs26VxArpvwcsvUbupqz" target="_blank" rel="noopener">100문제 Claude 버전 ↗</a>
+      <p>폰 · 태블릿 · PC 어디서 풀어도 진행이 이어진다(Claude 계정 동기화) · 해설 아래 <b>📘 개념 바로가기</b>로 이 페이지의 해당 상자(핵심 · 함정)로 연결 · 북마크 · 단원 접기 · 결과 화면은 원본 문제지와 같다</p>
+    </div>
+    <a class="doc-dl" href="https://claude.ai/artifact/9sfs26VxArpvwcsvUbupqz" target="_blank" rel="noopener">열기 ↗</a>
+  </div>
+  <div class="doc">
     <div class="doc-ico"><span>🐍</span>PY</div>
     <div class="doc-main">
       <a class="doc-open" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week11-keras-tuner.py" download="11주차_KerasTuner_main.py">실습 코드 — Getting started with KerasTuner (main.py)</a>
@@ -631,7 +639,7 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   </div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="pred">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>예측 · 학습 · 테스트 (2 · 3p)</h3>
   <p>학습 목표는 하나다 &mdash; <b>딥러닝을 이용한 이미지 분류를 이해한다.</b></p>
   <div class="tbl-wrap"><table>
@@ -645,7 +653,7 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   <p class="fx-note">&lsquo;사전에 정의한 카테고리&rsquo;가 핵심이다. CIFAR-10으로 학습한 모델은 사과 사진을 넣어도 10개 클래스(비행기 · 자동차 · 새 · …) 중 하나로 답한다. 물체의 <b>위치</b>까지 찾는 검출(14주차), <b>픽셀마다</b> 클래스를 붙이는 분할(12주차)과는 다른 과제다.</p>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="cnn-concept">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>CNN 개념 — 특징 추출과 분류 (4p)</h3>
   <p>이미지 분류의 대표 모델은 <b>CNN</b>이다. <b>Convolution과 Pool 연산을 반복</b>해 <b>불변하는 특징</b>(물체가 조금 옮겨지거나 커져도 그대로인 특징)을 찾고, 그 특징을 입력으로 <b>Fully Connected layer</b>에 보내 Classification을 한다.</p>
   <div class="flow">
@@ -670,7 +678,7 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   </div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="color-conv">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>컬러 이미지는 깊이 3, 커널도 3차원 (5~7p)</h3>
   <ul class="ul">
     <li>10주차 CNN은 흑백(gray scale) 이미지를 <b>픽셀값의 2차원 행렬</b>로 다뤘다</li>
@@ -687,7 +695,7 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   <p class="fx-note">채널마다 특징 맵이 따로 나오는 것이 <b>아니다</b> &mdash; 세 채널 결과를 더해 <b>한 장</b>이 된다(깊이 3 → 1). 필터 수가 출력 깊이를 정한다. 파라미터는 <span class="tex">(k\cdot k\cdot C_{in}+1)\times C_{out}</span>이므로 3×3 필터 32개면 <span class="tex">(3\cdot3\cdot3+1)\times32=896</span>이다(<a class="ext" href="machine-learning-week10.html#color">10주차 보충설명</a>과 같은 식).</p></div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="cifar">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>CIFAR-10 (8p)</h3>
   <p>컴퓨터비전 분야에서 널리 알려진 <b>사물 인식</b> 데이터셋이다. <b>32×32 컬러 이미지 6만 장</b>, <b>10클래스 × 클래스당 6천 장</b> &mdash; airplane, automobile, bird, cat, deer, dog, frog, horse, ship, truck.</p>
   <p class="fx-note">6만 장은 <b>학습 50,000 + 테스트 10,000</b>으로 미리 나뉘어 있다. 11.3에서 학습 50,000장 중 5,000장을 다시 검증용으로 떼어 낸다.</p>
@@ -710,7 +718,7 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   </div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="steps7">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>컬러 이미지 분류 7단계 (9p)</h3>
   <div class="flow">
     <div class="fl"><b>1 · 데이터 셋 읽어 들이기</b><span>학습 / 검증 / 테스트로 분할 &mdash; 이 절</span></div>
@@ -723,7 +731,7 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   </div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="load-norm">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>1단계 · 데이터 읽기, 2단계 · 정규화와 원-핫 (10~13p)</h3>
 <pre class="code">import keras
 from keras.datasets import cifar10
@@ -742,7 +750,7 @@ y_test  = keras.utils.to_categorical(y_test, num_classes)</pre>
   <div class="fix"><b>정정 · 주의</b> &mdash; 13p 코드 첫 줄 <code>from keras.utils import np_utils</code>는 지금의 Keras 3에는 <b>없는 모듈</b>이라 오류가 난다. 실제로 쓰는 것은 아래 줄의 <code>keras.utils.to_categorical</code>뿐이므로 그 줄은 지우면 된다. 또 CIFAR-10의 <code>y_train</code>은 이미 0~9 <b>정수</b>로 들어 있다 &mdash; &lsquo;텍스트 → 숫자&rsquo; 단계는 끝나 있고, 원-핫은 &lsquo;정수 → 길이 10 벡터&rsquo;로 바꾸는 일이다.</div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="split">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>훈련 · 검증 · 테스트 데이터 (14p)</h3>
   <div class="tbl-wrap"><table>
     <thead><tr><th>데이터</th><th>교안의 정의</th><th>CIFAR-10에서</th></tr></thead>
@@ -776,7 +784,7 @@ y_test  = keras.utils.to_categorical(y_test, num_classes)</pre>
   </div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="model">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>3단계 · 모델 구조 정의 (15 · 16p)</h3>
   <p>신경망 구조는 처음부터 새로 짜기보다 <b>유명한 구조를 따라 만든 뒤 하나씩 바꿔 가며 영향을 분석</b>한다. 여기서는 <b>AlexNet의 간략 버전</b>을 만든다.</p>
 <pre class="code">model = Sequential()
@@ -811,7 +819,7 @@ model.summary()</pre>
   <p class="fx-note">10주차와 같은 결론이 다시 나온다 &mdash; 528,054개 중 <b>512,500개(97%)</b>가 Flatten 뒤 Dense(500) 한 층에 있다(<a class="ext" href="machine-learning-week10.html#keras">10.7</a>). 드롭아웃은 학습할 때만 일부 노드를 끄는 층이라 파라미터가 0이다.</p>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="impl-point">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>구현 포인트 두 가지 (36p, 교안 번호 9.3)</h3>
   <ol class="ul">
     <li>합성곱으로 뽑은 <b>특징 맵을 분류할 수 있는 모양으로 바꾸는 과정</b> &mdash; 위 코드의 <code>Flatten()</code>(요즘은 전역 평균 풀링)</li>
@@ -819,7 +827,7 @@ model.summary()</pre>
   </ol>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="compile">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>4단계 · 컴파일 (17p)</h3>
   <div class="tbl-wrap"><table>
     <thead><tr><th>설정</th><th>교안의 정의</th><th>코드</th></tr></thead>
@@ -832,7 +840,7 @@ model.summary()</pre>
   <p class="fx-note">RMSprop은 <a class="ext" href="machine-learning-week06.html">6주차</a>의 모멘텀 SGD처럼 경사하강법을 개선한 것으로, 파라미터마다 최근 기울기 크기의 이동 평균으로 학습률을 나눠 <b>보폭을 자동 조절</b>한다. Adam은 여기에 모멘텀을 더한 것이다(실습 코드는 Adam).</p>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="fit">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>5단계 · 학습과 로그 읽기 (18 · 19p)</h3>
 <pre class="code">from keras.callbacks import ModelCheckpoint
 checkpointer = ModelCheckpoint(filepath='model.weights.best.hdf5', verbose=1,
@@ -848,7 +856,7 @@ hist = model.fit(x_train, y_train, batch_size=32, epochs=100,
   <p class="fx-note">18p 로그를 읽어 보면: 1에포크 val_acc 0.5166 → 7에포크 0.6828로 오르다가, 8에포크는 &lsquo;val_loss did not improve&rsquo;(1.1300)로 저장되지 않았다. 학습 정확도(acc 0.66대)와 검증 정확도가 비슷하게 움직이므로 이 구간에서는 아직 과적합이 아니다.</p>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="eval67">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>6 · 7단계 · 최고 가중치 불러와 평가 (20 · 21p)</h3>
 <pre class="code">model.load_weights('model.weights.best.hdf5')    <span class="cm"># 6단계 · 가장 좋았던 에포크의 가중치</span>
 score = model.evaluate(x_test, y_test, verbose=0)  <span class="cm"># 7단계 · [손실, 정확도]</span>
@@ -881,7 +889,7 @@ print('\n', 'Test accuracy:', score[1])</pre>
   </div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="vgg">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>VGGNet — 3×3만으로 깊게 (23 · 24p)</h3>
   <ul class="ul">
     <li><b>2014년 ILSVRC 2위</b>, Oxford 대학교(Visual Geometry Group)의 모델</li>
@@ -898,7 +906,7 @@ print('\n', 'Test accuracy:', score[1])</pre>
   <p class="fx-note">대신 VGG16 전체 파라미터는 <b>138,357,544개</b>로 매우 크다(이 컴퓨터의 <code>keras.applications.VGG16(weights=None)</code>으로 확인). 그중 약 1억 2천만 개가 마지막 FC 세 층에 있다 &mdash; 이번 주 CIFAR 모델과 같은 이야기다.</p></div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="resnet">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>ResNet — 지름길로 기울기를 살린다 (25~27p)</h3>
   <ul class="ul">
     <li><b>2015년 ILSVRC 1위</b> (Deep Residual Learning for Image Recognition, CVPR 2016)</li>
@@ -922,7 +930,7 @@ print('\n', 'Test accuracy:', score[1])</pre>
   <p class="fx-note">&lsquo;1 +&rsquo; 덕분에 F가 아무것도 배우지 못해도 최소한 입력이 그대로 전달된다. 그래서 152층도 학습된다. 반대로 <span class="tex">F</span> 기울기가 커서 곱이 폭발하는 문제는 BN(배치 정규화)이 함께 막는다. <a class="ext" href="machine-learning-week10.html#lab">10주차 실습의 BasicBlock</a>이 바로 이 구조였다. ResNet50의 파라미터는 <b>25,636,712개</b>로 VGG16의 1/5이다.</p>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="inception">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>Inception — 여러 크기 커널을 나란히 (28 · 29p)</h3>
   <ul class="ul">
     <li>합성곱층의 <b>커널을 개선</b>해 연산 복잡도를 줄이고 <b>파라미터 수를 적게</b> 써서 파라미터와 속도를 함께 개선했다(Rethinking the Inception Architecture, CVPR 2016 = Inception v3)</li>
@@ -950,7 +958,7 @@ print('\n', 'Test accuracy:', score[1])</pre>
   </div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="densenet">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>DenseNet — 앞의 모든 층을 이어 붙인다 (30 · 31p)</h3>
   <ul class="ul">
     <li><b>모든 레이어의 특징 맵을 연결</b>하는 방법(Dense block) &mdash; 각 층이 앞선 <b>모든</b> 층의 출력을 입력으로 받는다</li>
@@ -960,7 +968,7 @@ print('\n', 'Test accuracy:', score[1])</pre>
   <p class="fx-note">ResNet은 <b>더하고</b>(<span class="tex">x+F(x)</span>, 채널 수 그대로), DenseNet은 <b>이어 붙인다</b>(<span class="tex">[x, F(x)]</span>, 채널 수 증가). 특징을 재사용하므로 DenseNet121은 파라미터 <b>8,062,504개</b>로 ResNet50의 1/3이다.</p>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="mobilenet">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>MobileNet — 합성곱을 두 단계로 쪼갠다 (32 · 33p)</h3>
   <ul class="ul">
     <li><b>목표</b>: 모바일 기기에서 서빙할 수 있는 <b>가벼운 모델</b></li>
@@ -984,7 +992,7 @@ print('\n', 'Test accuracy:', score[1])</pre>
   <p class="fx-note">두 값 모두 Keras의 <code>Conv2D</code> · <code>SeparableConv2D</code>로 만들어 확인했다. 11.2의 일반 합성곱은 &lsquo;공간 보기&rsquo;와 &lsquo;채널 섞기&rsquo;를 한 번에 하는데, MobileNet은 이것을 둘로 나눠 곱셈을 크게 줄인다. MobileNet 전체 파라미터는 <b>4,253,864개</b>로 VGG16의 약 3%다.</p>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="efficientnet">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>EfficientNet — 깊이 · 너비 · 해상도를 함께 키운다 (34 · 35p)</h3>
   <p>모델을 키우는 세 방향 &mdash; <b>깊이</b>(층 수) · <b>너비</b>(채널 수) · <b>입력 이미지 크기</b>(해상도) &mdash; 를 효율적으로 함께 조절하는 <b>Compound Scaling</b>을 제안했다.</p>
   <div class="fx"><div class="tex-d">\text{depth}: d=\alpha^{\phi}\qquad\text{width}: w=\beta^{\phi}\qquad\text{resolution}: r=\gamma^{\phi}</div>
@@ -1024,7 +1032,7 @@ print('\n', 'Test accuracy:', score[1])</pre>
   </div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="metrics">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>평가 방법 (37 · 38p)</h3>
   <div class="tbl-wrap"><table>
     <thead><tr><th>지표</th><th>교안</th><th>쉽게</th></tr></thead>
@@ -1055,7 +1063,7 @@ print('\n', 'Test accuracy:', score[1])</pre>
   <div class="fix"><b>정정 · 주의</b> &mdash; 37p는 질병을 &lsquo;(False)&rsquo;, 정상을 &lsquo;(True)&rsquo;로 적었는데, 보통은 <b>찾으려는 쪽(질병)을 양성(Positive)</b>으로 둔다. 민감도 = 참 양성률(TP / 실제 양성), 특이도 = 참 음성률(TN / 실제 음성)이다. 시험(100문제 93 · 95 · 96번)은 교안 문구 그대로 &lsquo;질병을 찾는 비율 = 민감도, 정상을 찾는 비율 = 특이도&rsquo;로 고르면 된다.</div>
 </div>
 
-<div class="pt gyo">
+<div class="pt gyo" id="opendata">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>이미지 분류 오픈 데이터 (39 · 40p, 교안 번호 9.5)</h3>
   <div class="tbl-wrap"><table>
     <thead><tr><th>데이터</th><th>내용</th></tr></thead>
