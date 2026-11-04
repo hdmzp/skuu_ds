@@ -480,6 +480,7 @@ table.acc{min-width:0}
   <a href="#camshift">08 CAMshift</a>
   <a href="#summary">핵심 정리</a>
   <a href="#next">과제 · 다음 주</a>
+  <a href="#pres">학생 논문 발표 4편</a>
 </nav>
 
 <div class="wrap">
@@ -505,6 +506,7 @@ table.acc{min-width:0}
   <p class="legend-t">내용이 어디에서 왔는지 <b>뱃지</b>로 구분했습니다</p>
   <i><span class="bdg bdg-gyo">교안</span><span>교수님 슬라이드에 있는 내용 (영어 교안을 한국어로 옮김)</span></i>
   <i><span class="bdg bdg-plus">보충설명</span><span>교안에 없거나 짧게 지나간 부분을 따로 찾아 정리한 내용</span></i>
+  <i><span class="bdg bdg-pres">학생발표</span><span>학생 논문 발표에서 다룬 내용 — <a class="ext" href="#pres">맨 아래 절</a>에 모아 두었습니다</span></i>
   <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고, <span class="hi">노란 형광펜</span>은 <b>꼭 기억할 문장</b>, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선</span>은 누르면 뜻이 뜹니다. 쪽수는 <b>슬라이드 오른쪽 아래에 찍힌 번호</b>(= PDF 쪽수)다.</p>
 </div>
 
@@ -771,6 +773,7 @@ table.acc{min-width:0}
   </div>
   <p>OpenCV의 <code>cv2.calcOpticalFlowPyrLK</code>가 이 방식이다(<code>maxLevel</code> = 피라미드 단계 수). <a class="ext" href="computer-vision-week08.html#exam">8주차 중간고사 기출</a>의 가우시안 피라미드 · 에일리어싱 문제와 직접 이어진다 &mdash; 줄이기 전에 흐리게 하지 않으면 거친 단계의 기울기가 에일리어싱으로 망가진다.</p>
 </div>
+<div class="tip"><b>학생 발표와 이어진다</b> &mdash; 피라미드 LK의 &lsquo;줄이면 큰 움직임도 작아진다&rsquo;를 8K 영상까지 밀어붙인 것이 <a class="ext" href="#pres-dpflow">DPFlow(정종선)</a>다.</div>
 </section>
 
 <!-- ===================== 04 ===================== -->
@@ -920,6 +923,7 @@ table.acc{min-width:0}
   <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>표류(drift)가 생기는 이유</h3>
   <p>추적기는 매 프레임 &lsquo;지금 찾은 위치의 모습&rsquo;으로 대상 모델을 갱신해야 외형 변화를 따라간다. 그런데 한 번 몇 픽셀 어긋난 위치로 갱신하면, 모델에 <b>배경이 조금 섞이고</b>, 다음 프레임에는 그 배경까지 닮은 곳을 찾는다. 작은 오차가 쌓여 결국 대상 대신 배경을 쫓는다. 반대로 모델을 전혀 갱신하지 않으면 외형이 바뀔 때 놓친다 &mdash; 갱신 속도는 이 둘 사이의 줄타기다. KLT가 &lsquo;M 프레임마다 모서리를 새로 뽑는&rsquo; 선택 단계를 두는 것도 같은 문제에 대한 대응이다.</p>
 </div>
+<div class="tip"><b>학생 발표와 이어진다</b> &mdash; 대상 하나의 상자를 트랜스포머로 &lsquo;생성&rsquo;하는 <a class="ext" href="#pres-seqtrack">SeqTrack(이경민)</a>.</div>
 </section>
 
 <!-- ===================== 06 ===================== -->
@@ -1008,6 +1012,7 @@ table.acc{min-width:0}
   <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>Harris와 Shi-Tomasi의 차이 — 5주차와 이어 보기</h3>
   <p>Harris는 응답 <span class="tex">R=\det M-k(\operatorname{tr}M)^2=\lambda_1\lambda_2-k(\lambda_1+\lambda_2)^2</span>로 고유값을 직접 구하지 않고 모서리를 판정한다. Shi-Tomasi(1994, &lsquo;Good Features to Track&rsquo;)는 <b><span class="tex">\min(\lambda_1,\lambda_2)</span></b>를 그대로 쓴다 &mdash; LK의 2×2 시스템이 잘 풀리는 조건을 곧바로 옮긴 것이라 추적에 더 맞는다. 둘 다 같은 행렬 <span class="tex">M=A^\top A</span>(구조 텐서)를 본다는 점이 이번 주의 핵심 연결이다: <b>검출(5주차)과 추적(10주차)이 같은 행렬 위에 서 있다.</b></p>
 </div>
+<div class="tip"><b>학생 발표와 이어진다</b> &mdash; KLT의 드리프트 · 가림 · 독립 추적 한계를 &lsquo;점끼리 함께 추적&rsquo;으로 푼 <a class="ext" href="#pres-cotracker">CoTracker(정동영)</a>.</div>
 </section>
 
 <!-- ===================== 07 ===================== -->
@@ -1094,6 +1099,7 @@ table.acc{min-width:0}
   <p><span class="tex">w(x)=\sqrt{q_m/p_m}</span>에서 <span class="tex">m</span>은 픽셀 x의 색이 속한 구간이다. 대상 모델에는 많고(<span class="tex">q_m</span> 큼) 현재 후보 창에는 적은(<span class="tex">p_m</span> 작음) 색일수록 가중치가 커진다 &mdash; &ldquo;이 색이 더 있어야 하는 쪽으로 가라&rdquo;는 신호다. 모델과 후보가 같으면 모든 가중치가 1이 되어 창이 더 움직이지 않는다(수렴). 이 가중치는 바타차리야 계수 <span class="tex">\rho=\sum_m\sqrt{p_mq_m}</span>를 1차 근사해 최대화하면 나오는 값이다(Comaniciu 등 2003). OpenCV에서는 <code>cv2.calcBackProject</code>로 역투영 영상을 만들고 <code>cv2.meanShift</code>를 부른다.</p>
   <p>산에 비유하면, 확률 밀도 함수가 지형이고 Mean shift는 <b>지금 서 있는 곳에서 바타차리야 유사도가 가장 가파르게 커지는 방향</b>(= 확률 밀도의 경사 방향)으로 한 걸음씩 오르다가, 더 오를 곳이 없는 <b>봉우리(유사도의 극대점)</b>에 멈추는 과정이다. 그래서 출발점 근처의 봉우리를 찾을 뿐 가장 높은 봉우리를 보장하지는 않는다 &mdash; 대상이 한 프레임에 창 밖으로 멀리 뛰면 놓치는 이유다.</p>
 </div>
+<div class="tip"><b>학생 발표와 이어진다</b> &mdash; 이 절의 원 논문(Comaniciu et al., CVPR 2000)을 <a class="ext" href="#pres-meanshift">김수정 발표</a>에서 식 하나하나 다뤘다.</div>
 </section>
 
 <!-- ===================== 08 ===================== -->
@@ -1187,9 +1193,335 @@ table.acc{min-width:0}
 <section class="sec" id="next">
   <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">과제 · 학생 발표 · 다음 주<small>HW2 마감 11/4 · 11주차 Classification (1)</small></h2></div>
 <div class="warn"><b>HW2 제출 마감 &mdash; 11월 4일(이번 주 수업일)</b>. 범위는 5~7주차(특징 검출 · 기술 · 매칭). 과제 내용은 <a class="ext" href="computer-vision-assignments.html#hw2">과제 · 논문 발표</a> 페이지에 모아 두었다.</div>
-<div class="tip"><b>10주차 학생 발표</b> &mdash; 바탕화면 <code>컴_10주차/학생발표</code> 폴더가 아직 비어 있다. 발표 자료가 올라오면 이 페이지 아래에 절을 추가한다.</div>
+<div class="tip"><b>10주차 학생 발표 4편</b> &mdash; Mean Shift 원 논문 · DPFlow · CoTracker · SeqTrack. 이 페이지 맨 아래 <a class="ext" href="#pres">학생 논문 발표 절</a>에 정리했다.</div>
 <div class="note-box"><b>11주차(11.11) &mdash; Classification (1)</b>. Bag of Words와 분류기(K-최근접 이웃, SVM). 실시간 수업에서 Python Review · HW2 Review와 함께 <b>HW3가 부여</b>된다(11~13주차 범위: BoW-SVM, CNN). 지금까지는 &lsquo;어디에 있나 · 어떻게 움직이나&rsquo;(기하)를 다뤘다면, 다음 주부터는 &lsquo;<b>무엇인가</b>&rsquo;(인식)로 넘어간다 &mdash; 5~7주차의 특징 기술자를 모아 &lsquo;시각 단어&rsquo;로 만드는 것이 BoW다. &rarr; <a class="ext" href="computer-vision-week11.html">11주차 수업내용 열기</a></div>
 </section>
+
+<!-- ===================== 학생 발표 ===================== -->
+<section class="sec" id="pres">
+  <div class="sec-head"><span class="sec-badge">발표</span><h2 class="sec-title">학생 논문 발표 4편 — 추적을 학습으로 다시 풀다<small>10주차 발표 · 상자 · 모든 픽셀 · 색 영역 · 점</small></h2></div>
+
+<div class="oneline">
+  <p><b>네 발표를 한 줄로 꿰면</b></p>
+  <ul class="ul">
+    <li>네 편 모두 오늘 교안의 한 절을 출발점으로 삼는다 &mdash; <b>Mean Shift 원 논문(2000)</b>은 <a class="ext" href="#meanshift">07절</a> 그 자체, <b>DPFlow(2025)</b>는 <a class="ext" href="#lk">03절</a> 피라미드 LK, <b>CoTracker(2024)</b>는 <a class="ext" href="#klt">06절</a> KLT의 점 추적, <b>SeqTrack(2023)</b>은 <a class="ext" href="#track">05절</a> Visual Tracking을 다시 푼다</li>
+    <li>무엇을 따라가는가가 다르다 &mdash; SeqTrack은 <b>상자 하나</b>, DPFlow는 두 프레임 사이 <b>모든 픽셀</b>, Mean Shift는 <b>색 분포 영역</b>, CoTracker는 긴 영상 내내 <b>점 여러 개</b></li>
+    <li>고전 방법의 약점을 어떻게 메우나 &mdash; 큰 움직임(→ 더 깊은 피라미드), 가림 · 드리프트(→ 점끼리 정보를 나누는 어텐션), 복잡한 전용 출력부(→ 좌표를 문장처럼 생성), 계산량(→ 전수 탐색 대신 언덕 오르기)</li>
+  </ul>
+</div>
+
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📕</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-w10-pres-meanshift">① 김수정 — Real-Time Tracking of Non-Rigid Objects using Mean Shift</a>
+      <p>Comaniciu · Ramesh · Meer, <b>CVPR 2000</b> · doi:10.1109/CVPR.2000.854761 &mdash; 원본은 PowerPoint라 PDF로 바꿔 실었다 · <a class="ext" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week10-presentation-kim-meanshift.pptx" download="컴퓨터비전_10주차_학생발표_김수정_MeanShift.pptx">원본 PPTX ⬇</a></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week10-presentation-kim-meanshift.pdf" download="컴퓨터비전_10주차_학생발표_김수정_MeanShift.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📕</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-w10-pres-dpflow">② 정종선 — DPFlow: Adaptive Optical Flow Estimation with a Dual-Pyramid Framework</a>
+      <p>Morimitsu et al., <b>CVPR 2025</b> · 해상도에 맞춰 피라미드 깊이를 바꾸는 광류</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week10-presentation-jung-dpflow.pdf" download="컴퓨터비전_10주차_학생발표_정종선_DPFlow.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📕</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-w10-pres-cotracker">③ 정동영 — CoTracker: It is Better to Track Together</a>
+      <p>Karaev et al.(Meta AI · Oxford VGG), <b>ECCV 2024</b> · <a class="ext" href="https://co-tracker.github.io" target="_blank" rel="noopener">프로젝트 페이지</a></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week10-presentation-jeong-cotracker.pdf" download="컴퓨터비전_10주차_학생발표_정동영_CoTracker.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📕</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=cv-w10-pres-seqtrack">④ 이경민 — SeqTrack: Sequence to Sequence Learning for Visual Object Tracking</a>
+      <p>Chen et al., <b>CVPR 2023</b> · 코드 <a class="ext" href="https://github.com/microsoft/VideoX/tree/master/SeqTrack" target="_blank" rel="noopener">microsoft/VideoX/SeqTrack</a></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/week10-presentation-lee-seqtrack.pdf" download="컴퓨터비전_10주차_학생발표_이경민_SeqTrack.pdf">⬇ 다운로드</a>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>네 발표를 한 표로 — 무엇을 따라가고, 교안의 어디에서 출발했나</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>논문</th><th>따라가는 것</th><th>교안의 출발점</th><th>고전 방법의 약점 → 해법</th></tr></thead>
+    <tbody>
+      <tr><td><b>Mean Shift</b> (2000)</td><td>색 분포로 표현한 <b>영역</b></td><td><a class="ext" href="#meanshift">07절</a> · <a class="ext" href="#camshift">08절</a> 바타차리야</td><td>전 위치를 다 비교하면 느리다 → 유사도가 커지는 쪽으로 <b>몇 걸음만</b></td></tr>
+      <tr><td><b>DPFlow</b> (2025)</td><td>두 프레임 사이 <b>모든 픽셀</b>의 (u, v)</td><td><a class="ext" href="#lk">03절</a> 피라미드 LK · <a class="ext" href="#flow">02절</a> 광류</td><td>고해상도일수록 이동량(px)이 커진다 → <b>해상도만큼 피라미드를 깊게</b></td></tr>
+      <tr><td><b>CoTracker</b> (2024)</td><td>긴 영상 내내 <b>점 여러 개</b>의 궤적 + 가려짐</td><td><a class="ext" href="#klt">06절</a> KLT · <a class="ext" href="#lk">03절</a> LK 창</td><td>점마다 따로 추적하면 가림 · 드리프트에 약하다 → <b>점끼리 어텐션</b>으로 함께</td></tr>
+      <tr><td><b>SeqTrack</b> (2023)</td><td>대상 하나의 <b>바운딩 박스</b></td><td><a class="ext" href="#track">05절</a> Visual Tracking</td><td>분류 · 회귀 · 코너 전용 출력부가 복잡하다 → 좌표를 <b>토큰으로 생성</b></td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">발표 순서와 상관없이 <b>교안 순서(07 → 03 → 06 → 05)</b>로 묶어 읽으면 이해가 쉽다. 아래도 그 순서로 정리했다.</p>
+</div>
+
+<!-- ① Mean Shift -->
+<h3 class="sub-title" id="pres-meanshift">① 김수정 — Mean Shift 추적 원 논문 (CVPR 2000) · 색 분포를 비교하고, 언덕을 오른다</h3>
+<div class="deck">
+  <div class="deck-h">발표 슬라이드 모아보기 <span>김수정 · 2p · 4p · 5p · 6p · 7p · 8p · 10p · 11p · 12p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-kim-02.jpg" alt="발표 2p — 수업 Mean Shift Tracking의 원조"><figcaption><b>2p</b> 수업 Mean Shift Tracking의 원조</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-kim-04.jpg" alt="발표 4p — 핵심 — 색 분포를 비교하고 언덕을 오른다"><figcaption><b>4p</b> 핵심 — 색 분포를 비교하고 언덕을 오른다</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-kim-05.jpg" alt="발표 5p — 커널 가중 색 히스토그램"><figcaption><b>5p</b> 커널 가중 색 히스토그램</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-kim-06.jpg" alt="발표 6p — 바타차리야 계수 · 거리"><figcaption><b>6p</b> 바타차리야 계수 · 거리</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-kim-07.jpg" alt="발표 7p — Mean Shift로 ρ 최대화 — 가중 평균"><figcaption><b>7p</b> Mean Shift로 ρ 최대화 — 가중 평균</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-kim-08.jpg" alt="발표 8p — 매 프레임 알고리즘 · 크기 적응"><figcaption><b>8p</b> 매 프레임 알고리즘 · 크기 적응</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-kim-10.jpg" alt="발표 10p — 전수 탐색 6,561 vs Mean Shift 4번"><figcaption><b>10p</b> 전수 탐색 6,561 vs Mean Shift 4번</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-kim-11.jpg" alt="발표 11p — Subway — 크기 변화와 가림 감지"><figcaption><b>11p</b> Subway — 크기 변화와 가림 감지</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-kim-12.jpg" alt="발표 12p — 정리와 한계"><figcaption><b>12p</b> 정리와 한계</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>문제와 핵심 아이디어 — 수업에서 배운 Mean Shift 추적의 원조</h3>
+  <p>대상은 <b>움직이는 카메라 + 모양이 변하는 물체(축구 선수 · 지하철 승객) + 실시간</b>이다. 어려움은 <b>부분 가림 · 복잡한 배경(비슷한 색) · 크기 변화 · 흐림</b> 네 가지이고, 목표는 600 MHz PC에서 Java로도 <b>30 fps</b>. 추적은 감시 · 인식 시스템의 일부일 뿐이므로 <span class="hi">계산이 가벼워야 한다</span>.</p>
+  <div class="flow">
+    <div class="fl"><b>1 · 타깃 모델 <span class="tex">\hat q</span></b><span>첫 프레임에서 대상 영역의 <b>색 히스토그램</b>을 저장 &mdash; <a class="ext" href="#meanshift">07절</a> H<sub>model</sub></span></div>
+    <div class="fl"><b>2 · 타깃 후보 <span class="tex">\hat p(y)</span></b><span>현재 프레임 위치 y에 창을 놓고 색 히스토그램 계산</span></div>
+    <div class="fl"><b>3 · 새 위치 <span class="tex">\hat y=\arg\max_y\rho(y)</span></b><span><span class="tex">\hat q</span>와 가장 비슷한 <span class="tex">\hat p(y)</span>를 주는 y를 <b>Mean Shift로</b> 찾는다 &mdash; 모든 위치를 비교하지 않는다</span></div>
+  </div>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>세 부품 — 커널 가중 히스토그램 · 바타차리야 · 가중 평균</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>부품</th><th>식</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><b>① 커널 가중 색 히스토그램</b></td><td><span class="tex">\hat q_u=C\sum_i k(\lVert x_i^*\rVert^2)\,\delta[b(x_i^*)-u]</span></td><td>픽셀 색이 들어갈 칸 <span class="tex">b(\cdot)</span>을 세되, <b>Epanechnikov 커널</b>로 중심 픽셀은 크게 · 가장자리는 작게 센다 &mdash; 가장자리는 배경이 섞이거나 가려지기 쉬워 <b>덜 믿을 만하다</b>. 실험은 RGB 각 32칸 = 32×32×32칸</td></tr>
+      <tr><td><b>② 유사도 · 거리</b></td><td><span class="tex">\rho(y)=\sum_u\sqrt{\hat p_u(y)\,\hat q_u},\;\;d=\sqrt{1-\rho}</span></td><td><a class="ext" href="#camshift">08절</a>의 바타차리야. <span class="tex">\rho=1</span> 완전히 같음 · 0 안 겹침. 장점 셋 &mdash; 베이즈 오차와 연결된 이론적 근거, <b>d는 진짜 거리</b>(대칭 · 삼각 부등식), 정규화된 분포끼리라 <b>물체 크기와 거의 무관</b></td></tr>
+      <tr><td><b>③ Mean Shift 이동</b></td><td><span class="tex">w_i=\sqrt{\hat q_u/\hat p_u(\hat y_0)},\;\;\hat y_1=\dfrac{\sum_i x_i w_i}{\sum_i w_i}</span></td><td><span class="tex">\rho</span>를 이전 위치 <span class="tex">\hat y_0</span> 근처에서 테일러 근사하면 &lsquo;가중치 <span class="tex">w_i</span>로 가중한 커널 밀도&rsquo;가 되고, 그 봉우리로 가는 한 걸음이 <b>가중 평균</b>이다(Epanechnikov는 미분 프로파일 g가 상수라 식이 이렇게 단순해진다)</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>매 프레임 반복</b>: ① <span class="tex">\hat y_0</span>에서 <span class="tex">\hat p,\rho</span> 계산 ② <span class="tex">w_i</span> 계산 ③ 가중 평균으로 <span class="tex">\hat y_1</span> ④ <span class="tex">\rho</span>가 줄었으면 <span class="tex">\hat y_1\leftarrow(\hat y_0+\hat y_1)/2</span>(실제로는 0.1% 미만) ⑤ <span class="tex">\lVert\hat y_1-\hat y_0\rVert&lt;\varepsilon</span>(1픽셀)이면 끝. <b>크기 적응</b>은 창 반지름 h를 <b>0.9h · h · 1.1h</b> 세 가지로 각각 추적해 거리 d가 가장 작은 것을 고르고, IIR 필터로 이전 크기와 섞어 급변을 막는다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>숫자로 — 가중치 <span class="tex">w_i</span>가 창을 끌어당기는 방식과 속도 차이</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>픽셀의 색 u</th><th>타깃에서 비율 <span class="tex">\hat q_u</span></th><th>지금 창에서 비율 <span class="tex">\hat p_u</span></th><th><span class="tex">w=\sqrt{\hat q_u/\hat p_u}</span></th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td>선수 유니폼 빨강</td><td>0.30</td><td>0.075</td><td><b>2.0</b></td><td>타깃엔 많은데 창엔 부족 → 이 색 픽셀 쪽으로 <b>끌려간다</b></td></tr>
+      <tr><td>잔디 초록</td><td>0.10</td><td>0.40</td><td><b>0.5</b></td><td>창에 너무 많다(배경) → 영향이 작아진다</td></tr>
+      <tr><td>살색</td><td>0.20</td><td>0.20</td><td>1.0</td><td>이미 맞다 → 중립</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">새 중심은 이 가중치로 픽셀 좌표를 평균한 곳이므로, 빨강 픽셀이 몰린 쪽으로 창이 옮겨 간다 &mdash; <a class="ext" href="#meanshift">07절 보충설명</a>의 <span class="tex">w(x)=\sqrt{q_m/p_m}</span>과 같은 식이다. 속도: 발표 10p의 81×81 영역을 <b>전수 탐색</b>하면 히스토그램 비교 <b>6,561번</b>, Mean Shift는 Football 영상에서 프레임당 평균 <b>4.19번</b>이다 &mdash; 6,561 ÷ 4.19 ≈ <b>1,566배</b> 적다. 10p ρ 표면이 봉우리 하나인 매끈한 언덕이라, 창 전체가 &lsquo;끌려 올라가는 범위(basin of attraction)&rsquo;여서 멀리서 시작해도 수렴했다.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>실험과 한계</h3>
+  <ul class="ul">
+    <li><b>Football</b> 154프레임(352×240), 75번 선수 &mdash; 30 fps, 프레임당 평균 4.19회 반복, 가림 · 방해자 · 블러에도 유지</li>
+    <li><b>Subway1</b> 187프레임 &mdash; 다가오며 커지는 사람에 맞춰 창도 커진다. <b>Subway2</b> 약 2분(≈3,600프레임) &mdash; 프레임별 최소 거리 d가 평소 <b>≈0.3</b>(압축 잡음), 부분 가림 때 <b>≈0.6</b>, 기차에 타 완전히 가려지면 급증 &mdash; <span class="hi">d 값 자체가 가림 감지기</span>가 된다</li>
+    <li>장점: 가볍다 · 가림 · 복잡한 배경 · 블러에 강하다 · <b>움직임 모델 없이</b> 동작</li>
+    <li>한계 → 보완: <b>색만</b> 써서 비슷한 색 배경에 혼동(위치 정보 없음) / 빠른 이동 · 완전 가림 시 놓침 → <b>칼만 필터</b> 같은 예측 결합 / 크기는 ±10%만 시도, 회전 미반영 → <a class="ext" href="#camshift">CAMshift</a></li>
+  </ul>
+  <p class="fx-note">발표 마지막 줄이 이번 주 요약이다 &mdash; <b>KLT = 코너 &lsquo;점&rsquo;을 따라간다 vs Mean Shift = 색 분포 &lsquo;영역&rsquo;을 따라간다.</b></p>
+</div>
+
+<!-- ② DPFlow -->
+<h3 class="sub-title" id="pres-dpflow">② 정종선 — DPFlow (CVPR 2025) · 해상도가 커지면 피라미드도 깊게</h3>
+<div class="deck">
+  <div class="deck-h">발표 슬라이드 모아보기 <span>정종선 · 4p · 5p · 6p · 7p · 8p · 9p · 10p · 11p · 13p · 15p · 17p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-jung-04.jpg" alt="발표 4p — 수업 복습 — 피라미드 LK"><figcaption><b>4p</b> 수업 복습 — 피라미드 LK</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-jung-05.jpg" alt="발표 5p — 해상도 2배 → 이동량 2배"><figcaption><b>5p</b> 해상도 2배 → 이동량 2배</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-jung-06.jpg" alt="발표 6p — 기존 세 처리 방식"><figcaption><b>6p</b> 기존 세 처리 방식</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-jung-07.jpg" alt="발표 7p — 전체 구조 — Encoder · Decoder"><figcaption><b>7p</b> 전체 구조 — Encoder · Decoder</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-jung-08.jpg" alt="발표 8p — 이중 피라미드 — Xf · Xb · Xi"><figcaption><b>8p</b> 이중 피라미드 — Xf · Xb · Xi</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-jung-09.jpg" alt="발표 9p — CGU — Self / Cross Gate"><figcaption><b>9p</b> CGU — Self / Cross Gate</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-jung-10.jpg" alt="발표 10p — Adaptive Depth — 1K 3층 … 8K 6층"><figcaption><b>10p</b> Adaptive Depth — 1K 3층 … 8K 6층</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-jung-11.jpg" alt="발표 11p — Decoder — 20 + 3 = 23"><figcaption><b>11p</b> Decoder — 20 + 3 = 23</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-jung-13.jpg" alt="발표 13p — 해상도가 클수록 격차"><figcaption><b>13p</b> 해상도가 클수록 격차</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-jung-15.jpg" alt="발표 15p — 절제 실험"><figcaption><b>15p</b> 절제 실험</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-jung-17.jpg" alt="발표 17p — 한계와 적용 범위"><figcaption><b>17p</b> 한계와 적용 범위</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>문제 — 같은 움직임도 해상도가 2배면 이동량은 2배</h3>
+  <p>영상은 8K(7680×4320)까지 커졌는데, 광류 모델 대부분은 <b>1K(960×540) 안팎</b>으로 학습 · 평가되어 왔다. 640×360에서 20px 움직인 물체는 1280×720에서 <b>40px</b> 움직인다 &mdash; <span class="hi">실제 움직임은 같아도 픽셀이 촘촘해져, 고해상도일수록 더 먼 곳에서 대응점을 찾아야 한다</span>.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>기존 처리 방식</th><th>한계</th></tr></thead>
+    <tbody>
+      <tr><td><b>축소</b> &mdash; 영상을 줄여 입력</td><td>작은 물체 · 세밀한 움직임 손실</td></tr>
+      <tr><td><b>분할(Tiling)</b> &mdash; 타일로 나눠 따로(FlowFormer++)</td><td>전체 맥락 손실 · 타일 모양의 사각 오류</td></tr>
+      <tr><td><b>원본 그대로</b> &mdash; 고정 구조에 큰 영상(SEA-RAFT)</td><td>학습 크기와 달라 성능 저하</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">해법의 원리는 <a class="ext" href="#lk">03절</a> <b>피라미드 LK</b>(4주차 Image Pyramids)와 같다 &mdash; 영상을 줄이면 큰 움직임도 작아져 &lsquo;작은 움직임&rsquo; 가정이 다시 성립하고, 작은 영상에서 먼저 추정 → 한 단계 확대(좌표 2배 → 이동량도 2배) → 오차 수정. 다른 점은 <b>밝기 대신 신경망이 학습한 특징</b>을 비교한다는 것이다.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>핵심 아이디어 셋 — 이중 피라미드 · CGU · 깊이 조절</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>아이디어</th><th>하는 일</th></tr></thead>
+    <tbody>
+      <tr><td><b>① 이중 피라미드</b> (Dual Pyramid)</td><td>특징 피라미드는 층 사이 정보를 넘기지만 원본이 점점 흐려지고, 이미지 피라미드는 층마다 원본을 직접 보지만 층끼리 단절된다 &mdash; 둘을 합친다. 한 층에 <b>X<sub>f</sub></b>(얕은 층에서 넘어온 순방향) · <b>X<sub>b</sub></b>(깊은 층에서 되돌아온 역방향) · <b>X<sub>i</sub></b>(그 크기로 줄인 원본에서 직접 추출)를 이어 붙여 합성곱 → 그 층의 특징</td></tr>
+      <tr><td><b>② CGU</b> (Cross-Gated Unit)</td><td>게이트로 정보 반영 정도를 조절한다. Self-Gate는 자기 영상 특징으로, <b>Cross-Gate는 상대 영상 특징까지</b> 보고 게이트 값을 정한다. 어텐션 대신 <b>합성곱</b>을 써서 계산이 작고 입력 크기가 바뀌어도 그대로 동작한다</td></tr>
+      <tr><td><b>③ Adaptive Depth</b></td><td>입력이 클수록 피라미드를 깊게 &mdash; <span class="tex">N=3+\operatorname{round}\!\left[\log_2\max\!\left(1,\tfrac{d}{d_{1K}}\right)\right]</span>(d = 영상 대각선). 모든 층이 <b>같은 모듈 · 가중치를 공유</b>하므로 층을 늘려도 재학습이 필요 없다(깊이 조절 자체는 RAPIDFlow에서 왔다)</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>Decoder</b>는 작은 크기부터 반복해 고친다: 영상 1 특징의 한 점에 대해, 영상 2에서 &lsquo;원래 좌표 + 현재 이동량&rsquo; 주변 특징과 유사도를 비교 → CGU를 넣은 GRU가 <b>수정량</b>을 낸다(예: 현재 20 + 수정 3 = <b>23</b>) → 다음 해상도로 확대해 이어서 보정 → 마지막에 원본 해상도로 업샘플링. GRU는 &lsquo;이전 정보와 새 정보를 얼마나 섞을지&rsquo;를 게이트로 정하는 순환 신경망 단위다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>숫자로 — 피라미드 층 수 공식과 &lsquo;꼭대기에서 몇 픽셀인가&rsquo;</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>입력</th><th><span class="tex">d/d_{1K}</span></th><th><span class="tex">\log_2</span></th><th>층 수 N</th><th>1K에서 20px 움직임이 이 해상도에선</th><th>맨 위 층(1/2<sup>N−1</sup>)에서는</th></tr></thead>
+    <tbody>
+      <tr><td>1K 960×540</td><td>1</td><td>0</td><td><b>3</b></td><td>20 px</td><td>20 ÷ 4 = <b>5 px</b></td></tr>
+      <tr><td>2K 1920×1080</td><td>2</td><td>1</td><td><b>4</b></td><td>40 px</td><td>40 ÷ 8 = <b>5 px</b></td></tr>
+      <tr><td>4K 3840×2160</td><td>4</td><td>2</td><td><b>5</b></td><td>80 px</td><td>80 ÷ 16 = <b>5 px</b></td></tr>
+      <tr><td>8K 7680×4320</td><td>8</td><td>3</td><td><b>6</b></td><td>160 px</td><td>160 ÷ 32 = <b>5 px</b></td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note"><span class="hi">해상도가 2배가 될 때마다 층을 하나 더 쌓으니, 가장 거친 층에서 보는 이동량이 해상도와 상관없이 일정하다</span> &mdash; 그래서 1K로만 학습해도 8K에서 통한다. 층을 3개로 고정하면 8K에서 맨 위 층 이동량이 160 ÷ 4 = 40px라 작은 움직임 가정이 깨진다 &mdash; 발표 15p 절제 실험의 8K EPE <b>3층 14.7 vs 6층 4.11</b>이 이 차이다. (층이 하나 늘 때마다 크기를 1/2로 줄인다고 단순화한 계산이다.)</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>실험 결과와 한계</h3>
+  <p><b>Kubric-NK</b> &mdash; 같은 장면을 1K · 2K · 4K · 8K로 렌더링한 2,400샘플(600 × 4). 학습에는 고해상도 데이터를 쓰지 않았다. 지표 <b>EPE</b> = 정답 화살표와 예측 화살표 끝 사이 거리의 평균(px, 낮을수록 좋다).</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>방법 (Kubric-NK EPE)</th><th>1K</th><th>2K</th><th>4K</th><th>8K</th></tr></thead>
+    <tbody>
+      <tr><td>SEA-RAFT (M)</td><td>0.53</td><td>1.53</td><td>11.0</td><td>51.8</td></tr>
+      <tr><td>FlowFormer++</td><td><b>0.46</b></td><td>1.11</td><td>5.39</td><td>24.4</td></tr>
+      <tr><td>RAPIDFlow</td><td>0.81</td><td>1.23</td><td>2.11</td><td>5.96</td></tr>
+      <tr><td><b>DPFlow</b></td><td>0.50</td><td><b>0.85</b></td><td><b>1.77</b></td><td><b>4.11</b></td></tr>
+    </tbody>
+  </table></div>
+  <ul class="ul">
+    <li><span class="hi">해상도가 커질수록 격차가 벌어진다</span> &mdash; 8K에서 RAPIDFlow 대비 −31%(5.96 → 4.11). 1K에서는 FlowFormer++가 더 낫다</li>
+    <li>절제 실험: 이중 피라미드만 넣으면 KITTI가 오히려 나빠지고(4.50 → 4.70), <b>양방향 전달까지</b> 넣어야 Sintel · KITTI 둘 다 좋아진다(2.41 · 4.13)</li>
+    <li>한계: 모든 평가에서 최고는 아니다(Sintel clean) · 합성 장면 평가라 실제 촬영 조건을 다 담지 못한다 · <b>두 프레임 사이</b> 추정이라 긴 영상 추적 · 8K 실시간은 보장하지 않는다 &mdash; 긴 영상 추적은 바로 다음 CoTracker의 주제다</li>
+  </ul>
+</div>
+
+<!-- ③ CoTracker -->
+<h3 class="sub-title" id="pres-cotracker">③ 정동영 — CoTracker (ECCV 2024) · 점은 혼자보다 함께 추적한다</h3>
+<div class="deck">
+  <div class="deck-h">발표 슬라이드 모아보기 <span>정동영 · 2p · 3p · 4p · 5p · 6p · 7p · 9p · 10p · 12p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-jeong-02.jpg" alt="발표 2p — LK · KLT의 세 한계"><figcaption><b>2p</b> LK · KLT의 세 한계</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-jeong-03.jpg" alt="발표 3p — 함께 추적하라"><figcaption><b>3p</b> 함께 추적하라</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-jeong-04.jpg" alt="발표 4p — 전체 구조 한눈에"><figcaption><b>4p</b> 전체 구조 한눈에</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-jeong-05.jpg" alt="발표 5p — 특징 지도 · 주변 7×7 비교"><figcaption><b>5p</b> 특징 지도 · 주변 7×7 비교</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-jeong-06.jpg" alt="발표 6p — 가려진 점 찾기 · proxy token"><figcaption><b>6p</b> 가려진 점 찾기 · proxy token</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-jeong-07.jpg" alt="발표 7p — 창을 겹쳐 이어달리기"><figcaption><b>7p</b> 창을 겹쳐 이어달리기</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-jeong-09.jpg" alt="발표 9p — 결과 — DAVIS AJ"><figcaption><b>9p</b> 결과 — DAVIS AJ</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-jeong-10.jpg" alt="발표 10p — 절제 실험"><figcaption><b>10p</b> 절제 실험</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-jeong-12.jpg" alt="발표 12p — 정리 — 강의에서 CoTracker로"><figcaption><b>12p</b> 정리 — 강의에서 CoTracker로</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>기존 추적의 세 한계와 &lsquo;함께 추적하라&rsquo;</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>한계 (LK · KLT)</th><th>왜</th></tr></thead>
+    <tbody>
+      <tr><td><b>Drift</b></td><td>두 프레임씩 이어 붙이므로 작은 오차가 <b>누적</b>된다 &mdash; RAFT 광류를 누적한 궤적도 정답에서 벗어난다</td></tr>
+      <tr><td><b>Occlusion</b></td><td>가려지면 <a class="ext" href="#flow">밝기 항상성</a> 가정이 깨져 점을 잃는다</td></tr>
+      <tr><td><b>독립 추적</b></td><td>LK는 정해진 <b>5×5 이웃</b>만 같이 움직인다고 보고, 다른 점의 정보는 쓰지 않는다</td></tr>
+    </tbody>
+  </table></div>
+  <p><span class="hi">CoTracker는 &lsquo;같이 움직이는 점&rsquo;이 어느 것인지를 어텐션으로 학습한다</span> &mdash; LK가 미리 정한 5×5 창 대신, 데이터에서 배운 관계로 이웃을 고른다. 따로 추적하는 PIPs는 배경 점이 지나가는 자동차에 끌려가지만, 함께 추적하면 물체 점과 배경 점이 분리된 채 유지된다(3p).</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>구조 — 특징 · 주변 비교 · 점 × 프레임 표 · 두 방향 어텐션</h3>
+  <div class="flow">
+    <div class="fl"><b>1 · 입력</b><span>영상 + 추적할 점</span></div>
+    <div class="fl"><b>2 · 특징 지도</b><span>CNN이 모든 위치에 특징을 붙인다 · <b>4가지 배율</b>(≈ 피라미드)</span></div>
+    <div class="fl"><b>3 · 주변 비교</b><span>점의 생김새 Q를 예상 위치 주변 <b>7×7</b>과 비교해 가장 닮은 칸 = 이동 단서</span></div>
+    <div class="fl"><b>4 · 카드 표(토큰)</b><span>점 N × 프레임 T. 카드 1장 = 한 점이 그 프레임에서 아는 것(위치 · 보이는지 · 생김새 · 이동 단서)</span></div>
+    <div class="fl"><b>5 · 두 방향 회의</b><span>트랜스포머가 <b>가로(시간 방향)</b>와 <b>세로(점 방향)</b>를 번갈아 본다 → 위치 보정, 4~6회 반복</span></div>
+    <div class="fl"><b>6 · 출력</b><span>궤적 + 가려짐 여부</span></div>
+  </div>
+  <p><b>가려진 점 찾기</b>(6p) &mdash; 프레임 3에서 A가 가려져도, <b>시간 방향</b>으로는 A가 앞뒤 프레임에서 오른쪽으로 움직이고 있었고, <b>점 방향</b>으로는 같은 순간 B · C가 오른쪽으로 갔다. 두 단서를 합쳐 A의 위치를 추론한다. 점이 많으면 <b>proxy token 64개</b>(반 대표)만 서로 대화해 추적 가능한 점이 <b>7.4배</b>, 속도는 <b>7배</b>가 된다.</p>
+  <p><b>긴 영상</b>(7p) &mdash; 8프레임 창을 4프레임씩 겹쳐 옮기며 &lsquo;이어달리기&rsquo;한다. 겹친 4프레임은 앞 창의 예측을 물려받고(바통), 새 4프레임만 새로 추정 &mdash; 길이 제한 없이 <b>온라인</b> 처리. 학습도 창 여러 개를 이어서 오차를 배우는 <b>Unrolled training</b>으로 해 AJ가 44.6 → <b>62.2(+17.6)</b>.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>숫자로 — proxy token이 계산을 얼마나 줄이나, 지표 AJ · δ · OA</h3>
+  <p>점끼리 어텐션은 프레임마다 &lsquo;모든 점 쌍&rsquo;을 본다. 점이 N = 1,000개면 <span class="tex">N^2=1{,}000{,}000</span>쌍이다. 64개 대표를 두면 점 ↔ 대표만 보므로 <span class="tex">N\times64=64{,}000</span>쌍 &mdash; <b>약 1/16</b>. 점이 늘수록 차이는 더 커진다(N에 비례 vs N²에 비례). 발표의 &lsquo;7.4배 더 많은 점 · 7배 속도&rsquo;가 이 효과다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>지표</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><b>AJ</b> (Average Jaccard)</td><td>위치 정확도와 가려짐 판단을 함께 보는 <b>종합 점수</b> &mdash; 가장 중요</td></tr>
+      <tr><td><b>δ<sub>avg</sub></b></td><td>예측이 정답 반경 1 · 2 · 4 · 8 · 16 px 안에 든 비율의 평균</td></tr>
+      <tr><td><b>OA</b> (Occlusion Accuracy)</td><td>&lsquo;보인다 / 가려졌다&rsquo; 판단의 정확도</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">학습은 <b>Kubric 합성 영상</b>(CG 6,000개 × 24프레임)으로 한다 &mdash; CG라서 <b>가려진 점의 정답 위치</b>까지 자동으로 만들 수 있다. 실제 영상으로는 가려진 점의 정답을 사람이 달 수 없다.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>결과 · 절제 실험 · 쓰임</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>DAVIS(실제 영상) AJ</th><th>PIPs</th><th>MFT</th><th>OmniMotion</th><th>TAPIR</th><th><b>CoTracker</b></th></tr></thead>
+    <tbody><tr><td>점수</td><td>42.2</td><td>47.3</td><td>52.8</td><td>56.2</td><td><b>62.2</b></td></tr></tbody>
+  </table></div>
+  <ul class="ul">
+    <li>TAPIR 대비 AJ <b>+6.0</b>, 가려진 점 정확도 <b>+10.4</b>(Dynamic Replica). TAPIR · OmniMotion은 영상 전체를 보는 <b>오프라인</b>, CoTracker는 창 단위 <b>온라인</b> &mdash; 더 불리한 조건에서 앞섰다</li>
+    <li>빼면 AJ가 얼마나 떨어지나: <b>Unrolled 학습 −17.6</b> · 고해상도(1/4) 특징 −9.7 · 보조 점(함께 추적) −6.6 &mdash; &ldquo;실전처럼 연습시키기&rdquo;가 가장 큰 기여. 함께 추적하면 가려진 점 정확도 <b>+30.6%</b>, 보조 점은 전역(global)보다 <b>같은 물체 주변(local)</b>이 효과적</li>
+    <li>쓰임(11p): 산업 이상 탐지 &mdash; 치약 튜브를 누르는 영상에서 ① 물체 찾기 → ② 변형돼도 끝까지 따라가기(추적) → ③ 정상인지 미세 누출인지 판단. <span class="hi">물체를 끝까지 따라가야 그 물체에 무슨 일이 생겼는지 알 수 있다</span></li>
+  </ul>
+  <p class="fx-note">발표 12p의 대응표 &mdash; LK 5×5 이웃 가정 → 학습된 track attention / Gaussian Pyramid → 4배율 특징 지도 / KLT drift → time attention + Unrolled 학습 / 가림 시 소실 → 함께 추적으로 위치 추론.</p>
+</div>
+
+<!-- ④ SeqTrack -->
+<h3 class="sub-title" id="pres-seqtrack">④ 이경민 — SeqTrack (CVPR 2023) · 상자 좌표를 문장처럼 생성한다</h3>
+<div class="deck">
+  <div class="deck-h">발표 슬라이드 모아보기 <span>이경민 · 3p · 4p · 5p · 6p · 7p · 8p · 10p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-lee-03.jpg" alt="발표 3p — 기존 추적 방식의 문제"><figcaption><b>3p</b> 기존 추적 방식의 문제</figcaption></figure>
+    <figure class="sld"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-lee-04.jpg" alt="발표 4p — 핵심 — 상자를 시퀀스로 생성"><figcaption><b>4p</b> 핵심 — 상자를 시퀀스로 생성</figcaption></figure>
+    <figure class="sld"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-lee-05.jpg" alt="발표 5p — Encoder · Decoder 구조"><figcaption><b>5p</b> Encoder · Decoder 구조</figcaption></figure>
+    <figure class="sld"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-lee-06.jpg" alt="발표 6p — 학습과 추론"><figcaption><b>6p</b> 학습과 추론</figcaption></figure>
+    <figure class="sld"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-lee-07.jpg" alt="발표 7p — 결과 — Table 2"><figcaption><b>7p</b> 결과 — Table 2</figcaption></figure>
+    <figure class="sld"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-lee-08.jpg" alt="발표 8p — 절제 실험 — Table 4"><figcaption><b>8p</b> 절제 실험 — Table 4</figcaption></figure>
+    <figure class="sld"><img width="1100" height="620" loading="lazy" src="../materials/%EC%BB%B4%ED%93%A8%ED%84%B0%EB%B9%84%EC%A0%84/figs/cv10-pres-lee-10.jpg" alt="발표 10p — 한계"><figcaption><b>10p</b> 한계</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>문제와 아이디어 — 회귀하지 말고 생성하라</h3>
+  <p>수업의 Motion Tracking은 셋으로 나뉜다 &mdash; <b>Optical Flow</b>(픽셀의 움직임) · <b>Feature Tracking</b>(특징점을 여러 프레임에서) · <b>Visual Object Tracking</b>(특정 대상의 위치를 계속 추정). SeqTrack은 세 번째, <a class="ext" href="#track">05절</a>의 문제를 트랜스포머로 다시 정의했다.</p>
+  <p>기존 추적기는 (a) <b>분류 + 회귀</b> 헤드나 (b) <b>코너 예측</b> 헤드처럼 과제 전용 출력부와 손실을 여러 개 둔다. SeqTrack은 <span class="hi">&ldquo;위치를 한 번에 회귀하는 것이 아니라, 좌표를 문장처럼 하나씩 생성한다&rdquo;</span> &mdash; 바운딩 박스를 <b>이산 토큰</b>(어휘 4,000개)으로 바꿔 <b>x → y → w → h</b> 순서로 자기회귀(autoregressive) 생성한다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>부분</th><th>하는 일</th></tr></thead>
+    <tbody>
+      <tr><td><b>Encoder</b></td><td>템플릿(첫 프레임 대상)과 탐색 영상을 패치로 나눠 <b>함께</b> ViT에 넣어 시각 특징 추출</td></tr>
+      <tr><td><b>Decoder</b></td><td>Causal 트랜스포머 &mdash; 인코더 특징을 참고해 앞 토큰만 보고 다음 토큰 생성</td></tr>
+      <tr><td><b>학습</b></td><td>입력 [start, x, y, w, h] → 정답 [x, y, w, h, end], 다음 토큰 예측의 <b>교차 엔트로피</b> 하나</td></tr>
+      <tr><td><b>추론</b></td><td>start만 넣어 x 생성 → [start, x]로 y → … → h</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>숫자로 — 좌표를 토큰 4,000개로 나누면 얼마나 정밀한가</h3>
+  <p>좌표를 탐색 영역 크기로 나눠 0~1로 정규화한 뒤 4,000칸으로 쪼개 칸 번호를 &lsquo;단어&rsquo;로 쓴다. 탐색 영역이 384 px(SeqTrack-L384)라면 한 칸은 <span class="tex">384/4000\approx0.096</span> px이다. 예를 들어 x = 192 px(가운데)는 <span class="tex">192/384=0.5\rightarrow</span> 약 2,000번 토큰.</p>
+  <p class="fx-note"><span class="hi">0.1 px보다 촘촘해 양자화 오차는 사실상 문제가 되지 않는다.</span> 그런데 회귀(실수 출력)를 버리고 굳이 분류(어느 칸인가)로 바꾸면, 출력부가 언어 모델과 똑같은 &lsquo;다음 단어 예측 + 교차 엔트로피&rsquo; 하나로 통일되고 각 좌표의 <b>확률(확신도)</b>까지 얻는다 &mdash; 아래 절제 실험의 &lsquo;Likelihood 기반 템플릿 갱신 +1.6&rsquo;이 이 확률을 쓴 것이다.</p>
+</div>
+
+<div class="pt pres">
+  <h3 class="pt-h"><span class="bdg bdg-pres">학생발표</span>결과 · 절제 실험 · 한계</h3>
+  <ul class="ul">
+    <li>SeqTrack-L384: <b>LaSOT AUC 72.5 · TrackingNet AUC 85.5 · GOT-10k AO 74.8</b> &mdash; 단순한 구조로 SOTA 수준</li>
+    <li>절제(Table 4, Δ = LaSOT · GOT-10k 변화의 평균): 자기회귀 → 양방향 <b>−2.9</b>(LaSOT 69.2 → 64.8, GOT-10k 73.7 → 72.4 &mdash; 자기회귀 생성이 중요) · 템플릿과 탐색 영상을 따로 인코딩 <b>−7.4</b>(함께 인코딩이 가장 중요) · 확률 기반 온라인 템플릿 갱신 <b>+1.6</b>. 좌표 순서를 [w, h, x, y]나 [x<sub>min</sub>, y<sub>min</sub>, x<sub>max</sub>, y<sub>max</sub>]로 바꿔도 −2.0 &mdash; 순서 x → y → w → h가 가장 좋았다</li>
+    <li>기여: 추적을 <b>시퀀스 생성 문제로 재정의</b> · 분류 / 회귀 / 코너 헤드 제거 · 경쟁력 있는 성능</li>
+    <li>한계: 명시적 <b>재검출 모듈이 없다</b> &mdash; 대상이 화면 밖으로 나가거나 가림 · 방해물(distractor)에 약하다 · 시간 모델링이 제한적 → 향후 전체 영상 시퀀스 활용</li>
+  </ul>
+  <p class="fx-note">&lsquo;템플릿과 탐색 영상을 함께 본다&rsquo;는 Mean Shift가 첫 프레임 히스토그램 <span class="tex">\hat q</span>와 현재 창 <span class="tex">\hat p</span>를 비교하던 것의 학습 판이다 &mdash; 비교 수단이 바타차리야 계수에서 트랜스포머 어텐션으로 바뀌었을 뿐이다. 가림 · 화면 이탈에 약한 것도 두 방법의 공통 약점이고, 이것이 CoTracker가 &lsquo;함께 추적 + 시간 방향 어텐션&rsquo;으로 푼 부분이다.</p>
+</div>
+</section>
+
 
 <p class="src">출처 — 컴퓨터비전 10. Motion Tracking (2026-2학기, 65페이지)<br>
 영어 교안을 korean-translation 규칙(하다체 · 번역투 피하기)에 따라 절 단위로 한국어로 옮겨 정리하고 도식 · 예시 슬라이드 <b>53장</b>을 캡처해 실었다. &lsquo;보충설명&rsquo; 뱃지가 붙은 부분(법선 흐름 · 2×2 손풀이 · 피라미드 LK 단계 · HS 갱신식 해석 · LK vs HS · 표류 · Harris vs Shi-Tomasi · Mean shift 가중치 · 바타차리야 숫자 예)은 교안에 없는 내용을 따로 계산하거나 찾아 정리한 것이다. 교안의 오타 네 곳(15p 테일러 부호 · 35p &lsquo;Lagrange operator&rsquo; · 57p 정규 커널 부호 · 63p 첨자)은 노란 상자로 따로 표시했다.</p>
