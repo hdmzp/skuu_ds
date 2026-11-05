@@ -42,7 +42,8 @@
     var byPage = {}, byKey = {};
     figs.forEach(function (f) {
       var p = pageOf(f), cb = f.querySelector('figcaption b');
-      if (p !== null && !byPage[p]) byPage[p] = f;
+      /* .deck.v2(다른 판 교안)의 슬라이드는 쪽수 매칭에서 빼고 data-sref 캡션으로만 찾는다 */
+      if (p !== null && !byPage[p] && !f.closest('.deck.v2')) byPage[p] = f;
       if (cb) {
         var k = cb.textContent.replace(/\s+/g, ' ').trim();
         if (!byKey[k]) byKey[k] = f;
