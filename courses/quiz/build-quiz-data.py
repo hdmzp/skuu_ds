@@ -128,6 +128,15 @@ TERMS = {
    'Convolution','Normalization','Pooling','Activation','Loss function','Adam','Regularization',
    'Epoch','Seed','Learning rate','Batch','과적합','Overfitting','Underfitting','텐서플로','파이토치','코랩','Colab','아나콘다','conda','어노테이션',
  ],
+ 'nlp-w11': [
+   '규칙 기반','통계 기반','신경망 기반','특징 공학','표현 학습','퍼셉트론','XOR','다층 퍼셉트론','MLP','심층 신경망','은닉층','순전파','활성화 함수','ReLU','Sigmoid','Tanh',
+   '손실 함수','MSE','교차 엔트로피','소프트맥스','역전파','연쇄법칙','경사하강법','학습률','SGD','Momentum','AdaGrad','RMSProp','Adam','배치 크기','iteration','에폭','검증','과적합','과소적합','학습 곡선',
+   '규제','데이터 증강','가중치 감쇠','드롭아웃','조기 종료','배치 정규화','단어집','<UNK>','원핫','차원의 저주','분산 표현','밀집 벡터','시소러스','WordNet','통계 기반','추론 기반',
+   '분포 가설','맥락','윈도우 크기','동시발생 행렬','PMI','PPMI','SVD','word2vec','CBOW','Skip-gram','대리 과제','타깃','W_in','W_out','은닉층','Embedding 계층','네거티브 샘플링','0.75','서브샘플링',
+   'min_count','sg=1','gensim','코사인 유사도','유추','king','t-SNE','PCA','교착어','형태소 분석','서브워드','BPE','WordPiece','GloVe','FastText','OOV','문맥 임베딩',
+   'CNN','지역 수용 영역','파라미터 공유','이동 등가성','이동 불변성','합성곱','커널','필터','수용 영역','특징 맵','스트라이드','패딩','제로 패딩','same','valid','풀링','최대 풀링','Flatten','전결합',
+   '1차원 합성곱','Conv1D','n-gram','Text-CNN','Kim','전역 최대 풀링','GlobalMaxPooling1D','미세 조정','trainable','RNN','Transformer','파이프라인','코랩','IMDB',
+ ],
  'nlp-w10': [
    '토픽 모델링','토픽','잠재','비지도 학습','문서-단어 행렬','DTM','BoW','단어 모음','TF-IDF','IDF','LSA','LSI','SVD','특이값','Truncated SVD',
    'LDA','디리클레','생성 모형','α','β','Gibbs','깁스 샘플링','변분 추론','혼란도','Perplexity','응집도','Coherence','pyLDAvis','gensim','KoNLPy','교착어',
@@ -295,3 +304,5 @@ build('ml-w10', 'materials/기계학습특론/week10-quiz100.html', 'courses/qui
       {'title': '10주차 · 합성곱 신경망(CNN)', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week10-quiz100.html'})
 build('ml-w11', 'materials/기계학습특론/week11-quiz100.html', 'courses/quiz/ml-w11.js',
       {'title': '11주차 · 딥러닝 이미지 분류', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week11-quiz100.html'})
+build('nlp-w11', 'materials/자연어처리/week11-quiz100.html', 'courses/quiz/nlp-w11.js',
+      {'title': '11주차 · 자연어처리 딥러닝 Ⅰ', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week11-quiz100.html'})
