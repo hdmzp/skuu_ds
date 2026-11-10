@@ -428,6 +428,23 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
 .live b{color:#7c2d12}
 .live .ul li{color:#7c2d12}
 .live .ul li::before{background:#b45309;opacity:.75}
+/* 본인 복습 필기 — 공부하다 헷갈려 찾아본 내용 */
+.mynote{
+  background:#f7f5ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.mynote::before{
+  content:'📝 내 복습 필기 · 헷갈려서 찾아본 것';display:inline-block;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.mynote b{color:#2e1065}
+.mynote p + p{margin-top:7px}
+.mynote .ul li{color:#3b2a6b}
+.mynote .ul li::before{background:#6d28d9;opacity:.75}
+.mynote .tbl-wrap{margin:8px 0 4px;background:#fff}
+.mynote table{min-width:0}
+.mynote .fx{background:#fff;margin:9px 0}
 /* 100문제 해설 포인트 */
 .qexp{
   background:#f0fdf4;border:1px solid #bbf7d0;border-left:4px solid #16a34a;
@@ -686,6 +703,40 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
     <li>그래서 컬러 이미지 위를 움직이는 <b>커널도 3차원</b>이어야 한다 &mdash; <b>색상 채널별로 별도의 필터</b>(필터의 면)가 있고, 각 면이 자기 채널 위를 움직이며 겹친 픽셀끼리 곱해 더한다</li>
     <li><b>세 채널의 값을 모아</b>(합쳐) 특징 맵의 픽셀 하나를 만든다. 필터를 <b>2개</b> 쓰면 특징 맵도 <b>2장</b>이다(7p)</li>
   </ul>
+</div>
+
+<div class="mynote" id="channels"><b>채널 수는 &lsquo;색의 가짓수&rsquo;가 아니라 &lsquo;색을 표현하는 방식(컬러 모델)&rsquo;이 정한다</b>
+<p>여러 색이 섞인 사진이라도 컴퓨터는 보통 <b>3개(또는 4개)의 기본 채널</b>로만 저장한다. 화면의 수백만 가지 색은 모두 <b>빨강(R) · 초록(G) · 파랑(B) 세 빛을 비율만 달리 섞은 것</b>이기 때문이다(RGB 컬러 모델). 빨강 · 노랑 · 보라 · 갈색이 아무리 많이 들어 있어도 R 채널 · G 채널 · B 채널, <b>2차원 행렬 딱 3장(깊이 = 3)</b>에 나뉘어 담긴다. 각 채널은 오직 &lsquo;그 원색의 세기&rsquo;만 맡는다.</p>
+<p><b>작은 예로 확인</b> &mdash; 색이 네 가지(빨강 · 노랑 · 보라 · 갈색)인 2×2 이미지도 저장은 이렇게 된다. 노랑에게 따로 채널이 생기는 게 아니라, <b>R과 G 채널에 동시에 큰 값</b>이 들어가는 것이 노랑이다.</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>픽셀</th><th>보이는 색</th><th>R 채널</th><th>G 채널</th><th>B 채널</th></tr></thead>
+  <tbody>
+    <tr><td>(0, 0)</td><td>빨강</td><td>255</td><td>0</td><td>0</td></tr>
+    <tr><td>(0, 1)</td><td>노랑</td><td>255</td><td>255</td><td>0</td></tr>
+    <tr><td>(1, 0)</td><td>보라</td><td>128</td><td>0</td><td>128</td></tr>
+    <tr><td>(1, 1)</td><td>갈색</td><td>150</td><td>75</td><td>0</td></tr>
+  </tbody>
+</table>
+</div>
+<p>배열 모양은 <b>(2, 2, 3)</b> &mdash; 색이 두 가지든 수천 가지든 마지막 축은 3이다. 한 채널에 8비트(0~255)면 표현 가능한 색은 <span class="tex">256^3\approx1678</span>만 가지다.</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>채널 수</th><th>예</th><th>각 채널이 담는 것</th></tr></thead>
+  <tbody>
+    <tr><td><b>1</b></td><td>흑백(Grayscale) &mdash; MNIST <code>(28, 28, 1)</code></td><td>밝기(명도)만</td></tr>
+    <tr><td><b>3</b></td><td><b>RGB</b> 컬러 사진 &mdash; CIFAR-10 <code>(32, 32, 3)</code>. HSV · YCbCr · Lab도 축의 의미만 다를 뿐 3채널</td><td>빨강 · 초록 · 파랑의 세기</td></tr>
+    <tr><td><b>4</b></td><td><b>RGBA</b>(PNG 등 투명도 포함) · <b>CMYK</b>(인쇄용)</td><td>RGB + 투명도(Alpha) / 청록(Cyan) · 자주(Magenta) · 노랑(Yellow) · 검정(Black) 잉크량</td></tr>
+    <tr><td><b>수십~수백</b></td><td><b>초분광(hyperspectral)</b> 영상 &mdash; 인공위성 · 의료용 특수 카메라</td><td>적외선 · 자외선 등 잘게 나눈 파장 대역 하나씩</td></tr>
+  </tbody>
+</table>
+</div>
+<p><b>CNN과 연결하면</b></p>
+<ul class="ul">
+  <li>입력 채널 수가 바뀌면 <b>첫 합성곱 층의 커널 깊이가 그만큼</b> 된다 &mdash; 흑백이면 3×3×<b>1</b>, RGB면 3×3×<b>3</b>, 초분광 100대역이면 3×3×<b>100</b>. Keras는 <code>input_shape</code>의 마지막 숫자를 보고 자동으로 맞춘다</li>
+  <li>RGBA 이미지를 RGB용 모델에 넣으려면 보통 Alpha를 버리고 3채널로 맞춘다. 반대로 흑백 이미지를 ImageNet 사전학습 모델(3채널 입력)에 넣을 때는 같은 채널을 3번 복사한다</li>
+  <li><span class="hi">헷갈리기 쉬운 점 &mdash; 은닉층의 &lsquo;채널&rsquo;은 색이 아니다.</span> 합성곱 층을 지난 특징 맵의 채널 수(32 · 64 · 128 &hellip;)는 <b>필터 개수</b>이고, 각 채널은 &lsquo;가로 에지 · 동그란 무늬&rsquo; 같은 <b>특징 하나에 대한 반응 지도</b>다. 색 채널은 입력층에서만 뜻이 있다(아래 보충설명의 &lsquo;필터 수가 출력 깊이를 정한다&rsquo;)</li>
+</ul>
 </div>
 
 <div class="pt plus">
