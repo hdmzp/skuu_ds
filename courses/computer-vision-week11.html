@@ -138,7 +138,7 @@ body{
   .tl-era b{font-size:11.5px}
 }
 /* table */
-.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+.tbl-wrap{position:relative;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
 table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
 th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
 th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
@@ -357,6 +357,36 @@ code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5
 .pt.flip{border-left-color:#b45309}
 .pt.live{border-left-color:#9d174d}
 .pt.plus{border-left-color:#0f766e}
+/* 11주차 추가: 내 정리 상자 · 서술형 예상문답 */
+.mynote{background:#f7f5ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:12px 0;font-size:13px;line-height:1.85;color:#3b2a6b}
+.mynote::before{content:'📝 내 정리';display:inline-block;background:#6d28d9;color:#fff;font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px}
+.mynote b{color:#2e1065}
+.mynote p + p{margin-top:7px}
+.mynote .ul li{color:#3b2a6b}
+.q{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--ink);border-radius:var(--radius);padding:15px 16px 13px;margin:16px 0;scroll-margin-top:70px}
+.q-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px}
+.q-no{display:inline-block;background:var(--ink);color:#fff;font-size:11.5px;font-weight:800;letter-spacing:.03em;padding:4px 9px;border-radius:6px;line-height:1.3}
+.q-star{color:#d97706;font-size:12.5px;letter-spacing:1px;font-weight:700}
+.q-wk{font-size:11.5px;font-weight:700;color:#6d28d9;background:#f5f0fd;border:1px solid #d6c7f5;border-radius:999px;padding:2px 9px}
+.q-txt{font-size:14.5px;font-weight:700;line-height:1.7;color:var(--ink)}
+.q-alt{font-size:12.5px;color:var(--muted);line-height:1.7;margin-top:5px}
+.q-alt b{color:#b45309}
+.go{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:8px 0 2px}
+.go b{font-size:11.5px;font-weight:800;color:var(--muted);margin-right:3px}
+.go-a{font-size:12px;font-weight:600;color:var(--accent);text-decoration:none;background:var(--accent-light);border:1px solid #c4d2ee;border-radius:999px;padding:3px 10px}
+.go-a::after{content:' →';opacity:.6}
+.go-a:hover{background:#dce9fb;border-color:var(--accent)}
+details.ans{margin-top:11px;border-top:1px dashed var(--border);padding-top:9px}
+details.ans > summary{cursor:pointer;font-size:12.5px;font-weight:800;color:var(--green);list-style:none;display:inline-flex;align-items:center;gap:6px;user-select:none}
+details.ans > summary::-webkit-details-marker{display:none}
+details.ans > summary::before{content:'▸';display:inline-block;transition:transform .15s}
+details.ans[open] > summary::before{transform:rotate(90deg)}
+details.ans:not([open]) > summary::after{content:'— 먼저 써 보고 눌러서 확인';font-weight:500;color:var(--muted);font-size:11.5px}
+.ans p{font-size:13.5px;line-height:1.9;color:#2d3748;margin-top:8px}
+.ans p b{color:var(--ink)}
+.ans .lab{display:block;font-size:12.5px;font-weight:800;color:var(--accent);margin-bottom:1px}
+.ans .tbl-wrap{margin:8px 0}
+.ans table{min-width:0}
 .pt.pres{border-left-color:#6d28d9}
 .deep{background:#f5f3ff;border:1px solid #c4b5fd;border-left:4px solid #7c3aed;border-radius:0 var(--radius) var(--radius) 0;padding:11px 14px;margin:12px 0;font-size:13px;color:#3f4854;line-height:1.8}
 .deep b:first-child{color:#6d28d9}
@@ -475,6 +505,7 @@ table.acc{min-width:0}
   <a href="#nb">05 Naive Bayes</a>
   <a href="#svm">06 SVM</a>
   <a href="#kernel">07 커널 · 소프트 마진</a>
+  <a href="#exam">서술형 예상문답</a>
   <a href="#summary">핵심 정리</a>
   <a href="#next">과제 · 다음 주</a>
 </nav>
@@ -522,12 +553,13 @@ table.acc{min-width:0}
 
 <div class="mapgrid">
   <a href="#recog"><b>01 인식 과제</b><span>분류 · 검출 · 식별 · 분할 · 장면 · 행동 · 어려움 · 역사 · 데이터 기반 접근</span></a>
-  <a href="#bow"><b>02 Bag of Words</b><span>특징의 모음 · 공간 정보 무시 · 벡터 공간 모형 · 코사인 · TF-IDF</span></a>
+  <a href="#bow"><b>02 Bag of Words</b><span>특징의 모음 · BoVW · 공간 정보 무시 · <b>문서 순서 소멸과 비교</b> · 벡터 공간 모형 · 코사인 · <b>TF-IDF를 시각 단어에</b></span></a>
   <a href="#bowpipe"><b>03 BoW 파이프라인</b><span>사전 학습(SIFT + K-평균) · 코드북 · 양자화 · 히스토그램</span></a>
-  <a href="#knn"><b>04 분류 · KNN</b><span>결정 경계 · 최근접 이웃 · k와 거리 · L1 · L2 · CIFAR-10</span></a>
+  <a href="#knn"><b>04 분류 · KNN</b><span>결정 규칙 · <b>판별 vs 생성</b> · 최근접 이웃 · k와 거리 · L1 · L2 · CIFAR-10</span></a>
   <a href="#nb"><b>05 Naive Bayes</b><span>사후 확률 · 베이즈 규칙 · MAP · 조건부 독립 · 로그 확률 예</span></a>
-  <a href="#svm"><b>06 SVM</b><span>최대 여백 · 서포트 벡터 · <span class="tex">2/\lVert w\rVert</span> · 원 문제 · 라그랑주 쌍대</span></a>
+  <a href="#svm"><b>06 SVM</b><span>최대 여백 · <b>마진 그림</b> · 서포트 벡터 · <span class="tex">2/\lVert w\rVert</span> · 원 문제 · 라그랑주 쌍대</span></a>
   <a href="#kernel"><b>07 커널 · 소프트 마진</b><span>고차원 사상 · 커널 트릭 · 슬랙 변수 ξ · C의 역할</span></a>
+  <a href="#exam"><b>EXAM 서술형 예상문답 7</b><span>BoW · TF-IDF · L1 vs L2 · KNN이 영상에 안 쓰이는 이유 · SVM 마진 · 판별 vs 생성 · Naive Bayes</span></a>
 </div>
 </section>
 
@@ -636,6 +668,39 @@ table.acc{min-width:0}
   <p><b>BoW의 정의</b>(22p) &mdash; 데이터 하나(문서 · 질감 · 영상)를 <b>특징에 대한 히스토그램</b>으로 표현한다. 특징은 <b>서로 독립</b>으로 다루고, 표현은 <b>히스토그램</b>이다.</p>
 </div>
 
+<div class="pt flip" id="flip-bow">
+  <h3 class="pt-h" data-sref="19p, 22p"><span class="bdg bdg-flip">플립 강의</span>영상 분류에서 BoW를 강조한 이유와 여러 이름 (19 · 22p)</h3>
+  <p>강의는 영상 분류에서 <b>Bag of Words</b>를 강조해서 설명했다. 컴퓨터비전에서는 같은 생각을 <b>Bag of Visual Words(BoVW)</b>, <b>bag of features</b>, <b>bag of keypoints</b>라고도 부른다 &mdash; 문서의 &lsquo;단어&rsquo; 자리에 영상의 <b>키포인트에서 뽑은 특징(feature)</b>이 들어가기 때문이다. 이 표현은 <b>크기(scale) · 회전(rotation)에 불변</b>이다.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>문서 BoW</th><th>영상 BoVW</th><th>한 줄 풀이</th></tr></thead>
+    <tbody>
+      <tr><td>문서 한 편</td><td>영상 한 장</td><td>분류 · 검색의 단위</td></tr>
+      <tr><td>단어 (word)</td><td><b>시각 단어</b> (visual word, codeword)</td><td>키포인트의 SIFT 기술자(128차원)를 K-평균으로 묶은 <b>군집 중심</b> 하나</td></tr>
+      <tr><td>사전 (vocabulary)</td><td><b>코드북</b> (codebook, visual dictionary)</td><td>군집 중심 K개의 모음 &mdash; 03절 ① 사전 학습</td></tr>
+      <tr><td>단어 세기</td><td><b>양자화 + 히스토그램</b></td><td>각 특징을 가장 가까운 중심에 대응시켜 칸마다 센다 &mdash; 03절 ② 인코딩</td></tr>
+      <tr><td><b>단어 순서를 버린다</b></td><td><b>특징의 위치(공간 배치)를 버린다</b></td><td>21p의 가정: &lsquo;공간 정보를 무시해도 된다&rsquo;</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="pit" id="pit-order"><b>&ldquo;문서에서 BoW가 순서를 소멸시킨 것과 비슷한가?&rdquo; &mdash; 절반은 맞고 절반은 다르다</b>
+<p><b>맞는 절반</b> &mdash; 영상 BoW가 <b>특징의 위치를 버리는 것</b>은 문서 BoW가 <b>단어 순서를 버리는 것</b>과 정확히 같은 일이다. &ldquo;개가 사람을 문다&rdquo;와 &ldquo;사람이 개를 문다&rdquo;가 같은 벡터가 되듯, 얼굴 사진에서 눈 · 코 · 입 조각의 자리를 마구 섞어도 같은 히스토그램이 된다. 그 덕에 물체가 화면 어디에 있든, 일부가 가려지든 표현이 크게 흔들리지 않는다(<b>위치 이동 · 가림에 강함</b>).</p>
+<p><b>다른 절반</b> &mdash; 그런데 <b>크기 · 회전 불변</b>은 &lsquo;가방에 넣었기 때문&rsquo;이 아니다. 그 전 단계인 <b>SIFT 기술자</b>가 만든 성질이다. SIFT는 키포인트마다 <b>스케일(DoG 극값이 나온 σ)</b>과 <b>주 방향(기울기 방향 히스토그램의 최댓값)</b>을 구하고, 그 크기 · 방향에 맞춰 패치를 잘라 정규화한 뒤 기술자를 계산한다(<a class="ext" href="computer-vision-week06.html#sift">6주차 SIFT</a>). 그래서 같은 바퀴가 크게 · 비스듬히 찍혀도 <b>같은 시각 단어</b>로 떨어진다. 문서로 치면 &lsquo;Running · runs · ran&rsquo;을 모두 &lsquo;run&rsquo;으로 맞추는 <b>어간 정규화</b>에 가깝다.</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>불변성</th><th>어디서 오나</th><th>문서 BoW의 짝</th></tr></thead>
+  <tbody>
+    <tr><td>위치 이동 · 배치 · 일부 가림</td><td><b>가방(히스토그램)</b> &mdash; 위치를 버림</td><td>단어 <b>순서</b>를 버림</td></tr>
+    <tr><td>크기 · 회전</td><td><b>SIFT 기술자</b> &mdash; 스케일 · 주 방향으로 정규화</td><td>어간 · 표제어 정규화</td></tr>
+    <tr><td>(대가) 공간 관계 손실</td><td>바퀴가 차체 <b>아래</b>에 있다는 정보가 사라짐</td><td>&ldquo;not good&rdquo;의 순서가 사라짐</td></tr>
+  </tbody>
+</table>
+</div>
+<p>문서에서 순서를 조금 되살리려고 <b>n-gram</b>을 쓰듯, 영상에서는 영상을 2×2 · 4×4 격자로 나눠 칸마다 히스토그램을 따로 만들어 이어 붙이는 <b>공간 피라미드 매칭</b>(Lazebnik 2006)으로 배치 정보를 일부 되살린다(교안 밖 보충).</p>
+</div>
+
 <div class="pt gyo">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>벡터 공간 모형과 TF-IDF — 문서 검색에서 빌려 온 생각 (23~26p)</h3>
   <p>Salton(1979)의 <b>벡터 공간 모형</b> &mdash; 문서(데이터 점)는 <b>단어(특징)마다 센 개수의 벡터</b>다. Tartan · robot · CHIMP · CMU · bio · soft · ankle · sensor 같은 단어의 출현 횟수를 센, 그저 <b>단어에 대한 히스토그램</b>이다. 두 문서의 유사도는 어떤 거리를 써도 되지만 <b>코사인 거리가 빠르다</b>.</p>
@@ -648,6 +713,63 @@ table.acc{min-width:0}
   <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>시각 단어에서 TF-IDF가 뜻하는 것 · 코사인이 빠른 이유</h3>
   <p>영상에서 &lsquo;흔한 단어&rsquo;는 하늘 · 아스팔트 · 흰 벽처럼 거의 모든 영상에 나오는 패치다. 이런 단어는 분류에 도움이 안 되므로 IDF가 눌러 준다. 반대로 바퀴 · 눈 같은 특정 물체에만 나오는 단어는 IDF가 커진다. 자연어처리 10주차의 TF-IDF와 식이 같다(<a class="ext" href="nlp-week10.html#dtm">NLP 10.1.2</a>).</p>
   <p>히스토그램은 대부분 0인 <b>희소 벡터</b>다. 코사인 <span class="tex">\frac{\boldsymbol a\cdot\boldsymbol b}{\lVert\boldsymbol a\rVert\lVert\boldsymbol b\rVert}</span>은 벡터를 미리 정규화해 두면 <b>내적 하나</b>이고, 내적은 둘 다 0이 아닌 칸만 곱하면 되므로 빠르다. 또 문서(영상)의 길이(특징 개수)가 달라도 방향만 비교하므로 공정하다.</p>
+</div>
+
+<div class="pt flip" id="flip-tfidf">
+  <h3 class="pt-h" data-sref="25p, 26p"><span class="bdg bdg-flip">플립 강의</span>모든 단어가 똑같이 중요하진 않다 → TF-IDF (25 · 26p)</h3>
+  <p>강의 &mdash; 모든 단어가 똑같이 중요하지는 않기 때문에 <b>TF-IDF</b>로 가중치를 준다. 문서에서는 TF = 단어 빈도(Term Frequency), IDF = 역문서 빈도(Inverse Document Frequency)였다. <b>영상에서는 이 둘을 무엇으로 바꿔 끼우는가?</b> 아래 보충에서 숫자로 끝까지 따라가 본다.</p>
+</div>
+
+<div class="pt plus" id="tfidf-cv">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>TF-IDF를 시각 단어에 붙이는 법 — 대응표와 숫자 예</h3>
+  <p><b>핵심은 &lsquo;문서 → 영상, 단어 → 시각 단어&rsquo;로 이름만 바꾸면 식이 그대로라는 것</b>이다. 26p 식의 기호를 영상 말로 옮기면:</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>26p 기호</th><th>문서에서</th><th>영상에서</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tex">n(w_{i,d})</span> &mdash; <b>TF</b></td><td>문서 d에 단어 <span class="tex">w_i</span>가 나온 횟수</td><td>영상 d의 특징 중 <b>시각 단어 <span class="tex">c_i</span>로 양자화된 개수</b> = BoW 히스토그램의 i번째 칸</td></tr>
+      <tr><td><span class="tex">D</span></td><td>전체 문서 수</td><td>전체 <b>학습(데이터베이스) 영상 수</b></td></tr>
+      <tr><td><span class="tex">\sum_{d'}\mathbf 1[w_i\in d']</span> &mdash; DF</td><td>단어 <span class="tex">w_i</span>가 한 번이라도 나온 문서 수</td><td>시각 단어 <span class="tex">c_i</span>가 <b>한 번이라도 나온 영상 수</b></td></tr>
+      <tr><td><span class="tex">\log\frac{D}{\text{DF}}</span> &mdash; <b>IDF</b></td><td>흔한 단어(the, 은 · 는)일수록 작다</td><td>흔한 패치(하늘 · 아스팔트 · 흰 벽)일수록 작다</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>숫자 예</b> &mdash; 시각 단어 3개(<span class="tex">c_1</span>=하늘 패치, <span class="tex">c_2</span>=바퀴 패치, <span class="tex">c_3</span>=털 패치), 학습 영상 4장의 BoW 히스토그램이 다음과 같다고 하자.</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>영상</th><th>c<sub>1</sub> 하늘</th><th>c<sub>2</sub> 바퀴</th><th>c<sub>3</sub> 털</th><th>TF-IDF 벡터</th></tr></thead>
+    <tbody>
+      <tr><td>A 자동차</td><td>5</td><td>3</td><td>0</td><td>[0, 2.08, 0]</td></tr>
+      <tr><td>B 자동차</td><td>6</td><td>2</td><td>0</td><td>[0, 1.39, 0]</td></tr>
+      <tr><td>C 고양이</td><td>4</td><td>0</td><td>4</td><td>[0, 0, 2.77]</td></tr>
+      <tr><td>D 고양이</td><td>5</td><td>0</td><td>3</td><td>[0, 0, 2.08]</td></tr>
+      <tr><td><b>DF</b> (나온 영상 수)</td><td>4</td><td>2</td><td>2</td><td></td></tr>
+      <tr><td><b>IDF</b> = ln(4 / DF)</td><td><b>0</b></td><td>0.693</td><td>0.693</td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="flow">
+    <div class="fl"><b>① DF를 센다</b><span>하늘 패치는 4장 모두에 나온다(DF = 4), 바퀴 · 털은 2장씩</span></div>
+    <div class="fl"><b>② IDF를 구한다</b><span>하늘: <span class="tex">\ln(4/4)=0</span> &mdash; 어디에나 있으니 정보가 없다. 바퀴 · 털: <span class="tex">\ln(4/2)\approx0.693</span></span></div>
+    <div class="fl"><b>③ TF × IDF</b><span>A의 바퀴 칸: <span class="tex">3\times0.693=2.08</span>. 하늘 칸은 모두 0이 된다</span></div>
+    <div class="fl"><b>④ 정규화 후 코사인으로 비교 · 분류</b><span>벡터 길이를 1로 맞추고 내적한다</span></div>
+  </div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>코사인 유사도</th><th>원래 개수 그대로</th><th>TF-IDF 후</th></tr></thead>
+    <tbody>
+      <tr><td>A(자동차) vs B(자동차)</td><td>0.976</td><td><b>1.00</b></td></tr>
+      <tr><td>A(자동차) vs C(고양이)</td><td><b>0.606</b> &mdash; 꽤 비슷해 보인다</td><td><b>0</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>원래 개수로는 자동차와 고양이가 <b>0.61이나 비슷</b>하다고 나온다 &mdash; 둘 다 하늘이 많이 찍혔기 때문이다. TF-IDF가 하늘 칸을 0으로 눌러 주자 &lsquo;바퀴냐 털이냐&rsquo;만 남아 두 클래스가 완전히 갈린다. <span class="hi">IDF는 &lsquo;어느 영상에나 나오는 시각 단어&rsquo;의 목소리를 줄이고, &lsquo;특정 물체에만 나오는 시각 단어&rsquo;의 목소리를 키운다.</span> (실제로는 DF가 전체와 딱 같은 단어가 드물어 IDF가 0까지는 안 가고 작아질 뿐이다.)</p>
+  <ul class="ul">
+    <li><b>DF · IDF는 학습 영상으로만 한 번 계산</b>해 두고, 테스트 영상에도 같은 IDF를 곱한다 &mdash; 사전(코드북)을 학습 집합으로 만드는 것과 같은 원칙</li>
+    <li><b>TF의 변형</b> &mdash; 교안은 개수 그대로지만, 영상마다 특징 수가 달라 <b>개수 ÷ 그 영상의 전체 특징 수</b>로 나눈 비율을 TF로 쓰기도 한다(Sivic &amp; Zisserman의 Video Google, 2003)</li>
+    <li><b>영상 검색에서의 쓰임</b> &mdash; 질의 영상과 데이터베이스 영상을 TF-IDF 벡터의 코사인으로 비교해 순위를 매긴다. 너무 흔한 시각 단어는 문서의 <b>불용어(stop words)</b>처럼 아예 빼기도 한다</li>
+    <li>분류에서는 TF-IDF 가중 히스토그램을 L2 정규화해 SVM에 넣는다 &mdash; 03절 ③ 분류 단계의 입력</li>
+  </ul>
 </div>
 </section>
 
@@ -740,6 +862,32 @@ clf = SVC(kernel='rbf', C=10).fit(X_hist_train, y_train)      <span class="cm">#
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>분류란 (43 · 44p)</h3>
   <p>입력 벡터를 둘 이상의 클래스 중 하나에 할당하는 것이다. <span class="hi">어떤 결정 규칙이든 입력 공간을 결정 경계로 나뉜 결정 영역들로 쪼갠다.</span> 분류기에는 최근접 이웃 · kNN · SVM · 신경망 · 심층 신경망 등이 있고, 이번 주는 <b>KNN · Naive Bayes · SVM</b>을 다룬다.</p>
 </div>
+
+<div class="pt flip" id="flip-rule">
+  <h3 class="pt-h" data-sref="43p"><span class="bdg bdg-flip">플립 강의</span>결정 규칙이 분류의 경계를 정한다 · 판별 모델과 생성 모델 (43p)</h3>
+  <p>강의 &mdash; <b>분류의 경계를 결정짓는 결정 규칙(decision rule)</b>이 중요하다. 43p 문장 그대로, <span class="hi">어떤 결정 규칙이든 입력 공간을 결정 경계로 나뉜 결정 영역들로 쪼갠다.</span> 분류기마다 다른 것은 <b>그 경계를 어떻게 얻느냐</b>다.</p>
+  <ul class="ul">
+    <li><b>KNN · SVM은 판별(discriminative) 모델</b> &mdash; 경계(또는 &lsquo;이 x는 어느 클래스인가&rsquo;)를 데이터에서 <b>바로</b> 정한다</li>
+    <li><b>Naive Bayes는 생성(generative) 모델</b> &mdash; 클래스마다 &lsquo;그 클래스의 데이터가 어떻게 생겨나는지&rsquo;(<span class="tex">p(\boldsymbol x|z)</span>, <span class="tex">p(z)</span>)를 배운 뒤, 베이즈 규칙으로 뒤집어 클래스를 고른다</li>
+  </ul>
+</div>
+
+<div class="pit" id="pit-gen"><b>판별 모델 vs 생성 모델 &mdash; 무엇을 배우느냐가 다르다</b>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>판별 모델 (discriminative)</th><th>생성 모델 (generative)</th></tr></thead>
+  <tbody>
+    <tr><td>배우는 것</td><td>결정 경계, 또는 <span class="tex">p(z|\boldsymbol x)</span>를 <b>직접</b></td><td>클래스별 데이터 분포 <span class="tex">p(\boldsymbol x|z)</span>와 사전 확률 <span class="tex">p(z)</span></td></tr>
+    <tr><td>결정 규칙</td><td>KNN: 이웃 k개의 <b>다수결</b> · SVM: <span class="tex">\operatorname{sign}(\boldsymbol w\cdot\boldsymbol x+b)</span></td><td><span class="tex">\hat z=\arg\max_z p(\boldsymbol x|z)\,p(z)</span> (MAP, 베이즈 규칙)</td></tr>
+    <tr><td>비유</td><td>두 나라 사이 <b>국경선만</b> 긋는다</td><td>나라마다 <b>사람들의 모습</b>을 다 익힌 뒤, 새 사람이 어느 나라 사람에 더 가까운지 본다</td></tr>
+    <tr><td>할 수 있는 것</td><td>분류만 &mdash; 경계 밖의 일은 모른다</td><td>분류 + 그 클래스다운 <b>데이터를 만들어 낼 수도</b> 있다(예: bio 클래스 단어 확률로 가짜 기사 생성)</td></tr>
+    <tr><td>강점</td><td>데이터가 많을 때 보통 <b>정확도가 높다</b> &mdash; 경계 하나에만 집중</td><td>데이터가 <b>적을 때</b> 잘 버틴다 · 확률을 바로 준다 · 학습이 빠르다(세기만 하면 된다)</td></tr>
+    <tr><td>약점</td><td>데이터의 생김새를 설명하지 못한다</td><td>분포 가정(예: 조건부 독립)이 틀리면 성능이 떨어진다</td></tr>
+    <tr><td>이번 주 예</td><td><b>KNN, SVM</b></td><td><b>Naive Bayes</b></td></tr>
+  </tbody>
+</table>
+</div>
+헷갈리는 지점 &mdash; Naive Bayes도 결국 <span class="tex">\arg\max</span>로 <b>경계를 만든다</b>. 차이는 경계를 &lsquo;바로 배우느냐(판별)&rsquo;, &lsquo;분포를 배우고 거기서 유도하느냐(생성)&rsquo;다. 또 KNN은 모형 모수가 없는 <b>비모수</b> 방법이지만 분포를 모형화하지 않고 바로 결정하므로 판별 쪽으로 분류한다.</div>
 
 <div class="pt gyo">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>KNN의 규칙과 선택지 (45~51p)</h3>
@@ -864,6 +1012,43 @@ clf = SVC(kernel='rbf', C=10).fit(X_hist_train, y_train)      <span class="cm">#
   <p class="fx-note"><span class="tex">y_i\in\{+1,-1\}</span>은 데이터 점의 레이블이다. 두 조건을 <span class="tex">y_i</span>를 곱해 하나로 합친 오른쪽이 <b>선형 SVM의 원 문제(primal formulation)</b>다. <span class="hi">볼록 이차 계획(QP) 문제라 해가 하나뿐이다</span>(70p).</p></div>
 </div>
 
+<div class="mynote" id="margin-note"><b>마진(Margin) &mdash; 결정 경계와 가장 가까운 점 사이의 안전거리</b>
+<p>데이터 분류에서 마진은 두 집단을 가르는 <b>기준선(결정 경계)</b>과, 양쪽 집단에서 그 선에 <b>가장 가까이 있는 점들</b> 사이의 빈 공간(여백)이자 안전거리다.</p>
+<ul class="ul">
+  <li><b>결정 경계 (Decision Boundary)</b> &mdash; 데이터를 A 그룹과 B 그룹으로 나누는 기준선(차원이 높으면 면, 초평면) <span class="tex">\boldsymbol w\cdot\boldsymbol x+b=0</span></li>
+  <li><b>서포트 벡터 (Support Vectors)</b> &mdash; 기준선에 가장 아슬아슬하게 붙어 있는 최전방의 점들. <span class="tex">\boldsymbol w\cdot\boldsymbol x+b=\pm1</span> 위에 놓인다</li>
+  <li><b>마진 (Margin)</b> &mdash; 기준선과 서포트 벡터 사이의 수직 거리. 한쪽이 <span class="tex">1/\lVert\boldsymbol w\rVert</span>, 양쪽을 합친 폭이 교안의 <span class="tex">2/\lVert\boldsymbol w\rVert</span>다</li>
+</ul>
+<p><b>마진을 최대한 넓게 잡는 이유</b> &mdash; ① <b>완충 지대(일반화 성능)</b>: 두 집단 사이에 빈 공간이 넓으면, 학습 때 본 적 없는 애매한 새 데이터가 들어와도 잘못 분류될 확률이 줄어든다. ② <b>과적합 방지</b>: 선이 한쪽 데이터에 바짝 붙어 있으면 실전의 작은 잡음에도 점이 선을 넘어간다. 넓은 마진은 그런 흔들림을 견디는 여유를 준다 &mdash; 교안 66p의 &lsquo;데이터의 작은 흔들림에 가장 안정적&rsquo;이 이 뜻이다.</p>
+<p><b>비유</b> &mdash; 서로 싸우는 두 무리의 양 떼 사이에 울타리를 칠 때, 어느 쪽 양에게도 닿지 않도록 양쪽에서 최대한 멀리 떨어뜨려 <b>가장 넓은 빈 틈을 정중앙에</b> 두는 것과 같다. 이 빈 틈이 마진이고, 울타리 위치를 정하는 것은 <b>맨 앞줄의 양(서포트 벡터)</b>뿐이다 &mdash; 뒷줄 양이 움직여도 울타리는 그대로다.</p>
+<figure class="fig svgfig">
+  <div class="svg-scroll">
+  <svg viewBox="0 0 560 300" role="img" aria-label="SVM의 결정 경계, 마진, 서포트 벡터">
+    <defs><marker id="ar" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#111827"/></marker></defs>
+    <rect x="0" y="0" width="560" height="300" fill="#fff"/>
+    <polygon points="150,300 380,0 470,0 240,300" fill="#ede9fe" opacity=".75"/>
+    <line x1="195" y1="300" x2="425" y2="0" stroke="#1b3f8b" stroke-width="2.6"/>
+    <line x1="150" y1="300" x2="380" y2="0" stroke="#6d28d9" stroke-width="1.6" stroke-dasharray="6 5"/>
+    <line x1="240" y1="300" x2="470" y2="0" stroke="#6d28d9" stroke-width="1.6" stroke-dasharray="6 5"/>
+    <g fill="#2563eb">
+      <circle cx="70" cy="80" r="7"/><circle cx="120" cy="150" r="7"/><circle cx="60" cy="210" r="7"/><circle cx="150" cy="60" r="7"/><circle cx="90" cy="250" r="7"/><circle cx="200" cy="140" r="7"/><circle cx="196" cy="240" r="7"/><circle cx="299" cy="105" r="7"/>
+    </g>
+    <g fill="#dc2626">
+      <rect x="430" y="90" width="13" height="13"/><rect x="480" y="170" width="13" height="13"/><rect x="410" y="230" width="13" height="13"/><rect x="500" y="60" width="13" height="13"/><rect x="460" y="262" width="13" height="13"/><rect x="344" y="149" width="13" height="13"/>
+    </g>
+    <g fill="none" stroke="#f59e0b" stroke-width="2.5"><circle cx="196" cy="240" r="12"/><circle cx="299" cy="105" r="12"/><circle cx="350.5" cy="155.5" r="13"/></g>
+    <line x1="241" y1="182" x2="297" y2="225" stroke="#111827" stroke-width="1.5" marker-start="url(#ar)" marker-end="url(#ar)"/>
+    <g font-size="12.5" font-weight="700">
+      <text x="300" y="248" fill="#111827">마진 = 2/‖w‖</text>
+      <text x="20" y="25" fill="#2563eb">클래스 −1</text>
+      <text x="470" y="40" fill="#dc2626">클래스 +1</text>
+    </g>
+  </svg>
+  </div>
+  <figcaption><b>실선</b> 결정 경계 w·x+b=0 · <b>점선</b> w·x+b=±1 · <b>노란 원</b> 서포트 벡터. 경계는 두 점선 사이 빈 띠의 한가운데에 놓이고, 띠의 폭을 정하는 것은 서포트 벡터 세 개뿐이다.</figcaption>
+</figure>
+</div>
+
 <div class="pt gyo">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>라그랑주 승수와 판별 함수 (71p)</h3>
   <div class="fx"><div class="tex-d">L(\boldsymbol w,b;\lambda)=\frac{\lVert\boldsymbol w\rVert^2}{2}-\sum_i\lambda_i\big(y_i(\boldsymbol w\cdot\boldsymbol x_i+b)-1\big),\qquad\tilde L(\lambda)=\sum_i\lambda_i-\frac12\sum_i\sum_j\lambda_i\lambda_jy_iy_j(\boldsymbol x_j\cdot\boldsymbol x_i)</div>
@@ -935,6 +1120,103 @@ clf = SVC(kernel='rbf', C=10).fit(X_hist_train, y_train)      <span class="cm">#
 </div>
 </section>
 
+<!-- ===================== 서술형 예상문답 ===================== -->
+<section class="sec" id="exam">
+  <div class="sec-head"><span class="sec-badge">EXAM</span><h2 class="sec-title">서술형 예상문답<small>기말 대비 · 중간고사처럼 정의 → 원리 → 장점 · 용도 → 비교를 소문항으로</small></h2></div>
+<div class="note-box"><b>어떻게 골랐나</b> &mdash; 중간고사(<a class="ext" href="computer-vision-week08.html#exam">8주차 기출 7문항</a>)는 한 개념을 <b>정의 · 함수(원리) · 장점 · 용도 · 비교</b>로 쪼개 물었다. 11주차에서 같은 방식으로 묶이기 좋은 것은 플립 강의에서 강조한 <b>BoW · TF-IDF · 결정 규칙(판별/생성) · 거리 · KNN의 한계 · SVM</b>이다. 답은 <b>그대로 옮겨 쓸 수 있는 문장</b>으로 적었고, 굵은 글씨가 채점 키워드다. 먼저 써 본 뒤 &lsquo;답&rsquo;을 눌러 확인하자.</div>
+
+<article class="q" id="q11-1">
+  <div class="q-h"><span class="q-no">11-1</span><span class="q-star">★★★</span><span class="q-wk">02 · 03절</span></div>
+  <p class="q-txt">Q. Bag of (Visual) Words &mdash; (1) 정의를 문서의 BoW와 대응시켜 서술하시오. (2) BoW로 영상을 분류하는 과정을 단계별로 서술하시오. (3) 장점과 한계를 서술하시오.</p>
+  <p class="q-alt"><b>이렇게도 나온다</b> &mdash; &ldquo;BoW에서 크기 · 회전 불변성은 어디서 오는가&rdquo; · &ldquo;코드북(시각 사전)을 만드는 방법과 K의 영향&rdquo; · &ldquo;문서 BoW가 단어 순서를 버리는 것과 비교하시오&rdquo;</p>
+  <div class="go"><b>개념 바로가기</b><a class="go-a" href="#flip-bow">BoW 여러 이름</a><a class="go-a" href="#pit-order">순서 소멸과 비교</a><a class="go-a" href="#bowpipe">03 파이프라인</a></div>
+  <details class="ans"><summary>답</summary>
+    <p><span class="lab">[(1) 정의]</span><b>Bag of Words</b>는 데이터 하나를 <b>특징에 대한 히스토그램</b>으로 표현하는 방법이다. 특징들은 <b>서로 독립</b>으로 보고 <b>위치(순서) 정보는 버린 채</b> &lsquo;어떤 특징이 몇 번 나왔는가&rsquo;만 센다. 문서에서는 단어의 출현 횟수를 세고, 영상에서는 <b>키포인트에서 뽑은 지역 특징(SIFT 등)</b>을 <b>시각 단어(visual word)</b>로 바꿔 센다 &mdash; 그래서 Bag of Visual Words · bag of features · bag of keypoints라고도 한다. 대응은 <b>문서 ↔ 영상, 단어 ↔ 시각 단어(특징을 군집화한 중심), 사전 ↔ 코드북, 단어 순서를 버림 ↔ 특징의 공간 배치를 버림</b>이다.</p>
+    <p><span class="lab">[(2) 과정 ① 사전 학습]</span>학습 영상들에서 격자 또는 관심점(Harris · DoG) 위치의 패치를 뽑아 <b>SIFT 기술자</b>를 계산한다. 모은 기술자들을 <b>K-평균으로 군집화(벡터 양자화)</b>하면 <b>군집 중심 K개가 시각 단어</b>가 되고, 이 모음이 <b>코드북</b>이다.</p>
+    <p><span class="lab">[(2) 과정 ② 인코딩]</span>영상마다 특징을 뽑아 각각 <b>가장 가까운 군집 중심</b>의 시각 단어로 대응시키고(양자화), 단어별 출현 횟수를 세어 <b>길이 K의 히스토그램</b>을 만든다. 흔한 단어를 눌러 주는 <b>TF-IDF 가중치</b>와 정규화를 더할 수 있다.</p>
+    <p><span class="lab">[(2) 과정 ③ 분류]</span>히스토그램을 입력으로 <b>SVM · Naive Bayes · KNN</b> 같은 분류기를 학습하고, 테스트 영상도 같은 코드북으로 인코딩해 분류한다.</p>
+    <p><span class="lab">[(3) 장점]</span>① 위치를 버리므로 물체가 어디 있든, <b>일부가 가려져도</b> 표현이 크게 바뀌지 않는다. ② SIFT 기술자 덕분에 <b>크기 · 회전에 불변</b>이다. ③ 영상마다 특징 개수가 달라도 <b>고정 길이 벡터</b>가 되어 일반 분류기에 바로 넣을 수 있다. ④ 단순하고 계산이 빠르다.</p>
+    <p><span class="lab">[(3) 한계]</span>① <b>공간 배치 정보를 잃는다</b> &mdash; 바퀴가 차체 아래에 있다는 관계, 눈 · 코 · 입의 배치가 사라진다(보완: 공간 피라미드 매칭). ② <b>양자화 오차</b> &mdash; 비슷한 패치가 다른 단어로, 다른 패치가 같은 단어로 갈 수 있다. ③ 코드북 크기 <b>K 선택</b>에 민감하다(작으면 구별력 ↓, 크면 희소 · 잡음 ↑). ④ 특징은 사람이 설계한 것이라, 12주차 CNN처럼 특징까지 학습하는 방법에 밀렸다.</p>
+  </details>
+</article>
+
+<article class="q" id="q11-2">
+  <div class="q-h"><span class="q-no">11-2</span><span class="q-star">★★★</span><span class="q-wk">02절</span></div>
+  <p class="q-txt">Q. TF-IDF &mdash; (1) TF와 IDF의 정의와 식을 쓰시오. (2) TF-IDF를 시각 단어(BoW 히스토그램)에 적용하는 방법을 서술하시오. (3) TF-IDF가 필요한 이유를 예를 들어 서술하시오.</p>
+  <p class="q-alt"><b>이렇게도 나온다</b> &mdash; &ldquo;영상 검색에서 TF-IDF와 코사인 유사도를 쓰는 이유&rdquo; · &ldquo;IDF가 0이 되는 경우는?&rdquo;</p>
+  <div class="go"><b>개념 바로가기</b><a class="go-a" href="#flip-tfidf">플립 강의</a><a class="go-a" href="#tfidf-cv">시각 단어 TF-IDF 숫자 예</a><a class="go-a" href="nlp-week10.html#dtm">NLP 10주차 TF-IDF</a></div>
+  <details class="ans"><summary>답</summary>
+    <p><span class="lab">[(1) 정의 · 식]</span><b>TF(Term Frequency, 단어 빈도)</b>는 문서 d 안에 단어 <span class="tex">w_i</span>가 나온 횟수 <span class="tex">n(w_{i,d})</span>다. <b>IDF(Inverse Document Frequency, 역문서 빈도)</b>는 전체 문서 수 D를 그 단어가 나온 문서 수로 나눈 값의 로그 <span class="tex">\log\frac{D}{\sum_{d'}\mathbf 1[w_i\in d']}</span>다. 단어의 가중치는 둘의 곱 <span class="tex">n(w_{i,d})\cdot\log\frac{D}{\text{DF}_i}</span>이고, 문서는 이 값들을 이어 붙인 벡터로 표현한다. TF는 &lsquo;이 문서에서 얼마나 자주&rsquo;, IDF는 &lsquo;전체에서 얼마나 드문가&rsquo;를 잰다.</p>
+    <p><span class="lab">[(2) 시각 단어에 적용]</span>문서를 <b>영상</b>으로, 단어를 <b>시각 단어(코드워드)</b>로 바꾸면 식이 그대로다. ① <b>TF</b> = 영상 d의 특징 중 시각 단어 <span class="tex">c_i</span>로 양자화된 개수, 곧 <b>BoW 히스토그램의 i번째 칸</b>(특징 수로 나눈 비율을 쓰기도 한다). ② <b>DF</b> = 학습 영상 중 <span class="tex">c_i</span>가 한 번이라도 나온 영상 수, <b>IDF</b> = log(학습 영상 수 / DF). DF · IDF는 <b>학습 영상으로 한 번만</b> 계산해 두고 테스트 영상에도 같은 값을 쓴다. ③ 히스토그램의 각 칸에 그 단어의 IDF를 곱하고, 벡터를 정규화한 뒤 <b>코사인 유사도</b>로 비교하거나 SVM에 넣는다.</p>
+    <p><span class="lab">[(3) 필요한 이유]</span>모든 단어가 똑같이 중요하지 않기 때문이다. 영상에서 <b>하늘 · 아스팔트 · 흰 벽</b> 같은 패치는 거의 모든 영상에 나와 개수는 많지만 클래스를 가르는 데 도움이 안 된다. 예를 들어 자동차 [하늘 5, 바퀴 3, 털 0]과 고양이 [4, 0, 4]는 원래 개수로는 코사인 유사도가 <b>0.61</b>로 꽤 비슷하게 나온다. 하늘 패치가 4장 모두에 나오면 IDF = log(4/4) = <b>0</b>이 되어 하늘 칸이 지워지고, 두 벡터는 [0, 2.08, 0]과 [0, 0, 2.77]로 유사도 <b>0</b>이 된다. 곧 IDF는 <b>흔한 시각 단어의 가중치를 낮추고, 특정 물체에만 나오는 단어(바퀴 · 털)의 가중치를 높여</b> 구별력을 키운다.</p>
+  </details>
+</article>
+
+<article class="q" id="q11-3">
+  <div class="q-h"><span class="q-no">11-3</span><span class="q-star">★★★</span><span class="q-wk">04절</span></div>
+  <p class="q-txt">Q. 맨해튼 거리와 유클리드 거리 &mdash; (1) 각각의 공식을 쓰시오. (2) 두 거리의 차이점을 서술하시오. (3) 각각이 쓰이는 상황을 서술하시오.</p>
+  <p class="q-alt"><b>이렇게도 나온다</b> &mdash; &ldquo;두 점 (1, 2)와 (4, 6)의 L1 · L2 거리를 구하시오&rdquo; · &ldquo;KNN에서 거리 계산 전 정규화가 필요한 이유&rdquo; · &ldquo;Lp 거리로 일반화하시오&rdquo;</p>
+  <div class="go"><b>개념 바로가기</b><a class="go-a" href="#knn">04 KNN · L1 · L2</a><a class="go-a" href="machine-learning-week07.html#dist">기계학습특론 7주차 거리</a></div>
+  <details class="ans"><summary>답</summary>
+    <p><span class="lab">[(1) 공식]</span>두 벡터 <span class="tex">\boldsymbol x=(x_1,\dots,x_n)</span>, <span class="tex">\boldsymbol y</span>에 대해 <b>맨해튼(L1) 거리</b>는 <span class="tex">d_1=\sum_{i=1}^{n}\lvert x_i-y_i\rvert</span>, <b>유클리드(L2) 거리</b>는 <span class="tex">d_2=\sqrt{\sum_{i=1}^{n}(x_i-y_i)^2}</span>다. 영상이면 <span class="tex">i</span>가 픽셀(또는 히스토그램 칸)이다. 예: (1, 2)와 (4, 6)은 차이가 (3, 4)이므로 <span class="tex">d_1=3+4=7</span>, <span class="tex">d_2=\sqrt{9+16}=5</span>. 둘 다 <span class="tex">d_p=(\sum\lvert x_i-y_i\rvert^p)^{1/p}</span>의 p = 1, 2인 경우다.</p>
+    <p><span class="lab">[(2) 차이 ① 기하학적 의미]</span>L1은 축을 따라 가로 · 세로로만 움직인 <b>격자 길(택시 거리)</b>의 길이이고, L2는 두 점을 잇는 <b>직선 거리</b>다(교안 49p &mdash; L1은 경로 1 · 2 · 3이 모두 같은 길이). 그래서 항상 <span class="tex">d_1\ge d_2</span>이고, 같은 거리의 점들을 그리면 L1은 <b>마름모</b>, L2는 <b>원</b>이다.</p>
+    <p><span class="lab">[(2) 차이 ② 큰 차이에 대한 민감도]</span>L2는 차이를 <b>제곱</b>하므로 한 성분의 큰 차이를 크게 벌한다. 차이 (1, 1, 1, 1, 8)과 (3, 3, 3, 3, 0)은 L1로는 둘 다 12지만, L2로는 8.25와 6이다. 곧 <b>L1은 모든 차이를 똑같이 세어 이상치에 덜 민감</b>하고, <b>L2는 튀는 값 하나에 크게 흔들린다</b>.</p>
+    <p><span class="lab">[(2) 차이 ③ 좌표축 의존성 · 계산]</span>L2는 좌표축을 <b>회전해도 값이 같지만</b>, L1은 축 방향에 따라 달라진다 &mdash; 원점에서 (5, 0)과 (3, 4)는 L2로는 둘 다 5지만 L1로는 5와 7이다. 계산은 L1이 절댓값 합이라 조금 더 싸다.</p>
+    <p><span class="lab">[(3) 쓰이는 상황]</span><b>L1</b> &mdash; ① 각 성분이 <b>독립적인 의미</b>를 가질 때(도시의 블록 이동, 성분별 차이를 그대로 합하고 싶을 때). ② <b>이상치 · 잡음</b>이 섞인 데이터. ③ <b>희소한 고차원 벡터</b>, 특히 BoW <b>히스토그램</b> 비교(히스토그램 차이의 합). ④ 영상 블록 매칭의 절대 차이 합(SAD). <b>L2</b> &mdash; ① 물리적 <b>직선 거리</b>가 의미 있는 연속 · 저차원 특징(좌표, 키 · 몸무게). ② <b>K-평균</b>(오차 제곱합 SSE를 줄이므로 중심이 평균이 된다)과 SIFT 기술자 매칭. ③ 방향(회전)에 무관해야 할 때. 어느 쪽이든 특징마다 단위 · 크기가 다르면 큰 값의 축이 거리를 지배하므로 <b>먼저 정규화</b>해야 한다(교안 48p).</p>
+  </details>
+</article>
+
+<article class="q" id="q11-4">
+  <div class="q-h"><span class="q-no">11-4</span><span class="q-star">★★☆</span><span class="q-wk">04절</span></div>
+  <p class="q-txt">Q. KNN이 영상 분류에 (픽셀 그대로) 쓰이지 않는 이유를 서술하시오. 그리고 KNN의 k를 정하는 방법과 k가 너무 작거나 클 때의 문제를 서술하시오.</p>
+  <p class="q-alt"><b>이렇게도 나온다</b> &mdash; &ldquo;KNN이 &lsquo;학습은 빠르고 예측은 느린&rsquo; 이유&rdquo; · &ldquo;비모수적 방법이란&rdquo;</p>
+  <div class="go"><b>개념 바로가기</b><a class="go-a" href="#knn">04 CIFAR-10 결과와 한계</a></div>
+  <details class="ans"><summary>답</summary>
+    <p><span class="lab">[KNN 요약]</span>KNN은 질의점에 가장 가까운 k개 학습 데이터의 <b>다수결</b>로 클래스를 정하는 <b>비모수적</b> 분류기다. 학습은 데이터를 <b>저장</b>하는 것뿐이고, 모든 계산을 예측 때 한다.</p>
+    <p><span class="lab">[이유 ① 테스트 시간이 너무 느리다]</span>새 영상 하나를 분류할 때마다 <b>모든 학습 영상과 거리</b>를 재야 한다(O(N·D)). CIFAR-10만 해도 학습 영상 50,000장 × 32×32×3 = 3,072차원이라 한 장에 약 1.5억 번의 연산이 든다. 실용 분류기는 학습이 오래 걸려도 <b>예측이 빨라야</b> 하는데 KNN은 정반대다. 학습 데이터 전체를 메모리에 들고 있어야 하는 것도 부담이다.</p>
+    <p><span class="lab">[이유 ② 픽셀 거리가 의미와 맞지 않는다]</span>영상 전체 수준의 L1 · L2 거리는 <b>직관에 어긋난다</b>(교안 53p). 원본의 일부를 가리거나, 몇 픽셀 옮기거나, 색조를 바꾼 영상 세 장이 원본과 <b>똑같은 L2 거리</b>를 가질 수 있다. 실제로 CIFAR-10의 최근접 이웃은 같은 클래스보다 <b>배경색 · 전체 밝기</b>가 비슷한 영상이다(52p). 픽셀 거리는 &lsquo;무엇이 찍혔나&rsquo;가 아니라 &lsquo;색이 어디에 칠해졌나&rsquo;를 잰다.</p>
+    <p><span class="lab">[이유 ③ 차원의 저주]</span>3,072차원 공간을 데이터로 촘촘히 채우려면 기하급수적으로 많은 영상이 필요하고, 고차원에서는 모든 점 사이 거리가 비슷해져 &lsquo;가장 가깝다&rsquo;의 의미가 약해진다.</p>
+    <p><span class="lab">[k 정하기]</span>k는 <b>교차 검증</b>으로 여러 값을 시험해 고른다(이진 분류는 동점을 피하려 홀수). <b>k가 너무 작으면</b>(k = 1) 잡음 점 하나에 결과가 흔들린다. <b>k가 너무 크면</b> 이웃에 <b>다른 클래스의 점</b>이 섞여 경계가 뭉개진다. 거리 계산 전에는 차원마다 크기가 다르므로 <b>정규화</b>가 중요하다.</p>
+    <p><span class="lab">[그래서]</span>픽셀 대신 <b>BoW 히스토그램</b>이나 CNN 특징처럼 의미를 담은 특징 공간으로 바꾼 뒤에는 KNN(최근접 검색)도 쓸 만하다. 원시 픽셀에 바로 쓰지 않는다는 것이 핵심이다.</p>
+  </details>
+</article>
+
+<article class="q" id="q11-5">
+  <div class="q-h"><span class="q-no">11-5</span><span class="q-star">★★★</span><span class="q-wk">06 · 07절</span></div>
+  <p class="q-txt">Q. SVM(Support Vector Machine) &mdash; (1) 결정 경계 · 서포트 벡터 · 마진을 정의하시오. (2) 마진을 최대화하는 이유를 서술하시오. (3) 마진이 <span class="tex">2/\lVert\boldsymbol w\rVert</span>임을 보이고 최적화 문제를 쓰시오. (4) 선형 분리가 안 될 때의 해결 방법 두 가지를 서술하시오.</p>
+  <p class="q-alt"><b>이렇게도 나온다</b> &mdash; &ldquo;C 값이 클 때와 작을 때의 차이&rdquo; · &ldquo;커널 트릭이 &lsquo;트릭&rsquo;인 이유&rdquo; · &ldquo;슬랙 변수 ξ의 의미&rdquo;</p>
+  <div class="go"><b>개념 바로가기</b><a class="go-a" href="#margin-note">마진 정리 · 그림</a><a class="go-a" href="#svm">06 SVM</a><a class="go-a" href="#kernel">07 커널 · 소프트 마진</a></div>
+  <details class="ans"><summary>답</summary>
+    <p><span class="lab">[(1) 정의]</span><b>SVM</b>은 두 클래스를 나누는 <b>선형 결정 경계를 데이터에서 학습</b>하되, 가능한 수많은 경계 중 <b>마진이 가장 큰 것</b>을 고르는 판별 분류기다. <b>결정 경계</b>는 두 클래스를 나누는 초평면 <span class="tex">\boldsymbol w\cdot\boldsymbol x+b=0</span>이다. <b>서포트 벡터</b>는 경계에 <b>가장 가까이 있는 최전방의 점들</b>로, <span class="tex">\boldsymbol w\cdot\boldsymbol x+b=\pm1</span> 위에 놓인다. <b>마진</b>은 결정 경계와 서포트 벡터 사이의 <b>수직 거리(빈 공간, 안전거리)</b>이며 양쪽을 합친 폭이 <span class="tex">2/\lVert\boldsymbol w\rVert</span>다.</p>
+    <p><span class="lab">[(2) 마진 최대화의 이유]</span>① <b>일반화 성능</b> &mdash; 두 집단 사이 완충 지대가 넓으면 학습 때 못 본 애매한 데이터가 들어와도 잘못 분류될 확률이 줄어든다. 최대 마진 해는 데이터의 작은 흔들림에 <b>가장 안정적</b>이다(66p). ② <b>과적합 방지</b> &mdash; 경계가 한쪽 데이터에 바짝 붙으면 작은 잡음에도 점이 선을 넘는다. 넓은 마진은 그런 변동을 견딘다. ③ 경계는 <b>서포트 벡터만으로 정해진다</b> &mdash; 멀리 있는 점을 지우거나 옮겨도 해가 바뀌지 않아 효율적이고 견고하다.</p>
+    <p><span class="lab">[(3) 2/‖w‖ 유도와 최적화 문제]</span>점 <span class="tex">\boldsymbol x</span>에서 초평면까지의 거리는 <span class="tex">\lvert\boldsymbol w\cdot\boldsymbol x+b\rvert/\lVert\boldsymbol w\rVert</span>다. 서포트 벡터는 <span class="tex">\boldsymbol w\cdot\boldsymbol x+b=\pm1</span> 위에 있으므로 한쪽 거리가 <span class="tex">1/\lVert\boldsymbol w\rVert</span>, 양쪽 합이 <span class="tex">2/\lVert\boldsymbol w\rVert</span>다. 마진 최대화는 <span class="tex">\lVert\boldsymbol w\rVert</span> 최소화와 같고, 미분하기 쉽게 <span class="tex">\min\tfrac12\lVert\boldsymbol w\rVert^2\;\text{s.t.}\;y_i(\boldsymbol w\cdot\boldsymbol x_i+b)\ge1</span>로 쓴다(<span class="tex">y_i\in\{+1,-1\}</span>). 이것은 <b>볼록 이차 계획(QP)</b> 문제라 <b>전역 최적해가 하나</b>다. 라그랑주 승수로 쌍대 문제를 풀면 판별 함수는 <span class="tex">\operatorname{sign}(\sum_i\lambda_iy_i\,\boldsymbol x_i\cdot\boldsymbol x+b)</span>이고, <span class="tex">\lambda_i&gt;0</span>인 점이 서포트 벡터다.</p>
+    <p><span class="lab">[(4) 해결 ① 커널 트릭]</span>원 모양처럼 직선으로 못 나누는 데이터는 <b>더 높은 차원으로 사상</b>(<span class="tex">\varphi</span>)하면 선형 분리가 가능해진다(예: <span class="tex">(x_1,x_2)\to(x_1,x_2,x_1^2+x_2^2)</span>). 쌍대 문제에는 데이터가 <b>내적으로만</b> 나오므로, <span class="tex">\varphi</span>를 직접 계산하지 않고 <b>커널 함수</b> <span class="tex">K(\boldsymbol x_i,\boldsymbol x_j)=\varphi(\boldsymbol x_i)\cdot\varphi(\boldsymbol x_j)</span>로 바꿔 끼운다 &mdash; 다항 · RBF(무한 차원) · 히스토그램 교집합 커널 등.</p>
+    <p><span class="lab">[(4) 해결 ② 소프트 마진]</span>이상점 때문에 마진이 좁아지거나 분리가 불가능하면, <b>슬랙 변수</b> <span class="tex">\xi_i</span>로 약간의 오분류를 허용한다: <span class="tex">\min\lVert\boldsymbol w\rVert^2+C\sum\xi_i\;\text{s.t.}\;y_i(\boldsymbol w^\top\boldsymbol x_i+b)\ge1-\xi_i</span>. <b>C가 크면</b> 실수를 비싸게 쳐서 마진이 좁고 과적합 위험이 커지고, <b>C가 작으면</b> 마진이 넓고 몇 점은 틀려도 둔다. C는 교차 검증으로 고른다 &mdash; 마진과 실수 사이의 균형이다.</p>
+  </details>
+</article>
+
+<article class="q" id="q11-6">
+  <div class="q-h"><span class="q-no">11-6</span><span class="q-star">★★☆</span><span class="q-wk">04 · 05 · 06절</span></div>
+  <p class="q-txt">Q. 판별 모델(discriminative)과 생성 모델(generative)의 차이를 결정 규칙 중심으로 서술하고, KNN · SVM · Naive Bayes를 각각 분류하시오.</p>
+  <div class="go"><b>개념 바로가기</b><a class="go-a" href="#flip-rule">결정 규칙</a><a class="go-a" href="#pit-gen">판별 vs 생성 표</a></div>
+  <details class="ans"><summary>답</summary>
+    <p><span class="lab">[결정 규칙]</span>분류기의 <b>결정 규칙</b>은 입력 공간을 <b>결정 경계로 나뉜 결정 영역들</b>로 쪼갠다(43p). 판별 모델과 생성 모델은 이 경계를 얻는 방식이 다르다.</p>
+    <p><span class="lab">[판별 모델]</span>결정 경계 또는 사후 확률 <span class="tex">p(z|\boldsymbol x)</span>를 데이터에서 <b>직접</b> 학습한다. 클래스를 가르는 데 필요한 것에만 집중하므로 데이터가 충분하면 보통 정확도가 높지만, 데이터가 어떻게 생겼는지는 설명하지 못한다. <b>KNN</b>(이웃 k개의 다수결로 바로 결정)과 <b>SVM</b>(<span class="tex">\operatorname{sign}(\boldsymbol w\cdot\boldsymbol x+b)</span>, 최대 마진 경계를 직접 학습)이 여기에 속한다.</p>
+    <p><span class="lab">[생성 모델]</span>클래스마다 데이터가 생겨나는 분포 <span class="tex">p(\boldsymbol x|z)</span>와 사전 확률 <span class="tex">p(z)</span>를 학습한 뒤, <b>베이즈 규칙</b>으로 사후 확률을 계산해 <span class="tex">\hat z=\arg\max_z p(\boldsymbol x|z)p(z)</span>(MAP)를 고른다. 분포를 알기 때문에 그 클래스다운 데이터를 <b>만들어 낼 수도</b> 있고, 데이터가 적어도 잘 버티며 확률을 바로 준다. 대신 분포 가정이 틀리면 성능이 떨어진다. <b>Naive Bayes</b>가 대표 예로, 특징들이 클래스가 주어지면 <b>조건부 독립</b>이라 가정해 <span class="tex">p(z)\prod_n p(x_n|z)</span>로 계산한다.</p>
+  </details>
+</article>
+
+<article class="q" id="q11-7">
+  <div class="q-h"><span class="q-no">11-7</span><span class="q-star">★☆☆</span><span class="q-wk">05절</span></div>
+  <p class="q-txt">Q. Naive Bayes 분류기 &mdash; (1) 결정식을 쓰고 &lsquo;naive&rsquo;의 의미를 서술하시오. (2) 로그 확률을 쓰는 이유와 확률이 0인 단어의 문제 · 해결책을 서술하시오.</p>
+  <div class="go"><b>개념 바로가기</b><a class="go-a" href="#nb">05 Naive Bayes</a></div>
+  <details class="ans"><summary>답</summary>
+    <p><span class="lab">[(1) 결정식 · naive]</span>관측 특징 <span class="tex">x_1,\dots,x_N</span>이 주어졌을 때 사후 확률이 가장 큰 클래스를 고른다: <span class="tex">\hat z=\arg\max_z p(z)\prod_n p(x_n|z)</span>. 베이즈 규칙의 분모 <span class="tex">p(\boldsymbol X)</span>는 z와 무관해 뺀다. <b>naive(순진한)</b>는 &lsquo;클래스가 주어지면 특징들이 서로 <b>조건부 독립</b>&rsquo;이라는 단순한 가정을 뜻한다 &mdash; 그 덕에 결합 가능도를 특징별 확률의 곱으로 쪼갤 수 있고, 특징을 독립으로 보는 BoW와 잘 맞는다.</p>
+    <p><span class="lab">[(2) 로그 · 0 확률]</span>1보다 작은 확률을 수십 · 수백 개 곱하면 값이 컴퓨터가 표현하지 못할 만큼 작아진다(언더플로). 로그를 취하면 곱이 <b>합</b>이 되어 안정적이고, 로그는 증가 함수라 argmax 결과는 같다. 그런데 학습 데이터에 한 번도 안 나온 단어는 <span class="tex">p=0</span>이고 <span class="tex">\log0=-\infty</span>라, 그 단어 하나 때문에 클래스 전체가 탈락한다. 그래서 모든 개수에 1을 더하는 <b>라플라스(add-1) 스무딩</b> <span class="tex">p(w|z)=\frac{n_{w,z}+1}{\sum_{w'}n_{w',z}+V}</span>으로 0을 없앤다.</p>
+  </details>
+</article>
+</section>
+
 <section class="sec" id="summary">
   <div class="sec-head"><span class="sec-badge">SUM</span><h2 class="sec-title">핵심 정리<small>서술형으로 나올 때 이 흐름으로</small></h2></div>
 <div class="tbl-wrap">
@@ -946,8 +1228,11 @@ clf = SVC(kernel='rbf', C=10).fit(X_hist_train, y_train)      <span class="cm">#
     <tr><td>데이터 기반 접근</td><td>레이블 데이터 수집 → ML 학습 → 테스트 평가</td><td>&mdash;</td></tr>
     <tr><td>BoW 정의</td><td>특징에 대한 히스토그램 · 특징은 독립 · <b>공간 정보 무시</b> · 가림 · 크기 · 회전에 강함</td><td>벡터 공간 모형, 코사인</td></tr>
     <tr><td>TF-IDF</td><td>흔한 단어의 가중치를 낮춘다</td><td><span class="tex">n(w_{i,d})\log\frac{D}{\sum_{d'}\mathbf 1[w_i\in d']}</span></td></tr>
+    <tr><td>TF-IDF (영상)</td><td>TF = 히스토그램 칸(시각 단어 개수) · DF = 그 단어가 나온 학습 영상 수 · 흔한 패치(하늘)를 눌러 준다</td><td>IDF는 학습 영상으로 한 번 계산</td></tr>
+    <tr><td>BoW 불변성</td><td>위치 · 가림 불변은 <b>가방</b>(위치를 버림 = 문서의 순서 소멸), 크기 · 회전 불변은 <b>SIFT 기술자</b></td><td>&mdash;</td></tr>
     <tr><td>BoW 파이프라인</td><td>① 사전 학습(SIFT → K-평균, 중심 = 코드워드) ② 인코딩(최근접 중심 양자화 → 히스토그램) ③ 분류</td><td>길이 K 고정 벡터</td></tr>
     <tr><td>KNN</td><td>비모수 · k개 다수결 · 거리 정규화 · k는 교차 검증 · 작으면 잡음에 민감, 크면 다른 클래스 섞임 · 영상 픽셀엔 안 씀</td><td>L1 <span class="tex">\sum\lvert\cdot\rvert</span>, L2 <span class="tex">\sqrt{\sum(\cdot)^2}</span></td></tr>
+    <tr><td>판별 vs 생성</td><td>판별: 경계 · <span class="tex">p(z|x)</span>를 직접(KNN · SVM) · 생성: <span class="tex">p(x|z)p(z)</span>를 배워 베이즈로(Naive Bayes)</td><td>결정 규칙이 결정 영역을 나눈다</td></tr>
     <tr><td>Naive Bayes</td><td>클래스마다 모수 모형 · MAP · 조건부 독립 · 로그 확률 · (0 확률 → 스무딩)</td><td><span class="tex">\hat z=\arg\max_zp(z)\prod_np(x_n|z)</span></td></tr>
     <tr><td>SVM</td><td>최대 여백 · 서포트 벡터 · 볼록 QP(해 하나)</td><td>여백 <span class="tex">2/\lVert w\rVert</span>, <span class="tex">\min\tfrac12\lVert w\rVert^2\;\text{s.t.}\;y_i(w\cdot x_i+b)\ge1</span></td></tr>
     <tr><td>커널 트릭</td><td>고차원으로 사상하면 분리 가능 · 내적만 커널로 바꾼다</td><td><span class="tex">K(x_i,x_j)=\varphi(x_i)\cdot\varphi(x_j)</span></td></tr>
