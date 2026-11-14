@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>12주차 순환 신경망과 주의 메커니즘 — 100문제 풀이</title>
+<style>
+  :root{
+    --bg:#f4f6fa; --card:#ffffff; --ink:#16202e; --muted:#657189;
+    --line:#e2e8f2; --brand:#1560d8; --brand-deep:#0b3b8c; --brand-soft:#eaf1fe;
+    --ok:#0f8a5f; --ok-soft:#e6f6ef; --no:#d43c4a; --no-soft:#fdecee;
+    --warn:#b7791f; --shadow:0 1px 2px rgba(16,32,64,.05),0 8px 24px rgba(16,32,64,.07);
+    --r:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0e1420; --card:#161e2c; --ink:#e8edf6; --muted:#98a4bb;
+      --line:#273246; --brand:#5b96ff; --brand-deep:#a8c6ff; --brand-soft:#1a2740;
+      --ok:#48c99a; --ok-soft:#122c23; --no:#ff7b88; --no-soft:#33191e;
+      --warn:#e0b25c; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Malgun Gothic","맑은 고딕",system-ui,sans-serif;
+    line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:22px 16px 80px}
+
+  header.top{margin-bottom:18px}
+  .eyebrow{color:var(--brand);font-weight:700;font-size:13px;letter-spacing:.04em}
+  h1{font-size:25px;line-height:1.3;margin:4px 0 6px;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:14px;margin:0}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+
+  /* controls */
+  .controls{padding:14px 16px;margin-bottom:14px}
+  .ctl-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .ctl-row + .ctl-row{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+  .ctl-label{font-size:12px;font-weight:700;color:var(--muted);min-width:52px}
+  .chip{
+    border:1px solid var(--line);background:transparent;color:var(--ink);
+    padding:5px 11px;border-radius:999px;font-size:13px;cursor:pointer;
+    font-family:inherit;transition:.13s; white-space:nowrap;
+  }
+  .chip:hover{border-color:var(--brand);color:var(--brand)}
+  .chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+  .chip.ghost[aria-pressed="true"]{background:var(--brand-soft);color:var(--brand-deep);border-color:var(--brand)}
+  .spacer{flex:1}
+
+  /* progress */
+  .prog{padding:14px 16px;margin-bottom:14px}
+  .prog-head{display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;margin-bottom:9px}
+  .stat{font-size:13px;color:var(--muted)}
+  .stat b{color:var(--ink);font-size:15px;font-variant-numeric:tabular-nums}
+  .stat.ok b{color:var(--ok)} .stat.no b{color:var(--no)}
+  .bar{height:7px;background:var(--line);border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--ok));border-radius:99px;transition:width .3s}
+
+  /* question */
+  .qcard{padding:20px 20px 18px;margin-bottom:14px}
+  .qmeta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
+  .tag{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:.02em}
+  .tag.num{background:var(--brand-deep);color:#fff}
+  @media (prefers-color-scheme: dark){ .tag.num{background:var(--brand-soft);color:var(--brand-deep)} }
+  .tag.sec{background:var(--brand-soft);color:var(--brand-deep)}
+  .tag.d1{background:var(--ok-soft);color:var(--ok)}
+  .tag.d2{background:#fff4e0;color:var(--warn)}
+  .tag.d3{background:var(--no-soft);color:var(--no)}
+  @media (prefers-color-scheme: dark){ .tag.d2{background:#3a2e14} }
+  .qtext{font-size:17.5px;font-weight:600;letter-spacing:-.01em;margin:0 0 16px;line-height:1.55}
+
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{
+    display:flex;gap:11px;align-items:flex-start;text-align:left;width:100%;
+    padding:12px 14px;border:1.5px solid var(--line);background:var(--card);
+    border-radius:11px;cursor:pointer;font:inherit;font-size:15px;color:var(--ink);
+    transition:.13s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--brand);background:var(--brand-soft)}
+  .opt:disabled{cursor:default}
+  .opt .n{
+    flex:none;width:23px;height:23px;border-radius:50%;background:var(--line);color:var(--muted);
+    display:grid;place-items:center;font-size:12.5px;font-weight:700;margin-top:1px;
+  }
+  .opt.correct{border-color:var(--ok);background:var(--ok-soft)}
+  .opt.correct .n{background:var(--ok);color:#fff}
+  .opt.wrong{border-color:var(--no);background:var(--no-soft)}
+  .opt.wrong .n{background:var(--no);color:#fff}
+  .opt .mark{margin-left:auto;font-size:13px;font-weight:700;flex:none;padding-left:8px}
+  .opt.correct .mark{color:var(--ok)} .opt.wrong .mark{color:var(--no)}
+
+  .exp{margin-top:14px;padding:13px 15px;border-radius:11px;background:var(--brand-soft);border-left:3px solid var(--brand);font-size:14.5px}
+  .exp h4{margin:0 0 5px;font-size:12.5px;letter-spacing:.03em;color:var(--brand-deep)}
+  .exp p{margin:0}
+  .exp .ref{display:block;margin-top:7px;font-size:12.5px;color:var(--muted)}
+
+  .nav{display:flex;gap:8px;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+  .btn{
+    border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 16px;border-radius:10px;
+    font:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:.13s;
+  }
+  .btn:hover:not(:disabled){border-color:var(--brand);color:var(--brand)}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+  .btn.primary:hover:not(:disabled){filter:brightness(1.08);color:#fff}
+  .btn.danger{color:var(--no);border-color:var(--no)}
+  .btn.danger:hover{background:var(--no-soft)}
+
+  /* palette */
+  details.pal{padding:0;margin-bottom:14px;overflow:hidden}
+  details.pal summary{padding:13px 16px;cursor:pointer;font-size:14px;font-weight:600;list-style:none;display:flex;align-items:center;gap:8px}
+  details.pal summary::-webkit-details-marker{display:none}
+  details.pal summary::before{content:"▸";color:var(--muted);transition:.15s}
+  details.pal[open] summary::before{transform:rotate(90deg)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:6px;padding:0 16px 16px}
+  .cell{
+    aspect-ratio:1;border:1px solid var(--line);background:transparent;border-radius:8px;
+    font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;
+    font-variant-numeric:tabular-nums;transition:.1s;
+  }
+  .cell:hover{border-color:var(--brand);color:var(--brand)}
+  .cell.o{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+  .cell.x{background:var(--no-soft);border-color:var(--no);color:var(--no)}
+  .cell.cur{outline:2px solid var(--brand);outline-offset:1px}
+
+  /* result */
+  .result{padding:26px 22px;text-align:center}
+  .score{font-size:46px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:6px 0}
+  .score small{font-size:20px;color:var(--muted);font-weight:600}
+  .breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:20px 0 6px;text-align:left}
+  .bd{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .bd .k{font-size:12px;color:var(--muted)}
+  .bd .v{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+  .empty{padding:40px 20px;text-align:center;color:var(--muted);font-size:15px}
+  footer{margin-top:26px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.8}
+  @media (max-width:520px){
+    h1{font-size:21px} .qtext{font-size:16.5px} .opt{font-size:14.5px;padding:11px 12px}
+    .ctl-label{min-width:100%;margin-bottom:-3px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">CHAPTER 12 · 자연어처리</div>
+    <h1>12주차 &middot; 순환 신경망(RNN·LSTM)과 Seq2Seq·주의 메커니즘 — 100문제</h1>
+    <p class="sub">강의자료 12.1.1~12.2.6절 전 범위 · 4지선다 · 난이도 3단계</p>
+  </header>
+
+  <section class="panel controls">
+    <div class="ctl-row">
+      <span class="ctl-label">단원</span>
+      <div id="secChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    </div>
+    <div class="ctl-row">
+      <span class="ctl-label">난이도</span>
+      <div id="diffChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    </div>
+    <div class="ctl-row">
+      <span class="ctl-label">설정</span>
+      <button class="chip ghost" id="shuffleQ" aria-pressed="false">문제 순서 섞기</button>
+      <button class="chip ghost" id="shuffleO" aria-pressed="false">보기 순서 섞기</button>
+      <span class="spacer"></span>
+      <button class="chip" id="reviewBtn">오답 다시 풀기 <b id="wrongCount">0</b></button>
+      <button class="chip" id="resetBtn">처음부터</button>
+    </div>
+  </section>
+
+  <section class="panel prog">
+    <div class="prog-head">
+      <span class="stat">진도 <b><span id="doneN">0</span> / <span id="totalN">0</span></b></span>
+      <span class="stat ok">정답 <b id="okN">0</b></span>
+      <span class="stat no">오답 <b id="noN">0</b></span>
+      <span class="spacer"></span>
+      <span class="stat">정답률 <b id="rate">—</b></span>
+    </div>
+    <div class="bar"><i id="barFill"></i></div>
+  </section>
+
+  <details class="panel pal">
+    <summary>문제 번호로 이동 <span style="color:var(--muted);font-weight:400">(초록 = 정답, 빨강 = 오답)</span></summary>
+    <div class="grid" id="palette"></div>
+  </details>
+
+  <main id="stage"></main>
+
+  <footer>
+    12주차 강의자료(순환 신경망(RNN·LSTM)과 Seq2Seq·주의 메커니즘) 기반 자율 학습용 문제 세트<br>
+    풀이 기록은 이 브라우저에만 저장되며, '처음부터'를 누르면 초기화됩니다.
+  </footer>
+</div>
+
+<script>
+const QUESTIONS = [{"id": 1, "sec": "12.1.1", "diff": "기초", "q": "순차 데이터(Sequential data)의 정의로 가장 알맞은 것은?", "opts": ["관측 값 사이에 어떤 상관관계도 존재하지 않는 데이터", "관측 값의 순서를 바꿔도 의미가 전혀 변하지 않는 데이터", "모든 표본의 길이가 항상 동일하게 고정된 데이터", "관측 값이 순서(order)를 가지고 나열되어 있는 데이터"], "a": 3, "exp": "강의자료는 순차 데이터를 관측 값이 순서를 가지고 나열된 데이터로 정의하며, 순서를 바꾸면 의미 자체가 달라지는 점을 가장 큰 특징으로 든다."}, {"id": 2, "sec": "12.1.1", "diff": "기초", "q": "순차 데이터에서 t 번째 관측 값과 전체 순차열의 표기로 옳은 것은?", "opts": ["c(t) 로 표기하고 전체를 c(1), c(2), … , c(d) 로 나타낸다", "y(t) 로 표기하고 전체를 y(1), y(2), … , y(V) 로 나타낸다", "x(t) 로 표기하고 전체를 x(1), x(2), … , x(T) 로 나타낸다", "h(t) 로 표기하고 전체를 h(0), h(1), … , h(T) 로 나타낸다"], "a": 2, "exp": "강의자료는 t 번째 관측 값을 x(t) 로 쓰고 전체를 x(1) … x(T) 로 나타낸다. h(t) 는 은닉 상태, y(t) 는 출력의 표기이다."}, {"id": 3, "sec": "12.1.1", "diff": "기초", "q": "강의자료가 제시한 순차 데이터의 세 가지 특성에 해당하지 않는 것은?", "opts": ["순서 의존성", "가변 길이", "차원 불변성", "장기 의존성"], "a": 2, "exp": "강의자료는 순서 의존성·가변 길이·장기 의존성 세 가지를 순차 데이터의 특성으로 제시했다. 차원 불변성은 언급되지 않는다."}, {"id": 4, "sec": "12.1.1", "diff": "중급", "q": "\"개가 사람을 물었다\" 와 \"사람이 개를 물었다\" 의 대비가 보여 주는 순차 데이터의 특성은?", "opts": ["가중치 공유", "장기 의존성", "가변 길이", "순서 의존성"], "a": 3, "exp": "단어 구성은 같지만 순서가 달라 의미가 달라지는 예로, 순서 의존성을 설명하기 위한 예시이다."}, {"id": 5, "sec": "12.1.1", "diff": "중급", "q": "\"프랑스에서 자란 그는 … 유창한 ( 프랑스어 ) 를 말한다\" 예시가 설명하는 특성은?", "opts": ["순서 의존성", "희소성", "가변 길이", "장기 의존성"], "a": 3, "exp": "빈칸을 채우는 데 필요한 단서가 아주 먼 과거의 단어('프랑스')에 있다는 점에서 장기 의존성의 예시이다."}, {"id": 6, "sec": "12.1.1", "diff": "중급", "q": "다층 퍼셉트론(MLP)으로 순차 데이터를 처리할 때 생기는 한계로 옳지 않은 것은?", "opts": ["입력 순서를 그대로 보존하면서 임의 길이의 문장을 하나의 모형으로 처리할 수 있다", "입력을 한 덩어리의 고정 길이 벡터로 밀어 넣어야 해서 순서 정보가 사라진다", "시점마다 별도의 가중치를 두면 파라미터 수가 시점 수에 비례해 폭증한다", "문장 길이가 달라지면 입력 노드 수가 달라져 같은 모형을 사용할 수 없다"], "a": 0, "exp": "MLP 는 고정 길이 입력만 받고 순서 정보를 잃어버린다. 순서 보존과 가변 길이 처리는 RNN 이 해결한 문제이다."}, {"id": 7, "sec": "12.1.2", "diff": "기초", "q": "순환 신경망(RNN)의 핵심 아이디어로 옳은 것은?", "opts": ["시점마다 서로 다른 가중치를 학습해 표현력을 높인다", "입력 순서를 무작위로 섞어 일반화 성능을 높인다", "모든 시점의 입력을 하나의 고정 벡터로 이어 붙여 한 번에 처리한다", "이전 시점의 은닉 상태를 현재 시점의 입력과 함께 사용한다"], "a": 3, "exp": "RNN 은 직전 은닉 상태 h(t-1) 을 현재 입력 x(t) 와 함께 사용해 순차 데이터를 처리하도록 설계된 구조이다."}, {"id": 8, "sec": "12.1.2", "diff": "기초", "q": "은닉 상태 h(t) 에 대한 설명으로 옳은 것은?", "opts": ["출력 y(t) 와 항상 동일한 값을 갖는 벡터이다", "t 시점까지의 입력 x(1) … x(t) 를 요약해 담고 있는 고정 크기 벡터이다", "t 시점의 입력 x(t) 하나만을 담고 있으며 길이가 시점마다 달라지는 가변 크기 벡터이다", "학습 중에는 전혀 갱신되지 않는 상수 벡터이다"], "a": 1, "exp": "은닉 상태는 t 시점까지의 입력을 요약한 고정 크기 벡터로, 매 시점 갱신되어 다음 시점으로 전달되며 '기억' 역할을 한다."}, {"id": 9, "sec": "12.1.2", "diff": "기초", "q": "RNN 의 은닉 상태 갱신식으로 옳은 것은?", "opts": ["h(t) = σ( W_y · h(t) + c )", "h(t) = tanh( W_x · x(t) + W_h · h(t+1) + b )", "h(t) = tanh( W_x · x(t) + W_h · h(t-1) + b )", "h(t) = softmax( W_x · x(t) + W_h · h(t-1) + b )"], "a": 2, "exp": "은닉 상태는 입력과 직전 은닉 상태의 선형 변환을 더한 뒤 tanh 를 적용해 얻는다. softmax 는 출력식에 쓰인다."}, {"id": 10, "sec": "12.1.2", "diff": "기초", "q": "RNN 의 출력식으로 옳은 것은?", "opts": ["y(t) = tanh( W_y · h(t) + c )", "y(t) = softmax( W_x · x(t) + b )", "y(t) = σ( W_h · h(t-1) + b )", "y(t) = softmax( W_y · h(t) + c )"], "a": 3, "exp": "출력은 현재 은닉 상태를 선형 변환한 뒤 softmax 를 적용해 얻는다."}, {"id": 11, "sec": "12.1.2", "diff": "중급", "q": "RNN 의 초기 은닉 상태 h(0) 에 대한 설명으로 옳은 것은?", "opts": ["입력 임베딩 벡터들의 평균으로 초기화한다", "보통 난수로 초기화하므로 매 실행마다 첫 출력이 크게 달라진다", "보통 영벡터로 초기화하므로 첫 시점의 은닉 상태는 x(1) 만으로 결정된다", "마지막 시점의 h(T) 를 복사해 사용한다"], "a": 2, "exp": "h(0) 은 보통 영벡터로 두므로 W_h · h(0) 항이 0 이 되어 h(1) 은 x(1) 만으로 결정된다."}, {"id": 12, "sec": "12.1.2", "diff": "중급", "q": "RNN 의 은닉층 활성함수로 tanh 를 사용하는 이유로 강의자료가 든 것은?", "opts": ["음수 출력을 0 으로 잘라내 희소성을 높이기 위해", "기울기를 항상 정확히 1 로 유지하기 위해", "출력 범위를 (-1, 1) 로 제한해 은닉 상태가 발산하지 않도록 하기 위해", "출력의 합을 1 로 만들어 다음 단어에 대한 확률 분포를 직접 얻기 위해"], "a": 2, "exp": "tanh 는 출력을 (-1, 1) 로 제한해 은닉 상태가 발산하지 않게 한다. 합을 1 로 만드는 것은 softmax 의 역할이다."}, {"id": 13, "sec": "12.1.2", "diff": "중급", "q": "RNN 을 시간축으로 펼친(unfolded) 구조에 대한 설명으로 옳지 않은 것은?", "opts": ["파라미터 수가 시점 수 T 에 비례해 함께 증가한다", "문장 길이가 달라져도 같은 파라미터로 처리할 수 있다", "모든 시점이 동일한 W_x, W_h 를 공유한다", "시점 수만큼 층이 쌓인 깊은 신경망과 같아진다"], "a": 0, "exp": "가중치 공유 덕분에 파라미터 수는 시점 수 T 와 무관하게 일정하게 유지된다."}, {"id": 14, "sec": "12.1.2", "diff": "심화", "q": "W_x = 0.5, W_h = 0.8, b = 0, h(0) = 0 이고 입력이 x = ( 1, 1, 0 ) 인 은닉 차원 1 의 RNN 에서 h(1) 의 값은?", "opts": ["0.509", "0.701", "0.500", "0.462"], "a": 3, "exp": "W_x·x(1) + W_h·h(0) = 0.5×1.0 + 0.8×0 = 0.500 이고 tanh(0.500) = 0.462 이다. 0.500 은 tanh 적용 전의 값이다."}, {"id": 15, "sec": "12.1.2", "diff": "심화", "q": "같은 수치 예시에서 t = 2 의 tanh 입력값과 h(2) 를 바르게 짝지은 것은?", "opts": ["0.561 → 0.509", "0.500 → 0.462", "0.800 → 0.664", "0.870 → 0.701"], "a": 3, "exp": "0.5×1.0 + 0.8×0.462 = 0.870 이고 tanh(0.870) = 0.701 이다."}, {"id": 16, "sec": "12.1.2", "diff": "심화", "q": "같은 수치 예시에서 t = 3 의 입력이 x(3) = 0 인데도 h(3) = 0.509 로 0 이 아닌 이유는?", "opts": ["직전 은닉 상태 h(2) 가 W_h 를 통해 전달되어 과거 정보가 남아 있기 때문", "편향 b 가 0.561 로 설정되어 있어 입력이 없어도 그 값이 그대로 더해지기 때문", "패딩 토큰이 0 대신 0.509 로 채워졌기 때문", "tanh(0) 의 값이 0.509 이기 때문"], "a": 0, "exp": "입력이 0 이어도 W_h · h(2) = 0.8 × 0.701 = 0.561 이 남아 tanh(0.561) = 0.509 가 된다. 과거 정보가 은닉 상태에 남아 있다는 증거이다."}, {"id": 17, "sec": "12.1.3", "diff": "기초", "q": "RNN 의 입출력 구조와 대표 응용을 잘못 연결한 것은?", "opts": ["one-to-many : 이미지 캡셔닝", "many-to-one : 감정 분류, 스팸 판별", "many-to-many (동기) : 품사 태깅, 개체명 인식", "many-to-one : 이미지 캡셔닝"], "a": 3, "exp": "이미지 캡셔닝은 하나의 입력에서 순차열을 생성하는 one-to-many 구조이다. many-to-one 의 예는 감정 분류·스팸 판별이다."}, {"id": 18, "sec": "12.1.3", "diff": "기초", "q": "입력을 모두 읽은 뒤 출력을 생성하는 many-to-many (비동기) 구조의 대표 과제는?", "opts": ["개체명 인식", "기계 번역", "감정 분류", "품사 태깅"], "a": 1, "exp": "기계 번역은 입력을 다 읽은 뒤 길이가 다른 출력을 생성하는 비동기 many-to-many 구조로, 12-2 절의 Seq2Seq 로 이어진다."}, {"id": 19, "sec": "12.1.3", "diff": "기초", "q": "텍스트를 RNN 의 입력으로 바꾸는 과정의 순서로 옳은 것은?", "opts": ["토큰화 → 단어 사전 구축 → 정수 인코딩 → 임베딩", "단어 사전 구축 → 임베딩 → 토큰화 → 정수 인코딩", "임베딩 → 토큰화 → 정수 인코딩 → 단어 사전 구축", "정수 인코딩 → 토큰화 → 임베딩 → 단어 사전 구축"], "a": 0, "exp": "강의자료는 토큰화 → 단어 사전 구축 → 정수 인코딩 → 임베딩 순서로 RNN 입력을 만든다고 설명한다."}, {"id": 20, "sec": "12.1.3", "diff": "중급", "q": "임베딩 층에 대한 설명으로 옳은 것은?", "opts": ["d × d 크기의 고정된 행렬을 사용해 각 단어를 다시 원-핫 벡터로 되돌린다", "V × V 크기의 행렬을 학습해 단어 간 거리를 계산한다", "V × d 크기의 행렬을 학습해 각 단어를 d ≪ V 인 밀집 벡터로 변환한다", "학습되지 않는 상수 행렬로 정수 인덱스를 그대로 통과시킨다"], "a": 2, "exp": "임베딩 층은 어휘 크기 V 와 임베딩 차원 d 로 이루어진 V × d 행렬을 학습해 각 단어를 밀집 벡터로 바꾼다."}, {"id": 21, "sec": "12.1.3", "diff": "중급", "q": "패딩과 마스킹에 대한 설명으로 옳은 것은?", "opts": ["PAD 토큰은 어휘 사전에 등록하지 않고 임의의 실수로 채운다", "마스킹은 패딩과 무관하게 은닉 차원을 줄이는 기법이다", "짧은 문장 뒤에 0(PAD) 을 채우는 post-padding 을 쓰고, PAD 위치는 마스킹으로 연산에서 제외한다", "짧은 문장 앞에 0(PAD) 을 채우는 pre-padding 만 허용되며, PAD 위치도 정상 입력으로 학습에 반영한다"], "a": 2, "exp": "강의자료는 문장 뒤에 0(PAD) 을 채우는 post-padding 을 소개하고, PAD 위치는 마스킹으로 연산에서 제외한다고 설명한다."}, {"id": 22, "sec": "12.1.3", "diff": "중급", "q": "Keras 에서 패딩된 PAD 위치를 연산에서 제외하기 위해 사용하는 설정은?", "opts": ["stateful=True", "return_state=True", "mask_zero=True", "return_sequences=True"], "a": 2, "exp": "Keras 의 Embedding 층에 mask_zero=True 를 주면 0 으로 채워진 PAD 위치가 마스킹되어 이후 연산에서 제외된다."}, {"id": 23, "sec": "12.1.3", "diff": "기초", "q": "패딩을 마친 뒤 RNN 에 들어가는 입력 텐서의 형태로 강의자료가 제시한 것은?", "opts": ["(timesteps, dim)", "(batch, timesteps, dim)", "(batch, dim)", "(batch, vocab, timesteps)"], "a": 1, "exp": "패딩으로 배치 내 시점 수를 맞추면 (batch, timesteps, dim) 형태의 3 차원 텐서가 된다."}, {"id": 24, "sec": "12.1.4", "diff": "기초", "q": "BPTT(Backpropagation Through Time)에 대한 설명으로 옳은 것은?", "opts": ["순전파 없이 기울기를 근사해 계산하는 방법", "은닉 상태를 무시하고 출력층만 갱신하는 방법", "시간 순방향으로만 기울기를 전파하는 방법", "펼친 구조에 통상적인 오차 역전파를 그대로 적용하는 방법"], "a": 3, "exp": "BPTT 는 시간축으로 펼친 RNN 에 일반적인 역전파를 적용하는 방법으로, 기울기가 시간 역방향으로 전파된다."}, {"id": 25, "sec": "12.1.4", "diff": "기초", "q": "BPTT 에서 전체 손실 L 을 구하는 방식으로 옳은 것은?", "opts": ["마지막 시점의 손실 L(T) 만 사용", "첫 시점 손실 L(1) 만 사용", "각 시점 손실의 합 L = L(1) + L(2) + … + L(T)", "각 시점 손실의 곱 L = L(1) × L(2) × … × L(T)"], "a": 2, "exp": "전체 손실은 각 시점 손실의 합이며, W_h 의 기울기는 모든 시점의 기여를 더해서 계산된다."}, {"id": 26, "sec": "12.1.4", "diff": "중급", "q": "잘라낸 BPTT(Truncated BPTT)에 대한 설명으로 옳은 것은?", "opts": ["손실 계산 자체를 마지막 k 시점에서만 수행한다", "역전파 구간을 길이 k 로 잘라 수행하되 순전파는 계속 이어 간다", "순전파와 역전파를 모두 길이 k 에서 끊어 버려 문장을 k 개 단위로 나눈다", "역전파는 전체 구간에서 하고 순전파만 잘라서 한다"], "a": 1, "exp": "잘라낸 BPTT 는 순전파는 이어 가면서 역전파 구간만 길이 k 로 제한해 메모리를 절약하는 방법이다."}, {"id": 27, "sec": "12.1.4", "diff": "심화", "q": "대부분의 프레임워크가 입력 순차열 길이만큼만 펼쳐서 학습한다는 사실이 실무적으로 뜻하는 바는?", "opts": ["maxlen 과 무관하게 항상 문장 전체의 의존 관계를 학습할 수 있다", "문장을 자르는 길이 maxlen 이 곧 학습 가능한 의존 거리의 상한이 된다", "maxlen 은 임베딩 차원 d 와 같아야 학습이 가능하다", "maxlen 을 줄일수록 더 먼 과거의 의존 관계를 학습할 수 있다"], "a": 1, "exp": "펼치는 길이가 maxlen 으로 정해지므로 그보다 먼 시점 간의 의존 관계는 기울기가 전파되지 않아 학습되지 않는다."}, {"id": 28, "sec": "12.1.4", "diff": "심화", "q": "k 시점 이전으로 기울기를 전파할 때 나타나는 항의 크기는 대략 무엇에 비례하는가?", "opts": ["k · | W_h |", "| W_x |^k", "| W_h |^k", "| W_h | / k"], "a": 2, "exp": "∂h(t)/∂h(t-k) 는 야코비 행렬 ( W_h )ᵀ·diag(tanh'(·)) 를 k 번 곱한 형태이므로 대략 | W_h |^k 에 비례한다."}, {"id": 29, "sec": "12.1.4", "diff": "중급", "q": "| W_h | 의 크기에 따른 기울기 거동을 바르게 설명한 것은?", "opts": ["| W_h | < 1 이면 지수적으로 0 에 수렴(소실), | W_h | > 1 이면 지수적으로 발산(폭주)", "| W_h | < 1 이면 지수적으로 발산(폭주), | W_h | > 1 이면 0 에 수렴(소실)", "| W_h | 의 크기와 무관하게 기울기는 항상 일정하게 유지된다", "| W_h | 가 1 에 가까울수록 기울기가 가장 빠르게 발산한다"], "a": 0, "exp": "반복 곱 때문에 순환 가중치의 크기가 1 보다 작으면 기울기가 지수적으로 사라지고, 1 보다 크면 지수적으로 커진다."}, {"id": 30, "sec": "12.1.4", "diff": "중급", "q": "기울기 폭주의 증상과 대표적 해결 방법을 바르게 연결한 것은?", "opts": ["먼 과거를 학습하지 못함 — 기울기 클리핑", "손실 발산 / NaN — 기울기 클리핑(gradient clipping)", "먼 과거를 학습하지 못함 — 패딩과 마스킹", "손실 발산 / NaN — 게이트 구조(LSTM, GRU) 로의 교체"], "a": 1, "exp": "강의자료의 표에 따르면 기울기 폭주는 손실 발산·NaN 으로 나타나며 기울기 클리핑으로 대응한다."}, {"id": 31, "sec": "12.1.4", "diff": "심화", "q": "tanh 의 미분값이 기울기 소실에 기여하는 이유로 옳은 것은?", "opts": ["미분값이 항상 1 보다 커서 반복해 곱할수록 기울기가 지수적으로 커지기 때문", "미분값이 음수라서 기울기의 부호가 매 시점 뒤집힌다", "미분값이 최대 1 이고 포화 구간에서는 거의 0 이라 곱해질수록 기울기가 작아진다", "미분값이 입력과 무관하게 항상 0.5 로 고정되기 때문"], "a": 2, "exp": "tanh' 는 최대 1 이며 포화 구간에서 거의 0 이 되므로, 반복 곱 과정에서 기울기를 더 작아지는 방향으로 만든다."}, {"id": 32, "sec": "12.1.4", "diff": "중급", "q": "기본 RNN 이 장기 의존성을 학습하기 어려운 이유로 강의자료가 제시한 것은?", "opts": ["은닉 상태가 매 시점 tanh 로 덮어써지면서 과거 정보가 희석되기 때문", "은닉 상태가 시점마다 초기화되어 과거 정보가 아예 사라지기 때문", "가중치를 공유하지 않아 먼 시점의 정보가 전달되지 않기 때문", "출력층의 softmax 가 과거 정보를 상쇄하기 때문"], "a": 0, "exp": "기본 RNN 은 은닉 상태가 매 시점 tanh 로 갱신(덮어쓰기)되면서 과거 정보가 점점 희석되어 장기 의존성 학습이 어렵다."}, {"id": 33, "sec": "12.1.4", "diff": "기초", "q": "강의자료가 밝힌, 기본 RNN 이 실험적으로 학습하기 매우 어려운 의존 거리의 기준은?", "opts": ["시점 거리와 무관하게 모두 학습 가능", "대략 3 시점 이상 떨어진 의존 관계", "대략 100 시점 이상 떨어진 의존 관계", "대략 10 시점 이상 떨어진 의존 관계"], "a": 3, "exp": "강의자료는 실험적으로 대략 10 시점 이상 떨어진 의존 관계는 기본 RNN 으로 학습하기가 매우 어렵다고 밝힌다."}, {"id": 34, "sec": "12.1.5", "diff": "기초", "q": "게이트(gate)에 대한 설명으로 가장 알맞은 것은?", "opts": ["은닉 상태의 차원을 줄이는 압축 장치", "정보를 얼마나 통과시킬지를 학습하는 밸브", "입력 순서를 뒤집어 주는 변환기", "손실 함수를 정규화하는 항"], "a": 1, "exp": "게이트는 시그모이드 출력 g ∈ (0,1) 을 정보 벡터에 원소별로 곱해 통과량을 조절하는, 학습되는 정보 밸브이다."}, {"id": 35, "sec": "12.1.5", "diff": "기초", "q": "게이트 값 g 의 의미로 옳은 것은?", "opts": ["g ≈ 0 이면 차단, g ≈ 1 이면 그대로 통과", "g 는 정보 벡터에 더해져 편향처럼 작동한다", "g ≈ 0 이면 그대로 통과, g ≈ 1 이면 차단", "g 는 항상 0 또는 1 중 하나의 값만 갖는다"], "a": 0, "exp": "시그모이드 출력 g 는 (0,1) 사이 값이며 정보 벡터에 원소별로 곱해져, 0 에 가까우면 차단, 1 에 가까우면 통과시킨다."}, {"id": 36, "sec": "12.1.5", "diff": "기초", "q": "LSTM 을 제안한 연구자와 연도로 옳은 것은?", "opts": ["Cho et al. (2014)", "Vaswani et al. (2017)", "Hochreiter & Schmidhuber (1997)", "Bahdanau et al. (2015)"], "a": 2, "exp": "LSTM 은 Hochreiter & Schmidhuber 가 1997 년에 제안했다. Cho et al.(2014) 은 GRU, Bahdanau et al.(2015) 은 주의 메커니즘을 제안했다."}, {"id": 37, "sec": "12.1.5", "diff": "심화", "q": "오늘날의 3-게이트 표준 LSTM 구조에서 망각 게이트를 추가한 연구로 강의자료가 밝힌 것은?", "opts": ["Luong et al. (2015)", "Gers et al. (2000)", "Sutskever et al. (2014)", "Hochreiter & Schmidhuber (1997)"], "a": 1, "exp": "원래의 LSTM 에 망각 게이트를 추가해 오늘날의 3-게이트 표준 구조를 완성한 것은 Gers et al.(2000) 이다."}, {"id": 38, "sec": "12.1.5", "diff": "중급", "q": "LSTM 이 유지하는 두 상태의 역할을 바르게 설명한 것은?", "opts": ["셀 상태 C(t) 와 은닉 상태 h(t) 는 항상 같은 값을 갖는다", "셀 상태 C(t) 는 입력 게이트만, 은닉 상태 h(t) 는 망각 게이트만 사용한다", "셀 상태 C(t) 는 장기 기억, 은닉 상태 h(t) 는 단기 기억 및 현재 출력", "셀 상태 C(t) 는 단기 기억, 은닉 상태 h(t) 는 장기 기억"], "a": 2, "exp": "강의자료는 셀 상태를 컨베이어 벨트처럼 곧게 흐르는 장기 기억, 은닉 상태를 단기 기억이자 현재 시점의 출력으로 설명한다."}, {"id": 39, "sec": "12.1.5", "diff": "기초", "q": "LSTM 의 세 게이트를 바르게 나열한 것은?", "opts": ["리셋 게이트 · 업데이트 게이트 · 출력 게이트", "망각 게이트 · 리셋 게이트 · 입력 게이트", "입력 게이트 · 정렬 게이트 · 출력 게이트", "망각 게이트 · 입력 게이트 · 출력 게이트"], "a": 3, "exp": "LSTM 은 망각 f(t), 입력 i(t), 출력 o(t) 의 세 게이트를 갖는다. 리셋·업데이트 게이트는 GRU 의 구성이다."}, {"id": 40, "sec": "12.1.5", "diff": "중급", "q": "망각 게이트 f(t) 의 역할과 수식으로 옳은 것은?", "opts": ["현재 입력에서 새로 저장할 후보값을 만들며 f(t) = tanh( W_f · [ h(t-1), x(t) ] + b_f )", "출력할 정보를 고르며 f(t) = σ( W_f · C(t) + b_f )", "셀 상태를 더하는 항으로 f(t) = C(t-1) + x(t) 이다", "직전 셀 상태 C(t-1) 에서 무엇을 버릴지 결정하며 f(t) = σ( W_f · [ h(t-1), x(t) ] + b_f )"], "a": 3, "exp": "망각 게이트는 시그모이드로 (0,1) 값을 만들어 C(t-1) 에 원소별로 곱함으로써 필요 없는 기억을 지운다."}, {"id": 41, "sec": "12.1.5", "diff": "중급", "q": "입력 게이트 i(t) 와 후보값 C̃(t) 의 활성함수를 바르게 짝지은 것은?", "opts": ["i(t) 는 시그모이드, C̃(t) 는 tanh", "둘 다 softmax", "둘 다 시그모이드", "i(t) 는 tanh, C̃(t) 는 시그모이드"], "a": 0, "exp": "i(t) = σ(W_i·[h(t-1), x(t)]+b_i) 는 저장 비율이므로 시그모이드, C̃(t) = tanh(W_C·[h(t-1), x(t)]+b_C) 는 저장할 후보값이므로 tanh 를 쓴다."}, {"id": 42, "sec": "12.1.5", "diff": "중급", "q": "LSTM 의 셀 상태 갱신식으로 옳은 것은?", "opts": ["C(t) = f(t) ⊙ C(t-1) × i(t) ⊙ C̃(t)", "C(t) = f(t) ⊙ C(t-1) + i(t) ⊙ C̃(t)", "C(t) = tanh( W_C · C(t-1) + b_C )", "C(t) = o(t) ⊙ tanh( C(t-1) ) + i(t)"], "a": 1, "exp": "앞의 항은 남길 과거 기억, 뒤의 항은 추가할 새 기억이며 곱이 아닌 덧셈으로 결합된다."}, {"id": 43, "sec": "12.1.5", "diff": "심화", "q": "셀 상태가 곱이 아니라 덧셈으로 갱신되는 것이 중요한 이유는?", "opts": ["∂C(t)/∂C(t-1) = f(t) 가 되어 f(t) ≈ 1 이면 기울기가 그대로 보존되기 때문", "덧셈을 쓰면 셀 상태가 항상 (-1, 1) 범위에 머물기 때문", "덧셈이 곱셈보다 계산량이 적어 학습 속도가 빨라지기 때문", "∂C(t)/∂C(t-1) = 0 이 되어 과거 시점의 영향이 완전히 차단되고 기울기가 사라지기 때문"], "a": 0, "exp": "덧셈 갱신 덕분에 반복 곱해지는 항이 학습되는 값 f(t) 로 대체되어, 망각 게이트가 열려 있으면 먼 과거까지 기울기가 전달된다."}, {"id": 44, "sec": "12.1.5", "diff": "중급", "q": "출력 게이트와 은닉 상태의 관계식으로 옳은 것은?", "opts": ["h(t) = σ( o(t) + C(t) )", "h(t) = tanh( o(t) ⊙ C(t-1) )", "h(t) = o(t) ⊙ C(t)", "h(t) = o(t) ⊙ tanh( C(t) )"], "a": 3, "exp": "출력 게이트 o(t) 가 갱신된 셀 상태의 tanh 값 중 어떤 부분을 내보낼지 고른다. 장기 기억 C(t) 는 그대로 유지된다."}, {"id": 45, "sec": "12.1.5", "diff": "심화", "q": "LSTM 의 파라미터 수가 같은 은닉 차원의 기본 RNN 대비 약 4 배가 되는 이유는?", "opts": ["은닉 상태와 셀 상태를 각각 2 벌씩, 모두 4 벌을 저장해 두어야 하기 때문", "게이트 3 개와 후보값 1 개, 총 4 개의 선형 변환이 필요하기 때문", "시점마다 별도의 가중치를 학습하기 때문", "tanh 와 시그모이드를 각각 두 번씩 적용하기 때문"], "a": 1, "exp": "망각·입력·출력 게이트와 후보값 계산에 각각 하나씩, 모두 4 개의 선형 변환이 필요하므로 파라미터가 약 4 배가 된다."}, {"id": 46, "sec": "12.1.5", "diff": "심화", "q": "LSTM 이 기울기 소실을 완화하는 원리로 옳지 않은 것은?", "opts": ["반복 곱해지는 항이 학습되는 값 f(t) 로 대체되기 때문", "셀 상태가 매 시점 tanh 로 덮어써져 과거 정보를 새로 갱신하기 때문", "망각 게이트가 열려 있으면(f(t) ≈ 1) 먼 과거까지 기울기가 전달되기 때문", "셀 상태가 게이트를 통한 덧셈으로 갱신되어 기울기가 곧게 흐르기 때문"], "a": 1, "exp": "셀 상태를 매 시점 tanh 로 덮어쓰는 것은 기본 RNN 의 특징이자 문제점이며, LSTM 은 덧셈 갱신으로 이를 피한다."}, {"id": 47, "sec": "12.1.6", "diff": "기초", "q": "GRU 를 제안한 연구와 그 성격으로 옳은 것은?", "opts": ["Cho et al. (2014) 이 제안한 LSTM 의 경량화 구조", "Hochreiter & Schmidhuber (1997) 가 제안한 LSTM 의 확장 구조", "Sutskever et al. (2014) 가 제안한 인코더-디코더 구조", "Gers et al. (2000) 이 제안한 4-게이트 구조"], "a": 0, "exp": "GRU 는 Cho et al.(2014) 이 제안한 LSTM 의 경량화 구조로, 셀 상태를 없애고 게이트를 2 개로 줄였다."}, {"id": 48, "sec": "12.1.6", "diff": "중급", "q": "GRU 의 구조적 특징으로 옳은 것은?", "opts": ["셀 상태를 없애고 은닉 상태 h(t) 하나만 유지하며 게이트는 리셋 r(t), 업데이트 z(t) 두 개이다", "은닉 상태를 없애고 셀 상태 C(t) 하나만 유지한다", "게이트를 하나만 두고 셀 상태를 두 벌 유지한다", "셀 상태 C(t) 와 은닉 상태 h(t) 를 모두 유지하며 게이트는 리셋 r(t), 입력 i(t), 출력 o(t) 세 개이다"], "a": 0, "exp": "GRU 는 셀 상태를 제거하고 은닉 상태만 유지하며, 리셋 게이트와 업데이트 게이트 2 개만 사용한다."}, {"id": 49, "sec": "12.1.6", "diff": "심화", "q": "GRU 의 은닉 상태 갱신식 h(t) = ( 1 - z(t) ) ⊙ h(t-1) + z(t) ⊙ h̃(t) 가 갖는 의미는?", "opts": ["삭제와 추가를 하나의 게이트 z(t) 가 함께 담당한다", "셀 상태와 은닉 상태를 동시에 갱신한다", "과거 정보를 항상 절반씩만 유지한다", "삭제는 r(t), 추가는 z(t) 가 각각 담당한다"], "a": 0, "exp": "z(t) 와 (1 - z(t)) 가 짝을 이루므로, LSTM 에서 망각·입력 두 게이트가 나누어 하던 일을 GRU 는 업데이트 게이트 하나로 처리한다."}, {"id": 50, "sec": "12.1.6", "diff": "중급", "q": "SimpleRNN · LSTM · GRU 비교표의 내용으로 옳지 않은 것은?", "opts": ["GRU 는 게이트가 3 개이고 파라미터가 약 4 배이다", "파라미터는 SimpleRNN 1 배, LSTM 약 4 배, GRU 약 3 배이다", "LSTM 은 h 와 C 를 유지하며 게이트가 3 개이다", "SimpleRNN 은 게이트가 0 개이고 h 만 유지한다"], "a": 0, "exp": "표에 따르면 GRU 는 게이트가 2 개이고 파라미터가 약 3 배이다. 게이트 3 개·약 4 배는 LSTM 이다."}, {"id": 51, "sec": "12.1.6", "diff": "심화", "q": "LSTM 과 GRU 의 성능 비교에 대한 강의자료의 결론으로 옳은 것은?", "opts": ["SimpleRNN 과 LSTM, GRU 사이에는 성능 차이가 없으므로 가장 단순한 SimpleRNN 을 쓰는 것이 언제나 합리적이다", "모든 데이터셋에서 LSTM 이 GRU 보다 항상 우수하므로 GRU 는 따로 시도할 필요가 없다", "모든 데이터셋에서 GRU 가 LSTM 보다 항상 우수하다", "데이터셋에 따라 우열이 갈리므로 두 구조를 모두 시도하는 것이 일반적이며, 둘 다 SimpleRNN 보다는 대체로 우수하다"], "a": 3, "exp": "강의자료는 LSTM 과 GRU 의 우열이 데이터셋에 따라 갈리므로 둘 다 시도할 것을 권하되, 둘 다 SimpleRNN 보다는 대체로 우수하다고 정리한다."}, {"id": 52, "sec": "12.1.6", "diff": "중급", "q": "Keras 에서 심층(다층) RNN 을 만들 때 아래쪽 층에 지정해야 하는 인자는?", "opts": ["go_backwards=True", "return_sequences=True", "return_state=True", "mask_zero=True"], "a": 1, "exp": "위층 RNN 이 매 시점의 출력을 받아야 하므로 아래쪽 층에 return_sequences=True 를 지정해 시점별 출력을 모두 넘긴다."}, {"id": 53, "sec": "12.1.6", "diff": "중급", "q": "양방향(bidirectional) RNN 에 대한 설명으로 옳지 않은 것은?", "opts": ["현재 시점에서 과거와 미래 문맥을 모두 참조할 수 있다", "정방향·역방향 RNN 을 함께 사용한다", "미래 입력을 알 수 없는 실시간 생성 과제에도 자유롭게 사용할 수 있다", "과거와 미래 문맥이 모두 필요한 품사 태깅·개체명 인식 과제에 유리하다"], "a": 2, "exp": "양방향 RNN 은 미래 입력을 미리 알아야 하므로, 실시간 생성이나 실시간 음성 인식처럼 미래를 알 수 없는 과제에는 쓸 수 없다."}, {"id": 54, "sec": "12.1.6", "diff": "심화", "q": "강의자료의 Keras 예제에서 Embedding(input_dim=10000, output_dim=64, mask_zero=True) 의 의미로 옳은 것은?", "opts": ["임베딩 행렬을 10000 회 반복 학습한다", "어휘 크기 10000, 임베딩 차원 64 이며 0 으로 패딩된 위치를 마스킹한다", "입력 문장 길이 10000, 배치 크기 64 이며 0 을 학습 대상에 포함한다", "은닉 차원 10000, 출력 클래스 64 인 분류층이다"], "a": 1, "exp": "input_dim 은 어휘 크기, output_dim 은 임베딩 차원이며 mask_zero=True 는 PAD(0) 위치를 마스킹한다."}, {"id": 55, "sec": "12.1.6", "diff": "중급", "q": "기울기 클리핑(gradient clipping)이 해결하는 문제는?", "opts": ["기울기 폭주", "가변 길이 입력 처리", "기울기 소실", "과적합"], "a": 0, "exp": "기울기 클리핑은 기울기의 크기가 지나치게 커질 때 이를 잘라 내는 기법이므로 폭주 문제에 대응한다. 소실은 게이트 구조로 완화한다."}, {"id": 56, "sec": "12.2.1", "diff": "기초", "q": "순차열 대 순차열(Seq2Seq) 문제의 정의로 옳은 것은?", "opts": ["하나의 벡터를 입력받아 하나의 벡터를 출력하는 문제", "입력과 출력의 길이가 반드시 같아야 하는 문제", "순차열을 입력받아 다른 순차열을 출력하는 문제", "순차열을 입력받아 하나의 범주를 출력하는 문제"], "a": 2, "exp": "Seq2Seq 는 순차열을 입력받아 길이가 다를 수 있는 다른 순차열을 출력하는 문제이다."}, {"id": 57, "sec": "12.2.1", "diff": "중급", "q": "Seq2Seq 문제의 특성으로 옳지 않은 것은?", "opts": ["출력 길이를 미리 알 수 없어 모형이 종료 시점도 스스로 판단해야 한다", "입력 길이 T 와 출력 길이 T' 가 항상 같아야 한다", "단어의 순서가 일대일로 대응되지 않는다", "입력 길이 T 와 출력 길이 T' 가 서로 다를 수 있다"], "a": 1, "exp": "Seq2Seq 의 핵심은 입력과 출력의 길이가 다를 수 있다는 점이다. 길이가 같아야 한다면 동기 many-to-many 로 충분하다."}, {"id": 58, "sec": "12.2.1", "diff": "기초", "q": "강의자료가 제시한 Seq2Seq 의 대표적 응용 분야에 해당하지 않는 것은?", "opts": ["문서 요약", "이미지 분류", "기계 번역", "음성 인식"], "a": 1, "exp": "강의자료는 기계 번역·문서 요약·대화 시스템·음성 인식을 대표 응용으로 든다. 이미지 분류는 출력이 순차열이 아니다."}, {"id": 59, "sec": "12.2.1", "diff": "중급", "q": "Seq2Seq 대표 응용의 입력과 출력을 잘못 연결한 것은?", "opts": ["음성 인식 : 음성 파형 → 텍스트", "기계 번역 : 한국어 문장 → 영어 문장", "문서 요약 : 긴 기사 → 짧은 요약문", "대화 시스템 : 음성 파형 → 텍스트"], "a": 3, "exp": "대화 시스템은 사용자 발화 → 응답 문장이고, 음성 파형 → 텍스트는 음성 인식이다."}, {"id": 60, "sec": "12.2.1", "diff": "중급", "q": "12-1 절까지의 구조로는 기계 번역을 다루기 어려웠던 이유는?", "opts": ["임베딩 층을 사용할 수 없었기 때문", "은닉 상태를 순환시킬 수 없었기 때문", "입력 시점과 출력 시점이 대응되는 경우만 다루었기 때문", "게이트 구조가 없어 장기 의존성을 학습할 수 없었기 때문"], "a": 2, "exp": "many-to-one, 동기 many-to-many 는 입출력 시점이 대응되는 구조라, 길이가 다른 순차열을 생성하는 번역에는 적합하지 않다."}, {"id": 61, "sec": "12.2.2", "diff": "기초", "q": "인코더-디코더(Encoder-Decoder) 구조를 제안한 연구로 강의자료가 든 것은?", "opts": ["Vaswani et al. (2017)", "Sutskever et al. (2014), Cho et al. (2014)", "Hochreiter & Schmidhuber (1997)", "Bahdanau et al. (2015)"], "a": 1, "exp": "Seq2Seq 인코더-디코더 구조는 Sutskever et al.(2014) 과 Cho et al.(2014) 이 제안했다."}, {"id": 62, "sec": "12.2.2", "diff": "기초", "q": "인코더와 디코더의 역할을 바르게 설명한 것은?", "opts": ["인코더와 디코더가 모두 입력 순차열을 읽어 평균을 낸다", "인코더는 출력 순차열을 한 단어씩 생성하고, 디코더는 입력 순차열을 하나의 문맥 벡터로 압축한다", "인코더는 입력 순차열을 하나의 문맥 벡터로 압축하고, 디코더는 그 벡터로 출력을 한 단어씩 생성한다", "인코더는 어휘 사전을 만들고, 디코더는 임베딩을 학습한다"], "a": 2, "exp": "Seq2Seq 는 두 개의 RNN(보통 LSTM) 을 이어 붙인 구조로, 인코더가 압축하고 디코더가 생성한다."}, {"id": 63, "sec": "12.2.2", "diff": "중급", "q": "인코더의 문맥 벡터 c 로 사용하는 값은?", "opts": ["첫 시점의 은닉 상태 h(1)", "마지막 시점의 은닉 상태(와 셀 상태), 즉 c = h(T)", "모든 시점 은닉 상태의 단순 평균", "인코더 출력 y(1) … y(T) 를 이어 붙인 벡터"], "a": 1, "exp": "인코더는 입력을 순서대로 읽으며 은닉 상태를 갱신하고, 마지막 시점의 은닉(과 셀) 상태를 입력 전체를 요약한 문맥 벡터로 사용한다."}, {"id": 64, "sec": "12.2.2", "diff": "심화", "q": "Keras 로 Seq2Seq 를 구현할 때 인코더의 마지막 은닉·셀 상태를 받아 디코더로 전달하는 방법은?", "opts": ["인코더 LSTM 에 return_state=True 를 주고, 받은 상태를 디코더 LSTM 의 initial_state 로 전달한다", "디코더 LSTM 에 stateful=True 를 주면 인코더 상태가 자동으로 복사된다", "인코더 LSTM 에 return_sequences=True 를 주고, 출력 전체를 디코더의 initial_state 로 전달한다", "인코더 Embedding 에 mask_zero=True 를 주면 상태가 자동으로 전달된다"], "a": 0, "exp": "return_state=True 로 마지막 은닉·셀 상태를 받아 디코더 LSTM 의 initial_state 인자로 넘기는 것이 강의자료의 구현 방식이다."}, {"id": 65, "sec": "12.2.2", "diff": "중급", "q": "디코더의 상태 갱신식과 초기 상태로 옳은 것은?", "opts": ["s(t) = softmax( W · c + b ), s(0) = h(1)", "s(t) = LSTM( y(t+1), s(t+1) ), s(0) = c", "s(t) = LSTM( y(t-1), s(t-1) ), s(0) = c", "s(t) = LSTM( x(t), s(t-1) ), s(0) = 0"], "a": 2, "exp": "디코더는 문맥 벡터를 초기 상태로 삼아 직전 출력 단어를 입력으로 받으며 상태를 갱신하는 언어 모형이다."}, {"id": 66, "sec": "12.2.2", "diff": "중급", "q": "디코더의 단어 예측 확률식으로 옳은 것은?", "opts": ["P( y(t) | y(1..t-1), x ) = softmax( W · s(t) + b )", "P( y(t) | y(1..t-1), x ) = tanh( W · s(t) + b )", "P( y(t) | x ) = σ( W · h(T) + b )", "P( y(t) ) = softmax( W · c + b ) — 모든 시점 동일"], "a": 0, "exp": "디코더는 현재 상태 s(t) 를 선형 변환한 뒤 softmax 를 적용해 다음 단어의 조건부 확률 분포를 얻는다."}, {"id": 67, "sec": "12.2.2", "diff": "기초", "q": "특수 토큰 <sos> 와 <eos> 의 역할을 바르게 설명한 것은?", "opts": ["<sos> 는 첫 시점 입력으로 쓰이는 생성 시작 신호, <eos> 는 생성 종료 신호이다", "<sos> 는 생성 종료 신호이고, <eos> 는 첫 시점 입력으로 쓰이는 생성 시작 신호이다", "둘 다 패딩 위치를 표시하는 토큰이다", "<sos> 는 인코더에만, <eos> 는 임베딩 층에만 사용된다"], "a": 0, "exp": "<sos> 는 디코더 첫 시점의 입력으로 생성을 시작하게 하고, <eos> 가 생성되면 문장 생성을 종료한다."}, {"id": 68, "sec": "12.2.3", "diff": "기초", "q": "Teacher forcing(교사 강요)의 정의로 옳은 것은?", "opts": ["학습률을 시점마다 다르게 주는 방법", "추론 시 디코더 입력으로 정답을 넣는 방법", "학습 시 디코더 입력으로 이전 시점의 '예측' 대신 '정답' 을 넣는 방법", "학습 시 인코더의 입력 단어 순서를 무작위로 섞어 일반화 성능을 높이는 방법"], "a": 2, "exp": "Teacher forcing 은 학습 단계에서 디코더의 입력으로 직전 시점의 정답 단어를 넣는 방법이다."}, {"id": 69, "sec": "12.2.3", "diff": "중급", "q": "Teacher forcing 의 장점으로 옳지 않은 것은?", "opts": ["초기 예측이 틀려도 오류가 누적되지 않아 학습이 빠르고 안정적이다", "학습과 추론의 환경이 완전히 같아져 노출 편향이 생기지 않는다", "디코더 입력이 미리 확정되어 한 번의 순전파로 전체 시점의 손실을 계산할 수 있다", "학습 초반의 잘못된 예측이 뒤 시점으로 전파되지 않는다"], "a": 1, "exp": "오히려 학습(정답 입력) 과 추론(예측 재입력) 의 환경이 달라지는 노출 편향이 teacher forcing 의 대표적 부작용이다."}, {"id": 70, "sec": "12.2.3", "diff": "심화", "q": "Teacher forcing 으로 한 번의 순전파에 전체 시점의 손실을 계산할 수 있다는 설명에 대한 강의자료의 단서로 옳은 것은?", "opts": ["시점 축 자체의 병렬화는 Transformer 에서 가능하다", "RNN 에서도 시점 축이 완전히 병렬로 계산된다", "teacher forcing 을 쓰면 역전파가 필요 없어진다", "손실은 마지막 시점에서만 한 번 계산된다"], "a": 0, "exp": "강의자료는 디코더 입력이 미리 확정된다는 장점을 말하면서도, 시점 축 병렬화 자체는 Transformer 에서 가능하다고 단서를 붙인다."}, {"id": 71, "sec": "12.2.3", "diff": "중급", "q": "노출 편향(exposure bias)이 발생하는 이유로 옳은 것은?", "opts": ["문맥 벡터의 크기가 입력 문장의 길이에 따라 매번 달라져 디코더가 혼란을 겪기 때문", "인코더와 디코더의 은닉 차원이 다르기 때문", "학습 때는 정답이 입력되지만 추론 때는 자기 예측을 입력해야 해 두 환경이 달라지기 때문", "학습 데이터에서 자주 등장하는 단어와 드문 단어의 분포가 크게 불균형하기 때문"], "a": 2, "exp": "teacher forcing 으로 학습한 모형은 추론 때 자기 예측을 입력받으므로 학습 환경과 달라져, 한 번 틀리면 오류가 뒤로 누적된다."}, {"id": 72, "sec": "12.2.3", "diff": "중급", "q": "Scheduled sampling 에 대한 설명으로 옳은 것은?", "opts": ["학습 중 정답만 입력하고 추론 때만 예측을 입력한다", "학습 중 정답과 예측을 확률적으로 섞어 입력하되, 학습이 진행될수록 정답 입력 비율을 점점 높인다", "배치마다 학습률을 무작위로 바꾸는 기법이다", "학습 중 정답과 예측을 확률적으로 섞어 입력하며, 학습이 진행될수록 예측 입력 비율을 높인다"], "a": 3, "exp": "Scheduled sampling 은 노출 편향을 완화하기 위해 정답과 예측을 섞어 입력하되, 학습이 진행될수록 예측 비율을 점차 높인다."}, {"id": 73, "sec": "12.2.3", "diff": "기초", "q": "그리디 디코딩의 방식으로 옳은 것은?", "opts": ["매 시점 확률이 가장 높은 단어 하나만 선택한다", "매 시점 상위 k 개 후보를 함께 유지한다", "매 시점 확률 분포에서 무작위로 표본을 뽑는다", "가능한 모든 순차열을 평가한 뒤 최선을 고른다"], "a": 0, "exp": "그리디 디코딩은 각 시점에서 확률 최대인 단어 하나만 골라 이어 가는 가장 단순한 디코딩 전략이다."}, {"id": 74, "sec": "12.2.3", "diff": "중급", "q": "빔 서치(beam search)에 대한 설명으로 옳은 것은?", "opts": ["매 시점 확률이 가장 높은 단어 하나만 유지하며 확장한다", "매 시점 상위 k 개 후보를 유지하되 beam size 를 키울수록 계산량이 줄어드는 장점이 있다", "상위 k 개(beam size)의 후보 순차열을 함께 유지하며 확장하고, 누적 로그 확률로 후보를 평가한다", "상위 k 개 후보를 유지하지만 누적 로그 확률 대신 시점별 손실의 합으로만 후보를 평가한다"], "a": 2, "exp": "빔 서치는 k 개의 후보를 병렬로 유지하며 누적 로그 확률로 평가하고, 필요하면 길이 정규화를 적용한다."}, {"id": 75, "sec": "12.2.4", "diff": "기초", "q": "고정 길이 문맥 벡터의 병목(bottleneck) 문제란?", "opts": ["입력 문장의 길이와 무관하게 항상 같은 크기의 벡터 하나로 압축해야 하는 문제", "디코더가 문맥 벡터를 전혀 사용하지 못하는 문제", "문맥 벡터의 차원이 입력 문장마다 달라져 미니배치를 구성할 수 없게 되는 문제", "인코더의 은닉 상태가 매 시점 초기화되는 문제"], "a": 0, "exp": "문장이 아무리 길어도 하나의 고정 크기 벡터에 담아야 하므로, 문장이 길어질수록 정보 손실이 커진다."}, {"id": 76, "sec": "12.2.4", "diff": "심화", "q": "문장 길이별 성능 그래프에서 두 모형의 거동을 바르게 설명한 것은?", "opts": ["두 모형 모두 원문 길이에 관계없이 BLEU 가 거의 일정하게 유지되어 차이가 나타나지 않는다", "원문이 짧을 때만 두 모형의 BLEU 차이가 크게 벌어지고 길어질수록 차이가 사라진다", "주의 메커니즘을 더한 모형이 원문이 길어질수록 BLEU 가 더 빠르게 떨어져 기본 Seq2Seq 보다 불리하다", "문맥 벡터 1 개의 Seq2Seq 는 원문이 길어질수록 BLEU 가 급격히 떨어지지만, 주의 메커니즘을 더하면 길이에 강건하다"], "a": 3, "exp": "그래프는 기본 Seq2Seq 의 BLEU 가 원문이 길어질수록 급락하는 반면 주의 메커니즘을 더한 모형은 거의 평평하게 유지됨을 보여 준다."}, {"id": 77, "sec": "12.2.4", "diff": "중급", "q": "강의자료가 정리한 기존 Seq2Seq 의 세 가지 문제에 해당하지 않는 것은?", "opts": ["긴 문장을 벡터 하나에 담을 수 없다는 정보 압축의 한계", "디코더가 매 시점 같은 문맥 벡터만 본다", "디코더가 시점마다 다른 문맥 벡터를 계산해 계산량이 폭증한다", "어떤 원문 단어를 근거로 번역했는지 해석할 수 없다"], "a": 2, "exp": "시점마다 다른 문맥 벡터를 계산하는 것은 주의 메커니즘의 특징이지 기존 Seq2Seq 의 문제가 아니다."}, {"id": 78, "sec": "12.2.4", "diff": "심화", "q": "\"school\" 을 출력할 때와 \"go\" 를 출력할 때 참조해야 할 원문 단어가 다르다는 지적은 어떤 문제를 드러내는가?", "opts": ["teacher forcing 이 학습을 불안정하게 만든다는 문제", "디코더가 <eos> 를 생성하지 못한다는 문제", "인코더가 입력을 역순으로 읽는다는 문제", "디코더가 출력 시점과 무관하게 늘 동일한 문맥 벡터 c 만 사용한다는 문제"], "a": 3, "exp": "출력 단어마다 필요한 원문 정보가 다른데도 기존 Seq2Seq 는 동일한 c 만 참조한다는 점이 두 번째 문제로 지적된다."}, {"id": 79, "sec": "12.2.4", "diff": "중급", "q": "병목 문제에 대한 강의자료의 해결 방향으로 옳은 것은?", "opts": ["디코더의 층수를 깊게 늘려 하나의 문맥 벡터로부터 더 많은 정보를 끌어낸다", "문맥 벡터의 차원을 어휘 크기 V 만큼 크게 키워 정보 손실을 줄인다", "인코더를 양방향으로 바꾸어 마지막 상태만 두 배로 만든다", "인코더의 모든 시점 은닉 상태를 남겨 두고 출력 시점마다 필요한 것을 골라 쓴다"], "a": 3, "exp": "문장 전체를 하나로 압축하지 말고 인코더의 모든 은닉 상태를 남겨 출력 시점마다 필요한 것을 선택해 쓰자는 것이 주의 메커니즘의 출발점이다."}, {"id": 80, "sec": "12.2.5", "diff": "기초", "q": "주의 메커니즘(Attention mechanism)을 기계 번역을 위해 제안한 연구는?", "opts": ["Bahdanau et al. (2015)", "Hochreiter & Schmidhuber (1997)", "Vaswani et al. (2017)", "Sutskever et al. (2014)"], "a": 0, "exp": "주의 메커니즘은 Bahdanau et al.(2015) 이 기계 번역을 위해 제안했다. Vaswani et al.(2017) 은 Transformer 를 제안했다."}, {"id": 81, "sec": "12.2.5", "diff": "기초", "q": "주의 메커니즘의 핵심 아이디어로 옳은 것은?", "opts": ["디코더가 매 시점 인코더의 모든 은닉 상태를 다시 참조하되 관련도가 높은 곳에 큰 가중치를 준다", "인코더와 디코더가 가중치를 공유해 파라미터를 줄인다", "인코더가 디코더의 모든 상태를 참조해 입력을 다시 읽는다", "디코더가 인코더의 마지막 은닉 상태 하나만을 매 시점 반복해서 참조하되 가중치를 곱해 세기를 조절한다"], "a": 0, "exp": "주의 메커니즘은 인코더의 모든 은닉 상태를 관련도에 따라 가중합해 시점마다 다른 문맥 벡터 c(t) 를 만든다."}, {"id": 82, "sec": "12.2.5", "diff": "기초", "q": "주의 메커니즘의 세 단계를 순서대로 바르게 나열한 것은?", "opts": ["스코어 계산 → softmax 로 정렬 가중치 → 인코더 상태의 가중합", "스코어 계산 → 인코더 상태의 가중합 → softmax", "softmax 로 정렬 가중치 → 스코어 계산 → 인코더 상태의 가중합", "인코더 상태의 가중합 → 스코어 계산 → softmax"], "a": 0, "exp": "① 관련도(스코어)를 계산하고 ② softmax 로 합이 1 인 정렬 가중치로 바꾼 뒤 ③ 인코더 상태를 그 가중치로 가중합한다."}, {"id": 83, "sec": "12.2.5", "diff": "중급", "q": "정렬 가중치 a(t,i) 의 수식과 성질로 옳은 것은?", "opts": ["a(t,i) = tanh( e(t,i) ) 이며 (-1, 1) 범위이다", "a(t,i) = e(t,i) / Σ e(t,j) 이며 값이 음수일 수도 있다", "a(t,i) = exp(e(t,i)) / Σ exp(e(t,j)) 이며 Σ a(t,i) = 1 이다", "a(t,i) = σ( e(t,i) ) 로 계산하며 각 값은 (0, 1) 이지만 합이 반드시 1 이 되지는 않는다"], "a": 2, "exp": "스코어에 softmax 를 적용하므로 모든 가중치가 양수이고 합이 정확히 1 이 된다."}, {"id": 84, "sec": "12.2.5", "diff": "중급", "q": "주의 메커니즘의 문맥 벡터 수식으로 옳은 것은?", "opts": ["c(t) = Σ a(t,i) · s(t)", "c(t) = Σ a(t,i) · h(i)", "c(t) = h(T) — 모든 시점 동일", "c(t) = Σ e(t,i) · h(i)"], "a": 1, "exp": "문맥 벡터는 인코더 은닉 상태 h(i) 를 정렬 가중치 a(t,i) 로 가중합한 값이며, 시점 t 마다 달라진다."}, {"id": 85, "sec": "12.2.5", "diff": "중급", "q": "주의 메커니즘 수식 표의 ④ 결합과 ⑤ 예측 단계로 옳은 것은?", "opts": ["s̃(t) = softmax( W [ c(t) ; s(t) ] ) 로 결합하고 ŷ(t) = tanh( W_o · s̃(t) ) 로 예측한다", "s̃(t) = c(t) + s(t) 로 결합하고 ŷ(t) = σ( W_o · s̃(t) ) 로 예측한다", "s̃(t) = c(t) ⊙ s(t) 로 결합하고 ŷ(t) = W_o · s̃(t) 로 예측한다", "s̃(t) = tanh( W [ c(t) ; s(t) ] ) 로 결합하고 ŷ(t) = softmax( W_o · s̃(t) ) 로 예측한다"], "a": 3, "exp": "문맥 벡터와 디코더 상태를 이어 붙여 tanh 로 결합한 뒤, softmax 로 다음 단어의 확률 분포를 얻는다."}, {"id": 86, "sec": "12.2.5", "diff": "중급", "q": "스코어 함수 dot 의 수식과 특징으로 옳은 것은?", "opts": ["vᵀ tanh( W [ s ; h ] ) — 가장 단순하고 추가 파라미터가 없다", "sᵀ W h — 가장 단순하고 추가 파라미터가 없다", "sᵀ h — 작은 신경망으로 계산하며 파라미터가 가장 많다", "sᵀ h — 가장 단순하고 추가 파라미터가 없다"], "a": 3, "exp": "dot 스코어는 두 벡터의 내적 sᵀh 로 계산하므로 추가 파라미터가 전혀 필요 없는 가장 단순한 방식이다."}, {"id": 87, "sec": "12.2.5", "diff": "중급", "q": "스코어 함수 general 의 수식과 사용 상황으로 옳은 것은?", "opts": ["sᵀ h — 인코더와 디코더의 차원이 다를 때 사용 (Luong)", "sᵀ W h — 인코더와 디코더의 차원이 다를 때 사용 (Luong)", "vᵀ tanh( W [ s ; h ] ) — 차원이 같을 때만 사용 (Luong)", "sᵀ W h — 작은 신경망으로 계산 (Bahdanau)"], "a": 1, "exp": "general 은 중간에 학습되는 행렬 W 를 두어 인코더와 디코더의 은닉 차원이 다를 때도 내적을 취할 수 있게 한다."}, {"id": 88, "sec": "12.2.5", "diff": "심화", "q": "같은 수치 예시에서 softmax 를 적용한 정렬 가중치 a(i) 로 옳은 것은?", "opts": ["a1 = 0.468, a2 = 0.468, a3 = 0.063", "a1 = 0.500, a2 = 0.000, a3 = 0.500", "a1 = 0.468, a2 = 0.063, a3 = 0.468", "a1 = 0.333, a2 = 0.333, a3 = 0.333"], "a": 2, "exp": "exp 값이 7.389, 1.000, 7.389 이고 합이 15.778 이므로 각각 0.468, 0.063, 0.468 이 된다."}, {"id": 89, "sec": "12.2.5", "diff": "심화", "q": "같은 수치 예시에서 최종 문맥 벡터 c 의 값은?", "opts": ["( 1.000, 1.000 )", "( 0.937, 0.532 )", "( 0.532, 0.937 )", "( 0.468, 0.468 )"], "a": 1, "exp": "0.468×(1,0) + 0.063×(0,1) + 0.468×(1,1) = (0.937, 0.532) 이다."}, {"id": 90, "sec": "12.2.6", "diff": "중급", "q": "강의자료의 정렬 행렬 히트맵을 읽는 방법으로 옳은 것은?", "opts": ["각 열(인코더 시점)의 합은 1 이며, 진한 칸일수록 낮은 가중치이다", "각 행의 합은 1 이며, 밝은 칸일수록 높은 가중치이다", "각 행(디코더 시점)의 합은 1 이며, 진한 칸일수록 높은 가중치이다", "행과 열의 합이 모두 1 이며, 색은 가중치와 무관하다"], "a": 2, "exp": "softmax 가 디코더 시점별로 적용되므로 각 행의 합이 1 이고, 히트맵에서는 진한 칸이 높은 가중치를 나타낸다."}, {"id": 91, "sec": "12.2.6", "diff": "심화", "q": "한국어 → 영어 정렬 행렬 예시에서 \"go\" 를 출력할 때 가장 큰 주의가 집중된 원문 단어와 그 가중치는?", "opts": ["\"에\" 에 0.72", "\"나는\" 에 0.82", "\"학교\" 에 0.80", "\"간다\" 에 0.75"], "a": 3, "exp": "예시 히트맵에서 'go' 행은 '간다' 열에 0.75 의 가중치를 집중시킨다. 0.82 는 'I'–'나는', 0.80 은 'school'–'학교' 의 값이다."}, {"id": 92, "sec": "12.2.6", "diff": "중급", "q": "Bahdanau attention 과 Luong attention 의 차이로 옳은 것은?", "opts": ["두 방식은 결합 위치가 같고 스코어 함수만 다르다", "Bahdanau 는 s(t) 를 먼저 구한 뒤 c(t) 를 계산해 출력 직전에 결합하고, Luong 은 s(t-1) 로 c(t) 를 구해 디코더 RNN 의 입력에 결합한다", "Bahdanau 는 s(t-1) 로 c(t) 를 구해 디코더 RNN 의 입력에 결합하고, Luong 은 s(t) 를 먼저 구한 뒤 c(t) 를 계산해 출력 직전에 결합한다", "Bahdanau 는 dot 스코어만, Luong 은 concat 스코어만 사용한다"], "a": 2, "exp": "두 방식은 문맥 벡터를 디코더의 어디에 넣는지가 다르다. Bahdanau 는 RNN 입력 쪽, Luong 은 출력 직전에 결합한다."}, {"id": 93, "sec": "12.2.6", "diff": "심화", "q": "Bahdanau 와 Luong 방식이 주로 사용하는 스코어 함수를 바르게 짝지은 것은?", "opts": ["Bahdanau — concat, Luong — dot / general", "둘 다 concat 만 사용한다", "Bahdanau — dot / general, Luong — concat", "Bahdanau — general, Luong — concat"], "a": 0, "exp": "Bahdanau 는 작은 신경망을 쓰는 concat 스코어를, Luong 은 dot 또는 general 스코어를 사용한다."}, {"id": 94, "sec": "12.2.6", "diff": "중급", "q": "Query · Key · Value 관점에서 주의 메커니즘의 구성 요소를 바르게 연결한 것은?", "opts": ["Query = 인코더 상태 h(i), Key = 인코더 상태 h(i), Value = 디코더 상태 s(t)", "Query = 인코더 상태 h(i), Key = 디코더 상태 s(t), Value = 디코더 상태 s(t)", "Query = 문맥 벡터 c(t), Key = 정렬 가중치 a(t,i), Value = 스코어 e(t,i)", "Query = 디코더 상태 s(t), Key = 인코더 상태 h(i), Value = 인코더 상태 h(i)"], "a": 3, "exp": "Query 는 찾는 쪽인 디코더 상태, Key 와 Value 는 비교 대상이자 가져올 값인 인코더 상태이다."}, {"id": 95, "sec": "12.2.6", "diff": "심화", "q": "Scaled dot-product attention 의 수식으로 강의자료가 제시한 것은?", "opts": ["Attention( Q, K, V ) = softmax( Q Kᵀ / √d ) V", "Attention( Q, K, V ) = softmax( Q + K ) V", "Attention( Q, K, V ) = tanh( Q Kᵀ / √d ) V", "Attention( Q, K, V ) = softmax( Q Kᵀ · d ) V"], "a": 0, "exp": "Q 와 K 의 내적을 차원의 제곱근으로 나누어 스케일한 뒤 softmax 를 적용하고 그 가중치로 V 를 가중합한다."}, {"id": 96, "sec": "12.2.6", "diff": "중급", "q": "셀프 어텐션(self-attention)의 정의로 옳은 것은?", "opts": ["가중치를 균등하게 배분하는 경우", "Q 는 원문에서, K 와 V 는 번역문에서 뽑는 경우", "Q, K, V 를 모두 같은 문장에서 뽑는 경우", "Q 와 K 만 사용하고 V 를 사용하지 않는 경우"], "a": 2, "exp": "Query, Key, Value 를 모두 같은 문장에서 얻는 주의 연산을 셀프 어텐션이라 하며, Transformer 의 핵심 구성 요소이다."}, {"id": 97, "sec": "12.2.6", "diff": "중급", "q": "Seq2Seq 와 Seq2Seq + Attention 비교표의 내용으로 옳지 않은 것은?", "opts": ["Attention 은 시점마다 다른 c(t) 를 사용한다", "Attention 을 더하면 계산량이 O(T + T') 로 줄어든다", "Attention 은 모든 인코더 상태로 기울기를 직접 전달한다", "Attention 은 정렬 행렬로 근거를 확인할 수 있어 해석 가능성이 있다"], "a": 1, "exp": "표에 따르면 기본 Seq2Seq 가 O(T + T'), Attention 을 더하면 스코어 계산이 추가되어 O(T × T') 로 계산량이 늘어난다."}, {"id": 98, "sec": "12.2.6", "diff": "중급", "q": "같은 구현 코드에서 weights = tf.nn.softmax(score, axis=-1) 와 context = tf.matmul(weights, enc_outputs) 가 각각 대응하는 단계는?", "opts": ["② 정렬 가중치, ③ 문맥 벡터", "① 스코어, ② 정렬 가중치", "② 정렬 가중치, ⑤ 예측", "③ 문맥 벡터, ④ 결합"], "a": 0, "exp": "softmax 는 스코어를 합이 1 인 정렬 가중치로 바꾸는 ② 단계, 가중치와 인코더 출력의 곱은 가중합으로 문맥 벡터를 얻는 ③ 단계이다."}, {"id": 99, "sec": "12.2.6", "diff": "기초", "q": "Transformer 를 제안한 논문과 저자로 옳은 것은?", "opts": ["Bahdanau et al. (2015), \"Attention Is All You Need\"", "Sutskever et al. (2014), \"Sequence to Sequence Learning\"", "Cho et al. (2014), \"Attention Is All You Need\"", "Vaswani et al. (2017), \"Attention Is All You Need\""], "a": 3, "exp": "Transformer 는 Vaswani et al.(2017) 의 \"Attention Is All You Need\" 에서 제안되었다."}, {"id": 100, "sec": "12.2.6", "diff": "중급", "q": "Transformer 의 핵심 아이디어로 옳은 것은?", "opts": ["셀프 어텐션을 제거하고 순환 구조만으로 문맥을 학습해 계산량을 크게 줄인다", "인코더 없이 디코더만으로 번역을 수행한다", "순환 구조를 제거하고 셀프 어텐션만으로 문맥을 학습해 완전한 병렬 처리를 가능하게 한다", "정렬 행렬을 사람이 직접 지정해 주어 학습 과정을 단순화하고 병렬 처리를 가능하게 한다"], "a": 2, "exp": "\"RNN 없이 Attention 만 쓰면 어떨까\" 라는 질문에서 출발해 순환 구조를 제거하고 셀프 어텐션만 사용함으로써 완전한 병렬 처리를 달성했다."}];
+
+const SECTIONS = {
+  "12.1.1": "순차 데이터",
+  "12.1.2": "RNN 구조·순전파",
+  "12.1.3": "입출력 구조·입력",
+  "12.1.4": "BPTT·기울기",
+  "12.1.5": "게이트와 LSTM",
+  "12.1.6": "GRU·확장·구현",
+  "12.2.1": "Seq2Seq 문제",
+  "12.2.2": "인코더-디코더",
+  "12.2.3": "학습·디코딩",
+  "12.2.4": "문맥 벡터 병목",
+  "12.2.5": "주의 메커니즘",
+  "12.2.6": "정렬·QKV·확장"
+};
+const DIFFS = ["기초","중급","심화"];
+const DIFFCLS = {"기초":"d1","중급":"d2","심화":"d3"};
+const KEY = "nlp_week12_quiz_v1";
+
+/* ---------- state ---------- */
+let state = {
+  answers:{},           // id -> chosen original option index
+  secFilter:"ALL",
+  diffFilter:"ALL",
+  shuffleQ:false,
+  shuffleO:false,
+  reviewMode:false,
+  order:[],             // array of question ids in display order
+  optOrder:{},          // id -> array of original indices
+  cursor:0
+};
+
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify({
+    answers:state.answers, shuffleQ:state.shuffleQ, shuffleO:state.shuffleO,
+    secFilter:state.secFilter, diffFilter:state.diffFilter, optOrder:state.optOrder
+  })); }catch(e){}
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY); if(!raw) return;
+    const d = JSON.parse(raw);
+    if(d && typeof d==="object"){
+      state.answers = d.answers||{};
+      state.shuffleQ = !!d.shuffleQ; state.shuffleO = !!d.shuffleO;
+      state.secFilter = d.secFilter||"ALL"; state.diffFilter = d.diffFilter||"ALL";
+      state.optOrder = d.optOrder||{};
+    }
+  }catch(e){}
+}
+
+/* ---------- helpers ---------- */
+function shuffled(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function optOrderFor(q){
+  if(!state.shuffleO) return [0,1,2,3];
+  if(!state.optOrder[q.id]) { state.optOrder[q.id] = shuffled([0,1,2,3]); save(); }
+  return state.optOrder[q.id];
+}
+function isWrong(q){ return q.id in state.answers && state.answers[q.id] !== q.a; }
+function isRight(q){ return state.answers[q.id] === q.a; }
+
+function buildOrder(keepCursor){
+  let pool = QUESTIONS.filter(q =>
+    (state.secFilter==="ALL" || q.sec===state.secFilter) &&
+    (state.diffFilter==="ALL" || q.diff===state.diffFilter)
+  );
+  if(state.reviewMode && state.reviewIds && state.reviewIds.length)
+    pool = state.reviewIds.map(id=>byId[id]);
+  let ids = pool.map(q=>q.id);
+  if(state.shuffleQ) ids = shuffled(ids);
+  state.order = ids;
+  if(!keepCursor) state.cursor = 0;
+  if(state.cursor >= ids.length) state.cursor = Math.max(0, ids.length-1);
+}
+
+const byId = {}; QUESTIONS.forEach(q => byId[q.id]=q);
+
+/* ---------- rendering ---------- */
+const $ = s => document.querySelector(s);
+const stage = $("#stage");
+
+function renderChips(){
+  const sc = $("#secChips"); sc.innerHTML="";
+  const mk = (label,val,cur,handler)=>{
+    const b=document.createElement("button");
+    b.className="chip"; b.textContent=label;
+    b.setAttribute("aria-pressed", String(cur===val));
+    b.onclick=()=>handler(val); return b;
+  };
+  sc.appendChild(mk("전체 "+QUESTIONS.length+"문항","ALL",state.secFilter,setSec));
+  Object.keys(SECTIONS).forEach(k=>{
+    const n = QUESTIONS.filter(q=>q.sec===k).length;
+    sc.appendChild(mk(k+" "+SECTIONS[k]+" ("+n+")",k,state.secFilter,setSec));
+  });
+  const dc = $("#diffChips"); dc.innerHTML="";
+  dc.appendChild(mk("전체","ALL",state.diffFilter,setDiff));
+  DIFFS.forEach(d=>{
+    const n = QUESTIONS.filter(q=>q.diff===d).length;
+    dc.appendChild(mk(d+" ("+n+")",d,state.diffFilter,setDiff));
+  });
+  $("#shuffleQ").setAttribute("aria-pressed", String(state.shuffleQ));
+  $("#shuffleO").setAttribute("aria-pressed", String(state.shuffleO));
+  $("#reviewBtn").setAttribute("aria-pressed", String(state.reviewMode));
+}
+
+function setSec(v){ state.secFilter=v; state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+function setDiff(v){ state.diffFilter=v; state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+
+function renderProgress(){
+  const ids = state.order;
+  const done = ids.filter(id=> id in state.answers).length;
+  const ok = ids.filter(id=> isRight(byId[id])).length;
+  const no = done - ok;
+  $("#doneN").textContent = done;
+  $("#totalN").textContent = ids.length;
+  $("#okN").textContent = ok;
+  $("#noN").textContent = no;
+  $("#rate").textContent = done ? Math.round(ok/done*100)+"%" : "—";
+  $("#barFill").style.width = ids.length ? (done/ids.length*100)+"%" : "0%";
+  $("#wrongCount").textContent = QUESTIONS.filter(isWrong).length;
+}
+
+function renderPalette(){
+  const p = $("#palette"); p.innerHTML="";
+  state.order.forEach((id,i)=>{
+    const q = byId[id];
+    const b=document.createElement("button");
+    b.className="cell" + (id in state.answers ? (isRight(q)?" o":" x") : "") + (i===state.cursor?" cur":"");
+    b.textContent = q.id;
+    b.title = q.sec+" · "+q.diff;
+    b.onclick=()=>{ state.cursor=i; renderAll(); window.scrollTo({top:0,behavior:"smooth"}); };
+    p.appendChild(b);
+  });
+}
+
+function renderQuestion(){
+  stage.innerHTML="";
+  if(!state.order.length){
+    const d=document.createElement("div"); d.className="panel empty";
+    d.textContent = state.reviewMode ? "틀린 문제가 없습니다. 잘하셨어요!" : "조건에 맞는 문제가 없습니다. 필터를 바꿔 보세요.";
+    stage.appendChild(d); return;
+  }
+  const idx = state.cursor;
+  const q = byId[state.order[idx]];
+  const answered = q.id in state.answers;
+  const order = optOrderFor(q);
+
+  const card=document.createElement("section"); card.className="panel qcard";
+
+  const meta=document.createElement("div"); meta.className="qmeta";
+  meta.innerHTML =
+    '<span class="tag num">'+ (idx+1) +' / '+ state.order.length +'</span>' +
+    '<span class="tag sec">'+ q.sec +' '+ SECTIONS[q.sec] +'</span>' +
+    '<span class="tag '+ DIFFCLS[q.diff] +'">'+ q.diff +'</span>' +
+    '<span style="margin-left:auto;font-size:12px;color:var(--muted)">문제 '+ q.id +'번</span>';
+  card.appendChild(meta);
+
+  const h=document.createElement("h2"); h.className="qtext"; h.textContent=q.q; card.appendChild(h);
+
+  const wrap=document.createElement("div"); wrap.className="opts";
+  order.forEach((orig,pos)=>{
+    const b=document.createElement("button"); b.className="opt"; b.type="button";
+    b.innerHTML = '<span class="n">'+(pos+1)+'</span><span class="t"></span>';
+    b.querySelector(".t").textContent = q.opts[orig];
+    if(answered){
+      b.disabled = true;
+      if(orig===q.a){ b.classList.add("correct"); b.insertAdjacentHTML("beforeend",'<span class="mark">정답</span>'); }
+      else if(orig===state.answers[q.id]){ b.classList.add("wrong"); b.insertAdjacentHTML("beforeend",'<span class="mark">내 선택</span>'); }
+    } else {
+      b.onclick=()=>{ state.answers[q.id]=orig; save(); renderAll(); };
+    }
+    wrap.appendChild(b);
+  });
+  card.appendChild(wrap);
+
+  if(answered){
+    const e=document.createElement("div"); e.className="exp";
+    const good = isRight(q);
+    e.innerHTML = '<h4>'+(good?'✓ 정답입니다':'✕ 다시 확인해 보세요')+'</h4><p></p>'+
+                  '<span class="ref">관련 단원 · '+q.sec+' '+SECTIONS[q.sec]+'</span>';
+    e.querySelector("p").textContent = q.exp;
+    if(!good){ e.style.background="var(--no-soft)"; e.style.borderLeftColor="var(--no)"; e.querySelector("h4").style.color="var(--no)"; }
+    card.appendChild(e);
+  }
+
+  const nav=document.createElement("div"); nav.className="nav";
+  const prev=document.createElement("button"); prev.className="btn"; prev.textContent="← 이전";
+  prev.disabled = idx===0; prev.onclick=()=>{ state.cursor--; renderAll(); };
+  const next=document.createElement("button"); next.className="btn primary";
+  next.textContent = idx===state.order.length-1 ? "결과 보기 →" : "다음 →";
+  next.onclick=()=>{
+    if(idx===state.order.length-1){ showResult(); }
+    else { state.cursor++; renderAll(); }
+  };
+  const redo=document.createElement("button"); redo.className="btn"; redo.textContent="이 문제 다시";
+  redo.disabled = !answered;
+  redo.onclick=()=>{ delete state.answers[q.id]; save(); renderAll(); };
+  nav.appendChild(prev); nav.appendChild(redo);
+  const sp=document.createElement("span"); sp.className="spacer"; nav.appendChild(sp);
+  nav.appendChild(next);
+  card.appendChild(nav);
+
+  stage.appendChild(card);
+}
+
+function showResult(){
+  const ids = state.order;
+  const done = ids.filter(id=> id in state.answers).length;
+  const ok = ids.filter(id=> isRight(byId[id])).length;
+  const card=document.createElement("section"); card.className="panel result";
+  const pct = done ? Math.round(ok/done*100) : 0;
+  let msg = pct>=90?"완벽합니다. 1주차 내용을 확실히 이해했어요."
+          : pct>=75?"좋습니다. 틀린 문제만 복습하면 충분해요."
+          : pct>=50?"절반 이상 맞혔습니다. 오답 노트를 한 번 더 돌려 보세요."
+          : "해설을 읽으며 오답부터 차근히 정리해 봅시다.";
+
+  const per = {};
+  Object.keys(SECTIONS).forEach(k=>{
+    const sub = ids.map(i=>byId[i]).filter(q=>q.sec===k && (q.id in state.answers));
+    if(sub.length) per[k] = [sub.filter(isRight).length, sub.length];
+  });
+
+  card.innerHTML =
+    '<div class="eyebrow">결과</div>'+
+    '<div class="score">'+ok+' <small>/ '+done+' 정답</small></div>'+
+    '<div class="stat" style="font-size:15px">정답률 <b>'+pct+'%</b> · '+msg+'</div>'+
+    '<div class="breakdown">'+ Object.keys(per).map(k=>
+       '<div class="bd"><div class="k">'+k+' '+SECTIONS[k]+'</div><div class="v">'+per[k][0]+' / '+per[k][1]+'</div></div>'
+     ).join('') +'</div>';
+
+  const nav=document.createElement("div"); nav.className="nav";
+  const back=document.createElement("button"); back.className="btn"; back.textContent="← 문제로 돌아가기";
+  back.onclick=()=>renderAll();
+  const rev=document.createElement("button"); rev.className="btn primary";
+  const wn = QUESTIONS.filter(isWrong).length;
+  rev.textContent="틀린 문제 "+wn+"개 다시 풀기"; rev.disabled = wn===0;
+  rev.onclick=()=>enterReview();
+  nav.appendChild(back);
+  const sp=document.createElement("span"); sp.className="spacer"; nav.appendChild(sp);
+  nav.appendChild(rev);
+  card.appendChild(nav);
+
+  stage.innerHTML=""; stage.appendChild(card);
+  renderProgress(); renderPalette();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function enterReview(){
+  const wrongIds = QUESTIONS.filter(isWrong).map(q=>q.id);
+  if(!wrongIds.length){
+    state.reviewMode=false; buildOrder(false); renderAll();
+    alert("틀린 문제가 없습니다.");
+    return;
+  }
+  wrongIds.forEach(id=> delete state.answers[id]);
+  state.reviewMode = true;
+  state.reviewIds = wrongIds;
+  state.order = state.shuffleQ ? shuffled(wrongIds) : wrongIds.slice();
+  state.cursor = 0;
+  save(); renderAll(); window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function renderAll(){ renderChips(); renderProgress(); renderPalette(); renderQuestion(); }
+
+/* ---------- events ---------- */
+$("#shuffleQ").onclick=()=>{ state.shuffleQ=!state.shuffleQ; buildOrder(false); save(); renderAll(); };
+$("#shuffleO").onclick=()=>{
+  state.shuffleO=!state.shuffleO;
+  if(!state.shuffleO) state.optOrder={};
+  save(); renderAll();
+};
+$("#reviewBtn").onclick=()=>{
+  if(state.reviewMode){ state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+  else enterReview();
+};
+$("#resetBtn").onclick=()=>{
+  state.answers={}; state.optOrder={}; state.reviewMode=false;
+  buildOrder(false); save(); renderAll(); window.scrollTo({top:0,behavior:"smooth"});
+};
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT") return;
+  if(e.key==="ArrowRight" && state.cursor < state.order.length-1){ state.cursor++; renderAll(); }
+  if(e.key==="ArrowLeft" && state.cursor>0){ state.cursor--; renderAll(); }
+  if(["1","2","3","4"].includes(e.key)){
+    const btns = document.querySelectorAll(".opt:not(:disabled)");
+    const b = btns[Number(e.key)-1]; if(b) b.click();
+  }
+});
+
+/* ---------- init ---------- */
+load();
+buildOrder(false);
+// resume at first unanswered
+const firstUn = state.order.findIndex(id=> !(id in state.answers));
+state.cursor = firstUn === -1 ? 0 : firstUn;
+renderAll();
+</script>
+</body>
+</html>

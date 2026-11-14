@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자연어처리 | 12주차 수업내용</title>
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0c1a3a">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+.exam{background:#fef2f2;border:2px solid var(--red);border-radius:var(--radius);padding:11px 15px;font-size:12.5px;color:#7f1d1d;line-height:1.7;margin:0 0 12px;display:flex;gap:9px;align-items:flex-start}
+.exam .tag{flex-shrink:0;background:var(--red);color:#fff;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;margin-top:1px}
+table.exam-table th{background:#fdecec}
+table.exam-table td:first-child{background:#fef7f7}
+.pipe{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:14px 0}
+.pipe .st{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:12px;font-weight:700;text-align:center;line-height:1.5;flex:1 1 100px;min-width:88px}
+.pipe .st small{display:block;font-size:10px;font-weight:400;color:var(--muted);margin-top:2px}
+.pipe .st.raw{background:#f1f0ec;color:var(--muted)}
+.pipe .st.app{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pipe .arrow{color:var(--muted);font-size:14px;flex:0 0 auto}
+.cycle{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.cyc{background:var(--accent);color:#fff;border-radius:8px;padding:12px 12px 11px;font-size:12.5px;font-weight:700;text-align:center}
+.cyc em{display:block;font-style:normal;font-size:10.5px;font-weight:400;color:#dbe4f7;margin-top:4px;line-height:1.5}
+.cyc.dim{background:#7d9ad6}
+@media(max-width:480px){.cycle{grid-template-columns:1fr 1fr}}
+.cyc-note{grid-column:1/-1;background:#fff7ed;border:1px solid #f59e0b;border-radius:8px;padding:9px 12px;font-size:11.5px;color:#78350f;text-align:center}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+
+/* 주차 내비 */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .out{color:#c9f24b}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 용어 · 약어 표 — 좁은 화면에서도 가로 스크롤 없이 읽히게 */
+#terms table{min-width:0}
+#terms td:first-child{white-space:normal;width:1%;font-size:12.5px}
+#terms td{padding:9px 11px}
+
+/* 수식 카드 · 풀이 예제 (기계학습특론 페이지와 같은 규칙) */
+.fx{background:#f8faff;border:1px solid #cfdcf5;border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:10px 0}
+.fx-lab{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.fx-note{font-size:12px;color:#4b5563;line-height:1.7;margin-top:7px}
+.fx-note b{color:var(--ink)}
+.tex-d{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:9px 2px 5px;text-align:center}
+.tex-d .katex{font-size:1.08em}
+.ex{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin:10px 0}
+.ex-q{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.65;background:#f1f0ec;border-radius:7px;padding:9px 12px;margin-bottom:4px}
+.ex-q em{font-style:normal;color:var(--red);font-size:11px;font-weight:700;display:block;margin-bottom:3px}
+.step{display:grid;grid-template-columns:20px 1fr;gap:9px;align-items:baseline;font-size:12.5px;color:#4b5563;line-height:1.75;padding:5px 0}
+.step i{font-style:normal;font-weight:700;color:var(--accent);font-size:11.5px}
+.ex-ans{margin-top:8px;background:#f0fdf4;border:1px solid #22c55e;border-radius:8px;padding:9px 12px;font-size:12.5px;color:#14532d;line-height:1.7}
+.ex-ans b{color:var(--green)}
+.figs > .note-box{margin:0}
+/* 편집 거리 DP 표 */
+.lev table{min-width:0;width:auto;margin:0 auto;font-family:'Consolas','D2Coding',ui-monospace,monospace}
+.lev th,.lev td{text-align:center;padding:6px 10px;white-space:nowrap}
+.lev td.on{background:#fde68a;font-weight:700;color:#7c2d12}
+/* ===== 개념 하이라이트(형광펜) + 툴팁 ===== */
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);
+  border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+td .term,th .term{font-weight:700}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;
+  left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+/* ===== 심화 — 한 걸음 더 ===== */
+.deep{
+  background:#f7f5ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:13px 16px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.deep::before{
+  content:'🔎 한 걸음 더 — 심화 개념';display:table;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:8px;
+}
+.deep b{color:#2e1065}
+.deep .ul li{color:#3b2a6b}
+.deep .ul li::before{background:#6d28d9;opacity:.75}
+.deep .tbl-wrap{margin:9px 0 4px;background:#fff}
+.deep pre.code{margin:9px 0}
+.deep .fx{background:#fff;border-color:#d8cdf7;border-left-color:#6d28d9;margin:9px 0}
+.deep .fx-lab{color:#6d28d9}
+.deep .term{background:#ede7ff;color:#5b21b6;border-bottom-color:#6d28d9}
+.deep .term:hover,.deep .term.on{background:#ddd2fb}
+/* ===== 오답 포인트 — 문제에서 갈린 지점 ===== */
+.pit{
+  background:#fff7ed;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:12.5px;line-height:1.8;color:#7c2d12;
+}
+.pit::before{
+  content:'⚠ 여기서 갈린다';display:table;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.pit b{color:#7c2d12}
+.pit .ul li{color:#7c2d12}
+.pit .ul li::before{background:#b45309;opacity:.8}
+.pit table{min-width:0}
+.pit .tbl-wrap{margin:8px 0 4px;background:#fff}
+
+/* ===== 필기 구분 — 실시간 강의 강조 / 내 복습 필기 ===== */
+.live{
+  background:#fffaf3;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#7c2d12;
+}
+.live::before{
+  content:'🎙 실시간 강의 강조';display:table;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.live b{color:#7c2d12}
+.live .ul li{color:#7c2d12}
+.live .ul li::before{background:#b45309;opacity:.75}
+.mynote{
+  background:#f5f3ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.mynote::before{
+  content:'📝 내 복습 필기 · 추가 개념';display:table;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.mynote b{color:#2e1065}
+.mynote .ul li{color:#3b2a6b}
+.mynote .ul li::before{background:#6d28d9;opacity:.75}
+.mynote table{min-width:0}
+.mynote .tbl-wrap{margin:8px 0 4px;background:#fff}
+.mynote pre.code{margin:9px 0}
+.mynote .fx{background:#fff;border-color:#d8cdf7;border-left-color:#6d28d9;margin:9px 0}
+/* 분류 알고리즘 바로가기 카드 */
+.algo{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:9px;margin:12px 0}
+.algo a{display:block;background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:11px 13px;text-decoration:none;color:inherit;transition:border-color .12s,transform .12s}
+.algo a:hover{border-color:var(--accent);transform:translateY(-1px)}
+.algo a b{display:block;font-size:13.5px;color:var(--ink)}
+.algo a small{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}
+.algo a span{display:block;font-size:12px;color:#4b5563;line-height:1.65}
+.algo a em{display:block;font-style:normal;font-size:11px;color:var(--accent);font-weight:700;margin-top:6px}
+/* 재현율 점 그림 */
+.dots{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0 4px}
+.dots i{width:15px;height:15px;border-radius:50%;display:inline-block}
+.dots i.tp{background:#16a34a}
+.dots i.fn{background:#fff;border:2px solid #dc2626}
+.dots i.fp{background:#f59e0b}
+.dots-lab{font-size:11.5px;color:#4b5563}
+/* 시그모이드 그림 */
+.sig{display:block;width:100%;max-width:420px;height:auto;margin:8px auto 2px;background:#fff;border:1px solid #d8cdf7;border-radius:8px}
+/* ===== 복습하기 ===== */
+.rv{background:var(--surface);border:1px solid var(--border);border-left:4px solid #0f766e;border-radius:var(--radius);margin:10px 0;overflow:hidden}
+.rv summary{cursor:pointer;list-style:none;padding:12px 15px;font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.6;display:flex;gap:9px;align-items:baseline}
+.rv summary::-webkit-details-marker{display:none}
+.rv summary i{font-style:normal;flex:none;font-size:11px;font-weight:800;color:#fff;background:#0f766e;border-radius:999px;padding:1px 8px}
+.rv summary::after{content:'답 보기 ▾';margin-left:auto;flex:none;font-size:11px;font-weight:700;color:#0f766e}
+.rv[open] summary::after{content:'접기 ▴'}
+.rv .ans{border-top:1px dashed #99e0d6;background:#f0fdfa;padding:12px 15px;font-size:13px;line-height:1.85;color:#134e4a}
+.rv .ans b{color:#0f3d3a}
+.rv .ans .ul li{color:#134e4a}
+.rv .ans .tbl-wrap{background:#fff;margin:8px 0}
+.rv .ans table{min-width:0}
+.rv .ans pre.code{margin:8px 0}
+.rv .one{display:block;background:#fff;border:1px solid #99e0d6;border-radius:7px;padding:7px 11px;margin-bottom:8px;font-weight:700;color:#0f3d3a}
+/* 범례 */
+.mark-legend{display:flex;flex-wrap:wrap;gap:8px 18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px 14px;margin:-14px 0 26px;font-size:12.5px;color:#4b5563;line-height:1.6}
+.mark-legend span{display:inline-flex;align-items:center;gap:6px}
+.hi{background:linear-gradient(transparent 58%,#ffe9a8 58%);font-weight:700;color:var(--ink);padding:0 1px}
+.mark-legend i{width:12px;height:12px;border-radius:3px;display:inline-block;flex-shrink:0}
+/* 7주차 추가: 한 줄 요약 · SVG 도식 */
+.oneline{background:#16233f;color:#e7edf9;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+.oneline > p{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:#c9f24b}
+.oneline .ul li{color:#c5d0e8;font-size:13px}
+.oneline .ul li b{color:#fff}
+.oneline .ul li::before{background:#c9f24b;opacity:.9}
+.oneline .hi{color:#16233f}
+.svgfig{padding:11px 11px 9px}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:560px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#docs">강의자료</a>
+  <a href="#goal">개요</a>
+  <a href="#s11">12.1.1 순차 데이터</a>
+  <a href="#s12">12.1.2 RNN 구조</a>
+  <a href="#s13">12.1.3 입출력 · 입력</a>
+  <a href="#s14">12.1.4 BPTT · 기울기</a>
+  <a href="#s15">12.1.5 게이트 · LSTM</a>
+  <a href="#s16">12.1.6 GRU · 확장</a>
+  <a href="#s21">12.2.1 Seq2Seq 문제</a>
+  <a href="#s22">12.2.2 인코더-디코더</a>
+  <a href="#s23">12.2.3 학습 · 디코딩</a>
+  <a href="#s24">12.2.4 병목</a>
+  <a href="#s25">12.2.5 주의 메커니즘</a>
+  <a href="#s26">12.2.6 정렬 · QKV</a>
+  <a href="#next">다음 주 예고</a>
+</nav>
+
+<div class="wrap">
+
+<div class="weeknav">
+  <a href="nlp.html" class="plan">← 강의계획서</a>
+  <a href="nlp-week09.html">9주차 · 질의응답 · 기계번역 · 대화 시스템</a>
+  <a href="nlp-week10.html">10주차 · 토픽 모델링 · 감성 분석 · 기계 독해</a>
+  <a href="nlp-week11.html">11주차 · 딥러닝 기초 · word2vec · CNN</a>
+  <span class="cur">12주차 · RNN · LSTM · Seq2Seq · 어텐션</span>
+</div>
+
+<section class="hero">
+  <p class="kicker">12주차 · 11.16 ~ 11.22 · 2026-2학기</p>
+  <h1>CHAPTER 12 — 자연어처리 딥러닝 Ⅱ</h1>
+  <p>순환 신경망(RNN · LSTM)과 Seq2Seq · 주의 메커니즘. 핵심 질문은 &ldquo;<b>순서가 있는 데이터를 신경망은 어떻게 처리하는가?</b>&rdquo;이다. 두 덩어리로 읽는다 &mdash; <b>12-1 순환 신경망</b>(은닉 상태를 다음 시점으로 넘겨 과거를 기억하고, 그 기억이 길어지면 생기는 기울기 소실을 LSTM · GRU의 게이트로 푼다)과 <b>12-2 Seq2Seq · 어텐션</b>(입력과 출력의 길이가 다른 번역을 인코더-디코더로 풀고, 문맥 벡터 하나에 모든 것을 담는 병목을 주의 메커니즘으로 푼다). 11주차 파이프라인의 &lsquo;합성곱 · 풀링&rsquo; 자리에 RNN이 들어간다.</p>
+  <div class="chips"><span class="chip">h(t) = tanh(W_x x + W_h h + b)</span><span class="chip">0.462 → 0.701 → 0.509</span><span class="chip">BPTT · |W_h|^k</span><span class="chip">클리핑 = 폭주</span><span class="chip">C(t) = f⊙C + i⊙C̃</span><span class="chip">LSTM 4배 · GRU 3배</span><span class="chip">teacher forcing</span><span class="chip">빔 서치</span><span class="chip">c(t) = Σ a·h</span><span class="chip">softmax(QKᵀ/√d)V</span><span class="chip">교안 32p (12-1)</span><span class="chip">100문제</span></div>
+</section>
+
+<div class="mark-legend">
+  <span><i style="background:#eef6ff;border:1px solid #1b3f8b"></i><b class="term" tabindex="0" data-tip="이렇게 파란 형광펜이 칠해진 말에 손을 올리거나(모바일은 탭) 하면 짧은 설명이 뜹니다.">어려운 용어</b> — 커서를 올리면(모바일은 탭) 설명이 뜹니다</span>
+  <span><i style="background:#f7f5ff;border:1px solid #6d28d9"></i><b>🔎 한 걸음 더</b> — 교안 한 줄을 끝까지 파고든 심화 설명 · 숫자 예시</span>
+  <span><i style="background:#fff7ed;border:1px solid #b45309"></i><b>⚠ 여기서 갈린다</b> — 헷갈리기 쉬운 지점 · 교안 정정</span>
+</div>
+
+<!-- ===================== 강의자료 ===================== -->
+<section class="sec" id="docs">
+  <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">12주차 강의자료<small>제목을 누르면 앱 실행 없이 화면에서 바로 열립니다</small></h2></div>
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📘</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=nlp-w12-slides">자연어처리 CHAPTER 12-1 — 순환 신경망 (RNN / LSTM)</a>
+      <p>순차 데이터 · RNN 구조 · 입출력 구조 · 패딩/마스킹 · BPTT · 기울기 소실 · 게이트 · LSTM · GRU · 심층/양방향 · Keras 구현 · <b>32페이지</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week12-slides.pdf" download="자연어처리_12주차_순환신경망_RNN_LSTM.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>⏳</span>PDF</div>
+    <div class="doc-main">
+      <span class="doc-open">자연어처리 CHAPTER 12-2 — Seq2Seq · 주의 메커니즘 (아직 올라오지 않음)</span>
+      <p>12-1 교안 마지막 쪽이 &lsquo;실습 2 · 3은 12-2에서 부과&rsquo;라고 예고한다. 아래 <a class="ext" href="#s21">12.2절</a>은 <b>100문제의 문항 · 해설</b>(그림 · 표 · 수치 포함)로 먼저 정리해 두었다</p>
+    </div>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>☁️</span>Claude</div>
+    <div class="doc-main">
+      <a class="doc-open" href="https://claude.ai/artifact/SR8pp9zgJjn9KusPSVNM9z" target="_blank" rel="noopener">12주차 100문제 — 다른 기기에서 이어 풀기(Claude 계정 저장) ↗</a>
+      <p>폰 · 태블릿 · PC 어디서 열어도 <b>같은 풀이 기록</b>이 이어진다. 답을 고르면 해설 아래에 <b>이 페이지의 개념 바로가기</b>와 핵심 · 함정 정리가 붙는다(정답이어도 펼쳐 둔다). 북마크 · 개념 슬라이서가 있고, 마지막 결과 화면은 원래 문제지와 같은 모양이라 <b>그대로 캡처해 제출</b>하면 된다</p>
+    </div>
+    <a class="doc-dl" href="https://claude.ai/artifact/SR8pp9zgJjn9KusPSVNM9z" target="_blank" rel="noopener">열기 ↗</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📝</span>HTML</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week12-quiz100.html" target="_blank" rel="noopener">12주차 RNN · LSTM · Seq2Seq · 어텐션 100문제 (원본) ↗</a>
+      <p>교수님이 올린 원본 문제지 · 기록이 이 브라우저에만 남는다 · 절별 문제는 아래 각 절 제목 옆 버튼으로도 열린다 · <b>12.1.5 게이트와 LSTM이 13문항으로 가장 많고, 12-2가 45문항이다</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week12-quiz100.html" download="자연어처리_12주차_100문제.html">⬇ 다운로드</a>
+  </div>
+</div>
+</section>
+
+<!-- ===================== 개요 ===================== -->
+<section class="sec" id="goal">
+  <div class="sec-head"><span class="sec-badge">GOAL</span><h2 class="sec-title">학습 목표와 12주차 지도<small>교안 2p · 이름 대조표</small></h2></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>학습 목표 (12-1 교안 2p)</th><th>이 페이지의 절</th></tr></thead>
+  <tbody>
+    <tr><td>순차 데이터의 특성과, 기존 신경망으로 다룰 때의 한계를 설명한다</td><td><a class="ext" href="#s11">12.1.1</a></td></tr>
+    <tr><td>RNN의 구조와 순전파 연산을 수식으로 표현한다</td><td><a class="ext" href="#s12">12.1.2</a> · <a class="ext" href="#s13">12.1.3</a></td></tr>
+    <tr><td>BPTT 과정에서 기울기 소실이 생기는 원인을 설명한다</td><td><a class="ext" href="#s14">12.1.4</a></td></tr>
+    <tr><td>LSTM과 GRU의 게이트 구조가 장기 의존성 문제를 어떻게 완화하는지 설명한다</td><td><a class="ext" href="#s15">12.1.5</a> · <a class="ext" href="#s16">12.1.6</a></td></tr>
+    <tr><td>Keras로 RNN · LSTM 모형을 구현하고 성능을 비교한다</td><td><a class="ext" href="#keras">12.1.6</a></td></tr>
+    <tr><td>(12-2) 입력과 출력의 길이가 다른 문제를 Seq2Seq와 주의 메커니즘으로 푼다</td><td><a class="ext" href="#s21">12.2.1</a> ~ <a class="ext" href="#s26">12.2.6</a></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>자료</th><th>이름 · 번호</th><th>이 페이지</th></tr></thead>
+  <tbody>
+    <tr><td>바탕화면 폴더</td><td><code>자_12주차(11.16-11.22)</code></td><td>12주차</td></tr>
+    <tr><td>교안</td><td><b>CHAPTER 12-1</b> 순환 신경망(RNN / LSTM), 32쪽 &mdash; 쪽에 절 번호가 없다(&lsquo;순차 데이터&rsquo; · &lsquo;순환 신경망&rsquo; 같은 제목만)</td><td>12.1.1 ~ 12.1.6 (쪽수 병기)</td></tr>
+    <tr><td>교안 (예정)</td><td>CHAPTER 12-2 Seq2Seq · 주의 메커니즘 &mdash; <b>아직 폴더에 없다</b></td><td>12.2.1 ~ 12.2.6 (100문제 해설로 정리)</td></tr>
+    <tr><td>100문제</td><td>12.1.1 ~ 12.2.6 · 12절 (12-1이 55문항, 12-2가 45문항)</td><td>절 제목 옆 문제 버튼</td></tr>
+    <tr><td>실습</td><td><b>실습 1</b> RNN / LSTM (과제 1-1 ~ 1-4) &mdash; 실습 2 · 3은 12-2에서 부과(교안 32p)</td><td>이 페이지에는 싣지 않음</td></tr>
+    <tr><td>강의계획서</td><td>12주차 자연어처리 딥러닝 Ⅱ (순환 신경망, 그리고 순차열 대 순차열 모형과 주의 메커니즘)</td><td>&mdash;</td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
+<!-- ===================== 12.1.1 ===================== -->
+<section class="sec" id="s11">
+  <div class="sec-head"><span class="sec-badge">12.1.1</span><h2 class="sec-title">순차 데이터<small>교안 3~5p · 순서를 바꾸면 의미가 바뀐다</small></h2></div>
+
+<h3 class="sub-title" id="seq-def">순차 데이터란 (교안 3p)</h3>
+<p><b>순차 데이터(Sequential data)</b> = 관측 값이 <b>순서(order)를 가지고 나열</b>된 데이터. t번째 관측 값을 <b>x(t)</b>로, 전체를 <b>x(1), x(2), …, x(T)</b>로 쓴다(h(t)는 은닉 상태, y(t)는 출력의 표기다). 가장 큰 특징은 <b>순서를 바꾸면 데이터의 의미 자체가 달라진다</b>는 점이다. 텍스트(단어의 순차열) · 시계열(주가 · 센서 값) · 음성(파형)이 대표적이고, 자연어처리가 다루는 데이터는 대부분 순차 데이터다.</p>
+
+<h3 class="sub-title" id="seq-props">순차 데이터의 세 가지 특성 (교안 4p)</h3>
+<div class="cards">
+  <div class="card2"><b>① 순서 의존성</b><p>&ldquo;개가 사람을 물었다&rdquo; vs &ldquo;사람이 개를 물었다&rdquo; &mdash; 단어 구성은 같은데 의미가 다르다. (<a class="ext" href="nlp-week10.html#bow">BoW</a>는 이 둘을 구분하지 못했다.)</p></div>
+  <div class="card2"><b>② 가변 길이</b><p>어떤 문장은 3단어, 다른 문장은 40단어 &rarr; 입력의 크기를 고정할 수 없다.</p></div>
+  <div class="card2"><b>③ 장기 의존성</b><p>현재 출력이 아주 먼 과거 입력에 의해 결정된다 &mdash; &ldquo;<b>프랑스</b>에서 자란 그는 … 유창한 ( <b>프랑스어</b> ) 를 말한다&rdquo;.</p></div>
+</div>
+<div class="pit"><b>세 특성 목록에 없는 것</b> &mdash; &lsquo;차원 불변성&rsquo; 같은 그럴듯한 이름이 오답 보기로 나온다. 교안의 세 가지는 <b>순서 의존성 · 가변 길이 · 장기 의존성</b>뿐이다.</div>
+
+<h3 class="sub-title" id="mlp-limit">기존 신경망(MLP)의 한계 (교안 5p)</h3>
+<ul class="ul">
+  <li>입력을 <b>한 덩어리의 고정 길이 벡터</b>로 밀어 넣어야 한다 &rarr; <b>순서 정보가 사라진다</b></li>
+  <li>문장 길이가 달라지면 입력 노드 수가 달라져 <b>같은 모형을 쓸 수 없다</b></li>
+  <li>시점마다 별도의 가중치를 두면 <b>파라미터 수가 시점 수에 비례해 폭증</b>한다</li>
+</ul>
+<p>RNN은 세 문제를 한꺼번에 푼다 &mdash; 한 시점씩 차례로 읽어 순서를 지키고(①), 같은 셀을 몇 번이든 반복해 길이에 상관없이 처리하며(②), 모든 시점이 같은 가중치를 공유해 파라미터가 늘지 않는다(③). 교안 32p의 생각해 볼 문제 ① &ldquo;가중치를 시점마다 다르게 두면?&rdquo;의 답이 바로 세 번째 줄이다.</p>
+</section>
+
+<!-- ===================== 12.1.2 ===================== -->
+<section class="sec" id="s12">
+  <div class="sec-head"><span class="sec-badge">12.1.2</span><h2 class="sec-title">RNN 구조 · 순전파<small>교안 6~10p · 기억을 가진 신경망</small></h2></div>
+
+<h3 class="sub-title" id="rnn-idea">핵심 아이디어 — 은닉 상태 (교안 6p)</h3>
+<div class="note-box"><b>순환 신경망(RNN, Recurrent Neural Network)</b> &mdash; 순차 데이터를 처리하려고 설계된 구조. 핵심 아이디어는 <b>이전 시점의 은닉 상태를 현재 시점의 입력과 함께 사용</b>하는 것이다.
+<ul class="ul">
+  <li><b>은닉 상태(hidden state) h(t)</b> &mdash; t 시점까지의 입력 x(1) … x(t)를 <b>요약해 담고 있는 고정 크기 벡터</b></li>
+  <li>매 시점 갱신되어 다음 시점으로 전달된다 &rarr; <b>&ldquo;기억(memory)&rdquo;</b>의 역할</li>
+  <li>출력만 내보내는 MLP와 달리, RNN은 <b>자기 자신에게도 값을 다시 흘려보낸다</b>(순환 구조, folded)</li>
+</ul></div>
+
+<h3 class="sub-title" id="rnn-forward">순전파 수식 (교안 7 · 8p)</h3>
+<div class="fx">
+  <div class="tex-d">h(t)=\tanh\big(W_x\,x(t)+W_h\,h(t-1)+b\big),\qquad y(t)=\mathrm{softmax}\big(W_y\,h(t)+c\big)</div>
+  <p class="fx-note"><span class="tex">W_x</span> = 입력 → 은닉, <span class="tex">W_h</span> = 은닉 → 은닉(<b>순환 가중치</b>), <span class="tex">b, c</span> = 편향. 셀 안에서는 <b>현재 입력과 직전 은닉 상태를 각각 선형 변환해 더한 뒤 tanh</b>를 씌운다. <b>tanh는 출력 범위를 (−1, 1)로 제한</b>해 은닉 상태가 발산하지 않게 한다(합을 1로 만드는 건 softmax의 일).</p>
+</div>
+<p id="h0"><b>초기 은닉 상태</b> &mdash; <span class="tex">h(0)</span>은 보통 <b>영벡터</b>로 둔다. 그러면 <span class="tex">W_h\,h(0)=0</span>이라 첫 시점의 은닉 상태는 <b>x(1)만으로 결정</b>된다.</p>
+
+<h3 class="sub-title" id="unfold">펼친 구조와 가중치 공유 (교안 9p)</h3>
+<svg viewBox="0 0 640 170" role="img" aria-label="펼친 RNN: 같은 RNN 셀 네 개가 h0부터 h4까지 은닉 상태를 오른쪽으로 넘기고, 각 셀은 아래에서 x1~x4를 받아 위로 y1~y4를 낸다. 모든 셀이 같은 W_x와 W_h를 쓴다" style="width:100%;max-width:640px;display:block;margin:10px auto">
+  <defs><marker id="u1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1b3f8b"/></marker></defs>
+  <text x="34" y="89" text-anchor="middle" font-size="12" fill="#b45309" font-weight="700">h(0)=0</text>
+  <g font-size="12" text-anchor="middle">
+    <rect x="80" y="66" width="90" height="36" rx="6" fill="#eef2fb" stroke="#1b3f8b"/><text x="125" y="89" fill="#1a1a2e">RNN</text>
+    <rect x="220" y="66" width="90" height="36" rx="6" fill="#eef2fb" stroke="#1b3f8b"/><text x="265" y="89" fill="#1a1a2e">RNN</text>
+    <rect x="360" y="66" width="90" height="36" rx="6" fill="#eef2fb" stroke="#1b3f8b"/><text x="405" y="89" fill="#1a1a2e">RNN</text>
+    <rect x="500" y="66" width="90" height="36" rx="6" fill="#eef2fb" stroke="#1b3f8b"/><text x="545" y="89" fill="#1a1a2e">RNN</text>
+    <text x="125" y="140" fill="#1a1a2e">x(1)</text><text x="265" y="140" fill="#1a1a2e">x(2)</text><text x="405" y="140" fill="#1a1a2e">x(3)</text><text x="545" y="140" fill="#1a1a2e">x(4)</text>
+    <text x="125" y="26" fill="#1a1a2e">y(1)</text><text x="265" y="26" fill="#1a1a2e">y(2)</text><text x="405" y="26" fill="#1a1a2e">y(3)</text><text x="545" y="26" fill="#1a1a2e">y(4)</text>
+    <text x="195" y="78" font-size="11" fill="#b45309">h(1)</text><text x="335" y="78" font-size="11" fill="#b45309">h(2)</text><text x="475" y="78" font-size="11" fill="#b45309">h(3)</text><text x="618" y="78" font-size="11" fill="#b45309">h(4)</text>
+  </g>
+  <g stroke="#1b3f8b" stroke-width="2">
+    <line x1="58" y1="84" x2="78" y2="84" marker-end="url(#u1)"/><line x1="170" y1="84" x2="218" y2="84" marker-end="url(#u1)"/><line x1="310" y1="84" x2="358" y2="84" marker-end="url(#u1)"/><line x1="450" y1="84" x2="498" y2="84" marker-end="url(#u1)"/><line x1="590" y1="84" x2="630" y2="84" marker-end="url(#u1)"/>
+    <line x1="125" y1="128" x2="125" y2="104" marker-end="url(#u1)"/><line x1="265" y1="128" x2="265" y2="104" marker-end="url(#u1)"/><line x1="405" y1="128" x2="405" y2="104" marker-end="url(#u1)"/><line x1="545" y1="128" x2="545" y2="104" marker-end="url(#u1)"/>
+    <line x1="125" y1="66" x2="125" y2="34" marker-end="url(#u1)"/><line x1="265" y1="66" x2="265" y2="34" marker-end="url(#u1)"/><line x1="405" y1="66" x2="405" y2="34" marker-end="url(#u1)"/><line x1="545" y1="66" x2="545" y2="34" marker-end="url(#u1)"/>
+  </g>
+  <text x="320" y="164" text-anchor="middle" font-size="12" font-weight="700" fill="#1a1a2e">네 칸 모두 같은 W_x · W_h · b (가중치 공유) — 파라미터 수는 시점 수 T와 무관</text>
+</svg>
+<ul class="ul">
+  <li>순환 구조를 시간축으로 펼치면 <b>시점 수만큼 층이 쌓인 깊은 신경망</b>과 같아진다(그래서 12.1.4에서 &lsquo;깊은 신경망의 기울기 문제&rsquo;가 그대로 나타난다)</li>
+  <li><b>가중치 공유(weight sharing)</b> &mdash; 모든 시점이 동일한 <span class="tex">W_x, W_h</span>를 쓴다 &rarr; 문장 길이가 달라져도 같은 파라미터로 처리(가변 길이 대응)</li>
+  <li>파라미터 수가 <b>시점 수 T와 무관하게 일정</b>하다 &mdash; 11주차 CNN의 &lsquo;같은 커널을 모든 위치에&rsquo;와 같은 발상을 시간축에 적용한 것이다</li>
+</ul>
+
+<h3 class="sub-title" id="rnn-example">간단한 수치 예시 — 은닉 차원 1 (교안 10p)</h3>
+<p><span class="tex">W_x=0.5,\ W_h=0.8,\ b=0,\ h(0)=0</span>, 입력 <span class="tex">x=(1,1,0)</span>. 교안 표를 다시 계산해 확인했다.</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>t</th><th>x(t)</th><th>W_x·x(t) + W_h·h(t−1)</th><th>h(t) = tanh(·)</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>1.0</td><td>0.5 × 1.0 + 0.8 × 0.000 = <b>0.500</b></td><td><b>0.462</b></td></tr>
+    <tr><td>2</td><td>1.0</td><td>0.5 × 1.0 + 0.8 × 0.462 = <b>0.870</b></td><td><b>0.701</b></td></tr>
+    <tr><td>3</td><td>0.0</td><td>0.5 × 0.0 + 0.8 × 0.701 = <b>0.561</b></td><td><b>0.509</b></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>🔎 표에서 읽어야 할 두 가지</b> &mdash; ① t = 3에서 <b>입력이 0인데 h(3)은 0이 아니다</b>(0.509) &rarr; 과거 정보가 <span class="tex">W_h\,h(2)=0.561</span>을 통해 은닉 상태에 남아 있다. ② <b>같은 입력 1.0이 들어와도 h(1)=0.462, h(2)=0.701로 다르다</b> &rarr; 같은 단어라도 앞 문맥에 따라 표현이 달라진다. 함정 보기는 tanh를 씌우기 <b>전</b> 값(0.500 · 0.870 · 0.561)을 h로 내놓는다. 한 번 더 이어 x(4) = 0이면 0.8 × 0.509 = 0.407 → tanh = 0.386 &mdash; 입력이 끊기면 기억이 매 시점 약 0.8배씩 <b>희석</b>된다(12.1.4 장기 의존성의 씨앗).</div>
+</section>
+
+<!-- ===================== 12.1.3 ===================== -->
+<section class="sec" id="s13">
+  <div class="sec-head"><span class="sec-badge">12.1.3</span><h2 class="sec-title">입출력 구조 · RNN의 입력 만들기<small>교안 11~13p</small></h2></div>
+
+<h3 class="sub-title" id="io-types">입력 · 출력 길이에 따른 네 가지 구조 (교안 11p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>구조</th><th>무엇을</th><th>대표 응용</th></tr></thead>
+  <tbody>
+    <tr><td><b>one-to-many</b></td><td>하나의 입력 → 순차열 출력</td><td><b>이미지 캡셔닝</b></td></tr>
+    <tr><td><b>many-to-one</b></td><td>순차열 입력 → 하나의 출력</td><td><b>감정 분류</b>, 스팸 판별</td></tr>
+    <tr><td><b>many-to-many (동기)</b></td><td>매 시점 입력과 출력이 대응</td><td><b>품사 태깅</b>, 개체명 인식 (<a class="ext" href="nlp-week07.html">7주차</a>)</td></tr>
+    <tr><td><b>many-to-many (비동기)</b></td><td>입력을 모두 읽은 뒤 출력 생성</td><td><b>기계 번역</b> → 12-2의 Seq2Seq</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="pit"><b>구조와 응용 짝 바꾸기</b> &mdash; &ldquo;many-to-one : 이미지 캡셔닝&rdquo;은 틀렸다. 캡셔닝은 이미지 <b>하나</b>에서 문장(순차열)을 만드는 one-to-many다. 동기와 비동기는 &lsquo;출력이 입력과 같은 박자로 나오는가&rsquo;로 가른다 &mdash; 품사 태깅은 단어마다 태그 하나(같은 길이), 번역은 다 읽고 나서 다른 길이로.</div>
+
+<h3 class="sub-title" id="rnn-input">텍스트를 RNN 입력으로 (교안 12p)</h3>
+<div class="flow">
+  <div class="fl"><b>토큰화</b><span>문장을 단어 · 형태소로</span></div>
+  <div class="fl"><b>단어 사전 구축</b><span>단어마다 번호</span></div>
+  <div class="fl"><b>정수 인코딩</b><span>문장 → 정수 순차열</span></div>
+  <div class="fl"><b>임베딩</b><span>V × d 행렬에서 행 조회 → 밀집 벡터 (d ≪ V)</span></div>
+</div>
+<p>원-핫 벡터는 차원이 어휘 크기 V만큼 커지고 단어 간 유사도를 담지 못한다(<a class="ext" href="nlp-week11.html#onehot">11주차 원핫의 한계</a>). 임베딩 층은 <b>V × d 행렬을 학습</b>해 각 단어를 밀집 벡터로 바꾼다(<a class="ext" href="nlp-week11.html#embedding-layer">11주차 Embedding 계층</a>).</p>
+
+<h3 class="sub-title" id="padding">패딩과 마스킹 (교안 13p)</h3>
+<ul class="ul">
+  <li>미니배치 학습을 위해 한 배치 안의 문장 길이를 같게 맞춰야 한다</li>
+  <li>짧은 문장 <b>뒤에</b> 0(PAD)을 채워 최대 길이에 맞춘다(<b>post-padding</b>) &rarr; 입력은 <b>(batch, timesteps, dim)</b> 3차원 텐서</li>
+  <li>PAD 위치는 <b>마스킹</b>으로 연산에서 제외한다 &rarr; Keras에서는 <code>Embedding(..., mask_zero=True)</code></li>
+</ul>
+<div class="deep"><b>🔎 왜 RNN에는 마스킹이 꼭 필요한가</b> &mdash; many-to-one RNN은 <b>마지막 시점의 h(T)</b>를 분류기로 넘긴다. post-padding된 짧은 리뷰(예: 실제 50단어, maxlen 200)는 뒤 150칸이 전부 PAD라, 마스킹이 없으면 RNN이 의미 없는 0을 150번 더 읽으며 기억을 희석시킨 뒤의 h(200)을 넘기게 된다. <code>mask_zero=True</code>면 Keras는 PAD 시점에서 은닉 상태를 갱신하지 않고 그대로 넘겨, <b>실제 마지막 단어의 은닉 상태</b>가 분류기로 간다. 11주차 Text-CNN은 전역 최대 풀링이 위치와 무관해 pre-padding으로도 충분했던 것과 대비된다.</div>
+</section>
+
+<!-- ===================== 12.1.4 ===================== -->
+<section class="sec" id="s14">
+  <div class="sec-head"><span class="sec-badge">12.1.4</span><h2 class="sec-title">BPTT · 기울기 소실과 폭주<small>교안 14~18p</small></h2></div>
+
+<h3 class="sub-title" id="bptt">시간을 거슬러 가는 역전파 BPTT (교안 14p)</h3>
+<p><b>BPTT(Backpropagation Through Time)</b> = <b>펼친 구조에 통상적인 오차 역전파를 그대로 적용</b>하는 방법. 전체 손실은 각 시점 손실의 합 <span class="tex">L=L(1)+L(2)+\cdots+L(T)</span>이고, 기울기가 시간 역방향으로 전파된다. <span class="tex">W_h</span>는 모든 시점에서 공유되므로 그 기울기는 <b>모든 시점의 기여를 더해서</b> 계산된다.</p>
+
+<h3 class="sub-title" id="tbptt">계산 비용과 잘라낸 BPTT (교안 15p)</h3>
+<ul class="ul">
+  <li>문장이 길어지면 펼친 층 수가 늘어 메모리 · 연산량이 함께 증가 &mdash; 역전파를 위해 T에 비례하는 순전파 결과를 저장해야 한다</li>
+  <li><b>잘라낸 BPTT(Truncated BPTT)</b> &mdash; 역전파 구간을 일정 길이 k로 잘라서 수행하고 <b>순전파는 계속 이어 간다</b>. 장점: 메모리 절약 · 학습 속도 향상 / 단점: <b>k보다 먼 과거의 의존 관계는 학습되지 않는다</b></li>
+</ul>
+<div class="note-box" id="maxlen"><b>실무 관점 (15p)</b> &mdash; 대부분의 프레임워크는 <b>입력 순차열 길이만큼만 펼쳐서</b> 학습한다. 따라서 <b>maxlen(자를 문장 길이)이 곧 학습 가능한 의존 거리의 상한</b>이 된다.</div>
+
+<h3 class="sub-title" id="vanishing">기울기 소실 · 폭주 (교안 16 · 17p)</h3>
+<div class="fx"><div class="tex-d">\frac{\partial h(t)}{\partial h(t-k)}=\prod_{j=1}^{k}W_h^{\top}\,\mathrm{diag}\big(\tanh'(\cdot)\big)\quad\Rightarrow\quad\text{대략 }|W_h|^{k}\text{ 에 비례}</div>
+<p class="fx-note">k 시점 이전으로 기울기를 보내려면 야코비 행렬을 <b>k번 곱해야</b> 한다. 같은 수를 반복해 곱하면 1보다 작을 땐 지수적으로 0으로, 1보다 클 땐 지수적으로 무한대로 간다.</p></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>경우</th><th>무슨 일이</th><th>증상</th><th>대표 해결</th></tr></thead>
+  <tbody>
+    <tr><td><b>|W_h| &lt; 1</b></td><td>기울기가 지수적으로 0에 수렴 = <b>기울기 소실</b></td><td>먼 과거를 학습하지 못함</td><td><b>게이트 구조 (LSTM, GRU)</b></td></tr>
+    <tr><td><b>|W_h| &gt; 1</b></td><td>기울기가 지수적으로 발산 = <b>기울기 폭주</b></td><td>손실 발산 / <b>NaN</b></td><td><b>기울기 클리핑</b> (gradient clipping)</td></tr>
+  </tbody>
+</table>
+</div>
+<p><b>tanh의 미분값은 최대 1</b>이고(z = 0에서), 포화 구간(|z|가 큰 곳)에서는 거의 0이다 &rarr; 곱해질수록 기울기를 <b>더 작게</b> 만드는 방향으로 작용한다. 그래서 RNN은 폭주보다 소실이 더 흔하다.</p>
+<div class="deep"><b>🔎 숫자로 보는 반복 곱</b> &mdash; tanh' = 0.9로 두면 한 시점마다 <span class="tex">|W_h|\times0.9</span>가 곱해진다. k = 10이면 |W_h| = 0.6 → 0.54¹⁰ = <b>0.0021</b>, 0.9 → 0.81¹⁰ = <b>0.12</b>, 1.3 → 1.17¹⁰ = <b>4.8</b>. k = 50이면 각각 <b>4 × 10⁻¹⁴</b>, 2.6 × 10⁻⁵, <b>2.6 × 10³</b>. 0.9배짜리 셀도 50단어 전에는 10만분의 1로 줄어든다 &mdash; 200단어 리뷰의 앞부분은 사실상 학습에 기여하지 못한다. 교안 16p 그래프 범례는 폭주 곡선을 |W_h| = 1.2로, 17p 본문은 1.3으로 그렸다 &mdash; 둘 다 &lsquo;1보다 크면 폭주&rsquo;의 예일 뿐이다.</div>
+<div class="pit"><b>클리핑은 소실을 못 고친다</b> &mdash; 기울기 클리핑은 <span class="tex">\lVert g\rVert</span>가 기준을 넘을 때만 크기를 줄인다. 너무 작은 기울기(소실)는 건드리지 않으므로 <b>폭주</b>만 해결한다. 소실은 게이트 구조로 완화한다(교안 32p 생각해 볼 문제 ②).</div>
+
+<h3 class="sub-title" id="long-dep">장기 의존성 문제 (교안 18p)</h3>
+<p>정답에 필요한 정보가 <b>아주 먼 과거 입력</b>에 있는 상황. 기본 RNN은 은닉 상태가 <b>매 시점 tanh로 덮어써지면서</b> 과거 정보가 희석된다. 실험적으로 <b>대략 10 시점 이상</b>(Bengio et al., 1994) 떨어진 의존 관계는 학습이 매우 어렵다. 교안 그림: &lsquo;프랑스 에서 자란 그는 … (중략) … 유창한 ___ 를 말한다&rsquo; &mdash; 빈칸을 채우려면 맨 앞 &lsquo;프랑스&rsquo;를 기억해야 한다.</p>
+</section>
+
+<!-- ===================== 12.1.5 ===================== -->
+<section class="sec" id="s15">
+  <div class="sec-head"><span class="sec-badge">12.1.5</span><h2 class="sec-title">게이트와 LSTM<small>교안 19~26p · 학습되는 정보 밸브와 덧셈 갱신</small></h2></div>
+
+<h3 class="sub-title" id="gate">게이트의 아이디어 (교안 19p)</h3>
+<div class="note-box"><b>게이트(gate)</b> = 정보를 <b>&ldquo;얼마나 통과시킬지&rdquo;를 학습하는 밸브</b>. 시그모이드 출력 <span class="tex">g\in(0,1)</span>을 정보 벡터에 <b>원소별로 곱해</b> 통과량을 조절한다 &mdash; <b>g ≈ 0이면 차단, g ≈ 1이면 그대로 통과</b>. 핵심은 게이트 값 자체도 <b>학습되는 가중치로 결정</b>된다는 점이다(현재 입력과 직전 은닉 상태를 보고 그때그때 밸브를 연다).</div>
+
+<h3 class="sub-title" id="lstm">LSTM — 두 개의 상태와 세 개의 게이트 (교안 20p)</h3>
+<ul class="ul">
+  <li><b>LSTM(Long Short-Term Memory)</b> &mdash; <b>Hochreiter &amp; Schmidhuber (1997)</b>가 제안한 게이트 기반 순환 구조. 망각 게이트는 <b>Gers et al. (2000)</b>이 추가해 오늘날의 3-게이트 표준 구조가 되었다</li>
+  <li><b>셀 상태 C(t)</b> = 장기 기억 &mdash; 컨베이어 벨트처럼 곧게 흐른다 / <b>은닉 상태 h(t)</b> = 단기 기억 및 현재 시점의 출력</li>
+  <li>세 게이트 &mdash; <b>망각 f(t) · 입력 i(t) · 출력 o(t)</b> (리셋 · 업데이트는 GRU의 게이트다)</li>
+</ul>
+<svg viewBox="0 0 640 230" role="img" aria-label="LSTM 셀: 위쪽에 셀 상태 C가 왼쪽에서 오른쪽으로 곧게 흐르며 망각 게이트와 곱해지고 입력 게이트와 후보값의 곱이 더해진다. 아래쪽 h(t-1)과 x(t)가 네 개의 선형변환 f, i, C~, o로 들어가고 출력 게이트가 tanh(C)와 곱해져 h(t)가 된다" style="width:100%;max-width:640px;display:block;margin:10px auto">
+  <defs><marker id="l1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1b3f8b"/></marker><marker id="l2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1d4ed8"/></marker></defs>
+  <rect x="70" y="20" width="500" height="180" rx="10" fill="#f8fafc" stroke="#94a3b8"/>
+  <line x1="20" y1="50" x2="620" y2="50" stroke="#1d4ed8" stroke-width="3" marker-end="url(#l2)"/>
+  <text x="22" y="40" font-size="12" font-weight="700" fill="#1d4ed8">C(t−1)</text><text x="590" y="40" font-size="12" font-weight="700" fill="#1d4ed8">C(t)</text>
+  <circle cx="170" cy="50" r="13" fill="#fff" stroke="#b91c1c" stroke-width="2"/><text x="170" y="55" text-anchor="middle" font-size="14" fill="#b91c1c">×</text>
+  <circle cx="320" cy="50" r="13" fill="#fff" stroke="#1d4ed8" stroke-width="2"/><text x="320" y="55" text-anchor="middle" font-size="15" fill="#1d4ed8">+</text>
+  <g font-size="12" text-anchor="middle">
+    <rect x="145" y="120" width="50" height="30" rx="5" fill="#fee2e2" stroke="#b91c1c"/><text x="170" y="140" fill="#7f1d1d">σ f</text>
+    <rect x="235" y="120" width="50" height="30" rx="5" fill="#fff7ed" stroke="#b45309"/><text x="260" y="140" fill="#7c2d12">σ i</text>
+    <rect x="305" y="120" width="60" height="30" rx="5" fill="#fff7ed" stroke="#b45309"/><text x="335" y="140" fill="#7c2d12">tanh C̃</text>
+    <rect x="430" y="120" width="50" height="30" rx="5" fill="#dcfce7" stroke="#166534"/><text x="455" y="140" fill="#14532d">σ o</text>
+    <rect x="490" y="70" width="56" height="26" rx="5" fill="#fff" stroke="#166534"/><text x="518" y="88" fill="#14532d">tanh</text>
+  </g>
+  <circle cx="298" cy="95" r="11" fill="#fff" stroke="#b45309" stroke-width="2"/><text x="298" y="100" text-anchor="middle" font-size="13" fill="#b45309">×</text>
+  <circle cx="518" cy="140" r="11" fill="#fff" stroke="#166534" stroke-width="2"/><text x="518" y="145" text-anchor="middle" font-size="13" fill="#166534">×</text>
+  <g stroke="#1b3f8b" stroke-width="1.6" fill="none">
+    <line x1="170" y1="120" x2="170" y2="64" marker-end="url(#l1)"/>
+    <line x1="260" y1="120" x2="290" y2="103" marker-end="url(#l1)"/><line x1="335" y1="120" x2="306" y2="103" marker-end="url(#l1)"/>
+    <line x1="298" y1="84" x2="314" y2="62" marker-end="url(#l1)"/>
+    <line x1="518" y1="50" x2="518" y2="68" marker-end="url(#l1)"/><line x1="518" y1="96" x2="518" y2="128" marker-end="url(#l1)"/>
+    <line x1="480" y1="140" x2="506" y2="140" marker-end="url(#l1)"/>
+    <line x1="529" y1="140" x2="618" y2="140" marker-end="url(#l1)"/>
+    <polyline points="20,185 380,185 380,175"/>
+    <line x1="170" y1="185" x2="170" y2="152" marker-end="url(#l1)"/><line x1="260" y1="185" x2="260" y2="152" marker-end="url(#l1)"/><line x1="335" y1="185" x2="335" y2="152" marker-end="url(#l1)"/><line x1="455" y1="185" x2="455" y2="152" marker-end="url(#l1)"/>
+    <line x1="380" y1="185" x2="455" y2="185"/>
+  </g>
+  <text x="22" y="178" font-size="12" font-weight="700" fill="#1a1a2e">h(t−1), x(t)</text><text x="592" y="132" font-size="12" font-weight="700" fill="#166534">h(t)</text>
+  <text x="170" y="222" text-anchor="middle" font-size="11.5" fill="#b91c1c">① 무엇을 버릴까</text><text x="298" y="222" text-anchor="middle" font-size="11.5" fill="#b45309">② 무엇을 새로 저장할까</text><text x="320" y="16" text-anchor="middle" font-size="11.5" fill="#1d4ed8">③ 곱이 아니라 덧셈으로 갱신</text><text x="480" y="222" text-anchor="middle" font-size="11.5" fill="#166534">④ 무엇을 내보낼까</text>
+</svg>
+
+<h3 class="sub-title" id="forget">① 망각 게이트 (교안 21p)</h3>
+<div class="fx"><div class="tex-d">f(t)=\sigma\big(W_f\cdot[h(t-1),\,x(t)]+b_f\big),\qquad f(t)\in(0,1)</div>
+<p class="fx-note">직전 셀 상태 <span class="tex">C(t-1)</span>에서 <b>무엇을 버릴지</b> 결정한다. <span class="tex">f(t)\odot C(t-1)</span>로 원소별로 곱해 필요 없는 기억을 지운다 &mdash; 예: 새 주어가 나오면 이전 주어의 성 · 수 정보를 잊는다. <span class="tex">[h(t-1),x(t)]</span>는 두 벡터를 이어 붙인(concatenate) 것이다.</p></div>
+
+<h3 class="sub-title" id="input-gate">② 입력 게이트와 후보값 (교안 22p)</h3>
+<div class="fx"><div class="tex-d">i(t)=\sigma\big(W_i\cdot[h(t-1),x(t)]+b_i\big),\qquad\tilde C(t)=\tanh\big(W_C\cdot[h(t-1),x(t)]+b_C\big)</div>
+<p class="fx-note">현재 입력에서 <b>무엇을 새로 저장할지</b>. <b>i(t)는 저장 비율이라 시그모이드(0~1)</b>, <b>C̃(t)는 저장할 내용이라 tanh(−1~1)</b>다. 실제로 셀에 더해지는 새 정보는 <span class="tex">i(t)\odot\tilde C(t)</span>.</p></div>
+
+<h3 class="sub-title" id="cell-update">③ 셀 상태 갱신 — 덧셈 (교안 23p)</h3>
+<div class="fx"><div class="tex-d">C(t)=\underbrace{f(t)\odot C(t-1)}_{\text{남길 과거 기억}}+\underbrace{i(t)\odot\tilde C(t)}_{\text{추가할 새 기억}}</div>
+<p class="fx-note"><b>곱이 아니라 덧셈으로 갱신</b>된다는 점이 기울기 소실 완화의 핵심이다. 게이트를 상수로 본 직접 경로 기준 <span class="tex">\partial C(t)/\partial C(t-1)\approx f(t)</span>이므로 <b>f(t) ≈ 1이면 기울기가 그대로 보존</b>된다.</p></div>
+
+<h3 class="sub-title" id="output-gate">④ 출력 게이트 (교안 24p)</h3>
+<div class="fx"><div class="tex-d">o(t)=\sigma\big(W_o\cdot[h(t-1),x(t)]+b_o\big),\qquad h(t)=o(t)\odot\tanh\big(C(t)\big)</div>
+<p class="fx-note">갱신된 셀 상태 중 <b>무엇을 이번 시점의 출력으로 내보낼지</b>. 장기 기억 C(t)는 그대로 유지하면서 필요한 부분만 골라 h(t)로 낸다.</p></div>
+<div class="deep"><b>🔎 한 시점을 숫자로</b> &mdash; 스칼라 셀에서 <span class="tex">C(t-1)=1.0</span>, 게이트가 f = 0.9 · i = 0.2 · o = 0.8, 후보값 C̃ = 0.5로 나왔다고 하자. <span class="tex">C(t)=0.9\times1.0+0.2\times0.5=0.9+0.1=1.0</span>, <span class="tex">h(t)=0.8\times\tanh(1.0)=0.8\times0.762=0.609</span>. 기억(C)은 1.0 그대로 다음 시점으로 넘어가고, 바깥으로는 0.609만 내보낸다. 기본 RNN이었다면 매 시점 tanh(W_h·h + …)로 <b>덮어써졌을</b> 값이, LSTM에서는 &lsquo;90% 남기고 10% 보태는&rsquo; 덧셈으로 이어진다.</div>
+
+<h3 class="sub-title" id="lstm-table">LSTM 수식 정리 · 파라미터 수 (교안 25p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>구성 요소</th><th>수식</th><th>활성</th><th>역할</th></tr></thead>
+  <tbody>
+    <tr><td>망각 게이트</td><td><span class="tex">f(t)=\sigma(W_f[h(t-1),x(t)]+b_f)</span></td><td>σ</td><td>과거 기억 삭제 비율</td></tr>
+    <tr><td>입력 게이트</td><td><span class="tex">i(t)=\sigma(W_i[h(t-1),x(t)]+b_i)</span></td><td>σ</td><td>새 정보 저장 비율</td></tr>
+    <tr><td>후보값</td><td><span class="tex">\tilde C(t)=\tanh(W_C[h(t-1),x(t)]+b_C)</span></td><td>tanh</td><td>저장할 새 정보</td></tr>
+    <tr><td>셀 상태</td><td><span class="tex">C(t)=f(t)\odot C(t-1)+i(t)\odot\tilde C(t)</span></td><td>&mdash;</td><td>장기 기억 갱신</td></tr>
+    <tr><td>출력 게이트</td><td><span class="tex">o(t)=\sigma(W_o[h(t-1),x(t)]+b_o)</span></td><td>σ</td><td>출력 비율</td></tr>
+    <tr><td>은닉 상태</td><td><span class="tex">h(t)=o(t)\odot\tanh(C(t))</span></td><td>tanh</td><td>단기 기억 · 출력</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="fx" id="lstm-params"><div class="tex-d">\text{SimpleRNN}:\ (d+u)u+u\qquad\text{LSTM}:\ 4\big[(d+u)u+u\big]</div>
+<p class="fx-note">게이트 3개 + 후보값 1개 = <b>선형 변환 4개</b> &rarr; 같은 은닉 차원의 기본 RNN 대비 <b>약 4배</b>. 입력(임베딩) d = 64, 은닉 u = 64면 SimpleRNN = 128 × 64 + 64 = <b>8,256</b>, LSTM = 4 × 8,256 = <b>33,024</b>로 정확히 4배다.</p></div>
+
+<h3 class="sub-title" id="lstm-why">LSTM이 기울기 소실을 완화하는 이유 (교안 26p)</h3>
+<ul class="ul">
+  <li>셀 상태는 게이트를 통한 <b>덧셈</b>으로 갱신되므로 기울기가 곧게 흐른다(constant error carousel)</li>
+  <li><span class="tex">\partial C(t)/\partial C(t-1)=f(t)</span> &mdash; 반복 곱해지는 항이 고정된 <span class="tex">W_h</span>가 아니라 <b>학습되는 값 f(t)</b>로 대체된다</li>
+  <li>망각 게이트가 열려 있으면(f(t) ≈ 1) 먼 과거까지 기울기가 전달된다 &mdash; f = 0.99면 50시점 뒤에도 0.99⁵⁰ = <b>0.61</b>, f = 0.95면 0.077이다(기본 RNN 0.81⁵⁰ = 2.6 × 10⁻⁵와 비교)</li>
+</ul>
+<div class="pit"><b>원리를 뒤집은 보기</b> &mdash; &ldquo;셀 상태가 매 시점 tanh로 덮어써져 과거 정보를 새로 갱신하기 때문&rdquo;은 <b>기본 RNN의 문제점</b>을 그대로 옮긴 오답이다. 교안 32p 생각해 볼 문제 ③(망각 게이트 편향 <span class="tex">b_f</span>를 크게 초기화하면?) &mdash; 학습 초기부터 f(t) ≈ 1이 되어 &lsquo;기본값이 기억 유지&rsquo;가 되므로, 기울기가 처음부터 먼 과거까지 흐른다. Keras LSTM의 <code>unit_forget_bias=True</code>(기본값)가 바로 b_f를 1로 초기화하는 설정이다.</div>
+</section>
+
+<!-- ===================== 12.1.6 ===================== -->
+<section class="sec" id="s16">
+  <div class="sec-head"><span class="sec-badge">12.1.6</span><h2 class="sec-title">GRU · RNN의 확장 · Keras 구현<small>교안 27~32p</small></h2></div>
+
+<h3 class="sub-title" id="gru">GRU (교안 27p)</h3>
+<ul class="ul">
+  <li><b>GRU(Gated Recurrent Unit)</b> &mdash; <b>Cho et al. (2014)</b>가 제안한 <b>LSTM의 경량화 구조</b></li>
+  <li><b>셀 상태를 없애고</b> 은닉 상태 h(t) 하나만 유지 / 게이트를 <b>2개로</b> 축소 &mdash; <b>리셋 게이트 r(t)</b>, <b>업데이트 게이트 z(t)</b></li>
+</ul>
+<div class="fx"><div class="tex-d">h(t)=\big(1-z(t)\big)\odot h(t-1)+z(t)\odot\tilde h(t)</div>
+<p class="fx-note"><b>삭제와 추가를 한 게이트가 담당</b>한다 &mdash; z와 1 − z가 짝이라, LSTM에서 망각 · 입력 두 게이트가 나눠 하던 일을 업데이트 게이트 하나가 한다. 리셋 게이트 r(t)는 후보값 <span class="tex">\tilde h(t)=\tanh(W_hx(t)+U_h(r(t)\odot h(t-1))+b_h)</span>을 만들 때 과거를 얼마나 쓸지 정한다.</p></div>
+<div class="warn"><b>z와 1 − z의 위치는 표기마다 반대다</b> &mdash; 교안 식은 Chung et al. (2014) 표기다. <b>Keras · PyTorch 구현과 Cho et al. (2014) 원 논문</b>은 <span class="tex">h(t)=z\odot h(t-1)+(1-z)\odot\tilde h(t)</span>로, z가 &lsquo;과거를 남길 비율&rsquo;이다. Keras로 직접 검증할 때는 Keras 표기를 따라야 결과가 일치한다. 어느 쪽이든 &lsquo;한 게이트로 삭제와 추가를 함께 한다&rsquo;는 뜻은 같다.</div>
+
+<h3 class="sub-title" id="rnn-compare">SimpleRNN · LSTM · GRU 비교 (교안 28p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>항목</th><th>SimpleRNN</th><th>LSTM</th><th>GRU</th></tr></thead>
+  <tbody>
+    <tr><td>유지하는 상태</td><td>h</td><td>h, C</td><td>h</td></tr>
+    <tr><td>게이트 수</td><td>0</td><td><b>3</b></td><td><b>2</b></td></tr>
+    <tr><td>파라미터 (상대)</td><td>1배</td><td><b>약 4배</b></td><td><b>약 3배</b></td></tr>
+    <tr><td>장기 의존성</td><td>약함</td><td>강함</td><td>강함</td></tr>
+    <tr><td>학습 속도</td><td>빠름</td><td>느림</td><td>중간</td></tr>
+    <tr><td>권장 상황</td><td>짧은 순차열 · 교육용</td><td>긴 순차열 · 성능 우선</td><td>데이터 · 자원이 적을 때</td></tr>
+  </tbody>
+</table>
+</div>
+<p><b>실험적 결론</b> &mdash; 데이터셋에 따라 LSTM과 GRU의 <b>우열이 갈리므로 두 구조를 모두 시도</b>하는 것이 일반적이다. 다만 둘 다 SimpleRNN보다는 대체로 우수하다.</p>
+<div class="pit"><b>LSTM과 GRU의 숫자 바꾸기</b> &mdash; &ldquo;GRU는 게이트 3개 · 파라미터 약 4배&rdquo;는 LSTM의 숫자다. GRU는 <b>2개 · 약 3배</b>(Keras 기본 <code>reset_after=True</code>면 편향이 두 벌이라 3배보다 조금 많다 &mdash; d = u = 64에서 24,960 = SimpleRNN의 3.02배).</div>
+
+<h3 class="sub-title" id="rnn-ext">RNN의 확장 — 심층 · 양방향 (교안 29p)</h3>
+<div class="cards">
+  <div class="card2"><b>심층(다층) RNN</b><p>은닉층을 위로 쌓아 표현력을 높인다. Keras에서는 <b>아래쪽 층에 <code>return_sequences=True</code></b>를 지정해 매 시점 출력을 위층에 넘긴다(기본값 False면 마지막 h(T) 하나만 나간다).</p></div>
+  <div class="card2"><b>양방향(bidirectional) RNN</b><p>정방향 · 역방향 RNN을 함께 써서 현재 시점에서 <b>과거와 미래 문맥을 모두</b> 참조 &rarr; 품사 태깅 · 개체명 인식에 유리. 단, <b>미래 입력을 알 수 없는 실시간 생성 과제에는 쓸 수 없다</b>(32p 문제 ④ &mdash; 실시간 음성 인식은 아직 오지 않은 소리를 볼 수 없다).</p></div>
+</div>
+
+<h3 class="sub-title" id="keras">Keras 구현 (교안 30p)</h3>
+<pre class="code">from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Embedding, SimpleRNN, LSTM, Dense
+model = Sequential([
+    Embedding(input_dim=10001, output_dim=64, mask_zero=True),   <span class="cm"># 교안 주석 : 0은 PAD 전용이므로 input_dim = 어휘 수 + 1</span>
+    LSTM(64),                                                    <span class="cm"># SimpleRNN(64)으로 바꿔 비교</span>
+    Dense(1, activation='sigmoid'),                              <span class="cm"># 이진 감정 분류</span>
+])
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])</pre>
+<div class="warn"><b>input_dim은 &lsquo;가장 큰 정수 인덱스 + 1&rsquo;이다</b> &mdash; 교안은 10001을 쓰고 100문제(54번)는 10000을 쓴다. Keras IMDB를 <code>num_words=10000</code>으로 불러오면 0(PAD) · 1(시작) · 2(OOV)까지 포함해 인덱스가 <b>0~9999</b>이므로 <b>10000이면 충분</b>하다. 10001로 두어도 쓰이지 않는 행이 하나 생길 뿐 오류는 없다. 직접 만든 사전이 1~V 번호를 쓰고 0을 PAD로 비워 두었다면 그때 V + 1이 필요하다.</div>
+
+<h3 class="sub-title" id="think">12-1 정리 · 생각해 볼 문제 (교안 31 · 32p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>생각해 볼 문제</th><th>답</th></tr></thead>
+  <tbody>
+    <tr><td>① 가중치를 시점마다 다르게 두면?</td><td>파라미터가 시점 수에 비례해 폭증하고, 학습 때 본 길이와 다른 문장을 처리할 수 없다 &mdash; <a class="ext" href="#unfold">가중치 공유</a></td></tr>
+    <tr><td>② 클리핑은 소실과 폭주 중 어느 쪽을?</td><td><b>폭주</b>. 큰 기울기만 잘라 내고 작은 기울기는 그대로 두기 때문 &mdash; <a class="ext" href="#vanishing">12.1.4</a></td></tr>
+    <tr><td>③ b_f를 크게 초기화하면?</td><td>초기부터 f ≈ 1 → 셀 기억이 유지되고 기울기가 먼 과거까지 흐른다 &mdash; <a class="ext" href="#lstm-why">12.1.5</a></td></tr>
+    <tr><td>④ 양방향 LSTM을 실시간 음성 인식에 못 쓰는 이유는?</td><td>역방향 RNN이 아직 들어오지 않은 미래 입력을 필요로 한다 &mdash; <a class="ext" href="#rnn-ext">12.1.6</a></td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
+<!-- ===================== 12.2.1 ===================== -->
+<section class="sec" id="s21">
+  <div class="sec-head"><span class="sec-badge">12.2.1</span><h2 class="sec-title">Seq2Seq 문제<small>12-2 교안 미공개 · 100문제 56~60번 기준</small></h2></div>
+<div class="warn"><b>12.2절은 100문제로 먼저 정리했다</b> &mdash; 12-2 교안(Seq2Seq · 주의 메커니즘) PDF가 아직 폴더에 없다. 아래 12.2.1 ~ 12.2.6은 100문제 56~100번의 문항 · 정답 · 해설에 나온 내용(교안의 그림 · 표 · 수치 · 코드를 가리키는 부분 포함)을 모아 재구성했고, 교안 쪽수는 비워 두었다. 교안이 올라오면 쪽수와 그림을 맞춰 보강한다.</div>
+
+<h3 class="sub-title" id="s2s-def">순차열 대 순차열 — 정의와 특성</h3>
+<p><b>Seq2Seq</b> = 순차열을 입력받아 <b>다른 순차열을 출력</b>하는 문제. 핵심은 <b>입력 길이 T와 출력 길이 T&prime;가 다를 수 있다</b>는 점이다 &mdash; 길이가 항상 같다면 12.1.3의 동기 many-to-many로 충분했다.</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>대표 응용</th><th>입력 → 출력</th></tr></thead>
+  <tbody>
+    <tr><td><b>기계 번역</b></td><td>원문 문장 → 번역 문장</td></tr>
+    <tr><td><b>문서 요약</b></td><td>긴 문서 → 짧은 요약</td></tr>
+    <tr><td><b>대화 시스템</b></td><td>사용자 발화 → 응답 문장</td></tr>
+    <tr><td><b>음성 인식</b></td><td>음성 파형 → 텍스트</td></tr>
+  </tbody>
+</table>
+</div>
+<p id="s2s-why">12-1까지의 구조(many-to-one, 동기 many-to-many)는 <b>입력 시점과 출력 시점이 대응되는 경우만</b> 다뤘다 &rarr; 길이가 다른 문장을 생성하는 번역을 다루기 어려웠다. <a class="ext" href="nlp-week09.html">9주차 기계번역</a>의 신경망 번역(seq2seq)을 이번에 구조부터 본다.</p>
+<div class="pit"><b>응용 짝 바꾸기</b> &mdash; &ldquo;대화 시스템 : 음성 파형 → 텍스트&rdquo;는 음성 인식이다. 이미지 분류는 출력이 순차열이 아니므로 Seq2Seq 응용이 아니다.</div>
+</section>
+
+<!-- ===================== 12.2.2 ===================== -->
+<section class="sec" id="s22">
+  <div class="sec-head"><span class="sec-badge">12.2.2</span><h2 class="sec-title">인코더-디코더<small>100문제 61~67번 기준</small></h2></div>
+
+<h3 class="sub-title" id="enc-dec">구조 — 두 개의 RNN을 이어 붙인다</h3>
+<p><b>인코더-디코더(Encoder-Decoder)</b> 구조는 <b>Sutskever et al. (2014)</b>와 <b>Cho et al. (2014)</b>가 제안했다. 두 개의 RNN(보통 LSTM)을 이어 붙여, <b>인코더는 입력 순차열을 하나의 문맥 벡터로 압축</b>하고 <b>디코더는 그 벡터로 출력을 한 단어씩 생성</b>한다.</p>
+<svg viewBox="0 0 640 170" role="img" aria-label="Seq2Seq: 인코더 LSTM 세 칸이 나는, 학교에, 간다를 읽고 마지막 상태가 문맥 벡터 c가 되어 디코더의 초기 상태로 넘어간다. 디코더는 sos를 첫 입력으로 I, go, to school, eos를 차례로 낸다" style="width:100%;max-width:640px;display:block;margin:10px auto">
+  <defs><marker id="e1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1b3f8b"/></marker></defs>
+  <text x="130" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#1b3f8b">인코더</text><text x="470" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#166534">디코더</text>
+  <g font-size="12" text-anchor="middle">
+    <rect x="20" y="60" width="64" height="34" rx="6" fill="#eef2fb" stroke="#1b3f8b"/><rect x="100" y="60" width="64" height="34" rx="6" fill="#eef2fb" stroke="#1b3f8b"/><rect x="180" y="60" width="64" height="34" rx="6" fill="#eef2fb" stroke="#1b3f8b"/>
+    <text x="52" y="128" fill="#1a1a2e">나는</text><text x="132" y="128" fill="#1a1a2e">학교에</text><text x="212" y="128" fill="#1a1a2e">간다</text>
+    <rect x="270" y="58" width="70" height="38" rx="8" fill="#fff7ed" stroke="#b45309" stroke-width="2"/><text x="305" y="75" fill="#7c2d12" font-weight="700">c = h(T)</text><text x="305" y="89" font-size="10.5" fill="#7c2d12">문맥 벡터</text>
+    <rect x="370" y="60" width="56" height="34" rx="6" fill="#dcfce7" stroke="#166534"/><rect x="440" y="60" width="56" height="34" rx="6" fill="#dcfce7" stroke="#166534"/><rect x="510" y="60" width="56" height="34" rx="6" fill="#dcfce7" stroke="#166534"/><rect x="580" y="60" width="56" height="34" rx="6" fill="#dcfce7" stroke="#166534"/>
+    <text x="398" y="128" fill="#64748b">&lt;sos&gt;</text><text x="468" y="128" fill="#64748b">I</text><text x="538" y="128" fill="#64748b">go</text><text x="608" y="128" fill="#64748b">to school</text>
+    <text x="398" y="40" fill="#14532d">I</text><text x="468" y="40" fill="#14532d">go</text><text x="538" y="40" fill="#14532d">to school</text><text x="608" y="40" fill="#14532d">&lt;eos&gt;</text>
+  </g>
+  <g stroke="#1b3f8b" stroke-width="1.8">
+    <line x1="84" y1="77" x2="98" y2="77" marker-end="url(#e1)"/><line x1="164" y1="77" x2="178" y2="77" marker-end="url(#e1)"/><line x1="244" y1="77" x2="268" y2="77" marker-end="url(#e1)"/><line x1="340" y1="77" x2="368" y2="77" marker-end="url(#e1)"/>
+    <line x1="426" y1="77" x2="438" y2="77" marker-end="url(#e1)"/><line x1="496" y1="77" x2="508" y2="77" marker-end="url(#e1)"/><line x1="566" y1="77" x2="578" y2="77" marker-end="url(#e1)"/>
+    <line x1="52" y1="116" x2="52" y2="96" marker-end="url(#e1)"/><line x1="132" y1="116" x2="132" y2="96" marker-end="url(#e1)"/><line x1="212" y1="116" x2="212" y2="96" marker-end="url(#e1)"/>
+    <line x1="398" y1="116" x2="398" y2="96" marker-end="url(#e1)"/><line x1="468" y1="116" x2="468" y2="96" marker-end="url(#e1)"/><line x1="538" y1="116" x2="538" y2="96" marker-end="url(#e1)"/><line x1="608" y1="116" x2="608" y2="96" marker-end="url(#e1)"/>
+    <line x1="398" y1="60" x2="398" y2="46" marker-end="url(#e1)"/><line x1="468" y1="60" x2="468" y2="46" marker-end="url(#e1)"/><line x1="538" y1="60" x2="538" y2="46" marker-end="url(#e1)"/><line x1="608" y1="60" x2="608" y2="46" marker-end="url(#e1)"/>
+  </g>
+  <text x="320" y="160" text-anchor="middle" font-size="11.5" fill="#475569">학습 때 디코더 입력은 정답 단어(teacher forcing), 추론 때는 직전에 자기가 낸 단어</text>
+</svg>
+<ul class="ul">
+  <li id="context"><b>문맥 벡터 c</b> &mdash; 인코더가 입력을 순서대로 읽으며 은닉 상태를 갱신하고, <b>마지막 시점의 은닉(과 셀) 상태</b>를 입력 전체의 요약으로 쓴다: <span class="tex">c=h(T)</span></li>
+  <li><b>디코더</b> &mdash; 문맥 벡터를 <b>초기 상태</b>로 삼아, <b>직전 출력 단어</b>를 입력으로 받으며 상태를 갱신하는 언어 모형: <span class="tex">s(t)=\mathrm{LSTM}(y(t-1),s(t-1)),\ s(0)=c</span></li>
+  <li>단어 예측 &mdash; <span class="tex">P(y(t)\mid y(1..t-1),x)=\mathrm{softmax}(W\cdot s(t)+b)</span></li>
+  <li id="sos"><b>&lt;sos&gt;</b> = 디코더 첫 시점의 입력(생성 시작 신호), <b>&lt;eos&gt;</b> = 이것이 생성되면 문장 생성 종료</li>
+</ul>
+<pre class="code" id="s2s-keras"><span class="cm"># 인코더의 마지막 상태를 디코더에 넘기는 Keras 방식 (100문제 64번)</span>
+enc_out, state_h, state_c = LSTM(units, return_state=True)(enc_emb)    <span class="cm"># 마지막 은닉 · 셀 상태</span>
+dec_out = LSTM(units, return_sequences=True)(dec_emb,
+                                             initial_state=[state_h, state_c])   <span class="cm"># s(0) = c</span></pre>
+<div class="pit"><b>return_state와 return_sequences</b> &mdash; <code>return_state=True</code>는 <b>마지막 은닉 · 셀 상태</b>를 따로 돌려준다(문맥 벡터용). <code>return_sequences=True</code>는 <b>모든 시점의 출력</b>을 돌려준다(심층 RNN의 아래층, 그리고 12.2.5 어텐션에서 인코더 출력 전체가 필요할 때).</div>
+</section>
+
+<!-- ===================== 12.2.3 ===================== -->
+<section class="sec" id="s23">
+  <div class="sec-head"><span class="sec-badge">12.2.3</span><h2 class="sec-title">학습 · 디코딩<small>100문제 68~74번 기준</small></h2></div>
+
+<h3 class="sub-title" id="teacher">Teacher forcing과 노출 편향</h3>
+<ul class="ul">
+  <li><b>Teacher forcing(교사 강요)</b> &mdash; 학습 시 디코더 입력으로 이전 시점의 <b>&lsquo;예측&rsquo; 대신 &lsquo;정답&rsquo;</b>을 넣는다. 초반에 한 번 틀린 단어가 뒤를 다 망치지 않아 학습이 빠르고 안정적이며, 디코더 입력이 미리 확정되므로 <b>한 번의 순전파로 전체 시점의 손실</b>을 계산할 수 있다 &mdash; 다만 <b>시점 축 자체의 병렬화는 Transformer에서</b> 가능하다(RNN은 여전히 한 시점씩 계산)</li>
+  <li id="exposure"><b>노출 편향(exposure bias)</b> &mdash; 학습 때는 정답이 입력되지만 추론 때는 <b>자기 예측</b>을 입력해야 해 두 환경이 달라진다 &rarr; 한 번 틀리면 오류가 뒤로 누적된다. Teacher forcing의 대표적 부작용이다</li>
+  <li><b>Scheduled sampling</b> &mdash; 학습 중 정답과 예측을 확률적으로 섞어 넣되, <b>학습이 진행될수록 예측 입력 비율을 높인다</b></li>
+</ul>
+<div class="pit"><b>장점과 부작용 바꾸기</b> &mdash; &ldquo;teacher forcing으로 학습과 추론 환경이 완전히 같아져 노출 편향이 생기지 않는다&rdquo;는 정반대다. 노출 편향의 <b>원인</b>이 teacher forcing이다.</div>
+
+<h3 class="sub-title" id="decoding">디코딩 — 그리디와 빔 서치</h3>
+<div class="cards">
+  <div class="card2"><b>그리디 디코딩</b><p>매 시점 <b>확률이 가장 높은 단어 하나만</b> 골라 이어 간다. 가장 단순하지만, 지금 1등인 단어가 문장 전체로는 최선이 아닐 수 있다.</p></div>
+  <div class="card2"><b>빔 서치 (beam search)</b><p><b>상위 k개(beam size)</b>의 후보 순차열을 함께 유지하며 확장하고, <b>누적 로그 확률</b>로 후보를 평가한다. 필요하면 <b>길이 정규화</b>를 적용한다(<a class="ext" href="nlp-week09.html">9주차 디코딩 · 빔 탐색</a>).</p></div>
+</div>
+<div class="deep"><b>🔎 왜 로그 확률의 합인가 · 왜 길이 정규화인가</b> &mdash; 문장 확률은 단어 확률의 곱 <span class="tex">\prod_t P(y_t\mid\cdot)</span>이다. 0.5짜리 단어 20개만 곱해도 10⁻⁶이라 컴퓨터에서 아주 작은 수가 되므로, 로그를 씌워 <span class="tex">\sum_t\log P</span>(합)로 바꾼다. 그런데 로그 확률은 항상 음수라 <b>단어가 많을수록 합이 더 작아진다</b> &rarr; 그대로 비교하면 짧은 문장이 유리하다. 그래서 길이로 나눠(길이 정규화) 공정하게 비교한다.</div>
+</section>
+
+<!-- ===================== 12.2.4 ===================== -->
+<section class="sec" id="s24">
+  <div class="sec-head"><span class="sec-badge">12.2.4</span><h2 class="sec-title">문맥 벡터 병목<small>100문제 75~79번 기준</small></h2></div>
+
+<h3 class="sub-title" id="bottleneck">고정 길이 문맥 벡터의 병목</h3>
+<p>입력 문장의 길이와 무관하게 <b>항상 같은 크기의 벡터 하나</b>로 압축해야 한다 &rarr; 문장이 길어질수록 정보 손실이 커진다. 교안 그래프: 문맥 벡터 1개짜리 Seq2Seq는 <b>원문이 길어질수록 BLEU가 급격히 떨어지지만</b>, 주의 메커니즘을 더하면 <b>길이에 강건</b>하다(거의 평평).</p>
+<div class="tbl-wrap" id="s2s-problems">
+<table>
+  <thead><tr><th>기존 Seq2Seq의 문제</th><th>내용</th></tr></thead>
+  <tbody>
+    <tr><td>① 고정 길이 병목</td><td>긴 문장도 벡터 하나에 담아야 한다</td></tr>
+    <tr><td>② 출력 시점과 무관한 같은 c</td><td>&ldquo;school&rdquo;을 낼 때는 &lsquo;학교&rsquo;를, &ldquo;go&rdquo;를 낼 때는 &lsquo;간다&rsquo;를 봐야 하는데 디코더는 <b>늘 같은 c만</b> 쓴다</td></tr>
+    <tr><td>③ 장기 의존성</td><td>문장 앞쪽 정보는 인코더 끝까지 가는 동안 희석된다(12.1.4)</td></tr>
+  </tbody>
+</table>
+</div>
+<p><b>해결 방향</b> &mdash; 문장 전체를 하나로 압축하지 말고, <b>인코더의 모든 시점 은닉 상태를 남겨 두고 출력 시점마다 필요한 것을 골라 쓴다</b> &rarr; 주의 메커니즘의 출발점.</p>
+<div class="pit"><b>해결책을 문제로 바꾼 보기</b> &mdash; &ldquo;디코더가 시점마다 다른 문맥 벡터를 계산해 계산량이 폭증한다&rdquo;는 기존 Seq2Seq의 문제가 아니라 <b>주의 메커니즘의 특징</b>이다(실제로 계산량은 12.2.6처럼 늘어난다).</div>
+</section>
+
+<!-- ===================== 12.2.5 ===================== -->
+<section class="sec" id="s25">
+  <div class="sec-head"><span class="sec-badge">12.2.5</span><h2 class="sec-title">주의 메커니즘<small>100문제 80~89번 기준 · Bahdanau et al. (2015)</small></h2></div>
+
+<h3 class="sub-title" id="attention">핵심 아이디어와 세 단계</h3>
+<p><b>주의 메커니즘(Attention mechanism)</b>은 <b>Bahdanau et al. (2015)</b>가 기계 번역을 위해 제안했다(Vaswani et al. 2017은 Transformer). 디코더가 <b>매 시점 인코더의 모든 은닉 상태를 다시 참조</b>하되 <b>관련도가 높은 곳에 큰 가중치</b>를 주어, 시점마다 다른 문맥 벡터 <span class="tex">c(t)</span>를 만든다.</p>
+<div class="flow" id="attn-steps">
+  <div class="fl"><b>① 스코어 계산</b><span><span class="tex">e(t,i)=\mathrm{score}(s(t),h(i))</span> &mdash; 디코더 상태와 각 인코더 상태의 관련도</span></div>
+  <div class="fl"><b>② 정렬 가중치</b><span><span class="tex">a(t,i)=\frac{\exp(e(t,i))}{\sum_j\exp(e(t,j))}</span> &mdash; softmax라 모두 양수, <span class="tex">\sum_i a(t,i)=1</span></span></div>
+  <div class="fl"><b>③ 문맥 벡터</b><span><span class="tex">c(t)=\sum_i a(t,i)\,h(i)</span> &mdash; 인코더 상태의 가중합, 시점 t마다 다르다</span></div>
+  <div class="fl"><b>④ 결합</b><span><span class="tex">\tilde s(t)=\tanh(W[c(t);s(t)])</span> &mdash; 문맥 벡터와 디코더 상태를 이어 붙여 tanh</span></div>
+  <div class="fl"><b>⑤ 예측</b><span><span class="tex">\hat y(t)=\mathrm{softmax}(W_o\,\tilde s(t))</span></span></div>
+</div>
+
+<h3 class="sub-title" id="score-fn">스코어 함수 세 가지</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>이름</th><th>식</th><th>특징</th></tr></thead>
+  <tbody>
+    <tr><td><b>dot</b></td><td><span class="tex">s^{\top}h</span></td><td>가장 단순, <b>추가 파라미터 없음</b> (Luong)</td></tr>
+    <tr><td><b>general</b></td><td><span class="tex">s^{\top}Wh</span></td><td>학습되는 W를 사이에 두어 <b>인코더와 디코더 차원이 다를 때</b>도 사용 (Luong)</td></tr>
+    <tr><td><b>concat</b></td><td><span class="tex">v^{\top}\tanh(W[s;h])</span></td><td>작은 신경망으로 관련도 계산 (Bahdanau, additive)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 class="sub-title" id="attn-example">수치 예시 — 인코더 상태 셋</h3>
+<p>100문제 88 · 89번의 수치: 인코더 상태 <span class="tex">h_1=(1,0),\ h_2=(0,1),\ h_3=(1,1)</span>, 스코어의 exp 값이 7.389 · 1.000 · 7.389 &mdash; 즉 스코어가 <b>(2, 0, 2)</b>다(dot이라면 디코더 상태 s = (2, 0)일 때 s·h = 2, 0, 2가 된다).</p>
+<div class="fx"><div class="tex-d">a=\frac{(7.389,\ 1.000,\ 7.389)}{15.778}=(0.468,\ 0.063,\ 0.468)</div>
+<div class="tex-d">c=0.468(1,0)+0.063(0,1)+0.468(1,1)=(0.937,\ 0.532)</div>
+<p class="fx-note">직접 계산해 확인했다(0.4683 + 0.4683 = 0.9366 → 0.937, 0.0634 + 0.4683 = 0.5317 → 0.532). 스코어가 0인 h₂도 가중치가 0이 아니라 0.063이다 &mdash; softmax는 어떤 칸도 완전히 0으로 만들지 않는다. 가중치 합 0.468 + 0.063 + 0.468 = 0.999는 반올림 탓이고 정확히는 1이다.</p></div>
+</section>
+
+<!-- ===================== 12.2.6 ===================== -->
+<section class="sec" id="s26">
+  <div class="sec-head"><span class="sec-badge">12.2.6</span><h2 class="sec-title">정렬 행렬 · Query-Key-Value · 확장<small>100문제 90~100번 기준</small></h2></div>
+
+<h3 class="sub-title" id="align-matrix">정렬 행렬 히트맵 읽기</h3>
+<p>행 = 디코더 시점(출력 단어), 열 = 인코더 시점(원문 단어). softmax가 디코더 시점별로 적용되므로 <b>각 행의 합은 1</b>이고, <b>진한 칸일수록 높은 가중치</b>다. 한국어 → 영어 예시 &mdash; <b>I – 나는 0.82</b>, <b>school – 학교 0.80</b>, <b>go – 간다 0.75</b>. 어순이 다른 두 언어에서 단어 대응이 대각선이 아니라 엇갈려 나타나는 것을 모형이 스스로 배운다(<a class="ext" href="nlp-week09.html">9주차 단어 정렬</a>을 정답 없이 학습하는 셈).</p>
+
+<h3 class="sub-title" id="bahdanau-luong">Bahdanau vs Luong</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>Bahdanau (2015)</th><th>Luong (2015)</th></tr></thead>
+  <tbody>
+    <tr><td>문맥 벡터 계산 시점</td><td>직전 상태 <b>s(t−1)</b>로 c(t)를 구함</td><td>현재 상태 <b>s(t)</b>를 먼저 구한 뒤 c(t) 계산</td></tr>
+    <tr><td>어디에 결합</td><td>디코더 <b>RNN의 입력</b>에 결합</td><td><b>출력 직전</b>에 결합</td></tr>
+    <tr><td>스코어 함수</td><td><b>concat</b> (additive)</td><td><b>dot / general</b> (multiplicative)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 class="sub-title" id="qkv">Query · Key · Value와 scaled dot-product</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>역할</th><th>Seq2Seq 어텐션에서</th><th>비유</th></tr></thead>
+  <tbody>
+    <tr><td><b>Query</b></td><td>디코더 상태 s(t)</td><td>찾는 쪽 &mdash; &ldquo;지금 무엇이 필요한가&rdquo;</td></tr>
+    <tr><td><b>Key</b></td><td>인코더 상태 h(i)</td><td>비교 대상 &mdash; 색인</td></tr>
+    <tr><td><b>Value</b></td><td>인코더 상태 h(i)</td><td>가져올 값 &mdash; 내용</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="fx"><div class="tex-d">\mathrm{Attention}(Q,K,V)=\mathrm{softmax}\!\left(\frac{QK^{\top}}{\sqrt d}\right)V</div>
+<p class="fx-note">Q와 K의 내적을 <b>차원의 제곱근 √d로 나눠 스케일</b>한 뒤 softmax, 그 가중치로 V를 가중합한다. 차원이 크면 내적값이 커져 softmax가 한 칸에 쏠리므로(기울기가 거의 0) √d로 눌러 준다. <b>셀프 어텐션(self-attention)</b> = Q, K, V를 <b>모두 같은 문장</b>에서 뽑는 경우 &mdash; Transformer의 핵심 구성 요소다.</p></div>
+<pre class="code" id="attn-code">score   = tf.matmul(query, enc_outputs, transpose_b=True)   <span class="cm"># ① 스코어 (dot)</span>
+weights = tf.nn.softmax(score, axis=-1)                     <span class="cm"># ② 정렬 가중치 (행마다 합 1)</span>
+context = tf.matmul(weights, enc_outputs)                   <span class="cm"># ③ 문맥 벡터 (가중합)</span></pre>
+
+<h3 class="sub-title" id="attn-compare">Seq2Seq vs Seq2Seq + Attention · Transformer로</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>Seq2Seq</th><th>Seq2Seq + Attention</th></tr></thead>
+  <tbody>
+    <tr><td>문맥 벡터</td><td>고정 1개 (c = h(T))</td><td>출력 시점마다 다른 c(t)</td></tr>
+    <tr><td>긴 문장</td><td>BLEU 급락</td><td>길이에 강건</td></tr>
+    <tr><td>계산량</td><td><b>O(T + T&prime;)</b></td><td><b>O(T × T&prime;)</b> &mdash; 출력 시점마다 입력 전 시점과 스코어 계산</td></tr>
+    <tr><td>해석</td><td>어려움</td><td>정렬 행렬로 어디를 봤는지 시각화</td></tr>
+  </tbody>
+</table>
+</div>
+<p id="transformer"><b>Transformer</b> &mdash; <b>Vaswani et al. (2017), &ldquo;Attention Is All You Need&rdquo;</b>. &ldquo;RNN 없이 어텐션만 쓰면 어떨까&rdquo;라는 질문에서 출발해 <b>순환 구조를 제거하고 셀프 어텐션만으로</b> 문맥을 학습 &rarr; 시점을 하나씩 기다릴 필요가 없어 <b>완전한 병렬 처리</b>가 가능해졌다(14주차).</p>
+<div class="pit"><b>계산량 방향 바꾸기</b> &mdash; &ldquo;Attention을 더하면 계산량이 O(T + T&prime;)로 줄어든다&rdquo;는 틀렸다. 어텐션은 성능 · 해석을 얻는 대신 계산량을 <b>O(T × T&prime;)로 늘린다</b>.</div>
+</section>
+
+<!-- ===================== 다음 주 ===================== -->
+<section class="sec" id="next">
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>13주차 (11.23 ~ 11.29)</small></h2></div>
+<div class="note-box"><b>13주차</b>는 강의계획서를 따른다. 이번 주 12.2.6에서 본 <b>셀프 어텐션 · Query-Key-Value · scaled dot-product</b>가 다음 단계(Transformer · 사전학습 언어모델)의 기초다. 12-2 교안이 올라오면 이 페이지의 12.2절을 교안 기준으로 보강한다.
+<ul class="ul">
+  <li>이번 주 손계산 거리 &mdash; <b>RNN 은닉 상태 표(0.462 · 0.701 · 0.509), |W_h|^k, LSTM 한 시점(C · h), 파라미터 수(SimpleRNN · LSTM 4배 · GRU 3배), 어텐션 가중치 · 문맥 벡터(0.468 · 0.063 · 0.468 → (0.937, 0.532))</b></li>
+  <li>비교표 &mdash; <b>네 가지 입출력 구조, 소실 vs 폭주와 처방, LSTM 게이트 넷의 활성 함수, SimpleRNN · LSTM · GRU, 심층 vs 양방향, 그리디 vs 빔, Bahdanau vs Luong, dot · general · concat, Seq2Seq vs +Attention</b></li>
+</ul></div>
+</section>
+
+<p class="src">자연어처리 12주차 (CHAPTER 12) 강의자료 정리 · 2026학년도 2학기<br>
+12-1 교안(순환 신경망, 32페이지)을 절 단위로 정리하고, 교안의 수치(RNN 은닉 상태 표 · 기울기 반복 곱 · 파라미터 수)를 직접 계산해 확인했다. 12-2(Seq2Seq · 주의 메커니즘)는 교안이 아직 올라오지 않아 <b>100문제 문항 · 해설을 바탕으로</b> 정리했다. 100문제의 절 구분(12.1.1 ~ 12.2.6)과 같은 번호를 사용해, 절 제목 옆 버튼으로 해당 절의 문제를 바로 풀 수 있다.</p>
+
+</div>
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive(){
+    var cur = '';
+    sections.forEach(function(s){ if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function(t){ t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      setTimeout(function(){
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+
+  /* ---- 개념 설명 말풍선 (형광펜 용어) ---- */
+  var terms = document.querySelectorAll('.term');
+  if (!terms.length) return;
+  var tip = document.createElement('div');
+  tip.id = 'tipbox';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  var current = null;
+
+  function hide() {
+    tip.classList.remove('on');
+    if (current) { current.classList.remove('on'); current = null; }
+  }
+  function show(el) {
+    tip.textContent = el.getAttribute('data-tip') || '';
+    tip.classList.add('on');
+    if (current && current !== el) current.classList.remove('on');
+    current = el;
+    el.classList.add('on');
+    var pad = 8;
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+    var top = r.top - t.height - 10;
+    if (top < pad) top = r.bottom + 10;
+    top = Math.min(top, window.innerHeight - t.height - pad);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+  terms.forEach(function (el) {
+    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+    el.addEventListener('mouseenter', function () { show(el); });
+    el.addEventListener('mouseleave', function () { if (current === el) hide(); });
+    el.addEventListener('focus', function () { show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (current === el && tip.classList.contains('on')) hide(); else show(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el); }
+      if (e.key === 'Escape') hide();
+    });
+  });
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide);
+});
+</script>
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script src="../vendor/katex/katex.min.js"></script>
+<script>
+// .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.
+// KaTeX를 못 불러온 경우에는 원문이 그대로 남아 최소한 읽을 수는 있게 둔다.
+(function () {
+  if (typeof katex === 'undefined') { return; }
+  document.querySelectorAll('.tex, .tex-d').forEach(function (el) {
+    try {
+      katex.render(el.textContent.trim(), el, {
+        displayMode: el.classList.contains('tex-d'),
+        throwOnError: false,
+        strict: false
+      });
+    } catch (e) { if (window.console) { console.error('KaTeX', e, el.textContent); } }
+  });
+})();
+</script>
+
+<script src="quiz/nlp-w12.js?v=1"></script>
+<script src="quiz/inline-quiz.js?v=2"></script>
+
+</body>
+</html>

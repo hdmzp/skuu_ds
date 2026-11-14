@@ -128,6 +128,9 @@ TERMS = {
    'Convolution','Normalization','Pooling','Activation','Loss function','Adam','Regularization',
    'Epoch','Seed','Learning rate','Batch','과적합','Overfitting','Underfitting','텐서플로','파이토치','코랩','Colab','아나콘다','conda','어노테이션',
  ],
+ 'nlp-w12': [
+   '순차 데이터','순서 의존성','가변 길이','장기 의존성','MLP','RNN','순환 신경망','은닉 상태','h(0)','tanh','softmax','W_x','W_h','가중치 공유','펼친','one-to-many','many-to-one','many-to-many','동기','비동기','이미지 캡셔닝','감정 분류','품사 태깅','기계 번역','토큰화','정수 인코딩','임베딩','패딩','post-padding','마스킹','mask_zero','BPTT','Truncated BPTT','잘라낸','maxlen','야코비','기울기 소실','기울기 폭주','클리핑','gradient clipping','NaN','Bengio','게이트','시그모이드','LSTM','Hochreiter','Gers','셀 상태','망각 게이트','입력 게이트','출력 게이트','후보값','덧셈','4 배','GRU','Cho','리셋 게이트','업데이트 게이트','경량화','3 배','심층','return_sequences','양방향','bidirectional','Embedding','input_dim','Seq2Seq','순차열 대 순차열','문서 요약','대화 시스템','음성 인식','인코더','디코더','Sutskever','문맥 벡터','return_state','initial_state','<sos>','<eos>','Teacher forcing','교사 강요','노출 편향','Scheduled sampling','그리디','빔 서치','beam','길이 정규화','병목','BLEU','주의 메커니즘','어텐션','Bahdanau','Luong','스코어','정렬 가중치','가중합','dot','general','concat','정렬 행렬','히트맵','Query','Key','Value','Scaled dot-product','셀프 어텐션','self-attention','Transformer','Vaswani','병렬',
+ ],
  'nlp-w11': [
    '규칙 기반','통계 기반','신경망 기반','특징 공학','표현 학습','퍼셉트론','XOR','다층 퍼셉트론','MLP','심층 신경망','은닉층','순전파','활성화 함수','ReLU','Sigmoid','Tanh',
    '손실 함수','MSE','교차 엔트로피','소프트맥스','역전파','연쇄법칙','경사하강법','학습률','SGD','Momentum','AdaGrad','RMSProp','Adam','배치 크기','iteration','에폭','검증','과적합','과소적합','학습 곡선',
@@ -306,3 +309,5 @@ build('ml-w11', 'materials/기계학습특론/week11-quiz100.html', 'courses/qui
       {'title': '11주차 · 딥러닝 이미지 분류', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week11-quiz100.html'})
 build('nlp-w11', 'materials/자연어처리/week11-quiz100.html', 'courses/quiz/nlp-w11.js',
       {'title': '11주차 · 자연어처리 딥러닝 Ⅰ', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week11-quiz100.html'})
+build('nlp-w12', 'materials/자연어처리/week12-quiz100.html', 'courses/quiz/nlp-w12.js',
+      {'title': '12주차 · 자연어처리 딥러닝 Ⅱ', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week12-quiz100.html'})
