@@ -652,7 +652,7 @@ td .term,th .term{font-weight:700}
       <tr><td>+ PAD 6칸</td><td>[0.010, −0.003]</td></tr>
     </tbody>
   </table></div>
-  <p>PAD 입력은 0이라 <span class="tex">h_t=	anh(h_{t-1}W_h)</span>만 남고, |W<sub>h</sub>| &lt; 1이면 한 칸마다 기억이 줄어든다(<a class="ext" href="#vanishing">12.1.4</a>의 반복 곱과 같은 원리). <span class="hi">PAD 3칸만으로 문장 내용이 분류기에 거의 전달되지 않는다</span> &mdash; 150칸이면 말할 것도 없다. 마스킹하면 PAD 시점에서 h를 갱신하지 않으므로 [0.990, 0.718]이 그대로 넘어간다.</p>
+  <p>PAD 입력은 0이라 <span class="tex">h_t=\tanh(h_{t-1}W_h)</span>만 남고, |W<sub>h</sub>| &lt; 1이면 한 칸마다 기억이 줄어든다(<a class="ext" href="#vanishing">12.1.4</a>의 반복 곱과 같은 원리). <span class="hi">PAD 3칸만으로 문장 내용이 분류기에 거의 전달되지 않는다</span> &mdash; 150칸이면 말할 것도 없다. 마스킹하면 PAD 시점에서 h를 갱신하지 않으므로 [0.990, 0.718]이 그대로 넘어간다.</p>
   <ul class="ul">
     <li><b>pre-padding이면 괜찮나?</b> &mdash; 이 예처럼 b = 0이면 앞의 PAD 동안 h가 0에 머물러 결과가 같다. 하지만 학습된 편향 b ≠ 0이면 h가 0에서 벗어나 출발점이 문장마다 달라지고, PAD도 기울기 계산 · 학습에 섞인다. 그래서 Keras 문서도 RNN에는 <b>mask_zero를 함께</b> 쓰도록 권한다(마스킹이 있으면 pre/post 어느 쪽이든 결과가 같다)</li>
     <li><b>many-to-many(번역 · 개체명 인식)</b>에서는 PAD 위치의 출력이 손실에 섞이면 &lsquo;PAD를 맞히는 법&rsquo;을 배우게 된다 &mdash; 마스크로 그 위치의 손실을 0으로 뺀다. 12.2절 어텐션에서도 PAD에 가중치가 가지 않게 같은 마스크를 쓴다</li>
@@ -857,10 +857,29 @@ td .term,th .term{font-weight:700}
 <div class="warn"><b>z와 1 − z의 위치는 표기마다 반대다</b> &mdash; 교안 식은 Chung et al. (2014) 표기다. <b>Keras · PyTorch 구현과 Cho et al. (2014) 원 논문</b>은 <span class="tex">h(t)=z\odot h(t-1)+(1-z)\odot\tilde h(t)</span>로, z가 &lsquo;과거를 남길 비율&rsquo;이다. Keras로 직접 검증할 때는 Keras 표기를 따라야 결과가 일치한다. 어느 쪽이든 &lsquo;한 게이트로 삭제와 추가를 함께 한다&rsquo;는 뜻은 같다.</div>
 
 <h3 class="sub-title" id="rnn-compare">SimpleRNN · LSTM · GRU 비교 (교안 28p)</h3>
+<div class="mynote">
+  <p><b>SimpleRNN은 &lsquo;가벼운 버전&rsquo;이 아니라 &lsquo;원조&rsquo;다</b> &mdash; 경량화 모델로 착각했던 부분 바로잡기</p>
+  <ul class="ul">
+    <li><b>RNN</b> = 순환 구조를 가진 신경망 <b>전체를 부르는 우산 이름</b>. SimpleRNN · LSTM · GRU가 모두 이 안에 들어간다 &mdash; LSTM도 GRU도 넓은 의미에서는 전부 RNN이다</li>
+    <li><b>SimpleRNN</b> = 그중 <span class="hi">가장 먼저 나온 기본형</span>. 무거운 RNN을 줄인 것이 아니라, 반대로 SimpleRNN이 너무 단순해서 긴 문맥을 기억하지 못하자 <b>나중에 더 무겁고 복잡한 LSTM(1997) · GRU(2014)</b>가 나왔다</li>
+    <li>이름이 따로 생긴 이유 &mdash; Keras가 <code>layers.LSTM</code> · <code>layers.GRU</code>와 구별하려고 가장 기초적인 순환층을 <code>layers.SimpleRNN</code>이라 부르면서 퍼졌다. 학계에서는 <b>Vanilla RNN</b>(아무것도 안 얹은 기본 맛) 또는 만든 사람 이름을 딴 <b>Elman RNN</b>이라 부른다</li>
+    <li>&lsquo;경량&rsquo;이 맞는 쪽은 따로 있다 &mdash; <b>GRU가 LSTM을 가볍게 줄인</b> 모델이다(게이트 3 → 2, 셀 상태 없음)</li>
+  </ul>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>비유</th><th>방식</th><th>결과</th></tr></thead>
+    <tbody>
+      <tr><td><b>SimpleRNN</b></td><td>메모지 없이 머릿속 암산만으로 직전 내용을 이어 가며 읽기</td><td>머리는 가볍지만(연산 적음) 문장이 조금만 길어도 앞 내용을 까먹는다</td></tr>
+      <tr><td><b>LSTM · GRU</b></td><td>중요한 건 수첩에 적고(기억 유지), 쓸모없는 건 지우개로 지우기(망각)</td><td>수첩 · 지우개를 챙겨 3~4배 무거워지지만 긴 글의 맥락을 끝까지 기억한다</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">한 줄로: &ldquo;RNN과 SimpleRNN의 차이&rdquo;는 두 모델의 차이가 아니라 <b>&lsquo;자동차(RNN)&rsquo;와 &lsquo;최초의 내연기관차(SimpleRNN)&rsquo;</b>처럼 범주와 그 안의 원조 모델을 구분하는 말이다.</p>
+</div>
 <div class="tbl-wrap">
 <table>
   <thead><tr><th>항목</th><th>SimpleRNN</th><th>LSTM</th><th>GRU</th></tr></thead>
   <tbody>
+    <tr><td>등장</td><td><b>1990</b> Elman (원조 · 기본형)</td><td><b>1997</b> Hochreiter &amp; Schmidhuber</td><td><b>2014</b> Cho et al. (LSTM 경량화)</td></tr>
+    <tr><td>다른 이름</td><td>Vanilla RNN · Elman RNN</td><td>&mdash;</td><td>&mdash;</td></tr>
     <tr><td>유지하는 상태</td><td>h</td><td>h, C</td><td>h</td></tr>
     <tr><td>게이트 수</td><td>0</td><td><b>3</b></td><td><b>2</b></td></tr>
     <tr><td>파라미터 (상대)</td><td>1배</td><td><b>약 4배</b></td><td><b>약 3배</b></td></tr>
@@ -870,6 +889,7 @@ td .term,th .term{font-weight:700}
   </tbody>
 </table>
 </div>
+<p class="fx-note">실습 1에서 잰 실제 무게(입력 · 은닉 64): SimpleRNN <b>8,256</b> · GRU <b>24,960</b>(약 3.0배) · LSTM <b>33,024</b>(4배), 에폭당 시간 약 12초 · 23초 · 25초 &mdash; <a class="ext" href="#lc-fair">실습 개념 ⑩</a>. 등장 연도는 Elman(1990) 기준이고, 비슷한 순환 구조는 Jordan(1986) 네트워크가 먼저 있었다 &mdash; 그래서 &lsquo;1980년대 말~1990년 무렵의 원조&rsquo;로 기억하면 된다.</p>
 <p><b>실험적 결론</b> &mdash; 데이터셋에 따라 LSTM과 GRU의 <b>우열이 갈리므로 두 구조를 모두 시도</b>하는 것이 일반적이다. 다만 둘 다 SimpleRNN보다는 대체로 우수하다.</p>
 <div class="pit"><b>LSTM과 GRU의 숫자 바꾸기</b> &mdash; &ldquo;GRU는 게이트 3개 · 파라미터 약 4배&rdquo;는 LSTM의 숫자다. GRU는 <b>2개 · 약 3배</b>(Keras 기본 <code>reset_after=True</code>면 편향이 두 벌이라 3배보다 조금 많다 &mdash; d = u = 64에서 24,960 = SimpleRNN의 3.02배).</div>
 
