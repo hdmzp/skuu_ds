@@ -314,6 +314,19 @@ td .term,th .term{font-weight:700}
 .live b{color:#7c2d12}
 .live .ul li{color:#7c2d12}
 .live .ul li::before{background:#b45309;opacity:.75}
+.labnote{
+  background:#fbfaff;border:1px solid #e3dcf7;border-left:4px solid #8b5cf6;
+  border-radius:var(--radius);padding:12px 15px;margin:10px 0 14px;
+  font-size:13px;line-height:1.85;
+}
+.labnote::before{
+  content:'🧪 내 실습 노트북 — [설명] · [결과]';display:table;background:#8b5cf6;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.labnote p{margin:6px 0}
+.labfig{margin:12px 0;text-align:center}
+.labfig img{max-width:100%;height:auto;border:1px solid #e2e8f0;border-radius:8px;background:#fff}
+.labfig figcaption{font-size:12px;color:#64748b;margin-top:4px}
 .mynote{
   background:#f5f3ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
   border-radius:var(--radius);padding:12px 15px;margin:12px 0;
@@ -396,6 +409,7 @@ td .term,th .term{font-weight:700}
   <a href="#s24">12.2.4 병목</a>
   <a href="#s25">12.2.5 주의 메커니즘</a>
   <a href="#s26">12.2.6 정렬 · QKV</a>
+  <a href="#lab">실습 1 · RNN / LSTM (내 풀이)</a>
   <a href="#next">다음 주 예고</a>
 </nav>
 
@@ -484,7 +498,7 @@ td .term,th .term{font-weight:700}
     <tr><td>교안</td><td><b>CHAPTER 12-1</b> 순환 신경망(RNN / LSTM), 32쪽 &mdash; 쪽에 절 번호가 없다(&lsquo;순차 데이터&rsquo; · &lsquo;순환 신경망&rsquo; 같은 제목만)</td><td>12.1.1 ~ 12.1.6 (쪽수 병기)</td></tr>
     <tr><td>교안 (예정)</td><td>CHAPTER 12-2 Seq2Seq · 주의 메커니즘 &mdash; <b>아직 폴더에 없다</b></td><td>12.2.1 ~ 12.2.6 (100문제 해설로 정리)</td></tr>
     <tr><td>100문제</td><td>12.1.1 ~ 12.2.6 · 12절 (12-1이 55문항, 12-2가 45문항)</td><td>절 제목 옆 문제 버튼</td></tr>
-    <tr><td>실습</td><td><b>실습 1</b> RNN / LSTM (과제 1-1 ~ 1-4) &mdash; 실습 2 · 3은 12-2에서 부과(교안 32p)</td><td>이 페이지에는 싣지 않음</td></tr>
+    <tr><td>실습</td><td><b>실습 1</b> RNN / LSTM (과제 1-1 ~ 1-4) &mdash; 실습 2 · 3은 12-2에서 부과(교안 32p)</td><td><a class="ext" href="#lab">실습 1 탭</a> &mdash; 내 풀이 노트북의 코드 흐름 · [설명] · [결과] · 과제 서술형</td></tr>
     <tr><td>강의계획서</td><td>12주차 자연어처리 딥러닝 Ⅱ (순환 신경망, 그리고 순차열 대 순차열 모형과 주의 메커니즘)</td><td>&mdash;</td></tr>
   </tbody>
 </table>
@@ -980,6 +994,285 @@ context = tf.matmul(weights, enc_outputs)                   <span class="cm"># �
 </section>
 
 <!-- ===================== 다음 주 ===================== -->
+<!-- ===================== 실습 1 ===================== -->
+<section class="sec" id="lab">
+  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">실습 1 — RNN · LSTM 직접 구현과 IMDB 감정 분류 (내 풀이 복습)<small>노트북 74셀 · numpy 구현 → Keras 검증 → 기울기 소실 실험 → IMDB 3모형 비교 → 과제 1-1 ~ 1-4</small></h2></div>
+
+<div class="note-box"><b>무엇을 했나</b> &mdash; 12.1절 교안의 식을 <b>직접 코드로 옮기고, 검증된 라이브러리와 숫자를 맞대어</b> 이해했는지 확인한 실습이다. <span class="hi">① numpy로 RNN · LSTM 순전파 → ② Keras에 같은 가중치를 넣어 오차 1e-7 수준으로 일치 확인 → ③ 기울기 소실을 숫자로 → ④ IMDB 영화평으로 SimpleRNN · LSTM · GRU 비교 → ⑤ 과제(GRU 구현 · 양방향 · 심층 · 클리핑)</span>. Windows VS Code · TensorFlow 2.21 · <b>CPU</b>로 실행했다(GPU 미사용). 실습 2 · 3(Seq2Seq · 어텐션)은 12-2에서 부과된다.</div>
+
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📓</span>IPYNB</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week12-lab1-mine.ipynb" download="12주차_RNN_LSTM_실습_풀이.ipynb">내 풀이 노트북 — 실습 1 RNN / LSTM (실행 결과 포함)</a>
+      <p>[설명] · [결과] · 과제 서술형([구현] · [결과] · [해석] · [결론]) 포함 · 과제 1-1 ~ 1-4 (100점)</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week12-lab1-mine.ipynb" download="12주차_RNN_LSTM_실습_풀이.ipynb">⬇ 다운로드</a>
+  </div>
+</div>
+
+<div class="flow">
+  <div class="fl"><b>(1) 데이터 측면</b><span>순차 데이터 = <code>(batch, timesteps, input_dim)</code> 3차원</span></div>
+  <div class="fl"><b>(2) 모델 측면</b><span>numpy로 RNN · LSTM 셀 순전파</span></div>
+  <div class="fl"><b>(3) 검증</b><span>Keras 층 가중치로 비교 &mdash; <code>np.allclose</code></span></div>
+  <div class="fl"><b>(4) 실험</b><span>|W<sub>h</sub>|<sup>k</sup> · f<sub>t</sub><sup>k</sup>로 기울기 소실 관찰</span></div>
+  <div class="fl"><b>(5)~(8) IMDB</b><span>불러오기 · 패딩 → Embedding + 순환층 → 학습 곡선 · maxlen 실험 · 예측</span></div>
+</div>
+
+<!-- ===== 1. numpy 구현 ===== -->
+<h3 class="sub-title" id="lab-shape">1 · 순차 데이터의 모양 — (batch, timesteps, input_dim)</h3>
+<div class="labnote">
+  <p><b>[설명]</b> 순차 데이터는 <span class="hi">순서가 의미를 갖는 데이터</span>이고, RNN은 항상 3차원 텐서로 받는다. 단어 4개짜리 문장 하나를 단어마다 숫자 3개로 표현하면 <code>(4, 3)</code>, Keras는 &lsquo;문장 여러 개&rsquo;를 받으므로 맨 앞에 개수 1을 붙여 <code>(1, 4, 3)</code>으로 바꾼다.</p>
+  <p><b>[결과]</b> 쉽게 말해 <b>(문장 수, 단어 수, 단어 하나의 숫자 개수)</b> 순서다. 이 모양이 아래 모든 셀에서 쓰인다 &mdash; <a class="ext" href="#s11">12.1.1</a> · <a class="ext" href="#s13">12.1.3 입력 형태</a>.</p>
+</div>
+
+<h3 class="sub-title" id="lab-rnn">2 · RNN 셀 순전파 직접 구현 → Keras SimpleRNN과 비교</h3>
+<pre class="code">def rnn_cell_forward(x_t, h_prev, W_x, W_h, b):
+    z = np.dot(x_t, W_x) + np.dot(h_prev, W_h) + b    <span class="cm"># 입력 변환 + 직전 은닉 변환 + 편향</span>
+    return np.tanh(z)                                  <span class="cm"># 출력 범위 (-1, 1)</span>
+
+def rnn_forward(inputs, W_x, W_h, b):
+    h_prev = np.zeros(W_h.shape[0])                    <span class="cm"># h(0) = 영벡터</span>
+    for t in range(T):
+        h_t = rnn_cell_forward(inputs[t], h_prev, W_x, W_h, b)
+        hidden_states[t] = h_t
+        h_prev = h_t                                   <span class="cm"># 현재 은닉 상태가 다음 시점의 '직전' (순환)</span>
+
+rnn_layer = keras.layers.SimpleRNN(hidden_units, return_sequences=True, return_state=True)
+_ = rnn_layer(inputs_batch)                            <span class="cm"># 한 번 호출해 가중치 생성(build)</span>
+rnn_layer.set_weights([W_x, W_h, b])                   <span class="cm"># [kernel, recurrent_kernel, bias]</span></pre>
+<div class="labnote">
+  <p><b>[설명]</b> RNN 셀은 <span class="hi">지금 들어온 단어와 방금까지 읽은 내용의 요약을 섞어 새 요약을 만드는 장치</span>다. 모든 시점이 같은 W<sub>x</sub> · W<sub>h</sub> · b를 돌려 쓰므로(가중치 공유) 문장 길이가 달라도 파라미터 수는 그대로다. 검증은 가장 확실한 방법 &mdash; 검증된 라이브러리에 <b>같은 가중치를 넣고 출력을 비교</b>한다. 수식 이해와 Keras 가중치 배치를 동시에 확인할 수 있다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>시점</th><th>입력 x<sub>t</sub></th><th>직접 구현 h<sub>t</sub></th><th>Keras SimpleRNN</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>[1.0, 0.0, 0.5]</td><td>[0.873797, −0.044212]</td><td>같음</td></tr>
+      <tr><td>2</td><td>[0.0, 1.0, 0.2]</td><td>[0.798152, 0.738656]</td><td>같음</td></tr>
+      <tr><td>3</td><td>[0.5, 0.5, 0.0]</td><td>[0.772595, 0.636046]</td><td>같음</td></tr>
+      <tr><td>4</td><td>[1.0, 1.0, 1.0]</td><td><b>[0.989854, 0.718239]</b> = h(T)</td><td>같음</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>[결과]</b> 최대 오차 <b>1.1e-07</b> &mdash; 컴퓨터가 소수를 저장할 때 생기는 반올림 차이일 뿐 사실상 같은 값이다. 문장을 한 단어씩 읽으며 &lsquo;지금까지의 요약&rsquo;을 4번 고쳐 썼고, 감정 분류처럼 문장 끝에서 답 하나만 내는 <b>many-to-one</b>에서는 마지막 <code>h(4)</code>만 분류기로 넘긴다(<a class="ext" href="#s13">12.1.3 입출력 구조</a>).</p>
+</div>
+
+<h3 class="sub-title" id="lab-lstm">3 · LSTM 셀 순전파 직접 구현 → Keras LSTM과 비교</h3>
+<pre class="code">z = np.dot(inputs[t], W) + np.dot(h_prev, U) + b   <span class="cm"># 4개 선형 변환을 한 번에</span>
+z_i, z_f, z_C, z_o = z[0:u], z[u:2*u], z[2*u:3*u], z[3*u:4*u]   <span class="cm"># Keras 순서 [i, f, C̃, o]</span>
+i_t, f_t, o_t = sigmoid(z_i), sigmoid(z_f), sigmoid(z_o)        <span class="cm"># 게이트 (0~1)</span>
+C_tilde = np.tanh(z_C)                                          <span class="cm"># 후보값 (-1~1)</span>
+C_t = f_t * C_prev + i_t * C_tilde      <span class="cm"># 핵심: 셀 상태는 '곱'이 아니라 '덧셈'으로 갱신</span>
+h_t = o_t * np.tanh(C_t)</pre>
+<div class="labnote">
+  <p><b>[설명]</b> LSTM은 RNN에 <span class="hi">장기 기억 노트(셀 상태)와 그 노트를 지우고 · 쓰고 · 읽는 세 게이트</span>를 붙인 구조다. Keras는 게이트 4개의 가중치를 <b>한 행렬로 이어 붙여</b> 저장한다 &mdash; kernel <code>(3, 8)</code> = (input_dim, 4·units), recurrent_kernel <code>(2, 8)</code>, bias <code>(8,)</code>. 열 방향으로 units개씩 <b>[i, f, C̃, o]</b> 순서로 잘라 쓴다(<a class="ext" href="#s15">12.1.5</a>).</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>첫 단어에서 게이트 값</th><th>값</th><th>범위 · 뜻</th></tr></thead>
+    <tbody>
+      <tr><td>i (입력 게이트)</td><td>[0.6184, 0.3108]</td><td>sigmoid 0~1 · 새 정보를 얼마나 쓸지</td></tr>
+      <tr><td>f (망각 게이트)</td><td><b>[0.7721, 0.7513]</b></td><td>sigmoid 0~1 · 예전 기억을 얼마나 남길지</td></tr>
+      <tr><td>C̃ (후보값)</td><td>[−0.3998, −0.2885]</td><td>tanh −1~1 · 쓸 내용</td></tr>
+      <tr><td>o (출력 게이트)</td><td>[0.6749, 0.7166]</td><td>sigmoid 0~1 · 기억 중 얼마를 내보낼지</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>[결과]</b> 최대 오차 <b>3.6e-08</b>로 이번에도 사실상 같았다 &mdash; Keras의 <b>[입력, 망각, 후보, 출력]</b> 순서를 제대로 짚었다는 뜻이다. 망각 게이트 [0.77, 0.75]는 쉽게 말해 <span class="hi">&lsquo;예전 기억의 약 75~77%는 남기고 나머지는 지운다&rsquo;</span>.</p>
+</div>
+<div class="pit"><b>게이트 순서 함정</b> &mdash; 교안 · 수식은 보통 f, i, C̃, o 순으로 쓰지만 Keras 가중치는 <b>i, f, C̃, o</b>, GRU는 <b>z, r, h</b>다. 순서를 틀리면 모양은 맞아도 값이 달라 <code>np.allclose</code>가 False가 된다.</div>
+
+<!-- ===== 기울기 소실 ===== -->
+<h3 class="sub-title" id="lab-vanish">4 · 기울기 소실 현상을 숫자로 관찰</h3>
+<div class="labnote">
+  <p><b>[설명]</b> 기울기 소실은 <span class="hi">역전파 때 같은 값을 여러 번 곱하면서 기울기가 0으로 줄어드는 현상</span>이고, 반대로 커지면 폭주한다. 과거로 한 칸 갈 때마다 <span class="tex">|W_h|\times\tanh'</span>을 한 번 곱한다고 보고(tanh′ = 0.9 가정), k칸 뒤의 크기 <span class="tex">(0.9|W_h|)^k</span>를 계산했다(<a class="ext" href="#s14">12.1.4</a>).</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>k (시간 거리)</th><th>|W<sub>h</sub>| = 0.6</th><th>|W<sub>h</sub>| = 0.9</th><th>|W<sub>h</sub>| = 1.3</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>0.54</td><td>0.81</td><td>1.17</td></tr>
+      <tr><td>10</td><td>2.1e-3</td><td>0.12</td><td>4.8</td></tr>
+      <tr><td>30</td><td><b>9.4e-9</b></td><td>1.8e-3</td><td><b>111</b></td></tr>
+      <tr><td>50</td><td>4.2e-14</td><td>2.7e-5</td><td>2,566</td></tr>
+    </tbody>
+  </table></div>
+  <figure class="labfig"><img width="1189" height="390" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp12-lab-c29.png" alt="반복 곱에 의한 기울기 변화와 tanh 미분"><figcaption>왼쪽: |W<sub>h</sub>|별 기울기 크기(로그) · 오른쪽: tanh′은 최대 1, 포화 구간에서 거의 0</figcaption></figure>
+  <p><b>[결과]</b> 곱하는 값이 1보다 작으면 30칸 뒤 <b>0.000000009</b> &mdash; 먼 과거 단어의 신호가 사라진다(소실). 1보다 크면 30칸 뒤 <b>111배</b> &mdash; 가중치가 한 번에 크게 흔들린다(폭주). 경계는 <span class="tex">0.9|W_h|=1</span>, 즉 <span class="tex">|W_h|\approx1.11</span>이다. 그래서 기본 RNN은 문장 앞쪽 내용을 뒤까지 기억하지 못한다.</p>
+</div>
+
+<div class="labnote" id="lab-lstm-grad">
+  <p><b>[설명] LSTM은 왜 다른가</b> &mdash; 셀 상태가 덧셈으로 갱신되므로 <span class="tex">\partial C_t/\partial C_{t-1}=f_t</span>. 반복해서 곱해지는 값이 고정된 W<sub>h</sub>가 아니라 <b>학습되는 망각 게이트 f<sub>t</sub></b>다. 모델이 f<sub>t</sub>를 1 가까이 두면 기울기가 먼 과거까지 거의 줄지 않는다.</p>
+  <figure class="labfig"><img width="690" height="390" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp12-lab-c34.png" alt="기본 RNN과 LSTM의 기울기 전달 비교"><figcaption>기본 RNN(|W<sub>h</sub>| = 0.9) vs LSTM(f<sub>t</sub> = 0.99 · 0.95 · 0.7)</figcaption></figure>
+  <p><b>[결과]</b> 50칸을 거슬러 갈 때 기본 RNN은 매 칸 0.81씩 곱해져 약 <b>0.000027</b>(처음의 0.003%)만 남는다. LSTM은 f<sub>t</sub> = 0.99면 <span class="tex">0.99^{50}\approx0.61</span> &mdash; <span class="hi">61%가 그대로 남는다</span>. LSTM은 &lsquo;기억을 얼마나 남길지&rsquo;를 스스로 배워 1 가까이 둘 수 있기 때문이다.</p>
+</div>
+
+<!-- ===== IMDB ===== -->
+<h3 class="sub-title" id="lab-imdb">5 · IMDB 영화평 — 불러오기 · 정수 인코딩 · 패딩</h3>
+<pre class="code">(x_train, y_train), (x_test, y_test) = keras.datasets.imdb.load_data(num_words=10000)
+index_to_word = {v + 3: k for k, v in word_index.items()}   <span class="cm"># 0 패딩 · 1 시작 · 2 OOV 예약 → +3</span>
+x_train_pad = pad_sequences(x_train, maxlen=200, padding='post', truncating='post')</pre>
+<div class="labnote">
+  <p>IMDB = 영화평 50,000건(학습 25,000 · 평가 25,000), 긍정 1 / 부정 0, 이미 <b>정수 인코딩</b>(단어 → 빈도 순위)되어 있다. <code>num_words=10000</code>은 상위 1만 단어만 남기고 나머지는 OOV(2)로. 문장 전체를 읽고 답 하나를 내는 <b>many-to-one</b> 문제다. 첫 리뷰를 되돌리면 &ldquo;&lt;sos&gt; this film was just brilliant casting location scenery &hellip;&rdquo;(라벨 1).</p>
+  <figure class="labfig"><img width="690" height="340" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp12-lab-c41.png" alt="IMDB 리뷰 길이 분포와 maxlen 200"><figcaption>리뷰 길이 분포 · 빨간 선 maxlen = 200</figcaption></figure>
+  <p><b>[결과]</b> 리뷰 길이 평균 <b>239</b> · 중앙값 <b>178</b> · 최댓값 2,494단어 &mdash; 몇몇 아주 긴 리뷰가 평균을 끌어올린다. 신경망에는 길이가 같아야 하므로 200단어로 맞췄다: 짧으면 <b>뒤에 0</b>(post 패딩), 길면 <b>200단어 뒤를 자름</b>(post 자르기) → <code>(25000, 200)</code>.</p>
+</div>
+
+<h3 class="sub-title" id="lab-models">6 · 순환층만 바꿔 끼우는 세 모형 — SimpleRNN · LSTM · GRU</h3>
+<pre class="code">model = keras.Sequential([
+    keras.layers.Input(shape=(maxlen,)),
+    keras.layers.Embedding(vocab_size, 64, mask_zero=True),   <span class="cm"># 단어 ID → 64차원 벡터, 0(패딩)은 마스킹</span>
+    rnn_layer,                                                <span class="cm"># SimpleRNN(64) | LSTM(64) | GRU(64)</span>
+    keras.layers.Dense(1, activation='sigmoid')])
+model.compile(optimizer=keras.optimizers.Adam(1e-3), loss='binary_crossentropy', metrics=['accuracy'])</pre>
+<div class="labnote">
+  <p><b>[설명]</b> 나머지 구조와 학습 조건을 똑같이 둔 채 순환층만 바꾸면, <span class="hi">성능 차이를 순환층 하나의 효과로</span> 볼 수 있다. <code>mask_zero=True</code>는 뒤따르는 순환층이 패딩 시점을 건너뛰게 한다 &mdash; post 패딩이라도 0 뒤의 의미 없는 시점이 마지막 은닉 상태를 흐리지 않는다.</p>
+</div>
+
+<div class="deep">
+  <p><b>파라미터 수를 손으로 맞춰 보기</b> (입력 64 · 은닉 64)</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>층</th><th>계산</th><th>실행 출력</th></tr></thead>
+    <tbody>
+      <tr><td>SimpleRNN</td><td><span class="tex">64\cdot64+64\cdot64+64=8{,}256</span></td><td>8,256</td></tr>
+      <tr><td>LSTM</td><td>선형 변환 4개 → <span class="tex">4\times8{,}256=33{,}024</span></td><td>33,024</td></tr>
+      <tr><td>GRU</td><td>3 × (64·64 + 64·64 + <b>64 + 64</b>) = 3 × 8,320 = 24,960</td><td>24,960</td></tr>
+      <tr><td>Embedding</td><td>10,000 × 64</td><td>640,000</td></tr>
+      <tr><td>Dense(1)</td><td>64 + 1</td><td>65</td></tr>
+    </tbody>
+  </table></div>
+  <p>GRU가 정확히 3 × 8,256 = 24,768이 아닌 이유 &mdash; Keras GRU 기본값 <code>reset_after=True</code>는 입력 쪽 · 순환 쪽 <b>편향을 따로 두 벌</b> 가진다(bias 모양 <code>(2, 3·units)</code>). 그래서 게이트마다 64가 더 붙어 24,960. 전체 LSTM 모형 673,089 중 <b>95%가 Embedding</b>이다.</p>
+</div>
+
+<h3 class="sub-title" id="lab-train">7 · 같은 조건으로 학습 — 5에폭 · 배치 128 · 검증 20%</h3>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>에폭별 검증 정확도</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>최고</th><th>에폭당 시간</th></tr></thead>
+  <tbody>
+    <tr><td>SimpleRNN</td><td>0.7748</td><td>0.8216</td><td>0.7800</td><td>0.8318</td><td>0.8270</td><td>0.8318</td><td>약 12초</td></tr>
+    <tr><td>LSTM</td><td>0.8568</td><td>0.8280</td><td>0.7950</td><td>0.8486</td><td>0.8538</td><td>0.8568</td><td>약 25초</td></tr>
+    <tr><td>GRU</td><td>0.8426</td><td>0.8614</td><td>0.8578</td><td>0.8634</td><td>0.8260</td><td><b>0.8634</b></td><td>약 23초</td></tr>
+  </tbody>
+</table></div>
+<figure class="labfig"><img width="1189" height="390" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp12-lab-c50.png" alt="세 모형의 손실과 정확도 곡선"><figcaption>손실 · 정확도 곡선 (실선 학습, 점선 검증)</figcaption></figure>
+<div class="labnote">
+  <p><b>[결과]</b> 최고 검증 정확도 <b>GRU 86.3% &gt; LSTM 85.7% &gt; SimpleRNN 83.2%</b> &mdash; 게이트가 있는 모형이 2~3%p 더 잘 맞혔다. 대신 파라미터(8,256 → 24,960 · 33,024)와 시간(약 2배)이 든다. 학습 정확도는 셋 다 0.91~0.92까지 오르는데 검증은 에폭마다 출렁인다 &mdash; 3에폭 무렵부터 <span class="hi">과적합 신호</span>(학습 손실 ↓ · 검증 손실 ↑)가 보인다.</p>
+</div>
+
+<h3 class="sub-title" id="lab-maxlen">8 · 문장 길이(maxlen)를 바꾸면 — 장기 의존성의 실제 영향</h3>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>maxlen (펼치는 시점 수)</th><th>50</th><th>100</th><th>200</th><th>400</th></tr></thead>
+  <tbody>
+    <tr><td>SimpleRNN</td><td>0.7624</td><td>0.6444</td><td>0.8026</td><td>0.8064</td></tr>
+    <tr><td>LSTM</td><td>0.7694</td><td>0.8290</td><td>0.8664</td><td><b>0.8788</b></td></tr>
+    <tr><td><b>차이</b></td><td>0.7%p</td><td>18.5%p</td><td>6.4%p</td><td><b>7.2%p</b></td></tr>
+  </tbody>
+</table></div>
+<figure class="labfig"><img width="689" height="390" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp12-lab-c53.png" alt="maxlen에 따른 검증 정확도"><figcaption>문장 길이에 따른 성능 변화 (3에폭)</figcaption></figure>
+<div class="labnote">
+  <p><b>[결과]</b> 50단어만 볼 때는 둘의 차이가 0.7%p로 거의 없었지만, 400단어까지 보게 하니 <b>LSTM 87.9% vs SimpleRNN 80.6%</b>. <span class="hi">문장이 길어질수록 앞 내용을 잊는 SimpleRNN의 약점이 드러나고, 기억을 오래 유지하는 LSTM의 장점이 커진다</span> &mdash; 교안 15p &lsquo;maxlen = 펼치는 시점 수 = 학습해야 하는 의존 거리&rsquo;의 실험 확인이다(<a class="ext" href="#maxlen">12.1.4 실무 관점</a>).</p>
+  <p class="fx-note">maxlen = 100에서 SimpleRNN이 0.64로 유독 낮은 것은 3에폭 · 시드 하나 실행이라 학습이 한 번 크게 흔들린 결과로 보인다 &mdash; 추세는 50 → 400 전체로 읽는 편이 안전하다.</p>
+</div>
+
+<h3 class="sub-title" id="lab-predict">9 · 실제 리뷰 예측 — LSTM 3에폭, 테스트 83.1%</h3>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>리뷰 (앞부분)</th><th>긍정 확률</th><th>예측 / 실제</th></tr></thead>
+  <tbody>
+    <tr><td>please give this one a miss &hellip; the show is flat flat flat</td><td>0.069</td><td>부정 / 부정 ✓</td></tr>
+    <tr><td>this film requires a lot of patience because it focuses on mood &hellip;</td><td>0.980</td><td>긍정 / 긍정 ✓</td></tr>
+    <tr><td>many animation buffs consider &hellip; the great forgotten genius &hellip;</td><td>0.332</td><td><b>부정 / 긍정 ✗</b></td></tr>
+    <tr><td>i generally love this type of movie however &hellip; wanting to kick the screen</td><td>0.349</td><td>부정 / 부정 ✓</td></tr>
+    <tr><td>i'm a die hard mario fan and i loved this game &hellip;</td><td>0.944</td><td>긍정 / 긍정 ✓</td></tr>
+  </tbody>
+</table></div>
+<div class="labnote">
+  <p><b>[결과]</b> 처음 보는 테스트 리뷰 25,000개 중 <b>83.1%</b>, 예시 5개 중 4개를 맞혔다. &lsquo;flat flat flat&rsquo;처럼 부정 표현이 뚜렷한 리뷰는 0.07로 확실하게 부정. 틀린 리뷰 3은 앞부분이 애니메이션 작가 소개 위주이고 &lsquo;great&rsquo; &lsquo;genius&rsquo; 말고는 감정이 뚜렷하지 않아 어려웠던 것으로 보인다. <span class="hi">확률이 0.5 근처일수록 모델이 헷갈린다는 뜻</span>이다. 리뷰 4는 &lsquo;love &hellip; however&rsquo;로 뒤집히는 문장을 맞혔다.</p>
+</div>
+
+<!-- ===== 과제 ===== -->
+<h3 class="sub-title" id="hw11">과제 1-1 · GRU 셀 직접 구현 (30점)</h3>
+<pre class="code">def gru_forward(inputs, W, U, b, units):               <span class="cm"># Keras GRU(reset_after=False), 순서 [z, r, h]</span>
+    h = np.zeros((B, units), dtype='float32')
+    for t in range(T):
+        x = inputs[:, t, :]
+        z = sigmoid(x @ W[:, :u]     + h @ U[:, :u]     + b[:u])        <span class="cm"># 업데이트 게이트</span>
+        r = sigmoid(x @ W[:, u:2*u]  + h @ U[:, u:2*u]  + b[u:2*u])     <span class="cm"># 리셋 게이트</span>
+        hh = np.tanh(x @ W[:, 2*u:] + (r * h) @ U[:, 2*u:] + b[2*u:])  <span class="cm"># r 을 h 에 먼저 곱한 뒤 U_h</span>
+        h = z * h + (1.0 - z) * hh                                       <span class="cm"># 남길 만큼 + 새로 쓸 만큼</span></pre>
+<div class="labnote">
+  <p><b>[구현]</b> Keras 가중치를 <b>[z, r, h]</b> 순서로 잘라 쓰고, 후보값에서 <span class="hi">리셋 게이트를 직전 은닉 상태에 먼저 곱한 뒤 U<sub>h</sub>를 적용</span>했다. 이 순서가 <code>reset_after=False</code>의 정의라서, 바꾸면 Keras와 맞지 않는다(<code>reset_after=True</code>는 <span class="tex">r\odot(hU_h+b)</span>로 U<sub>h</sub>를 먼저 곱한다).</p>
+  <p><b>[결과]</b> 입력 <code>(2, 5, 8)</code>에서 직접 구현과 Keras GRU 출력이 모두 <code>(2, 5, 2)</code>, <code>np.allclose(atol=1e-5)</code> = <b>True</b>.</p>
+  <p><b>[해석]</b> GRU는 셀 상태를 따로 두지 않고 <span class="tex">h=z\odot h_{prev}+(1-z)\odot\tilde h</span> 한 식으로 &lsquo;얼마나 남기고 얼마나 새로 쓸지&rsquo;를 함께 정한다. 선형 변환이 4개에서 3개로 줄어 순환층 파라미터가 LSTM 33,024 대비 GRU 24,960으로 약 <b>3/4</b>이다(<a class="ext" href="#s16">12.1.6</a>). 표기 주의: Keras · PyTorch · Cho et al.(2014)은 z가 <b>이전 상태를 남기는</b> 비율, Chung et al.(2014)은 반대로 쓴다.</p>
+</div>
+
+<h3 class="sub-title" id="hw12">과제 1-2 · 양방향 LSTM 성능 비교 (20점)</h3>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>모형</th><th>순환층 파라미터</th><th>전체 파라미터</th><th>최고 검증 정확도</th><th>학습 시간 (5에폭, CPU)</th></tr></thead>
+  <tbody>
+    <tr><td>LSTM (단방향)</td><td>33,024</td><td>673,089</td><td>0.8658</td><td>152.8초</td></tr>
+    <tr><td>BiLSTM (양방향)</td><td>66,048 (<b>2.00배</b>)</td><td>706,177</td><td>0.8720 (<b>+0.62%p</b>)</td><td>430.4초 (<b>2.82배</b>)</td></tr>
+  </tbody>
+</table></div>
+<figure class="labfig"><img width="1089" height="390" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp12-lab-c63.png" alt="단방향 vs 양방향 LSTM 검증 곡선"><figcaption>검증 손실 · 검증 정확도 비교</figcaption></figure>
+<div class="labnote">
+  <p><b>[결과]</b> <code>Bidirectional(LSTM(64))</code>은 정방향 · 역방향 두 벌을 돌려 출력 128을 이어 붙인다. 정확도는 0.6%p 올랐지만 파라미터는 정확히 2배, 시간은 약 2.8배 &mdash; <span class="hi">비용이 늘어난 만큼 성능이 따라오지 않았다</span>.</p>
+  <p><b>[해석]</b> &lsquo;not &hellip; good&rsquo;처럼 뒤에서 뒤집히는 표현을 더 잘 잡을 것이라 예상했지만, IMDB 감성 분류는 문장 구조보다 &lsquo;brilliant&rsquo; &lsquo;terrible&rsquo; 같은 <b>감정어가 나오는지</b>에 크게 기댄다. 단방향도 문장 끝까지 읽은 은닉 상태로 판단하므로 이미 리뷰 전체를 한 번 훑은 셈이고, 역방향이 더해 주는 것은 앞부분을 더 선명하게 기억하는 정도다. 200단어 뒤를 잘라 내 역방향이 먼저 읽어야 할 결말이 빠진 경우도 많았을 것이다. 시간이 2배보다 더 는 것은 역방향도 시점 순서대로 따로 계산해야 하고, CPU라 두 방향을 병렬로 처리하는 이점이 적었기 때문으로 보인다.</p>
+  <p><b>[결론]</b> 양방향은 문장 전체를 <b>미리 볼 수 있을 때만</b> 쓸 수 있어 다음 단어 예측 · 실시간 번역에는 못 쓴다. 이득이 1%p도 안 되면 단방향이 실용적이고, 개체명 인식처럼 단어마다 앞뒤 문맥이 중요한 과제에서 장점이 크다(<a class="ext" href="#s16">12.1.6 심층 vs 양방향</a>).</p>
+</div>
+
+<h3 class="sub-title" id="hw13">과제 1-3 · 심층 LSTM 실험 (20점)</h3>
+<pre class="code">for i in range(n_layers):
+    layers.append(keras.layers.LSTM(units, return_sequences=not is_last, dropout=dropout))
+<span class="cm"># 아래층: (batch, 200, 64) 를 그대로 위층에 / 맨 위층만 (batch, 64)</span></pre>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>모형</th><th>전체 파라미터</th><th>학습 정확도</th><th>검증 정확도</th><th>과적합 간격</th></tr></thead>
+  <tbody>
+    <tr><td>LSTM 1층</td><td>673,089</td><td>0.9178</td><td>0.8602</td><td>0.0576</td></tr>
+    <tr><td>LSTM 2층</td><td>706,113</td><td><b>0.9260</b></td><td>0.8486 ↓</td><td><b>0.0774</b></td></tr>
+    <tr><td>LSTM 2층 + dropout 0.3</td><td>706,113</td><td>0.9190</td><td><b>0.8664</b></td><td>0.0526</td></tr>
+  </tbody>
+</table></div>
+<figure class="labfig"><img width="1089" height="390" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp12-lab-c67.png" alt="층 수에 따른 검증 손실과 정확도"><figcaption>층 수에 따른 검증 손실 · 학습/검증 정확도</figcaption></figure>
+<div class="labnote">
+  <p><b>[결과]</b> 2층으로 쌓자 학습 정확도는 오르고 검증은 <b>떨어졌다</b>(0.8602 → 0.8486). 같은 2층에 dropout 0.3을 넣자 검증 0.8664로 셋 중 가장 높았다.</p>
+  <p><b>[해석]</b> <span class="hi">층을 깊게 쌓는다고 항상 좋아지지 않는다.</span> 늘어난 표현력이 일반화가 아니라 학습 데이터 20,000건을 외우는 데 쓰였다. 검증 손실이 3에폭에 0.51까지 튀고 검증 정확도가 0.80~0.85에서 출렁인 것은 깊이 방향 역전파 경로가 길어져 최적화가 불안정해진 신호로 읽었다. 감정어만 봐도 상당 부분 풀리는 과제라 위층이 한 번 더 추상화할 필요도 크지 않았다. 가장 눈에 띈 점은 dropout을 넣은 2층이 가장 좋았다는 것 &mdash; <b>깊이 자체보다 늘어난 용량을 규제 없이 둔 것</b>이 문제였다.</p>
+  <p><b>[결론]</b> 깊이는 데이터 양 · 규제 · 과제 난도와 함께 맞춰야 한다. 다만 5에폭 · 시드 하나이고, 같은 1층 LSTM도 실행마다 0.857~0.866으로 달라져(본문 0.8568, 과제 1-2의 0.8658) <b>1%p 안팎의 차이는 반복해서 확인</b>해야 결론을 낼 수 있다.</p>
+</div>
+
+<h3 class="sub-title" id="hw14">과제 1-4 · 기울기 클리핑 실험 (30점)</h3>
+<pre class="code">model.compile(optimizer=keras.optimizers.Adam(1e-3, clipnorm=1.0), ...)   <span class="cm"># ||g|| &gt; 1 이면 g ← g/||g||</span>
+<span class="cm"># 근거 측정: 클리핑 '전' 기울기의 전역 노름</span>
+with tf.GradientTape() as tape:
+    loss = bce(yb, tf.reshape(probe(xb, training=True), [-1]))
+grads = tape.gradient(loss, probe.trainable_variables)
+grad_norms.append(float(tf.linalg.global_norm(grads)))</pre>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>SimpleRNN · maxlen 400 · 5에폭</th><th>최종 학습 손실</th><th>최고 검증 정확도</th></tr></thead>
+  <tbody>
+    <tr><td>클리핑 없음</td><td>0.0479</td><td>0.7964</td></tr>
+    <tr><td><b>clipnorm = 1.0</b></td><td>0.1569</td><td><b>0.8562</b> (+6.0%p)</td></tr>
+  </tbody>
+</table></div>
+<div class="flow">
+  <div class="fl"><b>클리핑 전 기울기 노름 (60배치)</b><span>중앙값 <b>0.767</b> · 평균 1.556 · 최댓값 <b>25.776</b> · 1.0 초과 <b>30%</b></span></div>
+</div>
+<figure class="labfig"><img width="1089" height="390" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp12-lab-c71.png" alt="클리핑 유무 손실 곡선"><figcaption>클리핑 유무에 따른 손실 · 검증 정확도</figcaption></figure>
+<figure class="labfig"><img width="690" height="390" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp12-lab-c71b.png" alt="클리핑 전 기울기 전역 노름"><figcaption>클리핑 적용 전 기울기 크기(로그) · 파란 선 clipnorm = 1.0</figcaption></figure>
+<div class="labnote">
+  <p><b>[결과]</b> clipnorm 1.0을 적용하자 최고 검증 정확도가 <b>0.7964 → 0.8562</b>로 약 6%p 올랐고 검증 손실도 0.4 안팎에서 안정적이었다. 클리핑이 없을 때는 학습 손실이 0.05까지 빠르게 떨어진 반면 검증 손실은 0.5~0.67 사이에서 튀었다.</p>
+  <p><b>[해석]</b> <span class="hi">기울기 클리핑이 완화하는 것은 폭주다.</span> 클리핑은 노름이 1.0을 <b>넘을 때만</b> 줄이고 작은 기울기는 건드리지 않는다 &mdash; 0으로 사라지는 소실에는 원리상 도움을 줄 수 없다. 실제로 기울기 노름은 평소 중앙값 0.77로 얌전하다가 45번째 배치 부근에서 <b>25.8까지</b> 치솟았다. 이런 순간 가중치가 한꺼번에 크게 움직이면 배운 것이 흐트러진다. 흥미롭게도 클리핑 쪽 학습 손실이 더 높게 끝났다(0.157 vs 0.048) &mdash; 학습을 빠르게 만든 것이 아니라 갑작스러운 큰 갱신을 막아 <b>덜 외우고 더 고르게</b> 배우게 한 셈이다.</p>
+  <p><b>[결론]</b> 클리핑은 폭주를 막는 안전장치이지 소실의 해결책이 아니다. 클리핑한 SimpleRNN(0.8562)도 같은 길이에서 LSTM(0.8788)에 못 미쳤다 &mdash; 소실은 게이트처럼 <b>기울기가 흐르는 경로 자체</b>를 바꾸어야 해결된다(<a class="ext" href="#vanishing">12.1.4 소실 vs 폭주와 처방</a>).</p>
+</div>
+
+<div class="deep">
+  <p><b>clipnorm이 실제로 하는 일 — 숫자로</b></p>
+  <p>기울기 노름이 25.8이면 <span class="tex">g\leftarrow g\times\frac{1.0}{25.8}</span>로 <b>방향은 그대로, 길이만 1.0</b>으로 줄인다. 노름 0.77인 배치는 건드리지 않는다. 60배치 중 30%(18배치)가 잘렸고, 나머지 70%는 원래 기울기 그대로다. <code>clipvalue</code>는 원소마다 잘라 방향이 바뀔 수 있다는 점이 다르다. 11주차 기계학습특론 실습의 <code>clip_grad_norm_(..., 1.0)</code>(<a class="ext" href="machine-learning-week11.html#tl-common">ML 11주차</a>)과 같은 장치다.</p>
+</div>
+
+<div class="pit"><b>다시 풀 때 틀리기 쉬운 곳 ★</b>
+  <ul class="ul">
+    <li>Keras에 넣을 때 배치 차원 추가 &mdash; <code>(T, D)</code> → <code>(1, T, D)</code>. 가중치 교체 전 층을 한 번 호출해 build</li>
+    <li>LSTM 가중치는 <b>[i, f, C̃, o]</b>, GRU는 <b>[z, r, h]</b>. GRU 비교는 <code>reset_after=False</code>로 · 기본값이면 bias가 <code>(2, 3·units)</code></li>
+    <li>순환층을 쌓을 때 아래층은 <code>return_sequences=True</code> &mdash; 빠뜨리면 위층에 3차원 입력이 안 들어가 오류</li>
+    <li>IMDB 단어 ID는 빈도 순위 <b>+3</b>(0 패딩 · 1 시작 · 2 OOV)</li>
+    <li>클리핑은 <b>폭주</b> 대책, 소실 대책은 <b>게이트(LSTM · GRU)</b></li>
+  </ul>
+</div>
+</section>
+
+
 <section class="sec" id="next">
   <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>13주차 (11.23 ~ 11.29)</small></h2></div>
 <div class="note-box"><b>13주차</b>는 강의계획서를 따른다. 이번 주 12.2.6에서 본 <b>셀프 어텐션 · Query-Key-Value · scaled dot-product</b>가 다음 단계(Transformer · 사전학습 언어모델)의 기초다. 12-2 교안이 올라오면 이 페이지의 12.2절을 교안 기준으로 보강한다.
