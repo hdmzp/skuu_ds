@@ -307,6 +307,8 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
 .pt.flip{border-left-color:#b45309}
 .pt.live{border-left-color:#9d174d}
 .pt.plus{border-left-color:#0f766e}
+.pt.lab{border-left-color:#6d28d9}
+.bdg-lab{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
 .hi{background:linear-gradient(transparent 58%,#ffe9a8 58%);font-weight:700;color:var(--ink);padding:0 1px}
 .pt pre.code{margin:9px 0}
 
@@ -529,7 +531,8 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   <a href="#arch1">11.5 VGG · ResNet · Inception</a>
   <a href="#arch2">11.6 DenseNet · MobileNet · EfficientNet</a>
   <a href="#eval">11.7 평가 · 데이터 · 최신 모델</a>
-  <a href="#lab">실습 · KerasTuner</a>
+  <a href="#tl">실습 · 전이학습 · LoRA · Optuna</a>
+  <a href="#lab">참고 실습 · KerasTuner</a>
   <a href="#summary">핵심 정리</a>
   <a href="#next">다음 주</a>
 </nav>
@@ -593,7 +596,8 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   <a href="#arch1"><b>11.5 VGGNet · ResNet · Inception</b><span>3×3 고정 · skip connection · 병렬 브랜치</span></a>
   <a href="#arch2"><b>11.6 DenseNet · MobileNet · EfficientNet</b><span>dense block · depthwise separable · compound scaling</span></a>
   <a href="#eval"><b>11.7 정확도 측정 · 오픈 데이터 · 최신 모델</b><span>Top-5 · 민감도 · 특이도 · ROC/AUC · CIFAR · SVHN</span></a>
-  <a href="#lab"><b>실습 · KerasTuner</b><span>units · activation · dropout · lr 무작위 탐색</span></a>
+  <a href="#tl"><b>실습 · 전이학습 · LoRA · Optuna (제출본)</b><span>프로빙 vs Full FT · r 4/16/64 · TPE + pruning · TODO 15개</span></a>
+  <a href="#lab"><b>참고 실습 · KerasTuner</b><span>units · activation · dropout · lr 무작위 탐색</span></a>
 </div>
 </section>
 
@@ -1138,9 +1142,423 @@ print('\n', 'Test accuracy:', score[1])</pre>
 </div>
 </section>
 
+<!-- ===================== 실습 (제출본) ===================== -->
+<section class="sec" id="tl">
+  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">실습 — 전이학습 · PEFT(LoRA) · Optuna 튜닝 (내 제출본 복습)<small>common.py + lab1 · lab2 · lab3 · TODO 15개 / 100점 · 코드 흐름 · [설명] · [결과] · [고찰]</small></h2></div>
+
+<div class="note-box"><b>무엇을 했나</b> &mdash; 이번 주 교안(11.5~11.6)의 &lsquo;유명한 사전학습 모델&rsquo;을 <b>내 데이터(CIFAR-10)에 옮겨 쓰는 방법</b>을 세 단계로 실험했다. <span class="hi">① 얼마나 고칠까(전이학습 전략) → ② 아주 조금만 고치려면(PEFT · LoRA) → ③ 그 설정값은 누가 고르나(Optuna 하이퍼파라미터 튜닝)</span>. 네 파일은 하나의 흐름이다 &mdash; <code>common.py</code>가 학습 · 평가 규칙을 통일하고, lab1 · lab2 · lab3이 그것을 import해 쓴다. 아래 KerasTuner 참고 실습(<a class="ext" href="#lab">맨 아래</a>)의 &lsquo;자동 튜닝&rsquo;이 lab3에서 Optuna로 이어진다.</div>
+
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📄</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week11-tl-report.pdf" target="_blank" rel="noopener">제출 보고서 — 전이학습, PEFT, 하이퍼파라미터 튜닝</a>
+      <p>4쪽 · 실행 환경 · 실습 1~3 표와 해석 · KerasTuner vs Optuna 고찰</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week11-tl-report.pdf" download="11주차_실습_보고서.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>🐍</span>PY</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week11-tl-common.py" download="common.py">제출 코드 4개 — [설명] · [결과] 주석 포함</a>
+      <p><a class="ext" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week11-tl-common.py" download="common.py">common.py</a> · <a class="ext" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week11-tl-lab1.py" download="lab1_transfer_learning.py">lab1_transfer_learning.py</a> · <a class="ext" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week11-tl-lab2.py" download="lab2_peft_lora.py">lab2_peft_lora.py</a> · <a class="ext" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week11-tl-lab3.py" download="lab3_optuna_hpo.py">lab3_optuna_hpo.py</a></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week11-tl-lab1.py" download="lab1_transfer_learning.py">⬇ lab1</a>
+  </div>
+</div>
+
+<div class="tbl-wrap"><table>
+  <thead><tr><th>파일</th><th>TODO (배점)</th><th>한 줄로</th></tr></thead>
+  <tbody>
+    <tr><td><code>common.py</code></td><td>3개 (22)</td><td>시드 고정 · 학습 한 스텝 · macro-F1 평가 &mdash; <b>세 실습의 공통 규칙</b></td></tr>
+    <tr><td><code>lab1_transfer_learning.py</code></td><td>4개 (26)</td><td>프로빙 vs Full FT(LLRD) vs LP-FT, 백본 3종 비교</td></tr>
+    <tr><td><code>lab2_peft_lora.py</code></td><td>3개 (24)</td><td>ViT-S에 LoRA r = 4 · 16 · 64, DoRA · 병합 전후 추론 시간</td></tr>
+    <tr><td><code>lab3_optuna_hpo.py</code></td><td>5개 (28)</td><td>LoRA 하이퍼파라미터 7개를 TPE + MedianPruner로 탐색, 시드 3개 재학습</td></tr>
+  </tbody>
+</table></div>
+
+<div class="warn"><b>실행 환경 — README 조건과 실제 조건이 다르다</b>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>실행</th><th>README 조건</th><th>실제 조건</th><th>환경</th></tr></thead>
+    <tbody>
+      <tr><td>실습 1 프로빙 3개 · Full FT</td><td>전체 데이터</td><td>그대로</td><td>Colab T4</td></tr>
+      <tr><td>실습 1 LP-FT</td><td>5에폭</td><td>학습 4,000장 · 1에폭</td><td>Colab T4</td></tr>
+      <tr><td>실습 2 (4개)</td><td>전체 데이터 · 3에폭</td><td>학습 640장 · 1에폭 · 테스트 500장</td><td>CPU</td></tr>
+      <tr><td>실습 3</td><td>ViT-S · 40회 · 3에폭</td><td>ViT-Tiny · 15분 안에 끝난 4회 · 2에폭 · 학습 400장</td><td>CPU</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">무료 Colab T4는 <b>bfloat16을 하드웨어로 지원하지 않아</b> ConvNeXt에서 <code>RuntimeError: GET was unable to find an engine</code>이 났다. 제출 코드는 두고 <b>실행할 때만 bf16 autocast를 끄는 런처</b>로 fp32 학습을 했다. 이후 무료 GPU 한도가 소진되어 실습 2 · 3은 CPU에서 데이터를 줄였다 &mdash; 그래서 <span class="hi">실습 2 · 3의 절대 성능은 낮고, 같은 조건 안에서만 비교한다</span>. 학습 파라미터 수 · 어댑터 크기 · 추론 시간은 학습량과 무관하다.</p>
+</div>
+
+<div class="pt lab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>큰 그림 — 얼마나 고칠 것인가의 스펙트럼</h3>
+  <div class="flow">
+    <div class="fl"><b>선형 프로빙</b><span>백본을 <b>전부 얼리고</b> 마지막 분류층(헤드)만 학습 &mdash; ViT-S 3,850개(0.02%)</span></div>
+    <div class="fl"><b>PEFT · LoRA</b><span>백본은 얼리고 층마다 <b>작은 행렬 B · A</b>만 붙여 학습 &mdash; r16 1,183,498개(5.18%)</span></div>
+    <div class="fl"><b>Full FT</b><span>백본까지 <b>전부</b> 조금씩 고침 &mdash; ConvNeXt-T 27,827,818개(100%)</span></div>
+  </div>
+  <p><span class="hi">오른쪽으로 갈수록 성능 여지는 크지만 계산 · 메모리 · 저장 비용도 커진다.</span> 실습 1이 양 끝(프로빙 · Full FT)을, 실습 2가 가운데(LoRA)를 재고, 실습 3이 가운데의 설정값을 자동으로 고른다.</p>
+</div>
+
+<!-- ===== common.py ===== -->
+<h3 class="sub-title" id="tl-common">0 · common.py — 세 실습이 함께 쓰는 규칙</h3>
+
+<div class="pt lab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>데이터 분할 · 전처리 — 교안 11.3의 1~2단계와 같은 흐름</h3>
+  <ul class="ul">
+    <li><b>CIFAR-10 분할</b> &mdash; 공식 train 50,000장에서 <b>시드로 섞은 뒤 5,000장을 검증</b>으로 떼고, test 10,000장은 그대로 둔다. 시드가 같으면 어느 실습이든 <b>같은 검증 세트</b>를 쓴다. 검증은 증강 없이(<code>eval_tf</code>)</li>
+    <li><b>DataLoader</b> &mdash; 학습용은 <code>shuffle=True</code>(매 에폭 섞기) · <code>drop_last=True</code>(끝 자투리 배치 버림). drop_last는 실습 3 배치 64의 갱신 횟수에 영향을 준다(아래 [고찰])</li>
+    <li><b>사전학습 정합 전처리</b> &mdash; 사전학습 모델은 <b>학습 때 본 입력 형식</b>(224×224, 그 모델의 평균 · 표준편차)을 받아야 가장 잘 동작한다. <code>timm.data.resolve_data_config</code>가 모델별 설정을 읽어 CIFAR 32×32를 224로 키우고 정규화한다. 학습용에만 <b>RandAugment</b>(무작위 회전 · 색 변화)를 넣는다</li>
+    <li><code>count_params</code> &mdash; (학습되는 수, 전체 수). <span class="hi">프로빙 / LoRA / Full FT를 비교하는 핵심 숫자</span></li>
+  </ul>
+</div>
+
+<div class="pt lab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>TODO(1) set_seed — 재현성</h3>
+<pre class="code">random.seed(seed); np.random.seed(seed)
+torch.manual_seed(seed); torch.cuda.manual_seed_all(seed)   <span class="cm"># CPU + 모든 GPU</span>
+if deterministic:
+    torch.backends.cudnn.deterministic = True   <span class="cm"># cuDNN 결정적 알고리즘</span>
+    torch.backends.cudnn.benchmark = False      <span class="cm"># 빠른 알고리즘 자동 탐색 끄기</span></pre>
+  <p><b>[설명]</b> 시드는 난수의 출발점이다. 같으면 가중치 초기화 · 데이터 섞기 · 증강이 매번 똑같다. <b>[목적]</b> 성능 차이가 <b>설정 때문인지 운 때문인지</b> 가린다.</p>
+  <p><b>[결과]</b> 실습 3에서 시드 0 재학습 값 <b>0.7472</b>가 trial 0과 소수점까지 같았다(CPU 완전 재현). 반대로 <span class="hi">시드만 바꿔도 0.62~0.75로 흔들렸다</span> &mdash; 시드 3개의 평균 ± 표준편차를 보고하는 이유다.</p>
+</div>
+
+<div class="pt lab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>TODO(2) train_one_epoch — PyTorch 학습 한 스텝의 표준 순서</h3>
+<pre class="code">with torch.autocast(device_type="cuda", dtype=torch.bfloat16, enabled=use_amp):
+    logits = model(x)                    <span class="cm"># ① 순전파</span>
+    loss = criterion(logits, y)          <span class="cm"># ② 손실 (label_smoothing=0.1)</span>
+optimizer.zero_grad(set_to_none=True)    <span class="cm"># ③ 지난 기울기 지우기</span>
+loss.backward()                          <span class="cm"># ④ 기울기 계산 — autocast 밖에서</span>
+torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)   <span class="cm"># ⑤ 기울기 크기 1.0 이하로</span>
+optimizer.step()                         <span class="cm"># ⑥ 가중치 수정</span>
+if scheduler is not None: scheduler.step()                <span class="cm"># ⑦ lr 조정 (step 단위)</span></pre>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>단계</th><th>왜 이 자리인가</th></tr></thead>
+    <tbody>
+      <tr><td>autocast (bf16)</td><td>GPU에서 순전파를 반정밀도로 해 빠르고 메모리를 덜 쓴다. CPU에서는 꺼진다(<code>use_amp = device.type == "cuda"</code>)</td></tr>
+      <tr><td>zero_grad → backward</td><td>PyTorch는 기울기를 <b>누적</b>한다. <span class="hi">backward 뒤에 zero_grad를 두면 방금 구한 기울기가 지워져 학습이 안 된다</span></td></tr>
+      <tr><td>클리핑 (backward와 step 사이)</td><td>기울기 벡터 길이가 1.0을 넘으면 1.0으로 줄여 한 번에 크게 튀는 것(폭주)을 막는다 &mdash; 기울기가 있어야 자를 수 있고, step 전에 잘라야 효과가 있다</td></tr>
+      <tr><td>scheduler.step()</td><td>에폭이 아니라 <b>배치마다</b> lr을 바꾼다(warmup · cosine)</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>[결과]</b> 자가 점검(간단한 2분류)에서 손실이 <b>0.657 → 0.269</b>로 줄었다 &mdash; 순서가 맞다는 뜻이다. <b>[특이사항]</b> T4의 bf16 미지원 문제는 위 실행 환경 상자.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>label smoothing 0.1이면 학습 손실이 왜 0.5 밑으로 안 내려가나</h3>
+  <p>label smoothing은 정답 확률 목표를 1.0 대신 <span class="tex">1-\varepsilon+\varepsilon/K</span>로 낮추고 나머지 클래스에 <span class="tex">\varepsilon/K</span>씩 나눠 준다. <span class="tex">\varepsilon=0.1,\ K=10</span>이면 정답 0.91, 오답 9개 각 0.01이다. 모델이 이 목표 분포를 <b>완벽히</b> 맞혀도 교차 엔트로피는 목표 분포의 엔트로피만큼 남는다.</p>
+  <div class="fx"><div class="tex-d">H=-(0.91\ln0.91+9\times0.01\ln0.01)=0.0858+0.4145\approx0.50</div>
+  <p class="fx-note"><span class="hi">학습 손실의 하한이 약 0.5</span>다. Full FT의 학습 손실 0.99가 검증 손실 0.13보다 높은 것은 과소적합이 아니라, 학습 때만 켜지는 label smoothing과 RandAugment 때문이다(검증의 <code>evaluate</code>는 smoothing 없는 CE를 쓴다). 목적은 <b>과신 방지</b> &mdash; 정답 확률을 1.0까지 밀어붙이지 않게 한다.</p></div>
+</div>
+
+<div class="pt lab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>TODO(3) evaluate — 정확도와 macro-F1</h3>
+<pre class="code">return {"loss": total / max(n, 1),
+        "acc": float((p == t).mean()),
+        "macro_f1": float(f1_score(t, p, average="macro"))}</pre>
+  <p><b>[설명]</b> macro-F1 = 클래스마다 F1(정밀도와 재현율의 조화평균)을 구해 <b>단순 평균</b>. 정확도는 많은 클래스만 잘 맞혀도 높게 나오지만, macro-F1은 모든 클래스를 똑같이 취급해 <span class="hi">약한 클래스를 드러낸다</span>. <code>@torch.no_grad()</code> + <code>model.eval()</code> &mdash; 기울기를 계산하지 않고 dropout 등을 끈다. CIFAR-10은 클래스가 균형이라 acc와 macro-F1이 거의 같게 나왔다(예: 0.9618 / 0.9618).</p>
+</div>
+
+<!-- ===== lab1 ===== -->
+<h3 class="sub-title" id="tl-lab1">1 · lab1_transfer_learning.py — 백본 × 전략 비교</h3>
+
+<div class="pt lab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>코드 흐름 다섯 단계</h3>
+  <div class="flow">
+    <div class="fl"><b>1) 백본 + 새 헤드</b><span><code>timm.create_model(..., pretrained=True, num_classes=10)</code> &mdash; 사전학습 가중치를 불러오고 <b>마지막 층만 10클래스용 새 층(무작위)</b>으로 교체. LP-FT면 프로빙 <code>best.pt</code>를 통째로 불러온다</span></div>
+    <div class="fl"><b>2) 전처리 · 분할</b><span><code>resolve_transforms</code> → <code>build_cifar10_loaders</code></span></div>
+    <div class="fl"><b>3) 학습 전략</b><span>probe: 백본 동결 · 헤드만 / full: 전체 해동 + LLRD &mdash; TODO(1)(2)</span></div>
+    <div class="fl"><b>4) 학습 + 최고 체크포인트</b><span>warmup + cosine(TODO 3), 에폭마다 검증 macro-F1이 최고면 <code>best.pt</code> 저장(TODO 4)</span></div>
+    <div class="fl"><b>5) 테스트 1회</b><span><code>best.pt</code>로 테스트를 <b>딱 한 번</b> &mdash; 교안 11.4의 6 · 7단계와 같다</span></div>
+  </div>
+</div>
+
+<div class="pt lab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>TODO(1)(2) 프로빙과 Full FT + LLRD</h3>
+<pre class="code">if args.mode == "probe":                                   <span class="cm"># TODO(1) 선형 프로빙</span>
+    for p in model.parameters(): p.requires_grad = False   <span class="cm"># 백본 전체 얼리기</span>
+    for p in model.get_classifier().parameters(): p.requires_grad = True   <span class="cm"># 헤드만 풀기</span>
+    optimizer = torch.optim.AdamW(model.get_classifier().parameters(), lr=lr, weight_decay=0.0)
+else:                                                      <span class="cm"># TODO(2) Full FT + LLRD</span>
+    for p in model.parameters(): p.requires_grad = True
+    optimizer = create_optimizer_v2(model, opt="adamw", lr=lr, weight_decay=args.weight_decay,
+                                    layer_decay=args.layer_decay if args.layer_decay &lt; 1 else None)</pre>
+  <ul class="ul">
+    <li><b>프로빙</b>: <code>requires_grad=False</code>면 그 파라미터는 기울기를 계산하지 않는다. 옵티마이저에도 <b>헤드만</b> 넘기고, 헤드가 작아 weight decay는 0(관례). lr은 1e-3</li>
+    <li><b>Full FT</b>: lr 5e-5(프로빙의 1/20) &mdash; 이미 잘 학습된 백본을 <b>살짝만</b> 고친다. <code>drop_path=0.1</code>(블록을 무작위로 건너뛰는 규제)은 Full FT에서만 켠다</li>
+    <li><b>LLRD(층별 학습률 감쇠)</b>: 출력에 가까운 층은 큰 lr, 입력 쪽일수록 <span class="tex">lr\times0.75^{\text{깊이}}</span>로 작게 &mdash; <span class="hi">얕은 층은 선 · 질감 같은 일반 특징이라 거의 그대로 두고, 깊은 층만 새 작업에 맞게 많이 고친다</span>. layer_decay = 1.0이면 None을 넘겨 불필요한 그룹을 만들지 않는다</li>
+  </ul>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>숫자로 — LLRD 0.75이면 층마다 lr이 얼마나 작아지나</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>출력에서 몇 층 아래</th><th>배율 <span class="tex">0.75^k</span></th><th>lr (기준 5e-5)</th></tr></thead>
+    <tbody>
+      <tr><td>0 (헤드)</td><td>1.000</td><td>5.0e-5</td></tr>
+      <tr><td>1</td><td>0.750</td><td>3.8e-5</td></tr>
+      <tr><td>4</td><td>0.316</td><td>1.6e-5</td></tr>
+      <tr><td>8</td><td>0.100</td><td>5.0e-6</td></tr>
+      <tr><td>12</td><td>0.032</td><td>1.6e-6</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">12층 아래(입력 근처)는 헤드의 약 <b>1/32</b> 보폭으로만 움직인다. 이 배율은 파라미터 그룹마다 <code>lr_scale</code>로 붙고, timm 스케줄러의 <code>step_update</code>가 실제 lr에 곱해 준다 &mdash; 그래서 TODO(2)와 TODO(3)이 한 쌍이다. 자가 점검: <code>sorted({g.get('lr_scale', 1.0) for g in optimizer.param_groups})</code>가 여러 값이면 정상.</p>
+</div>
+
+<div class="pt lab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>TODO(3)(4) warmup + cosine 스케줄러, 검증 기준 최고 체크포인트</h3>
+<pre class="code">scheduler = CosineLRScheduler(optimizer, t_initial=epochs * steps_per_epoch, lr_min=lr * 0.01,
+                              warmup_t=int(args.warmup_epochs * steps_per_epoch), warmup_lr_init=lr * 0.01,
+                              t_in_epochs=False)                 <span class="cm"># step 단위</span>
+...
+if val["macro_f1"] > best["macro_f1"]:                        <span class="cm"># TODO(4) 검증으로만 고른다</span>
+    best = {**val, "epoch": epoch + 1}
+    torch.save(model.state_dict(), os.path.join(out_dir, "best.pt"))</pre>
+  <p><b>warmup</b>: 처음 1에폭 동안 lr을 <b>lr × 0.01에서 lr까지 서서히</b> 올린다 &mdash; 무작위 헤드가 낸 큰 기울기가 초반에 백본을 망가뜨리는 것을 막는다. 그 뒤 <b>cosine</b>으로 lr × 0.01까지 부드럽게 내린다. <code>_StepWrapper</code>는 <code>train_one_epoch</code>의 <code>scheduler.step()</code>을 timm의 <code>step_update(번호)</code>로 이어 주는 어댑터이고, 생성할 때 <code>step_update(0)</code>을 먼저 불러야 <b>첫 배치부터</b> warmup 시작 lr과 LLRD 배율이 적용된다.</p>
+  <p class="fx-note">교안 11.4 정정 상자와 같은 이야기 &mdash; 여기서는 기준을 <b>검증 macro-F1</b>로 명시해 고르고, 테스트 10,000장은 마지막에 한 번만 본다.</p>
+</div>
+
+<div class="pt lab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>[결과] 백본 × 전략 비교표</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>백본</th><th>전략</th><th>학습 파라미터</th><th>검증 macro-F1</th><th>테스트 acc</th><th>테스트 macro-F1</th></tr></thead>
+    <tbody>
+      <tr><td>ResNet-50 (a1_in1k)</td><td>프로빙</td><td>20,490 (0.09%)</td><td>0.7987</td><td>0.8018</td><td>0.7994</td></tr>
+      <tr><td>ViT-S (augreg_in21k)</td><td>프로빙</td><td>3,850 (0.02%)</td><td>0.9620</td><td>0.9618</td><td>0.9618</td></tr>
+      <tr><td>ConvNeXt-T (DINOv3)</td><td>프로빙</td><td>7,690 (0.03%)</td><td>0.9567</td><td>0.9543</td><td>0.9542</td></tr>
+      <tr><td>ConvNeXt-T (DINOv3)</td><td><b>Full FT</b> (LLRD 0.75 · 5에폭)</td><td>27,827,818 (100%)</td><td><b>0.9821</b></td><td><b>0.9783</b></td><td><b>0.9783</b></td></tr>
+      <tr><td>ConvNeXt-T (DINOv3)</td><td>LP-FT (축소)</td><td>27,827,818 (100%)</td><td>0.9695*</td><td>0.9567</td><td>0.9566</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">* LP-FT는 검증을 1,000장만 써서 검증값을 다른 실행과 직접 비교하지 않는다. 헤드 파라미터 수 = 특징 차원 × 10 + 10 &mdash; ResNet-50 2048·10+10 = 20,490, ViT-S 384·10+10 = 3,850, ConvNeXt-T 768·10+10 = 7,690. <span class="hi">헤드 크기는 백본의 마지막 특징 차원이 정한다.</span></p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Full FT 에폭별</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+    <tbody>
+      <tr><td>학습 손실</td><td>1.676</td><td>1.203</td><td>1.084</td><td>1.016</td><td>0.994</td></tr>
+      <tr><td>검증 macro-F1</td><td>0.9582</td><td>0.9725</td><td>0.9773</td><td>0.9801</td><td>0.9821</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="pt lab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>[고찰] 백본 · 프로빙 vs Full FT · LP-FT</h3>
+  <ul class="ul">
+    <li><b>백본</b> &mdash; 프로빙만으로 ViT-S 0.962, ConvNeXt-T 0.954, ResNet-50은 0.799. <span class="hi">ImageNet-1k로만 학습한 ResNet-50보다, ImageNet-21k로 학습한 ViT-S와 약 17억 장으로 자기지도 학습한 DINOv3 교사에서 증류한 ConvNeXt-T의 특징이 더 잘 전이됐다.</span> 사전학습 데이터의 규모 · 방식이 주된 차이로 보이지만 구조(CNN · ViT)도 함께 달라 한 요인으로 단정하기 어렵다</li>
+    <li><b>프로빙 vs Full FT</b> &mdash; Full FT가 테스트 macro-F1을 <b>2.4%p</b> 올렸지만 학습 파라미터는 약 <b>3,600배</b>(27,827,818 ÷ 7,690)다. 프로빙이 이미 0.95를 넘는다는 것 자체가 &lsquo;좋은 백본의 특징은 그대로 써도 강하다&rsquo;는 뜻이다</li>
+    <li><b>LP-FT</b> &mdash; 프로빙 헤드(테스트 0.954)에서 출발해 4,000장 · 1에폭만 미세조정하니 0.957로 <b>0.2%p</b> 올랐다. 성능 대부분은 이미 학습된 헤드에서 나왔고, 짧은 미세조정이 프로빙 성능을 해치지 않고 조금 끌어올린 정도다. 무작위 헤드로 시작한 Full FT의 첫 에폭 0.958과 비슷하지만 검증 규모 · 학습량이 달라 직접 비교하지 않았다</li>
+  </ul>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>LP-FT는 왜 하나 — 무작위 헤드가 백본을 흔드는 문제</h3>
+  <p>Full FT를 무작위 헤드로 시작하면, 처음 몇 스텝 동안 헤드의 출력이 엉망이라 <b>큰 손실 → 큰 기울기</b>가 백본까지 거꾸로 흘러 잘 학습된 특징을 흐트러뜨린다(Kumar et al., 2022 &lsquo;Fine-Tuning can Distort Pretrained Features&rsquo;). LP-FT는 <b>① 백본을 얼린 채 헤드부터 맞추고(프로빙) ② 그 헤드로 Full FT</b>를 시작해 초반 기울기를 작게 만든다. warmup과 LLRD도 같은 목적(초반 · 얕은 층을 살살)이다 &mdash; 이번 실습은 세 장치를 모두 쓴다.</p>
+</div>
+
+<!-- ===== lab2 ===== -->
+<h3 class="sub-title" id="tl-lab2">2 · lab2_peft_lora.py — LoRA의 r과 DoRA</h3>
+
+<div class="pt lab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>LoRA · DoRA · rsLoRA 한 번에</h3>
+  <div class="fx"><div class="tex-d">W=W_0+\underbrace{s}_{\text{스케일}}\cdot B A,\qquad B\in\mathbb R^{d\times r},\;A\in\mathbb R^{r\times k},\qquad s=\frac{\alpha}{r}\;(\text{LoRA}),\;\;s=\frac{\alpha}{\sqrt r}\;(\text{rsLoRA})</div></div>
+  <ul class="ul">
+    <li><b>LoRA</b>: 원래 가중치 <span class="tex">W_0</span>(d×k)는 얼려 두고 옆에 작은 행렬 두 개의 곱 <span class="tex">BA</span>만 학습한다. <span class="hi">r(rank)이 작을수록 학습할 숫자가 적다</span> &mdash; d × k 대신 r × (d + k)</li>
+    <li><b>DoRA</b>: 가중치를 <b>크기(magnitude)</b>와 <b>방향</b>으로 나눠 방향은 LoRA로, 크기는 출력 차원마다 하나씩 따로 학습 &mdash; Full FT의 움직임에 더 가깝게</li>
+    <li><b>rsLoRA</b>: 스케일을 <span class="tex">\alpha/r</span> 대신 <span class="tex">\alpha/\sqrt r</span>로 &mdash; r이 커져도 업데이트가 지나치게 작아지지 않게(rank-stabilized)</li>
+    <li><b>α = 2r 재매개화</b>: α를 r의 배수로 두면 r을 바꿀 때 α를 따로 맞출 일이 준다</li>
+  </ul>
+</div>
+
+<div class="pt lab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>TODO(1)(2)(3) 어디에 붙이나 · 설정 · 병합</h3>
+<pre class="code">DEFAULT_TARGETS = {
+    "vit": r"blocks\..*\.(qkv|proj|fc1|fc2)",   <span class="cm"># 어텐션 + MLP 전 층 (patch_embed.proj 제외)</span>
+    "convnext": ["fc1", "fc2"],                  <span class="cm"># 블록 MLP</span>
+    "resnet": r"layer\d+\..*\.conv\d+",         <span class="cm"># Conv2d 도 LoRA 지원 (stem 제외)</span>
+}
+lora_cfg = LoraConfig(r=args.r, lora_alpha=int(args.alpha_ratio * args.r), lora_dropout=args.dropout,
+                      target_modules=targets, use_dora=args.dora, use_rslora=args.rslora,
+                      modules_to_save=[head_name])          <span class="cm"># 새 헤드는 «완전 학습»</span>
+model = get_peft_model(base, lora_cfg)
+...
+merged = model.merge_and_unload()            <span class="cm"># TODO(3) W0 + s·BA 병합 → 일반 timm 모델</span>
+t_merged = time_inference(merged, test_loader, device)</pre>
+  <ul class="ul">
+    <li><b>target_modules</b> &mdash; 층 이름이 모델마다 달라 계열별로 정한다. &lsquo;LoRA Without Regret&rsquo;(2025): <span class="hi">어텐션만이 아니라 MLP까지 붙여야 Full FT에 가깝다</span>. 정규식이 <code>blocks\.</code>로 시작해 이미지를 조각내는 <code>patch_embed.proj</code>는 빠진다</li>
+    <li><b>modules_to_save=[head]</b> &mdash; 헤드는 새로 만든 무작위 층이라 LoRA가 아니라 통째로 학습해야 한다. <span class="hi">빼먹으면 헤드가 얼어 학습이 전혀 안 된다</span></li>
+    <li><b>lr 5e-4</b> &mdash; Full FT(5e-5)의 약 10배. LoRA는 학습하는 숫자가 적고 B가 0에서 시작하므로 큰 lr이 알맞다</li>
+    <li><b>save_pretrained</b> &mdash; 백본 전체가 아니라 <b>어댑터(LoRA 행렬 + 헤드)만</b> 저장(수 MB)</li>
+    <li><b>merge_and_unload</b> &mdash; 학습 때는 W₀와 BA를 따로 두지만, 배포 때는 하나로 더해 LoRA 분기를 없앤다. 수학적으로 같은 모델이라 성능은 같고 추가 계산은 0</li>
+  </ul>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>숫자로 — r16 ViT-S의 학습 파라미터 1,183,498을 손으로 맞춰 보기</h3>
+  <p>ViT-S는 은닉 차원 384, 블록 12개, MLP 확장 4배(1,536)다. LoRA 한 층의 파라미터는 <span class="tex">r\times(d_{in}+d_{out})</span>.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>층 (블록 하나)</th><th>입력 → 출력</th><th>r = 16일 때</th></tr></thead>
+    <tbody>
+      <tr><td>qkv</td><td>384 → 1,152</td><td>16 × 1,536 = 24,576</td></tr>
+      <tr><td>proj</td><td>384 → 384</td><td>16 × 768 = 12,288</td></tr>
+      <tr><td>fc1</td><td>384 → 1,536</td><td>16 × 1,920 = 30,720</td></tr>
+      <tr><td>fc2</td><td>1,536 → 384</td><td>16 × 1,920 = 30,720</td></tr>
+      <tr><td colspan="2"><b>블록 하나 합</b> × 12 블록</td><td>98,304 × 12 = <b>1,179,648</b></td></tr>
+      <tr><td colspan="2">+ 헤드 (384 × 10 + 10)</td><td>3,850</td></tr>
+      <tr><td colspan="2"><b>전체</b></td><td><b>1,183,498</b> &mdash; 실행 출력과 정확히 같다</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">LoRA 부분이 r에 정비례하므로 r = 4 · 64는 1/4 · 4배(298,762 · 4,722,442). <b>DoRA</b>는 출력 차원마다 크기 하나가 더 붙는다: (1,152 + 384 + 1,536 + 384) × 12 = <b>41,472</b> → 1,224,970. rsLoRA · α = 2r의 스케일은 <span class="tex">2r/\sqrt r=2\sqrt r</span> &mdash; r = 4 · 16 · 64에서 <b>4 · 8 · 16</b>이다.</p>
+</div>
+
+<div class="pt lab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>[결과] r × {LoRA, DoRA} 표 (CPU · 학습 640장 · 1에폭 · 테스트 500장)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>방법</th><th>r</th><th>학습 파라미터</th><th>어댑터</th><th>추론 (병합 전 → 후)</th><th>테스트 acc</th><th>테스트 macro-F1</th></tr></thead>
+    <tbody>
+      <tr><td>LoRA</td><td>4</td><td>298,762 (1.36%)</td><td>1.2 MB</td><td>3.39초 → 2.82초</td><td>0.550</td><td>0.518</td></tr>
+      <tr><td>LoRA</td><td><b>16</b></td><td>1,183,498 (5.18%)</td><td>4.5 MB</td><td>4.14초 → 3.15초</td><td><b>0.798</b></td><td><b>0.776</b></td></tr>
+      <tr><td>LoRA</td><td>64</td><td>4,722,442 (17.89%)</td><td>18.0 MB</td><td>4.71초 → 3.15초</td><td>0.584</td><td>0.526</td></tr>
+      <tr><td>DoRA</td><td>16</td><td>1,224,970 (5.35%)</td><td>4.7 MB</td><td>5.38초 → 3.16초</td><td>0.794</td><td>0.774</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">추론 시간은 CPU에서 64장 배치 하나의 평균. 피크 메모리는 GPU 전용 측정이라 CPU 실행에서는 <code>None</code>(측정 불가).</p>
+</div>
+
+<div class="pt lab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>[고찰] 파라미터 · 병합 · 성능</h3>
+  <ul class="ul">
+    <li><b>파라미터와 저장 크기</b> &mdash; r을 4배씩 늘리면 학습 파라미터와 어댑터 크기도 약 4배씩. r = 64는 17.9% &mdash; 은닉 차원 384의 1/6에 해당하는 랭크라 <span class="hi">저랭크로 압축해 아끼는 이점이 크게 줄어든다</span>. r = 16 어댑터 4.5 MB는 ViT-S 전체 가중치 약 87 MB의 5% 수준</li>
+    <li><b>병합</b> &mdash; 병합 전에는 r이 클수록 · DoRA일수록 느렸지만, <b>병합 후에는 모두 약 3초</b>로 같아졌다. 병합 전후 테스트 성능도 같아, 병합이 수학적으로 동치이고 <span class="hi">추론 비용이 늘지 않음</span>을 확인했다</li>
+    <li><b>성능</b> &mdash; r = 16(LoRA · DoRA)이 약 0.77로 가장 높고 r = 4 · 64는 약 0.52. 스케일 <span class="tex">2\sqrt r</span>이 r = 4에서는 4로 작아 20스텝 안에 충분히 학습되지 못했고, r = 64에서는 16으로 커져 업데이트가 과도했던 것으로 보인다(학습 손실 2.10 · 2.19). 20스텝 · 단일 시드라 해석은 제한적</li>
+    <li><b>LoRA vs DoRA</b> &mdash; 차이 0.002는 실습 3의 시드 간 표준편차 0.06보다 훨씬 작아 의미 있는 차이로 보기 어렵다</li>
+  </ul>
+</div>
+
+<!-- ===== lab3 ===== -->
+<h3 class="sub-title" id="tl-lab3">3 · lab3_optuna_hpo.py — Optuna로 LoRA 하이퍼파라미터 탐색</h3>
+
+<div class="pt lab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>코드 흐름 — objective가 HP를 뽑고, build_and_train이 학습해 점수를 돌려준다</h3>
+  <div class="flow">
+    <div class="fl"><b>create_study</b><span>maximize · TPESampler · MedianPruner · SQLite 저장 &mdash; TODO(5)</span></div>
+    <div class="fl"><b>objective(trial)</b><span><code>suggest_*</code>로 HP 7개를 뽑는다 &mdash; TODO(4)</span></div>
+    <div class="fl"><b>build_and_train</b><span>뽑힌 HP로 LoraConfig(TODO 1) → 파라미터 예산 제약 등록(TODO 2) → 에폭마다 report · prune 판정(TODO 3)</span></div>
+    <div class="fl"><b>결과 내보내기</b><span>trials.csv · 중요도(PED-ANOVA) · history · parallel 그림</span></div>
+    <div class="fl"><b>시드 3개 재학습</b><span>최적 HP가 운 좋은 시드 하나에서만 좋았던 건 아닌지 → 평균 ± 표준편차</span></div>
+  </div>
+</div>
+
+<div class="pt lab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>TODO(4) 탐색 공간 7개 · TODO(5) 샘플러와 프루너</h3>
+<pre class="code">params = {
+    "lr":           trial.suggest_float("lr", 1e-4, 1e-2, log=True),        <span class="cm"># 자릿수로 움직이는 값 → log</span>
+    "r":            trial.suggest_categorical("r", [4, 8, 16, 32, 64]),
+    "alpha_ratio":  trial.suggest_categorical("alpha_ratio", [1, 2, 4]),    <span class="cm"># α = ratio·r</span>
+    "lora_dropout": trial.suggest_float("lora_dropout", 0.0, 0.2),
+    "dora":         trial.suggest_categorical("dora", [False, True]),
+    "batch":        trial.suggest_categorical("batch", [16, 32, 64]),
+    "weight_decay": trial.suggest_float("weight_decay", 1e-4, 0.1, log=True),
+}
+study = optuna.create_study(study_name=..., storage=storage, load_if_exists=True, direction="maximize",
+        sampler=optuna.samplers.TPESampler(seed=args.seed, n_startup_trials=5),
+        pruner=optuna.pruners.MedianPruner(n_startup_trials=5, n_warmup_steps=1))</pre>
+  <ul class="ul">
+    <li><b>log=True</b> &mdash; 1e-4~1e-2를 <b>자릿수 기준으로 고르게</b>. 그냥 뽑으면 약 91%가 1e-3~1e-2에 몰린다(1e-4~1e-3 구간은 전체 길이의 약 9%뿐)</li>
+    <li><b>define-by-run</b> &mdash; <code>suggest_*</code>를 objective <b>안에서</b> 불러야 시행마다 새로 뽑히고, 조건부 공간(예: DoRA일 때만 어떤 값)도 만들 수 있다</li>
+    <li><b>TPE</b> &mdash; 지난 결과를 &lsquo;좋았던 시행들&rsquo;과 &lsquo;나빴던 시행들&rsquo;로 나눠, 좋았던 쪽 분포에서 다음 후보를 더 자주 뽑는다. <span class="hi">n_startup_trials=5 &mdash; 처음 5시행은 무작위</span>로 자료를 모은다</li>
+    <li><b>MedianPruner</b> &mdash; 같은 에폭의 다른 시행 <b>중앙값보다 나쁘면</b> 중단. 완료 시행 5개가 쌓이고, 첫 에폭(step 0)이 지난 뒤부터 판단한다(n_warmup_steps=1)</li>
+  </ul>
+</div>
+
+<div class="pt lab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>TODO(1)(2)(3) LoRA 설정 · 파라미터 예산 · 가지치기</h3>
+<pre class="code">lora_cfg = LoraConfig(r=params["r"], lora_alpha=int(params["alpha_ratio"] * params["r"]),
+                      lora_dropout=params["lora_dropout"], use_dora=params["dora"], use_rslora=True,
+                      target_modules=guess_targets(args.model), modules_to_save=[head_name])
+model = get_peft_model(base, lora_cfg).to(device)
+trial.set_user_attr("trainable_params", n_train)                       <span class="cm"># TODO(2) 메모</span>
+trial.set_constraint("param_budget", n_train - args.max_trainable)    <span class="cm"># ≤ 0 이면 조건 만족</span>
+...
+trial.report(val["macro_f1"], step=epoch)                             <span class="cm"># TODO(3) 중간 점수 보고</span>
+if trial.should_prune():
+    raise optuna.TrialPruned()                                        <span class="cm"># PRUNED 로 기록</span></pre>
+  <ul class="ul">
+    <li><b>set_constraint</b> &mdash; 성능만 보면 무조건 큰 r을 고를 수 있다. 메모리 · 저장 예산(학습 파라미터 상한)을 걸어 <b>현실적인 해만</b> 최적 후보로 삼는다. g ≤ 0이면 feasible</li>
+    <li><span class="hi"><code>TrialPruned</code>로 끝내야 PRUNED로 기록된다</span> &mdash; 다른 예외로 죽이면 FAIL로 남는다</li>
+    <li>실습 2와 같은 LoRA 설정이지만 값을 고정하지 않고 Optuna가 뽑은 params에서 가져온다. 스케줄러는 OneCycleLR(처음 10% 동안 lr을 올렸다가 내린다)</li>
+  </ul>
+</div>
+
+<div class="pt lab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>[결과] 4개 시행 · 최적 조합 시드 재학습 (ViT-Tiny · CPU · 학습 400장 · 2에폭)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>trial</th><th>검증 macro-F1</th><th>lr</th><th>r</th><th>α/r</th><th>dropout</th><th>DoRA</th><th>배치</th><th>weight decay</th><th>학습 파라미터</th></tr></thead>
+    <tbody>
+      <tr><td><b>0</b></td><td><b>0.747</b></td><td>1.25e-3</td><td>4</td><td>4</td><td>0.08</td><td>X</td><td>32</td><td>1.8e-4</td><td>149,386</td></tr>
+      <tr><td>1</td><td>0.634</td><td>1.10e-4</td><td>32</td><td>2</td><td>0.13</td><td>O</td><td>16</td><td>2.1e-2</td><td>1,202,314</td></tr>
+      <tr><td>2</td><td>0.692</td><td>8.17e-4</td><td>16</td><td>1</td><td>0.09</td><td>X</td><td>32</td><td>2.4e-4</td><td>591,754</td></tr>
+      <tr><td>3</td><td>0.370</td><td>4.27e-4</td><td>32</td><td>4</td><td>0.05</td><td>X</td><td>64</td><td>2.6e-4</td><td>1,181,578</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>trial 0 조합 재학습</th><th>시드 0</th><th>시드 1</th><th>시드 2</th><th>평균 ± 표준편차</th></tr></thead>
+    <tbody><tr><td>검증 macro-F1</td><td>0.747</td><td>0.623</td><td>0.688</td><td><b>0.686 ± 0.062</b></td></tr></tbody>
+  </table></div>
+  <p class="fx-note">trial 0의 149,386 검산: ViT-Tiny(은닉 192, MLP 768, 12블록), r = 4 &mdash; 블록당 4 × (768 + 384 + 960 + 960) = 12,288, × 12 = 147,456, + 헤드 192 × 10 + 10 = 1,930 → <b>149,386</b>. 중요도(PED-ANOVA): 학습률 0.41 · weight decay 0.32 · dropout 0.26 순(완료 시행 4개라 참고용).</p>
+  <div class="deck">
+    <div class="deck-h">실습 3 그림 <span>최적화 이력 · 평행 좌표</span></div>
+    <div class="deck-g">
+      <figure class="sld"><img width="960" height="540" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml11-lab3-history.png" alt="실습 3 최적화 이력"><figcaption><b>history</b> 시행별 검증 macro-F1과 최고값</figcaption></figure>
+      <figure class="sld"><img width="1260" height="600" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml11-lab3-parallel.png" alt="실습 3 평행 좌표"><figcaption><b>parallel</b> lr · r · dropout과 점수의 관계</figcaption></figure>
+    </div>
+  </div>
+</div>
+
+<div class="pt lab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>[고찰] TPE · pruning이 작동하지 않은 이유, 시드 편차, 배치 크기</h3>
+  <ul class="ul">
+    <li><b>TPE와 pruning</b> &mdash; 둘 다 완료 시행 5개 이후부터 작동하도록 설정되어, <span class="hi">4개 시행으로 끝난 이번 탐색은 사실상 무작위 탐색</span>이었고 PRUNED도 없었다. trial 3은 첫 에폭 점수 0.225로 같은 시점 중앙값 0.586보다 크게 낮았지만, 첫 에폭(step 0)은 판단에서 빠지고 2에폭 설정에서는 판단 시점(step 1)이 곧 마지막 에폭이라, 시행이 더 쌓였어도 시간을 아끼지 못했을 것이다</li>
+    <li><b>시드 편차</b> &mdash; 같은 조합에서 시드만 바꿔도 0.62~0.75 &mdash; <span class="hi">trial 0과 trial 2의 차이 0.055보다 크다</span>. 단일 시행 점수로는 HP를 고르기 어려워 여러 시드의 평균 ± 표준편차를 보고해야 한다. 시드 0 재학습 값이 trial 0과 일치해 시드 고정은 정상 작동했다</li>
+    <li><b>배치 크기</b> &mdash; 배치 64인 trial 3이 가장 낮았다. 학습 400장에서 배치 64는 drop_last로 자투리를 버려 에폭당 6번(400 ÷ 64 = 6.25), 2에폭 동안 <b>12번만</b> 갱신했다(배치 32는 24번). 다만 lr · r도 함께 달라 배치만의 영향으로 단정할 수 없다</li>
+  </ul>
+</div>
+
+<div class="pt lab" id="tl-reflect">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 노트</span>[고찰] KerasTuner RandomSearch vs Optuna — 같은 시행 수에서 무엇이 달라지나</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th></th><th>KerasTuner (<a class="ext" href="#lab">참고 실습</a>)</th><th>Optuna (실습 3)</th></tr></thead>
+    <tbody>
+      <tr><td>탐색</td><td>RandomSearch 3회</td><td>TPE &mdash; 단, 처음 5회는 무작위</td></tr>
+      <tr><td>조기 중단</td><td>없음</td><td>MedianPruner &mdash; 완료 5회 이후부터</td></tr>
+      <tr><td>평가 안정성</td><td><b>시행마다 같은 조합을 2번 학습해 평균</b> (executions_per_trial=2)</td><td>시행당 1번 + 최적 조합만 시드 3개 재학습</td></tr>
+      <tr><td>관리 기능</td><td>&mdash;</td><td>DB 저장 · 이어서 탐색 · 병렬 · 제약 · 중요도 · 시각화</td></tr>
+    </tbody>
+  </table></div>
+  <ul class="ul">
+    <li><b>같은 시행 수(3~4회)에서는 차이가 없다</b> &mdash; TPE와 pruning이 모두 작동하기 전이라 Optuna도 무작위 탐색과 같아진다. 데이터 · 에폭을 줄였는지와 무관하게 <b>설정에서 정해지는</b> 결과다</li>
+    <li><b>시행이 쌓이면 차이가 생긴다</b> &mdash; 6번째부터 TPE는 좋았던 영역(이번 결과라면 lr 1e-3 근처 · 배치 32)을 더 자주 탐색하고, pruning은 에폭이 충분할 때 가망 없는 시행을 일찍 끝내 같은 시간에 더 많은 조합을 시험한다. README 원래 조건(40회 · 3에폭 이상)이었다면 확인할 수 있었다</li>
+    <li><b>평가가 흔들리면 평균 내기가 중요하다</b> &mdash; 시드 표준편차 0.062가 조합 간 차이 0.055보다 큰 상황에서는, 같은 조합을 여러 번 학습해 평균 내는 KerasTuner 방식이 더 믿을 만하다(전체 데이터라면 시드 차이는 줄어들 가능성이 크다)</li>
+  </ul>
+  <p><span class="hi">정리: 시행 수가 적을 때는 탐색 알고리즘의 차이보다 평가의 안정성이 더 중요하고, TPE와 pruning은 수십 번 이상 시행할 수 있을 때 효과를 발휘한다.</span> 실험 관리(DB · 재개 · 제약 · 중요도 · 시각화)는 Optuna가 더 편리했다.</p>
+</div>
+
+<div class="pit"><b>다시 풀 때 틀리기 쉬운 곳 ★</b>
+  <ul class="ul">
+    <li><code>zero_grad</code>는 <code>backward</code> <b>앞</b>, 클리핑은 <code>backward</code>와 <code>step</code> <b>사이</b>, <code>backward</code>는 autocast <b>밖</b></li>
+    <li>프로빙 옵티마이저에는 <b>헤드 파라미터만</b> &mdash; <code>model.parameters()</code>를 넘기면 동결된 백본까지 옵티마이저 상태를 만들어 메모리를 낭비한다</li>
+    <li>LLRD가 필요 없으면 <code>layer_decay=None</code>, 스케줄러는 <code>t_in_epochs=False</code>(step 단위)</li>
+    <li>LoRA에서 <code>modules_to_save=[head]</code>를 빼면 학습이 안 된다 · <code>lora_alpha</code>는 int</li>
+    <li>Optuna 가지치기는 <code>raise optuna.TrialPruned()</code> · lr · weight decay는 <code>log=True</code></li>
+    <li>체크포인트 · HP는 <b>검증</b>으로 고르고, 테스트는 <b>마지막 1회</b></li>
+  </ul>
+</div>
+</section>
+
+
 <!-- ===================== 실습 ===================== -->
 <section class="sec" id="lab">
-  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">실습 — Getting started with KerasTuner (하이퍼파라미터 튜닝)<small>main.py 한 파일 · TODO 없음 · 이 컴퓨터에서 실행한 출력</small></h2></div>
+  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">참고 실습 — Getting started with KerasTuner (하이퍼파라미터 튜닝)<small>main.py 한 파일 · TODO 없음 · 이 컴퓨터에서 실행한 출력</small></h2></div>
 
 <div class="note-box"><b>무엇을 하나</b> &mdash; 교안 11.4에서는 은닉 노드 500개 · 드롭아웃 30% · rmsprop처럼 <b>사람이 정한</b> 값으로 모델을 만들었다. 이런 값(학습 전에 정하는 값)을 <b>하이퍼파라미터</b>라 하고, <b>KerasTuner</b>는 &ldquo;이 범위 안에서 골라 봐&rdquo;라고 적어 두면 여러 조합을 직접 학습시켜 <b>검증 성능이 가장 좋은 조합</b>을 찾아 준다. 공식 튜토리얼 &lsquo;Getting started with KerasTuner&rsquo;를 한 파일로 옮긴 코드다. 채워 넣을 TODO는 없고, 제출 형식도 폴더에 따로 적혀 있지 않다.</div>
 
