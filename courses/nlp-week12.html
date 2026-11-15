@@ -632,7 +632,33 @@ td .term,th .term{font-weight:700}
   <li>짧은 문장 <b>뒤에</b> 0(PAD)을 채워 최대 길이에 맞춘다(<b>post-padding</b>) &rarr; 입력은 <b>(batch, timesteps, dim)</b> 3차원 텐서</li>
   <li>PAD 위치는 <b>마스킹</b>으로 연산에서 제외한다 &rarr; Keras에서는 <code>Embedding(..., mask_zero=True)</code></li>
 </ul>
-<div class="deep"><b>🔎 왜 RNN에는 마스킹이 꼭 필요한가</b> &mdash; many-to-one RNN은 <b>마지막 시점의 h(T)</b>를 분류기로 넘긴다. post-padding된 짧은 리뷰(예: 실제 50단어, maxlen 200)는 뒤 150칸이 전부 PAD라, 마스킹이 없으면 RNN이 의미 없는 0을 150번 더 읽으며 기억을 희석시킨 뒤의 h(200)을 넘기게 된다. <code>mask_zero=True</code>면 Keras는 PAD 시점에서 은닉 상태를 갱신하지 않고 그대로 넘겨, <b>실제 마지막 단어의 은닉 상태</b>가 분류기로 간다. 11주차 Text-CNN은 전역 최대 풀링이 위치와 무관해 pre-padding으로도 충분했던 것과 대비된다.</div>
+<div class="mynote">
+  <p><b>왜 RNN에는 마스킹이 꼭 필요한가</b></p>
+  <p>마스킹은 <span class="hi">길이가 서로 다른 시퀀스를 한 번에 묶어(배치 처리) 학습할 때, 가짜 데이터인 패딩이 모델의 계산과 학습을 망가뜨리는 것을 막기 위해</span> 필요하다. 자연어 · 시계열은 문장이나 데이터의 길이가 제각각이라, 병렬로 처리하려면 가장 긴 데이터에 맞춰 짧은 데이터의 빈자리를 의미 없는 숫자(보통 0)로 채운다 &mdash; 이것이 <b>패딩</b>. <b>마스킹</b>은 모델에게 &ldquo;<b>이 0들은 실제 데이터가 아니니 무시해</b>&rdquo;라고 알려 주는 표시다.</p>
+  <ul class="ul">
+    <li>패딩 = 길이를 맞추려고 <b>채우는</b> 것(데이터 쪽) · 마스킹 = 채운 칸을 <b>건너뛰게</b> 하는 것(모델 쪽) &mdash; 둘은 한 세트다</li>
+    <li>마스크는 &lsquo;진짜 = True, 패딩 = False&rsquo;인 표다. 예: [12, 7, 45, 0, 0] → [T, T, T, F, F]</li>
+  </ul>
+</div>
+<div class="deep"><b>🔎 RNN에서 특히 문제가 되는 이유 — 순서대로 읽으며 기억을 덮어쓰기 때문</b> &mdash; many-to-one RNN은 <b>마지막 시점의 h(T)</b>를 분류기로 넘긴다. post-padding된 짧은 리뷰(예: 실제 50단어, maxlen 200)는 뒤 150칸이 전부 PAD라, 마스킹이 없으면 RNN이 의미 없는 0을 150번 더 읽으며 기억을 희석시킨 뒤의 h(200)을 넘기게 된다. <code>mask_zero=True</code>면 Keras는 PAD 시점에서 은닉 상태를 갱신하지 않고 그대로 넘겨, <b>실제 마지막 단어의 은닉 상태</b>가 분류기로 간다. 11주차 Text-CNN은 전역 최대 풀링이 위치와 무관해 pre-padding으로도 충분했던 것과 대비된다.
+  <p><b>숫자로 — 실습 1 노트북의 RNN에 PAD를 이어 붙이면</b> (같은 가중치 W<sub>x</sub> · W<sub>h</sub>, b = 0으로 직접 계산)</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>읽은 것</th><th>은닉 상태 h</th></tr></thead>
+    <tbody>
+      <tr><td>실제 단어 4개 끝 (h(4))</td><td><b>[0.990, 0.718]</b> &mdash; 문장의 요약</td></tr>
+      <tr><td>+ PAD 1칸</td><td>[0.408, 0.072]</td></tr>
+      <tr><td>+ PAD 2칸</td><td>[0.188, −0.016]</td></tr>
+      <tr><td>+ PAD 3칸</td><td><b>[0.090, −0.018]</b> &mdash; 요약이 거의 지워졌다</td></tr>
+      <tr><td>+ PAD 6칸</td><td>[0.010, −0.003]</td></tr>
+    </tbody>
+  </table></div>
+  <p>PAD 입력은 0이라 <span class="tex">h_t=	anh(h_{t-1}W_h)</span>만 남고, |W<sub>h</sub>| &lt; 1이면 한 칸마다 기억이 줄어든다(<a class="ext" href="#vanishing">12.1.4</a>의 반복 곱과 같은 원리). <span class="hi">PAD 3칸만으로 문장 내용이 분류기에 거의 전달되지 않는다</span> &mdash; 150칸이면 말할 것도 없다. 마스킹하면 PAD 시점에서 h를 갱신하지 않으므로 [0.990, 0.718]이 그대로 넘어간다.</p>
+  <ul class="ul">
+    <li><b>pre-padding이면 괜찮나?</b> &mdash; 이 예처럼 b = 0이면 앞의 PAD 동안 h가 0에 머물러 결과가 같다. 하지만 학습된 편향 b ≠ 0이면 h가 0에서 벗어나 출발점이 문장마다 달라지고, PAD도 기울기 계산 · 학습에 섞인다. 그래서 Keras 문서도 RNN에는 <b>mask_zero를 함께</b> 쓰도록 권한다(마스킹이 있으면 pre/post 어느 쪽이든 결과가 같다)</li>
+    <li><b>many-to-many(번역 · 개체명 인식)</b>에서는 PAD 위치의 출력이 손실에 섞이면 &lsquo;PAD를 맞히는 법&rsquo;을 배우게 된다 &mdash; 마스크로 그 위치의 손실을 0으로 뺀다. 12.2절 어텐션에서도 PAD에 가중치가 가지 않게 같은 마스크를 쓴다</li>
+    <li><code>mask_zero=True</code>면 번호 0은 PAD 전용이 되므로 실제 단어에 0을 쓰면 안 된다 &mdash; 교안 코드의 <code>input_dim = 어휘 수 + 1</code>이 그 이유. 실습 1에서는 <a class="ext" href="#lc-pad">개념 ⑦</a></li>
+  </ul>
+</div>
 </section>
 
 <!-- ===================== 12.1.4 ===================== -->
