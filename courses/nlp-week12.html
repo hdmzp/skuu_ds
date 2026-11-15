@@ -1166,6 +1166,7 @@ context = tf.matmul(weights, enc_outputs)                   <span class="cm"># �
   </table></div>
   <figure class="labfig"><img width="690" height="340" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp12-lab-c41.png" alt="IMDB 리뷰 길이 분포와 maxlen 200"><figcaption>리뷰 길이 분포 · 빨간 선 maxlen = 200</figcaption></figure>
   <p><b>내 결과</b> &mdash; 리뷰 길이 평균 239 · 중앙값 178 · 최댓값 2,494단어(긴 리뷰가 평균을 끌어올림). 43단어짜리 리뷰는 뒤 157칸이 0. 결과 표 <code>(25000, 200)</code>. post 자르기라 긴 리뷰는 <b>결말이 잘린다</b> &mdash; 과제 1-2 해석에서 다시 나온다.</p>
+  <p class="fx-note">마스킹이 왜 꼭 필요한지 숫자로 &mdash; 이 노트북의 RNN에 PAD 3칸만 이어 붙여도 h(4) [0.990, 0.718]이 [0.090, −0.018]로 지워진다: <a class="ext" href="#padding">12.1.3 패딩과 마스킹</a>.</p>
 </div>
 
 <h3 class="sub-title" id="lc-emb">⑧ Embedding — 번호를 학습되는 벡터로</h3>
