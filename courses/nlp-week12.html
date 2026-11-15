@@ -808,6 +808,38 @@ td .term,th .term{font-weight:700}
   <li><span class="tex">\partial C(t)/\partial C(t-1)=f(t)</span> &mdash; 반복 곱해지는 항이 고정된 <span class="tex">W_h</span>가 아니라 <b>학습되는 값 f(t)</b>로 대체된다</li>
   <li>망각 게이트가 열려 있으면(f(t) ≈ 1) 먼 과거까지 기울기가 전달된다 &mdash; f = 0.99면 50시점 뒤에도 0.99⁵⁰ = <b>0.61</b>, f = 0.95면 0.077이다(기본 RNN 0.81⁵⁰ = 2.6 × 10⁻⁵와 비교)</li>
 </ul>
+<div class="mynote">
+  <p><b>왜 &lsquo;덧셈&rsquo;이면 기울기가 살아남나 — 직접 미분해 보기</b></p>
+  <p>핵심: <span class="hi">덧셈(+)은 미분할 때 두 경로를 따로 떼어 준다.</span> 그래서 직전 상태 <span class="tex">C_{t-1}</span>이 활성화 함수나 가중치 행렬 곱셈을 거치지 않고 독립된 항으로 남는다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th></th><th>일반 RNN (곱셈 · 합성 함수)</th><th>LSTM (덧셈 갱신)</th></tr></thead>
+    <tbody>
+      <tr><td>순전파</td><td><span class="tex">h_t=\tanh(Wh_{t-1}+Ux_t)</span></td><td><span class="tex">C_t=(f_t\odot C_{t-1})+(i_t\odot\tilde C_t)</span></td></tr>
+      <tr><td>한 칸 미분</td><td><span class="tex">\dfrac{\partial h_t}{\partial h_{t-1}}=\big(1-\tanh^2(\cdot)\big)\cdot W</span></td><td><span class="tex">\dfrac{\partial C_t}{\partial C_{t-1}}=f_t+(\text{나머지 항})</span></td></tr>
+      <tr><td>매번 곱해지는 것</td><td>고정된 <b>W</b> × 1보다 작은 <b>tanh′</b></td><td>매 시점 모델이 정하는 <b>f<sub>t</sub></b></td></tr>
+      <tr><td>길어지면</td><td>거듭제곱되어 0으로 사라진다</td><td>f<sub>t</sub> ≈ 1이면 거의 그대로 전달된다</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>덧셈 갱신이 만든 세 가지 변화</b></p>
+  <ol class="ul">
+    <li><b>경로 분리</b> &mdash; C<sub>t</sub>가 + 로 나뉘어 있어 C<sub>t−1</sub>로 편미분하면 앞부분 <span class="tex">f_t\odot C_{t-1}</span>에서 <b>f<sub>t</sub>만 깔끔하게</b> 떨어져 나온다</li>
+    <li><b>비선형 함수 회피</b> &mdash; C<sub>t−1</sub>이 tanh 안에 갇혀 있지 않고 바깥에 더해져 있어, 1보다 작은 미분값이 강제로 곱해지지 않는다</li>
+    <li><b>고정 가중치 대체</b> &mdash; 반복해서 곱해지는 주된 항이 고정 행렬 W가 아니라, 입력에 따라 스스로 조절하는 f<sub>t</sub>로 바뀐다</li>
+  </ol>
+  <p class="fx-note">요약: 덧셈 갱신 덕분에 C<sub>t−1</sub>은 활성화 함수 · 고정 가중치의 방해를 받지 않는 <b>직통 경로(highway)</b>를 갖고, 역전파의 핵심 항이 W 대신 학습되는 f<sub>t</sub>로 단순해진다.</p>
+</div>
+<div class="deep"><b>🔎 숫자로 · 그리고 남은 두 질문</b>
+  <p><b>20칸 거슬러 갈 때</b> &mdash; 일반 RNN에서 z = 1 근처라면 tanh′(1) = 1 − tanh²(1) = 0.42, W = 0.9이면 한 칸에 0.42 × 0.9 = <b>0.378</b>을 곱한다 → <span class="tex">0.378^{20}\approx3.5\times10^{-9}</span>. LSTM은 f = 0.95면 <span class="tex">0.95^{20}\approx0.36</span> &mdash; <span class="hi">같은 20칸에서 약 1억 배 차이</span>. RNN은 W를 키워 버티려 해도 tanh′가 포화 구간에서 0에 가까워 막힌다.</p>
+  <p><b>① 생략한 &lsquo;나머지 항&rsquo;은 왜 문제가 안 되나</b> &mdash; f<sub>t</sub> · i<sub>t</sub> · C̃<sub>t</sub>는 h<sub>t−1</sub>로 계산되고, h<sub>t−1</sub> = o<sub>t−1</sub> ⊙ tanh(C<sub>t−1</sub>)이라 C<sub>t−1</sub>과 간접적으로 연결된다. 이 우회 경로들은 W · sigmoid′(최대 0.25) · tanh′를 거치므로 <b>RNN처럼 금방 작아진다</b>. 하지만 여러 칸에 걸친 기울기는 &lsquo;가능한 모든 경로의 합&rsquo;이라, 작아지는 경로가 있어도 <span class="tex">f_t f_{t-1}\cdots</span>로만 이어지는 <b>직통 경로 하나가 살아 있으면</b> 기울기는 사라지지 않는다. 나머지 항은 &lsquo;있어도 직통 경로를 깎지 못하는&rsquo; 덧붙은 항이다.</p>
+  <p><b>② ResNet과 같은 원리</b> &mdash; 컴퓨터비전의 잔차 연결 <span class="tex">y=x+F(x)</span>를 미분하면 <span class="tex">\partial y/\partial x=1+\partial F/\partial x</span>. 덧셈이 &lsquo;1&rsquo;짜리 직통 경로를 만들어, F의 기울기가 작아져도 앞 층까지 신호가 간다(<a class="ext" href="machine-learning-week11.html#resnet">ML 11주차 ResNet</a>). LSTM은 그 직통 경로의 계수가 1로 고정되지 않고 <b>f<sub>t</sub>로 열고 닫을 수 있는</b> 버전이다 &mdash; 시간 방향의 ResNet인 셈이고, 실제로 게이트 달린 잔차 연결인 Highway Network(2015)는 LSTM에서 아이디어를 가져왔다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th></th><th>무엇을 따라 깊나</th><th>직통 경로</th><th>미분</th></tr></thead>
+    <tbody>
+      <tr><td>LSTM</td><td>시간(시점)</td><td>C<sub>t</sub> = f<sub>t</sub> ⊙ C<sub>t−1</sub> + …</td><td>f<sub>t</sub> + …</td></tr>
+      <tr><td>ResNet</td><td>층(깊이)</td><td>y = x + F(x)</td><td>1 + …</td></tr>
+    </tbody>
+  </table></div>
+</div>
 <div class="pit"><b>원리를 뒤집은 보기</b> &mdash; &ldquo;셀 상태가 매 시점 tanh로 덮어써져 과거 정보를 새로 갱신하기 때문&rdquo;은 <b>기본 RNN의 문제점</b>을 그대로 옮긴 오답이다. 교안 32p 생각해 볼 문제 ③(망각 게이트 편향 <span class="tex">b_f</span>를 크게 초기화하면?) &mdash; 학습 초기부터 f(t) ≈ 1이 되어 &lsquo;기본값이 기억 유지&rsquo;가 되므로, 기울기가 처음부터 먼 과거까지 흐른다. Keras LSTM의 <code>unit_forget_bias=True</code>(기본값)가 바로 b_f를 1로 초기화하는 설정이다.</div>
 </section>
 
