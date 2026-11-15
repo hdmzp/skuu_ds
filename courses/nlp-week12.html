@@ -708,6 +708,35 @@ td .term,th .term{font-weight:700}
   <li><b>셀 상태 C(t)</b> = 장기 기억 &mdash; 컨베이어 벨트처럼 곧게 흐른다 / <b>은닉 상태 h(t)</b> = 단기 기억 및 현재 시점의 출력</li>
   <li>세 게이트 &mdash; <b>망각 f(t) · 입력 i(t) · 출력 o(t)</b> (리셋 · 업데이트는 GRU의 게이트다)</li>
 </ul>
+<div class="mynote">
+  <p><b>LSTM은 어떻게 지금 모양이 되었나 — 두 단계</b></p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>때</th><th>누가</th><th>무엇을</th><th>왜</th></tr></thead>
+    <tbody>
+      <tr><td>1997</td><td>Hochreiter &amp; Schmidhuber</td><td><b>셀 상태 + 입력 게이트 + 출력 게이트</b> (게이트 2개)</td><td>기본 RNN은 먼 과거를 기억하지 못한다(장기 의존성 · 기울기 소실) &rarr; 따로 흐르는 &lsquo;기억 통로&rsquo;를 만들자</td></tr>
+      <tr><td>2000</td><td>Gers et al.</td><td><b>망각 게이트 추가</b> &rarr; 오늘날의 3-게이트 표준 LSTM</td><td>긴 시계열을 계속 읽다 보면 다 쓴 옛 기억이 쌓이기만 한다 &rarr; <b>스스로 비우는</b> 기능이 필요했다</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>세 게이트를 쉬운 말로</b> &mdash; 셀 상태를 &lsquo;공책&rsquo;이라고 하면:</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>게이트</th><th>쉬운 말</th><th>정확히는</th></tr></thead>
+    <tbody>
+      <tr><td><b>망각 게이트 f</b></td><td>🧽 <b>지우개</b> &mdash; 공책에서 이제 필요 없는 내용을 얼마나 지울까</td><td>시그모이드(0~1)로 이전 셀 상태의 각 칸을 얼마나 남길지 정한다. 1 = 그대로, 0 = 전부 지움</td></tr>
+      <tr><td><b>입력 게이트 i</b></td><td>✏️ <b>연필</b> &mdash; 지금 들어온 내용 중 무엇을 공책에 새로 적을까</td><td>새 후보값 C̃ 중 셀 상태에 더할 비율을 정한다</td></tr>
+      <tr><td><b>출력 게이트 o</b></td><td>📢 <b>스피커</b> &mdash; 공책 내용 중 지금 무엇을 말할까</td><td>갱신된 셀 상태(tanh)를 걸러 다음 은닉 상태 h(t)로 내보낸다</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">한 줄로: <span class="hi">지우고(f) → 적고(i) → 필요한 만큼 말한다(o)</span>. 공책(C)은 덧셈으로만 고쳐지므로 오래 들고 갈 수 있다.</p>
+</div>
+<div class="deep"><b>🔎 망각 게이트가 없으면 무슨 일이 — 숫자로</b> &mdash; 1997년 LSTM은 사실상 <span class="tex">f=1</span>로 고정된 셈이다(셀 상태가 자기 자신을 그대로 더하는 고리, &lsquo;constant error carousel&rsquo;). 매 시점 <span class="tex">i\odot\tilde C=0.5</span>씩 새로 적는다고 하자.
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>10시점 뒤</th><th>셀 상태 C</th><th>tanh(C) &rarr; h에 들어가는 값</th></tr></thead>
+    <tbody>
+      <tr><td>망각 없음 (f = 1)</td><td>0.5 × 10 = <b>5.0</b> &mdash; 계속 커진다</td><td>tanh(5.0) = 0.9999 &mdash; <b>포화</b>, 새 정보가 와도 출력이 거의 안 바뀐다</td></tr>
+      <tr><td>망각 있음 (f = 0.5)</td><td>0.5 → 0.75 → 0.875 → … → <b>0.999</b> (≈ 0.5 / (1 − 0.5) = 1.0에서 멈춤)</td><td>tanh(1.0) = 0.762 &mdash; 여전히 변할 여지가 있다</td></tr>
+    </tbody>
+  </table></div>
+  기억이 쌓이기만 하면 셀 상태가 무한히 커져 tanh가 포화되고 학습도 멈춘다. 망각 게이트는 <b>스스로 비워 셀 상태를 일정한 크기 안에 붙잡아 두는</b> 장치다. 반대로 기억해야 할 때는 f ≈ 1로 열어 기울기를 먼 과거까지 보낸다(<a class="ext" href="#lstm-why">교안 26p</a>) &mdash; 그래서 Keras는 망각 게이트 편향을 1로 초기화해(<code>unit_forget_bias=True</code>) 처음에는 &lsquo;지우지 않는 쪽&rsquo;에서 출발한다. 실습 1에서 첫 단어의 망각 게이트는 [0.77, 0.75]였다(<a class="ext" href="#lc-lstm">실습 개념 ④</a>).</div>
 <svg viewBox="0 0 640 230" role="img" aria-label="LSTM 셀: 위쪽에 셀 상태 C가 왼쪽에서 오른쪽으로 곧게 흐르며 망각 게이트와 곱해지고 입력 게이트와 후보값의 곱이 더해진다. 아래쪽 h(t-1)과 x(t)가 네 개의 선형변환 f, i, C~, o로 들어가고 출력 게이트가 tanh(C)와 곱해져 h(t)가 된다" style="width:100%;max-width:640px;display:block;margin:10px auto">
   <defs><marker id="l1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1b3f8b"/></marker><marker id="l2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1d4ed8"/></marker></defs>
   <rect x="70" y="20" width="500" height="180" rx="10" fill="#f8fafc" stroke="#94a3b8"/>
