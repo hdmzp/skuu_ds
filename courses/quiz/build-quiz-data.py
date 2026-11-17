@@ -96,6 +96,16 @@ TERMS = {
    'BoW','문서 벡터','임베딩','단어 임베딩','분포 가설','Word2Vec','CBOW','Skip-gram','윈도우','네거티브 샘플링','서브샘플링',
    'FastText','OOV','전이 학습','유추','Doc2Vec','SBERT','정적 임베딩','문맥 임베딩','ELMo','BERT','다의어',
  ],
+ 'ml-w12': [
+   '세그멘테이션','인스턴스','의미론적','Semantic','Object Detection','경계 상자','레이블 맵','label map',
+   '인코더','디코더','잠재 공간','오토인코더','Auto-encoder','병목','비지도 학습','자기 지도 학습','깊이 회귀',
+   '노이즈 제거','super-resolution','업스케일링','binary_crossentropy',
+   '전치 합성곱','디컨볼루션','transposed','보폭','패딩','언풀링','풀링 마스크','최대 풀링','팽창','atrous','팽창률','수용 영역',
+   'FCN','VGG-16','1×1','FCN-8s','include_top','block3_pool','Conv2DTranspose','add','U-Net','스킵 연결','연결','컨텍스트','위치 정보',
+   'H×W×N','교차 엔트로피','sparse_categorical_crossentropy','Cityscapes','argmax','adam','클래스 불균형','IOU','IoU','DICE','Dice','dice_loss','softmax','one_hot',
+   '모폴로지','침식','Mask R-CNN','Faster R-CNN','이진 마스크','SegNet','DeepLab','CRF','score map','RefiNet','PSPNet','피라미드','대형 커널',
+   'DeepLabV3','Batch normalization','캐스케이드','Fine-grain','Focal loss','L1',
+ ],
  'ml-w11': [
    '이미지 분류','예측','카테고리','CNN','Convolution','Pool','불변하는 특징','Fully Connected','Feature extraction','Classification',
    '컬러 이미지','gray scale','깊이','RGB','3차원','커널','필터','특징 맵','Feature map','CIFAR-10','32by32',
@@ -311,3 +321,5 @@ build('nlp-w11', 'materials/자연어처리/week11-quiz100.html', 'courses/quiz/
       {'title': '11주차 · 자연어처리 딥러닝 Ⅰ', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week11-quiz100.html'})
 build('nlp-w12', 'materials/자연어처리/week12-quiz100.html', 'courses/quiz/nlp-w12.js',
       {'title': '12주차 · 자연어처리 딥러닝 Ⅱ', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week12-quiz100.html'})
+build('ml-w12', 'materials/기계학습특론/week12-quiz100.html', 'courses/quiz/ml-w12.js',
+      {'title': '12주차 · 딥러닝 영상 분할', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week12-quiz100.html'})

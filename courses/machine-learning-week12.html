@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기계학습특론 | 12주차 수업내용</title>
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0c1a3a">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.svgfig{padding:11px 11px 9px}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:560px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+.alg-h{font-size:14.5px;font-weight:700;margin:24px 0 10px;padding:9px 13px;border-radius:8px}
+.alg-h.hi-x{background:#f0fdf4;border:1px solid #bbf7d0;color:#14532d}
+.alg-h.lo-x{background:#fef2f2;border:1px solid #fecaca;color:#7f1d1d}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+/* 수식 카드 */
+.fx{background:#f8faff;border:1px solid #cfdcf5;border-left:3px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:10px 0}
+.fx + .fx{margin-top:8px}
+.fx-lab{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.fx-note{font-size:12px;color:#4b5563;line-height:1.7;margin-top:7px}
+.fx-note b{color:var(--ink)}
+.tex-d{position:relative;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:9px 2px 5px;text-align:center}
+.tex-d .katex{font-size:1.12em}
+.tex{white-space:nowrap}
+/* 풀이 예제 */
+.ex{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin:10px 0}
+.ex-q{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.65;
+  background:#f1f0ec;border-radius:7px;padding:9px 12px;margin-bottom:4px}
+.ex-q em{font-style:normal;color:var(--red);font-size:11px;font-weight:700;display:block;margin-bottom:3px}
+.step{display:grid;grid-template-columns:20px 1fr;gap:9px;align-items:baseline;
+  font-size:12.5px;color:#4b5563;line-height:1.75;padding:5px 0}
+.step i{font-style:normal;font-weight:700;color:var(--accent);font-size:11.5px}
+.step .katex{font-size:1em}
+.ex-ans{margin-top:8px;background:#f0fdf4;border:1px solid #22c55e;border-radius:8px;
+  padding:9px 12px;font-size:12.5px;color:#14532d;line-height:1.7}
+.ex-ans b{color:var(--green)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+
+/* 주차 내비 */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* 노트북 주석 */
+.nbc{color:#b45309;font-weight:700;background:#fff7ed;border-radius:3px;padding:0 3px}
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .out{color:#c9f24b}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 함수 카드 */
+.fnc{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:var(--radius);padding:13px 15px;margin:11px 0}
+.fnc h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fnc .sig{
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;color:#1b3f8b;
+  background:#eef2fb;border:1px solid #dbe3f5;border-radius:6px;padding:7px 10px;margin:7px 0 9px;
+  overflow-x:auto;white-space:pre;
+}
+.fnc dl{display:grid;grid-template-columns:minmax(84px,auto) 1fr;gap:5px 12px;font-size:12.5px;line-height:1.65}
+.fnc dt{font-weight:700;color:var(--ink)}
+.fnc dd{color:#4b5563}
+@media(max-width:440px){.fnc dl{grid-template-columns:1fr;gap:2px}.fnc dd{margin-bottom:6px}}
+/* 개념 하이라이트 + 툴팁 */
+
+/* ===== 4주차 개편: 슬라이드 모아보기 · 출처 뱃지 ===== */
+/* ===== 출처 뱃지 ===== */
+.bdg{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.02em;padding:3px 9px;border-radius:999px;white-space:nowrap;line-height:1.5}
+.bdg-gyo{background:#eef2fb;color:#1b3f8b;border:1px solid #c4d2ee}
+.bdg-flip{background:#fff7ed;color:#b45309;border:1px solid #f0c48a}
+.bdg-live{background:#fdf0f5;color:#9d174d;border:1px solid #f3bcd2}
+.bdg-plus{background:#f0fdfa;color:#0f766e;border:1px solid #99e0d6}
+.bdg-quiz{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+.tbl-wrap{position:relative}
+/* ===== 대면 강의 상자: 핑크(필기) · 초록(팩트체크) · 네온(트렌드) ===== */
+.lec,.fix,.neon{border-radius:var(--radius);padding:13px 16px;margin:12px 0;font-size:13px;line-height:1.85}
+.lec::before,.fix::before,.neon::before{display:table;font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:8px}
+.lec{background:#fdf2f8;border:1px solid #f9a8d4;border-left:4px solid #db2777;color:#4a1d36}
+.lec::before{content:'🎙 대면 강의 필기';background:#db2777;color:#fff}
+.lec b{color:#831843}
+.lec .ul li{color:#4a1d36}.lec .ul li::before{background:#db2777}
+.fix{background:#f0fdf4;border:1px solid #86efac;border-left:4px solid #16a34a;color:#14532d}
+.fix::before{content:'🌿 개념 정리';background:#16a34a;color:#fff}
+.fix b{color:#14532d}
+.fix .ul li{color:#14532d}.fix .ul li::before{background:#16a34a}
+.neon{background:#0b1224;border:1px solid #39ff88;border-left:4px solid #39ff88;color:#dbe7ff;
+  box-shadow:0 0 0 1px rgba(57,255,136,.15),0 0 18px rgba(57,255,136,.18),inset 0 0 22px rgba(125,249,255,.05)}
+.neon::before{content:'⚡ 최근 트렌드';background:#39ff88;color:#04120a;box-shadow:0 0 10px rgba(57,255,136,.7)}
+.neon b{color:#7df9ff}
+.neon .ul li{color:#dbe7ff}.neon .ul li b{color:#7df9ff}.neon .ul li::before{background:#39ff88;opacity:1;box-shadow:0 0 6px #39ff88}
+.neon a.ext{color:#ff7ad9}
+.boxkey{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center;font-size:12.5px;color:var(--muted);margin:4px 0 12px}
+.bk{font-size:11px;font-weight:700;padding:2px 10px;border-radius:999px;white-space:nowrap}
+.lec-k{background:#db2777;color:#fff}.fix-k{background:#16a34a;color:#fff}
+.neon-k{background:#0b1224;color:#39ff88;border:1px solid #39ff88;box-shadow:0 0 8px rgba(57,255,136,.45)}
+.deep-k{background:#6d28d9;color:#fff}
+.bigmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin:12px 0 16px}
+.bigmap a{display:grid;grid-template-columns:auto 1fr;gap:2px 9px;align-items:start;text-decoration:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;color:var(--ink)}
+.bigmap a:hover{border-color:#db2777;box-shadow:0 4px 12px rgba(219,39,119,.12)}
+.bigmap i{grid-row:span 2;font-style:normal;font-weight:800;font-size:12px;color:#fff;background:linear-gradient(135deg,#db2777,#16a34a);width:24px;height:24px;border-radius:50%;display:grid;place-items:center}
+.bigmap b{font-size:12.5px}.bigmap span{font-size:11.5px;color:var(--muted);line-height:1.5}
+table.folds td.te{background:#fce7f3;color:#9d174d;font-weight:700;text-align:center}
+table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
+.sub-title[id^="lec-"]{scroll-margin-top:64px}
+.fix[id]{scroll-margin-top:64px}
+
+.pt[id],.sub-title[id],.pt p[id]{scroll-margin-top:64px}
+.bdg-pres{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
+
+/* ===== 개념 카드 ===== */
+.pt{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin:11px 0}
+.pt-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;font-weight:700;line-height:1.45;margin-bottom:7px}
+.pt > p{font-size:13.5px;color:#3f4854;line-height:1.85}
+.pt > p + p{margin-top:9px}
+.pt > p b{color:var(--ink)}
+.pt.gyo{border-left-color:#1b3f8b}
+.pt.flip{border-left-color:#b45309}
+.pt.live{border-left-color:#9d174d}
+.pt.plus{border-left-color:#0f766e}
+.pt.lab{border-left-color:#6d28d9}
+.bdg-lab{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
+.hi{background:linear-gradient(transparent 58%,#ffe9a8 58%);font-weight:700;color:var(--ink);padding:0 1px}
+.pt pre.code{margin:9px 0}
+
+/* 본문 속 짧은 보충 설명 상자 */
+.qa{background:#f0fdfa;border:1px solid #99e0d6;border-left:4px solid #0f766e;
+  border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:11px 0;
+  font-size:13px;line-height:1.85;color:#134e4a}
+.qa::before{content:'보충설명';display:table;font-size:10.5px;font-weight:800;letter-spacing:.02em;
+  padding:3px 9px;border-radius:999px;margin-bottom:7px;background:#e3f7f3;color:#0f766e;border:1px solid #99e0d6}
+.qa b{color:#0f3d3a}
+.qa .ul li{color:#134e4a}
+.qa .ul li::before{background:#0f766e;opacity:.8}
+
+/* ===== 슬라이드 모아보기 ===== */
+.deck{background:#efeeea;border:1px solid var(--border);border-radius:var(--radius);padding:12px 12px 14px;margin-bottom:20px}
+.deck-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.deck-h span{font-size:11px;font-weight:400;color:var(--muted)}
+.deck-t{font-size:12px;font-weight:700;color:var(--accent);margin:13px 0 7px;padding-left:8px;border-left:3px solid var(--accent)}
+.deck-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.sld{background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px;margin:0;cursor:zoom-in;transition:box-shadow .15s,transform .15s}
+.sld:hover{box-shadow:0 6px 16px rgba(18,34,80,.13);transform:translateY(-2px)}
+.sld img{display:block;width:100%;height:auto;border-radius:4px;background:#fff}
+.sld figcaption{font-size:11px;color:var(--muted);line-height:1.5;margin-top:6px;text-align:center}
+.sld figcaption b{color:var(--accent)}
+
+/* ===== 한 줄 요약 ===== */
+.oneline{background:#16233f;color:#e7edf9;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+.oneline > p{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--lime)}
+.oneline .ul li{color:#c5d0e8;font-size:13px}
+.oneline .ul li b{color:#fff}
+.oneline .ul li::before{background:var(--lime);opacity:.9}
+
+/* ===== 슬라이드 확대 보기 ===== */
+#lb{position:fixed;inset:0;background:rgba(9,15,31,.94);display:none;align-items:center;justify-content:center;
+  z-index:400;padding:52px 60px 64px;cursor:zoom-out;-webkit-user-select:none;user-select:none}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:80vh;border-radius:8px;background:#fff;box-shadow:0 18px 50px rgba(0,0,0,.45);cursor:default}
+#lb .cap{position:absolute;left:0;right:0;bottom:18px;text-align:center;color:#d9e1f3;font-size:12.5px;line-height:1.6;padding:0 20px;cursor:default}
+#lb .cap b{color:#fff}
+#lb .cap .num{display:block;font-size:11px;color:#9fb0d4;margin-top:4px;letter-spacing:.04em}
+#lb button{
+  position:absolute;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;
+  border-radius:50%;width:44px;height:44px;font-size:20px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .15s;
+  font-family:inherit;padding:0;
+}
+#lb button:hover{background:rgba(255,255,255,.22)}
+#lb button:disabled{opacity:.25;cursor:default}
+#lb .prev{left:12px;top:50%;transform:translateY(-50%)}
+#lb .next{right:12px;top:50%;transform:translateY(-50%)}
+#lb .x{right:12px;top:12px;width:38px;height:38px;font-size:17px}
+@media(max-width:560px){
+  #lb{padding:48px 10px 92px}
+  #lb .prev{left:50%;top:auto;bottom:16px;transform:translateX(-64px)}
+  #lb .next{right:50%;top:auto;bottom:16px;transform:translateX(64px)}
+  #lb .cap{bottom:70px}
+}
+
+.kg{display:block;width:108px;height:42px;margin:0 auto}
+.mapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px;margin-top:10px}
+.mapgrid a{
+  display:block;text-decoration:none;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:9px;padding:10px 13px;transition:.15s;
+}
+.mapgrid a:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(18,34,80,.1)}
+.mapgrid b{display:block;font-size:12.5px;color:var(--ink)}
+.mapgrid span{font-size:11.5px;color:var(--muted);line-height:1.55}
+.legend{
+  display:flex;flex-wrap:wrap;gap:9px 16px;align-items:center;
+  background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius);
+  padding:13px 15px;margin:0 0 24px;font-size:12px;color:var(--muted);line-height:1.6;
+}
+.legend i{font-style:normal;display:flex;align-items:center;gap:7px}
+.legend .legend-t{flex:0 0 100%;font-size:12.5px;font-weight:700;color:var(--ink)}
+.legend .legend-t2{flex:0 0 100%;font-size:11.5px;color:var(--muted);border-top:1px dashed var(--border);padding-top:10px;margin-top:1px}
+
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+/* 퀴즈 목록 */
+.qz{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 15px;margin-bottom:9px}
+.qz h4{font-size:13px;font-weight:700;margin-bottom:5px}
+.qz .ans{
+  display:block;margin-top:7px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;
+  padding:8px 11px;font-size:12.5px;color:#14532d;line-height:1.7;
+}
+.qz .ans summary{cursor:pointer;font-weight:700;color:#166534;list-style:none}
+.qz .ans summary::-webkit-details-marker{display:none}
+.qz .ans summary::before{content:'▸ ';font-weight:700}
+.qz .ans[open] summary::before{content:'▾ '}
+.qz .ans pre.code{margin:8px 0 0}
+
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 실시간 강의 강조 */
+.live{
+  background:#fffaf3;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#7c2d12;
+}
+.live::before{
+  content:'🎙 실시간 강의 강조';display:inline-block;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.live b{color:#7c2d12}
+.live .ul li{color:#7c2d12}
+.live .ul li::before{background:#b45309;opacity:.75}
+/* 본인 복습 필기 — 공부하다 헷갈려 찾아본 내용 */
+.mynote{
+  background:#f7f5ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.mynote::before{
+  content:'📝 내 복습 필기 · 헷갈려서 찾아본 것';display:inline-block;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.mynote b{color:#2e1065}
+.mynote p + p{margin-top:7px}
+.mynote .ul li{color:#3b2a6b}
+.mynote .ul li::before{background:#6d28d9;opacity:.75}
+.mynote .tbl-wrap{margin:8px 0 4px;background:#fff}
+.mynote table{min-width:0}
+.mynote .fx{background:#fff;margin:9px 0}
+/* 100문제 해설 포인트 */
+.qexp{
+  background:#f0fdf4;border:1px solid #bbf7d0;border-left:4px solid #16a34a;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;font-size:13px;line-height:1.8;color:#14532d;
+}
+.qexp::before{
+  content:'✅ 100문제 해설에서 짚어 준 것';display:inline-block;background:#16a34a;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.qexp b{color:#14532d}
+.qexp .ul li{color:#166534}
+.qexp .ul li::before{background:#16a34a;opacity:.8}
+.fml{
+  display:block;background:#eef2fb;border:1px solid #dbe3f5;border-radius:8px;
+  padding:9px 12px;margin:8px 0;font-size:13px;color:#1b3f8b;text-align:center;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;overflow-x:auto;white-space:nowrap;
+}
+
+/* 계산으로 채운 수업시간 도식 (SVG) — 좁은 화면에서는 가로 스크롤 */
+.svgfig{padding:11px 11px 9px}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:560px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+.figs > .note-box{margin:0}
+/* 7주차 추가: 심화 · 함정 · 복습 상자 (자연어처리 페이지와 같은 모양) */
+.deep{
+  background:#f7f5ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:13px 16px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.deep::before{
+  content:'🔎 한 걸음 더 — 심화 개념';display:table;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:8px;
+}
+.deep b{color:#2e1065}
+.deep .ul li{color:#3b2a6b}
+.deep .ul li::before{background:#6d28d9;opacity:.75}
+.deep .tbl-wrap{margin:9px 0 4px;background:#fff}
+.deep pre.code{margin:9px 0}
+.deep .fx{background:#fff;border-color:#d8cdf7;border-left-color:#6d28d9;margin:9px 0}
+.deep .fx-lab{color:#6d28d9}
+.deep .term{background:#ede7ff;color:#5b21b6;border-bottom-color:#6d28d9}
+.deep .term:hover,.deep .term.on{background:#ddd2fb}
+.pit{
+  background:#fff7ed;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:12.5px;line-height:1.8;color:#7c2d12;
+}
+.pit::before{
+  content:'⚠ 여기서 갈린다';display:table;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.pit b{color:#7c2d12}
+.pit .ul li{color:#7c2d12}
+.pit .ul li::before{background:#b45309;opacity:.8}
+.pit table{min-width:0}
+.pit .tbl-wrap{margin:8px 0 4px;background:#fff}
+.rv{background:var(--surface);border:1px solid var(--border);border-left:4px solid #0f766e;border-radius:var(--radius);margin:10px 0;overflow:hidden}
+.rv summary{cursor:pointer;list-style:none;padding:12px 15px;font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.6;display:flex;gap:9px;align-items:baseline}
+.rv summary::-webkit-details-marker{display:none}
+.rv summary i{font-style:normal;flex:none;font-size:11px;font-weight:800;color:#fff;background:#0f766e;border-radius:999px;padding:1px 8px}
+.rv summary::after{content:'답 보기 ▾';margin-left:auto;flex:none;font-size:11px;font-weight:700;color:#0f766e}
+.rv[open] summary::after{content:'접기 ▴'}
+.rv .ans{border-top:1px dashed #99e0d6;background:#f0fdfa;padding:12px 15px;font-size:13px;line-height:1.85;color:#134e4a}
+.rv .ans b{color:#0f3d3a}
+.rv .ans .ul li{color:#134e4a}
+.rv .ans .tbl-wrap{background:#fff;margin:8px 0}
+.rv .ans table{min-width:0}
+.rv .ans pre.code{margin:8px 0}
+.rv .one{display:block;background:#fff;border:1px solid #99e0d6;border-radius:7px;padding:7px 11px;margin-bottom:8px;font-weight:700;color:#0f3d3a}
+
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#map">한눈에 보기</a>
+  <a href="#docs">강의자료</a>
+  <a href="#seg">12.1 분할의 개념 · 종류</a>
+  <a href="#encdec">12.2 인코더-디코더 · 오토인코더</a>
+  <a href="#decode">12.3 전치 합성곱 · 언풀링 · 팽창</a>
+  <a href="#fcnunet">12.4 FCN · U-Net</a>
+  <a href="#segtrain">12.5 레이블 맵 · 손실 · IoU · Dice</a>
+  <a href="#models">12.6 인스턴스 분할 · 여러 모델</a>
+  <a href="#summary">핵심 정리</a>
+  <a href="#next">다음 주</a>
+</nav>
+
+<div class="wrap">
+
+<div class="weeknav">
+  <a href="machine-learning.html" class="plan">← 강의계획서</a>
+  <a href="machine-learning-week09.html">9주차 · 군집화 · 의사결정나무 · 딥러닝</a>
+  <a href="machine-learning-week10.html">10주차 · 합성곱 신경망(CNN)</a>
+  <a href="machine-learning-week11.html">11주차 · 이미지 분류</a>
+  <span class="cur">12주차 · 이미지 분할</span>
+</div>
+
+<section class="hero">
+  <p class="kicker">12주차 · 2026-2학기</p>
+  <h1>12. 이미지 분할 — 픽셀마다 클래스를 붙인다</h1>
+  <p>11주차 분류는 사진 한 장에 <b>레이블 하나</b>였다. 분할(segmentation)은 <b>픽셀 하나하나</b>에 레이블을 붙여, 입력과 같은 크기의 <b>레이블 맵</b>을 내놓는다. 그러려면 CNN이 줄여 놓은 특징 맵을 <b>다시 원래 크기로 키워야</b> 한다 &mdash; 그래서 <b>인코더-디코더</b> 구조와, 키우는 기술(<b>전치 합성곱 · 언풀링 · 팽창 합성곱</b>)이 이번 주의 중심이다. 그 위에 <b>FCN · U-Net</b>, 학습에 쓰는 <b>교차 엔트로피 · IoU · Dice</b>, 사람을 한 명씩 구분하는 <b>인스턴스 분할(Mask R-CNN)</b>, 그리고 SegNet · DeepLab · PSPNet 같은 모델들을 훑는다.</p>
+  <div class="chips"><span class="chip">최승호 교수</span><span class="chip">교안 &lsquo;시멘틱 분할&rsquo; 32p</span><span class="chip">100문제 12.1~12.6</span><span class="chip">FCN-8s · U-Net · Mask R-CNN</span><span class="chip">Dice = 2|A∩B| / (|A|+|B|)</span></div>
+</section>
+
+<div class="legend">
+  <p class="legend-t">내용이 어디에서 왔는지 <b>뱃지</b>로 구분했습니다</p>
+  <i><span class="bdg bdg-gyo">교안</span><span>교수님 슬라이드에 있는 내용</span></i>
+  <i><span class="bdg bdg-plus">보충설명</span><span>교안에 없거나 짧게 지나간 부분을 따로 풀어 쓴 내용 &mdash; 숫자 예 · 코드 줄 풀이 · 주의점</span></i>
+  <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고(← → 로 넘기기), <span class="hi">노란 형광펜</span>은 꼭 기억할 문장, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선</span>은 누르면 뜻이 뜹니다.</p>
+</div>
+
+<section class="sec" id="map">
+  <div class="sec-head"><span class="sec-badge">MAP</span><h2 class="sec-title">한눈에 보기<small>분할의 종류 → 줄였다 키우는 구조 → 키우는 기술 → 모델 → 학습 · 평가 → 인스턴스 분할</small></h2></div>
+
+<div class="oneline">
+  <p><b>이번 주 한 줄 요약</b></p>
+  <ul class="ul">
+    <li><b>세그멘테이션</b> = 영상을 여러 영역으로 나누는 것. <b>의미론적 분할</b>은 같은 클래스면 같은 색(사람 셋 = Person 하나), <b>인스턴스 분할</b>은 개체마다 다른 라벨(Person 1 · 2 · 3). 객체 탐지는 <b>사각형</b>, 분할은 <b>픽셀</b></li>
+    <li><b>인코더</b>는 입력을 작은 <b>잠재 공간</b>으로 압축하고, <b>디코더</b>는 그것을 타깃 도메인으로 펼친다. 입력 = 타깃이면 <b>오토인코더</b> &mdash; 병목 때문에 &lsquo;중요한 것만 남기는 압축&rsquo;을 배운다. 입력에 노이즈를 넣고 깨끗한 원본을 맞히게 하면 <b>노이즈 제거 오토인코더</b></li>
+    <li>줄어든 특징 맵을 키우는 법: <b>전치 합성곱</b> <span class="tex">H=(H_o-1)s+k-2p</span>(학습되는 필터), <b>언풀링</b>(최대 풀링 때 기억한 위치에 값을 되돌림), <b>팽창 합성곱</b>(크기는 안 줄이고 수용 영역만 키움)</li>
+    <li><b>FCN</b> = VGG-16의 FC 층을 1×1 합성곱으로 바꾸고 업샘플링 + 스킵 연결(<b>덧셈</b>). <b>U-Net</b> = 대칭 U자 인코더-디코더 + 스킵 연결(<b>이어 붙이기</b>)</li>
+    <li>출력은 <b>H×W×N</b>(픽셀마다 N개 클래스 점수) → argmax로 레이블 맵. 손실은 <b>교차 엔트로피</b>, 클래스 불균형이 문제라 <b>Dice 손실</b>도 쓴다. 평가는 <b>IoU · Dice</b>(<span class="tex">\text{IoU}=\frac{\text{Dice}}{2-\text{Dice}}</span>)</li>
+    <li><b>Mask R-CNN</b> = Faster R-CNN(클래스 · 상자 분기)에 <b>마스크 분기</b>를 하나 더 붙여 끝에서 끝까지 학습. 그 밖에 SegNet · DeepLab(다중 스케일 + CRF) · RefineNet · PSPNet(피라미드 풀링) · DeepLabV3 · Fine-grain(U-Net + BN + Focal + L1)</li>
+  </ul>
+</div>
+<div class="mapgrid">
+  <a href="#seg"><b>12.1 세그멘테이션의 개념과 종류</b><span>탐지(상자) · 의미론적(클래스) · 인스턴스(개체) 분할</span></a>
+  <a href="#encdec"><b>12.2 인코더-디코더와 오토인코더</b><span>잠재 공간 · 병목 · 비지도 / 자기 지도 · 노이즈 제거 · 해상도 개선</span></a>
+  <a href="#decode"><b>12.3 디코딩 기법</b><span>전치 합성곱 크기 식 · 언풀링과 풀링 마스크 · 팽창률</span></a>
+  <a href="#fcnunet"><b>12.4 FCN과 U-Net</b><span>VGG-16 + 1×1 · FCN-8s 코드 · 덧셈 vs 연결</span></a>
+  <a href="#segtrain"><b>12.5 레이블 맵 · 손실 · 평가</b><span>H×W×N · sparse CE · 클래스 불균형 · IoU · Dice · Dice 손실 코드</span></a>
+  <a href="#models"><b>12.6 인스턴스 분할과 여러 모델</b><span>모폴로지 · 상자 + 분할 · Mask R-CNN · SegNet · DeepLab · PSPNet</span></a>
+</div>
+</section>
+
+<section class="sec" id="docs">
+  <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">12주차 강의자료<small>제목을 누르면 앱 실행 없이 화면에서 바로 열립니다</small></h2></div>
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📘</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=ml-w12-seg">시멘틱 분할 (딥러닝 이미지 분할)</a>
+      <p>세그멘테이션 · 인코더-디코더 · 오토인코더 · 전치 합성곱 · 언풀링 · 팽창 합성곱 · FCN · U-Net · IoU · Dice · 인스턴스 분할 · SegNet · DeepLab · PSPNet · <b>32페이지</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week12-segmentation.pdf" download="기계학습특론_12주차_딥러닝_이미지분할.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📝</span>HTML</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week12-quiz100.html" target="_blank" rel="noopener">12주차 딥러닝 영상 분할 100문제 ↗</a>
+      <p>브라우저에서 바로 푸는 문제지 · 절별 문제는 아래 각 절 제목 옆 버튼으로도 열립니다 · <b>12.2 인코더-디코더가 26문항으로 가장 많습니다</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week12-quiz100.html" download="기계학습특론_12주차_딥러닝_영상분할_100문제.html">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>✨</span>Claude</div>
+    <div class="doc-main">
+      <a class="doc-open" href="https://claude.ai/artifact/DtqVmpLggMM7q7ykS2bgjk" target="_blank" rel="noopener">100문제 Claude 버전 ↗</a>
+      <p>폰 · 태블릿 · PC 어디서 풀어도 진행이 이어진다(Claude 계정 동기화) · 해설 아래 <b>📘 개념 바로가기</b>로 이 페이지의 해당 상자로 연결 · 북마크 · 단원 접기 · 결과 화면은 원본 문제지와 같다</p>
+    </div>
+    <a class="doc-dl" href="https://claude.ai/artifact/DtqVmpLggMM7q7ykS2bgjk" target="_blank" rel="noopener">열기 ↗</a>
+  </div>
+</div>
+</section>
+
+<!-- ===================== 12.1 ===================== -->
+<section class="sec" id="seg">
+  <div class="sec-head"><span class="sec-badge">12.1</span><h2 class="sec-title">세그멘테이션의 개념과 종류<small>교안 2 · 3p</small></h2></div>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>2p · 3p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-02.jpg" alt="교안 2p — 학습 목표"><figcaption><b>2p</b> 학습 목표</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-03.jpg" alt="교안 3p — 세그멘테이션 개념 · 탐지 / 의미론적 / 인스턴스"><figcaption><b>3p</b> 세그멘테이션 개념 · 탐지 / 의미론적 / 인스턴스</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo" id="seg-def">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>세그멘테이션 — 영상을 여러 영역으로 나눈다 (2 · 3p)</h3>
+  <p>학습 목표는 <b>세그멘테이션에 대해서 이해한다</b>. <b>세그멘테이션(segmentation)</b>은 <span class="hi">영상을 여러 개의 영역으로 분할하는 것</span>이고, 종류는 <b>인스턴스 세그멘테이션</b>과 <b>의미론적인(semantic) 세그멘테이션</b> 두 가지다. 3p 그림은 같은 사진(사람 여럿)을 세 방식으로 처리한 결과를 나란히 보여 준다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th></th><th>객체 탐지<br>(Object Detection)</th><th>의미론적 분할<br>(Semantic Segmentation)</th><th>인스턴스 분할<br>(Instance Segmentation)</th></tr></thead>
+    <tbody>
+      <tr><td>3p 그림</td><td>사람마다 <b>보라색 사각형</b></td><td>사람 전체가 <b>Person 한 덩어리</b>, 한 색</td><td><b>Person 1 · 2 · 3 …</b> 사람마다 다른 색</td></tr>
+      <tr><td>결과의 단위</td><td>경계 상자(좌표 4개 + 클래스)</td><td><b>픽셀</b>마다 클래스</td><td><b>픽셀</b>마다 클래스 + 개체 번호</td></tr>
+      <tr><td>같은 클래스 개체끼리</td><td>상자로 따로</td><td><b>구별하지 않는다</b></td><td><b>구별한다</b></td></tr>
+      <tr><td>예</td><td>도로의 차에 상자 치기(14주차)</td><td>모든 차 픽셀을 &lsquo;car&rsquo;로 칠하기</td><td>차 1 · 차 2 · 차 3을 따로 칠하기</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">교안 22p의 인스턴스 분할 정의 &mdash; <b>사람을 개개인별로 다른 라벨로 가지게 하는 방법</b>. 의미론적 분할도 <b>클래스 개념을 쓴다</b>(픽셀마다 타깃 클래스 중 하나를 붙인다) &mdash; &lsquo;클래스를 안 쓴다&rsquo;는 보기는 틀렸다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>분류 → 탐지 → 분할, 출력 모양으로 비교하면</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>과제</th><th>입력</th><th>출력 모양 (클래스 N개)</th><th>질문</th></tr></thead>
+    <tbody>
+      <tr><td>분류 (11주차)</td><td>H×W×3</td><td><b>N</b> &mdash; 사진 전체의 클래스 점수 하나</td><td>이 사진은 무엇인가?</td></tr>
+      <tr><td>탐지 (14주차)</td><td>H×W×3</td><td>상자 여러 개 × (좌표 4 + 클래스)</td><td>무엇이 어디에 있나?</td></tr>
+      <tr><td><b>의미론적 분할</b></td><td>H×W×3</td><td><b>H×W×N</b> &mdash; 픽셀마다 점수 → argmax하면 <b>H×W 레이블 맵</b></td><td>이 픽셀은 무엇인가?</td></tr>
+      <tr><td><b>인스턴스 분할</b></td><td>H×W×3</td><td>개체마다 H×W <b>이진 마스크</b> + 클래스</td><td>이 픽셀은 몇 번째 무엇인가?</td></tr>
+    </tbody>
+  </table></div>
+  <p>출력이 입력과 <b>같은 높이 · 너비</b>여야 한다는 것이 분할의 핵심 요구다(<a class="ext" href="#labelmap">12.5</a>). 11주차 분류 CNN은 합성곱 · 풀링으로 크기를 줄이고 Flatten으로 끝났는데, 분할은 줄인 것을 <b>다시 키우는 절반</b>(디코더)이 필요하다 &mdash; 그것이 12.2~12.4의 내용이다. 의료에서는 CT · MRI의 종양 · 장기 영역을 픽셀 단위로 그리는 데 쓰이고, U-Net이 원래 세포 현미경 영상용으로 나왔다.</p>
+</div>
+</section>
+
+<!-- ===================== 12.2 ===================== -->
+<section class="sec" id="encdec">
+  <div class="sec-head"><span class="sec-badge">12.2</span><h2 class="sec-title">인코더-디코더와 오토인코더<small>교안 4~10p</small></h2></div>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>4p · 5p · 6p · 7p · 8p · 9p · 10p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-04.jpg" alt="교안 4p — 인코더 · 디코더 정의 · 번역 예"><figcaption><b>4p</b> 인코더 · 디코더 정의 · 번역 예</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-05.jpg" alt="교안 5p — 인코딩과 디코딩 · 오토인코더"><figcaption><b>5p</b> 인코딩과 디코딩 · 오토인코더</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-06.jpg" alt="교안 6p — 오토인코더 손실 · 학습 두 종류"><figcaption><b>6p</b> 오토인코더 손실 · 학습 두 종류</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-07.jpg" alt="교안 7p — 오토인코더 목적 · 노이즈 제거 / 해상도 / 의미 분할"><figcaption><b>7p</b> 오토인코더 목적 · 노이즈 제거 / 해상도 / 의미 분할</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-08.jpg" alt="교안 8p — 오토인코더 원리 — 병목"><figcaption><b>8p</b> 오토인코더 원리 — 병목</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-09.jpg" alt="교안 9p — 노이즈 제거 오토인코더 · super-resolution"><figcaption><b>9p</b> 노이즈 제거 오토인코더 · super-resolution</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-10.jpg" alt="교안 10p — 이미지 노이즈 제거 예제 코드"><figcaption><b>10p</b> 이미지 노이즈 제거 예제 코드</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo" id="enc-dec">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>인코딩과 디코딩 (4 · 5p)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th></th><th>교안의 정의</th></tr></thead>
+    <tbody>
+      <tr><td><b>인코더</b></td><td>입력 샘플을 <b>잠재 공간</b>(latent space), 즉 인코더가 정의한 <b>숨겨진 구조화된 값 집합</b>에 매핑하는 함수. 샘플에 담긴 <b>의미론적 정보를 추출 · 압축</b>하도록 설계 · 훈련된다</td></tr>
+      <tr><td><b>디코더</b></td><td>잠재 공간의 요소를 <b>사전 정의된 타깃 도메인</b>으로 매핑하는 <b>여함수</b>. 타깃 도메인에 대한 지식을 적용해 정보를 적절하게 <b>압축 해제 · 완성</b>한다</td></tr>
+      <tr><td><b>공통 속성</b></td><td><span class="hi">입력 공간과 목표 공간보다 <b>작은 잠재 공간</b>을 갖는다</span></td></tr>
+    </tbody>
+  </table></div>
+  <p>머신러닝에서 인코더-디코더는 오래 쓰여 왔다. 대표가 <b>기계 번역</b> &mdash; 인코더는 <b>source language</b> 문장을 받아 문장의 의미를 <b>특징 벡터로 인코딩한 잠재 공간</b>으로 투사하는 법을 배우고, 디코더는 그 벡터를 <b>target 언어</b> 문장으로 바꾸도록 인코더와 <b>함께</b> 훈련된다. 4p 그림은 손글씨 8 · 4가 인코더 → 작은 코드 → 디코더를 거쳐 다시 8 · 4로 나오는 모습과, 코드들을 2차원에 흩뿌린 점 구름이다.</p>
+  <p class="fx-note">자연어처리 12주차의 seq2seq(RNN 인코더-디코더)와 같은 틀이다 &mdash; 문장 대신 영상, 단어 대신 픽셀일 뿐이다(<a class="ext" href="nlp-week12.html">NLP 12주차</a>).</p>
+</div>
+
+<div class="pt gyo" id="ae">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>오토인코더 — 입력과 타깃이 같은 인코더-디코더 (5 · 6p)</h3>
+  <p><b>오토인코더(Auto-encoder)</b>는 <span class="hi">입력과 타깃 도메인이 동일</span>하다. 중간의 <b>병목 계층</b>에도 불구하고 적절하게 인코딩한 다음, <b>품질을 해치지 않고</b> 원래 이미지로 디코딩하는 것이 목표다. 입력은 압축된 표현으로 줄고, 원본이 필요하면 디코더가 그 압축된 표현에서 다시 만들어 낸다.</p>
+  <ul class="ul">
+    <li><b>손실 함수</b> = 입력과 출력 데이터 사이의 <b>차이</b>. 손실을 계산할 <b>목표 이미지가 입력 이미지 자체</b>다</li>
+    <li>잠재 공간이 더 작으므로 <b>인코더는 데이터를 적절히 압축하는 법</b>을, <b>디코더는 다시 압축을 푸는 매핑</b>을 배워야 한다</li>
+  </ul>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>오토인코더 학습의 두 이름</th><th>왜 그렇게 부르나 (6p)</th></tr></thead>
+    <tbody>
+      <tr><td><b>비지도 학습</b></td><td>훈련에 <b>추가 레이블이 필요하지 않기</b> 때문</td></tr>
+      <tr><td><b>자기 지도 학습</b></td><td>명확하게 정의된 타깃(<b>입력 자신</b>)이 있고, 레이블 없는 데이터에서 패턴을 발견하려고 학습하기 때문</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="pt gyo" id="ae-use">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>오토인코더(인코더-디코더)의 쓰임 (7p)</h3>
+  <ul class="ul">
+    <li>이미지를 변환하거나 <b>한 도메인에서 다른 도메인으로 매핑</b>할 수 있다. 예: <b>깊이 회귀(depth regression)</b> &mdash; 각 픽셀마다 <b>카메라와 이미지 콘텐츠 사이의 거리</b>를 추정</li>
+    <li><b>의미론적 분할</b>에 인코더-디코더를 흔히 쓴다 &mdash; 이때 네트워크는 깊이가 아니라 <b>각 픽셀에 대해 추정한 클래스</b>를 반환하도록 훈련된다</li>
+    <li>예술적 응용으로도 유명하다 &mdash; <b>낙서를 현실적인 허구 이미지로</b>, <b>밤 사진을 낮 사진으로</b> 추정</li>
+  </ul>
+  <p class="fx-note">7p 아래 그림 세 개: a) 노이즈 제거 · b) 해상도 개선 · c) 의미론적 분할. 구조는 셋 다 같은 인코더-디코더이고, <b>무엇을 타깃으로 주느냐</b>만 다르다 &mdash; 깨끗한 원본 / 고해상도 원본 / 픽셀별 클래스.</p>
+</div>
+
+<div class="pt gyo" id="ae-why">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>오토인코더의 원리 — 병목 (8 · 9p)</h3>
+  <p>&ldquo;입력을 그대로 돌려주도록 훈련하는 게 무슨 의미가 있나?&rdquo; &mdash; 답은 <span class="hi"><b>병목(bottleneck) 속성</b></span>에 있다.</p>
+  <ul class="ul">
+    <li>인코더와 디코더는 <b>한 덩어리로 훈련</b>되지만, <b>용도에 따라 따로따로 쓸 수 있다</b></li>
+    <li>병목 때문에 인코더는 <b>가능한 많은 정보를 보존하면서</b> 데이터를 압축해야 한다. 훈련 데이터에 <b>반복 패턴</b>이 있으면 네트워크는 인코딩을 개선하려고 그 <b>상관관계를 알아내려</b> 한다</li>
+    <li><b>인코더만</b> 떼어 쓰면 그 도메인 이미지의 <b>저차원 표현</b>을 얻는다 &mdash; 이미지 사이의 <b>콘텐츠 유사도를 보존</b>하므로, 클러스터 · 패턴을 드러내는 <b>데이터 시각화</b>에 쓴다</li>
+    <li><b>디코더</b>를 위해 훈련해 <b>생성 작업</b>에 쓰기도 한다(13주차 생성 모델로 이어진다)</li>
+  </ul>
+  <p><b>노이즈 제거 오토인코더(denoising autoencoder)</b>가 가장 보편적이다. 특수성은 <span class="hi">입력 이미지가 네트워크에 들어가기 <b>전에</b> 손실이 있는 변환(노이즈 · 흐림 등)을 겪는다</span>는 것. 그래도 모델은 <b>원본 이미지를 돌려주도록</b> 훈련되므로, 손실이 있는 연산을 <b>되돌리고 누락된 정보를 복원</b>하는 법을 배운다. 같은 원리가 <b>스마트 이미지 업스케일링(smart image upscaling)</b>, 곧 <b>이미지 해상도 개선(image super-resolution)</b>에 쓰인다 &mdash; 작게 줄인 사진을 입력으로, 원본을 타깃으로.</p>
+</div>
+
+<div class="pt gyo" id="denoise">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>이미지 노이즈 제거 예제 (10p)</h3>
+  <p>낮은 차원의 <b>병목 계층</b>이 있는 <b>대칭</b> 인코더-디코더다. 오토인코더를 학습할 때는 <b>이미지를 입력과 타깃으로 모두</b> 쓰고, 노이즈 제거에 적용할 때는 입력만 노이즈를 섞은 이미지로 바꾼다.</p>
+  <pre class="code">inputs = Input(shape=[img_height * img_width])
+<span class="cm"># 인코딩 계층:</span>
+enc_1 = Dense(128, activation='relu')(inputs)
+code  = Dense(64, activation='relu')(enc_1)
+<span class="cm"># 디코딩 계층:</span>
+dec_1 = Dense(64, activation='relu')(code)
+preds = Dense(128, activation='sigmoid')(dec_1)
+autoencoder = Model(inputs, preds)
+<span class="cm"># 훈련:</span>
+autoencoder.compile(loss='binary_crossentropy')
+autoencoder.fit(x_train, x_train)          <span class="cm"># 입력과 타깃으로 x_train 사용</span>
+
+<span class="cm"># 노이즈 제거에 적용</span>
+x_noisy = x_train + np.random.normal(loc=.0, scale=.5, size=x_train.shape)
+autoencoder.fit(x_noisy, x_train)</pre>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>10p 코드를 한 줄씩 — 그리고 그대로 돌리면 나는 오류 하나</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>줄</th><th>하는 일</th><th>MNIST(28×28)라면</th></tr></thead>
+    <tbody>
+      <tr><td><code>Input(shape=[img_height * img_width])</code></td><td>이미지를 한 줄로 편 벡터를 받는다(10주차 Flatten과 같은 생각)</td><td>784차원</td></tr>
+      <tr><td><code>Dense(128, relu)</code> → <code>Dense(64, relu)</code></td><td><b>인코더</b> &mdash; 784 → 128 → <b>64</b>로 줄인다. 64가 <b>병목(code)</b></td><td>784 → 128 → 64</td></tr>
+      <tr><td><code>Dense(64, relu)</code> → <code>Dense(…, sigmoid)</code></td><td><b>디코더</b> &mdash; 다시 키운다. 마지막 sigmoid는 픽셀값을 0~1로 맞춘다</td><td>64 → 64 → 784</td></tr>
+      <tr><td><code>compile(loss='binary_crossentropy')</code></td><td>픽셀마다 &lsquo;0~1 값 맞히기&rsquo;로 보고 입력과 출력의 차이를 잰다</td><td>픽셀값을 /255로 정규화해 둬야 한다</td></tr>
+      <tr><td><code>fit(x_train, x_train)</code></td><td><b>입력 = 타깃</b> &mdash; 오토인코더의 정의 그대로</td><td></td></tr>
+      <tr><td><code>np.random.normal(loc=.0, scale=.5, …)</code></td><td>평균 0 · 표준편차 0.5인 <b>가우시안 노이즈</b>를 모든 픽셀에 더한다</td><td>x_train과 같은 모양</td></tr>
+      <tr><td><code>fit(x_noisy, x_train)</code></td><td><b>입력 = 노이즈 이미지, 타깃 = 깨끗한 원본</b> → 노이즈를 지우는 법을 배운다</td><td></td></tr>
+    </tbody>
+  </table></div>
+  <div class="pit"><b>교안 코드의 마지막 층 <code>Dense(128, …)</code>은 그대로면 학습이 안 된다</b> &mdash; 출력이 128차원인데 타깃 <code>x_train</code>은 784차원이라 손실을 잴 수 없다(모양 불일치 오류). 입력과 타깃이 같은 오토인코더는 <b>마지막 층 노드 수 = 입력 차원</b>이어야 하므로 <code>Dense(img_height * img_width, activation='sigmoid')</code>로 써야 한다. 시험에서는 &lsquo;출력 크기는 입력과 같아야 한다&rsquo;가 핵심이다.</div>
+  <p>파라미터 수(MNIST, 고친 버전): 784×128+128 = <b>100,480</b> · 128×64+64 = <b>8,256</b> · 64×64+64 = <b>4,160</b> · 64×784+784 = <b>50,960</b> → 합 <b>163,856</b>. 정보가 64칸을 지나야 하므로 784칸 그대로 외울 수 없다 &mdash; 이것이 &lsquo;병목이 압축을 강제한다&rsquo;의 숫자 버전이다.</p>
+</div>
+</section>
+
+<!-- ===================== 12.3 ===================== -->
+<section class="sec" id="decode">
+  <div class="sec-head"><span class="sec-badge">12.3</span><h2 class="sec-title">더 잘 디코딩하기 위한 기법 — 전치 합성곱 · 언풀링 · 팽창 합성곱<small>교안 11~14p</small></h2></div>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>11p · 12p · 13p · 14p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-11.jpg" alt="교안 11p — 전치 합성곱 — 기호와 크기 식"><figcaption><b>11p</b> 전치 합성곱 — 기호와 크기 식</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-12.jpg" alt="교안 12p — 합성곱 vs 전치 합성곱 그림"><figcaption><b>12p</b> 합성곱 vs 전치 합성곱 그림</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-13.jpg" alt="교안 13p — 언풀링 — 풀링 마스크"><figcaption><b>13p</b> 언풀링 — 풀링 마스크</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-14.jpg" alt="교안 14p — 팽창(atrous) 합성곱"><figcaption><b>14p</b> 팽창(atrous) 합성곱</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo" id="tconv">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>전치 합성곱 (transposed convolution, 디컨볼루션) (11 · 12p)</h3>
+  <p>기호 &mdash; 커널 크기 <b>k</b>, 입력 깊이 <b>D</b>, 커널 개수 <b>N</b>, 패딩 <b>p</b>, 보폭 <b>s</b>. 전치 합성곱은 <span class="hi">합성곱 계층을 반전시켜, 특징 맵과 <b>훈련 가능한 필터</b> 사이의 합성곱으로 특징 맵의 <b>공간 차원을 증가</b>시킨다</span>.</p>
+  <div class="fx">
+    <p class="fx-lab">합성곱 (피드 포워드 방향) — 크기가 줄어든다</p>
+    <div class="tex-d">H_o=\frac{H-k+2p}{s}+1,\qquad W_o=\frac{W-k+2p}{s}+1</div>
+    <p class="fx-lab">전치 합성곱 — 위 식을 H에 대해 거꾸로 푼 것, 크기가 커진다</p>
+    <div class="tex-d">H=(H_o-1)\,s+k-2p,\qquad W=(W_o-1)\,s+k-2p</div>
+    <p class="fx-note">아래 식은 위 식을 정리한 것뿐이다: <span class="tex">H_o-1=\frac{H-k+2p}{s}</span> → 양변에 s를 곱하고 <span class="tex">k-2p</span>를 넘기면 <span class="tex">H=(H_o-1)s+k-2p</span>. 출력 깊이는 두 경우 모두 <b>커널 개수 N</b>이다.</p>
+  </div>
+  <p class="fx-note">12p 그림 &mdash; 위는 일반 합성곱(입력에 패딩을 두르고 보폭 s로 훑어 출력이 작아짐), 아래는 전치 합성곱(입력 칸 사이를 벌리고 주위에 패딩을 둔 뒤 합성곱 → 출력이 커짐). 그림 오른쪽 아래 상자는 출력 한 칸이 필터와 겹친 입력 칸들의 곱의 합이라는 표시다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>식에 숫자 넣어 보기 — 100문제의 계산 세 개</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>상황</th><th>계산</th><th>결과</th></tr></thead>
+    <tbody>
+      <tr><td>합성곱 H=32, k=3, p=1, s=1</td><td><span class="tex">(32-3+2)/1+1</span></td><td><b>32</b> &mdash; &lsquo;same&rsquo; 패딩, 크기 유지</td></tr>
+      <tr><td>합성곱 H=15, k=3, p=1, s=2</td><td><span class="tex">(15-3+2)/2+1=7+1</span></td><td><b>8</b> &mdash; 보폭 2라 약 절반</td></tr>
+      <tr><td>전치 합성곱 H<sub>o</sub>=7, k=4, p=1, s=2</td><td><span class="tex">(7-1)\cdot2+4-2=12+2</span></td><td><b>14</b> &mdash; 정확히 2배</td></tr>
+    </tbody>
+  </table></div>
+  <p>&lsquo;k=4, s=2, p=1&rsquo;은 <b>크기를 정확히 2배</b>로 만드는 단골 조합이다(FCN-8s 코드의 <code>kernel_size=4, strides=2</code>). Keras에서 <code>padding='same'</code>을 주면 출력 = 입력 × 보폭이 되도록 맞춰 준다 &mdash; <code>strides=8</code>이면 8배.</p>
+  <p class="fx-note">이름 주의 &mdash; &lsquo;디컨볼루션&rsquo;이라고 부르지만 수학의 역합성곱(deconvolution)처럼 원래 값을 되돌리는 것이 <b>아니다</b>. 크기만 키우고, 값은 학습된 필터가 새로 만든다.</p>
+</div>
+
+<div class="pt gyo" id="unpool">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>언풀링 — 최대 풀링을 거꾸로 (13p)</h3>
+  <ul class="ul">
+    <li><b>최대 풀링을 유사반전</b>하기 위해 나온 방법. <b>수학적으로 완전한 반전은 불가능</b>하지만(버린 값은 되살릴 수 없다), 최소한 <b>공간 샘플링 관점</b>에서 그에 가깝게 설계했다</li>
+    <li>유사 역연산을 위해 각 최대 풀링 계층을 수정해, 결과 텐서와 함께 <b>풀링 마스크(pooling mask)</b> &mdash; 최댓값이 어느 자리에 있었는지 &mdash; 를 출력한다</li>
+    <li>언풀링은 그 <b>풀링 마스크를 이용해</b> 입력 값을 <b>풀링되기 전의 형상으로 업스케일링된 텐서에 뿌린다</b></li>
+  </ul>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>4×4 → 2×2 → 4×4 숫자로 따라가기</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>① 원래 4×4</th><th>② 최대 풀링 2×2 (보폭 2)</th><th>③ 언풀링 (마스크 사용)</th></tr></thead>
+    <tbody><tr>
+      <td><code>1 <b>5</b> | 2 1<br>3 2 | <b>6</b> 0<br>----+----<br><b>7</b> 0 | 1 2<br>4 1 | 3 <b>8</b></code></td>
+      <td><code>5 6<br>7 8</code><br>+ 마스크: 각 창의 최댓값 위치<br>(오른쪽 위 · 왼쪽 아래 · 왼쪽 위 · 오른쪽 아래)</td>
+      <td><code>0 5 | 0 0<br>0 0 | 6 0<br>----+----<br>7 0 | 0 0<br>0 0 | 0 8</code></td>
+    </tr></tbody>
+  </table></div>
+  <p>언풀링 결과는 <b>마스크가 가리킨 자리에만 값</b>이 놓이고 <b>나머지는 0</b>이다(100문제 49번). 크기는 원래대로 4×4로 돌아오지만 1 · 2 · 3 같은 작은 값은 사라졌다 &mdash; 그래서 &lsquo;유사&rsquo; 역연산이다. 값을 2×2 전체에 <b>복제</b>하는 것은 평균 풀링을 되돌리는 업샘플링(<code>UpSampling2D</code>)에 가깝다. 언풀링은 학습할 파라미터가 <b>없고</b>, 전치 합성곱은 <b>있다</b>는 점도 차이다. SegNet(<a class="ext" href="#segnet">12.6</a>)의 디코더가 이 방식이다.</p>
+</div>
+
+<div class="pt gyo" id="dilated">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>팽창 합성곱 (dilated / atrous convolution) (14p)</h3>
+  <p><span class="hi">데이터의 <b>공간 차원을 더 희생시키지 않고</b> 합성곱의 <b>수용 영역</b>을 인위적으로 키우는 방법</span>이다. 팽창 연산이 적용되고, 커널에 적용될 <b>팽창률(dilation rate)</b>이라는 초매개변수가 하나 더 있다는 점을 빼면 일반 합성곱과 같다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>팽창률 d면 커널이 실제로 덮는 크기는 k + (k−1)(d−1)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>3×3 커널</th><th>칸 사이 간격</th><th>덮는 범위</th><th>학습 파라미터</th></tr></thead>
+    <tbody>
+      <tr><td>d = 1 (일반 합성곱)</td><td>0</td><td>3×3</td><td>9</td></tr>
+      <tr><td>d = 2</td><td>1칸씩 구멍</td><td><b>5×5</b></td><td>9 (그대로)</td></tr>
+      <tr><td>d = 4</td><td>3칸씩</td><td>9×9</td><td>9 (그대로)</td></tr>
+    </tbody>
+  </table></div>
+  <p>왜 필요한가? 분할은 &lsquo;이 픽셀이 무엇인가&rsquo;를 판단하려고 <b>넓은 주변(문맥)</b>을 봐야 하지만, 풀링으로 넓게 보면 해상도가 줄어 위치가 뭉개진다. 팽창 합성곱은 <b>해상도를 유지한 채</b> 넓게 본다 &mdash; 파라미터와 크기는 그대로, 보는 범위만 커진다. DeepLab(<a class="ext" href="#deeplab">12.6</a>)이 이 방식을 여러 팽창률로 나란히 쓴다.</p>
+</div>
+
+<div class="pit"><b>크기를 키우는 세 방법 — 무엇이 다른가</b>
+<div class="tbl-wrap"><table>
+  <thead><tr><th></th><th>전치 합성곱</th><th>언풀링</th><th>팽창 합성곱</th></tr></thead>
+  <tbody>
+    <tr><td>하는 일</td><td>특징 맵을 <b>키운다</b></td><td>풀링 전 크기로 <b>되돌린다</b></td><td>크기는 <b>그대로</b>, 수용 영역만 키운다</td></tr>
+    <tr><td>학습 파라미터</td><td>있다(필터)</td><td>없다(마스크로 자리만 찾음)</td><td>있다(일반 합성곱과 같은 수)</td></tr>
+    <tr><td>필요한 것</td><td>k · s · p</td><td>인코더 쪽 <b>풀링 마스크</b></td><td><b>팽창률</b> d</td></tr>
+    <tr><td>쓰는 모델</td><td>FCN · U-Net</td><td>SegNet</td><td>DeepLab</td></tr>
+  </tbody>
+</table></div>
+팽창 합성곱은 &lsquo;키우는&rsquo; 기법이 아니라 <b>&lsquo;줄이지 않는&rsquo;</b> 기법이다 &mdash; 처음부터 덜 줄이면 나중에 덜 키워도 된다.</div>
+</section>
+
+<!-- ===================== 12.4 ===================== -->
+<section class="sec" id="fcnunet">
+  <div class="sec-head"><span class="sec-badge">12.4</span><h2 class="sec-title">FCN과 U-Net<small>교안 15 · 16 · 17p</small></h2></div>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>15p · 16p · 17p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-15.jpg" alt="교안 15p — FCN — VGG-16 + 1×1 합성곱"><figcaption><b>15p</b> FCN — VGG-16 + 1×1 합성곱</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-16.jpg" alt="교안 16p — U-Net — 대칭 U자 · 연결"><figcaption><b>16p</b> U-Net — 대칭 U자 · 연결</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-17.jpg" alt="교안 17p — FCN-8s 구현 코드"><figcaption><b>17p</b> FCN-8s 구현 코드</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo" id="fcn">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>완전 컨볼루션 네트워크 FCN (15p)</h3>
+  <p><b>FCN(Fully Convolutional Networks)</b>은 <b>VGG-16</b>에 기반해, <span class="hi">마지막 <b>FC layer를 1×1 합성곱 계층으로 대체</b></span>해 구성한다. 전결합층이 사라지니 이름 그대로 &lsquo;전부 합성곱&rsquo;이다. FCN이 보여 준 두 가지:</p>
+  <ul class="ul">
+    <li>특징 추출용 <b>CNN을 효율적으로 인코더로</b> 쓰는 방법</li>
+    <li>CNN의 특징 맵을 효율적으로 <b>업샘플링하고 디코딩</b>하는 방법</li>
+  </ul>
+  <p class="fx-note">15p 그림 &mdash; 왼쪽 &lsquo;VGG-16 특징 추출기&rsquo;, 오른쪽 &lsquo;분류 헤드(제거)&rsquo;, 그리고 마지막 블록의 출력을 얼마나 키우느냐에 따라 <b>FCN-32s · FCN-16s · FCN-8s</b> 세 모델. 숫자는 마지막에 한 번에 키우는 배수다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>FC를 1×1 합성곱으로 바꾸면 무엇이 좋아지나</h3>
+  <ul class="ul">
+    <li><b>위치가 남는다</b> &mdash; Flatten + Dense는 공간 구조를 펴 버리지만, 1×1 합성곱은 칸마다 같은 연산을 해 <b>H×W 격자를 유지</b>한다. 칸마다 클래스 점수가 나오니 곧 &lsquo;거친 분할 지도&rsquo;다</li>
+    <li><b>입력 크기가 자유롭다</b> &mdash; Dense는 입력 길이가 고정이라 학습 때와 같은 크기 사진만 받지만, 합성곱만 있으면 어떤 크기든 받는다</li>
+    <li>11주차 Inception · MobileNet의 1×1 합성곱(채널 수 조절, pointwise)과 같은 연산이다(<a class="ext" href="machine-learning-week11.html#mobilenet">11.6</a>)</li>
+  </ul>
+</div>
+
+<div class="pt gyo" id="fcn8s">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>FCN-8s 구현 (17p)</h3>
+  <pre class="code">inputs = Input(shape=(224, 224, 3))
+<span class="cm"># 인코더로 사전 훈련된 VGG-16 특징 추출기를 구성:</span>
+vgg16 = VGG16(include_top=False, weights='imagenet', input_tensor=inputs)
+<span class="cm"># 3개의 최종 블록 각각이 반환한 특징 맵을 복원:</span>
+f3 = vgg16.get_layer('block3_pool').output   <span class="cm"># shape: (28, 28, 256)</span>
+f4 = vgg16.get_layer('block4_pool').output   <span class="cm"># shape: (14, 14, 512)</span>
+f5 = vgg16.get_layer('block5_pool').output   <span class="cm"># shape: ( 7,  7, 512)</span>
+<span class="cm"># VGG 밀집 계층을 합성곱 계층으로 대체하고 대신 합성곱/풀링 블록 다음에 "디코딩" 계층을 추가:</span>
+f3 = Conv2D(filters=out_ch, kernel_size=1, padding='same')(f3)
+f4 = Conv2D(filters=out_ch, kernel_size=1, padding='same')(f4)
+f5 = Conv2D(filters=out_ch, kernel_size=1, padding='same')(f5)
+<span class="cm"># 'f4'와 결합시킬 수 있도록 'f5'를 14x14 맵으로 업스케일링:</span>
+f5x2 = Conv2DTranspose(filters=out_ch, kernel_size=4, strides=2,
+                       padding='same', activation='relu')(f5)
+<span class="cm"># 2개의 특징 맵을 요소-단위 덧셈으로 통합:</span>
+m1 = add([f4, f5x2])
+<span class="cm"># 'm1'과 'f3'을 28x28 map으로 통합하기 위해 이 연산을 반복:</span>
+m1x2 = Conv2DTranspose(filters=out_ch, kernel_size=4, strides=2,
+                       padding='same', activation='relu')(m1)
+m2 = add([f3, m1x2])
+<span class="cm"># 마지막으로 transp-conv를 사용해 원본 형상을 복원:</span>
+outputs = Conv2DTranspose(filters=out_ch, kernel_size=16, strides=8,
+                          padding='same', activation='sigmoid')(m2)
+fcn_8s = Model(inputs, outputs)</pre>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>모양을 따라가면 이름이 왜 &lsquo;8s&rsquo;인지 보인다</h3>
+  <div class="flow">
+    <div class="fl"><b>입력 224×224×3</b><span>VGG16(<code>include_top=False</code>: 분류 헤드 제거, <code>weights='imagenet'</code>: 사전 학습 가중치)</span></div>
+    <div class="fl"><b>f3 28×28 (1/8) · f4 14×14 (1/16) · f5 7×7 (1/32)</b><span>풀링 다섯 번 중 3 · 4 · 5번째 출력. 1×1 합성곱으로 채널을 클래스 수 <code>out_ch</code>로 맞춘다</span></div>
+    <div class="fl"><b>f5 7×7 → ×2 → 14×14, f4와 더함 = m1</b><span>전치 합성곱(k=4, s=2)으로 2배 &mdash; <span class="tex">(7-1)\cdot2+4-2=14</span></span></div>
+    <div class="fl"><b>m1 14×14 → ×2 → 28×28, f3와 더함 = m2</b><span>같은 연산 반복. 깊은 층의 &lsquo;무엇&rsquo;과 얕은 층의 &lsquo;어디&rsquo;를 합친다</span></div>
+    <div class="fl"><b>m2 28×28 → ×8 → 224×224×out_ch</b><span><code>kernel_size=16, strides=8</code> &mdash; 1/8 해상도를 <b>8배</b>로 한 번에 복원 → <b>FCN-8s</b></span></div>
+  </div>
+  <p class="fx-note">FCN-32s는 f5(1/32)만 32배로 한 번에 키워 경계가 뭉툭하고, FCN-16s는 f4까지, FCN-8s는 f3까지 섞어 경계가 가장 정교하다. 결합은 <code>add</code> &mdash; <b>원소별 덧셈</b>이라 두 특징 맵의 크기와 채널 수가 같아야 한다(그래서 1×1 합성곱으로 채널을 먼저 맞췄다).</p>
+</div>
+
+<div class="pt gyo" id="unet">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>U-Net (16p)</h3>
+  <ul class="ul">
+    <li>의미론적 분할을 위해 개발되었고 <b>FCN과 여러 속성을 공유</b>한다</li>
+    <li><b>특징 깊이를 늘리면서 공간 차원은 줄이는 다중 블록 축소 인코더</b> + <b>이미지 해상도를 복원하는 확장 디코더</b></li>
+    <li>FCN처럼 <b>스킵 연결</b>이 인코딩 블록을 <b>그에 대응하는 디코딩 블록</b>과 잇는다</li>
+    <li>디코딩 블록은 <b>이전 블록에서 컨텍스트 정보</b>를, <b>인코딩 경로에서 위치 정보</b>를 받는다</li>
+    <li>전통적인 <b>U자 형태</b>의 인코더-디코더로 돌아간 <b>대칭형</b></li>
+    <li><span class="hi">스킵 연결에서 온 특징 맵은 <b>덧셈 대신 연결(concatenation)</b>로 결합한다</span></li>
+  </ul>
+</div>
+
+<div class="pit"><b>FCN과 U-Net — 스킵 연결을 합치는 방식이 다르다</b>
+<div class="tbl-wrap"><table>
+  <thead><tr><th></th><th>FCN (-8s)</th><th>U-Net</th></tr></thead>
+  <tbody>
+    <tr><td>인코더</td><td>사전 학습된 <b>VGG-16</b>을 가져다 씀</td><td>축소 블록을 직접 쌓음</td></tr>
+    <tr><td>모양</td><td>비대칭 &mdash; 디코더가 짧다(키우기 몇 번)</td><td><b>대칭 U자</b> &mdash; 축소 단계마다 같은 수의 확장 단계</td></tr>
+    <tr><td>스킵 결합</td><td><b>덧셈</b> <code>add([f4, f5x2])</code> &mdash; 채널 수 그대로</td><td><b>연결</b> <code>concatenate</code> &mdash; 채널 수가 합쳐짐</td></tr>
+    <tr><td>디코더가 받는 것</td><td colspan="2">이전(깊은) 블록 → <b>컨텍스트(무엇)</b> · 인코더 스킵 → <b>위치(어디)</b> &mdash; 둘 다 같은 생각</td></tr>
+  </tbody>
+</table></div>
+덧셈은 &lsquo;두 지도를 겹쳐 하나로&rsquo;, 연결은 &lsquo;두 지도를 나란히 쌓아 다음 층이 알아서 섞게&rsquo;다. 11주차로 치면 <b>ResNet은 더하고, DenseNet은 이어 붙인다</b>와 같은 대비다(<a class="ext" href="machine-learning-week11.html#densenet">11.6</a>).</div>
+</section>
+
+<!-- ===================== 12.5 ===================== -->
+<section class="sec" id="segtrain">
+  <div class="sec-head"><span class="sec-badge">12.5</span><h2 class="sec-title">객체 분할 학습 — 레이블 맵 · 손실 · 평가지표<small>교안 18~21p</small></h2></div>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>18p · 19p · 20p · 21p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-18.jpg" alt="교안 18p — 레이블 맵으로 디코딩 — H×W×N"><figcaption><b>18p</b> 레이블 맵으로 디코딩 — H×W×N</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-19.jpg" alt="교안 19p — 교차 엔트로피 · 분할 코드"><figcaption><b>19p</b> 교차 엔트로피 · 분할 코드</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-20.jpg" alt="교안 20p — 클래스 불균형 · IoU · Dice"><figcaption><b>20p</b> 클래스 불균형 · IoU · Dice</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-21.jpg" alt="교안 21p — Dice 손실 코드"><figcaption><b>21p</b> Dice 손실 코드</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo" id="labelmap">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>레이블 맵으로 디코딩하기 (18p)</h3>
+  <p>사진의 각 픽셀 값과 컨텍스트가 주어졌을 때, <b>각 픽셀에 타깃 클래스 중 하나를 할당</b>해 <span class="hi">입력과 <b>동일한 높이와 너비</b>를 갖는 <b>레이블 맵(label map)</b></span>을 반환해야 한다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>네트워크</th><th>출력</th></tr></thead>
+    <tbody>
+      <tr><td>분류</td><td>이미지마다 클래스당 점수를 담은 <b>N개 로짓의 컬럼 벡터</b></td></tr>
+      <tr><td><b>분할</b></td><td>픽셀 단위 점수를 담은 <b>H×W×N 텐서</b> &mdash; 18p 그림의 상자에서 픽셀 하나마다 &lsquo;car&rsquo; · &lsquo;tree&rsquo; · &lsquo;road&rsquo; … 마스크 점수가 쌓여 있다</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">18p 그림 흐름: 입력 이미지 → encoder → decoder → 소프트맥스 출력(H×W×N) → <b>argmax</b> → 예측 레이블 맵(H×W).</p>
+</div>
+
+<div class="pt gyo" id="seg-loss">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>손실 함수 — 교차 엔트로피 (19p)</h3>
+  <pre class="code">inputs = Input(shape=(224, 224, 3))
+out_ch = num_classes = 19        <span class="cm"># Cityscapes 데이터셋에 객체 분할</span>
+<span class="cm"># [...] FCN-8s 아키텍처 구성, 이전 코드와 비교해볼 것</span>
+outputs = Conv2DTranspose(filters=out_ch, kernel_size=16, strides=8,
+                          padding='same', activation=None)(m2)
+seg_fcn = Model(inputs, outputs)
+seg_fcn.compile(optimizer='adam', loss='sparse_categorical_crossentropy')
+<span class="cm"># [...] 네트워크 훈련. 그런 다음 이를 사용해 레이블 맵을 예측:</span>
+label_map = np.argmax(seg_fcn.predict(image), axis=-1)</pre>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>19p 코드에서 17p와 달라진 세 군데</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>줄</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>out_ch = num_classes = 19</code></td><td>출력 채널 = 클래스 수. <b>Cityscapes</b>(도시 도로 장면 데이터셋)의 19개 클래스(도로 · 인도 · 건물 · 사람 · 차 …) &mdash; 출력이 224×224×<b>19</b></td></tr>
+      <tr><td><code>activation=None</code></td><td>17p는 <code>'sigmoid'</code>였지만 여기서는 <b>로짓 그대로</b> 내보낸다. 클래스 19개 중 하나를 고르는 문제라 소프트맥스 + 교차 엔트로피가 맞다</td></tr>
+      <tr><td><code>loss='sparse_categorical_crossentropy'</code></td><td>정답 레이블 맵이 원-핫(224×224×19)이 아니라 <b>정수</b>(224×224, 칸마다 0~18)일 때 쓰는 교차 엔트로피. 11주차의 <code>categorical_crossentropy</code> + <code>to_categorical</code>과 같은 계산을, 원-핫 변환 없이 한다</td></tr>
+      <tr><td><code>optimizer='adam'</code></td><td>11주차 예제는 rmsprop, 여기는 adam</td></tr>
+      <tr><td><code>np.argmax(…, axis=-1)</code></td><td><code>predict</code> 결과는 (1, 224, 224, 19). <b>마지막 축 = 클래스 축</b>에서 점수가 가장 큰 번호를 픽셀마다 골라 (1, 224, 224) 레이블 맵을 만든다</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">픽셀별 교차 엔트로피는 <b>모든 픽셀의 손실을 평균</b>한 것이다 &mdash; 224×224 = 50,176개의 작은 분류 문제를 한꺼번에 푸는 셈이다. 그래서 바로 다음의 &lsquo;클래스 불균형&rsquo; 문제가 생긴다.</p>
+</div>
+
+<div class="pt gyo" id="seg-metric">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>학습의 문제와 평가지표 — 클래스 불균형 · IoU · Dice (20p)</h3>
+  <p>이미지 단위 분류나 픽셀 단위 분류에서는 보통 <span class="hi"><b>클래스 불균형</b> 문제</span>가 생겨, 학습에서 반드시 해결해야 한다(20p 그림: 입력 이미지 · 실제 레이블 맵 · <b>클래스당 가중치 맵</b> · <b>윤곽 가중치 맵</b>). 평가지표는 <b>IoU(Intersection-over-Union)</b>와 <b>Dice</b>다.</p>
+  <div class="fx">
+    <div class="tex-d">\text{Dice}(A,B)=\frac{2\,|A\cap B|}{|A|+|B|}</div>
+    <div class="tex-d">\text{IoU}(A,B)=\frac{\text{Dice}(A,B)}{2-\text{Dice}(A,B)}\qquad;\qquad \text{Dice}(A,B)=\frac{2\times\text{IoU}(A,B)}{1+\text{IoU}(A,B)}</div>
+    <p class="fx-note">A = 예측 마스크, B = 정답 마스크, <span class="tex">|A\cap B|</span> = 둘이 겹치는 픽셀 수. IoU의 원래 정의는 <span class="tex">\frac{|A\cap B|}{|A\cup B|}</span>(겹친 넓이 ÷ 합친 넓이).</p>
+  </div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>숫자로 — 그리고 두 관계식은 어디서 나오나</h3>
+  <p><b>예</b>: 예측 A 100픽셀, 정답 B 100픽셀, 겹침 80픽셀이면</p>
+  <div class="fx">
+    <div class="tex-d">\text{Dice}=\frac{2\times80}{100+100}=0.8,\qquad |A\cup B|=100+100-80=120,\qquad \text{IoU}=\frac{80}{120}\approx0.667</div>
+    <p class="fx-note">관계식으로 확인: <span class="tex">0.8/(2-0.8)=0.8/1.2\approx0.667</span> ✓. <b>항상 IoU ≤ Dice</b>이고, 둘 다 완벽하면 1, 전혀 안 겹치면 0이다.</p>
+  </div>
+  <p><b>유도</b> &mdash; 겹침을 I, 합친 넓이를 U라 하면 <span class="tex">|A|+|B|=U+I</span>(겹친 부분이 두 번 세어지니까). 그러면 <span class="tex">\text{Dice}=\frac{2I}{U+I}</span>, <span class="tex">\text{IoU}=\frac{I}{U}</span>. 분자 · 분모를 U로 나누면 <span class="tex">\text{Dice}=\frac{2\,\text{IoU}}{1+\text{IoU}}</span>, 이것을 IoU에 대해 풀면 <span class="tex">\text{IoU}=\frac{\text{Dice}}{2-\text{Dice}}</span>.</p>
+  <p><b>왜 정확도(맞힌 픽셀 비율) 대신 이걸 쓰나?</b> &mdash; 사진의 95%가 배경이고 종양이 5%라면, <b>전부 배경이라고 찍어도 픽셀 정확도 95%</b>다. 하지만 종양 마스크의 Dice는 0이다. IoU · Dice는 <b>찾아야 할 영역끼리만</b> 비교하므로 작은 클래스를 놓치면 바로 드러난다 &mdash; 이것이 &lsquo;클래스 불균형&rsquo;과 짝지어 나오는 이유다.</p>
+</div>
+
+<div class="pt gyo" id="dice-loss">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>Dice를 손실로 쓰는 경우 (21p)</h3>
+  <pre class="code">def dice_loss(labels, logits, num_classes, eps=1e-6, spatial_axes=[1, 2]):
+    <span class="cm"># 로짓을 확률로, 실제 값을 원-핫 인코딩된 텐서로 변환:</span>
+    pred_proba = tf.nn.softmax(logits, axis=-1)
+    gt_onehot  = tf.one_hot(labels, num_classes, dtype=tf.float32)
+    <span class="cm"># 다이스 계수의 분자와 분모 계산:</span>
+    num_perclass = 2 * tf.reduce_sum(pred_proba * gt_onehot, axis=spatial_axes)
+    den_perclass = tf.reduce_sum(pred_proba + gt_onehot, axis=spatial_axes)
+    <span class="cm"># 배치와 클래스에 대한 평균과 다이스 계수 계산:</span>
+    dice = tf.reduce_mean((num_perclass + eps) / (den_perclass + eps))
+    return 1 - dice</pre>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>dice_loss를 한 줄씩 — 식 2|A∩B| / (|A|+|B|)가 그대로 들어 있다</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>줄</th><th>모양 (배치 B, 224×224, 클래스 N)</th><th>식에서의 역할</th></tr></thead>
+    <tbody>
+      <tr><td><code>softmax(logits, axis=-1)</code></td><td>(B, 224, 224, N)</td><td>로짓을 <b>클래스 축에서 확률</b>로 &mdash; &lsquo;부드러운&rsquo; 예측 마스크 A</td></tr>
+      <tr><td><code>one_hot(labels, N)</code></td><td>(B, 224, 224) → (B, 224, 224, N)</td><td>정수 레이블을 원-핫으로 &mdash; 정답 마스크 B. 예측과 <b>원소별로 곱할 수 있게</b> 모양을 맞춘다</td></tr>
+      <tr><td><code>2 * reduce_sum(A * B, axis=[1,2])</code></td><td>(B, N)</td><td><b>분자 2|A∩B|</b> &mdash; 높이 · 너비 두 공간 축을 따라 합해 클래스별로</td></tr>
+      <tr><td><code>reduce_sum(A + B, axis=[1,2])</code></td><td>(B, N)</td><td><b>분모 |A|+|B|</b></td></tr>
+      <tr><td><code>+ eps</code></td><td></td><td>사진에 없는 클래스는 분모가 0 &mdash; 0으로 나누기 방지</td></tr>
+      <tr><td><code>reduce_mean(…)</code></td><td>스칼라</td><td>배치와 클래스에 걸쳐 평균 &mdash; <b>클래스마다 같은 무게</b>로 평균하므로 작은 클래스도 큰 클래스만큼 손실에 반영된다</td></tr>
+      <tr><td><code>return 1 - dice</code></td><td></td><td>Dice는 <b>클수록 좋은</b> 지표, 손실은 <b>작을수록 좋아야</b> 하므로 1에서 뺀다</td></tr>
+    </tbody>
+  </table></div>
+</div>
+</section>
+
+<!-- ===================== 12.6 ===================== -->
+<section class="sec" id="models">
+  <div class="sec-head"><span class="sec-badge">12.6</span><h2 class="sec-title">인스턴스 분할과 다양한 분할 모델<small>교안 22~31p</small></h2></div>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>22p · 23p · 24p · 25p · 26p · 27p · 28p · 29p · 30p · 31p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-22.jpg" alt="교안 22p — 인스턴스 분할 — 사후 처리 · 상자 + 분할"><figcaption><b>22p</b> 인스턴스 분할 — 사후 처리 · 상자 + 분할</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-23.jpg" alt="교안 23p — Mask R-CNN"><figcaption><b>23p</b> Mask R-CNN</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-24.jpg" alt="교안 24p — SegNet"><figcaption><b>24p</b> SegNet</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-25.jpg" alt="교안 25p — DeepLab — 다중 스케일 · CRF"><figcaption><b>25p</b> DeepLab — 다중 스케일 · CRF</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-26.jpg" alt="교안 26p — RefineNet"><figcaption><b>26p</b> RefineNet</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-27.jpg" alt="교안 27p — PSPNet · 대형 커널 문제"><figcaption><b>27p</b> PSPNet · 대형 커널 문제</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-28.jpg" alt="교안 28p — DeepLabV3"><figcaption><b>28p</b> DeepLabV3</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-29.jpg" alt="교안 29p — DeepLabV3 · Fine-grain segments"><figcaption><b>29p</b> DeepLabV3 · Fine-grain segments</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-30.jpg" alt="교안 30p — Fine-grain segments — Table 1"><figcaption><b>30p</b> Fine-grain segments — Table 1</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-31.jpg" alt="교안 31p — Fine-grain segments — 결과 비교"><figcaption><b>31p</b> Fine-grain segments — 결과 비교</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo" id="inst">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>인스턴스 분할 방법 (22p)</h3>
+  <p><b>정의</b> &mdash; 사람을 <b>개개인별로 다른 라벨</b>로 가지게 하는 방법. 의미론적 분할에서 출발하는 두 가지 방법이 있다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>방법</th><th>어떻게</th></tr></thead>
+    <tbody>
+      <tr><td><b>사후 처리로 인스턴스 마스크로 변환</b></td><td>의미론적 분할 결과에 <b>마스크 침식(erosion)과 팽창(dilation)</b> 같은 <b>모폴로지 함수</b>를 적용해, 붙어 있는 덩어리를 개체별로 떼어 낸다</td></tr>
+      <tr><td><b>의미론적 분할을 경계 상자에 적용</b></td><td>① 객체 탐지 모델로 타깃 클래스의 <b>각 인스턴스의 경계 상자</b>를 얻고 ② 상자마다 잘라 낸 <b>패치를 의미론적 분할 모델에</b> 넣어 ③ 인스턴스 마스크를 얻는다</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">침식은 덩어리 가장자리를 깎아 가늘게 붙은 두 사람을 떼어 놓고, 팽창은 다시 부풀려 원래 크기로 돌린다(컴퓨터비전 수업의 모폴로지 연산).</p>
+</div>
+
+<div class="pt gyo" id="maskrcnn">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>Mask R-CNN — Faster R-CNN에 마스크 분기를 더한다 (23p)</h3>
+  <ul class="ul">
+    <li>탐지와 분할 두 네트워크를 <b>하나로 이어 앤드-투-앤드</b>로 훈련하면 <b>전체 파이프라인 성능이 향상</b>된다 &mdash; 이것이 <b>Mask R-CNN</b></li>
+    <li>구조: <b>영역 제안 네트워크</b> 하나 → 제안된 영역마다 <b>클래스</b>와 <b>상자 오프셋</b>을 예측하는 두 분기(= Faster R-CNN) + <b>세 번째 병렬 분기</b>가 각 영역의 <b>이진 마스크</b>를 출력</li>
+    <li>분할 분기는 <b>N개의 이진 마스크(클래스당 한 개)</b>를 출력하고, <span class="hi">다른 분기가 예측한 <b>클래스에 대응하는 마스크만</b> 최종 예측과 훈련 손실에 쓴다</span> &mdash; 그 인스턴스 클래스의 마스크만 분할 분기의 교차 엔트로피 손실에 영향을 준다</li>
+  </ul>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>왜 &lsquo;클래스당 마스크 하나&rsquo;이고, 왜 하나만 쓰나</h3>
+  <p>영역 하나에 대해 마스크 분기가 사람 마스크 · 차 마스크 · 개 마스크 …를 <b>각각 따로</b>(시그모이드, 이진) 내놓는다. 클래스 분기가 &lsquo;사람&rsquo;이라고 하면 <b>사람 마스크만</b> 꺼내 쓴다. 이렇게 하면 마스크 분기는 &lsquo;이게 무슨 물체인가&rsquo;를 고민하지 않고 &lsquo;<b>이 물체의 모양이 어디까지인가</b>&rsquo;만 배우면 된다 &mdash; 분류는 클래스 분기가, 모양은 마스크 분기가 나눠 맡는다. 픽셀마다 N개 중 하나를 고르는 소프트맥스(의미론적 분할)와 다른 점이다.</p>
+</div>
+
+<div class="pt gyo" id="segnet">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>SegNet (24p)</h3>
+  <p>인코더 및 디코더 방식이다. <b>인코더에는 여러 컨볼루션 레이어</b>, <b>디코더에는 여러 디컨볼루션 레이어</b>가 있고, <b>FCN이 만든 출력 결과를 향상</b>시켰다. 24p 그림: 입력 3×H×W → 줄어드는 상자(인코더) → 커지는 상자(디코더) → 예측 결과 H×W.</p>
+  <p class="fx-note">(보충) SegNet 논문의 핵심은 디코더가 인코더의 <b>풀링 위치(마스크)</b>를 받아 <b>언풀링</b>으로 키운다는 점이다(<a class="ext" href="#unpool">12.3 언풀링</a>). 큰 특징 맵을 통째로 넘기는 U-Net보다 메모리가 적게 든다.</p>
+</div>
+
+<div class="pt gyo" id="deeplab">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>DeepLab (25p)</h3>
+  <ul class="ul">
+    <li><b>여러 스케일</b>로 컨볼루션을 수행하고, 다양한 스케일의 특징으로 <b>score map</b>을 얻는다</li>
+    <li>score map은 최종 분할을 위해 <b>CRF(조건부 랜덤 필드)</b>로 보간되어 전달된다</li>
+    <li>스케일 처리는 CNN으로 <b>다양한 크기의 이미지</b>를 처리하거나, <b>확장(팽창) 컨볼루션의 여러 레벨로 병렬</b> 컨볼루션을 해서 이루어진다</li>
+  </ul>
+  <p class="fx-note">25p 그림: 입력 → DCNN(atrous 합성곱) → 거친 score map → 쌍선형 보간 → 완전 연결 CRF → 최종 출력. CRF는 &lsquo;색이 비슷하고 가까운 픽셀은 같은 클래스일 가능성이 높다&rsquo;는 규칙으로 경계를 다듬는다.</p>
+</div>
+
+<div class="pt gyo" id="refinet">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>RefineNet (26p)</h3>
+  <p>확장 컨볼루션은 <b>더 큰 입력을 필요로 해 메모리를 많이</b> 쓰고, <b>고해상도</b> 그림에서 계산할 때 문제가 생길 수 있다. 이를 해결하려고 제안한 방법이다 &mdash; 26p 그림처럼 1/4 · 1/8 · 1/16 · 1/32 해상도의 특징을 <b>RefineNet 블록</b>으로 아래에서부터 차례로 합치며 다듬는다. (교안 표기는 &lsquo;RefiNet&rsquo;)</p>
+</div>
+
+<div class="pt gyo" id="pspnet">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>PSPNet · 대형 커널 문제 (27p)</h3>
+  <ul class="ul">
+    <li><b>PSPNet</b> &mdash; <b>풀링 레이어의 커널 크기를 확장</b>하고, 풀링에서 <b>피라미드 방식</b>을 쓴다. 피라미드는 <b>이미지의 다양한 부분과 크기를 동시에 커버</b>한다</li>
+    <li><b>대형 커널 문제</b> &mdash; 대형 커널은 작은 커널보다 <b>훨씬 큰 수용 필드</b>를 갖지만 <b>계산이 복잡</b>하다. 이 복잡성은 <b>작은 커널을 써서</b> 해결할 수 있다</li>
+  </ul>
+  <p class="fx-note">(보충) 피라미드 풀링: 같은 특징 맵을 1×1 · 2×2 · 3×3 · 6×6 칸으로 평균 풀링해 &lsquo;사진 전체 분위기&rsquo;부터 &lsquo;부분&rsquo;까지 요약한 뒤 다시 키워 이어 붙인다. 작은 커널로 큰 커널 흉내 내기의 예: 7×7 하나 대신 1×7과 7×1을 이어 쓰면 49 → 14로 준다.</p>
+</div>
+
+<div class="pt gyo" id="deeplabv3">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>DeepLabV3 (28 · 29p)</h3>
+  <ul class="ul">
+    <li><b>배치 정규화(Batch normalization)</b>를 성능 향상을 위해 사용</li>
+    <li>특징의 <b>다중 스케일을 캐스케이드(cascade) 방식</b>으로 인코딩해 성능을 높였다</li>
+  </ul>
+  <p class="fx-note">28p 그림 위는 다중 스케일을 얻는 네 방식(a 이미지 피라미드 · b 인코더-디코더 · c 더 깊은 atrous 합성곱 · d 공간 피라미드 풀링), 아래는 블록 1~4 뒤에 팽창률을 키운 블록을 <b>이어 쌓는</b>(캐스케이드) 구조다.</p>
+</div>
+
+<div class="pt gyo" id="finegrain">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>Fine-grain segments (29~31p)</h3>
+  <p><b>U-Net에 Batch normalization을 모두 적용</b>하고 <b>Focal loss + L1 regularization</b>을 적용하는 방법을 제안했다. 30 · 31p의 Table 1은 세 모델을 손실 조합 (i)~(iv)별로 비교한다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>모델</th><th>IOU (조합 i~iv)</th><th>한 줄</th></tr></thead>
+    <tbody>
+      <tr><td>U-Net</td><td>0.496 · 0.496 · 0.632 · 0.496</td><td>대부분 0.496 수준, Precision · Recall이 거의 0인 조합이 많다</td></tr>
+      <tr><td>Attention U-Net</td><td>0.715 · 0.724 · 0.723 · 0.723</td><td>크게 오른다</td></tr>
+      <tr><td><b>U-Net BN</b></td><td>0.731 · 0.728 · 0.729 · 0.730</td><td><b>가장 높고 조합에 상관없이 안정적</b></td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">(보충) <b>Focal loss</b>는 이미 잘 맞히는 쉬운 픽셀(넓은 배경)의 손실을 줄이고 <b>어려운 픽셀에 집중</b>하게 하는 교차 엔트로피의 변형이다 &mdash; 12.5의 클래스 불균형에 대한 또 하나의 처방. L1 규제는 가중치를 0 쪽으로 당겨 과적합을 줄인다.</p>
+</div>
+
+<div class="pit"><b>이름이 비슷한 모델 — 핵심 한 단어로 구분</b>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>모델</th><th>핵심</th><th>연결되는 기법</th></tr></thead>
+  <tbody>
+    <tr><td>FCN</td><td>FC → 1×1 합성곱, 스킵 <b>덧셈</b></td><td>전치 합성곱</td></tr>
+    <tr><td>U-Net</td><td>대칭 U자, 스킵 <b>연결</b></td><td>전치 합성곱</td></tr>
+    <tr><td>SegNet</td><td>컨볼루션 인코더 + 디컨볼루션 디코더, FCN 개선</td><td>언풀링</td></tr>
+    <tr><td>DeepLab</td><td>다중 스케일 · score map · <b>CRF</b></td><td>팽창 합성곱</td></tr>
+    <tr><td>RefineNet</td><td>팽창 합성곱의 <b>메모리 문제</b> 해결</td><td>여러 해상도 정제</td></tr>
+    <tr><td>PSPNet</td><td><b>피라미드 풀링</b> · 대형 커널 문제</td><td>풀링 커널 확장</td></tr>
+    <tr><td>DeepLabV3</td><td><b>배치 정규화</b> · 다중 스케일 <b>캐스케이드</b></td><td>팽창 합성곱</td></tr>
+    <tr><td>Fine-grain</td><td>U-Net + BN + <b>Focal + L1</b></td><td>클래스 불균형</td></tr>
+    <tr><td>Mask R-CNN</td><td>Faster R-CNN + <b>마스크 분기</b>(인스턴스)</td><td>클래스당 이진 마스크</td></tr>
+  </tbody>
+</table></div></div>
+</section>
+
+<!-- ===================== 정리 ===================== -->
+<section class="sec" id="summary">
+  <div class="sec-head"><span class="sec-badge">SUM</span><h2 class="sec-title">핵심 정리<small>시험 전에 이것만</small></h2></div>
+<div class="cards">
+  <div class="card2"><b>분할의 종류</b><p>탐지 = 사각형. 의미론적 분할 = 픽셀마다 클래스(같은 클래스는 한 색). 인스턴스 분할 = 개체마다 다른 라벨.</p></div>
+  <div class="card2"><b>인코더-디코더</b><p>인코더: 입력 → 작은 잠재 공간(의미 압축). 디코더: 잠재 → 타깃 도메인(압축 해제). 잠재 공간이 입력 · 목표보다 작다.</p></div>
+  <div class="card2"><b>오토인코더</b><p>입력 = 타깃. 손실 = 입력과 출력의 차이. 비지도(레이블 불필요) · 자기 지도(타깃 = 입력). 병목 때문에 압축을 배운다.</p></div>
+  <div class="card2"><b>노이즈 제거 · 해상도 개선</b><p>망가진 입력 → 원본 타깃. <code>fit(x_noisy, x_train)</code>. 출력 층 크기 = 입력 크기.</p></div>
+  <div class="card2"><b>전치 합성곱</b><p><span class="tex">H_o=\frac{H-k+2p}{s}+1</span> ↔ <span class="tex">H=(H_o-1)s+k-2p</span>. 학습되는 필터로 키운다. k=4, s=2, p=1 → 2배.</p></div>
+  <div class="card2"><b>언풀링 · 팽창</b><p>언풀링: 풀링 마스크 자리에만 값, 나머지 0, 파라미터 없음. 팽창: 크기 유지 · 수용 영역 확대, 3×3 d=2 → 5×5.</p></div>
+  <div class="card2"><b>FCN · U-Net</b><p>FCN: VGG-16 FC → 1×1, FCN-8s(f3 · f4 · f5, ×2 ×2 ×8), 스킵 덧셈. U-Net: 대칭 U자, 스킵 연결(concat), 컨텍스트 + 위치.</p></div>
+  <div class="card2"><b>출력 · 손실</b><p>H×W×N → argmax(axis=-1) → H×W 레이블 맵. sparse_categorical_crossentropy(정수 레이블) · adam. Cityscapes 19클래스.</p></div>
+  <div class="card2"><b>IoU · Dice</b><p>Dice = 2|A∩B|/(|A|+|B|), IoU = Dice/(2−Dice), Dice = 2IoU/(1+IoU). 100 · 100 · 80 → 0.8 · 0.667. Dice 손실 = 1 − dice.</p></div>
+  <div class="card2"><b>인스턴스 분할</b><p>모폴로지(침식 · 팽창) 사후 처리 / 상자 → 패치 분할 / Mask R-CNN: 세 번째 분기, 클래스당 이진 마스크, 예측 클래스 마스크만 손실.</p></div>
+  <div class="card2"><b>여러 모델</b><p>SegNet(디컨볼루션 디코더) · DeepLab(다중 스케일 + CRF) · RefineNet(메모리) · PSPNet(피라미드 풀링) · DeepLabV3(BN + 캐스케이드) · Fine-grain(U-Net + BN + Focal + L1).</p></div>
+</div>
+</section>
+
+<!-- ===================== 다음 ===================== -->
+<section class="sec" id="next">
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주<small>13주차 · 딥러닝 : 이미지 생성</small></h2></div>
+<div class="note-box"><b>13주차</b> &mdash; 강의계획서상 <b>이미지 생성</b>이다. 이번 주 오토인코더에서 &lsquo;디코더를 위해 훈련해 <b>생성 작업</b>에 쓸 수 있다&rsquo;(9p)고 했던 것이 출발점이다 &mdash; 잠재 공간에서 점을 골라 디코더에 넣으면 새 이미지가 나온다. &rarr; <a class="ext" href="machine-learning-week13.html">13주차 수업내용</a></div>
+</section>
+
+<p class="src">기계학습특론 12주차 강의자료 정리 · 2026학년도 2학기<br>
+교안 &lsquo;시멘틱 분할&rsquo;(<b>32p</b>)을 100문제의 절 구분(12.1~12.6)에 맞춰 정리하고 슬라이드 <b>30장</b>을 실었다. 크기 식 · Dice/IoU 계산과 오토인코더 파라미터 수는 직접 계산한 값이고, 슬라이드 속 코드는 사진에서 옮겨 적었다.</p>
+
+</div>
+
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive(){
+    var cur = '';
+    sections.forEach(function(s){ if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function(t){ t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      setTimeout(function(){
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+});
+</script>
+<script>
+/* 슬라이드 확대 보기 — 좌우 이동 · 닫으면 보던 자리로 */
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.sld'));
+  if (!slides.length) return;
+
+  var lb = document.createElement('div');
+  lb.id = 'lb';
+  lb.innerHTML =
+    '<button class="prev" type="button" aria-label="이전 슬라이드">&#10094;</button>' +
+    '<img alt="">' +
+    '<button class="next" type="button" aria-label="다음 슬라이드">&#10095;</button>' +
+    '<button class="x" type="button" aria-label="닫기">&#10005;</button>' +
+    '<p class="cap"></p>';
+  document.body.appendChild(lb);
+
+  var big = lb.querySelector('img'),
+      cap = lb.querySelector('.cap'),
+      bPrev = lb.querySelector('.prev'),
+      bNext = lb.querySelector('.next'),
+      bX = lb.querySelector('.x');
+
+  var idx = -1, openedIdx = -1, savedY = 0, pushed = false, prevRestore = null, fromRef = false;
+
+  function lock() {
+    savedY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    document.body.style.position = 'fixed';
+    document.body.style.top = (-savedY) + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  /* html{scroll-behavior:smooth} 때문에 되돌아갈 때 화면이 흘러가지 않도록 잠깐 끈다 */
+  function instantly(fn) {
+    var de = document.documentElement, prev = de.style.scrollBehavior;
+    de.style.scrollBehavior = 'auto';
+    fn();
+    void de.offsetHeight;
+    de.style.scrollBehavior = prev;
+  }
+  function unlock() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    /* 개념 카드의 썸네일로 연 경우에는 넘겨 봤어도 읽던 자리로 돌아간다 */
+    var target = (!fromRef && idx >= 0 && idx !== openedIdx) ? slides[idx] : null;
+    function place() {
+      instantly(function () {
+        window.scrollTo(0, savedY);
+        /* 넘겨 본 슬라이드가 있으면 그 슬라이드 자리로, 아니면 보던 자리 그대로 */
+        if (target) target.scrollIntoView({ block: 'center' });
+      });
+    }
+    place();
+    /* 기기 뒤로가기로 닫을 때 브라우저가 옛 스크롤을 덮어쓰므로 한 프레임 뒤 한 번 더 */
+    if (window.requestAnimationFrame) window.requestAnimationFrame(place);
+    setTimeout(place, 0);
+  }
+
+  function preload(i) {
+    if (i < 0 || i >= slides.length) return;
+    var im = slides[i].querySelector('img');
+    if (im) { var p = new Image(); p.src = im.currentSrc || im.src; }
+  }
+
+  function render(i) {
+    idx = i;
+    var f = slides[i], im = f.querySelector('img'), fc = f.querySelector('figcaption');
+    big.src = im.currentSrc || im.src;
+    big.alt = im.alt || '';
+    cap.innerHTML = '';
+    cap.appendChild(document.createTextNode(fc ? fc.textContent : ''));
+    var num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = (i + 1) + ' / ' + slides.length + ' · ← → 로 넘기기';
+    cap.appendChild(num);
+    bPrev.disabled = (i === 0);
+    bNext.disabled = (i === slides.length - 1);
+    preload(i + 1); preload(i - 1);
+  }
+
+  function open(i) {
+    openedIdx = i;
+    lock();
+    render(i);
+    lb.classList.add('on');
+    if (!pushed && window.history && window.history.pushState) {
+      try {
+        if ('scrollRestoration' in window.history && prevRestore === null) {
+          prevRestore = window.history.scrollRestoration;
+          window.history.scrollRestoration = 'manual';
+        }
+        window.history.pushState({ lb: 1 }, '');
+        pushed = true;
+      } catch (e) { pushed = false; }
+    }
+  }
+  function closeNow() {
+    if (!lb.classList.contains('on')) return;
+    lb.classList.remove('on');
+    unlock();
+    idx = openedIdx = -1;
+    fromRef = false;
+    if (prevRestore !== null) {
+      try { window.history.scrollRestoration = prevRestore; } catch (e) {}
+      prevRestore = null;
+    }
+  }
+  function closeByUser() {
+    if (pushed) { pushed = false; window.history.back(); }  /* popstate 가 닫는다 */
+    else { closeNow(); }
+  }
+  function go(step) {
+    var n = idx + step;
+    if (n < 0 || n >= slides.length) return;
+    render(n);
+  }
+
+  slides.forEach(function (f, i) {
+    f.addEventListener('click', function () { open(i); });
+  });
+  window.__lbOpenFig = function (f) {
+    var i = slides.indexOf(f);
+    if (i >= 0) { fromRef = true; open(i); }
+  };
+
+  bPrev.addEventListener('click', function (e) { e.stopPropagation(); go(-1); });
+  bNext.addEventListener('click', function (e) { e.stopPropagation(); go(1); });
+  bX.addEventListener('click', function (e) { e.stopPropagation(); closeByUser(); });
+  big.addEventListener('click', function (e) { e.stopPropagation(); });
+  cap.addEventListener('click', function (e) { e.stopPropagation(); });
+  lb.addEventListener('click', closeByUser);
+
+  window.addEventListener('popstate', function () {
+    if (lb.classList.contains('on')) { pushed = false; closeNow(); }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('on')) return;
+    if (e.key === 'Escape') { e.preventDefault(); closeByUser(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+  });
+
+  /* 모바일 — 좌우로 쓸어 넘기기 */
+  var tx = 0, ty = 0;
+  lb.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) return;
+    tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+  }, { passive: true });
+  lb.addEventListener('touchend', function (e) {
+    if (!e.changedTouches.length) return;
+    var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
+</script>
+
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var terms = document.querySelectorAll('.term');
+  if (!terms.length) return;
+  var tip = document.createElement('div');
+  tip.id = 'tipbox';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  var current = null;
+
+  function hide() {
+    tip.classList.remove('on');
+    if (current) { current.classList.remove('on'); current = null; }
+  }
+  function show(el) {
+    tip.textContent = el.getAttribute('data-tip') || '';
+    tip.classList.add('on');
+    if (current && current !== el) current.classList.remove('on');
+    current = el;
+    el.classList.add('on');
+    var pad = 8;
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+    var top = r.top - t.height - 10;
+    if (top < pad) top = r.bottom + 10;
+    top = Math.min(top, window.innerHeight - t.height - pad);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+  terms.forEach(function (el) {
+    el.addEventListener('mouseenter', function () { show(el); });
+    el.addEventListener('mouseleave', function () { if (current === el) hide(); });
+    el.addEventListener('focus', function () { show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (current === el && tip.classList.contains('on')) hide(); else show(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el); }
+      if (e.key === 'Escape') hide();
+    });
+  });
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide);
+});
+</script>
+<script src="slide-ref.js?v=2"></script>
+<script src="../vendor/katex/katex.min.js"></script>
+<script>
+// .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.
+// KaTeX를 못 불러온 경우에는 원문이 그대로 남아 최소한 읽을 수는 있게 둔다.
+(function () {
+  if (typeof katex === 'undefined') { return; }
+  document.querySelectorAll('.tex, .tex-d').forEach(function (el) {
+    try {
+      katex.render(el.textContent.trim(), el, {
+        displayMode: el.classList.contains('tex-d'),
+        throwOnError: false,
+        strict: false
+      });
+    } catch (e) { if (window.console) { console.error('KaTeX', e, el.textContent); } }
+  });
+})();
+</script>
+
+<script src="quiz/ml-w12.js?v=1"></script>
+<script src="quiz/inline-quiz.js?v=2"></script>
+
+</body>
+</html>

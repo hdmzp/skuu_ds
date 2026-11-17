@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>12주차 딥러닝 영상 분할 100문제</title>
+<style>
+  :root{
+    --bg:#f4f6fa; --card:#ffffff; --ink:#16202e; --muted:#657189;
+    --line:#e2e8f2; --brand:#1560d8; --brand-deep:#0b3b8c; --brand-soft:#eaf1fe;
+    --ok:#0f8a5f; --ok-soft:#e6f6ef; --no:#d43c4a; --no-soft:#fdecee;
+    --warn:#b7791f; --shadow:0 1px 2px rgba(16,32,64,.05),0 8px 24px rgba(16,32,64,.07);
+    --r:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0e1420; --card:#161e2c; --ink:#e8edf6; --muted:#98a4bb;
+      --line:#273246; --brand:#5b96ff; --brand-deep:#a8c6ff; --brand-soft:#1a2740;
+      --ok:#48c99a; --ok-soft:#122c23; --no:#ff7b88; --no-soft:#33191e;
+      --warn:#e0b25c; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Malgun Gothic","맑은 고딕",system-ui,sans-serif;
+    line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:22px 16px 80px}
+
+  header.top{margin-bottom:18px}
+  .eyebrow{color:var(--brand);font-weight:700;font-size:13px;letter-spacing:.04em}
+  h1{font-size:25px;line-height:1.3;margin:4px 0 6px;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:14px;margin:0}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+
+  /* controls */
+  .controls{padding:14px 16px;margin-bottom:14px}
+  .ctl-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .ctl-row + .ctl-row{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+  .ctl-label{font-size:12px;font-weight:700;color:var(--muted);min-width:52px}
+  .chip{
+    border:1px solid var(--line);background:transparent;color:var(--ink);
+    padding:5px 11px;border-radius:999px;font-size:13px;cursor:pointer;
+    font-family:inherit;transition:.13s; white-space:nowrap;
+  }
+  .chip:hover{border-color:var(--brand);color:var(--brand)}
+  .chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+  .chip.ghost[aria-pressed="true"]{background:var(--brand-soft);color:var(--brand-deep);border-color:var(--brand)}
+  .spacer{flex:1}
+
+  /* progress */
+  .prog{padding:14px 16px;margin-bottom:14px}
+  .prog-head{display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;margin-bottom:9px}
+  .stat{font-size:13px;color:var(--muted)}
+  .stat b{color:var(--ink);font-size:15px;font-variant-numeric:tabular-nums}
+  .stat.ok b{color:var(--ok)} .stat.no b{color:var(--no)}
+  .bar{height:7px;background:var(--line);border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--ok));border-radius:99px;transition:width .3s}
+
+  /* question */
+  .qcard{padding:20px 20px 18px;margin-bottom:14px}
+  .qmeta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
+  .tag{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:.02em}
+  .tag.num{background:var(--brand-deep);color:#fff}
+  @media (prefers-color-scheme: dark){ .tag.num{background:var(--brand-soft);color:var(--brand-deep)} }
+  .tag.sec{background:var(--brand-soft);color:var(--brand-deep)}
+  .tag.d1{background:var(--ok-soft);color:var(--ok)}
+  .tag.d2{background:#fff4e0;color:var(--warn)}
+  .tag.d3{background:var(--no-soft);color:var(--no)}
+  @media (prefers-color-scheme: dark){ .tag.d2{background:#3a2e14} }
+  .qtext{font-size:17.5px;font-weight:600;letter-spacing:-.01em;margin:0 0 16px;line-height:1.55}
+
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{
+    display:flex;gap:11px;align-items:flex-start;text-align:left;width:100%;
+    padding:12px 14px;border:1.5px solid var(--line);background:var(--card);
+    border-radius:11px;cursor:pointer;font:inherit;font-size:15px;color:var(--ink);
+    transition:.13s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--brand);background:var(--brand-soft)}
+  .opt:disabled{cursor:default}
+  .opt .n{
+    flex:none;width:23px;height:23px;border-radius:50%;background:var(--line);color:var(--muted);
+    display:grid;place-items:center;font-size:12.5px;font-weight:700;margin-top:1px;
+  }
+  .opt.correct{border-color:var(--ok);background:var(--ok-soft)}
+  .opt.correct .n{background:var(--ok);color:#fff}
+  .opt.wrong{border-color:var(--no);background:var(--no-soft)}
+  .opt.wrong .n{background:var(--no);color:#fff}
+  .opt .mark{margin-left:auto;font-size:13px;font-weight:700;flex:none;padding-left:8px}
+  .opt.correct .mark{color:var(--ok)} .opt.wrong .mark{color:var(--no)}
+
+  .exp{margin-top:14px;padding:13px 15px;border-radius:11px;background:var(--brand-soft);border-left:3px solid var(--brand);font-size:14.5px}
+  .exp h4{margin:0 0 5px;font-size:12.5px;letter-spacing:.03em;color:var(--brand-deep)}
+  .exp p{margin:0}
+  .exp .ref{display:block;margin-top:7px;font-size:12.5px;color:var(--muted)}
+
+  .nav{display:flex;gap:8px;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+  .btn{
+    border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 16px;border-radius:10px;
+    font:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:.13s;
+  }
+  .btn:hover:not(:disabled){border-color:var(--brand);color:var(--brand)}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+  .btn.primary:hover:not(:disabled){filter:brightness(1.08);color:#fff}
+  .btn.danger{color:var(--no);border-color:var(--no)}
+  .btn.danger:hover{background:var(--no-soft)}
+
+  /* palette */
+  details.pal{padding:0;margin-bottom:14px;overflow:hidden}
+  details.pal summary{padding:13px 16px;cursor:pointer;font-size:14px;font-weight:600;list-style:none;display:flex;align-items:center;gap:8px}
+  details.pal summary::-webkit-details-marker{display:none}
+  details.pal summary::before{content:"▸";color:var(--muted);transition:.15s}
+  details.pal[open] summary::before{transform:rotate(90deg)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:6px;padding:0 16px 16px}
+  .cell{
+    aspect-ratio:1;border:1px solid var(--line);background:transparent;border-radius:8px;
+    font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;
+    font-variant-numeric:tabular-nums;transition:.1s;
+  }
+  .cell:hover{border-color:var(--brand);color:var(--brand)}
+  .cell.o{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+  .cell.x{background:var(--no-soft);border-color:var(--no);color:var(--no)}
+  .cell.cur{outline:2px solid var(--brand);outline-offset:1px}
+
+  /* result */
+  .result{padding:26px 22px;text-align:center}
+  .score{font-size:46px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:6px 0}
+  .score small{font-size:20px;color:var(--muted);font-weight:600}
+  .breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:20px 0 6px;text-align:left}
+  .bd{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .bd .k{font-size:12px;color:var(--muted)}
+  .bd .v{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+  .empty{padding:40px 20px;text-align:center;color:var(--muted);font-size:15px}
+  footer{margin-top:26px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.8}
+  @media (max-width:520px){
+    h1{font-size:21px} .qtext{font-size:16.5px} .opt{font-size:14.5px;padding:11px 12px}
+    .ctl-label{min-width:100%;margin-bottom:-3px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">CHAPTER 12 · 딥러닝 영상 분할(Segmentation)</div>
+    <h1>12주차 &middot; 딥러닝 영상 분할(Segmentation) — 100문제</h1>
+    <p class="sub">강의자료 12.1~12.6절 전 범위 · 4지선다 · 난이도 3단계</p>
+  </header>
+
+  <section class="panel controls">
+    <div class="ctl-row">
+      <span class="ctl-label">단원</span>
+      <div id="secChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    </div>
+    <div class="ctl-row">
+      <span class="ctl-label">난이도</span>
+      <div id="diffChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    </div>
+    <div class="ctl-row">
+      <span class="ctl-label">설정</span>
+      <button class="chip ghost" id="shuffleQ" aria-pressed="false">문제 순서 섞기</button>
+      <button class="chip ghost" id="shuffleO" aria-pressed="false">보기 순서 섞기</button>
+      <span class="spacer"></span>
+      <button class="chip" id="reviewBtn">오답 다시 풀기 <b id="wrongCount">0</b></button>
+      <button class="chip" id="resetBtn">처음부터</button>
+    </div>
+  </section>
+
+  <section class="panel prog">
+    <div class="prog-head">
+      <span class="stat">진도 <b><span id="doneN">0</span> / <span id="totalN">0</span></b></span>
+      <span class="stat ok">정답 <b id="okN">0</b></span>
+      <span class="stat no">오답 <b id="noN">0</b></span>
+      <span class="spacer"></span>
+      <span class="stat">정답률 <b id="rate">—</b></span>
+    </div>
+    <div class="bar"><i id="barFill"></i></div>
+  </section>
+
+  <details class="panel pal">
+    <summary>문제 번호로 이동 <span style="color:var(--muted);font-weight:400">(초록 = 정답, 빨강 = 오답)</span></summary>
+    <div class="grid" id="palette"></div>
+  </details>
+
+  <main id="stage"></main>
+
+  <footer>
+    12주차 강의자료(딥러닝 영상 분할 — 시멘틱 분할) 기반 자율 학습용 문제 세트<br>
+    풀이 기록은 이 브라우저에만 저장되며, '처음부터'를 누르면 초기화됩니다.
+  </footer>
+</div>
+
+<script>
+const QUESTIONS = [{"id": 1, "sec": "12.1", "diff": "기초", "q": "강의자료에서 세그멘테이션(segmentation)을 어떻게 정의하는가?", "opts": ["영상에서 객체의 경계 상자를 찾아내는 것", "영상의 해상도를 인위적으로 높이는 것", "영상을 여러 개의 영역으로 분할하는 것", "영상 전체에 하나의 클래스 레이블을 붙이는 것"], "a": 2, "exp": "자료는 세그멘테이션을 \"영상을 여러 개의 영역으로 분할하는 것\"으로 정의한다. 경계 상자 반환은 객체 탐지, 영상 전체에 한 레이블을 붙이는 것은 이미지 단위 분류에 해당한다."}, {"id": 2, "sec": "12.1", "diff": "기초", "q": "강의자료가 제시한 세그멘테이션의 두 가지 종류는?", "opts": ["인스턴스 세그멘테이션, 의미론적인 세그멘테이션", "이진 세그멘테이션, 다중 세그멘테이션", "전경 세그멘테이션, 배경 세그멘테이션", "지도 세그멘테이션, 비지도 세그멘테이션"], "a": 0, "exp": "자료는 세그멘테이션 종류로 인스턴스 세그멘테이션과 의미론적인(semantic) 세그멘테이션 두 가지를 명시한다."}, {"id": 3, "sec": "12.1", "diff": "기초", "q": "12주차 강의의 학습 목표로 자료에 제시된 것은?", "opts": ["강화학습의 보상 설계를 이해한다", "순환 신경망의 시계열 처리를 이해한다", "생성적 적대 신경망의 판별기를 이해한다", "세그멘테이션에 대해서 이해한다"], "a": 3, "exp": "학습 목표 슬라이드에는 \"세그멘테이션에 대해서 이해합니다\"만 제시되어 있다."}, {"id": 4, "sec": "12.1", "diff": "중급", "q": "자료의 개념 그림에서 여러 사람이 모두 하나의 'Person' 영역으로 같은 색으로 칠해진 결과는 무엇에 해당하는가?", "opts": ["객체 탐지(Object Detection)", "의미론적 분할(Semantic Segmentation)", "인스턴스 분할(Instance Segmentation)", "깊이 회귀(Depth Regression)"], "a": 1, "exp": "클래스 단위로만 구분하고 개체를 구별하지 않는 것이 의미론적 분할이다. 개체별로 다른 색을 주면 인스턴스 분할이 된다."}, {"id": 5, "sec": "12.1", "diff": "기초", "q": "자료가 밝힌 인스턴스 분할의 정의로 가장 알맞은 것은?", "opts": ["사람을 개개인별로 다른 라벨로 가지게 하는 방법", "사람 영역 전체를 하나의 라벨로 묶는 방법", "사람의 자세 관절 좌표를 추정하는 방법", "사람 이미지의 밝기를 정규화하는 방법"], "a": 0, "exp": "인스턴스 분할 슬라이드는 그 정의를 \"사람을 개개인별로 다른 라벨로 가지게 하는 방법\"이라고 명시한다."}, {"id": 6, "sec": "12.1", "diff": "중급", "q": "자료의 개념 그림에서 객체 탐지가 분할 계열 기법과 구분되는 가장 큰 차이점은?", "opts": ["여러 클래스를 동시에 다룰 수 없다", "합성곱 신경망을 쓰지 않는다", "학습에 레이블이 필요 없다", "결과가 픽셀 단위 영역이 아니라 사각형 경계 상자로 표현된다"], "a": 3, "exp": "그림에서 Object Detection은 사람마다 보라색 사각형 경계 상자를 그리는 반면, 두 분할 기법은 픽셀 단위 영역 마스크를 만든다."}, {"id": 7, "sec": "12.1", "diff": "중급", "q": "어떤 도로 영상에서 모든 차량 픽셀을 'car'로만 표시하고 차량들 사이를 구별하지 않는 시스템을 만들었다. 이 시스템은 어떤 작업을 수행한 것인가?", "opts": ["인스턴스 분할", "의미론적 분할", "객체 탐지", "이미지 단위 분류"], "a": 1, "exp": "클래스만 구별하고 개별 개체를 구별하지 않으므로 의미론적 분할이다."}, {"id": 8, "sec": "12.1", "diff": "기초", "q": "자료 그림에서 각 사람이 Person 1, Person 2, Person 3 처럼 서로 다른 라벨과 색으로 표시된 결과는?", "opts": ["의미론적 분할", "이미지 단위 분류", "인스턴스 분할", "노이즈 제거"], "a": 2, "exp": "같은 클래스라도 개체별로 다른 라벨을 부여하는 것이 인스턴스 분할이다."}, {"id": 9, "sec": "12.1", "diff": "심화", "q": "세그멘테이션에 대한 설명 중 강의자료의 내용과 가장 거리가 먼 것은?", "opts": ["세그멘테이션은 영상을 여러 영역으로 나누는 작업이다", "의미론적 분할은 각 픽셀에 클래스를 할당한다", "인스턴스 분할은 같은 클래스의 개체를 서로 다른 라벨로 구분한다", "의미론적 분할은 객체 탐지와 달리 클래스 개념을 사용하지 않는다"], "a": 3, "exp": "의미론적 분할은 각 픽셀에 타깃 클래스 중 하나를 할당하므로 클래스 개념을 반드시 사용한다. 나머지는 자료의 서술과 일치한다."}, {"id": 10, "sec": "12.1", "diff": "중급", "q": "의미론적 분할 네트워크가 최종적으로 반환해야 하는 결과의 형태는?", "opts": ["클래스별 확률 하나로 이루어진 스칼라 값", "이미지당 클래스 점수를 담은 컬럼 벡터", "입력과 동일한 높이·너비를 갖는 레이블 맵(label map)", "각 인스턴스에 대한 경계 상자 좌표 목록"], "a": 2, "exp": "자료는 각 픽셀에 타깃 클래스 중 하나를 할당해 \"동일한 높이와 너비를 갖는 레이블 맵\"을 반환해야 한다고 설명한다."}, {"id": 11, "sec": "12.2", "diff": "기초", "q": "강의자료에서 인코더(encoder)를 정의한 문장으로 알맞은 것은?", "opts": ["잠재 공간의 요소를 타깃 도메인으로 매핑하는 여함수", "출력 오차를 입력 쪽으로 전파하는 함수", "입력 샘플을 잠재 공간, 즉 숨겨진 구조화된 값 집합에 매핑하는 함수", "입력 이미지의 해상도를 두 배로 늘리는 함수"], "a": 2, "exp": "자료는 인코더를 \"입력 샘플을 잠재 공간, 즉 인코더에 의해 정의된 숨겨진 구조화된 값 집합에 매핑하는 함수\"로 정의한다."}, {"id": 12, "sec": "12.2", "diff": "기초", "q": "강의자료가 정의한 디코더(decoder)는 무엇인가?", "opts": ["잠재 공간의 요소를 사전 정의된 타깃 도메인으로 매핑하는 여함수", "입력을 잠재 공간으로 압축하는 함수", "레이블 맵에서 경계 상자를 추출하는 함수", "특징 맵에 팽창률을 적용하는 함수"], "a": 0, "exp": "자료는 디코더를 \"이 잠재 공간의 요소를 사전 정의된 타깃 도메인으로 매핑하는 여함수\"라고 정의한다."}, {"id": 13, "sec": "12.2", "diff": "기초", "q": "강의자료가 말하는 인코더-디코더 구조의 '공통 속성'은 무엇인가?", "opts": ["인코더와 디코더의 파라미터를 공유한다", "항상 두 개 이상의 손실 함수를 사용한다", "입력 공간과 목표 공간보다 작은 잠재 공간을 갖는다", "디코더가 인코더보다 항상 층 수가 많다"], "a": 2, "exp": "자료는 인코더-디코더의 공통 속성을 \"입력 공간과 목표 공간보다 작은 잠재공간을 갖는다는 점\"이라고 밝힌다."}, {"id": 14, "sec": "12.2", "diff": "중급", "q": "기계 번역에서 인코더 네트워크가 학습하는 일로 자료가 설명한 것은?", "opts": ["목표 언어의 문장을 문자 단위로 생성하는 것", "번역 품질 점수를 직접 회귀하는 것", "source language의 문장을 의미가 특징 벡터로 인코딩된 잠재 공간으로 투사하는 것", "target 언어 사전을 자동으로 구축하는 것"], "a": 2, "exp": "인코더 네트워크는 source language 문장을 입력으로 받아 문장의 의미가 특징 벡터로 인코딩된 잠재 공간으로 투사하는 것을 학습한다."}, {"id": 15, "sec": "12.2", "diff": "기초", "q": "기계 번역 예에서 디코더 네트워크의 역할은?", "opts": ["인코딩된 벡터를 target 언어의 문장으로 변환한다", "source 언어 문장을 토큰으로 분리한다", "잠재 공간의 차원을 자동으로 결정한다", "문장 길이에 따라 학습률을 조절한다"], "a": 0, "exp": "디코더 네트워크는 인코딩된 벡터를 target 언어의 문장으로 변환하기 위해 인코더와 함께 훈련된다."}, {"id": 16, "sec": "12.2", "diff": "기초", "q": "자료에 따르면 인코더는 무엇을 위해 설계 또는 훈련되는가?", "opts": ["타깃 도메인 지식을 적용해 정보를 완성하기 위해", "레이블 맵을 argmax로 만들기 위해", "클래스 불균형을 보정하기 위해", "샘플에 포함된 의미론적 정보를 추출·압축하기 위해"], "a": 3, "exp": "인코더는 샘플에 포함된 의미론적 정보를 추출/압축하기 위해 설계 또는 훈련되며, 타깃 도메인 지식을 적용해 압축을 해제·완성하는 것은 디코더의 역할이다."}, {"id": 17, "sec": "12.2", "diff": "중급", "q": "인코더가 정보를 압축한 뒤 디코더가 하는 일을 자료는 어떻게 서술하는가?", "opts": ["잠재 벡터를 다시 인코더에 되먹인다", "손실 함수의 기울기를 계산한다", "타깃 도메인에 대한 지식을 적용해 정보를 적절하게 압축 해제·완성한다", "잠재 공간의 차원을 인코더보다 더 줄인다"], "a": 2, "exp": "자료는 \"그런 다음 디코더는 타깃 도메인에 대한 지식을 적용해 정보를 적절하게 압축 해제 / 완성함\"이라고 설명한다."}, {"id": 18, "sec": "12.2", "diff": "기초", "q": "오토인코더(Auto-encoder)가 다른 인코더-디코더 모델과 구별되는 핵심 특징은?", "opts": ["잠재 공간이 입력보다 크다", "디코더가 없다", "입력과 타깃 도메인이 동일하다", "합성곱 계층을 사용할 수 없다"], "a": 2, "exp": "오토인코더는 입력과 타깃 도메인이 동일해서, 병목 계층이 있음에도 품질에 영향을 주지 않고 이미지를 인코딩·디코딩하는 것을 목표로 한다."}, {"id": 19, "sec": "12.2", "diff": "기초", "q": "자료에 따르면 오토인코더 알고리즘의 손실 함수는 무엇으로 정의되는가?", "opts": ["입력과 출력 데이터 사이의 차이", "잠재 벡터의 노름", "예측 클래스와 정답 클래스의 교차 엔트로피", "예측 마스크와 정답 마스크의 Dice 계수"], "a": 0, "exp": "자료는 \"입력과 출력 데이터 사이의 차이는 오토인코더 알고리즘 손실 함수\"라고 명시한다."}, {"id": 20, "sec": "12.2", "diff": "중급", "q": "오토인코더 학습에서 손실을 계산하기 위해 사용되는 목표(target) 이미지는 무엇인가?", "opts": ["별도로 사람이 라벨링한 마스크 이미지", "입력 이미지 자체", "잠재 코드에서 무작위로 샘플링한 이미지", "데이터셋의 평균 이미지"], "a": 1, "exp": "자료는 \"입력 이미지 자체가 손실을 계산하기 위해 사용되는 목표 이미지\"라고 설명한다."}, {"id": 21, "sec": "12.2", "diff": "중급", "q": "오토인코더의 잠재 공간이 더 작기 때문에 각 하부 네트워크가 배워야 하는 것을 옳게 짝지은 것은?", "opts": ["인코더 = 데이터를 적절히 압축하는 방법 / 디코더 = 다시 압축을 풀기 위한 적절한 매핑", "인코더 = 압축 해제 매핑 / 디코더 = 데이터 압축 방법", "인코더 = 클래스 분류 / 디코더 = 경계 상자 회귀", "인코더 = 업샘플링 / 디코더 = 다운샘플링"], "a": 0, "exp": "잠재 공간이 작으므로 인코딩 하부 네트워크는 데이터를 적절히 압축하는 방법을, 디코더는 다시 압축을 풀기 위한 적절한 매핑을 학습해야 한다."}, {"id": 22, "sec": "12.2", "diff": "기초", "q": "자료가 제시한 오토인코더 학습의 두 가지 종류는?", "opts": ["지도 학습과 강화 학습", "비지도 학습과 자기 지도 학습", "전이 학습과 메타 학습", "온라인 학습과 배치 학습"], "a": 1, "exp": "자료는 오토인코더 학습을 비지도 학습과 자기 지도 학습 두 가지로 설명한다."}, {"id": 23, "sec": "12.2", "diff": "중급", "q": "오토인코더 학습이 '비지도 학습'으로 불리는 이유로 자료가 든 근거는?", "opts": ["잠재 공간의 차원을 미리 알 수 없기 때문", "경사하강법을 쓰지 않기 때문", "클래스 개수를 알 필요가 없기 때문", "훈련에 추가 레이블이 필요하지 않기 때문"], "a": 3, "exp": "자료는 비지도 학습이라 부르는 이유로 \"훈련에 추가 레이블이 필요하지 않기 때문\"을 든다."}, {"id": 24, "sec": "12.2", "diff": "심화", "q": "자료가 설명하는 '자기 지도 학습'으로서의 오토인코더에 가장 부합하는 서술은?", "opts": ["사람이 만든 정답 마스크로부터 픽셀 단위 감독을 받는 경우", "명확하게 정의된 타깃(입력)이 있고 레이블이 없는 상태에서 패턴을 발견하기 위해 학습하는 경우", "보상 신호를 통해 정책을 개선하는 경우", "여러 모델의 예측을 평균해 성능을 올리는 경우"], "a": 1, "exp": "자료는 자기 지도 학습을 \"명확하게 정의된 타깃(입력)이 있고 레이블이 없는 데이터셋 상태에서 패턴을 발견하기 위해 학습하는 경우\"로 설명한다."}, {"id": 25, "sec": "12.2", "diff": "중급", "q": "자료가 오토인코더 목적의 예로 든 '깊이 회귀(depth regression)'는 무엇을 추정하는 작업인가?", "opts": ["각 픽셀이 속한 클래스", "각 픽셀에 대해 카메라와 이미지 콘텐츠 사이의 거리", "이미지 전체의 촬영 시각", "객체 경계 상자의 폭과 높이"], "a": 1, "exp": "자료는 깊이 회귀를 \"각 픽셀에 대해 카메라와 이미지 콘텐츠 사이의 거리 추정\"이라고 설명한다."}, {"id": 26, "sec": "12.2", "diff": "기초", "q": "의미론적 분할에 인코더-디코더를 쓸 때, 네트워크가 각 픽셀에 대해 반환하도록 훈련되는 값은?", "opts": ["카메라까지의 깊이", "픽셀의 원본 RGB 값", "해당 픽셀의 노이즈 세기", "추정한 클래스"], "a": 3, "exp": "자료는 \"의미론적인 분할에서 네트워크는 깊이가 아니라 각 픽셀에 대해 추정한 클래스를 반환하기 위해 훈련됨\"이라고 명시한다."}, {"id": 27, "sec": "12.2", "diff": "기초", "q": "자료가 인코더-디코더의 예술적 응용 사례로 든 것은?", "opts": ["문장을 요약해 제목을 만드는 작업", "낙서 예술을 현실적인 허구 이미지로 변환하거나 밤에 찍은 사진을 낮 사진으로 추정하는 것", "동영상에서 프레임 수를 줄이는 것", "텍스트를 음성으로 읽어 주는 것"], "a": 1, "exp": "자료는 인코더-디코더가 낙서 예술을 현실적인 허구 이미지로 변환하거나 밤 사진을 낮 사진으로 추정하는 예술적 응용으로 유명하다고 소개한다."}, {"id": 28, "sec": "12.2", "diff": "중급", "q": "오토인코더가 입력 이미지를 그대로 반환하도록 훈련해도 의미가 있는 이유를 자료는 무엇에서 찾는가?", "opts": ["오토인코더의 병목(bottleneck) 속성", "손실 함수가 교차 엔트로피이기 때문", "디코더가 사전 훈련되어 있기 때문", "입력이 항상 노이즈를 포함하기 때문"], "a": 0, "exp": "자료는 \"왜 네트워크가 입력 이미지를 반환하도록 훈련되어야 하는가? 오토 인코더의 병목 속성에 있음\"이라고 답한다. 병목 때문에 인코더는 정보를 최대한 보존하며 압축해야 한다."}, {"id": 29, "sec": "12.2", "diff": "중급", "q": "인코딩과 디코딩 구성요소의 훈련·적용 방식에 대한 자료의 설명으로 옳은 것은?", "opts": ["각각 따로 훈련하고 항상 함께 적용한다", "인코더만 훈련하고 디코더는 고정한다", "전체로 훈련되지만 용도에 따라 이 둘은 개별로 적용될 수 있다", "훈련과 적용 모두 분리해서 수행해야 한다"], "a": 2, "exp": "자료는 인코딩과 디코딩 구성요소가 전체로 훈련되지만 용도에 따라 개별로 적용된다고 설명한다."}, {"id": 30, "sec": "12.2", "diff": "심화", "q": "훈련 데이터셋이 반복 패턴을 가질 때 오토인코더 네트워크가 하게 되는 일로 자료가 서술한 것은?", "opts": ["반복 패턴을 제거하고 잔차만 학습한다", "인코딩을 개선하기 위해 이 상관관계를 알아내려고 한다", "병목 계층의 차원을 자동으로 늘린다", "학습률을 낮춰 과적합을 피한다"], "a": 1, "exp": "병목 때문에 정보를 최대한 압축해야 하므로, 데이터에 반복 패턴이 있으면 네트워크는 인코딩을 개선하기 위해 그 상관관계를 알아내려 한다."}, {"id": 31, "sec": "12.2", "diff": "중급", "q": "오토인코더의 인코더 부분이 만들어 내는 저차원 표현의 활용으로 자료가 든 예는?", "opts": ["이미지 사이의 콘텐츠 유사도 보존 및 클러스터·패턴 강조를 위한 데이터 시각화", "훈련 데이터의 라벨 자동 생성", "합성곱 커널의 팽창률 결정", "경계 상자 좌표의 정규화"], "a": 0, "exp": "자료는 인코더가 제공하는 저차원 표현이 이미지 간 콘텐츠 유사도를 보존하는 데 자주 쓰이며, 클러스터와 패턴을 강조하기 위한 데이터 시각화에도 사용된다고 설명한다."}, {"id": 32, "sec": "12.2", "diff": "중급", "q": "노이즈 제거 오토인코더(denoising autoencoder)의 '특수성'으로 자료가 지적한 것은?", "opts": ["디코더 없이 인코더만으로 동작한다", "잠재 공간이 입력보다 커야 한다", "손실 함수로 Dice를 사용한다", "입력 이미지가 네트워크에 전달되기 전에 손실이 있는 변환을 겪는다"], "a": 3, "exp": "노이즈 제거 오토인코더는 입력 이미지가 네트워크에 전달되기 전에 손실이 있는 변환(노이즈 추가 등)을 겪지만, 모델은 여전히 원본 이미지를 반환하도록 훈련된다."}, {"id": 33, "sec": "12.2", "diff": "심화", "q": "노이즈 제거 오토인코더가 손실이 있는 연산을 취소하는 방법을 학습하게 되는 직접적인 이유는?", "opts": ["잠재 공간이 입력보다 크기 때문", "노이즈의 분포를 사전에 알려주기 때문", "모델이 여전히 원본(깨끗한) 이미지를 반환하도록 훈련되기 때문", "배치 정규화를 사용하기 때문"], "a": 2, "exp": "입력에는 노이즈가 섞여 있어도 타깃은 원본 이미지이므로, 네트워크는 손실 연산을 취소하고 누락된 정보를 일부 복원하는 방법을 학습하게 된다."}, {"id": 34, "sec": "12.2", "diff": "기초", "q": "자료가 노이즈 제거 오토인코더의 확장 응용으로 언급한 스마트 이미지 업스케일링(smart image upscaling)의 다른 이름은?", "opts": ["이미지 해상도 개선(image super-resolution)", "이미지 정규화(image normalization)", "이미지 등록(image registration)", "이미지 이진화(image binarization)"], "a": 0, "exp": "자료는 이러한 오토인코더가 이미지 해상도 개선(image super-resolution)이라고 부르는 스마트 이미지 업스케일링에도 사용된다고 설명한다."}, {"id": 35, "sec": "12.2", "diff": "중급", "q": "이미지 노이즈 제거 예제 슬라이드가 강조하는 아키텍처 특징은?", "opts": ["잠재 공간이 없는 완전 연결 구조", "순환 연결을 갖는 비대칭 구조", "낮은 차원의 병목 계층이 있는 일반적인 인코더-디코더의 대칭 아키텍처", "입력마다 층 수가 달라지는 동적 구조"], "a": 2, "exp": "예제는 낮은 차원의 병목 계층을 가진 인코더-디코더의 대칭 아키텍처를 강조하며, 이미지를 입력과 타깃으로 모두 사용한다."}, {"id": 36, "sec": "12.2", "diff": "심화", "q": "자료의 노이즈 제거 오토인코더 코드에서 노이즈 데이터를 만들고 학습하는 부분은 x_noisy = x_train + np.random.normal(loc=0, scale=.5, size=x_train.shape) 이후 autoencoder.fit(x_noisy, x_train) 이다. 이 호출의 의미로 옳은 것은?", "opts": ["노이즈 이미지를 입력이자 타깃으로 사용한다", "깨끗한 이미지를 입력, 노이즈 이미지를 타깃으로 사용한다", "노이즈 이미지를 검증 데이터로만 사용한다", "노이즈 이미지를 입력, 깨끗한 원본을 타깃으로 사용한다"], "a": 3, "exp": "fit(x_noisy, x_train)은 첫 인자가 입력, 둘째 인자가 타깃이므로 노이즈가 섞인 이미지를 입력으로, 원본 x_train을 타깃으로 학습한다는 뜻이다."}, {"id": 37, "sec": "12.3", "diff": "기초", "q": "전치 합성곱(transposed convolution)을 자료에서 부르는 또 다른 이름은?", "opts": ["팽창 합성곱", "디컨볼루션(deconvolution)", "분리 합성곱", "그룹 합성곱"], "a": 1, "exp": "자료는 전치 합성곱을 \"transposed convolution, 디컨볼루션\"으로 병기하고 있다."}, {"id": 38, "sec": "12.3", "diff": "중급", "q": "자료에서 전치 합성곱을 설명할 때 정의한 기호와 의미의 짝으로 옳지 않은 것은?", "opts": ["k : 커널 크기", "D : 입력 깊이", "s : 보폭(stride)", "N : 팽창률"], "a": 3, "exp": "자료는 k(커널 크기), D(입력 깊이), N(커널 개수), p(패딩), s(보폭)로 기호를 정의한다. 팽창률은 팽창 합성곱에서 별도로 도입되는 초매개변수다."}, {"id": 39, "sec": "12.3", "diff": "중급", "q": "자료에 제시된 합성곱(피드 포워드 방향)의 출력 높이 수식은?", "opts": ["H_o = (H - k + 2p) / s + 1", "H_o = (H + k - 2p) / s - 1", "H_o = (H - 1)s + k - 2p", "H_o = H · s - k + 2p"], "a": 0, "exp": "자료의 수식은 H_o = (H - k + 2p)/s + 1 이며, W도 같은 형태로 주어진다."}, {"id": 40, "sec": "12.3", "diff": "중급", "q": "자료에 제시된 전치 합성곱의 출력 높이 수식은?", "opts": ["H = (H_o - k + 2p) / s + 1", "H = (H_o - 1)s + k - 2p", "H = H_o · k - 2p + s", "H = (H_o + 1)/s + k + 2p"], "a": 1, "exp": "전치 합성곱은 합성곱 수식을 반전시킨 형태로 H = (H_o - 1)s + k - 2p, W = (W_o - 1)s + k - 2p 이다."}, {"id": 41, "sec": "12.3", "diff": "심화", "q": "입력 높이 H = 32, 커널 크기 k = 3, 패딩 p = 1, 보폭 s = 1인 합성곱의 출력 높이 H_o는?", "opts": ["30", "31", "33", "32"], "a": 3, "exp": "H_o = (32 - 3 + 2)/1 + 1 = 31 + 1 = 32 이므로 공간 해상도가 유지된다."}, {"id": 42, "sec": "12.3", "diff": "심화", "q": "입력 높이 H = 15, 커널 크기 k = 3, 패딩 p = 1, 보폭 s = 2인 합성곱의 출력 높이 H_o는?", "opts": ["7", "9", "10", "8"], "a": 3, "exp": "H_o = (15 - 3 + 2)/2 + 1 = 14/2 + 1 = 7 + 1 = 8 이다."}, {"id": 43, "sec": "12.3", "diff": "심화", "q": "전치 합성곱에서 H_o = 7, 보폭 s = 2, 커널 크기 k = 4, 패딩 p = 1일 때 출력 높이 H는?", "opts": ["12", "13", "14", "16"], "a": 2, "exp": "H = (H_o - 1)s + k - 2p = (7 - 1)×2 + 4 - 2 = 12 + 2 = 14 이므로 해상도가 두 배가 된다."}, {"id": 44, "sec": "12.3", "diff": "중급", "q": "전치 합성곱 방식에 대한 자료의 설명으로 옳은 것은?", "opts": ["커널을 고정된 보간 필터로 대체해 학습을 생략한다", "합성곱 계층을 반전시켜 특징 맵의 콘텐츠와 훈련 가능한 필터 사이의 합성곱을 통해 공간 차원을 증가시킨다", "특징 맵의 채널 수만 늘리고 공간 크기는 유지한다", "최대 풀링의 인덱스를 저장해 그 위치로 값을 되돌린다"], "a": 1, "exp": "자료는 전치 합성곱을 \"합성곱 계층을 반전시켜 특징 맵의 콘텐츠와 훈련 가능한 필터 사이의 합성곱을 통해 특징 맵의 공간 차원을 증가시킴\"으로 설명한다. 마지막 보기는 언풀링에 대한 설명이다."}, {"id": 45, "sec": "12.3", "diff": "기초", "q": "언풀링(unpooling)은 어떤 연산을 유사반전하기 위해 나온 방법인가?", "opts": ["배치 정규화", "전치 합성곱", "교차 엔트로피 손실", "최대 풀링"], "a": 3, "exp": "자료는 언풀링을 \"최대 풀링을 유사반전하기 위해 나온 방법\"이라고 소개한다."}, {"id": 46, "sec": "12.3", "diff": "중급", "q": "언풀링에 대해 자료가 밝힌 수학적 성격은?", "opts": ["최대 풀링의 완전한 역연산이 존재한다", "수학적으로 완전한 반전은 불가능하지만 최소한 공간 샘플링 관점에서 그에 가깝게 설계한다", "최대 풀링과 완전히 동일한 연산이다", "합성곱의 역행렬로 정확히 계산된다"], "a": 1, "exp": "자료는 언풀링이 수학적으로는 불가능하지만 최소한 공간 샘플링 관점에서 최대 풀링의 반전에 가깝게 설계된 것이라고 설명한다."}, {"id": 47, "sec": "12.3", "diff": "중급", "q": "언풀링의 유사-역연산을 구현하기 위해 최대 풀링 계층을 어떻게 수정하는가?", "opts": ["출력 채널 수를 두 배로 늘린다", "커널 크기를 1로 고정한다", "결과 텐서와 함께 풀링 마스크(pooling mask)를 출력하도록 수정한다", "패딩을 자동으로 계산하도록 수정한다"], "a": 2, "exp": "자료는 유사-역연산 구현을 위해 각 최대 풀링 계층을 수정해 결과 텐서를 따라 풀링 마스크를 출력한다고 설명한다."}, {"id": 48, "sec": "12.3", "diff": "중급", "q": "언풀링 단계에서 풀링 마스크는 어떻게 사용되는가?", "opts": ["입력 값을 풀링되기 전의 형상으로 업스케일링된 텐서에 뿌리는 데 사용된다", "마스크를 손실 함수의 가중치로 사용한다", "마스크로 커널의 팽창률을 결정한다", "마스크로 배치 크기를 조절한다"], "a": 0, "exp": "자료는 풀링 마스크를 이용해 입력 값을 풀링되기 전의 형상으로 업스케일링된 텐서에 뿌린다고 설명한다. 마스크가 가리키는 위치에만 값이 놓이고 나머지는 0이 된다."}, {"id": 49, "sec": "12.3", "diff": "심화", "q": "자료의 언풀링 그림에서 max_pool(kernel_size=2, strides=2, padding=0)로 4×4 특징 맵을 줄인 뒤 max_unpool(kernel_size=2, strides=2)로 되돌렸을 때 결과 텐서의 특징으로 가장 알맞은 것은?", "opts": ["모든 위치가 원래 값으로 완전히 복원된다", "각 값이 2×2 블록 전체에 복제되어 채워진다", "마스크가 가리키는 최대값 위치에만 값이 놓이고 나머지 위치는 0이 된다", "크기는 그대로이고 값만 바뀐다"], "a": 2, "exp": "최대 풀링은 각 창에서 최대값만 남기므로, 언풀링은 풀링 마스크가 기억한 위치에만 값을 되돌리고 나머지 위치는 0으로 채운다. 값 복제는 평균 풀링을 되돌리는 avg_unpool(업샘플링)에 가깝다."}, {"id": 50, "sec": "12.3", "diff": "기초", "q": "팽창(dilated) 합성곱 또는 atrous convolution의 목적을 자료는 무엇이라고 설명하는가?", "opts": ["데이터의 공간 차원을 더 희생시키지 않고 합성곱의 수용 영역을 인위적으로 증가시키는 것", "특징 맵의 채널 수를 줄여 연산량을 절감하는 것", "최대 풀링의 마스크를 기록해 복원하는 것", "잠재 공간의 차원을 자동으로 결정하는 것"], "a": 0, "exp": "자료는 팽창 합성곱을 데이터의 공간 차원을 더 희생시키지 않고 수용 영역을 인위적으로 증가시키는 방법이라고 정의한다."}, {"id": 51, "sec": "12.3", "diff": "기초", "q": "팽창 합성곱이 일반 합성곱에 추가로 갖는 초매개변수는 무엇을 정의하는가?", "opts": ["커널에 적용될 보폭", "커널에 적용될 팽창률", "출력 채널 수", "패딩의 종류"], "a": 1, "exp": "자료는 \"추가적으로 커널에 적용될 팽창률을 정의하는 초매개변수가 있는 점을 제외하고 합성곱과 유사함\"이라고 설명한다."}, {"id": 52, "sec": "12.3", "diff": "심화", "q": "자료의 팽창 합성곱 그림처럼 3×3 커널에 팽창률 d = 2를 적용하면 커널이 실제로 덮는 영역은 어떻게 변하는가?", "opts": ["3×3 그대로 유지되고 파라미터만 늘어난다", "1×1로 줄어든다", "커널 원소 사이에 간격이 생겨 5×5 범위를 덮는다", "9×9 범위를 덮는다"], "a": 2, "exp": "팽창률 d=2면 커널 원소 사이에 한 칸씩 구멍이 생겨 3×3 커널이 5×5 범위를 덮는다. 학습 파라미터 수는 그대로이면서 수용 영역만 커지는 것이 팽창 합성곱의 이점이다."}, {"id": 53, "sec": "12.4", "diff": "기초", "q": "완전 컨볼루션 네트워크(FCN)는 어떤 분류 모델에 기반해 구성되었는가?", "opts": ["ResNet-50", "AlexNet", "GoogLeNet", "VGG-16"], "a": 3, "exp": "자료는 Fully convolutional networks가 VGG-16에 기반해 마지막 FC layer를 1×1 합성곱 계층으로 대체해 구성된다고 설명한다."}, {"id": 54, "sec": "12.4", "diff": "기초", "q": "FCN이 VGG-16을 분할용으로 바꾸기 위해 수행한 핵심 변경은?", "opts": ["마지막 FC layer를 1×1 합성곱 계층으로 대체", "모든 합성곱을 팽창 합성곱으로 대체", "최대 풀링을 모두 제거", "입력 해상도를 224×224로 고정"], "a": 0, "exp": "FCN은 VGG-16의 마지막 완전 연결(FC) 계층을 1×1 합성곱 계층으로 대체함으로써 임의 크기 입력에 대해 공간 정보를 유지한 출력을 낼 수 있게 한다."}, {"id": 55, "sec": "12.4", "diff": "중급", "q": "자료가 FCN의 기여로 든 두 가지 방법을 옳게 묶은 것은?", "opts": ["경계 상자 회귀 방법과 비최대 억제 방법", "RoI 풀링 방법과 마스크 분기 추가 방법", "특징 추출을 위한 CNN을 효율적으로 인코더로 사용하는 방법과 CNN의 특징맵을 효율적으로 업샘플링·디코딩하는 방법", "CRF 후처리 방법과 피라미드 풀링 방법"], "a": 2, "exp": "자료는 FCN의 기여로 특징 추출용 CNN을 인코더로 효율적으로 사용하는 방법과, CNN 특징맵을 효율적으로 업샘플링·디코딩하는 방법 두 가지를 든다."}, {"id": 56, "sec": "12.4", "diff": "심화", "q": "자료의 FCN-8s 구현 코드에서 인코더로 사전 훈련된 VGG-16 특징 추출기를 가져올 때 사용한 인자 설정은?", "opts": ["include_top=True, weights=None", "include_top=True, weights='imagenet'", "include_top=False, weights=None", "include_top=False, weights='imagenet'"], "a": 3, "exp": "코드는 VGG16(include_top=False, weights='imagenet', input_tensor=inputs)로 분류 헤드를 제거한 사전 훈련 특징 추출기를 가져온다."}, {"id": 57, "sec": "12.4", "diff": "심화", "q": "FCN-8s 코드에서 f3 = vgg16.get_layer('block3_pool').output 의 특징 맵 형상으로 자료에 표시된 것은?", "opts": ["(28, 28, 256)", "(14, 14, 512)", "(7, 7, 512)", "(56, 56, 128)"], "a": 0, "exp": "코드 주석에 f3은 (28, 28, 256), f4(block4_pool)는 (14, 14, 512), f5(block5_pool)는 (7, 7, 512)로 표기되어 있다."}, {"id": 58, "sec": "12.4", "diff": "심화", "q": "FCN-8s 코드의 마지막 출력 계층 Conv2DTranspose(filters=out_ch, kernel_size=16, strides=8, padding='same')에서 strides=8이 의미하는 바는?", "opts": ["채널 수를 8배로 늘린다", "특징 맵의 공간 해상도를 8배로 업샘플링한다", "8개의 스킵 연결을 만든다", "8개 클래스를 예측한다"], "a": 1, "exp": "전치 합성곱의 보폭 8은 공간 차원을 8배로 키운다는 뜻이며, 이것이 1/8 해상도 특징에서 원본 크기로 복원하는 FCN-8s의 마지막 단계다."}, {"id": 59, "sec": "12.4", "diff": "중급", "q": "FCN-8s 코드에서 m1 = add([f4, f5x2]) 처럼 스킵 연결로 온 특징을 결합하는 방식은?", "opts": ["채널 방향 연결(concatenation)", "최대값 선택(max)", "곱셈(multiply)", "원소별 덧셈(add)"], "a": 3, "exp": "FCN은 add()를 사용해 인코더의 중간 특징과 업샘플링된 특징을 원소별로 더한다. 채널 방향 연결을 쓰는 것은 U-Net이다."}, {"id": 60, "sec": "12.4", "diff": "기초", "q": "U-Net의 전체 구성을 자료는 어떻게 설명하는가?", "opts": ["특징 깊이를 증가시키면서 공간 차원은 축소시키는 다중 블록 축소 인코더와 이미지 해상도를 복원하는 확장 디코더", "특징 깊이와 공간 차원을 모두 유지하는 단일 경로 네트워크", "완전 연결 계층만으로 구성된 다층 퍼셉트론", "영역 제안 네트워크와 분류 분기의 결합"], "a": 0, "exp": "자료는 U-Net을 특징 깊이를 늘리며 공간 차원을 줄이는 축소 인코더와, 이미지 해상도를 복원하는 확장 디코더로 구성된다고 설명한다."}, {"id": 61, "sec": "12.4", "diff": "중급", "q": "U-Net의 스킵 연결이 하는 일로 자료가 서술한 것은?", "opts": ["디코더의 출력을 다시 인코더 입력으로 되돌린다", "인코딩 블록을 그에 대응하는 디코딩 블록과 연결한다", "같은 블록 안의 두 합성곱을 건너뛴다", "손실 함수를 여러 층에 분산시킨다"], "a": 1, "exp": "자료는 \"FCN처럼 스킵 연결은 인코딩 블록을 그에 대응하는 디코딩 블록과 연결함\"이라고 설명한다."}, {"id": 62, "sec": "12.4", "diff": "중급", "q": "U-Net의 디코딩 블록이 서로 다른 두 경로에서 받는 정보를 옳게 짝지은 것은?", "opts": ["이전 블록에서 위치 정보 / 인코딩 경로에서 컨텍스트 정보", "이전 블록에서 손실 값 / 인코딩 경로에서 학습률", "이전 블록에서 컨텍스트 정보 / 인코딩 경로에서 위치 정보", "이전 블록에서 클래스 점수 / 인코딩 경로에서 경계 상자"], "a": 2, "exp": "자료는 디코딩 블록이 이전 블록으로부터 컨텍스트 정보를, 인코딩 경로에서 위치 정보를 제공받는다고 설명한다."}, {"id": 63, "sec": "12.4", "diff": "기초", "q": "U-Net이라는 이름과 관련해 자료가 강조한 구조적 특징은?", "opts": ["전통적인 U자 형태의 인코더-디코더 구조로 돌아간 대칭형", "인코더가 디코더보다 두 배 깊은 비대칭형", "디코더가 없는 단방향 구조", "순환 신경망과 결합된 구조"], "a": 0, "exp": "자료는 \"U-Net은 전통적인 U자 형태의 인코더-디코더 구조로 돌아가 대칭형\"이라고 서술한다."}, {"id": 64, "sec": "12.4", "diff": "심화", "q": "스킵 연결로 전달된 특징맵을 결합하는 방식에서 U-Net이 FCN과 다른 점은?", "opts": ["결합하지 않고 버린다", "평균을 취해 결합한다", "덧셈으로 결합한다", "덧셈 대신 연결(concatenation)을 통해 결합한다"], "a": 3, "exp": "자료는 U-Net에서 \"스킵 연결에서 나온 특징맵은 덧셈 대신 연결을 통해 결합이 됨\"이라고 명시한다. FCN-8s 코드는 add()를 사용했다."}, {"id": 65, "sec": "12.5", "diff": "기초", "q": "인코더-디코더를 사용한 객체 분할에서 네트워크가 반환해야 하는 레이블 맵(label map)의 조건은?", "opts": ["입력보다 8배 작은 해상도를 가져야 한다", "클래스 수만큼의 길이를 갖는 1차원 벡터여야 한다", "입력 이미지와 동일한 높이와 너비를 가져야 한다", "각 인스턴스마다 하나씩 생성되어야 한다"], "a": 2, "exp": "자료는 각 픽셀에 타깃 클래스 중 하나를 할당해 동일한 높이와 너비를 갖는 레이블 맵을 반환해야 한다고 설명한다."}, {"id": 66, "sec": "12.5", "diff": "중급", "q": "의미론적 분할 네트워크가 최종적으로 반환하도록 구성되는 텐서의 형상은? (N은 클래스 수)", "opts": ["N×1 컬럼 벡터", "H×W×N 텐서", "H×W×1 텐서", "N×N 혼동 행렬"], "a": 1, "exp": "자료는 이미지 단위 분류망이 N개 로짓의 컬럼 벡터를 내는 것과 달리, 분할 네트워크는 픽셀 단위 점수를 담고 있는 H×W×N 텐서를 반환하도록 구성된다고 설명한다."}, {"id": 67, "sec": "12.5", "diff": "중급", "q": "이미지 단위 분류 네트워크와 분할 네트워크의 출력 차이를 옳게 설명한 것은?", "opts": ["분류망은 H×W×N 텐서를, 분할망은 N개 로짓 벡터를 낸다", "분류망은 이미지마다 클래스당 점수를 담은 N개 로짓의 컬럼 벡터를, 분할망은 픽셀 단위 점수를 담은 텐서를 낸다", "둘 다 동일한 형상의 출력을 낸다", "분류망은 확률을, 분할망은 경계 상자를 낸다"], "a": 1, "exp": "자료는 전체 이미지 단위로 클래스당 점수를 포함하는 N개 로짓의 컬럼 벡터를 내던 분류망과 달리, 분할망은 픽셀 단위 점수 텐서를 반환하도록 구성된다고 설명한다."}, {"id": 68, "sec": "12.5", "diff": "기초", "q": "자료가 인코더-디코더 기반 객체 분할의 기본 손실 함수로 제시한 것은?", "opts": ["교차 엔트로피(cross-entropy) 손실", "평균 제곱 오차(MSE)", "힌지 손실(hinge loss)", "코사인 유사도 손실"], "a": 0, "exp": "자료는 \"손실함수 : 교차 - 엔트로피 손실을 사용\"이라고 명시한다."}, {"id": 69, "sec": "12.5", "diff": "심화", "q": "자료의 분할 코드에서 out_ch = num_classes = 19 로 설정한 이유를 주석은 무엇이라고 밝히는가?", "opts": ["ImageNet 분류 클래스 수이기 때문", "VGG-16의 블록 수이기 때문", "전치 합성곱의 커널 크기이기 때문", "Cityscapes 데이터셋에 객체 분할을 하기 위해서"], "a": 3, "exp": "코드 주석은 \"# Cityscapes 데이터셋에 객체 분할\"이라고 적혀 있으며, 이 데이터셋의 클래스 수 19를 출력 채널 수로 삼는다."}, {"id": 70, "sec": "12.5", "diff": "심화", "q": "자료의 분할 코드 seg_fcn.compile(optimizer='adam', loss=...) 에서 사용된 손실 이름은?", "opts": ["binary_crossentropy", "categorical_hinge", "sparse_categorical_crossentropy", "mean_squared_error"], "a": 2, "exp": "코드는 loss='sparse_categorical_crossentropy'를 사용한다. 정답 레이블 맵이 원-핫이 아니라 정수 클래스 인덱스로 주어지기 때문이다."}, {"id": 71, "sec": "12.5", "diff": "기초", "q": "자료의 분할 코드에서 사용한 최적화 알고리즘은?", "opts": ["adam", "sgd", "rmsprop", "adagrad"], "a": 0, "exp": "코드는 seg_fcn.compile(optimizer='adam', loss='sparse_categorical_crossentropy')로 컴파일한다."}, {"id": 72, "sec": "12.5", "diff": "중급", "q": "자료의 코드 label_map = np.argmax(seg_fcn.predict(image), axis=-1) 에서 axis=-1을 따라 argmax를 취하는 이유는?", "opts": ["배치 차원에서 가장 좋은 샘플을 고르기 위해", "마지막 축인 클래스 축에서 점수가 가장 큰 클래스를 각 픽셀에 할당하기 위해", "높이 축에서 최대 응답 위치를 찾기 위해", "채널 수를 줄여 메모리를 절약하기 위해"], "a": 1, "exp": "예측 텐서의 마지막 축이 클래스 축이므로, 그 축에서 argmax를 취하면 픽셀마다 가장 점수가 높은 클래스 인덱스가 되어 레이블 맵이 만들어진다."}, {"id": 73, "sec": "12.5", "diff": "기초", "q": "자료가 분할 학습에서 반드시 해결해야 할 문제로 지적한 것은?", "opts": ["클래스 불균형 문제", "기울기 폭발 문제", "레이블 노이즈 문제", "입력 정규화 문제"], "a": 0, "exp": "자료는 \"이미지 단위 분류나 픽셀 단위 분류 작업에서 보통 클래스 불균형 문제가 발생함\"을 학습에서 해결해야 할 문제로 든다."}, {"id": 74, "sec": "12.5", "diff": "기초", "q": "자료가 분할 성능의 평가지표로 제시한 두 가지는?", "opts": ["정확도와 F1 점수", "BLEU와 ROUGE", "PSNR과 SSIM", "Intersection-over-Union(IOU)과 DICE"], "a": 3, "exp": "자료는 평가지표로 Intersection-over-union(IOU)과 DICE를 제시한다."}, {"id": 75, "sec": "12.5", "diff": "중급", "q": "자료에 제시된 Dice 계수의 정의식은?", "opts": ["Dice(A,B) = |A∩B| / |A∪B|", "Dice(A,B) = 2|A∩B| / (|A| + |B|)", "Dice(A,B) = |A| + |B| - 2|A∩B|", "Dice(A,B) = |A∩B| / (|A| + |B|)"], "a": 1, "exp": "자료의 수식은 Dice(A,B) = 2|A∩B| / (|A| + |B|) 이다. 첫 번째 보기는 IoU의 정의다."}, {"id": 76, "sec": "12.5", "diff": "심화", "q": "자료에 제시된 Dice와 IoU의 관계식 중 IoU를 Dice로 표현한 것은?", "opts": ["IoU(A,B) = Dice(A,B) / (2 - Dice(A,B))", "IoU(A,B) = 2·Dice(A,B) / (1 + Dice(A,B))", "IoU(A,B) = 1 - Dice(A,B)", "IoU(A,B) = Dice(A,B) / 2"], "a": 0, "exp": "자료의 수식은 IoU(A,B) = Dice(A,B) / (2 - Dice(A,B)) 이다."}, {"id": 77, "sec": "12.5", "diff": "심화", "q": "자료에 제시된, IoU로부터 Dice를 구하는 관계식은?", "opts": ["Dice(A,B) = IoU(A,B) / (2 - IoU(A,B))", "Dice(A,B) = 2 × IoU(A,B) / (1 + IoU(A,B))", "Dice(A,B) = IoU(A,B) / (1 - IoU(A,B))", "Dice(A,B) = 1 + IoU(A,B) / 2"], "a": 1, "exp": "자료의 수식은 Dice(A,B) = 2×IoU(A,B) / (1 + IoU(A,B)) 이며, 앞의 IoU 관계식과 서로 역관계다."}, {"id": 78, "sec": "12.5", "diff": "심화", "q": "예측 마스크 A와 정답 마스크 B가 각각 100픽셀이고 겹치는 영역이 80픽셀일 때, 자료의 수식으로 계산한 Dice와 IoU 값은?", "opts": ["Dice = 0.8, IoU = 0.8", "Dice = 0.6667, IoU = 0.8", "Dice = 0.8, IoU ≈ 0.6667", "Dice = 0.4, IoU = 0.5"], "a": 2, "exp": "Dice = 2×80/(100+100) = 0.8 이고, IoU = Dice/(2 - Dice) = 0.8/1.2 ≈ 0.6667 이다. 항상 IoU ≤ Dice 관계가 성립한다."}, {"id": 79, "sec": "12.5", "diff": "중급", "q": "자료의 dice_loss 함수가 마지막에 return 1 - dice 를 하는 이유로 가장 알맞은 것은?", "opts": ["Dice 계수가 항상 1보다 크기 때문", "1에서 빼야 확률이 되기 때문", "클래스 개수로 정규화하기 위해", "Dice 계수는 클수록 좋은 지표라서 최소화 대상인 손실로 바꾸기 위해"], "a": 3, "exp": "Dice 계수는 1에 가까울수록 좋은 겹침을 뜻하므로, 경사하강법으로 최소화할 손실로 쓰려면 1 - dice 형태로 부호를 뒤집어야 한다."}, {"id": 80, "sec": "12.5", "diff": "중급", "q": "자료의 dice_loss 코드에서 pred_proba = tf.nn.softmax(logits, axis=-1) 이 수행하는 일은?", "opts": ["로짓을 정수 레이블로 반올림한다", "로짓을 클래스 축에서 확률로 변환한다", "확률을 다시 로짓으로 되돌린다", "공간 축을 따라 합을 구한다"], "a": 1, "exp": "코드 주석대로 로짓을 확률로 변환하는 단계이며, 이어 실제 값은 tf.one_hot으로 원-핫 인코딩된 텐서로 변환된다."}, {"id": 81, "sec": "12.5", "diff": "중급", "q": "자료의 dice_loss 코드에서 gt_onehot = tf.one_hot(labels, num_classes, dtype=tf.float32) 를 사용하는 이유는?", "opts": ["레이블에 노이즈를 주기 위해", "클래스 불균형 가중치를 계산하기 위해", "정수 클래스 레이블을 예측 확률과 원소별로 곱할 수 있는 원-핫 형태로 맞추기 위해", "레이블의 공간 해상도를 줄이기 위해"], "a": 2, "exp": "정답이 정수 인덱스 맵이므로, 소프트맥스 확률 텐서와 같은 형상으로 맞추기 위해 원-핫 인코딩한 뒤 분자·분모를 계산한다."}, {"id": 82, "sec": "12.5", "diff": "심화", "q": "자료의 dice_loss 코드에서 num_perclass, den_perclass 계산 시 tf.reduce_sum(..., axis=spatial_axes)를 쓰고 spatial_axes=[1, 2]로 둔 의미는?", "opts": ["배치와 클래스 축을 따라 합한다", "클래스 축만 따라 합한다", "모든 축을 따라 합한다", "높이·너비 두 공간 축을 따라 합해 클래스별 Dice 분자·분모를 만든다"], "a": 3, "exp": "축 1과 2는 높이·너비이므로 공간 전체에 대해 합산하면 배치×클래스 단위의 분자·분모가 남고, 이후 tf.reduce_mean으로 배치와 클래스에 대한 평균 Dice를 구한다."}, {"id": 83, "sec": "12.6", "diff": "중급", "q": "의미론적 분할 결과를 사후 처리해 인스턴스 마스크로 변환할 때 자료가 든 도구는?", "opts": ["마스크 침식(erosion)과 팽창(dilation) 같은 모폴로지 함수", "조건부 랜덤 필드(CRF)", "비최대 억제(NMS)", "배치 정규화"], "a": 0, "exp": "자료는 사후 처리를 통한 인스턴스 마스크 변환이 마스크 침식과 팽창 같은 모폴로지 함수를 사용해 이루어진다고 설명한다."}, {"id": 84, "sec": "12.6", "diff": "중급", "q": "'의미론적인 분할을 경계 상자에 적용하기' 방식의 처리 순서로 옳은 것은?", "opts": ["의미론적 분할 → 모폴로지 연산 → 클래스 점수 계산", "CRF 보간 → 경계 상자 회귀 → 마스크 출력", "객체 탐지 모델로 인스턴스별 경계 상자 반환 → 각 패치를 의미론적 분할 모델에 제공 → 인스턴스 마스크 획득", "피라미드 풀링 → 스케일 통합 → 인스턴스 라벨 할당"], "a": 2, "exp": "자료는 객체 탐지 모델로 타깃 클래스 각 인스턴스의 경계 상자를 얻은 뒤, 각 패치를 의미론적 분할 모델에 넣어 인스턴스 마스크를 얻는다고 설명한다."}, {"id": 85, "sec": "12.6", "diff": "기초", "q": "Faster R-CNN에 분할 기능을 이어 붙여 앤드-투-앤드로 훈련하는 방식을 자료는 어떤 모델이라고 부르는가?", "opts": ["SegNet", "U-Net", "PSPNet", "Mask R-CNN"], "a": 3, "exp": "자료는 두 네트워크를 하나로 이어 앤드-투-앤드로 훈련해 전체 파이프라인 성능을 향상시킨 방법이 Mask R-CNN이라고 밝힌다."}, {"id": 86, "sec": "12.6", "diff": "중급", "q": "Mask R-CNN이 Faster R-CNN에 추가한 세 번째 병렬 분기의 출력은?", "opts": ["각 영역의 요소에 대한 이진 마스크", "각 영역의 깊이 맵", "각 영역의 회전 각도", "각 영역의 특징 벡터 요약"], "a": 0, "exp": "자료는 클래스와 상자 오프셋을 예측하는 두 분기에 더해, 세 번째 병렬 분기를 추가해 각 영역 요소에 대한 이진 마스크를 출력한다고 설명한다."}, {"id": 87, "sec": "12.6", "diff": "중급", "q": "Mask R-CNN의 분할 분기는 몇 개의 마스크를 출력하도록 정의되는가?", "opts": ["영역당 1개의 다중 클래스 마스크", "N개의 이진 마스크(클래스당 한 개)", "이미지당 1개의 이진 마스크", "영역 제안 개수만큼의 마스크"], "a": 1, "exp": "자료는 분할 분기가 N개의 이진 마스크(클래스당 한 개)를 출력하도록 정의된다고 설명한다."}, {"id": 88, "sec": "12.6", "diff": "심화", "q": "Mask R-CNN에서 분할 분기의 여러 마스크 중 최종 예측과 훈련 손실 계산에 사용되는 것은?", "opts": ["점수가 가장 높은 세 개의 마스크 평균", "모든 클래스의 마스크를 합한 결과", "항상 첫 번째 클래스의 마스크", "다른 분기에 의해 예측된 클래스에 대응하는 마스크만"], "a": 3, "exp": "자료는 다른 분기가 예측한 클래스에 대응하는 마스크만 최종 예측과 훈련 손실 계산에 사용되며, 즉 인스턴스 클래스의 마스크만 분할 분기의 교차 엔트로피 손실에 영향을 준다고 설명한다."}, {"id": 89, "sec": "12.6", "diff": "중급", "q": "탐지 네트워크와 분할 네트워크를 따로 두지 않고 하나로 이어 훈련할 때 자료가 밝힌 이점은?", "opts": ["전체 파이프라인 성능이 향상된다", "학습 데이터가 필요 없어진다", "경계 상자를 예측하지 않아도 된다", "클래스 불균형이 자동으로 사라진다"], "a": 0, "exp": "자료는 두 네트워크를 하나로 이어서 앤드-투-앤드 방식으로 훈련하면 전체 파이프라인 성능이 향상된다고 설명하며, 그 결과가 Mask R-CNN이다."}, {"id": 90, "sec": "12.6", "diff": "기초", "q": "SegNet의 구조를 자료는 어떻게 설명하는가?", "opts": ["영역 제안 네트워크와 세 개의 병렬 분기", "인코더에는 다양한 컨볼루션 레이어, 디코더에는 다양한 디컨볼루션 레이어", "순환 계층과 어텐션 계층의 결합", "완전 연결 계층만으로 구성된 얕은 구조"], "a": 1, "exp": "자료는 SegNet을 인코더 및 디코더 방식으로, 인코더에는 다양한 컨볼루션 레이어가, 디코더에는 다양한 디컨볼루션 레이어가 있다고 설명한다."}, {"id": 91, "sec": "12.6", "diff": "중급", "q": "SegNet에 대해 자료가 밝힌 성능상의 위치는?", "opts": ["FCN보다 훨씬 적은 메모리를 사용하지만 정확도는 낮다", "CRF를 사용해 경계를 다듬는다", "FCN에 의해 생성된 출력 결과를 향상시킨다", "인스턴스 단위 라벨을 직접 출력한다"], "a": 2, "exp": "자료는 SegNet이 \"FCN에 의해 생성된 출력 결과를 향상시킴\"이라고 서술한다. CRF 사용은 DeepLab의 특징이다."}, {"id": 92, "sec": "12.6", "diff": "중급", "q": "DeepLab이 score map을 얻는 방식으로 자료가 설명한 것은?", "opts": ["여러 스케일을 사용해 컨볼루션을 수행하고 다양한 스케일의 특징을 사용해 얻는다", "최대 풀링 마스크를 그대로 되돌려 얻는다", "영역 제안마다 RoI 풀링을 적용해 얻는다", "입력 이미지를 격자로 잘라 각각 분류해 얻는다"], "a": 0, "exp": "자료는 DeepLab이 여러 스케일로 컨볼루션을 수행하고 다양한 스케일의 특징을 사용해 score map을 얻는다고 설명한다."}, {"id": 93, "sec": "12.6", "diff": "기초", "q": "DeepLab에서 score map은 최종 분할을 위해 무엇을 통해 보간되고 전달되는가?", "opts": ["비최대 억제(NMS)", "전치 합성곱만", "CRF(조건부 랜덤 필드)", "풀링 마스크"], "a": 2, "exp": "자료는 \"Score map은 최종 분할을 위해 CRF를 통해 보간되고 전달됨\"이라고 서술한다."}, {"id": 94, "sec": "12.6", "diff": "중급", "q": "RefiNet이 해결하려 한 문제로 자료가 지적한 것은?", "opts": ["전치 합성곱이 체커보드 아티팩트를 만드는 문제", "확장 컨볼루션이 더 큰 입력을 필요로 해 메모리를 많이 사용하고, 고해상도 계산 시 문제가 생기는 것", "스킵 연결이 없어 위치 정보가 손실되는 문제", "클래스 불균형으로 소수 클래스가 무시되는 문제"], "a": 1, "exp": "자료는 확장 컨볼루션이 더 큰 입력을 필요로 하므로 메모리를 많이 사용하고 고해상도에서 계산할 때 문제가 발생할 수 있어, 이를 해결하기 위한 방법으로 RefiNet을 제안한다고 설명한다."}, {"id": 95, "sec": "12.6", "diff": "기초", "q": "PSPNet이 사용하는 핵심 기법으로 자료가 제시한 것은?", "opts": ["CRF 후처리", "마스크 침식과 팽창", "스킵 연결의 덧셈 결합", "풀링 레이어의 커널 크기를 확장한 피라미드 방식 풀링"], "a": 3, "exp": "자료는 PSPNet이 풀링 레이어의 커널 크기를 확장하고 풀링에서 피라미드 방식을 사용한다고 설명한다."}, {"id": 96, "sec": "12.6", "diff": "중급", "q": "PSPNet에서 피라미드 방식을 쓰는 이유를 자료는 무엇이라고 밝히는가?", "opts": ["파라미터 수를 줄이기 위해", "피라미드가 이미지의 다양한 부분과 크기를 동시에 커버하기 때문", "경계 상자를 함께 예측하기 위해", "배치 정규화를 대체하기 위해"], "a": 1, "exp": "자료는 \"피라미드는 이미지의 다양한 부분과 크기를 동시에 커버함\"이라고 그 이유를 설명한다."}, {"id": 97, "sec": "12.6", "diff": "중급", "q": "자료가 설명한 '대형 커널 문제'의 내용으로 옳은 것은?", "opts": ["대형 커널은 수용 필드가 작아 문맥 정보를 못 본다", "대형 커널은 항상 작은 커널보다 정확도가 낮다", "대형 커널은 배치 정규화와 함께 쓸 수 없다", "대형 커널은 작은 커널보다 훨씬 큰 수용 필드를 갖지만 계산상의 복잡성이 크며, 이는 작은 커널을 사용해 해결할 수 있다"], "a": 3, "exp": "자료는 대형 커널이 큰 수용 필드를 갖는 대신 계산 복잡성이 커지며, 이 복잡성은 작은 커널을 사용해 해결할 수 있다고 설명한다."}, {"id": 98, "sec": "12.6", "diff": "기초", "q": "DeepLabV3에서 성능 향상을 위해 사용되었다고 자료가 밝힌 기법은?", "opts": ["드롭아웃", "가중치 감쇠", "배치 정규화(Batch normalization)", "레이블 스무딩"], "a": 2, "exp": "자료는 \"Batch normalization는 성능 향상을 위해서 사용됨\"과 함께 특징에 대한 다중 스케일이 캐스케이드 방식으로 인코딩되어 성능이 향상된다고 설명한다."}, {"id": 99, "sec": "12.6", "diff": "중급", "q": "자료가 소개한 Fine-grain segments 방법의 구성으로 옳은 것은?", "opts": ["U-Net에 Batch normalization을 모두 적용하고 Focal loss + L1 regularization을 적용", "FCN에 CRF를 적용하고 Dice loss를 사용", "SegNet에 피라미드 풀링을 붙이고 L2 regularization을 적용", "Mask R-CNN에 팽창 합성곱을 적용하고 MSE를 사용"], "a": 0, "exp": "자료는 Fine-grain segments로 \"U-Net에 Batch normalization 모두 적용 및 Focal loss + L1 regularization 적용 방법\"을 제안한다."}, {"id": 100, "sec": "12.6", "diff": "심화", "q": "자료의 Fine-grain segments 비교 표(Table 1)에서 IOU 기준 성능에 대한 설명으로 옳은 것은?", "opts": ["기본 U-Net이 세 모델 중 가장 높은 IOU를 보인다", "Attention U-Net이 0.9 이상의 IOU를 달성한다", "세 모델의 IOU가 모두 0.5 이하로 비슷하다", "기본 U-Net의 IOU는 대체로 0.496 수준인 데 비해 Attention U-Net과 U-Net BN은 0.71~0.73 수준으로 크게 높다"], "a": 3, "exp": "표에서 U-Net은 0.496~0.632, Attention U-Net은 0.715~0.724, U-Net BN은 0.728~0.731의 IOU를 보여 배치 정규화·어텐션을 더한 변형이 뚜렷이 우수하다."}];
+
+const SECTIONS = {
+  "12.1": "세그멘테이션 개념과 종류",
+  "12.2": "인코더-디코더와 오토인코더",
+  "12.3": "디코딩 기법: 전치 합성곱·언풀링·팽창 합성곱",
+  "12.4": "FCN과 U-Net",
+  "12.5": "객체 분할 학습: 레이블 맵·손실·평가지표",
+  "12.6": "인스턴스 분할과 다양한 분할 모델"
+};
+const DIFFS = ["기초","중급","심화"];
+const DIFFCLS = {"기초":"d1","중급":"d2","심화":"d3"};
+const KEY = "mlx_week12_quiz_v1";
+
+/* ---------- state ---------- */
+let state = {
+  answers:{},           // id -> chosen original option index
+  secFilter:"ALL",
+  diffFilter:"ALL",
+  shuffleQ:false,
+  shuffleO:false,
+  reviewMode:false,
+  order:[],             // array of question ids in display order
+  optOrder:{},          // id -> array of original indices
+  cursor:0
+};
+
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify({
+    answers:state.answers, shuffleQ:state.shuffleQ, shuffleO:state.shuffleO,
+    secFilter:state.secFilter, diffFilter:state.diffFilter, optOrder:state.optOrder
+  })); }catch(e){}
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY); if(!raw) return;
+    const d = JSON.parse(raw);
+    if(d && typeof d==="object"){
+      state.answers = d.answers||{};
+      state.shuffleQ = !!d.shuffleQ; state.shuffleO = !!d.shuffleO;
+      state.secFilter = d.secFilter||"ALL"; state.diffFilter = d.diffFilter||"ALL";
+      state.optOrder = d.optOrder||{};
+    }
+  }catch(e){}
+}
+
+/* ---------- helpers ---------- */
+function shuffled(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function optOrderFor(q){
+  if(!state.shuffleO) return [0,1,2,3];
+  if(!state.optOrder[q.id]) { state.optOrder[q.id] = shuffled([0,1,2,3]); save(); }
+  return state.optOrder[q.id];
+}
+function isWrong(q){ return q.id in state.answers && state.answers[q.id] !== q.a; }
+function isRight(q){ return state.answers[q.id] === q.a; }
+
+function buildOrder(keepCursor){
+  let pool = QUESTIONS.filter(q =>
+    (state.secFilter==="ALL" || q.sec===state.secFilter) &&
+    (state.diffFilter==="ALL" || q.diff===state.diffFilter)
+  );
+  if(state.reviewMode && state.reviewIds && state.reviewIds.length)
+    pool = state.reviewIds.map(id=>byId[id]);
+  let ids = pool.map(q=>q.id);
+  if(state.shuffleQ) ids = shuffled(ids);
+  state.order = ids;
+  if(!keepCursor) state.cursor = 0;
+  if(state.cursor >= ids.length) state.cursor = Math.max(0, ids.length-1);
+}
+
+const byId = {}; QUESTIONS.forEach(q => byId[q.id]=q);
+
+/* ---------- rendering ---------- */
+const $ = s => document.querySelector(s);
+const stage = $("#stage");
+
+function renderChips(){
+  const sc = $("#secChips"); sc.innerHTML="";
+  const mk = (label,val,cur,handler)=>{
+    const b=document.createElement("button");
+    b.className="chip"; b.textContent=label;
+    b.setAttribute("aria-pressed", String(cur===val));
+    b.onclick=()=>handler(val); return b;
+  };
+  sc.appendChild(mk("전체 "+QUESTIONS.length+"문항","ALL",state.secFilter,setSec));
+  Object.keys(SECTIONS).forEach(k=>{
+    const n = QUESTIONS.filter(q=>q.sec===k).length;
+    sc.appendChild(mk(k+" "+SECTIONS[k]+" ("+n+")",k,state.secFilter,setSec));
+  });
+  const dc = $("#diffChips"); dc.innerHTML="";
+  dc.appendChild(mk("전체","ALL",state.diffFilter,setDiff));
+  DIFFS.forEach(d=>{
+    const n = QUESTIONS.filter(q=>q.diff===d).length;
+    dc.appendChild(mk(d+" ("+n+")",d,state.diffFilter,setDiff));
+  });
+  $("#shuffleQ").setAttribute("aria-pressed", String(state.shuffleQ));
+  $("#shuffleO").setAttribute("aria-pressed", String(state.shuffleO));
+  $("#reviewBtn").setAttribute("aria-pressed", String(state.reviewMode));
+}
+
+function setSec(v){ state.secFilter=v; state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+function setDiff(v){ state.diffFilter=v; state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+
+function renderProgress(){
+  const ids = state.order;
+  const done = ids.filter(id=> id in state.answers).length;
+  const ok = ids.filter(id=> isRight(byId[id])).length;
+  const no = done - ok;
+  $("#doneN").textContent = done;
+  $("#totalN").textContent = ids.length;
+  $("#okN").textContent = ok;
+  $("#noN").textContent = no;
+  $("#rate").textContent = done ? Math.round(ok/done*100)+"%" : "—";
+  $("#barFill").style.width = ids.length ? (done/ids.length*100)+"%" : "0%";
+  $("#wrongCount").textContent = QUESTIONS.filter(isWrong).length;
+}
+
+function renderPalette(){
+  const p = $("#palette"); p.innerHTML="";
+  state.order.forEach((id,i)=>{
+    const q = byId[id];
+    const b=document.createElement("button");
+    b.className="cell" + (id in state.answers ? (isRight(q)?" o":" x") : "") + (i===state.cursor?" cur":"");
+    b.textContent = q.id;
+    b.title = q.sec+" · "+q.diff;
+    b.onclick=()=>{ state.cursor=i; renderAll(); window.scrollTo({top:0,behavior:"smooth"}); };
+    p.appendChild(b);
+  });
+}
+
+function renderQuestion(){
+  stage.innerHTML="";
+  if(!state.order.length){
+    const d=document.createElement("div"); d.className="panel empty";
+    d.textContent = state.reviewMode ? "틀린 문제가 없습니다. 잘하셨어요!" : "조건에 맞는 문제가 없습니다. 필터를 바꿔 보세요.";
+    stage.appendChild(d); return;
+  }
+  const idx = state.cursor;
+  const q = byId[state.order[idx]];
+  const answered = q.id in state.answers;
+  const order = optOrderFor(q);
+
+  const card=document.createElement("section"); card.className="panel qcard";
+
+  const meta=document.createElement("div"); meta.className="qmeta";
+  meta.innerHTML =
+    '<span class="tag num">'+ (idx+1) +' / '+ state.order.length +'</span>' +
+    '<span class="tag sec">'+ q.sec +' '+ SECTIONS[q.sec] +'</span>' +
+    '<span class="tag '+ DIFFCLS[q.diff] +'">'+ q.diff +'</span>' +
+    '<span style="margin-left:auto;font-size:12px;color:var(--muted)">문제 '+ q.id +'번</span>';
+  card.appendChild(meta);
+
+  const h=document.createElement("h2"); h.className="qtext"; h.textContent=q.q; card.appendChild(h);
+
+  const wrap=document.createElement("div"); wrap.className="opts";
+  order.forEach((orig,pos)=>{
+    const b=document.createElement("button"); b.className="opt"; b.type="button";
+    b.innerHTML = '<span class="n">'+(pos+1)+'</span><span class="t"></span>';
+    b.querySelector(".t").textContent = q.opts[orig];
+    if(answered){
+      b.disabled = true;
+      if(orig===q.a){ b.classList.add("correct"); b.insertAdjacentHTML("beforeend",'<span class="mark">정답</span>'); }
+      else if(orig===state.answers[q.id]){ b.classList.add("wrong"); b.insertAdjacentHTML("beforeend",'<span class="mark">내 선택</span>'); }
+    } else {
+      b.onclick=()=>{ state.answers[q.id]=orig; save(); renderAll(); };
+    }
+    wrap.appendChild(b);
+  });
+  card.appendChild(wrap);
+
+  if(answered){
+    const e=document.createElement("div"); e.className="exp";
+    const good = isRight(q);
+    e.innerHTML = '<h4>'+(good?'✓ 정답입니다':'✕ 다시 확인해 보세요')+'</h4><p></p>'+
+                  '<span class="ref">관련 단원 · '+q.sec+' '+SECTIONS[q.sec]+'</span>';
+    e.querySelector("p").textContent = q.exp;
+    if(!good){ e.style.background="var(--no-soft)"; e.style.borderLeftColor="var(--no)"; e.querySelector("h4").style.color="var(--no)"; }
+    card.appendChild(e);
+  }
+
+  const nav=document.createElement("div"); nav.className="nav";
+  const prev=document.createElement("button"); prev.className="btn"; prev.textContent="← 이전";
+  prev.disabled = idx===0; prev.onclick=()=>{ state.cursor--; renderAll(); };
+  const next=document.createElement("button"); next.className="btn primary";
+  next.textContent = idx===state.order.length-1 ? "결과 보기 →" : "다음 →";
+  next.onclick=()=>{
+    if(idx===state.order.length-1){ showResult(); }
+    else { state.cursor++; renderAll(); }
+  };
+  const redo=document.createElement("button"); redo.className="btn"; redo.textContent="이 문제 다시";
+  redo.disabled = !answered;
+  redo.onclick=()=>{ delete state.answers[q.id]; save(); renderAll(); };
+  nav.appendChild(prev); nav.appendChild(redo);
+  const sp=document.createElement("span"); sp.className="spacer"; nav.appendChild(sp);
+  nav.appendChild(next);
+  card.appendChild(nav);
+
+  stage.appendChild(card);
+}
+
+function showResult(){
+  const ids = state.order;
+  const done = ids.filter(id=> id in state.answers).length;
+  const ok = ids.filter(id=> isRight(byId[id])).length;
+  const card=document.createElement("section"); card.className="panel result";
+  const pct = done ? Math.round(ok/done*100) : 0;
+  let msg = pct>=90?"완벽합니다. 1주차 내용을 확실히 이해했어요."
+          : pct>=75?"좋습니다. 틀린 문제만 복습하면 충분해요."
+          : pct>=50?"절반 이상 맞혔습니다. 오답 노트를 한 번 더 돌려 보세요."
+          : "해설을 읽으며 오답부터 차근히 정리해 봅시다.";
+
+  const per = {};
+  Object.keys(SECTIONS).forEach(k=>{
+    const sub = ids.map(i=>byId[i]).filter(q=>q.sec===k && (q.id in state.answers));
+    if(sub.length) per[k] = [sub.filter(isRight).length, sub.length];
+  });
+
+  card.innerHTML =
+    '<div class="eyebrow">결과</div>'+
+    '<div class="score">'+ok+' <small>/ '+done+' 정답</small></div>'+
+    '<div class="stat" style="font-size:15px">정답률 <b>'+pct+'%</b> · '+msg+'</div>'+
+    '<div class="breakdown">'+ Object.keys(per).map(k=>
+       '<div class="bd"><div class="k">'+k+' '+SECTIONS[k]+'</div><div class="v">'+per[k][0]+' / '+per[k][1]+'</div></div>'
+     ).join('') +'</div>';
+
+  const nav=document.createElement("div"); nav.className="nav";
+  const back=document.createElement("button"); back.className="btn"; back.textContent="← 문제로 돌아가기";
+  back.onclick=()=>renderAll();
+  const rev=document.createElement("button"); rev.className="btn primary";
+  const wn = QUESTIONS.filter(isWrong).length;
+  rev.textContent="틀린 문제 "+wn+"개 다시 풀기"; rev.disabled = wn===0;
+  rev.onclick=()=>enterReview();
+  nav.appendChild(back);
+  const sp=document.createElement("span"); sp.className="spacer"; nav.appendChild(sp);
+  nav.appendChild(rev);
+  card.appendChild(nav);
+
+  stage.innerHTML=""; stage.appendChild(card);
+  renderProgress(); renderPalette();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function enterReview(){
+  const wrongIds = QUESTIONS.filter(isWrong).map(q=>q.id);
+  if(!wrongIds.length){
+    state.reviewMode=false; buildOrder(false); renderAll();
+    alert("틀린 문제가 없습니다.");
+    return;
+  }
+  wrongIds.forEach(id=> delete state.answers[id]);
+  state.reviewMode = true;
+  state.reviewIds = wrongIds;
+  state.order = state.shuffleQ ? shuffled(wrongIds) : wrongIds.slice();
+  state.cursor = 0;
+  save(); renderAll(); window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function renderAll(){ renderChips(); renderProgress(); renderPalette(); renderQuestion(); }
+
+/* ---------- events ---------- */
+$("#shuffleQ").onclick=()=>{ state.shuffleQ=!state.shuffleQ; buildOrder(false); save(); renderAll(); };
+$("#shuffleO").onclick=()=>{
+  state.shuffleO=!state.shuffleO;
+  if(!state.shuffleO) state.optOrder={};
+  save(); renderAll();
+};
+$("#reviewBtn").onclick=()=>{
+  if(state.reviewMode){ state.reviewMode=false; buildOrder(false); save(); renderAll(); }
+  else enterReview();
+};
+$("#resetBtn").onclick=()=>{
+  state.answers={}; state.optOrder={}; state.reviewMode=false;
+  buildOrder(false); save(); renderAll(); window.scrollTo({top:0,behavior:"smooth"});
+};
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT") return;
+  if(e.key==="ArrowRight" && state.cursor < state.order.length-1){ state.cursor++; renderAll(); }
+  if(e.key==="ArrowLeft" && state.cursor>0){ state.cursor--; renderAll(); }
+  if(["1","2","3","4"].includes(e.key)){
+    const btns = document.querySelectorAll(".opt:not(:disabled)");
+    const b = btns[Number(e.key)-1]; if(b) b.click();
+  }
+});
+
+/* ---------- init ---------- */
+load();
+buildOrder(false);
+// resume at first unanswered
+const firstUn = state.order.findIndex(id=> !(id in state.answers));
+state.cursor = firstUn === -1 ? 0 : firstUn;
+renderAll();
+</script>
+</body>
+</html>
