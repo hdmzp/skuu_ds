@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기계학습특론 | 13주차 수업내용</title>
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0c1a3a">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.svgfig{padding:11px 11px 9px}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:560px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+.alg-h{font-size:14.5px;font-weight:700;margin:24px 0 10px;padding:9px 13px;border-radius:8px}
+.alg-h.hi-x{background:#f0fdf4;border:1px solid #bbf7d0;color:#14532d}
+.alg-h.lo-x{background:#fef2f2;border:1px solid #fecaca;color:#7f1d1d}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+/* 수식 카드 */
+.fx{background:#f8faff;border:1px solid #cfdcf5;border-left:3px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:10px 0}
+.fx + .fx{margin-top:8px}
+.fx-lab{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.fx-note{font-size:12px;color:#4b5563;line-height:1.7;margin-top:7px}
+.fx-note b{color:var(--ink)}
+.tex-d{position:relative;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:9px 2px 5px;text-align:center}
+.tex-d .katex{font-size:1.12em}
+.tex{white-space:nowrap}
+/* 풀이 예제 */
+.ex{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin:10px 0}
+.ex-q{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.65;
+  background:#f1f0ec;border-radius:7px;padding:9px 12px;margin-bottom:4px}
+.ex-q em{font-style:normal;color:var(--red);font-size:11px;font-weight:700;display:block;margin-bottom:3px}
+.step{display:grid;grid-template-columns:20px 1fr;gap:9px;align-items:baseline;
+  font-size:12.5px;color:#4b5563;line-height:1.75;padding:5px 0}
+.step i{font-style:normal;font-weight:700;color:var(--accent);font-size:11.5px}
+.step .katex{font-size:1em}
+.ex-ans{margin-top:8px;background:#f0fdf4;border:1px solid #22c55e;border-radius:8px;
+  padding:9px 12px;font-size:12.5px;color:#14532d;line-height:1.7}
+.ex-ans b{color:var(--green)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+
+/* 주차 내비 */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+
+/* 노트북 주석 */
+.nbc{color:#b45309;font-weight:700;background:#fff7ed;border-radius:3px;padding:0 3px}
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .out{color:#c9f24b}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 함수 카드 */
+.fnc{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:var(--radius);padding:13px 15px;margin:11px 0}
+.fnc h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fnc .sig{
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;color:#1b3f8b;
+  background:#eef2fb;border:1px solid #dbe3f5;border-radius:6px;padding:7px 10px;margin:7px 0 9px;
+  overflow-x:auto;white-space:pre;
+}
+.fnc dl{display:grid;grid-template-columns:minmax(84px,auto) 1fr;gap:5px 12px;font-size:12.5px;line-height:1.65}
+.fnc dt{font-weight:700;color:var(--ink)}
+.fnc dd{color:#4b5563}
+@media(max-width:440px){.fnc dl{grid-template-columns:1fr;gap:2px}.fnc dd{margin-bottom:6px}}
+/* 개념 하이라이트 + 툴팁 */
+
+/* ===== 4주차 개편: 슬라이드 모아보기 · 출처 뱃지 ===== */
+/* ===== 출처 뱃지 ===== */
+.bdg{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.02em;padding:3px 9px;border-radius:999px;white-space:nowrap;line-height:1.5}
+.bdg-gyo{background:#eef2fb;color:#1b3f8b;border:1px solid #c4d2ee}
+.bdg-flip{background:#fff7ed;color:#b45309;border:1px solid #f0c48a}
+.bdg-live{background:#fdf0f5;color:#9d174d;border:1px solid #f3bcd2}
+.bdg-plus{background:#f0fdfa;color:#0f766e;border:1px solid #99e0d6}
+.bdg-quiz{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+.tbl-wrap{position:relative}
+/* ===== 대면 강의 상자: 핑크(필기) · 초록(팩트체크) · 네온(트렌드) ===== */
+.lec,.fix,.neon{border-radius:var(--radius);padding:13px 16px;margin:12px 0;font-size:13px;line-height:1.85}
+.lec::before,.fix::before,.neon::before{display:table;font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:8px}
+.lec{background:#fdf2f8;border:1px solid #f9a8d4;border-left:4px solid #db2777;color:#4a1d36}
+.lec::before{content:'🎙 대면 강의 필기';background:#db2777;color:#fff}
+.lec b{color:#831843}
+.lec .ul li{color:#4a1d36}.lec .ul li::before{background:#db2777}
+.fix{background:#f0fdf4;border:1px solid #86efac;border-left:4px solid #16a34a;color:#14532d}
+.fix::before{content:'🌿 개념 정리';background:#16a34a;color:#fff}
+.fix b{color:#14532d}
+.fix .ul li{color:#14532d}.fix .ul li::before{background:#16a34a}
+.neon{background:#0b1224;border:1px solid #39ff88;border-left:4px solid #39ff88;color:#dbe7ff;
+  box-shadow:0 0 0 1px rgba(57,255,136,.15),0 0 18px rgba(57,255,136,.18),inset 0 0 22px rgba(125,249,255,.05)}
+.neon::before{content:'⚡ 최근 트렌드';background:#39ff88;color:#04120a;box-shadow:0 0 10px rgba(57,255,136,.7)}
+.neon b{color:#7df9ff}
+.neon .ul li{color:#dbe7ff}.neon .ul li b{color:#7df9ff}.neon .ul li::before{background:#39ff88;opacity:1;box-shadow:0 0 6px #39ff88}
+.neon a.ext{color:#ff7ad9}
+.boxkey{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center;font-size:12.5px;color:var(--muted);margin:4px 0 12px}
+.bk{font-size:11px;font-weight:700;padding:2px 10px;border-radius:999px;white-space:nowrap}
+.lec-k{background:#db2777;color:#fff}.fix-k{background:#16a34a;color:#fff}
+.neon-k{background:#0b1224;color:#39ff88;border:1px solid #39ff88;box-shadow:0 0 8px rgba(57,255,136,.45)}
+.deep-k{background:#6d28d9;color:#fff}
+.bigmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin:12px 0 16px}
+.bigmap a{display:grid;grid-template-columns:auto 1fr;gap:2px 9px;align-items:start;text-decoration:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;color:var(--ink)}
+.bigmap a:hover{border-color:#db2777;box-shadow:0 4px 12px rgba(219,39,119,.12)}
+.bigmap i{grid-row:span 2;font-style:normal;font-weight:800;font-size:12px;color:#fff;background:linear-gradient(135deg,#db2777,#16a34a);width:24px;height:24px;border-radius:50%;display:grid;place-items:center}
+.bigmap b{font-size:12.5px}.bigmap span{font-size:11.5px;color:var(--muted);line-height:1.5}
+table.folds td.te{background:#fce7f3;color:#9d174d;font-weight:700;text-align:center}
+table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
+.sub-title[id^="lec-"]{scroll-margin-top:64px}
+.fix[id]{scroll-margin-top:64px}
+
+.pt[id],.sub-title[id],.pt p[id]{scroll-margin-top:64px}
+.bdg-pres{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
+
+/* ===== 개념 카드 ===== */
+.pt{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin:11px 0}
+.pt-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;font-weight:700;line-height:1.45;margin-bottom:7px}
+.pt > p{font-size:13.5px;color:#3f4854;line-height:1.85}
+.pt > p + p{margin-top:9px}
+.pt > p b{color:var(--ink)}
+.pt.gyo{border-left-color:#1b3f8b}
+.pt.flip{border-left-color:#b45309}
+.pt.live{border-left-color:#9d174d}
+.pt.plus{border-left-color:#0f766e}
+.pt.lab{border-left-color:#6d28d9}
+.bdg-lab{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
+.hi{background:linear-gradient(transparent 58%,#ffe9a8 58%);font-weight:700;color:var(--ink);padding:0 1px}
+.pt pre.code{margin:9px 0}
+
+/* 본문 속 짧은 보충 설명 상자 */
+.qa{background:#f0fdfa;border:1px solid #99e0d6;border-left:4px solid #0f766e;
+  border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:11px 0;
+  font-size:13px;line-height:1.85;color:#134e4a}
+.qa::before{content:'보충설명';display:table;font-size:10.5px;font-weight:800;letter-spacing:.02em;
+  padding:3px 9px;border-radius:999px;margin-bottom:7px;background:#e3f7f3;color:#0f766e;border:1px solid #99e0d6}
+.qa b{color:#0f3d3a}
+.qa .ul li{color:#134e4a}
+.qa .ul li::before{background:#0f766e;opacity:.8}
+
+/* ===== 슬라이드 모아보기 ===== */
+.deck{background:#efeeea;border:1px solid var(--border);border-radius:var(--radius);padding:12px 12px 14px;margin-bottom:20px}
+.deck-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.deck-h span{font-size:11px;font-weight:400;color:var(--muted)}
+.deck-t{font-size:12px;font-weight:700;color:var(--accent);margin:13px 0 7px;padding-left:8px;border-left:3px solid var(--accent)}
+.deck-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.sld{background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px;margin:0;cursor:zoom-in;transition:box-shadow .15s,transform .15s}
+.sld:hover{box-shadow:0 6px 16px rgba(18,34,80,.13);transform:translateY(-2px)}
+.sld img{display:block;width:100%;height:auto;border-radius:4px;background:#fff}
+.sld figcaption{font-size:11px;color:var(--muted);line-height:1.5;margin-top:6px;text-align:center}
+.sld figcaption b{color:var(--accent)}
+
+/* ===== 한 줄 요약 ===== */
+.oneline{background:#16233f;color:#e7edf9;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+.oneline > p{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--lime)}
+.oneline .ul li{color:#c5d0e8;font-size:13px}
+.oneline .ul li b{color:#fff}
+.oneline .ul li::before{background:var(--lime);opacity:.9}
+
+/* ===== 슬라이드 확대 보기 ===== */
+#lb{position:fixed;inset:0;background:rgba(9,15,31,.94);display:none;align-items:center;justify-content:center;
+  z-index:400;padding:52px 60px 64px;cursor:zoom-out;-webkit-user-select:none;user-select:none}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:80vh;border-radius:8px;background:#fff;box-shadow:0 18px 50px rgba(0,0,0,.45);cursor:default}
+#lb .cap{position:absolute;left:0;right:0;bottom:18px;text-align:center;color:#d9e1f3;font-size:12.5px;line-height:1.6;padding:0 20px;cursor:default}
+#lb .cap b{color:#fff}
+#lb .cap .num{display:block;font-size:11px;color:#9fb0d4;margin-top:4px;letter-spacing:.04em}
+#lb button{
+  position:absolute;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;
+  border-radius:50%;width:44px;height:44px;font-size:20px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .15s;
+  font-family:inherit;padding:0;
+}
+#lb button:hover{background:rgba(255,255,255,.22)}
+#lb button:disabled{opacity:.25;cursor:default}
+#lb .prev{left:12px;top:50%;transform:translateY(-50%)}
+#lb .next{right:12px;top:50%;transform:translateY(-50%)}
+#lb .x{right:12px;top:12px;width:38px;height:38px;font-size:17px}
+@media(max-width:560px){
+  #lb{padding:48px 10px 92px}
+  #lb .prev{left:50%;top:auto;bottom:16px;transform:translateX(-64px)}
+  #lb .next{right:50%;top:auto;bottom:16px;transform:translateX(64px)}
+  #lb .cap{bottom:70px}
+}
+
+.kg{display:block;width:108px;height:42px;margin:0 auto}
+.mapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px;margin-top:10px}
+.mapgrid a{
+  display:block;text-decoration:none;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:9px;padding:10px 13px;transition:.15s;
+}
+.mapgrid a:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(18,34,80,.1)}
+.mapgrid b{display:block;font-size:12.5px;color:var(--ink)}
+.mapgrid span{font-size:11.5px;color:var(--muted);line-height:1.55}
+.legend{
+  display:flex;flex-wrap:wrap;gap:9px 16px;align-items:center;
+  background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius);
+  padding:13px 15px;margin:0 0 24px;font-size:12px;color:var(--muted);line-height:1.6;
+}
+.legend i{font-style:normal;display:flex;align-items:center;gap:7px}
+.legend .legend-t{flex:0 0 100%;font-size:12.5px;font-weight:700;color:var(--ink)}
+.legend .legend-t2{flex:0 0 100%;font-size:11.5px;color:var(--muted);border-top:1px dashed var(--border);padding-top:10px;margin-top:1px}
+
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+/* 퀴즈 목록 */
+.qz{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 15px;margin-bottom:9px}
+.qz h4{font-size:13px;font-weight:700;margin-bottom:5px}
+.qz .ans{
+  display:block;margin-top:7px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;
+  padding:8px 11px;font-size:12.5px;color:#14532d;line-height:1.7;
+}
+.qz .ans summary{cursor:pointer;font-weight:700;color:#166534;list-style:none}
+.qz .ans summary::-webkit-details-marker{display:none}
+.qz .ans summary::before{content:'▸ ';font-weight:700}
+.qz .ans[open] summary::before{content:'▾ '}
+.qz .ans pre.code{margin:8px 0 0}
+
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 실시간 강의 강조 */
+.live{
+  background:#fffaf3;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#7c2d12;
+}
+.live::before{
+  content:'🎙 실시간 강의 강조';display:inline-block;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.live b{color:#7c2d12}
+.live .ul li{color:#7c2d12}
+.live .ul li::before{background:#b45309;opacity:.75}
+/* 본인 복습 필기 — 공부하다 헷갈려 찾아본 내용 */
+.mynote{
+  background:#f7f5ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.mynote::before{
+  content:'📝 내 복습 필기 · 헷갈려서 찾아본 것';display:inline-block;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.mynote b{color:#2e1065}
+.mynote p + p{margin-top:7px}
+.mynote .ul li{color:#3b2a6b}
+.mynote .ul li::before{background:#6d28d9;opacity:.75}
+.mynote .tbl-wrap{margin:8px 0 4px;background:#fff}
+.mynote table{min-width:0}
+.mynote .fx{background:#fff;margin:9px 0}
+/* 100문제 해설 포인트 */
+.qexp{
+  background:#f0fdf4;border:1px solid #bbf7d0;border-left:4px solid #16a34a;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;font-size:13px;line-height:1.8;color:#14532d;
+}
+.qexp::before{
+  content:'✅ 100문제 해설에서 짚어 준 것';display:inline-block;background:#16a34a;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.qexp b{color:#14532d}
+.qexp .ul li{color:#166534}
+.qexp .ul li::before{background:#16a34a;opacity:.8}
+.fml{
+  display:block;background:#eef2fb;border:1px solid #dbe3f5;border-radius:8px;
+  padding:9px 12px;margin:8px 0;font-size:13px;color:#1b3f8b;text-align:center;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;overflow-x:auto;white-space:nowrap;
+}
+
+/* 계산으로 채운 수업시간 도식 (SVG) — 좁은 화면에서는 가로 스크롤 */
+.svgfig{padding:11px 11px 9px}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:560px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+.figs > .note-box{margin:0}
+/* 7주차 추가: 심화 · 함정 · 복습 상자 (자연어처리 페이지와 같은 모양) */
+.deep{
+  background:#f7f5ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:13px 16px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.deep::before{
+  content:'🔎 한 걸음 더 — 심화 개념';display:table;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:8px;
+}
+.deep b{color:#2e1065}
+.deep .ul li{color:#3b2a6b}
+.deep .ul li::before{background:#6d28d9;opacity:.75}
+.deep .tbl-wrap{margin:9px 0 4px;background:#fff}
+.deep pre.code{margin:9px 0}
+.deep .fx{background:#fff;border-color:#d8cdf7;border-left-color:#6d28d9;margin:9px 0}
+.deep .fx-lab{color:#6d28d9}
+.deep .term{background:#ede7ff;color:#5b21b6;border-bottom-color:#6d28d9}
+.deep .term:hover,.deep .term.on{background:#ddd2fb}
+.pit{
+  background:#fff7ed;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:12.5px;line-height:1.8;color:#7c2d12;
+}
+.pit::before{
+  content:'⚠ 여기서 갈린다';display:table;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.pit b{color:#7c2d12}
+.pit .ul li{color:#7c2d12}
+.pit .ul li::before{background:#b45309;opacity:.8}
+.pit table{min-width:0}
+.pit .tbl-wrap{margin:8px 0 4px;background:#fff}
+.rv{background:var(--surface);border:1px solid var(--border);border-left:4px solid #0f766e;border-radius:var(--radius);margin:10px 0;overflow:hidden}
+.rv summary{cursor:pointer;list-style:none;padding:12px 15px;font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.6;display:flex;gap:9px;align-items:baseline}
+.rv summary::-webkit-details-marker{display:none}
+.rv summary i{font-style:normal;flex:none;font-size:11px;font-weight:800;color:#fff;background:#0f766e;border-radius:999px;padding:1px 8px}
+.rv summary::after{content:'답 보기 ▾';margin-left:auto;flex:none;font-size:11px;font-weight:700;color:#0f766e}
+.rv[open] summary::after{content:'접기 ▴'}
+.rv .ans{border-top:1px dashed #99e0d6;background:#f0fdfa;padding:12px 15px;font-size:13px;line-height:1.85;color:#134e4a}
+.rv .ans b{color:#0f3d3a}
+.rv .ans .ul li{color:#134e4a}
+.rv .ans .tbl-wrap{background:#fff;margin:8px 0}
+.rv .ans table{min-width:0}
+.rv .ans pre.code{margin:8px 0}
+.rv .one{display:block;background:#fff;border:1px solid #99e0d6;border-radius:7px;padding:7px 11px;margin-bottom:8px;font-weight:700;color:#0f3d3a}
+
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#map">한눈에 보기</a>
+  <a href="#docs">강의자료</a>
+  <a href="#ganintro">13.1 생성 모델 · GAN 개념</a>
+  <a href="#ganstruct">13.2 구조 · 동작 · 업샘플링</a>
+  <a href="#gantrain">13.3 학습 · 통합 신경망</a>
+  <a href="#minimax">13.4 미니맥스 · 가치 함수</a>
+  <a href="#ganeval">13.5 평가 · 응용</a>
+  <a href="#ganproj">13.6 구현 프로젝트</a>
+  <a href="#summary">핵심 정리</a>
+  <a href="#next">다음 주</a>
+</nav>
+
+<div class="wrap">
+
+<div class="weeknav">
+  <a href="machine-learning.html" class="plan">← 강의계획서</a>
+  <a href="machine-learning-week10.html">10주차 · 합성곱 신경망(CNN)</a>
+  <a href="machine-learning-week11.html">11주차 · 이미지 분류</a>
+  <a href="machine-learning-week12.html">12주차 · 이미지 분할</a>
+  <span class="cur">13주차 · 이미지 생성</span>
+</div>
+
+<section class="hero">
+  <p class="kicker">13주차 · 2026-2학기</p>
+  <h1>13. 이미지 생성 — 위조지폐범과 경찰이 서로를 키운다 (GAN)</h1>
+  <p>지금까지의 신경망은 사진을 보고 &lsquo;무엇인가&rsquo;를 <b>맞히는</b> 결정론적인 과업(분류 · 탐지 · 분할)을 했다. 이번 주는 세상에 없던 이미지를 <b>만들어 내는</b> 생성 모델, 그중 <b>생성적 적대 신경망(GAN)</b>이다. 노이즈로 가짜를 만드는 <b>생성자</b>와 진짜 · 가짜를 가려내는 <b>판별자</b>가 경쟁하며 함께 좋아진다. 두 네트워크의 구조(판별자 = 줄어드는 CNN, 생성자 = 거꾸로 커지는 CNN), <b>판별자를 고정한 통합 신경망</b>으로 생성자를 학습하는 방법, 이 경쟁을 수식으로 쓴 <b>미니맥스 가치 함수</b>, 평가 지표(<b>인셉션 점수 · FID</b>)와 응용, 그리고 패션 MNIST로 GAN을 직접 만드는 7단계 프로젝트를 다룬다.</p>
+  <div class="chips"><span class="chip">최승호 교수</span><span class="chip">교안 &lsquo;생성모델&rsquo; 31p</span><span class="chip">100문제 13.1~13.6</span><span class="chip">생성자 · 판별자 · 통합 신경망</span><span class="chip">min<sub>G</sub> max<sub>D</sub> V(D, G)</span><span class="chip">패션 MNIST · 노이즈 100차원</span></div>
+</section>
+
+<div class="legend">
+  <p class="legend-t">내용이 어디에서 왔는지 <b>뱃지</b>로 구분했습니다</p>
+  <i><span class="bdg bdg-gyo">교안</span><span>교수님 슬라이드에 있는 내용</span></i>
+  <i><span class="bdg bdg-plus">보충설명</span><span>교안에 없거나 짧게 지나간 부분을 따로 풀어 쓴 내용 &mdash; 숫자 예 · 모양 추적 · 코드 줄 풀이</span></i>
+  <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고(← → 로 넘기기), <span class="hi">노란 형광펜</span>은 꼭 기억할 문장, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선</span>은 누르면 뜻이 뜹니다.</p>
+</div>
+
+<section class="sec" id="map">
+  <div class="sec-head"><span class="sec-badge">MAP</span><h2 class="sec-title">한눈에 보기<small>생성 모델 → 두 네트워크 → 번갈아 학습 → 미니맥스 → 평가 · 응용 → 직접 구현</small></h2></div>
+
+<div class="oneline">
+  <p><b>이번 주 한 줄 요약</b></p>
+  <ul class="ul">
+    <li><b>생성 모델</b> = 기존에 없던 새로운 콘텐츠(이미지 · 영상 · 음악 · 텍스트)를 만드는 신경망. <b>GAN</b>은 <b>적대적 훈련</b>에 기반해 <b>서로 경쟁하는 두 신경망</b>으로 이뤄진다</li>
+    <li><b>생성자</b>(위조지폐범) = 무작위 노이즈 → 진짜 같은 이미지. <b>판별자</b>(경찰) = 이미지 → 진짜일 확률(0 가짜 · 1 진짜). 판별자는 <b>줄어드는 CNN</b>, 생성자는 1차원 벡터에서 <b>커지는 CNN</b>(업샘플링 = 픽셀 반복)</li>
+    <li>학습은 <b>번갈아</b>: ① 판별자 = 진짜(1) · 가짜(0)를 레이블과 함께 넣는 <b>지도 학습</b> ② 생성자 = 판별자를 붙인 <b>통합 신경망</b>에 노이즈를 넣고 정답을 &lsquo;진짜(1)&rsquo;로 &mdash; 이때 <span class="hi">판별자 가중치는 <b>고정</b></span>(<code>trainable=False</code>)</li>
+    <li><b>미니맥스 게임</b>(제로섬): <span class="tex">\min_G\max_D V(D,G)</span>, <span class="tex">V=\mathbb E[\log D(x)]</span> <span class="tex">+\,\mathbb E[\log(1-D(G(z)))]</span> &mdash; D는 키우고 G는 줄인다. 로그는 틀릴수록 벌점을 크게</li>
+    <li>평가: <b>인셉션 점수</b>(예측 확신도 높음 + 다양성 높음) · <b>FID</b>(실제와 생성 이미지의 인셉션 출력 분포 사이 프레셰 거리, 작을수록 좋음). 응용: <b>StackGAN</b>(문장 → 이미지, 2단계) · 이미지-이미지 번역 · 초해상도</li>
+  </ul>
+</div>
+<div class="mapgrid">
+  <a href="#ganintro"><b>13.1 생성 모델과 GAN의 기본 개념</b><span>결정론적 과업 vs 생성 · 적대적 훈련 · 생성자 · 판별자 · 위조지폐범과 경찰</span></a>
+  <a href="#ganstruct"><b>13.2 GAN의 구조와 동작</b><span>줄어드는 CNN vs 커지는 CNN · 동작 3단계 · 다운 / 업샘플링</span></a>
+  <a href="#gantrain"><b>13.3 GAN의 학습과 통합 신경망</b><span>판별자 지도 학습 · 통합 신경망 · 판별자 고정 · 교대 학습 · 코드</span></a>
+  <a href="#minimax"><b>13.4 미니맥스 게임과 가치 함수</b><span>제로섬 · maximizer / minimizer · D(x) · D(G(z)) · 로그를 쓰는 이유</span></a>
+  <a href="#ganeval"><b>13.5 평가 방법과 응용 분야</b><span>인셉션 점수 · FID · StackGAN · 이미지 번역 · 초해상도</span></a>
+  <a href="#ganproj"><b>13.6 GAN 구현 프로젝트</b><span>패션 MNIST · [−1, 1] · 7×7 → 28×28 · Adam(0.0002, 0.5) · train()</span></a>
+</div>
+</section>
+
+<section class="sec" id="docs">
+  <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">13주차 강의자료<small>제목을 누르면 앱 실행 없이 화면에서 바로 열립니다</small></h2></div>
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📘</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=ml-w13-gan">생성모델 (생성적 적대 신경망 GAN)</a>
+      <p>생성 모델 · GAN 구조 · 판별자 · 생성자 · 업샘플링 · 통합 신경망 학습 · 미니맥스 함수 · 인셉션 점수 · FID · StackGAN · 이미지 번역 · 초해상도 · 구현 프로젝트 7단계 · <b>31페이지</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week13-gan.pdf" download="기계학습특론_13주차_딥러닝_생성모델.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📝</span>HTML</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week13-quiz100.html" target="_blank" rel="noopener">13주차 딥러닝 생성모델 100문제 ↗</a>
+      <p>브라우저에서 바로 푸는 문제지 · 절별 문제는 아래 각 절 제목 옆 버튼으로도 열립니다 · <b>13.3 학습과 통합 신경망이 20문항으로 가장 많습니다</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week13-quiz100.html" download="기계학습특론_13주차_딥러닝_생성모델_100문제.html">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>✨</span>Claude</div>
+    <div class="doc-main">
+      <a class="doc-open" href="https://claude.ai/artifact/DTQgxJ2aAP15Amr2baTqC3" target="_blank" rel="noopener">100문제 Claude 버전 ↗</a>
+      <p>폰 · 태블릿 · PC 어디서 풀어도 진행이 이어진다(Claude 계정 동기화) · 해설 아래 <b>📘 개념 바로가기</b>로 이 페이지의 해당 상자로 연결 · 북마크 · 단원 접기 · 결과 화면은 원본 문제지와 같다</p>
+    </div>
+    <a class="doc-dl" href="https://claude.ai/artifact/DTQgxJ2aAP15Amr2baTqC3" target="_blank" rel="noopener">열기 ↗</a>
+  </div>
+</div>
+</section>
+
+<!-- ===================== 13.1 ===================== -->
+<section class="sec" id="ganintro">
+  <div class="sec-head"><span class="sec-badge">13.1</span><h2 class="sec-title">생성 모델 개요와 GAN의 기본 개념<small>교안 2~5p</small></h2></div>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>2p · 3p · 4p · 5p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-02.jpg" alt="교안 2p — 학습 목표"><figcaption><b>2p</b> 학습 목표</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-03.jpg" alt="교안 3p — 생성 모델 · GAN"><figcaption><b>3p</b> 생성 모델 · GAN</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-04.jpg" alt="교안 4p — GAN 구조 — 생성자 · 판별자"><figcaption><b>4p</b> GAN 구조 — 생성자 · 판별자</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-05.jpg" alt="교안 5p — 위조지폐범과 경찰"><figcaption><b>5p</b> 위조지폐범과 경찰</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo" id="gen-model">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>생성 모델 — 없던 것을 만든다 (2 · 3p)</h3>
+  <p>학습 목표는 <b>생성적 적대 신경망에 대해 알아본다</b>. 지금까지 딥러닝 · 신경망은 이미지의 시각적 특징을 이해해 <b>사물 탐지 같은 결정론적인 과업</b>을 하도록 배웠다. 이번 주는 컴퓨터 비전에서 딥러닝을 응용하는 <b>새로운 영역</b>인 <b>생성 모델(generative model)</b>이다.</p>
+  <ul class="ul">
+    <li><span class="hi">생성 모델 = <b>기존에 존재하지 않았던 새로운 콘텐츠</b>를 생성하는 능력을 가진 신경망 모델</span></li>
+    <li>실제와 매우 흡사한 <b>이미지 · 영상 · 음악 · 텍스트</b>를 생성할 수 있다</li>
+  </ul>
+  <p class="fx-note">기계학습특론 1주차의 &lsquo;판별 모델 vs 생성 모델&rsquo;(<a class="ext" href="machine-learning-week01.html">1주차</a>)이 여기서 실제 구조로 이어진다 &mdash; 판별 모델은 &lsquo;이 사진은 무엇인가&rsquo;, 생성 모델은 &lsquo;이런 사진을 하나 그려라&rsquo;.</p>
+</div>
+
+<div class="pt gyo" id="gan-def">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>GAN — 서로 경쟁하는 두 신경망 (4p)</h3>
+  <p><b>생성적 적대 신경망(GAN, Generative Adversarial Network)</b>은 <b>적대적 훈련(adversarial training)</b>이라는 개념에 기반하며, <span class="hi"><b>서로 경쟁하는 2개의 신경망</b></span>으로 구성된다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th></th><th>입력</th><th>하는 일</th></tr></thead>
+    <tbody>
+      <tr><td><b>생성자</b> (generator)</td><td><b>무작위 노이즈</b></td><td>노이즈를 원래 데이터셋에서 본 표본과 <b>비슷하도록 변환</b>한다</td></tr>
+      <tr><td><b>판별자</b> (discriminator)</td><td>이미지(관찰)</td><td>입력이 생성자가 만든 <b>가짜</b>인지, 원래 데이터셋의 <b>진짜</b>인지 예측한다</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="pt gyo" id="gan-analogy">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>위조지폐범과 경찰 (5p)</h3>
+  <ul class="ul">
+    <li><b>생성자 = 위조지폐범</b>, <b>판별자 = 경찰</b></li>
+    <li>위조지폐범은 더 진짜 같은 위조지폐를 만드는 법을 익히고, 경찰은 그것을 찾아내는 법을 익힌다</li>
+    <li>상대의 기술이 향상되면서 <b>서로의 학습 목표도 변한다</b> &mdash; 위조지폐범이 완벽한 위조지폐를 만들면 경찰은 새로운 감별법을 익힌다</li>
+    <li><span class="hi">상대방의 기술을 깨는 방법을 <b>끝없이 학습</b>하는 과정</span> &mdash; 이것이 &lsquo;적대(adversarial)&rsquo;의 뜻이다</li>
+  </ul>
+  <p class="fx-note">두 신경망은 같은 목표를 공유하지 <b>않는다</b>. 판별자가 이기면 생성자가 지고, 생성자가 이기면 판별자가 진다 &mdash; 13.4의 제로섬 게임.</p>
+</div>
+</section>
+
+<!-- ===================== 13.2 ===================== -->
+<section class="sec" id="ganstruct">
+  <div class="sec-head"><span class="sec-badge">13.2</span><h2 class="sec-title">GAN의 구조와 동작 원리<small>교안 6~9p</small></h2></div>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>6p · 7p · 8p · 9p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-06.jpg" alt="교안 6p — 두 네트워크의 모양과 동작 순서"><figcaption><b>6p</b> 두 네트워크의 모양과 동작 순서</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-07.jpg" alt="교안 7p — 판별자 모델 구조 · 코드"><figcaption><b>7p</b> 판별자 모델 구조 · 코드</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-08.jpg" alt="교안 8p — 생성자 모델 구조 · 코드"><figcaption><b>8p</b> 생성자 모델 구조 · 코드</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-09.jpg" alt="교안 9p — 다운 샘플링 · 업샘플링"><figcaption><b>9p</b> 다운 샘플링 · 업샘플링</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo" id="gan-arch">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>두 네트워크의 모양과 동작 순서 (6p)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th></th><th>판별자 신경망</th><th>생성자 신경망</th></tr></thead>
+    <tbody>
+      <tr><td>구조</td><td>출력이 <b>1차원이 될 때까지</b> 합성곱층의 크기가 <b>작아지는</b> 일반적인 CNN</td><td>CNN 층 배치를 <b>반대로 바꾼</b> 구조 &mdash; <b>1차원 벡터</b>를 받아 합성곱의 크기가 입력 이미지 크기까지 점점 <b>커진다</b></td></tr>
+      <tr><td>입력 → 출력</td><td>이미지 → 진짜일 확률 1개</td><td>노이즈 벡터 → 이미지</td></tr>
+    </tbody>
+  </table></div>
+  <div class="flow">
+    <div class="fl"><b>① 생성자가 무작위 숫자를 입력받아 이미지를 반환</b><span>노이즈 z → G(z)</span></div>
+    <div class="fl"><b>② 생성된 이미지가 데이터셋의 실제 이미지와 함께 판별자에 입력</b><span>가짜와 진짜가 섞여 들어간다</span></div>
+    <div class="fl"><b>③ 판별자가 각 이미지가 실제 이미지일 확률을 반환</b><span><b>0이면 가짜, 1이면 진짜</b></span></div>
+  </div>
+</div>
+
+<div class="pt gyo" id="disc">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>판별자 모델 (7p)</h3>
+  <p>목표: <span class="hi">입력받은 이미지가 생성자가 만든 <b>가짜</b>인지 <b>진짜</b>인지 예측하는 것</span>. 7p 코드는 <code>Sequential</code>에 합성곱층을 쌓되, 합성곱층마다 <b>LeakyReLU(alpha=0.2)</b>와 <b>Dropout(0.25)</b>을 붙이고, 중간에 <code>ZeroPadding2D</code> · <code>BatchNormalization(momentum=0.8)</code>을 두며, 마지막에 <code>Flatten</code> → <b><code>Dense(1, activation='sigmoid')</code></b>로 진짜일 확률 하나를 낸다.</p>
+</div>
+
+<div class="pt gyo" id="gen">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>생성자 모델 (8p)</h3>
+  <p>생성자는 무작위 데이터를 받아 <b>훈련 데이터를 흉내 낸 가짜 이미지</b>를 만든다. 목표: <span class="hi">판별자가 <b>진짜라고 판정할 만큼</b> 훈련 데이터와 완벽하게 비슷한 이미지를 만드는 것</span>. 8p 코드는 노이즈를 <b><code>Dense(128*7*7)</code>로 키운 뒤 <code>Reshape((7, 7, 128))</code></b>로 특징 맵 모양을 만들고, 그다음 <b>업샘플링과 합성곱을 반복</b>해 7×7 → 14×14 → 28×28 이미지로 키운다.</p>
+</div>
+
+<div class="pt gyo" id="upsample">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>다운 샘플링과 업샘플링 (9p)</h3>
+  <ul class="ul">
+    <li><b>다운 샘플링</b> &mdash; 풀링 층을 이용해 입력 이미지를 <b>줄이는</b> 것</li>
+    <li><b>업샘플링</b> &mdash; <b>입력 픽셀을 반복</b>하는 형태로 늘리는 층. 코드: <code>keras.layers.UpSampling2D(size=(2, 2))</code></li>
+  </ul>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>입력 2×2</th><th>size=(2, 2) → 4×4</th><th>size=(3, 3) → 6×6</th></tr></thead>
+    <tbody><tr>
+      <td><code>1 2<br>3 4</code></td>
+      <td><code>1 1 2 2<br>1 1 2 2<br>3 3 4 4<br>3 3 4 4</code></td>
+      <td><code>1 1 1 2 2 2<br>1 1 1 2 2 2<br>1 1 1 2 2 2<br>3 3 3 4 4 4<br>3 3 3 4 4 4<br>3 3 3 4 4 4</code></td>
+    </tr></tbody>
+  </table></div>
+  <p class="fx-note">각 값이 가로 · 세로로 size배씩 <b>복제</b>된다. 학습할 파라미터가 <b>없다</b> &mdash; 그래서 바로 뒤에 합성곱층을 붙여 복제된 덩어리를 매끄럽게 다듬는다. 12주차의 <b>언풀링</b>(마스크 자리에만 값, 나머지 0)이나 <b>전치 합성곱</b>(학습되는 필터)과 다르다(<a class="ext" href="machine-learning-week12.html#decode">12.3</a>).</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>모양으로 비교 — 판별자는 줄이고, 생성자는 키운다</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>판별자 (13.6 4단계)</th><th>생성자 (13.6 3단계)</th></tr></thead>
+    <tbody>
+      <tr><td>28×28×1 (이미지)</td><td>100 (노이즈 z)</td></tr>
+      <tr><td>Conv(32, 보폭 2) → 14×14×32</td><td>Dense 6,272 → Reshape <b>7×7×128</b></td></tr>
+      <tr><td>Conv(64, 보폭 2) → 7×7×64 → ZeroPadding → <b>8×8×64</b></td><td>UpSampling → 14×14 → Conv(128) → <b>14×14×128</b></td></tr>
+      <tr><td>Conv(128, 보폭 2) → <b>4×4×128</b></td><td>UpSampling → 28×28 → Conv(64) → <b>28×28×64</b></td></tr>
+      <tr><td>Conv(256, 보폭 1) → <b>4×4×256</b></td><td>Conv(1) → <b>28×28×1</b> (이미지)</td></tr>
+      <tr><td>Flatten 4,096 → <b>Dense(1, sigmoid)</b> → 진짜일 확률</td><td></td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">판별자는 11주차 분류 CNN과 같은 모양(크기 ↓ 채널 ↑ → 값 하나), 생성자는 그것을 거꾸로 세운 모양(크기 ↑ 채널 ↓ → 이미지)이다. 7×7을 8×8로 만드는 <code>ZeroPadding2D(((0,1),(0,1)))</code>는 아래 · 오른쪽에 0을 한 줄씩 덧대 다음 보폭 2 합성곱이 4×4로 딱 떨어지게 하려는 것이다. 판별자에 <b>LeakyReLU</b>를 쓰는 이유: 음수 쪽에도 작은 기울기(0.2)를 남겨, 판별자를 거쳐 생성자까지 가는 기울기가 끊기지 않게 한다.</p>
+</div>
+</section>
+
+<!-- ===================== 13.3 ===================== -->
+<section class="sec" id="gantrain">
+  <div class="sec-head"><span class="sec-badge">13.3</span><h2 class="sec-title">GAN의 학습 과정과 통합 신경망<small>교안 10~14p</small></h2></div>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>10p · 11p · 12p · 13p · 14p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-10.jpg" alt="교안 10p — 판별자 학습 · 생성자 학습"><figcaption><b>10p</b> 판별자 학습 · 생성자 학습</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-11.jpg" alt="교안 11p — GAN의 병렬 학습"><figcaption><b>11p</b> GAN의 병렬 학습</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-12.jpg" alt="교안 12p — 판별자 학습 코드"><figcaption><b>12p</b> 판별자 학습 코드</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-13.jpg" alt="교안 13p — 생성자 학습 — 판별자 고정"><figcaption><b>13p</b> 생성자 학습 — 판별자 고정</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-14.jpg" alt="교안 14p — 통합 신경망 코드 · 에포크별 결과"><figcaption><b>14p</b> 통합 신경망 코드 · 에포크별 결과</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo" id="train-d">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>판별자 학습 — 평범한 지도 학습 (10 · 12p)</h3>
+  <ul class="ul">
+    <li><b>일반적인 지도 학습 모델의 학습 과정</b>이다 &mdash; 생성자가 만든 <b>가짜 이미지</b>와 훈련 데이터에서 뽑은 <b>진짜 이미지</b>를 <b>레이블과 함께</b> 입력한다(진짜 = 1, 가짜 = 0)</li>
+    <li>진짜인지 여부를 <b>시그모이드 함수</b>로 확률 값으로 예측한다</li>
+    <li>12p 코드: <code>discriminator = Discriminator_Model()</code>로 만들고, <b><code>binary_crossentropy</code></b> 손실 · <b>Adam</b> 최적화 · <code>metrics=['accuracy']</code>로 컴파일</li>
+  </ul>
+  <pre class="code">noise = np.random.normal(0, 1, (batch_size, 100))     <span class="cm"># 노이즈 데이터 생성</span>
+gen_imgs = generator.predict(noise)                   <span class="cm"># 생성자로 가짜 이미지 한 배치 생성</span>
+<span class="cm"># 판별자 모델 학습(진짜 이미지는 1, 가짜 이미지는 0)</span>
+d_loss_real = discriminator.train_on_batch(imgs, valid)
+d_loss_fake = discriminator.train_on_batch(gen_imgs, fake)</pre>
+</div>
+
+<div class="pt gyo" id="combined">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>생성자 학습 — 판별자를 붙인 통합 신경망 (10 · 11 · 14p)</h3>
+  <p>생성자를 학습하려면 <b>만든 가짜 이미지가 얼마나 진짜 같았는지 알려 줄 판별자</b>가 필요하다. 그래서 <span class="hi"><b>판별자와 생성자를 합친 통합 신경망</b>을 만들어 생성자를 학습</span>한다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>병렬 학습 (11p)</th><th>오차가 고치는 가중치</th></tr></thead>
+    <tbody>
+      <tr><td>판별자 모델의 오차</td><td>역전파 → <b>판별자</b> 가중치 수정</td></tr>
+      <tr><td>통합 신경망의 오차</td><td>역전파 → <b>생성자</b> 가중치 수정</td></tr>
+    </tbody>
+  </table></div>
+  <pre class="code">discriminator.trainable = False             <span class="cm"># 판별자 가중치 고정</span>
+z = Input(shape=(100,))                     <span class="cm"># 생성자 입력: 노이즈</span>
+img = generator(z)                          <span class="cm"># 노이즈 → 가짜 이미지</span>
+valid = discriminator(img)                  <span class="cm"># 가짜 이미지 → 판별자의 판정</span>
+combined = Model(inputs=z, outputs=valid)   <span class="cm"># 통합 신경망</span>
+combined.compile(loss='binary_crossentropy', optimizer=optimizer)
+g_loss = combined.train_on_batch(noise, valid)   <span class="cm"># 노이즈 → '진짜(1)'라고 답하게</span></pre>
+  <p class="fx-note">14p 코드를 13.6 5단계(26p)의 표기로 옮겼다 &mdash; 두 슬라이드는 같은 흐름이다.</p>
+  <p class="fx-note">14p 아래 그림은 학습 에포크별 생성 이미지 &mdash; 처음엔 잡음이던 것이 에포크가 늘수록 숫자 모양이 된다.</p>
+</div>
+
+<div class="pt gyo" id="freeze">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>왜 판별자 가중치를 고정하나 (13p)</h3>
+  <ul class="ul">
+    <li>생성자를 학습할 때는 <b>판별자 모델의 가중치를 고정</b>해야 한다</li>
+    <li>이유: 생성자와 판별자의 <b>손실 함수가 서로 달라</b> 가중치 수정 방향도 서로 다르기 때문</li>
+    <li>고정하지 않으면 생성자의 손실 함수가 이끄는 방향으로 판별자 가중치가 수정되어, <span class="hi">판별자가 <b>가짜 이미지를 진짜로 판정</b>하는 경향</span>을 보이게 된다</li>
+  </ul>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>한 번의 반복(iteration)을 순서대로 — 같은 가짜 이미지에 정답이 두 번 다르다</h3>
+  <div class="flow">
+    <div class="fl"><b>① 진짜 배치 뽑기</b><span>훈련 데이터에서 무작위 32장 → <code>imgs</code>, 정답 <code>valid</code> = 1</span></div>
+    <div class="fl"><b>② 가짜 배치 만들기</b><span>노이즈 32개 → <code>generator.predict</code> → <code>gen_imgs</code>, 정답 <code>fake</code> = 0</span></div>
+    <div class="fl"><b>③ 판별자 학습</b><span>진짜엔 1, 가짜엔 0이라고 답하도록 &mdash; <b>판별자만</b> 바뀐다. <code>d_loss = 0.5 × (real + fake)</code></span></div>
+    <div class="fl"><b>④ 생성자 학습 (통합 신경망)</b><span>새 노이즈를 넣고 정답을 <b>1(진짜)</b>로 &mdash; 판별자는 얼어 있으니 <b>생성자만</b> 바뀐다</span></div>
+  </div>
+  <p>③에서는 가짜에 <b>0</b>을, ④에서는 가짜에 <b>1</b>을 정답으로 준다 &mdash; 같은 가짜를 두고 경찰은 &lsquo;가짜다&rsquo;를, 위조범은 &lsquo;진짜로 보이게&rsquo;를 배운다. 이것이 적대적 훈련이다. ④에서 판별자를 고정하지 않으면 &lsquo;가짜에 1&rsquo;이라는 정답이 판별자까지 고쳐 버려, 경찰이 위조범 편을 들게 된다(13p의 경고).</p>
+  <p class="fx-note">Keras 주의: <code>trainable = False</code>는 <b>compile 시점</b>에 적용된다. 판별자 자체는 그 전에 따로 compile해 두었으므로 ③에서는 여전히 학습되고, 통합 신경망 안에서만 얼어 있다 &mdash; 그래서 코드 순서가 &lsquo;판별자 compile → trainable=False → combined compile&rsquo;이다.</p>
+</div>
+
+<div class="pit"><b>판별자 학습 vs 생성자 학습 — 무엇을 넣고 무엇이 바뀌나</b>
+<div class="tbl-wrap"><table>
+  <thead><tr><th></th><th>판별자 학습</th><th>생성자 학습 (통합 신경망)</th></tr></thead>
+  <tbody>
+    <tr><td>입력</td><td>진짜 이미지 + 가짜 이미지</td><td>노이즈 z</td></tr>
+    <tr><td>정답</td><td>진짜 <b>1</b> · 가짜 <b>0</b></td><td>전부 <b>1</b> (진짜)</td></tr>
+    <tr><td>손실</td><td>binary_crossentropy</td><td>binary_crossentropy</td></tr>
+    <tr><td>바뀌는 가중치</td><td><b>판별자</b></td><td><b>생성자만</b> (판별자 고정)</td></tr>
+    <tr><td>성격</td><td>평범한 지도 학습(이진 분류)</td><td>판별자를 &lsquo;채점자&rsquo;로 쓰는 학습</td></tr>
+  </tbody>
+</table></div>
+결론(30p): GAN 학습은 <b>판별자 모델과 통합 신경망을 교대로</b> 학습하는 방식이다. &lsquo;통합 신경망에서 생성자를 고정한다&rsquo;는 보기는 거꾸로다.</div>
+</section>
+
+<!-- ===================== 13.4 ===================== -->
+<section class="sec" id="minimax">
+  <div class="sec-head"><span class="sec-badge">13.4</span><h2 class="sec-title">미니맥스 게임과 가치 함수<small>교안 15 · 16 · 17p</small></h2></div>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>15p · 16p · 17p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-15.jpg" alt="교안 15p — 제로섬 · 미니맥스 게임"><figcaption><b>15p</b> 제로섬 · 미니맥스 게임</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-16.jpg" alt="교안 16p — 가치 함수 V(D, G) · 기호"><figcaption><b>16p</b> 가치 함수 V(D, G) · 기호</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-17.jpg" alt="교안 17p — 미니맥스 수식을 두 부분으로"><figcaption><b>17p</b> 미니맥스 수식을 두 부분으로</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo" id="minimax-game">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>제로섬 게임과 미니맥스 (15p)</h3>
+  <ul class="ul">
+    <li>GAN의 학습은 최적화 문제보다 <b>제로섬 게임</b>에 가깝다 &mdash; 참가자들이 총합이 정해진 점수를 나눠 가지므로 <b>한 참가자의 득점이 다른 참가자의 실점</b>이 된다</li>
+    <li>이를 인공지능에서는 <b>미니맥스 게임 이론(mini-max game theory)</b>이라 한다. 미니맥스는 의사 결정 알고리즘의 한 종류로, <b>두 참가자가 순서대로 행동하는 게임</b>의 의사 결정에 주로 쓰인다</li>
+    <li>목표는 최적의 다음 수를 예측하는 것 &mdash; <b>최대화 참가자(maximizer)</b>는 자기 점수가 최대가 되게, <b>최소화 참가자(minimizer)</b>는 최대화 참가자의 수에 대응하면서 그 점수가 최소가 되게 한다</li>
+  </ul>
+</div>
+
+<div class="pt gyo" id="value-fn">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>가치 함수 V(D, G) (16 · 17p)</h3>
+  <div class="fx">
+    <div class="tex-d">\min_G\max_D V(D,G)=\mathbb{E}_{x\sim p_{\text{data}}(x)}\big[\log D(x)\big]+\mathbb{E}_{z\sim p_z(z)}\big[\log\big(1-D(G(z))\big)\big]</div>
+    <p class="fx-note">앞 항 = 실제 데이터 x에 대한 판별자의 출력, 뒤 항 = 생성자가 만든 가짜 이미지에 대한 판별자의 출력.</p>
+  </div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>기호</th><th>의미</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tex">G</span> / <span class="tex">D</span></td><td>생성자 모델 / 판별자 모델</td></tr>
+      <tr><td><span class="tex">z</span></td><td>생성자에 입력되는 <b>무작위 노이즈</b></td></tr>
+      <tr><td><span class="tex">G(z)</span></td><td>생성자가 노이즈 z를 받아 만든 (실제와 비슷한) 가짜 이미지</td></tr>
+      <tr><td><span class="tex">D(G(z))</span></td><td>생성 이미지에 대한 판별자의 예측 결과</td></tr>
+      <tr><td><span class="tex">\log D(x)</span></td><td>실제 이미지 x에 대한 판별자의 예측 결과</td></tr>
+    </tbody>
+  </table></div>
+  <ul class="ul">
+    <li><b>D의 목표</b> &mdash; 이미지 레이블을 정확히 예측할 확률을 <b>최대</b>로. 실제와 가짜를 모두 정확히 분류하도록 학습한다. 단독 학습에서는 <span class="tex">\log D(x)</span>의 D(x)가 <b>1에 가까워지도록</b> 해 미니맥스 함숫값을 최대로</li>
+    <li><b>G의 목표</b> &mdash; 생성 이미지의 레이블이 정확히 예측될 확률을 <b>최소</b>로. <span class="tex">\log(1-D(G(z)))</span>가 <b>최소</b>가 되도록(=D(G(z))를 1 쪽으로) 학습한다</li>
+    <li>두 부분은 <b>서로 다른 오차 함수</b>를 쓴다. 결론: <span class="hi">진짜에 대한 D(x)는 최대로, 가짜에 대한 D는 최소로</span>(판별자 입장). <b>로그를 씌운 이유</b> &mdash; 원하는 값과 차이가 날수록 <b>벌점이 커지도록</b></li>
+  </ul>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>숫자로 보는 &lsquo;로그는 틀릴수록 벌점을 키운다&rsquo;</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>상황</th><th>판별자 출력</th><th>해당 항</th><th>값</th></tr></thead>
+    <tbody>
+      <tr><td>진짜를 진짜라고 잘 봄</td><td>D(x) = 0.9</td><td><span class="tex">\log D(x)</span></td><td>−0.11 (거의 0, 벌점 작음)</td></tr>
+      <tr><td>진짜를 가짜라고 봄</td><td>D(x) = 0.1</td><td><span class="tex">\log D(x)</span></td><td><b>−2.30</b> (벌점 큼)</td></tr>
+      <tr><td>가짜를 가짜라고 잘 봄</td><td>D(G(z)) = 0.1</td><td><span class="tex">\log(1-D(G(z)))</span></td><td>−0.11</td></tr>
+      <tr><td>가짜에 속음</td><td>D(G(z)) = 0.9</td><td><span class="tex">\log(1-D(G(z)))</span></td><td><b>−2.30</b></td></tr>
+      <tr><td>완전히 틀림</td><td>D(x) → 0</td><td><span class="tex">\log D(x)</span></td><td>→ −∞</td></tr>
+    </tbody>
+  </table></div>
+  <p>판별자는 두 항을 모두 0 쪽(최댓값)으로 올리려 하고, 생성자는 뒤 항을 −∞ 쪽(최솟값)으로 끌어내리려 한다 &mdash; 같은 V를 하나는 키우고 하나는 줄이니 &lsquo;min max&rsquo;다. 확률을 그대로 쓰면 0.1과 0.01의 차이가 0.09지만, 로그로는 −2.3과 −4.6으로 크게 벌어져 &lsquo;많이 틀린 것&rsquo;을 강하게 꾸짖는다. 이 식은 판별자의 <b>이진 교차 엔트로피</b>와 같은 꼴이다(정답 1에는 <span class="tex">\log D</span>, 정답 0에는 <span class="tex">\log(1-D)</span>).</p>
+  <p class="fx-note">(교안 밖) 이론상 둘이 끝까지 균형을 이루면 생성 분포가 실제 분포와 같아지고 판별자는 무엇을 넣든 <b>D = 0.5</b>(반반 찍기)가 된다. 또 13.3 코드처럼 생성자를 &lsquo;정답 1&rsquo;로 학습하면 실제로는 <span class="tex">-\log D(G(z))</span>를 줄이는 셈인데, 학습 초반 기울기가 더 커서 실무에서 흔히 쓰는 변형이다.</p>
+</div>
+</section>
+
+<!-- ===================== 13.5 ===================== -->
+<section class="sec" id="ganeval">
+  <div class="sec-head"><span class="sec-badge">13.5</span><h2 class="sec-title">GAN의 평가 방법과 응용 분야<small>교안 18 · 19 · 20p</small></h2></div>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>18p · 19p · 20p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-18.jpg" alt="교안 18p — 인셉션 점수 · FID"><figcaption><b>18p</b> 인셉션 점수 · FID</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-19.jpg" alt="교안 19p — StackGAN — 문장으로 이미지"><figcaption><b>19p</b> StackGAN — 문장으로 이미지</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-20.jpg" alt="교안 20p — 이미지 번역 · 초해상도"><figcaption><b>20p</b> 이미지 번역 · 초해상도</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo" id="eval-is">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>인셉션 점수와 FID (18p)</h3>
+  <p>평가 방법은 <b>인셉션 점수(Inception Score)</b>와 <b>프레셰 인셉션 거리(Frechet Inception Distance, FID)</b> 두 가지다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th></th><th>인셉션 점수</th><th>FID</th></tr></thead>
+    <tbody>
+      <tr><td>도구</td><td colspan="2">실제 이미지로 <b>사전 학습한 인셉션 신경망</b>(11주차 Inception)</td></tr>
+      <tr><td>무엇을 넣나</td><td><b>생성 이미지</b>만</td><td><b>실제 이미지와 생성 이미지</b> 둘 다</td></tr>
+      <tr><td>기준</td><td>① <b>예측 점수가 높을 것</b> &mdash; 분류 결과가 생성한 이미지와 어긋나지 않으면 그 확신도가 예측 점수<br>② <b>다양성이 높을 것</b> &mdash; 생성 이미지가 특정 클래스에 치우치면 안 된다</td><td>인셉션 출력을 모아 각각 <b>다변량 가우시안 분포</b>를 구한 뒤 두 분포 사이의 <b>프레셰 거리</b>를 계산</td></tr>
+      <tr><td>좋은 쪽</td><td>클수록</td><td><b>작을수록</b>(실제와 가깝다)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">결론(30p): 실제로는 생성 이미지의 품질을 <b>사람이 직접 평가</b>하는 방식이 주로 쓰이고, 인셉션 점수 · 인셉션 거리가 함께 쓰인다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>두 기준을 예로 — 그리고 FID가 더 많이 쓰이는 이유</h3>
+  <ul class="ul">
+    <li>신발만 아주 선명하게 만드는 생성자 &mdash; 인셉션이 &lsquo;신발!&rsquo;이라고 확신하니 <b>①은 높지만</b>, 한 클래스에 몰려 <b>②가 낮다</b>. 생성자가 진짜 같아 보이는 몇 종류만 반복해 만드는 이 현상을 <b>모드 붕괴(mode collapse)</b>라고 한다</li>
+    <li>흐릿한 이미지 &mdash; 인셉션이 무엇인지 확신하지 못해 ①이 낮다</li>
+    <li>FID는 <b>실제 이미지 분포와 직접 비교</b>하므로, 인셉션 점수가 놓치는 &lsquo;실제 데이터와 얼마나 닮았나&rsquo;를 본다. 두 분포의 평균 차이와 퍼짐(공분산) 차이를 함께 재므로 품질과 다양성을 한 숫자로 본다 &mdash; 0이면 두 분포가 같다</li>
+  </ul>
+</div>
+
+<div class="pt gyo" id="apps">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>GAN의 응용 분야 (19 · 20p)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>응용</th><th>하는 일</th></tr></thead>
+    <tbody>
+      <tr><td><b>문장으로부터 이미지 생성</b> &mdash; StackGAN</td><td>문장이 설명한 상황이 담긴 고품질 이미지를 만든다.<br><b>1단계</b>: 문장 내용에 따라 대략적인 <b>형태와 색</b>을 담은 <b>저해상도</b> 이미지<br><b>2단계</b>: 1단계 이미지 + <b>원래 문장</b>을 받아 결함과 빠진 세부 사항을 채운 <b>고해상도</b> 이미지</td></tr>
+      <tr><td><b>이미지-이미지 번역</b> (Image-to-Image translation)</td><td>어떤 장면에 대한 표현을 <b>다른 이미지로</b> 만든다 &mdash; 20p 그림: 흑백 → 컬러, 스케치 → 가방 사진, 낮 → 밤</td></tr>
+      <tr><td><b>초해상도 이미지 GAN</b></td><td>저해상도 이미지를 <b>고해상도</b>로 변환</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">12주차 오토인코더의 쓰임(노이즈 제거 · 해상도 개선 · 낮 ↔ 밤 사진)과 겹친다(<a class="ext" href="machine-learning-week12.html#ae-use">12.2</a>). 차이는 &lsquo;원본과 픽셀 차이를 줄이는&rsquo; 오토인코더와 달리, GAN은 &lsquo;판별자가 진짜라고 믿게&rsquo; 만들어 더 선명한 결과를 낸다는 점이다.</p>
+</div>
+</section>
+
+<!-- ===================== 13.6 ===================== -->
+<section class="sec" id="ganproj">
+  <div class="sec-head"><span class="sec-badge">13.6</span><h2 class="sec-title">GAN 모델 구현 프로젝트<small>교안 21~28p · 패션 MNIST</small></h2></div>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>21p · 22p · 23p · 24p · 25p · 26p · 27p · 28p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-21.jpg" alt="교안 21p — 구현 프로젝트 7단계"><figcaption><b>21p</b> 구현 프로젝트 7단계</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-22.jpg" alt="교안 22p — 1단계 라이브러리 임포트"><figcaption><b>22p</b> 1단계 라이브러리 임포트</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-23.jpg" alt="교안 23p — 2단계 데이터셋 · 이미지 확인"><figcaption><b>23p</b> 2단계 데이터셋 · 이미지 확인</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-24.jpg" alt="교안 24p — 3단계 생성자 구성"><figcaption><b>24p</b> 3단계 생성자 구성</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-25.jpg" alt="교안 25p — 4단계 판별자 구성"><figcaption><b>25p</b> 4단계 판별자 구성</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-26.jpg" alt="교안 26p — 5단계 통합 신경망"><figcaption><b>26p</b> 5단계 통합 신경망</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-27.jpg" alt="교안 27p — 6단계 학습 함수"><figcaption><b>27p</b> 6단계 학습 함수</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-28.jpg" alt="교안 28p — 7단계 학습 결과"><figcaption><b>28p</b> 7단계 학습 결과</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo" id="proj-steps">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>7단계 (21 · 22p)</h3>
+  <div class="flow">
+    <div class="fl"><b>1. 라이브러리 임포트</b><span><code>keras.datasets.fashion_mnist</code>, <code>Input · Dense · Reshape · Flatten · Dropout</code>, <code>BatchNormalization · Activation · ZeroPadding2D</code>, <code>LeakyReLU</code>, <code>UpSampling2D · Conv2D</code>, <code>Sequential · Model</code>, <code>Adam</code>, numpy · matplotlib</span></div>
+    <div class="fl"><b>2. 데이터셋 내려받기 · 이미지 확인</b><span>패션 MNIST</span></div>
+    <div class="fl"><b>3. 생성자 구성</b><span></span></div>
+    <div class="fl"><b>4. 판별자 구성</b><span></span></div>
+    <div class="fl"><b>5. 통합 신경망 구성</b><span></span></div>
+    <div class="fl"><b>6. 학습 과정 함수 구현</b><span></span></div>
+    <div class="fl"><b>7. 학습 및 결과 관찰</b><span></span></div>
+  </div>
+</div>
+
+<div class="pt gyo" id="proj-data">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>2단계 — 데이터 준비 (23p)</h3>
+  <pre class="code">(training_data, _), (_, _) = fashion_mnist.load_data()   <span class="cm"># 데이터셋 읽어 들이기</span>
+X_train = training_data / 127.5 - 1.     <span class="cm"># 픽셀 값의 범위가 [-1, 1]이 되도록 조정</span>
+X_train = np.expand_dims(X_train, axis=3)  <span class="cm"># (60000, 28, 28) → (60000, 28, 28, 1)</span></pre>
+  <p class="fx-note">23p 아래 <code>visualize_input</code> 함수는 이미지 한 장을 흑백으로 그리고 칸마다 픽셀 값을 적어 보여 준다. 레이블(<code>_</code>)은 버린다 &mdash; GAN은 정답 레이블 없이 이미지 자체의 분포를 배운다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>/127.5 − 1 계산과, 왜 [0, 1]이 아니라 [−1, 1]인가</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>원래 픽셀</th><th>/127.5</th><th>−1</th></tr></thead>
+    <tbody>
+      <tr><td>0 (검정)</td><td>0</td><td><b>−1</b></td></tr>
+      <tr><td>127.5</td><td>1</td><td><b>0</b></td></tr>
+      <tr><td>255 (흰색)</td><td>2</td><td><b>+1</b></td></tr>
+    </tbody>
+  </table></div>
+  <p>11주차 분류는 <code>/255</code>로 [0, 1]이었다. GAN 예제가 [−1, 1]로 바꾸는 것은 진짜 이미지와 가짜 이미지의 <b>값 범위를 맞추기</b> 위해서다 &mdash; 범위가 다르면 판별자가 &lsquo;모양&rsquo;이 아니라 &lsquo;값의 범위&rsquo;만 보고도 진위를 가려 버린다. <code>expand_dims(axis=3)</code>은 흑백 이미지에 <b>채널 축 1</b>을 붙여 Conv2D가 받는 (28, 28, 1) 모양으로 맞춘다(<a class="ext" href="machine-learning-week11.html#channels">11주차 채널</a>).</p>
+  <div class="pit"><b>교안 코드의 함정 — 진짜는 [−1, 1]인데 생성자 마지막 층은 relu</b> &mdash; 24p 생성자의 마지막 층은 <code>Conv2D(1, kernel_size=3, padding="same", activation="relu")</code>라 출력이 <b>0 이상</b>뿐이다. 진짜 이미지에는 −1 ~ 0 값(어두운 픽셀)이 많은데 생성자는 그 값을 만들 수 없어, 판별자가 &lsquo;음수가 있으면 진짜&rsquo;로 쉽게 가려낼 수 있다. 범위를 맞추려면 마지막 활성화를 출력 범위 −1 ~ 1인 <b>tanh</b>로 두는 것이 원래 DCGAN의 방식이다. 시험에서는 교안 그대로(relu) 묻겠지만, 직접 돌려 본다면 이 한 줄을 바꿔야 결과가 제대로 나온다.</div>
+</div>
+
+<div class="pt gyo" id="proj-gen">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>3단계 — 생성자 (24p)</h3>
+  <pre class="code">def build_generator():
+    generator = Sequential()
+    generator.add(Dense(128 * 7 * 7, activation="relu", input_dim=100))   <span class="cm"># 유닛 6,272개</span>
+    generator.add(Reshape((7, 7, 128)))                                   <span class="cm"># 이미지 모양 7×7×128로</span>
+    generator.add(UpSampling2D())                                         <span class="cm"># 14×14로 두 배</span>
+    generator.add(Conv2D(128, kernel_size=3, padding="same", activation="relu"))
+    generator.add(BatchNormalization(momentum=0.8))
+    generator.add(UpSampling2D())                                         <span class="cm"># 28×28로 두 배</span>
+    generator.add(Conv2D(64, kernel_size=3, padding="same", activation="relu"))
+    generator.add(BatchNormalization(momentum=0.8))
+    generator.add(Conv2D(1, kernel_size=3, padding="same", activation="relu"))  <span class="cm"># 필터 1개 → 28×28×1</span>
+    generator.summary()
+    noise = Input(shape=(100,))                                           <span class="cm"># 길이 100인 노이즈 벡터</span>
+    fake_image = generator(noise)
+    return Model(inputs=noise, outputs=fake_image)</pre>
+  <p class="fx-note">24p 그림: 100 z → <b>7×7×128 → 14×14×128 → 28×28×64 → 28×28×1</b>. 데이터셋 이미지 크기(28×28)에 도달했으므로 업샘플링은 두 번으로 끝난다. <code>UpSampling2D()</code>의 기본 size가 (2, 2)다.</p>
+</div>
+
+<div class="pt gyo" id="proj-disc">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>4단계 — 판별자 (25p)</h3>
+  <p>입력 <b>28×28×1</b> → Conv2D(32, 보폭 2) → <b>14×14×32</b> → Conv2D(64, 보폭 2) + ZeroPadding → <b>8×8×64</b> → Conv2D(128, 보폭 2) → <b>4×4×128</b> → Conv2D(256) → <b>4×4×256</b> → Flatten → Dense(1, sigmoid) → <b>값 1개</b>(진짜일 확률). 층마다 LeakyReLU · Dropout · BatchNormalization.</p>
+</div>
+
+<div class="pt gyo" id="proj-combined">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>5단계 — 통합 신경망 (26p)</h3>
+  <pre class="code">optimizer = Adam(learning_rate=0.0002, beta_1=0.5)
+discriminator = build_discriminator()
+discriminator.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+discriminator.trainable = False                <span class="cm"># 통합 신경망 안에서는 판별자 고정</span>
+generator = build_generator()
+z = Input(shape=(100,))
+img = generator(z)
+valid = discriminator(img)
+combined = Model(inputs=z, outputs=valid)
+combined.compile(loss='binary_crossentropy', optimizer=optimizer)</pre>
+  <p class="fx-note">Adam의 기본값은 학습률 0.001 · beta_1 0.9인데, GAN에서는 <b>0.0002 · 0.5</b>로 낮춘다(DCGAN 논문의 권장값). 두 네트워크가 서로를 쫓는 불안정한 학습이라 한 번에 크게 움직이지 않게 하려는 것이다.</p>
+</div>
+
+<div class="pt gyo" id="proj-train">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>6 · 7단계 — 학습 함수와 결과 (27 · 28p)</h3>
+  <pre class="code">def train(epochs, batch_size=128, save_interval=50):
+    valid = np.ones((batch_size, 1))       <span class="cm"># 진짜 정답 = 1</span>
+    fake  = np.zeros((batch_size, 1))      <span class="cm"># 가짜 정답 = 0</span>
+    for epoch in range(epochs):
+        <span class="cm"># --- 판별자 학습 ---</span>
+        idx  = np.random.randint(0, X_train.shape[0], batch_size)   <span class="cm"># 무작위 배치</span>
+        imgs = X_train[idx]
+        noise = np.random.normal(0, 1, (batch_size, 100))
+        gen_imgs = generator.predict(noise)
+        d_loss_real = discriminator.train_on_batch(imgs, valid)
+        d_loss_fake = discriminator.train_on_batch(gen_imgs, fake)
+        d_loss = 0.5 * np.add(d_loss_real, d_loss_fake)              <span class="cm"># 두 손실의 평균</span>
+        <span class="cm"># --- 생성자 학습 ---</span>
+        g_loss = combined.train_on_batch(noise, valid)               <span class="cm"># 가짜를 '진짜'로 판정하도록</span>
+        print("%d [D loss: %f, acc.: %.2f%%] [G loss: %f]" % (epoch, d_loss[0], 100*d_loss[1], g_loss))
+        if epoch % save_interval == 0:
+            plot_generated_images(epoch, generator)                  <span class="cm"># 생성 이미지를 그려 파일로 저장</span>
+
+train(epochs=1000, batch_size=32, save_interval=50)</pre>
+  <p class="fx-note">28p 결과 그림: 0 에포크의 잡음에서 시작해 50 · 1,000 · 10,000 에포크로 갈수록 생성 이미지가 패션 MNIST(옷 · 신발 · 가방)의 형태에 점점 가까워진다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>train() 인자와 숫자 읽기</h3>
+  <ul class="ul">
+    <li><code>train(epochs=1000, batch_size=32, save_interval=50)</code> &mdash; 반복 <b>1,000</b>회, 한 번에 진짜 <b>32</b>장 + 가짜 32장, <b>50</b>회마다 생성 이미지 저장. 여기서 &lsquo;epoch&rsquo;는 사실 <b>배치 한 번</b>(iteration)이다 &mdash; 6만 장 전체를 도는 것이 아니라 32장만 뽑으므로, 1,000회면 전체 데이터의 약 절반(32,000장)만 본 셈이다</li>
+    <li><code>np.random.randint(0, 60000, 32)</code> &mdash; 0 ~ 59,999 중 무작위 번호 32개 → 그 이미지들로 배치</li>
+    <li><code>d_loss = 0.5 * (real + fake)</code> &mdash; 진짜 손실과 가짜 손실의 <b>평균</b>. 판별자가 반반 찍으면 각 손실이 약 <span class="tex">-\log 0.5\approx0.69</span>이다. 학습이 균형을 이루면 d_loss · g_loss가 이 근처에서 오르내리고, 한쪽이 0으로 떨어지면 그쪽이 너무 강해 상대가 배울 것이 없어졌다는 신호다</li>
+  </ul>
+</div>
+</section>
+
+<!-- ===================== 정리 ===================== -->
+<section class="sec" id="summary">
+  <div class="sec-head"><span class="sec-badge">SUM</span><h2 class="sec-title">핵심 정리<small>시험 전에 이것만 · 교안 결론 29 · 30p</small></h2></div>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>29p · 30p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-29.jpg" alt="교안 29p — 결론 (1)"><figcaption><b>29p</b> 결론 (1)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-30.jpg" alt="교안 30p — 결론 (2)"><figcaption><b>30p</b> 결론 (2)</figcaption></figure>
+  </div>
+</div>
+<div class="cards">
+  <div class="card2"><b>생성 모델 · GAN</b><p>없던 콘텐츠를 만드는 신경망. GAN = 적대적 훈련, 경쟁하는 두 신경망. 학습한 데이터와 비슷한 분포의 새 이미지를 만든다.</p></div>
+  <div class="card2"><b>생성자 · 판별자</b><p>생성자(위조지폐범): 노이즈 → 이미지. 판별자(경찰): 이미지 → 진짜일 확률(0 가짜, 1 진짜) = 이미지 분류 신경망.</p></div>
+  <div class="card2"><b>구조</b><p>판별자 = 출력 1차원까지 줄어드는 CNN(LeakyReLU · Dropout · sigmoid 1개). 생성자 = 1차원 입력을 이미지 크기까지 업샘플링(Dense → Reshape 7×7×128 → 14 → 28).</p></div>
+  <div class="card2"><b>업샘플링</b><p>픽셀을 가로세로로 반복. (2, 2): 2×2 → 4×4, (3, 3): 2×2 → 6×6. 다운 샘플링 = 풀링으로 줄이기.</p></div>
+  <div class="card2"><b>학습</b><p>판별자 = 진짜 1 · 가짜 0 지도 학습(sigmoid, binary_crossentropy, Adam). 생성자 = 통합 신경망(노이즈 → 정답 1), 판별자 고정. 둘을 교대로.</p></div>
+  <div class="card2"><b>판별자 고정 이유</b><p>두 손실 함수가 달라 수정 방향이 다르다. 고정 안 하면 판별자가 가짜를 진짜로 판정하게 된다.</p></div>
+  <div class="card2"><b>미니맥스</b><p>제로섬 게임. <span class="tex">\min_G\max_D\,\mathbb E[\log D(x)]+\mathbb E[\log(1-D(G(z)))]</span>. D는 최대, G는 최소. 로그 = 틀릴수록 큰 벌점.</p></div>
+  <div class="card2"><b>평가</b><p>인셉션 점수: 예측 확신도 ↑ · 다양성 ↑(클수록 좋다). FID: 실제 · 생성 출력의 다변량 가우시안 사이 프레셰 거리(작을수록 좋다). 주로 사람이 직접 평가.</p></div>
+  <div class="card2"><b>응용</b><p>StackGAN(문장 → 저해상도 형태 · 색 → 고해상도 세부), 이미지-이미지 번역, 초해상도.</p></div>
+  <div class="card2"><b>프로젝트</b><p>패션 MNIST · /127.5 − 1 → [−1, 1] · expand_dims → (28, 28, 1) · 노이즈 100 · Adam(0.0002, 0.5) · train(1000, 32, 50) · d_loss = 평균.</p></div>
+</div>
+</section>
+
+<!-- ===================== 다음 ===================== -->
+<section class="sec" id="next">
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주<small>14주차 · 딥러닝 : 이미지 검출</small></h2></div>
+<div class="note-box"><b>14주차</b> &mdash; 강의계획서상 <b>이미지 검출(Detection)</b>이다. 12주차 인스턴스 분할에서 잠깐 나온 <b>Faster R-CNN</b>(영역 제안 + 클래스 · 상자 분기)이 본격적으로 나온다 &mdash; 사진 속 물체마다 <b>사각형</b>과 클래스를 찾는 과제다. 자료가 올라오면 그 기준으로 정리한다.</div>
+</section>
+
+<p class="src">기계학습특론 13주차 강의자료 정리 · 2026학년도 2학기<br>
+교안 &lsquo;생성모델&rsquo;(<b>31p</b>)을 100문제의 절 구분(13.1~13.6)에 맞춰 정리하고 슬라이드 <b>29장</b>을 실었다. 슬라이드 속 코드는 사진 해상도가 낮아, 100문제 해설에 적힌 인자 값과 대조해 옮겨 적었다. 로그 벌점 · 정규화 값 계산은 직접 계산한 값이다.</p>
+
+</div>
+
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive(){
+    var cur = '';
+    sections.forEach(function(s){ if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function(t){ t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      setTimeout(function(){
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+});
+</script>
+<script>
+/* 슬라이드 확대 보기 — 좌우 이동 · 닫으면 보던 자리로 */
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.sld'));
+  if (!slides.length) return;
+
+  var lb = document.createElement('div');
+  lb.id = 'lb';
+  lb.innerHTML =
+    '<button class="prev" type="button" aria-label="이전 슬라이드">&#10094;</button>' +
+    '<img alt="">' +
+    '<button class="next" type="button" aria-label="다음 슬라이드">&#10095;</button>' +
+    '<button class="x" type="button" aria-label="닫기">&#10005;</button>' +
+    '<p class="cap"></p>';
+  document.body.appendChild(lb);
+
+  var big = lb.querySelector('img'),
+      cap = lb.querySelector('.cap'),
+      bPrev = lb.querySelector('.prev'),
+      bNext = lb.querySelector('.next'),
+      bX = lb.querySelector('.x');
+
+  var idx = -1, openedIdx = -1, savedY = 0, pushed = false, prevRestore = null, fromRef = false;
+
+  function lock() {
+    savedY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    document.body.style.position = 'fixed';
+    document.body.style.top = (-savedY) + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  /* html{scroll-behavior:smooth} 때문에 되돌아갈 때 화면이 흘러가지 않도록 잠깐 끈다 */
+  function instantly(fn) {
+    var de = document.documentElement, prev = de.style.scrollBehavior;
+    de.style.scrollBehavior = 'auto';
+    fn();
+    void de.offsetHeight;
+    de.style.scrollBehavior = prev;
+  }
+  function unlock() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    /* 개념 카드의 썸네일로 연 경우에는 넘겨 봤어도 읽던 자리로 돌아간다 */
+    var target = (!fromRef && idx >= 0 && idx !== openedIdx) ? slides[idx] : null;
+    function place() {
+      instantly(function () {
+        window.scrollTo(0, savedY);
+        /* 넘겨 본 슬라이드가 있으면 그 슬라이드 자리로, 아니면 보던 자리 그대로 */
+        if (target) target.scrollIntoView({ block: 'center' });
+      });
+    }
+    place();
+    /* 기기 뒤로가기로 닫을 때 브라우저가 옛 스크롤을 덮어쓰므로 한 프레임 뒤 한 번 더 */
+    if (window.requestAnimationFrame) window.requestAnimationFrame(place);
+    setTimeout(place, 0);
+  }
+
+  function preload(i) {
+    if (i < 0 || i >= slides.length) return;
+    var im = slides[i].querySelector('img');
+    if (im) { var p = new Image(); p.src = im.currentSrc || im.src; }
+  }
+
+  function render(i) {
+    idx = i;
+    var f = slides[i], im = f.querySelector('img'), fc = f.querySelector('figcaption');
+    big.src = im.currentSrc || im.src;
+    big.alt = im.alt || '';
+    cap.innerHTML = '';
+    cap.appendChild(document.createTextNode(fc ? fc.textContent : ''));
+    var num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = (i + 1) + ' / ' + slides.length + ' · ← → 로 넘기기';
+    cap.appendChild(num);
+    bPrev.disabled = (i === 0);
+    bNext.disabled = (i === slides.length - 1);
+    preload(i + 1); preload(i - 1);
+  }
+
+  function open(i) {
+    openedIdx = i;
+    lock();
+    render(i);
+    lb.classList.add('on');
+    if (!pushed && window.history && window.history.pushState) {
+      try {
+        if ('scrollRestoration' in window.history && prevRestore === null) {
+          prevRestore = window.history.scrollRestoration;
+          window.history.scrollRestoration = 'manual';
+        }
+        window.history.pushState({ lb: 1 }, '');
+        pushed = true;
+      } catch (e) { pushed = false; }
+    }
+  }
+  function closeNow() {
+    if (!lb.classList.contains('on')) return;
+    lb.classList.remove('on');
+    unlock();
+    idx = openedIdx = -1;
+    fromRef = false;
+    if (prevRestore !== null) {
+      try { window.history.scrollRestoration = prevRestore; } catch (e) {}
+      prevRestore = null;
+    }
+  }
+  function closeByUser() {
+    if (pushed) { pushed = false; window.history.back(); }  /* popstate 가 닫는다 */
+    else { closeNow(); }
+  }
+  function go(step) {
+    var n = idx + step;
+    if (n < 0 || n >= slides.length) return;
+    render(n);
+  }
+
+  slides.forEach(function (f, i) {
+    f.addEventListener('click', function () { open(i); });
+  });
+  window.__lbOpenFig = function (f) {
+    var i = slides.indexOf(f);
+    if (i >= 0) { fromRef = true; open(i); }
+  };
+
+  bPrev.addEventListener('click', function (e) { e.stopPropagation(); go(-1); });
+  bNext.addEventListener('click', function (e) { e.stopPropagation(); go(1); });
+  bX.addEventListener('click', function (e) { e.stopPropagation(); closeByUser(); });
+  big.addEventListener('click', function (e) { e.stopPropagation(); });
+  cap.addEventListener('click', function (e) { e.stopPropagation(); });
+  lb.addEventListener('click', closeByUser);
+
+  window.addEventListener('popstate', function () {
+    if (lb.classList.contains('on')) { pushed = false; closeNow(); }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('on')) return;
+    if (e.key === 'Escape') { e.preventDefault(); closeByUser(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+  });
+
+  /* 모바일 — 좌우로 쓸어 넘기기 */
+  var tx = 0, ty = 0;
+  lb.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) return;
+    tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+  }, { passive: true });
+  lb.addEventListener('touchend', function (e) {
+    if (!e.changedTouches.length) return;
+    var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
+</script>
+
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var terms = document.querySelectorAll('.term');
+  if (!terms.length) return;
+  var tip = document.createElement('div');
+  tip.id = 'tipbox';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  var current = null;
+
+  function hide() {
+    tip.classList.remove('on');
+    if (current) { current.classList.remove('on'); current = null; }
+  }
+  function show(el) {
+    tip.textContent = el.getAttribute('data-tip') || '';
+    tip.classList.add('on');
+    if (current && current !== el) current.classList.remove('on');
+    current = el;
+    el.classList.add('on');
+    var pad = 8;
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+    var top = r.top - t.height - 10;
+    if (top < pad) top = r.bottom + 10;
+    top = Math.min(top, window.innerHeight - t.height - pad);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+  terms.forEach(function (el) {
+    el.addEventListener('mouseenter', function () { show(el); });
+    el.addEventListener('mouseleave', function () { if (current === el) hide(); });
+    el.addEventListener('focus', function () { show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (current === el && tip.classList.contains('on')) hide(); else show(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el); }
+      if (e.key === 'Escape') hide();
+    });
+  });
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide);
+});
+</script>
+<script src="slide-ref.js?v=2"></script>
+<script src="../vendor/katex/katex.min.js"></script>
+<script>
+// .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.
+// KaTeX를 못 불러온 경우에는 원문이 그대로 남아 최소한 읽을 수는 있게 둔다.
+(function () {
+  if (typeof katex === 'undefined') { return; }
+  document.querySelectorAll('.tex, .tex-d').forEach(function (el) {
+    try {
+      katex.render(el.textContent.trim(), el, {
+        displayMode: el.classList.contains('tex-d'),
+        throwOnError: false,
+        strict: false
+      });
+    } catch (e) { if (window.console) { console.error('KaTeX', e, el.textContent); } }
+  });
+})();
+</script>
+
+<script src="quiz/ml-w13.js?v=1"></script>
+<script src="quiz/inline-quiz.js?v=2"></script>
+
+</body>
+</html>
