@@ -530,6 +530,7 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   <a href="#fcnunet">12.4 FCN · U-Net</a>
   <a href="#segtrain">12.5 레이블 맵 · 손실 · IoU · Dice</a>
   <a href="#models">12.6 인스턴스 분할 · 여러 모델</a>
+  <a href="#lab">실습 (문제)</a>
   <a href="#summary">핵심 정리</a>
   <a href="#next">다음 주</a>
 </nav>
@@ -608,6 +609,22 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
       <p>폰 · 태블릿 · PC 어디서 풀어도 진행이 이어진다(Claude 계정 동기화) · 해설 아래 <b>📘 개념 바로가기</b>로 이 페이지의 해당 상자로 연결 · 북마크 · 단원 접기 · 결과 화면은 원본 문제지와 같다</p>
     </div>
     <a class="doc-dl" href="https://claude.ai/artifact/DtqVmpLggMM7q7ykS2bgjk" target="_blank" rel="noopener">열기 ↗</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📦</span>ZIP</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week12-lab-problem.zip" download="12주차_실습_문제.zip">실습 문제 폴더 — 건축 CAD 도면 요소 분할 (PyTorch)</a>
+      <p><code>segmentation_example_pytorch/</code> 파이썬 파일 6개 · TODO 14개(100점) &mdash; 데이터(<code>data_annotated2/</code>)는 들어 있지 않다 · 아래 <a class="ext" href="#lab">실습 절</a></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week12-lab-problem.zip" download="12주차_실습_문제.zip">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📄</span>MD</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week12-lab-readme.md" download="12주차_README_실습문제.md">README — 실습 문제 안내</a>
+      <p>환경 · 데이터 · 실행 명령 · TODO 목록과 배점 · 자가 점검 · 제출물</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week12-lab-readme.md" download="12주차_README_실습문제.md">⬇ 다운로드</a>
   </div>
 </div>
 </section>
@@ -1190,6 +1207,68 @@ label_map = np.argmax(seg_fcn.predict(image), axis=-1)</pre>
 </section>
 
 <!-- ===================== 다음 ===================== -->
+<!-- ===================== 실습 ===================== -->
+<section class="sec" id="lab">
+  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">실습 — 건축 CAD 도면 요소 분할 (문제)<small>PyTorch · segmentation-models-pytorch · TODO 14개 / 100점 · 풀이 전</small></h2></div>
+
+<div class="note-box"><b>무엇을 하나</b> &mdash; 건축 도면 이미지에서 벽 · 창 · 문 같은 <b>도면 기호 7종 + 배경</b>을 픽셀마다 분류한다(의미론적 분할, <a class="ext" href="#seg">12.1</a>). 이번 주 교안의 <b>인코더-디코더(12.2) · 전치 · 팽창 합성곱(12.3) · U-Net · DeepLab(12.4) · Dice · IoU(12.5)</b>를 코드 빈칸에 직접 채운다. 기존 TensorFlow 실습(<code>building_segmentation.py</code>)을 PyTorch 2.x로 옮기고 SegFormer 백본 · SAM 의사라벨을 더한 2026 개정판이다. <b>이 절은 문제 안내만 정리했다</b> &mdash; 풀이 · 실행 결과는 아직 없다.</div>
+
+<div class="warn"><b>먼저 확인할 것</b>
+<ul class="ul">
+  <li><b>데이터가 배포본에 없다</b> &mdash; 기존 실습 zip의 <code>data_annotated2/</code>(원본 도면 <code>JPEGImages/</code> + 클래스 인덱스 마스크 <code>SegmentationClassPNG3/</code>)를 <code>segmentation_example_pytorch/</code> 아래에 그대로 복사한다. 바탕화면 <code>기_12주차/segmentation_example/</code> 폴더에 있다</li>
+  <li><b>클래스는 8개</b> &mdash; <code>labels.txt</code> = __ignore__, _background_, ow, iw, of, cw, ef, st, oo. __ignore__를 빼면 배경 1 + 기호 7 = <b>8</b>이 출력 채널 수다. 옛 Keras 코드의 <code>NUM_CLASSES = 7</code>은 마지막 <code>oo</code>가 빠진 값이니 따라 쓰지 않는다</li>
+  <li>GPU가 없으면 <code>--size 128 --batch 2 --epochs 2 --workers 0</code>으로 동작만 확인한다(AMP는 CUDA에서만). 설치: <code>pip install -r requirements.txt</code> &mdash; torch ≥ 2.2 · segmentation-models-pytorch ≥ 0.4 · torchmetrics ≥ 1.3 · albumentations ≥ 1.4 (SAM 실습에만 transformers)</li>
+</ul></div>
+
+<div class="tbl-wrap"><table>
+  <thead><tr><th>파일</th><th>TODO</th><th>무엇을 채우나</th><th>교안 연결</th></tr></thead>
+  <tbody>
+    <tr><td rowspan="3"><code>dataset.py</code><br>(20점)</td><td>1 (6)</td><td>학습용 증강 &mdash; 뒤집기 · 90° 회전 · ShiftScaleRotate · 밝기/대비</td><td rowspan="3">이미지와 마스크를 <b>같은 변환</b>으로 &mdash; 마스크는 클래스 번호라 보간하면 안 된다</td></tr>
+    <tr><td>2 (4)</td><td><code>__len__</code> &mdash; 표본 개수</td></tr>
+    <tr><td>3 (10)</td><td><code>__getitem__</code> &mdash; <code>(float32 (3,S,S), int64 (S,S))</code> 반환</td></tr>
+    <tr><td rowspan="6"><code>train_seg.py</code><br>(50점)</td><td>1 (10)</td><td><code>build_model</code> &mdash; U-Net · DeepLabV3+ · SegFormer 생성, <code>mit_*</code> 인코더는 DeepLabV3+에 못 쓴다는 검사</td><td><a class="ext" href="#fcnunet">12.4</a> · 팽창 합성곱 <a class="ext" href="#decode">12.3</a></td></tr>
+    <tr><td>2 (6)</td><td>CE 손실 + <code>smp.losses.DiceLoss(mode="multiclass")</code> 준비</td><td rowspan="2"><a class="ext" href="#segtrain">12.5 손실 · Dice</a></td></tr>
+    <tr><td>3 (4)</td><td>두 손실의 합 (nnU-Net 기본 조합)</td></tr>
+    <tr><td>4 (10)</td><td><code>MulticlassJaccardIndex</code>로 mIoU(배경 제외 옵션) · 클래스별 IoU</td><td><a class="ext" href="#segtrain">12.5 IoU</a></td></tr>
+    <tr><td>5 (12)</td><td>학습 한 스텝 &mdash; AMP → 손실 → <code>zero_grad</code> → <code>backward</code> → <code>unscale_</code> + 클리핑 → <code>step</code> → <code>sched.step()</code></td><td><a class="ext" href="machine-learning-week11.html#tc-loop">11주차 실습 개념 ②</a>와 같은 순서</td></tr>
+    <tr><td>6 (8)</td><td>검증 한 스텝 &mdash; 손실 누적 + <code>argmax</code> 예측으로 지표 갱신</td><td>&mdash;</td></tr>
+    <tr><td rowspan="2"><code>predict.py</code><br>(15점)</td><td>1 (5)</td><td><code>colorize</code> &mdash; 인덱스 마스크에 팔레트</td><td rowspan="2">로짓을 <b>원본 크기로 양선형 보간한 뒤</b> argmax</td></tr>
+    <tr><td>2 (10)</td><td>추론 후처리 → uint8 인덱스 맵</td></tr>
+    <tr><td rowspan="3"><code>train_sam_pseudolabel.py</code><br>(15점)</td><td>1 (5)</td><td>무거운 영상 인코더를 이미지당 1회만 실행 · 캐시</td><td rowspan="3">SAM(Segment Anything) &mdash; 상자 프롬프트로 마스크를 얻어 사람 라벨 대신 쓰기</td></tr>
+    <tr><td>2 (6)</td><td>상자 프롬프트 → 원본 해상도 이진 마스크 + IoU 점수</td></tr>
+    <tr><td>3 (4)</td><td>넓이 큰 객체부터 칠하고, 저품질 마스크는 상자로 대체</td></tr>
+  </tbody>
+</table></div>
+<p class="fx-note"><code>labelme2voc.py</code> · <code>label_convert.py</code> · <code>labels.txt</code> · <code>class_names.txt</code>는 손대지 않는다.</p>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">실행</span>실행 명령과 자가 점검</h3>
+<pre class="code">python train_seg.py --data data_annotated2 --arch deeplabv3plus --encoder resnet50 --epochs 30
+python train_seg.py --data data_annotated2 --arch segformer     --encoder mit_b2   --lr 6e-5
+python train_seg.py --data data_annotated2 --arch unet          --encoder resnet34 --ignore_bg_in_miou
+python predict.py --ckpt runs/&lt;run&gt;/best.pt --images data_annotated2/JPEGImages --out preds
+python train_sam_pseudolabel.py --json_dir cad_img_v3 --images data_annotated2/JPEGImages \
+       --labels labels.txt --out data_annotated2/SegmentationClassSAM</pre>
+  <ul class="ul">
+    <li>① <code>python -m py_compile dataset.py train_seg.py predict.py train_sam_pseudolabel.py</code></li>
+    <li>② 데이터셋: <code>x.shape == (3,256,256)</code>, <code>y.dtype == int64</code>, 마스크 값이 <b>0~7 정수</b>(보간이 잘못되면 8 이상이나 실수가 나온다)</li>
+    <li>③ 더미 텐서: 모델 출력 <code>(2, 8, 256, 256)</code>, 완벽 예측이면 손실 ≈ 0 · mIoU = 1.0, <code>build_model('deeplabv3plus','mit_b2',8)</code>은 ValueError</li>
+    <li>④ 2에폭만 돌려 손실이 내려가는지</li>
+  </ul>
+</div>
+
+<div class="tbl-wrap"><table>
+  <thead><tr><th>#</th><th>제출물</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>완성한 <code>dataset.py</code> · <code>train_seg.py</code> · <code>predict.py</code> · <code>train_sam_pseudolabel.py</code></td></tr>
+    <tr><td>2</td><td><code>runs/&lt;run&gt;/history.json</code> · <code>curves.png</code>, 최종 val mIoU와 클래스별 IoU 표</td></tr>
+    <tr><td>3</td><td><code>preds/</code> 오버레이 이미지 3장 이상</td></tr>
+    <tr><td>4</td><td>보고서 2~3쪽 &mdash; ① 백본 3종(resnet50 / mit_b2 / efficientnet-b3) val mIoU · 학습 시간 비교 ② 손실 ablation: CE만 / Dice만 / CE+Dice의 클래스별 IoU(특히 소수 클래스 <code>ef</code> · <code>st</code>) ③ 사람 라벨 vs SAM 의사라벨 모델의 mIoU · 경계 정확도와 실패 사례</td></tr>
+  </tbody>
+</table></div>
+<p class="fx-note">README 기준 예상 소요: 코드 채우기 2시간 + 학습 · 실험 3시간.</p>
+</section>
+
 <section class="sec" id="next">
   <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주<small>13주차 · 딥러닝 : 이미지 생성</small></h2></div>
 <div class="note-box"><b>13주차</b> &mdash; 강의계획서상 <b>이미지 생성</b>이다. 이번 주 오토인코더에서 &lsquo;디코더를 위해 훈련해 <b>생성 작업</b>에 쓸 수 있다&rsquo;(9p)고 했던 것이 출발점이다 &mdash; 잠재 공간에서 점을 골라 디코더에 넣으면 새 이미지가 나온다. &rarr; <a class="ext" href="machine-learning-week13.html">13주차 수업내용</a></div>
