@@ -146,6 +146,18 @@ TERMS = {
    'Convolution','Normalization','Pooling','Activation','Loss function','Adam','Regularization',
    'Epoch','Seed','Learning rate','Batch','과적합','Overfitting','Underfitting','텐서플로','파이토치','코랩','Colab','아나콘다','conda','어노테이션',
  ],
+ 'nlp-w13': [
+   '시퀀스 레이블링','자질','형태소 분석','품사 태깅','형태소','어근','접사','어절','교착어','세종 품사 태그','NNG','NNP','NR','JKO','JKS','VV','VA','EFN',
+   'KoNLPy','한나눔','꼬꼬마','코모란','Mecab','Okt','Twitter','Korean POS tag comparison chart','태그셋','사용자 사전',
+   'HMM','은닉 상태','마르코프','관측 독립','CRF','미등록어','OOV','자질 템플릿','이산 기호','분산 표현',
+   '세종 말뭉치','21세기 세종계획','형태 분석 말뭉치','국립국어원','FFNN','argmax','Sequence-to-sequence','seq2seq','음절','CNN','Maxpooling',
+   'Bi-LSTM-CRF','Bi-LSTM','전이 행렬','전이 점수','방출 점수','log-sum-exp','Viterbi','softmax',
+   '의미역','구문 분석','술어','논항','BERT','멀티 헤드 어텐션','WordPiece','세그먼트 임베딩','포지션 임베딩','MLM','NSP','LSTM-CRF',
+   '중의성 해소','맥락 벡터','양방향 순환신경망','BERT-kNN','kNN','gloss','BEM','ESCHER','ConSeC','Context','Gloss','Memory','Scoring','Glove',
+   '개체명 인식','NER','BIO','BIOES','개체 단위 F1','seqeval','Word2vec','단어 임베딩','PTB',
+   'KoBERT','KoELECTRA','KLUE-RoBERTa','토큰 분류','미세조정','nested NER','few-shot',
+   'Lesk','WordNet','compute_overlap','word_tokenize','pos_tag','ne_chunk','allennlp','bert-base-srl','CoNLL-2003','B-ORG','B-MISC','패딩','mask_zero','TimeDistributed','one-hot',
+ ],
  'nlp-w12': [
    '순차 데이터','순서 의존성','가변 길이','장기 의존성','MLP','RNN','순환 신경망','은닉 상태','h(0)','tanh','softmax','W_x','W_h','가중치 공유','펼친','one-to-many','many-to-one','many-to-many','동기','비동기','이미지 캡셔닝','감정 분류','품사 태깅','기계 번역','토큰화','정수 인코딩','임베딩','패딩','post-padding','마스킹','mask_zero','BPTT','Truncated BPTT','잘라낸','maxlen','야코비','기울기 소실','기울기 폭주','클리핑','gradient clipping','NaN','Bengio','게이트','시그모이드','LSTM','Hochreiter','Gers','셀 상태','망각 게이트','입력 게이트','출력 게이트','후보값','덧셈','4 배','GRU','Cho','리셋 게이트','업데이트 게이트','경량화','3 배','심층','return_sequences','양방향','bidirectional','Embedding','input_dim','Seq2Seq','순차열 대 순차열','문서 요약','대화 시스템','음성 인식','인코더','디코더','Sutskever','문맥 벡터','return_state','initial_state','<sos>','<eos>','Teacher forcing','교사 강요','노출 편향','Scheduled sampling','그리디','빔 서치','beam','길이 정규화','병목','BLEU','주의 메커니즘','어텐션','Bahdanau','Luong','스코어','정렬 가중치','가중합','dot','general','concat','정렬 행렬','히트맵','Query','Key','Value','Scaled dot-product','셀프 어텐션','self-attention','Transformer','Vaswani','병렬',
  ],
@@ -333,3 +345,5 @@ build('ml-w12', 'materials/기계학습특론/week12-quiz100.html', 'courses/qui
       {'title': '12주차 · 딥러닝 영상 분할', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week12-quiz100.html'})
 build('ml-w13', 'materials/기계학습특론/week13-quiz100.html', 'courses/quiz/ml-w13.js',
       {'title': '13주차 · 딥러닝 생성모델', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week13-quiz100.html'})
+build('nlp-w13', 'materials/자연어처리/week13-quiz100.html', 'courses/quiz/nlp-w13.js',
+      {'title': '13주차 · 형태소 · 품사 태깅 · 의미 · 개체명', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week13-quiz100.html'})
