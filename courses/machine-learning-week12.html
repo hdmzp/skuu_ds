@@ -841,6 +841,63 @@ autoencoder.fit(x_noisy, x_train)</pre>
   <p class="fx-note">이름 주의 &mdash; &lsquo;디컨볼루션&rsquo;이라고 부르지만 수학의 역합성곱(deconvolution)처럼 원래 값을 되돌리는 것이 <b>아니다</b>. 크기만 키우고, 값은 학습된 필터가 새로 만든다.</p>
 </div>
 
+<div class="mynote" id="tconv-note">
+  <p><b>① 합성곱이란 &mdash; 뒤집고, 밀고, 곱해서 더한다</b></p>
+  <p>수학의 합성곱 <span class="tex">f*g</span>는 한 함수를 <b>반전(뒤집기)</b>하고 <b>이동(shift)</b>시켜 가며 두 함수를 곱한 뒤 그 적분(또는 합)을 구하는 연산이다.</p>
+  <div class="fx">
+    <p class="fx-lab">연속 · 이산 정의</p>
+    <div class="tex-d">(f*g)(t)=\int_{-\infty}^{\infty} f(\tau)\,g(t-\tau)\,d\tau,\qquad (f*g)[n]=\sum_{m} f[m]\,g[n-m]</div>
+    <p class="fx-note"><span class="tex">g(t-\tau)</span>의 <b>마이너스</b>가 &lsquo;뒤집기&rsquo;, <b>t</b>가 &lsquo;밀기&rsquo;다. t를 바꿀 때마다 겹친 부분을 곱해 더한 값 하나가 나온다.</p>
+  </div>
+  <ul class="ul">
+    <li><b>신호 처리</b> &mdash; 입력 신호에 필터(가중치)를 적용해 노이즈를 지우거나 특정 주파수를 걸러 낸다</li>
+    <li><b>이미지 · CNN</b> &mdash; 이미지 위에 작은 <b>커널</b>을 도장 찍듯 미끄러뜨리며(sliding window) 겹친 픽셀끼리 곱해 더한다(곱셈-누산, FMA). 경계선 · 질감 · 형태 같은 <b>지역적 특징</b>이 뽑힌다(<a class="ext" href="machine-learning-week10.html#conv">10주차 10.5 합성곱층</a>)</li>
+    <li><b>딥러닝</b> &mdash; 커널 값을 사람이 정하지 않고 <b>학습 가능한 파라미터</b>로 두어 데이터에 맞게 최적화한다</li>
+  </ul>
+  <p class="fx-note">작은 차이 하나 &mdash; 딥러닝 라이브러리의 &lsquo;합성곱&rsquo;은 사실 커널을 <b>뒤집지 않는</b> 교차 상관 <span class="tex">y[i]=\sum_m x[i+m]\,w[m]</span>이다. 커널을 어차피 학습하므로 뒤집었든 아니든 결과가 같아 그냥 합성곱이라 부른다.</p>
+
+  <p style="margin-top:12px"><b>② 전치 합성곱 &mdash; 모아서 하나를 만드는 대신, 하나를 퍼뜨려 더한다</b></p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th></th><th>일반 합성곱</th><th>전치 합성곱</th></tr></thead>
+    <tbody>
+      <tr><td>한 칸이 하는 일</td><td>넓은 입력의 여러 값을 <b>모아</b> 출력 한 칸</td><td>입력 한 칸에 필터를 곱해 출력 여러 칸에 <b>퍼뜨림</b>, 겹치면 <b>더함</b></td></tr>
+      <tr><td>행렬로 쓰면</td><td><span class="tex">y=C\,x</span></td><td><span class="tex">y=C^{T}x</span> &mdash; 연결 방향만 뒤집힌 것</td></tr>
+      <tr><td>크기</td><td>줄어든다</td><td>커진다</td></tr>
+    </tbody>
+  </table></div>
+  <div class="fx">
+    <p class="fx-lab">1차원 숫자 예 &mdash; 필터 w = [1, 2, 1] (k=3), 보폭 s=2, 패딩 0</p>
+    <p class="fx-note">입력 x = [1, 2]. 교안 식으로 출력 길이 = <span class="tex">(2-1)\cdot 2+3-0=5</span>.</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>출력 위치</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th></tr></thead>
+      <tbody>
+        <tr><td>x₁=1 × [1,2,1] (위치 0부터)</td><td>1</td><td>2</td><td>1</td><td></td><td></td></tr>
+        <tr><td>x₂=2 × [1,2,1] (보폭 2만큼 밀어 위치 2부터)</td><td></td><td></td><td>2</td><td>4</td><td>2</td></tr>
+        <tr><td><b>더한 결과</b></td><td><b>1</b></td><td><b>2</b></td><td><b>3</b></td><td><b>4</b></td><td><b>2</b></td></tr>
+      </tbody>
+    </table></div>
+    <p class="fx-note">위치 2는 두 번 겹쳐서 1+2=3이 됐다. 이 계산이 <span class="tex">C^{T}</span> 곱하기와 똑같은지 확인해 보자. 같은 설정의 일반 합성곱(길이 5 → 2)의 행렬 C와 그 전치는</p>
+    <div class="tex-d">C=\begin{bmatrix}1&amp;2&amp;1&amp;0&amp;0\\0&amp;0&amp;1&amp;2&amp;1\end{bmatrix},\qquad C^{T}\begin{bmatrix}1\\2\end{bmatrix}=\begin{bmatrix}1&amp;0\\2&amp;0\\1&amp;1\\0&amp;2\\0&amp;1\end{bmatrix}\begin{bmatrix}1\\2\end{bmatrix}=\begin{bmatrix}1\\2\\3\\4\\2\end{bmatrix}</div>
+    <p class="fx-note">한 줄씩 읽으면: 셋째 줄 <span class="tex">1\cdot1+1\cdot2=3</span>이 바로 &lsquo;겹친 칸은 더한다&rsquo;이다. 그래서 &lsquo;퍼뜨려 더하기&rsquo;와 &lsquo;<span class="tex">C^{T}</span> 곱하기&rsquo;는 같은 연산을 두 가지로 말한 것이다.</p>
+  </div>
+  <ul class="ul">
+    <li><b>역연산이 아니다</b> &mdash; C는 2×5라 역행렬이 없다. <span class="tex">C^{T}</span>는 <b>모양(크기)만</b> 되돌릴 뿐이고, 합성곱에서 이미 잃은 세부 픽셀 정보를 되살리지는 못한다. 값은 학습된 필터가 새로 만든다</li>
+    <li><b>학습 가능한 업샘플링</b> &mdash; 고정된 보간법과 달리 필터가 학습되므로 오토인코더의 디코더 · 의미론적 분할(FCN · U-Net) · 생성 모델(<a class="ext" href="machine-learning-week13.html">13주차 GAN</a>의 생성자)에서 해상도를 높일 때 쓴다</li>
+    <li><b>PyTorch</b> <code>ConvTranspose2d</code>의 출력 크기는 교안 식에 <code>output_padding</code>을 더한 <span class="tex">(H_o-1)s-2p+k+\text{output\_padding}</span>이다. 보폭이 2 이상이면 서로 다른 입력 크기가 같은 출력 크기로 줄어들 수 있어서, 거꾸로 갈 때 어느 쪽인지 정해 주는 값이다</li>
+  </ul>
+</div>
+<div class="pit"><b>체커보드 아티팩트 &mdash; k가 s로 나누어떨어지느냐로 갈린다</b>
+  입력이 전부 1이고 필터도 전부 1이면, 출력 각 칸의 값 = <b>그 칸에 기여가 몇 번 겹쳤나</b>다.
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>설정 (입력 [1,1,1])</th><th>출력</th><th>가운데 부분</th></tr></thead>
+    <tbody>
+      <tr><td>k=3, s=2 &mdash; 3÷2 나머지 있음</td><td>[1, 1, <b>2</b>, 1, <b>2</b>, 1, 1]</td><td>1, 2가 <b>번갈아</b> &rarr; 2차원에서는 격자무늬(체커보드)</td></tr>
+      <tr><td>k=4, s=2 &mdash; 4÷2 나누어떨어짐</td><td>[1, 1, 2, 2, 2, 2, 1, 1]</td><td>가운데가 <b>고르게</b> 2</td></tr>
+    </tbody>
+  </table></div>
+  위 숫자 예의 위치 2가 홀로 두 번 겹친 것도 같은 현상이다. 그래서 2배 업샘플링에는 <b>k=4, s=2, p=1</b>을 즐겨 쓰고(위 보충설명의 단골 조합), 아예 피하려면 <b>보간으로 먼저 키운 뒤 일반 합성곱</b>을 하거나 채널을 공간으로 재배치하는 <b>픽셀 셔플(sub-pixel convolution)</b>을 쓴다. 필터가 학습되면서 고르지 않은 겹침을 어느 정도 보정할 수는 있지만, 완전히 없어진다는 보장은 없다.
+</div>
+
 <div class="pt gyo" id="unpool">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>언풀링 — 최대 풀링을 거꾸로 (13p)</h3>
   <ul class="ul">
