@@ -1277,6 +1277,43 @@ label_map = np.argmax(seg_fcn.predict(image), axis=-1)</pre>
   <p class="fx-note">25p 그림: 입력 → DCNN(atrous 합성곱) → 거친 score map → 쌍선형 보간 → 완전 연결 CRF → 최종 출력. CRF는 &lsquo;색이 비슷하고 가까운 픽셀은 같은 클래스일 가능성이 높다&rsquo;는 규칙으로 경계를 다듬는다.</p>
 </div>
 
+<div class="mynote" id="crf-note">
+  <p><b>CRF(조건부 랜덤 필드)란 &mdash; 하나씩 따로 맞히지 말고, 이웃과 어울리는 답을 통째로 고르기</b></p>
+  <p>입력 X가 주어졌을 때, 서로 연결된 출력 라벨 전체 Y의 조건부 확률 <span class="tex">P(Y\mid X)</span>를 직접 모델링하는 <b>판별적 확률 그래프 모델</b>이다. 각 요소를 따로 분류하지 않고 라벨들 사이의 <b>일관성과 문맥</b>을 함께 따진다.</p>
+  <div class="fx">
+    <p class="fx-lab">점수 → 확률 (전역 정규화)</p>
+    <div class="tex-d">P(Y\mid X)=\frac{1}{Z(X)}\exp\Big(\underbrace{\sum_i \psi_u(y_i,X)}_{\text{각 칸의 적합도}}+\underbrace{\sum_{i,j}\psi_p(y_i,y_j,X)}_{\text{이웃 라벨 궁합}}\Big)</div>
+    <div class="tex-d">Z(X)=\sum_{Y'}\exp\big(\text{score}(Y')\big)\quad\text{(가능한 모든 라벨 조합의 합)}</div>
+    <p class="fx-note">단계로 읽으면: ① 라벨 조합 하나마다 점수 = 칸별 적합도의 합 + 이웃끼리 궁합의 합 → ② exp로 양수로 만든다 → ③ 모든 조합의 합 <b>Z(분배 함수)</b>로 나눠 합이 1인 확률로 만든다. 칸 하나씩이 아니라 <b>조합 전체</b>를 한 번에 나누므로 &lsquo;전역&rsquo; 정규화다.</p>
+  </div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>핵심 특징</th><th>무슨 뜻</th></tr></thead>
+    <tbody>
+      <tr><td><b>판별적 모델</b></td><td>입력이 생겨날 확률 <span class="tex">P(X)</span>는 모델링하지 않고 <span class="tex">P(Y\mid X)</span>에만 집중 &rarr; 서로 겹치거나 의존적인 자질도 자유롭게 넣을 수 있다</td></tr>
+      <tr><td><b>문맥 · 전이 고려</b></td><td>칸별 점수에 더해 <b>이웃 라벨끼리의 궁합(전이 점수)</b>을 반영 &rarr; 불가능하거나 어색한 조합이 줄어든다</td></tr>
+      <tr><td><b>최적 조합 찾기</b></td><td>문장처럼 한 줄(체인)이면 <b>비터비(Viterbi)</b>로 정확히 찾는다. DeepLab처럼 모든 픽셀이 서로 이어진 격자는 고리가 많아 <b>평균장(mean-field) 근사</b>로 반복해 푼다</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>분할에서는 &mdash; 3픽셀짜리 숫자 예.</b> 사람 몸 위의 픽셀 A · B · C가 일렬로 있고 색이 비슷하다. CNN 점수(<span class="tex">\psi_u</span>)는 A · C는 확실히 &lsquo;사람&rsquo;인데, B는 그림자 때문에 살짝 &lsquo;배경&rsquo;이 높다. 이웃 궁합(<span class="tex">\psi_p</span>)은 &lsquo;색이 비슷한 이웃이 같은 라벨이면 +1&rsquo;로 두자.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>라벨 조합 (A, B, C)</th><th>칸별 점수 합</th><th>이웃 궁합 (A–B, B–C)</th><th>총점</th></tr></thead>
+    <tbody>
+      <tr><td>사람, <b>배경</b>, 사람 &mdash; CNN이 칸마다 따로 고른 답</td><td>2 + <b>0.6</b> + 2 = 4.6</td><td>0 + 0 = 0</td><td>4.6</td></tr>
+      <tr><td>사람, <b>사람</b>, 사람</td><td>2 + <b>0.4</b> + 2 = 4.4</td><td>1 + 1 = 2</td><td><b>6.4</b></td></tr>
+    </tbody>
+  </table></div>
+  <p>칸별로만 보면 B는 배경(0.6 &gt; 0.4)이지만, 조합 전체로 보면 &lsquo;사람 · 사람 · 사람&rsquo;이 이긴다 &mdash; 사람 몸 한가운데 구멍처럼 박힌 <b>외톨이 라벨이 메워지고</b>, 경계는 색이 실제로 바뀌는 곳에 맞춰진다. 이것이 DeepLab이 거친 score map 뒤에 CRF를 붙이는 이유다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th></th><th>HMM (은닉 마르코프 모델)</th><th>CRF</th></tr></thead>
+    <tbody>
+      <tr><td>무엇을 모델링</td><td>결합 확률 <span class="tex">P(X,Y)</span> &mdash; <b>생성적</b></td><td>조건부 확률 <span class="tex">P(Y\mid X)</span> &mdash; <b>판별적</b></td></tr>
+      <tr><td>입력 자질</td><td>&lsquo;현재 라벨이 현재 관측만 만든다&rsquo;는 강한 독립 가정</td><td>입력 전체의 문맥 자질을 자유롭게(앞뒤 단어 · 주변 픽셀 색 등)</td></tr>
+      <tr><td>정규화</td><td>단계마다 확률(국소)</td><td>시퀀스 전체를 Z로 한 번에(전역)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">문장 버전(품사 태깅 · 개체명 인식의 Bi-LSTM-CRF, 비터비 계산)은 <a class="ext" href="nlp-week13.html#s4">NLP 13주차 13.4 HMM · CRF</a>에 있다. 구조는 같고 &lsquo;단어 한 줄&rsquo;이 &lsquo;픽셀 격자&rsquo;로 바뀌었을 뿐이다.</p>
+</div>
+
 <div class="pt gyo" id="refinet">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>RefineNet (26p)</h3>
   <p>확장 컨볼루션은 <b>더 큰 입력을 필요로 해 메모리를 많이</b> 쓰고, <b>고해상도</b> 그림에서 계산할 때 문제가 생길 수 있다. 이를 해결하려고 제안한 방법이다 &mdash; 26p 그림처럼 1/4 · 1/8 · 1/16 · 1/32 해상도의 특징을 <b>RefineNet 블록</b>으로 아래에서부터 차례로 합치며 다듬는다. (교안 표기는 &lsquo;RefiNet&rsquo;)</p>
