@@ -964,6 +964,42 @@ autoencoder.fit(x_noisy, x_train)</pre>
   <p>왜 필요한가? 분할은 &lsquo;이 픽셀이 무엇인가&rsquo;를 판단하려고 <b>넓은 주변(문맥)</b>을 봐야 하지만, 풀링으로 넓게 보면 해상도가 줄어 위치가 뭉개진다. 팽창 합성곱은 <b>해상도를 유지한 채</b> 넓게 본다 &mdash; 파라미터와 크기는 그대로, 보는 범위만 커진다. DeepLab(<a class="ext" href="#deeplab">12.6</a>)이 이 방식을 여러 팽창률로 나란히 쓴다.</p>
 </div>
 
+<div class="mynote" id="dilated-note">
+  <p><b>한 줄 비유 &mdash; 돋보기를 딱 붙여 보지 않고, 한 걸음 물러나 넓게 훑어보기</b></p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th></th><th>일반 합성곱 (d=1)</th><th>팽창 합성곱 (d=2)</th></tr></thead>
+    <tbody>
+      <tr><td>비유</td><td><b>코 박고 꼼꼼하게</b> 보기</td><td><b>징검다리처럼 띄엄띄엄</b> 넓게 보기</td></tr>
+      <tr><td>필터 모양 (1줄)</td><td><code>● ● ●</code></td><td><code>● _ ● _ ●</code></td></tr>
+      <tr><td>점(파라미터) 수</td><td>3</td><td>3 (그대로)</td></tr>
+      <tr><td>시야</td><td>3칸</td><td><b>5칸</b></td></tr>
+      <tr><td>이미지 크기</td><td colspan="2">둘 다 줄이지 않는다 &mdash; 화질(디테일) 그대로</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>안 쓰면 생기는 두 문제</b> &mdash; 넓게 보는 다른 길은 둘 다 대가가 있다.</p>
+  <ul class="ul">
+    <li><b>① 줄여서 넓게 보기(풀링) &rarr; 화질이 뭉개진다.</b> 고화질 사진을 썸네일로 줄였다가 억지로 키우는 것과 같아, 경계선이 흐려지고 &lsquo;이 픽셀이 정확히 어디였지?&rsquo;가 사라진다. 자율주행 · 의료 영상처럼 픽셀 단위로 영역을 따야 하는 분할에는 치명적이다</li>
+    <li><b>② 안 줄이고 넓게 보기(큰 필터 · 층 쌓기) &rarr; 무거워진다.</b> 9×9 범위를 보려면 9×9 필터 = 채널당 <b>81개</b> 가중치, 또는 3×3 층을 <b>4겹</b>(수용 영역 3 → 5 → 7 → 9) 쌓아 9×4 = <b>36개</b>와 4배 연산이 든다. 팽창률 4인 3×3 한 층이면 <b>9개</b>로 같은 9×9를 본다</li>
+  </ul>
+  <p>그래서 팽창 합성곱은 <span class="hi">&ldquo;디테일도 살리고, 큰 그림도 함께 봐야 할 때&rdquo;</span>의 절충안이다. 예: 도로 위 사람을 찾을 때 사람 윤곽선은 또렷이 유지하면서 주변(도로 · 인도)까지 넓게 봐야 정확히 구분된다.</p>
+  <pre class="code"><span class="cm"># Keras — dilation_rate만 추가</span>
+Conv2D(64, kernel_size=3, dilation_rate=2, padding='same')
+<span class="cm"># PyTorch — 크기를 유지하려면 padding = dilation (3×3일 때)</span>
+nn.Conv2d(64, 64, kernel_size=3, dilation=2, padding=2)</pre>
+  <p class="fx-note">PyTorch 쪽 padding=2인 이유: d=2인 3×3은 실제로 5×5를 덮으므로, 위 보충설명의 크기 식 <span class="tex">k+(k-1)(d-1)=5</span>에 &lsquo;same&rsquo; 패딩 <span class="tex">(5-1)/2=2</span>를 준다.</p>
+</div>
+<div class="pit"><b>만능은 아니다 &mdash; 격자 현상(gridding effect)</b>
+  징검다리로 건너뛰다 보면 <b>한 번도 밟지 않는 사각지대</b> 픽셀이 생긴다. 1차원에서 3칸 필터를 쌓아 출력 한 칸이 입력의 어느 위치를 보는지 세어 보면:
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>팽창률 쌓기</th><th>각 층이 보는 간격</th><th>출력 한 칸이 보는 입력 위치 (가운데 = 0)</th></tr></thead>
+    <tbody>
+      <tr><td><b>2 → 2 → 2</b></td><td>{−2, 0, 2}를 세 번 더함</td><td>−6, −4, −2, 0, 2, 4, 6 &mdash; <b>짝수 칸만</b>. 홀수 칸은 끝까지 안 본다</td></tr>
+      <tr><td><b>1 → 2 → 3</b></td><td>{−1, 0, 1} + {−2, 0, 2} + {−3, 0, 3}</td><td>−6부터 6까지 <b>빠짐없이</b> (예: 5 = 0 + 2 + 3)</td></tr>
+    </tbody>
+  </table></div>
+  같은 팽창률만 쌓으면 2차원에서는 바둑판 줄만 계속 밟아 <b>모기장 같은 격자 무늬</b>가 생기고, 멀리 있는 신호등 같은 <b>아주 작은 물체</b>는 칸 사이로 빠져 못 볼 수 있다. 그래서 실제로는 ① 꼼꼼한 <b>일반 합성곱과 섞어</b> 쓰거나, ② <b>HDC(hybrid dilated convolution)</b>처럼 팽창률을 1 → 2 → 3(또는 1 → 2 → 5)으로 <b>톱니바퀴처럼 다르게</b> 줘서 모든 픽셀을 한 번은 밟게 한다. 2 · 4 · 8처럼 <b>공약수가 있는 팽창률</b>만 쌓으면 같은 문제가 남는다.
+</div>
+
 <div class="pit"><b>크기를 키우는 세 방법 — 무엇이 다른가</b>
 <div class="tbl-wrap"><table>
   <thead><tr><th></th><th>전치 합성곱</th><th>언풀링</th><th>팽창 합성곱</th></tr></thead>
