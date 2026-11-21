@@ -643,6 +643,34 @@ Komoran [('아버지', 'NNG'), ('가', 'JKS'), ('방', 'NNG'), ...]</span></pre>
 </table>
 </div>
 <div class="deep"><b>🔎 HMM과 CRF, 한 줄로 차이</b> &mdash; HMM은 &lsquo;품사가 단어를 <b>만들어 낸다</b>&rsquo;는 <b>생성 모델</b> <span class="tex">P(x, y)</span>이라 단어끼리는 서로 독립이라고 가정해야 계산이 된다. CRF는 문장 전체가 주어졌을 때 태그열의 확률 <span class="tex">P(y\mid x)</span>를 바로 모델링하는 <b>판별 모델</b>이라, 입력 쪽 자질을 얼마든지 겹쳐 써도 된다. 둘 다 &lsquo;태그 → 다음 태그&rsquo; 전이를 쓰는 점은 같고, 이 전이 아이디어가 13.5의 <b>Bi-LSTM-CRF</b>에서 CRF 층으로 그대로 살아남는다.</div>
+<div class="mynote" id="gen-vs-disc"><b>생성 모델 vs 판별 모델 — 데이터가 만들어지는 과정까지 배우나, 정답 경계만 배우나</b>
+<ul class="ul">
+  <li><b>판별 모델(Discriminative)</b> &mdash; 입력 <span class="tex">X</span>(문장 전체)가 주어졌을 때 정답 <span class="tex">Y</span>(태그열)가 나올 <b>조건부 확률</b> <span class="tex">P(Y\mid X)</span>를 <b>직접</b> 학습한다. 예: <b>CRF</b>, 로지스틱 회귀</li>
+  <li><b>생성 모델(Generative)</b> &mdash; 입력과 정답의 <b>결합 확률</b> <span class="tex">P(X,Y)</span>를 먼저 학습한 뒤, 거기서 필요한 확률을 계산한다. 예: <b>HMM</b>, 나이브 베이즈</li>
+</ul>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>구분</th><th>생성 모델</th><th>판별 모델</th></tr></thead>
+  <tbody>
+    <tr><td>핵심 목적</td><td>데이터가 만들어지는 <b>과정(분포) 자체</b>를 학습</td><td>입력이 주어졌을 때 <b>정답을 맞히는 기준</b>을 학습</td></tr>
+    <tr><td>학습하는 확률</td><td>결합 확률 <span class="tex">P(x,y)</span> 또는 <span class="tex">P(x\mid y)</span></td><td>조건부 확률 <span class="tex">P(y\mid x)</span></td></tr>
+    <tr><td>비유 (개 vs 고양이)</td><td>개와 고양이의 생김새를 각각 완벽히 익혀 <b>직접 그림을 그릴 수 있는</b> 수준</td><td>둘을 가르는 <b>결정적인 차이</b>(귀 모양 등)만 찾아내는 수준</td></tr>
+    <tr><td>품사 태깅에서 던지는 질문</td><td>&ldquo;이 품사(y)라면 어떤 단어(x)가 나올까?&rdquo;</td><td>&ldquo;이 문장(x)이 주어졌을 때 가장 알맞은 품사(y)는?&rdquo;</td></tr>
+    <tr><td>장점</td><td>새 데이터를 <b>생성</b>할 수 있다 · 데이터가 적을 때 유리할 수 있다</td><td>분류(예측) 성능이 대체로 더 좋다 · 맞히는 데 필요한 것에만 집중</td></tr>
+    <tr><td>대표 예</td><td>HMM · 나이브 베이즈 · GAN · 확산 모델(Diffusion)</td><td>CRF · 로지스틱 회귀 · SVM · 일반적인 딥러닝 분류기</td></tr>
+  </tbody>
+</table></div>
+<p><b>식으로 보면</b> &mdash; 생성 모델도 결국 태그를 고를 때는 <span class="tex">P(y\mid x)</span>가 필요한데, 베이즈 규칙으로 <b>돌아서</b> 구한다. 판별 모델은 그 값을 <b>바로</b> 계산한다.</p>
+<div class="fx">
+  <p class="fx-lab">HMM (생성) — 품사가 단어를 만들어 내는 이야기</p>
+  <div class="tex-d">P(x,y)=\prod_{i}\underbrace{P(y_i\mid y_{i-1})}_{\text{전이: 다음 품사}}\;\underbrace{P(x_i\mid y_i)}_{\text{방출: 그 품사가 이 단어를 낼 확률}}\qquad\Rightarrow\qquad \hat y=\arg\max_y P(x,y)</div>
+  <p class="fx-lab">CRF (판별) — 문장 전체를 보고 태그열에 점수를 매김</p>
+  <div class="tex-d">P(y\mid x)=\frac{\exp\big(\sum_i[\,\text{전이 점수}(y_{i-1},y_i)+\text{자질 점수}(y_i,x,i)\,]\big)}{Z(x)}</div>
+  <p class="fx-note">HMM의 방출 확률 <span class="tex">P(x_i\mid y_i)</span>에는 <b>단어 하나</b>만 들어간다(관측 독립 가정) &mdash; 그래서 &lsquo;앞 단어가 무엇인가&rsquo;, &lsquo;-하다로 끝나는가&rsquo; 같은 단서를 넣을 자리가 없다. CRF의 자질 점수는 <b>문장 x 전체와 위치 i</b>를 함께 보므로 그런 단서를 얼마든지 겹쳐 쓸 수 있다. <span class="tex">Z(x)</span>는 가능한 모든 태그열의 점수 합으로, 전체 확률이 1이 되게 나누는 값이다.</p>
+</div>
+<p><b>예: &ldquo;배를 먹었다&rdquo;의 &lsquo;배&rsquo;</b> &mdash; HMM은 &ldquo;명사라면 &lsquo;배&rsquo;라는 단어가 나올 확률 <span class="tex">P(\text{배}\mid\text{명사})</span>&rdquo;처럼 <b>단어 생성 확률</b>을 따진다. CRF는 &ldquo;<b>뒤에 &lsquo;먹었다&rsquo;가 온다</b> → 먹을 수 있는 명사(과일) 쪽 점수 +&rdquo;처럼 문장 속 단서를 직접 점수로 쓴다.</p>
+<p><b>결론</b> &mdash; 품사 태깅 · 개체명 인식(NER)처럼 &ldquo;<b>주어진 문장에 정확한 태그를 붙이는 것</b>&rdquo;이 최종 목적이면, 단어가 생겨날 확률까지 모형으로 만들 필요가 없는 <b>판별 모델(CRF)</b>이 목적에 더 맞는다. 그래서 13.5의 Bi-LSTM-CRF도 맨 위에 CRF를 둔다.</p>
+<p class="fx-note">주의 &mdash; &lsquo;판별 모델이 계산이 효율적&rsquo;은 <b>맞히는 데 필요 없는 것(단어 분포)을 모델링하지 않는다</b>는 뜻이다. 학습 자체는 오히려 CRF가 더 무겁다: HMM은 말뭉치에서 &lsquo;명사 다음 동사가 몇 번&rsquo;, &lsquo;명사가 &lsquo;배&rsquo;인 경우가 몇 번&rsquo;을 <b>세기만</b> 하면 되지만, CRF는 <span class="tex">Z(x)</span>를 계산하며 경사 하강으로 가중치를 반복 학습해야 한다. 같은 생성 · 판별 구분이 다른 과목에도 나온다 &mdash; <a class="ext" href="computer-vision-week11.html#pit-gen">컴퓨터비전 11주차(Naive Bayes vs KNN · SVM)</a> · <a class="ext" href="machine-learning-week12.html#crf-note">기계학습특론 12주차 CRF</a> · <a class="ext" href="machine-learning-week13.html#gen-model">기계학습특론 13주차 GAN(생성 모델)</a>.</p>
+</div>
 </section>
 
 <!-- ===================== 13.5 ===================== -->
