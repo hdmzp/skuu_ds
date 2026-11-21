@@ -842,6 +842,31 @@ Komoran [('아버지', 'NNG'), ('가', 'JKS'), ('방', 'NNG'), ...]</span></pre>
 </ul>
 <div class="deep"><b>🔎 BERT-kNN을 숫자로</b> &mdash; 학습 문장에서 &lsquo;배&rsquo;의 BERT 벡터를 의미별로 모아 두었다고 하자(2차원으로 단순화). 배_01(과일) 예문 벡터 [0.9, 0.1] · [0.8, 0.2], 배_02(선박) [0.1, 0.9] · [0.2, 0.8]. 새 문장 &ldquo;<b>항구에 배가 들어왔다</b>&rdquo;의 &lsquo;배&rsquo; 벡터가 [0.15, 0.85]라면, 코사인 유사도가 선박 쪽 두 벡터와 0.99 이상, 과일 쪽과는 0.28 · 0.41이라 k = 3의 이웃 중 2개가 배_02 → <b>선박</b>. <span class="hi">같은 글자 &lsquo;배&rsquo;라도 BERT는 문맥에 따라 다른 벡터를 내므로</span>(word2vec은 단어마다 벡터 하나) 이 방식이 통한다. 계산: [0.15, 0.85] · [0.1, 0.9] = 0.78, 길이 0.863 · 0.906 → 0.998 / [0.9, 0.1]과는 0.22 / (0.863 × 0.906) ≈ 0.28.</div>
 
+<div class="mynote" id="bertknn-note"><b>BERT-kNN — BERT가 &lsquo;범주&rsquo;는 맞히고 &lsquo;구체적인 답&rsquo;을 놓칠 때, 비슷한 문장을 찾아가 답을 가져온다</b>
+<p><b>BERT-kNN</b>은 사전 학습된 언어 모델 BERT에 <b>k-최근접 이웃(k-NN) 검색</b>을 붙여 <b>사실 회상</b>과 <b>질의응답(QA)</b> 성능을 높이는 기법이다(Kassner &amp; Schütze, 2020). <b>BERT를 추가로 학습시키지 않고</b>, 대규모 코퍼스에서 비슷한 문맥과 정답 후보를 찾아 정확도를 끌어올린다.</p>
+<ul class="ul">
+  <li><b>사실 회상 강화</b> &mdash; BERT는 정답의 <b>범주</b>(예: &lsquo;중부 유럽 도시&rsquo;)는 잘 맞히지만 <b>구체적인 사실</b>(예: &lsquo;빈&rsquo;)은 놓치곤 한다. k-NN 검색이 코퍼스 속 실제 문장에서 정답을 찾아온다</li>
+  <li><b>무학습 결합</b>(zero-shot · no further training) &mdash; 기존 BERT에 코퍼스 기반 검색 부품만 붙여, <b>빈칸 채우기(cloze-style) QA</b>에서 성능을 높인다</li>
+</ul>
+<div class="flow">
+  <div class="fl"><b>① 미리 만들어 두기 (데이터 저장소)</b><span>코퍼스(예: 위키백과)의 문장마다 단어 하나를 [MASK]로 가리고 BERT에 넣어, 그 자리의 벡터를 <b>열쇠(key)</b>, 가려진 실제 단어를 <b>값(value)</b>으로 저장한다 &mdash; &ldquo;…모차르트는 [MASK]에서 숨졌다&rdquo; → 값 &lsquo;빈&rsquo;</span></div>
+  <div class="fl"><b>② 질문을 같은 방식으로 벡터로</b><span>&ldquo;모차르트가 숨진 도시는 [MASK]이다&rdquo;의 [MASK] 자리 벡터를 만든다</span></div>
+  <div class="fl"><b>③ 가장 가까운 열쇠 k개를 찾는다</b><span>문맥이 비슷한 문장들이 뽑히고, 그 문장들의 값(&lsquo;빈&rsquo;, &lsquo;빈&rsquo;, &lsquo;잘츠부르크&rsquo; …)을 모아 후보 확률로 만든다</span></div>
+  <div class="fl"><b>④ BERT의 원래 예측과 섞는다</b><span>BERT는 &lsquo;프라하 · 베를린 · 빈 …&rsquo;처럼 그럴듯한 도시를 넓게 고르고, kNN은 실제 문장에 있던 &lsquo;빈&rsquo;에 힘을 실어 준다 → 최종 답 &lsquo;빈&rsquo;</span></div>
+</div>
+<p class="fx-note">위 모차르트 문장은 이해를 돕기 위한 예시다. 핵심은 &ldquo;<b>모델이 외우지 못한 사실을, 모델의 벡터 공간에서 가까운 실제 문장에서 빌려 온다</b>&rdquo;는 것 &mdash; 오늘날 LLM이 외부 문서를 찾아 답하는 <b>검색 증강(RAG)</b>의 초기 형태로 볼 수 있다.</p>
+<div class="tbl-wrap"><table>
+  <thead><tr><th></th><th>교안의 BERT-kNN (13.8 중의성 해소)</th><th>이 필기의 BERT-kNN (사실 회상 · QA)</th></tr></thead>
+  <tbody>
+    <tr><td>찾는 것</td><td>중의어의 <b>의미</b>(배_01 과일 / 배_02 선박)</td><td>빈칸에 들어갈 <b>단어 · 사실</b>(&lsquo;빈&rsquo;)</td></tr>
+    <tr><td>저장해 두는 것</td><td>의미 레이블이 붙은 예문의 BERT 벡터 → 값 = <b>의미 번호</b></td><td>코퍼스 문장의 [MASK] 자리 BERT 벡터 → 값 = <b>가려진 단어</b></td></tr>
+    <tr><td>필요한 데이터</td><td>의미 레이블이 붙은 말뭉치(사람이 단 정답)</td><td>레이블 없는 대규모 텍스트</td></tr>
+    <tr><td>공통점</td><td colspan="2"><b>BERT는 그대로 두고(추가 학습 없음)</b>, BERT가 문맥에 따라 다르게 내는 벡터로 <b>가장 가까운 이웃을 찾아 그 값을 빌려 온다</b> &mdash; 위 &lsquo;배&rsquo; 숫자 예의 코사인 유사도 계산이 두 경우 모두 그대로 쓰인다</td></tr>
+  </tbody>
+</table></div>
+<p class="fx-note">kNN 자체는 기계학습특론 7주차의 그 kNN이다(<a class="ext" href="machine-learning-week07.html">7주차 kNN</a>) &mdash; &lsquo;학습은 저장뿐, 예측할 때 가장 가까운 것을 찾는다&rsquo;. 달라진 것은 거리를 재는 공간이 BERT의 문맥 벡터라는 점이다.</p>
+</div>
+
 <h3 class="sub-title" id="wsd-knowledge">방법 ② 지식 상호 보완 모델 — Luo et al. (교안 37~39p)</h3>
 <div class="flow">
   <div class="fl"><b>Context 모듈</b><span>중의어가 있는 문장을 <b>GloVe</b> 입력 → Bi-LSTM 정방향 · 역방향 벡터를 concatenate</span></div>
