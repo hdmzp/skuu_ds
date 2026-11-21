@@ -728,6 +728,28 @@ Komoran [('아버지', 'NNG'), ('가', 'JKS'), ('방', 'NNG'), ...]</span></pre>
   <li><b>CRF</b>가 그 h를 보고 <b>문장 전체의 최적 태그열</b>을 한꺼번에 결정한다</li>
 </ul>
 
+<div class="mynote" id="bilstm-note"><b>Bi-LSTM — 앞에서 한 번, 뒤에서 한 번 읽고 합친다</b>
+<p><b>Bi-LSTM(양방향 LSTM)</b>은 순차 데이터를 <b>정방향(과거 → 미래)</b>과 <b>역방향(미래 → 과거)</b> 두 LSTM 층으로 <b>동시에</b> 처리해, 각 위치에서 <b>앞뒤 문맥을 모두</b> 반영하는 순환 신경망 구조다(<a class="ext" href="nlp-week12.html#lstm">12주차 LSTM</a>을 두 개 쓴 것).</p>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>구성</th><th>하는 일</th></tr></thead>
+  <tbody>
+    <tr><td><b>정방향 LSTM</b></td><td>문장을 <b>처음부터 끝까지</b> 읽는다 &mdash; 위치 t의 은닉 상태 <span class="tex">\overrightarrow{h_t}</span>에는 <b>t까지의 앞부분</b>이 담긴다</td></tr>
+    <tr><td><b>역방향 LSTM</b></td><td>문장을 <b>끝에서 처음까지</b> 읽는다 &mdash; <span class="tex">\overleftarrow{h_t}</span>에는 <b>t부터 끝까지의 뒷부분</b>이 담긴다</td></tr>
+    <tr><td><b>은닉 상태 결합</b></td><td>각 시점마다 두 은닉 상태를 <b>이어 붙이거나(concatenation)</b> 더한다. 이어 붙이면 은닉 크기 h → <b>2h</b> (예: 128 + 128 = 256)</td></tr>
+  </tbody>
+</table></div>
+<div class="fx"><div class="tex-d">h_t=\big[\,\overrightarrow{h_t}\;;\;\overleftarrow{h_t}\,\big]\in\mathbb{R}^{2h}</div></div>
+<p><b>예: &ldquo;배 를 먹었다&rdquo;의 &lsquo;배&rsquo;</b> &mdash; 정방향 LSTM은 &lsquo;배&rsquo;를 읽는 순간 아직 아무것도 보지 못했다(문장 맨 앞). 과일인지 선박인지 신체인지 알 수 없다. 역방향 LSTM은 &lsquo;먹었다 → 를 → 배&rsquo; 순으로 읽어 오므로 &lsquo;배&rsquo;에 도착할 때 이미 <b>&lsquo;먹었다&rsquo;</b>를 알고 있다. 둘을 이어 붙인 <span class="tex">h_t</span>로 판단하면 &lsquo;먹는 배 = 과일&rsquo;로 기울어진다. 일반(단방향) LSTM은 <b>과거 정보 위주</b>, Bi-LSTM은 <b>뒷부분까지</b> 함께 본다.</p>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>장점</th><th>한계</th></tr></thead>
+  <tbody><tr>
+    <td>시퀀스 전체의 앞뒤 맥락을 반영 &mdash; <b>개체명 인식 · 품사 태깅 · 감성 분석</b>, 시계열 패턴 분석 등 &lsquo;완성된 입력 전체에 답을 다는&rsquo; 과제에 유리</td>
+    <td>① 파라미터와 연산량이 <b>약 2배</b> ② <b>미래 시점의 입력이 있어야</b> 하므로 실시간 스트리밍이나 <b>다음 토큰 생성</b>(언어 모델 · 번역 디코더)에는 쓸 수 없다 &mdash; 생성할 때는 뒤 단어가 아직 없다</td>
+  </tr></tbody>
+</table></div>
+<p class="fx-note">파라미터 예(입력 임베딩 100차원, 은닉 128): LSTM 한 방향 = 게이트 4개 × (128 × (128 + 100) + 128) = <b>117,248</b>개, Bi-LSTM = 두 방향 따로 = <b>234,496</b>개. 그래서 13.5 구조에서 Bi-LSTM의 출력(위치마다 2h차원)이 CRF로 들어간다 &mdash; Bi-LSTM이 &lsquo;각 위치의 앞뒤 문맥 표현&rsquo;을 만들고, CRF가 &lsquo;태그끼리의 순서 규칙&rsquo;을 맞춘다. 앞뒤를 함께 보는 생각은 이후 <b>BERT</b>(양방향 트랜스포머)로 이어진다(<a class="ext" href="#s15">13.15</a>).</p>
+</div>
+
 <h3 class="sub-title" id="why-crf">CRF 층이 필요한 이유 — softmax와 비교 (교안 26p)</h3>
 <div class="tbl-wrap">
 <table>
