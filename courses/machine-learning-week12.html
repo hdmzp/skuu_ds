@@ -535,7 +535,8 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   <a href="#found">12.8 ② SAM · CLIP</a>
   <a href="#apps">12.9 응용</a>
   <a href="#guide">12.10 모델 선택</a>
-  <a href="#lab">실습 (문제)</a>
+  <a href="#segl">실습 (내 풀이 · 개념)</a>
+  <a href="#lab">실습 문제 안내</a>
   <a href="#summary">핵심 정리</a>
   <a href="#next">다음 주</a>
 </nav>
@@ -2579,14 +2580,343 @@ label_map = np.argmax(seg_fcn.predict(image), axis=-1)</pre>
 
 <!-- ===================== 다음 ===================== -->
 <!-- ===================== 실습 ===================== -->
-<section class="sec" id="lab">
-  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">실습 — 건축 CAD 도면 요소 분할 (문제)<small>PyTorch · segmentation-models-pytorch · TODO 14개 / 100점 · 풀이 전</small></h2></div>
+<section class="sec" id="segl">
+  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">실습 — 건축 CAD 도면 요소 분할 (개념으로 다시 보기)<small>실습의 목적과 흐름 · 교안 개념이 코드의 어느 줄인가 · 내 결과</small></h2></div>
 
-<div class="note-box"><b>무엇을 하나</b> &mdash; 건축 도면 이미지에서 벽 · 창 · 문 같은 <b>도면 기호 7종 + 배경</b>을 픽셀마다 분류한다(의미론적 분할, <a class="ext" href="#seg">12.1</a>). 이번 주 교안의 <b>인코더-디코더(12.2) · 전치 · 팽창 합성곱(12.3) · U-Net · DeepLab(12.4) · Dice · IoU(12.5)</b>를 코드 빈칸에 직접 채운다. 기존 TensorFlow 실습(<code>building_segmentation.py</code>)을 PyTorch 2.x로 옮기고 SegFormer 백본 · SAM 의사라벨을 더한 2026 개정판이다. <b>이 절은 문제 안내만 정리했다</b> &mdash; 풀이 · 실행 결과는 아직 없다.</div>
+<div class="note-box"><b>이 탭을 읽는 법</b> &mdash; 먼저 <a class="ext" href="#segl-about">실습 개요</a>에서 이 실습이 무엇을 하려는지, 파일 네 개가 어떻게 이어지는지, 어떤 라이브러리와 교안 개념을 쓰는지 큰 그림을 잡는다. 그다음 <b>개념 10개</b>를 하나씩 놓고 <span class="hi">① 개념을 쉽게 → ② 코드에서는 어느 줄인가(코드 ↔ 뜻 표) → ③ 쓴 함수 → ④ 내 실행 결과</span> 순서로 본다. 문제 안내(TODO 표 · 배점 · 제출물)는 <a class="ext" href="#lab">실습 문제 안내</a>에 있다.</div>
+
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>🐍</span>PY</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week12-seg-train_seg.py" download="train_seg.py">제출 코드 4개 — [설명] · [목적] · [결과] 주석 포함</a>
+      <p><a class="ext" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week12-seg-dataset.py" download="dataset.py">dataset.py</a> · <a class="ext" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week12-seg-train_seg.py" download="train_seg.py">train_seg.py</a> · <a class="ext" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week12-seg-predict.py" download="predict.py">predict.py</a> · <a class="ext" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week12-seg-train_sam_pseudolabel.py" download="train_sam_pseudolabel.py">train_sam_pseudolabel.py</a></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week12-seg-train_seg.py" download="train_seg.py">⬇ train_seg</a>
+  </div>
+</div>
+
+<!-- ============ 실습 개요 ============ -->
+<div class="pt lab" id="segl-about">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 개요</span>이 실습이 하려는 것 · 코드 흐름 · 라이브러리 · 교안 개념 연결</h3>
+
+  <p><b>이 실습이 하려는 것</b> &mdash; 한마디로 <span class="hi">건축 CAD 도면을 보고, 화소 하나하나가 어떤 도면 요소인지 맞히는 모델을 만드는 실습</span>이다. 사진 한 장에 &lsquo;고양이&rsquo;라는 이름표 하나를 붙이는 것이 분류라면, 분할은 사진의 모든 화소에 이름표를 붙인다. 이번에는 도면의 각 화소를 배경과 도면 기호 7종(ow, iw, of, cw, ef, st, oo) 중 하나로 나누므로 <a class="ext" href="#seg">12.1</a>의 <b>의미 분할</b>에 해당한다.</p>
+  <p>실습은 세 가지 질문에 답하도록 짜여 있다. 첫째, 어떤 백본을 쓰면 좋은가. 둘째, 어떤 손실 함수로 학습해야 작은 기호도 잘 잡는가. 셋째, 사람이 폴리곤을 정성껏 그리는 대신 상자만 그리고 나머지를 SAM에게 맡기면 얼마나 쓸 만한가. 예전 Keras 실습 코드를 PyTorch로 옮기면서 최신 학습 관행(AMP, OneCycleLR, mIoU 평가)과 SAM 실습을 더한 개정판이다.</p>
+
+  <p><b>코드 흐름 &mdash; 파일 네 개가 하는 일</b></p>
+  <div class="flow">
+    <div class="fl"><b>dataset.py · 재료 손질</b><span>도면과 정답 마스크를 읽고 같은 증강을 둘에 똑같이 적용해 텐서로</span></div>
+    <div class="fl"><b>train_seg.py · 요리</b><span>모델 생성 → 손실 → 가중치 갱신, 에폭마다 mIoU로 채점하고 최고점 저장</span></div>
+    <div class="fl"><b>predict.py · 결과 확인</b><span>예측을 원본 크기로 되돌려 색을 입히고 도면 위에 겹쳐 그림</span></div>
+    <div class="fl"><b>train_sam_pseudolabel.py · 라벨 자동 생성</b><span>사람이 그린 상자를 SAM에 넣어 마스크를 받고 학습용 정답으로</span></div>
+  </div>
+  <p>이미지만 돌리고 마스크를 안 돌리면 정답이 어긋나므로, dataset.py는 한 번의 호출로 둘을 함께 변환하는 것이 핵심이다. train_seg.py가 만든 best.pt를 predict.py가 읽고, train_sam_pseudolabel.py가 만든 마스크 폴더는 다시 train_seg.py의 학습 데이터가 된다.</p>
+
+  <p><b>활용한 대표 라이브러리</b></p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>라이브러리</th><th>이 실습에서 맡은 일</th></tr></thead>
+    <tbody>
+      <tr><td><b>PyTorch</b></td><td>전체의 바탕. 텐서 계산, 자동 미분, <code>Dataset</code> · <code>DataLoader</code>, 혼합 정밀도(AMP) 학습</td></tr>
+      <tr><td><b>segmentation_models_pytorch (smp)</b></td><td>분할 모델 조립 키트. <code>smp.DeepLabV3Plus(encoder_name="resnet50")</code>처럼 구조와 백본만 고르면 ImageNet 사전학습 인코더가 들어간 모델이 만들어진다. 백본 3종 비교를 한 줄씩만 바꿔 할 수 있었고, Dice 손실도 여기서 가져왔다</td></tr>
+      <tr><td><b>torchmetrics</b></td><td><code>MulticlassJaccardIndex</code>로 IoU 계산. 배치마다 평균을 내지 않고 에폭 전체의 맞음 · 틀림을 누적했다가 한 번에 계산한다</td></tr>
+      <tr><td><b>albumentations</b></td><td>증강. 이미지와 마스크를 함께 넣으면 마스크에는 최근접 보간을 써서 클래스 번호가 섞이지 않는다</td></tr>
+      <tr><td><b>Hugging Face transformers</b></td><td><code>SamModel</code> · <code>SamProcessor</code>로 SAM을 불러 상자 프롬프트 마스크를 얻는다</td></tr>
+    </tbody>
+  </table></div>
+
+  <p><b>교안과 연결되는 대표 개념</b></p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>교안 개념</th><th>실습에서 나타나는 곳</th><th>내 결과로 본 것</th></tr></thead>
+    <tbody>
+      <tr><td><a class="ext" href="#encdec">12.2 인코더-디코더</a></td><td>smp가 고른 ResNet-50 · MiT-B2 · EfficientNet-B3가 인코더, DeepLabV3+ · SegFormer의 머리가 디코더</td><td>인코더는 ImageNet 사전학습으로 시작해 학습 조각 26개로도 mIoU 0.55</td></tr>
+      <tr><td><a class="ext" href="#decode">12.3 팽창 합성곱</a> · <a class="ext" href="#models">DeepLab ASPP</a></td><td><code>build_model</code>의 &lsquo;MiT 인코더는 DeepLabV3+에 쓸 수 없다&rsquo; 검사. MiT는 트랜스포머라 팽창 모드가 없다</td><td>DeepLabV3+ 두 모델의 경계 F1 0.51 · 0.49</td></tr>
+      <tr><td><a class="ext" href="#latest">12.8 SegFormer · 자기 주의</a></td><td><code>smp.Segformer(encoder_name="mit_b2")</code></td><td>초반 10에폭은 가장 빨리 올랐지만, 1/4 해상도 예측이라 경계 F1 0.12</td></tr>
+      <tr><td><a class="ext" href="#segtrain">12.5 IoU · Dice</a></td><td>평가는 IoU, 학습은 IoU를 미분 가능하게 바꾼 Dice + CE</td><td>CE만 쓰면 cw 0.0, Dice를 더하면 살아났다 &mdash; 클래스 불균형</td></tr>
+      <tr><td><a class="ext" href="#decode">12.3 업샘플링</a></td><td>predict.py에서 클래스 번호가 아니라 <b>로짓을</b> 원본 크기로 보간한 뒤 argmax</td><td>정수 번호를 키우면 계단 경계가 생긴다</td></tr>
+      <tr><td><a class="ext" href="#found">12.8 SAM · 프롬프트 분할</a></td><td>인코더 1회 실행 · 캐시, 상자 프롬프트, 의사라벨 합성</td><td>작은 기호 IoU 0.9 이상, 건물 외곽 ow는 0.18</td></tr>
+      <tr><td><a class="ext" href="machine-learning-week11.html#tc-tf">11주차 전이학습</a> · <a class="ext" href="machine-learning-week11.html#tc-loop">학습 한 스텝</a></td><td>사전학습 인코더, AMP · 기울기 클리핑 · OneCycleLR이 들어간 학습 스텝</td><td>모델마다 Colab T4에서 30에폭 1.1~1.4분</td></tr>
+    </tbody>
+  </table></div>
+
+  <p><b>한 줄 정리</b> &mdash; <span class="hi">분할 모델은 인코더-디코더로 만들고, IoU로 평가하고, Dice + CE로 학습하며, 라벨이 부족하면 SAM으로 보충할 수 있다</span>는 교안의 흐름을 실제 도면 데이터에 처음부터 끝까지 적용해 보는 실습이다. 결과도 교안과 맞아떨어졌다. DeepLab 계열이 경계를 가장 잘 잡았고, Dice가 소수 클래스를 살렸으며, SAM은 작은 기호에서만 쓸 만했다.</p>
+</div>
+
+<div class="pt lab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 지도</span>세 질문, 개념 10개</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>질문</th><th>개념</th><th>파일</th></tr></thead>
+    <tbody>
+      <tr><td><b>데이터를 어떻게 먹이나?</b></td><td><a class="ext" href="#sc-aug">① 같은 변환 · 최근접 보간</a> · <a class="ext" href="#sc-tile">② 조각 나누기와 분할 seed</a></td><td>dataset.py</td></tr>
+      <tr><td><b>어떤 모델을 어떻게 학습하나?</b></td><td><a class="ext" href="#sc-model">③ 구조 · 백본 고르기</a> · <a class="ext" href="#sc-loss">④ CE + Dice</a> · <a class="ext" href="#sc-step">⑤ AMP 학습 스텝</a></td><td>train_seg.py</td></tr>
+      <tr><td><b>얼마나 잘했나?</b></td><td><a class="ext" href="#sc-iou">⑥ IoU · mIoU · 없는 클래스</a> · <a class="ext" href="#sc-val">⑦ 검증 스텝 argmax</a> · <a class="ext" href="#sc-pred">⑧ 로짓 보간 후 argmax</a></td><td>train_seg.py · predict.py</td></tr>
+      <tr><td><b>라벨을 싸게 만들 수 있나?</b></td><td><a class="ext" href="#sc-sam">⑨ SAM 인코더 1회 · 상자 프롬프트</a> · <a class="ext" href="#sc-pseudo">⑩ 의사라벨 합성 순서</a></td><td>train_sam_pseudolabel.py</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="warn"><b>실행 환경과 데이터 &mdash; README 조건과 실제가 다르다</b> &mdash; 배포 자료의 <code>data_annotated2/</code>에는 도면이 1장뿐이었고, 그 마스크 <code>SegmentationClassPNG3</code>는 <b>모든 화소가 0</b>이었다(옛 <code>/255</code> 변환으로 번호가 사라짐). <code>.npy</code>에서 <code>npy_to_index_png</code>로 다시 만들고, <code>cad_img_v3</code> JSON 안의 imageData에서 두 번째 도면을 꺼내 폴리곤을 칠해 <b>라벨 도면 2장</b>을 만들었다. 2장으로는 배치를 만들 수 없어 512×512 조각 32개(학습 26 / 검증 6)로 잘랐다 &mdash; <a class="ext" href="#sc-tile">개념 ②</a>. 학습 6회는 Colab T4, 30에폭 · 배치 4. <span class="hi">같은 도면의 조각이 학습과 검증에 섞이므로 점수는 처음 보는 도면보다 높게 나온 값이다.</span> ef · oo는 데이터에 없다.</div>
+
+<!-- ============ dataset ============ -->
+<h3 class="sub-title">A · 데이터를 어떻게 먹이나 — dataset.py</h3>
+
+<div class="pt lab" id="sc-aug">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ①</span>이미지와 마스크에 같은 변환 · 마스크는 최근접 보간</h3>
+  <p><b>개념</b> &mdash; 분할의 정답은 &lsquo;화소마다 클래스 번호&rsquo;인 마스크다. 이미지를 회전하면 마스크도 똑같이 회전해야 화소 대응이 유지된다. 또 마스크를 키우거나 돌릴 때 양선형 보간을 쓰면 1(ow)과 2(iw) 사이에서 1.5 같은 없는 번호가 생기므로, <span class="hi">마스크는 반드시 가장 가까운 화소 값을 그대로 가져오는 최근접 보간</span>을 쓴다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>A.Resize(size, size)</code></td><td>크기 맞추기. mask 인자로 들어온 배열에는 자동으로 최근접 보간</td></tr>
+      <tr><td><code>A.HorizontalFlip(p=0.5)</code> · <code>A.RandomRotate90(p=0.5)</code></td><td>도면은 방향이 바뀌어도 같은 기호 &mdash; 적은 데이터를 늘린다</td></tr>
+      <tr><td><code>A.ShiftScaleRotate(..., border_mode=0)</code></td><td>조금 이동 · 확대 · 회전. 빈 곳은 0(이미지는 검정, 마스크는 배경)으로 채운다</td></tr>
+      <tr><td><code>A.RandomBrightnessContrast(p=0.5)</code></td><td>밝기 · 대비. 기하 변환이 아니라 <b>이미지에만</b> 적용된다</td></tr>
+      <tr><td><code>np.array(Image.open(mask_path))</code></td><td>마스크는 <code>convert("RGB")</code> 없이 읽는다. RGB로 바꾸면 팔레트 색으로 풀려 번호가 사라진다</td></tr>
+      <tr><td><code>out = self.tf(image=img, mask=mask)</code></td><td><b>한 번의 호출</b>이라 둘에 같은 난수(같은 회전)가 적용된다</td></tr>
+      <tr><td><code>out["mask"].long()</code></td><td>CrossEntropyLoss가 요구하는 int64 정답</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note"><b>내 결과</b> &mdash; 자가 점검 ②에서 <code>x = (3, 256, 256) float32</code>, <code>y = (256, 256) int64</code>, 마스크 값 {0, 1, 2}로 증강 뒤에도 정수 번호가 유지되었다.</p>
+</div>
+
+<div class="pt lab" id="sc-tile">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ②</span>조각 나누기와 분할 seed &mdash; 데이터가 적을 때</h3>
+  <p><b>개념</b> &mdash; 도면은 2481×1754로 크고 라벨 도면은 2장뿐이다. 통째로 512로 줄이면 선이 뭉개지고 표본도 2개뿐이므로, <span class="hi">원본 해상도 그대로 512×512 조각으로 잘라 표본 수를 늘렸다</span>. 전경이 1% 미만인 여백 조각은 버렸다. 대신 조각 단위로 무작위 분할하면 같은 도면의 이웃 조각이 학습과 검증에 함께 들어가 점수가 낙관적으로 나온다(정보 누수).</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>결정</th><th>이유</th></tr></thead>
+    <tbody>
+      <tr><td>마지막 조각은 끝에 맞춰 자른다 (0, 512, …, W − 512)</td><td>패딩 없이 도면 전체를 덮는다 &mdash; 가로 5 × 세로 4 = 도면당 최대 20조각</td></tr>
+      <tr><td>분할 seed 0이 아니라 2</td><td>seed 0이면 소수 클래스 st가 검증에 하나도 없어 st IoU를 잴 수 없다. seed 2는 학습 · 검증 모두에 6개 클래스</td></tr>
+      <tr><td>SAM 마스크도 같은 위치로 자른다</td><td>조각 선택을 항상 사람 마스크 기준으로 해 이름이 같게 &mdash; 사람 라벨 모델과 같은 분할로 비교</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note"><b>내 결과</b> &mdash; 조각 32개(학습 26 / 검증 6). st는 학습 조각 1개 · 검증 조각 1개에만, of는 학습 4개 · 검증 2개, cw는 학습 5개 · 검증 1개에 나온다. 클래스 화소 비율은 배경 57.4% · iw 35.2% · ow 4.1% · of 2.5% · st 0.39% · cw 0.34%.</p>
+</div>
+
+<!-- ============ train ============ -->
+<h3 class="sub-title">B · 어떤 모델을 어떻게 학습하나 — train_seg.py</h3>
+
+<div class="pt lab" id="sc-model">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ③</span>구조와 백본 고르기 &mdash; smp 한 줄</h3>
+  <p><b>개념</b> &mdash; 분할 모델 = <b>인코더(백본)</b>가 특징을 뽑고 <b>디코더</b>가 원래 크기로 되돌린다(<a class="ext" href="#encdec">12.2</a>). smp는 이 둘을 레고처럼 조합하게 해 준다. 인코더는 ImageNet 사전학습 가중치로 시작하고 디코더만 새로 배운다(<a class="ext" href="machine-learning-week11.html#tc-tf">11주차 전이학습</a>). DeepLabV3+는 인코더 뒷단을 팽창 합성곱으로 바꿔 해상도를 지키는데, <span class="hi">트랜스포머 인코더 MiT에는 팽창 모드가 없어 SegFormer 구조로만 쓸 수 있다</span>.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>kw = dict(encoder_name=encoder, encoder_weights="imagenet", in_channels=3, classes=num_classes)</code></td><td>공통 인자. classes = 8(배경 + 기호 7)이 마지막 출력 채널 수</td></tr>
+      <tr><td><code>if arch in ("deeplabv3plus", "deeplabv3") and encoder.startswith("mit_"): raise ValueError</code></td><td>잘못된 조합을 학습 전에 막는다</td></tr>
+      <tr><td><code>{"deeplabv3plus": smp.DeepLabV3Plus, "unet": smp.Unet, ...}[arch](**kw)</code></td><td>이름으로 클래스를 골라 생성 &mdash; 출력 (B, 8, H, W) 로짓</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>구조 · 백본</th><th>파라미터</th><th>val mIoU</th><th>배경 제외</th><th>경계 F1</th><th>최고 에폭</th><th>학습 시간</th></tr></thead>
+    <tbody>
+      <tr><td>DeepLabV3+ · ResNet-50</td><td>26.7M</td><td><b>0.546</b></td><td><b>0.549</b></td><td><b>0.513</b></td><td>28</td><td>1.1분</td></tr>
+      <tr><td>SegFormer · MiT-B2 (lr 6e-5)</td><td>24.7M</td><td>0.495</td><td>0.504</td><td>0.122</td><td>20</td><td>1.3분</td></tr>
+      <tr><td>DeepLabV3+ · EfficientNet-B3</td><td>11.7M</td><td>0.492</td><td>0.495</td><td>0.488</td><td>30</td><td>1.4분</td></tr>
+    </tbody>
+  </table></div>
+  <div class="deck">
+    <div class="deck-h">내 결과 그림 <span>검증 mIoU 곡선 · 왼쪽 백본, 오른쪽 손실과 SAM 라벨</span></div>
+    <div class="deck-g">
+      <figure class="sld"><img width="1430" height="494" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-lab-val-miou.png" alt="검증 mIoU 곡선"><figcaption><b>val mIoU</b> 6개 실험, 30에폭</figcaption></figure>
+    </div>
+  </div>
+  <ul class="ul">
+    <li><b>ResNet-50이 가장 높았지만 차이 0.05는 확정적이지 않다</b> &mdash; 검증 조각이 6개라 한두 조각에 따라 클래스 IoU가 크게 흔들린다. 클래스별로는 SegFormer가 iw · cw · st, EfficientNet-B3가 of에서 가장 높았다</li>
+    <li><b>SegFormer의 경계 F1 0.122</b> &mdash; 디코더가 입력의 1/4 해상도에서 예측한 뒤 업샘플링하므로 선 하나 두께의 경계가 뭉개진다. 초반 10에폭은 가장 빨리 올랐지만 20에폭 0.495 뒤 0.442까지 떨어졌다</li>
+    <li><b>DeepLabV3+ 두 모델은 28~30에폭이 최고점</b> &mdash; 30에폭에서도 아직 오르는 중이었다</li>
+    <li>EfficientNet-B3는 파라미터가 절반 이하인데 가장 느렸다 &mdash; 깊이별 합성곱은 연산량에 비해 GPU 활용이 낮다. 다만 1분대라 고정 비용 영향도 크다</li>
+  </ul>
+</div>
+
+<div class="pt lab" id="sc-loss">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ④</span>CE + Dice &mdash; 넓은 클래스와 작은 클래스를 함께</h3>
+  <p><b>개념</b> &mdash; <b>CE</b>는 화소마다 정답 확률을 높이는 손실을 모두 더하므로, 화소가 많은 배경 · iw가 손실 대부분을 차지한다. <b>Dice</b>는 클래스마다 겹침 비율 2|A∩B| / (|A| + |B|)를 따로 계산해 평균하므로 작은 클래스도 같은 비중이다(<a class="ext" href="#segtrain">12.5</a>). <span class="hi">둘을 더하면 CE의 안정적인 기울기와 Dice의 불균형 보정을 함께 얻는다</span> &mdash; nnU-Net의 기본 조합이다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>nn.CrossEntropyLoss(weight=class_weights, ignore_index=-100 if ignore_index is None else ignore_index)</code></td><td>ignore_index가 없으면 PyTorch 기본값 -100(어떤 화소도 무시하지 않음)</td></tr>
+      <tr><td><code>smp.losses.DiceLoss(mode="multiclass", ignore_index=ignore_index)</code></td><td>정답 (B, H, W) 정수를 받아 안에서 원-핫으로 바꾸고 softmax와 비교</td></tr>
+      <tr><td><code>return self.ce(logits, target) + self.dice(logits, target)</code></td><td>두 손실 모두 <b>로짓</b>을 받는다 &mdash; 모델 끝에 softmax를 넣지 않는다</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>손실 (DeepLabV3+ R50)</th><th>배경</th><th>ow</th><th>iw</th><th>of</th><th>cw</th><th>st</th><th>mIoU</th><th>경계 F1</th></tr></thead>
+    <tbody>
+      <tr><td>CE</td><td><b>0.661</b></td><td>0.604</td><td><b>0.681</b></td><td>0.062</td><td>0.000</td><td>0.684</td><td>0.449</td><td><b>0.553</b></td></tr>
+      <tr><td>Dice</td><td>0.345</td><td><b>0.764</b></td><td>0.407</td><td>0.313</td><td><b>0.371</b></td><td>0.689</td><td>0.482</td><td>0.370</td></tr>
+      <tr><td>CE + Dice</td><td>0.563</td><td>0.736</td><td>0.506</td><td><b>0.538</b></td><td>0.166</td><td><b>0.764</b></td><td><b>0.546</b></td><td>0.513</td></tr>
+    </tbody>
+  </table></div>
+  <ul class="ul">
+    <li><b>CE만 쓰면 cw(화소 0.34%)를 전혀 못 맞혔다</b> &mdash; Dice만 쓰면 cw 0.371 · of 0.313으로 살아났다. 교안의 클래스 불균형 문제를 숫자로 본 것이다</li>
+    <li><b>Dice의 대가</b> &mdash; 배경 IoU 0.345 · 경계 F1 0.370으로 가장 낮다. 작은 클래스를 키우다 배경을 전경으로 칠했다. 곡선도 14에폭에 0.06까지 떨어질 만큼 불안정했다</li>
+    <li><b>CE + Dice가 어느 클래스에서도 크게 무너지지 않아 mIoU 최고</b>. README가 짚은 ef는 데이터에 없고, st는 학습 조각 1개라 손실 간 차이를 보기에는 cw · of가 낫다</li>
+  </ul>
+</div>
+
+<div class="pt lab" id="sc-step">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑤</span>AMP 학습 스텝 &mdash; 11주차 순서에 GradScaler가 붙는다</h3>
+  <p><b>개념</b> &mdash; <a class="ext" href="machine-learning-week11.html#tc-loop">11주차 개념 ②</a>의 &lsquo;예측 → 채점 → 기울기 → 고치기&rsquo;와 같다. 다른 점은 <b>float16 혼합 정밀도</b>다. float16은 아주 작은 기울기가 0으로 사라지기 쉬워, GradScaler가 손실에 큰 수를 곱해 역전파한 뒤 갱신 직전에 되돌린다. <span class="hi">클리핑은 되돌린 뒤(unscale_ 다음)에 해야 실제 기울기 크기에 1.0 기준이 적용된다.</span></p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>순서</th><th>코드</th><th>왜 이 자리</th></tr></thead>
+    <tbody>
+      <tr><td>① 순전파 · 손실</td><td><code>with torch.autocast("cuda", dtype=torch.float16, enabled=use_amp): loss = criterion(model(x), y)</code></td><td>합성곱 · 행렬곱만 float16. CPU면 enabled=False로 그대로 float32</td></tr>
+      <tr><td>② 기울기 지우기</td><td><code>opt.zero_grad(set_to_none=True)</code></td><td>backward 앞. None으로 두면 0을 채우는 것보다 빠르다</td></tr>
+      <tr><td>③ 역전파</td><td><code>scaler.scale(loss).backward()</code></td><td>배율을 곱한 손실로 역전파</td></tr>
+      <tr><td>④ 배율 되돌리기</td><td><code>scaler.unscale_(opt)</code></td><td>클리핑 <b>전에</b></td></tr>
+      <tr><td>⑤ 클리핑</td><td><code>nn.utils.clip_grad_norm_(model.parameters(), 1.0)</code></td><td>기울기 길이를 1.0 이하로</td></tr>
+      <tr><td>⑥ 갱신</td><td><code>scaler.step(opt); scaler.update()</code></td><td>inf · NaN이면 이번 갱신을 건너뛰고 배율을 줄인다</td></tr>
+      <tr><td>⑦ 학습률</td><td><code>sched.step()</code></td><td>OneCycleLR은 <b>배치마다</b> 호출(전체 스텝 = 에폭 × 배치 수)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note"><b>내 결과</b> &mdash; 학습 조각 26개 · 배치 4 · <code>drop_last=True</code>라 에폭당 6스텝, 30에폭에 180스텝. 조각을 내기 전 도면 2장일 때는 학습 1장이라 배치가 0개가 되어 <code>num_samples=0</code> 오류가 났다.</p>
+</div>
+
+<!-- ============ eval ============ -->
+<h3 class="sub-title">C · 얼마나 잘했나 — 지표 · 검증 · 예측</h3>
+
+<div class="pt lab" id="sc-iou">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑥</span>IoU · mIoU &mdash; 그리고 데이터에 없는 클래스</h3>
+  <p><b>개념</b> &mdash; IoU = TP / (TP + FP + FN) = 겹친 넓이 ÷ 합친 넓이(<a class="ext" href="#segtrain">12.5</a>). 클래스별 IoU를 단순 평균한 것이 mIoU(macro)라 작은 클래스도 같은 비중이다. 배경이 대부분인 도면에서는 배경을 빼고 평균한 값도 함께 본다. <span class="hi">지표 객체는 update로 에폭 동안 혼동행렬을 쌓고 compute로 한 번에 계산</span>하므로 배치 평균보다 정확하다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>MulticlassJaccardIndex(num_classes=K, ignore_index=0 if args.ignore_bg_in_miou else None, average="macro")</code></td><td>mIoU. ignore_index=0이면 정답이 배경인 화소를 뺀다</td></tr>
+      <tr><td><code>MulticlassJaccardIndex(num_classes=K, average=None)</code></td><td>평균하지 않은 클래스별 IoU 8개</td></tr>
+      <tr><td><code>miou.reset()</code> → <code>update(pred, y)</code> × 배치 → <code>compute()</code></td><td>에폭마다 새로 쌓고 끝에 한 번 계산</td></tr>
+    </tbody>
+  </table></div>
+  <div class="fix"><b>주의 &mdash; 없는 클래스는 0이 아니라 &lsquo;잴 수 없음&rsquo;</b>: macro 평균은 예측과 정답 어디에도 없는 클래스를 빼고 평균하지만, <code>average=None</code>은 그 클래스의 IoU를 <b>0</b>으로 돌려준다. 그래서 학습 로그의 클래스별 표에는 데이터에 없는 ef · oo가 0.0으로 찍힌다. 결과표에서는 NaN으로 바꿔 &lsquo;못 맞힘&rsquo;과 구분했다. 반대로 SegFormer는 없는 oo를 일부 화소에서 예측해 oo가 NaN이 아닌 0.0으로 남았다.</div>
+</div>
+
+<div class="pt lab" id="sc-val">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑦</span>검증 스텝 &mdash; 로짓에서 클래스 번호로</h3>
+  <p><b>개념</b> &mdash; 모델 출력은 화소마다 클래스 8개의 점수(로짓)다. <span class="hi">채널 축에서 가장 큰 점수의 위치가 그 화소의 예측 클래스</span>다. 검증에서는 기울기를 끄고(no_grad) 학습용 무작위 장치를 끈다(eval).</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>model.eval()</code> · <code>with torch.no_grad():</code></td><td>평가 모드 · 기울기 기록 끄기 &mdash; 둘은 다른 일이라 둘 다</td></tr>
+      <tr><td><code>vl += criterion(logits, y).item() * x.size(0)</code></td><td>배치 크기를 곱해 더한 뒤 나중에 전체 개수로 나눈다(마지막 배치가 작아도 정확한 평균)</td></tr>
+      <tr><td><code>pred = logits.argmax(1).cpu()</code></td><td>(B, 8, H, W) → (B, H, W). 지표 객체가 CPU에 있으므로 CPU로</td></tr>
+      <tr><td><code>if m &gt; best: torch.save({...}, "best.pt")</code></td><td>검증 mIoU 최고 시점의 가중치만 남긴다</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="pt lab" id="sc-pred">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑧</span>예측 후처리 &mdash; 로짓을 키운 뒤 argmax · 팔레트</h3>
+  <p><b>개념</b> &mdash; 학습 크기로 줄여 예측했으면 원본 크기로 되돌려야 한다. 정수인 클래스 번호를 키우면 계단 모양 경계가 생기므로, <span class="hi">연속값인 로짓을 양선형 보간으로 키운 뒤 argmax</span>를 한다(<a class="ext" href="#decode">12.3 업샘플링</a>). 색은 번호를 팔레트의 행으로 바꾸는 배열 인덱싱 한 줄이다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>F.interpolate(logits, size=(H, W), mode="bilinear", align_corners=False)</code></td><td>(1, 8, S, S) → (1, 8, H, W)</td></tr>
+      <tr><td><code>logits.argmax(1)[0].cpu().numpy().astype(np.uint8)</code></td><td>(H, W) 인덱스 맵 &mdash; 인덱스 PNG로 저장해 재학습에도 쓸 수 있다</td></tr>
+      <tr><td><code>PALETTE[mask.astype(np.int64) % len(PALETTE)]</code></td><td>(H, W) 번호 → (H, W, 3) RGB. % 는 팔레트 길이를 넘는 번호 방어</td></tr>
+      <tr><td><code>img * (1 - alpha) + colorize(pred) * alpha</code></td><td>원본과 색 마스크를 반씩 섞은 오버레이</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ============ SAM ============ -->
+<h3 class="sub-title">D · 라벨을 싸게 만들 수 있나 — train_sam_pseudolabel.py</h3>
+
+<div class="pt lab" id="sc-sam">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑨</span>SAM &mdash; 무거운 인코더는 한 번, 프롬프트마다 가벼운 디코더</h3>
+  <p><b>개념</b> &mdash; SAM은 ViT 영상 인코더(무거움, 이미지당 1회)와 프롬프트 인코더 · 마스크 디코더(가벼움, 프롬프트마다)로 나뉜다(<a class="ext" href="#found">12.8 ②</a>). <span class="hi">한 도면에 객체가 30개여도 인코더는 한 번만 돌리고 임베딩을 재사용</span>하는 것이 설계의 핵심이다. 상자 프롬프트는 모호성이 적어 마스크 후보 3개 대신 1개만 받는다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>if key != self._cache_key: self._emb = self.model.get_image_embeddings(inp["pixel_values"])</code></td><td>새 이미지일 때만 인코더 실행 · 캐시</td></tr>
+      <tr><td><code>inp = self.proc(img, input_boxes=[[box]], return_tensors="pt")</code></td><td>상자 좌표를 SAM 입력 크기(긴 변 1024)에 맞게 변환</td></tr>
+      <tr><td><code>inp.pop("pixel_values")</code></td><td>화소는 캐시한 임베딩으로 대신하므로 뺀다</td></tr>
+      <tr><td><code>self.model(image_embeddings=self._emb, multimask_output=False, **inp)</code></td><td>디코더만 실행 &mdash; 마스크 1개</td></tr>
+      <tr><td><code>post_process_masks(out.pred_masks, original_sizes, reshaped_input_sizes)[0][0, 0]</code></td><td>256×256 저해상도 로짓을 원본 크기로 키우고 0 기준으로 이진화</td></tr>
+      <tr><td><code>out.iou_scores[0, 0, 0]</code></td><td>SAM이 스스로 예측한 마스크 품질 &mdash; 품질 필터에 쓴다</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="pt lab" id="sc-pseudo">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑩</span>의사라벨 합성 &mdash; 큰 것부터 칠하고, 자신 없으면 상자로</h3>
+  <p><b>개념</b> &mdash; 객체 마스크를 하나의 라벨 맵으로 합칠 때 순서가 중요하다. <span class="hi">넓은 영역(건물 외곽)을 먼저 칠하고 작은 기호를 나중에 덮어써야</span> 작은 객체가 지워지지 않는다. SAM의 품질 점수가 낮으면 마스크를 버리지 않고 상자 전체로 채워, 거칠더라도 위치는 남긴다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>sorted(meta["shapes"], key=lambda s: -np.prod(np.ptp(np.array(s["points"]), axis=0)))</code></td><td>np.ptp = 최댓값 − 최솟값 → (가로폭, 세로폭), 곱이 상자 넓이. 음수라 큰 것부터</td></tr>
+      <tr><td><code>if not cls: continue</code></td><td>목록에 없는 라벨(None)이나 배경(0)은 건너뛴다</td></tr>
+      <tr><td><code>if iou &lt; args.min_iou: mask[y0:y1+1, x0:x1+1] = True</code></td><td>품질 0.5 미만이면 상자 채움으로 대체</td></tr>
+      <tr><td><code>label_map[mask] = cls</code></td><td>나중 객체가 앞의 것을 덮어쓴다</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th></th><th>배경</th><th>ow</th><th>iw</th><th>of</th><th>cw</th><th>st</th><th>mIoU</th><th>경계 F1</th></tr></thead>
+    <tbody>
+      <tr><td>의사라벨 품질 (사람 라벨 대비)</td><td>0.977</td><td><b>0.184</b></td><td>0.853</td><td>0.964</td><td>0.902</td><td>0.941</td><td>&mdash;</td><td>&mdash;</td></tr>
+      <tr><td>사람 라벨로 학습한 모델</td><td>0.563</td><td><b>0.736</b></td><td>0.506</td><td><b>0.538</b></td><td><b>0.166</b></td><td>0.764</td><td><b>0.546</b></td><td><b>0.513</b></td></tr>
+      <tr><td>SAM 라벨로 학습한 모델</td><td>0.633</td><td>0.441</td><td>0.617</td><td>0.000</td><td>0.100</td><td>0.798</td><td>0.431</td><td>0.260</td></tr>
+    </tbody>
+  </table></div>
+  <div class="deck">
+    <div class="deck-h">내 결과 그림 <span>사람 라벨 vs SAM 의사라벨 · 검증 조각 예측</span></div>
+    <div class="deck-g">
+      <figure class="sld"><img width="1650" height="528" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-lab-sam-vs-human.png" alt="사람 라벨과 SAM 의사라벨"><figcaption><b>실패 사례</b> 빨강 = ow 라벨이 서로 다른 화소</figcaption></figure>
+      <figure class="sld"><img width="1650" height="1760" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml12-lab-pred-compare.png" alt="검증 조각 예측 비교"><figcaption><b>예측</b> 정답 · 사람 라벨 모델 · SAM 라벨 모델</figcaption></figure>
+    </div>
+  </div>
+  <ul class="ul">
+    <li><b>닫힌 작은 기호는 상자만으로 충분했다</b> &mdash; of · cw · st 모두 IoU 0.9 이상. 폴리곤 대신 상자만 그려도 되는 클래스에서는 라벨링 비용이 크게 준다</li>
+    <li><b>실패 사례 ow 0.184</b> &mdash; ow 상자가 건물 전체를 덮어 SAM이 건물 전체를 ow로 냈다. 그 위에 칠한 방 마스크는 벽 선에서 조금 안쪽으로 물러나고 문 열림 호를 포함하지 않아, <b>SAM의 ow 화소 74%가 사람 라벨에서는 iw</b>였다. 복도는 상자가 주변 방까지 포함해 분리되지 않았다</li>
+    <li><b>학습 결과</b> &mdash; mIoU 0.115 하락, 경계 F1은 0.513 → 0.260으로 절반. 라벨 경계가 벽 선에서 벗어나 있으니 모델도 그 위치를 배웠다. 의사라벨 of 품질은 0.964였지만 모델은 of를 iw로 예측했다 &mdash; of 학습 조각이 4개뿐이라 단일 학습으로는 원인을 단정하기 어렵다</li>
+    <li>JSON이 있는 도면이 1장이라 학습 조각 26개 중 16개만 SAM 라벨이다 &mdash; 전부 SAM이었다면 차이는 더 컸을 것이다</li>
+  </ul>
+</div>
+
+<div class="pt plus" id="segl-funcs">
+  <h3 class="pt-h"><span class="bdg bdg-plus">함수 사전</span>이 실습에서 쓴 함수 · 객체 한 표로</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>라이브러리</th><th>함수 · 객체</th><th>하는 일</th><th>개념</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="2">albumentations</td><td><code>A.Compose</code> · <code>Resize</code> · <code>HorizontalFlip</code> · <code>RandomRotate90</code> · <code>ShiftScaleRotate</code> · <code>RandomBrightnessContrast</code> · <code>Normalize</code></td><td>이미지 · 마스크 동시 증강</td><td>①</td></tr>
+      <tr><td><code>ToTensorV2</code></td><td>HWC 넘파이 → CHW 텐서 (마스크는 HW 그대로)</td><td>①</td></tr>
+      <tr><td rowspan="3">smp</td><td><code>DeepLabV3Plus</code> · <code>Unet</code> · <code>UnetPlusPlus</code> · <code>Segformer</code></td><td>구조 + 사전학습 인코더로 모델 생성</td><td>③</td></tr>
+      <tr><td><code>encoder_name</code> · <code>encoder_weights="imagenet"</code></td><td>백본 선택 · 전이학습</td><td>③</td></tr>
+      <tr><td><code>losses.DiceLoss(mode="multiclass")</code></td><td>Dice 손실</td><td>④</td></tr>
+      <tr><td rowspan="7">PyTorch</td><td><code>nn.CrossEntropyLoss(ignore_index)</code></td><td>화소별 CE</td><td>④</td></tr>
+      <tr><td><code>torch.autocast</code> · <code>torch.amp.GradScaler</code></td><td>float16 순전파 · 손실 배율</td><td>⑤</td></tr>
+      <tr><td><code>scaler.unscale_</code> · <code>clip_grad_norm_</code></td><td>배율 되돌리기 · 기울기 자르기</td><td>⑤</td></tr>
+      <tr><td><code>optim.AdamW</code> · <code>lr_scheduler.OneCycleLR</code></td><td>옵티마이저 · 배치마다 학습률 조정</td><td>⑤</td></tr>
+      <tr><td><code>model.eval()</code> · <code>torch.no_grad()</code> · <code>argmax(1)</code></td><td>평가 모드 · 기울기 끄기 · 예측 클래스</td><td>⑦</td></tr>
+      <tr><td><code>F.interpolate(mode="bilinear")</code></td><td>로짓을 원본 크기로</td><td>⑧</td></tr>
+      <tr><td><code>Dataset.__len__</code> · <code>__getitem__</code> · <code>DataLoader(drop_last=True)</code></td><td>표본 개수 · i번째 표본 · 배치 공급</td><td>① ⑤</td></tr>
+      <tr><td>torchmetrics</td><td><code>MulticlassJaccardIndex(average="macro" | None, ignore_index)</code> · <code>update</code> · <code>compute</code> · <code>reset</code></td><td>mIoU · 클래스별 IoU 누적 계산</td><td>⑥</td></tr>
+      <tr><td rowspan="3">transformers</td><td><code>SamModel.get_image_embeddings</code></td><td>무거운 인코더 1회</td><td>⑨</td></tr>
+      <tr><td><code>SamProcessor(input_boxes=...)</code></td><td>상자 좌표 변환</td><td>⑨</td></tr>
+      <tr><td><code>image_processor.post_process_masks</code> · <code>iou_scores</code></td><td>원본 크기 이진 마스크 · 품질 점수</td><td>⑨ ⑩</td></tr>
+      <tr><td>NumPy</td><td><code>np.ptp</code> · 배열 인덱싱 <code>PALETTE[mask]</code> · <code>label_map[mask] = cls</code></td><td>상자 넓이 · 색칠 · 덮어쓰기</td><td>⑧ ⑩</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="pit"><b>다시 풀 때 틀리기 쉬운 곳 ★</b>
+  <ul class="ul">
+    <li>마스크를 <code>convert("RGB")</code>로 읽거나 따로 증강하면 번호가 깨지거나 어긋난다 &mdash; <code>tf(image=img, mask=mask)</code> 한 번에</li>
+    <li>MiT 인코더 + DeepLabV3+는 불가 &mdash; SegFormer로</li>
+    <li><code>unscale_</code>는 클리핑 <b>앞</b>, <code>sched.step()</code>은 OneCycleLR이면 배치마다</li>
+    <li>손실에는 softmax 전 로짓을, 업샘플링도 번호가 아니라 로짓을</li>
+    <li><code>average=None</code> 클래스별 IoU의 0.0은 &lsquo;데이터에 없음&rsquo;일 수 있다 &mdash; 클래스 등장 여부부터 확인</li>
+    <li>의사라벨은 큰 객체부터 칠한다 &mdash; 순서를 뒤집으면 작은 기호가 지워진다</li>
+    <li>학습 표본 수 × <code>drop_last</code>로 배치가 0개가 되지 않는지 &mdash; <code>num_samples=0</code> 오류</li>
+  </ul>
+</div>
+</section>
+
+<section class="sec" id="lab">
+  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">실습 문제 안내 — 건축 CAD 도면 요소 분할<small>PyTorch · segmentation-models-pytorch · TODO 14개 / 100점</small></h2></div>
+
+<div class="note-box"><b>무엇을 하나</b> &mdash; 건축 도면 이미지에서 벽 · 창 · 문 같은 <b>도면 기호 7종 + 배경</b>을 픽셀마다 분류한다(의미론적 분할, <a class="ext" href="#seg">12.1</a>). 이번 주 교안의 <b>인코더-디코더(12.2) · 전치 · 팽창 합성곱(12.3) · U-Net · DeepLab(12.4) · Dice · IoU(12.5)</b>를 코드 빈칸에 직접 채운다. 기존 TensorFlow 실습(<code>building_segmentation.py</code>)을 PyTorch 2.x로 옮기고 SegFormer 백본 · SAM 의사라벨을 더한 2026 개정판이다. <b>이 절은 교수님이 낸 문제 안내다</b> &mdash; 내 풀이 · 실행 결과 · 개념 정리는 <a class="ext" href="#segl">실습 (내 풀이 · 개념)</a>에 있다.</div>
 
 <div class="warn"><b>먼저 확인할 것</b>
 <ul class="ul">
-  <li><b>데이터가 배포본에 없다</b> &mdash; 기존 실습 zip의 <code>data_annotated2/</code>(원본 도면 <code>JPEGImages/</code> + 클래스 인덱스 마스크 <code>SegmentationClassPNG3/</code>)를 <code>segmentation_example_pytorch/</code> 아래에 그대로 복사한다. 바탕화면 <code>기_12주차/segmentation_example/</code> 폴더에 있다</li>
+  <li><b>데이터가 배포본에 없다</b> &mdash; 기존 실습 zip의 <code>data_annotated2/</code>(원본 도면 <code>JPEGImages/</code> + 클래스 인덱스 마스크 <code>SegmentationClassPNG3/</code>)를 <code>segmentation_example_pytorch/</code> 아래에 그대로 복사한다. 바탕화면 <code>기_12주차/segmentation_example/</code> 폴더에 있다. <b>단, 그 안에 도면이 1장뿐이고 마스크가 전부 0이다</b> &mdash; 어떻게 해결했는지는 <a class="ext" href="#sc-tile">내 실습 개념 ②</a></li>
   <li><b>클래스는 8개</b> &mdash; <code>labels.txt</code> = __ignore__, _background_, ow, iw, of, cw, ef, st, oo. __ignore__를 빼면 배경 1 + 기호 7 = <b>8</b>이 출력 채널 수다. 옛 Keras 코드의 <code>NUM_CLASSES = 7</code>은 마지막 <code>oo</code>가 빠진 값이니 따라 쓰지 않는다</li>
   <li>GPU가 없으면 <code>--size 128 --batch 2 --epochs 2 --workers 0</code>으로 동작만 확인한다(AMP는 CUDA에서만). 설치: <code>pip install -r requirements.txt</code> &mdash; torch ≥ 2.2 · segmentation-models-pytorch ≥ 0.4 · torchmetrics ≥ 1.3 · albumentations ≥ 1.4 (SAM 실습에만 transformers)</li>
 </ul></div>
