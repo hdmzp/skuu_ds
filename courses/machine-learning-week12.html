@@ -535,6 +535,7 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   <a href="#found">12.8 ② SAM · CLIP</a>
   <a href="#apps">12.9 응용</a>
   <a href="#guide">12.10 모델 선택</a>
+  <a href="#labrev">실습 정리 (내 풀이)</a>
   <a href="#lab">실습 (문제)</a>
   <a href="#summary">핵심 정리</a>
   <a href="#next">다음 주</a>
@@ -2579,6 +2580,86 @@ label_map = np.argmax(seg_fcn.predict(image), axis=-1)</pre>
 
 <!-- ===================== 다음 ===================== -->
 <!-- ===================== 실습 ===================== -->
+<section class="sec" id="labrev">
+  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">실습 정리 — CAD 도면 분할, 무엇을 했고 교안의 어디와 이어지나<small>내 풀이 복습 · 코드 흐름 · 라이브러리 · 교안 개념 연결</small></h2></div>
+
+<div class="note-box"><b>이 실습이 하려는 것</b> &mdash; 한마디로 <b>건축 CAD 도면을 보고, 화소 하나하나가 어떤 도면 요소인지 맞히는 모델</b>을 만드는 실습이다. 사진 한 장에 &ldquo;고양이&rdquo;라는 이름표 하나를 붙이는 게 분류라면, 분할(segmentation)은 사진의 <b>모든 화소에 이름표</b>를 붙인다. 이번에는 도면의 각 화소를 배경과 도면 기호 7종(ow, iw, of, cw, ef, st, oo) 중 하나로 분류하므로, 강의에서 배운 <b>의미 분할(semantic segmentation)</b>(<a class="ext" href="#seg">12.1</a>)에 해당한다. 문제 구성과 TODO 배점은 <a class="ext" href="#lab">실습 (문제)</a> 절에 있다.</div>
+
+<div class="pt gyo">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">세 질문</span>실습이 답하려는 것</h3>
+  <div class="flow">
+    <div class="fl"><span class="fl-n">1</span><div><h4>어떤 백본을 쓰면 좋은가</h4><p>백본 = 특징을 뽑는 몸통 신경망. ResNet-50 · MiT-B2 · EfficientNet-B3 비교</p></div></div>
+    <div class="fl"><span class="fl-n">2</span><div><h4>어떤 손실 함수로 학습해야 작은 기호도 잘 잡는가</h4><p>CE만 / Dice만 / CE + Dice</p></div></div>
+    <div class="fl"><span class="fl-n">3</span><div><h4>상자만 대충 그리고 나머지는 SAM에게 맡기면 얼마나 쓸 만한가</h4><p>사람이 폴리곤을 정성껏 그리는 대신 상자 프롬프트 → SAM 의사라벨</p></div></div>
+  </div>
+  <p class="fx-note">예전 Keras 실습 코드를 PyTorch로 옮기면서 <b>최신 학습 관행(AMP, OneCycleLR, mIoU 평가)</b>과 <b>SAM 실습</b>을 더한 개정판이다.</p>
+</div>
+
+<h3 class="sub-title">코드 흐름 — 파일 4개가 하는 일</h3>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>파일</th><th>비유</th><th>하는 일</th></tr></thead>
+  <tbody>
+    <tr><td><code>dataset.py</code></td><td>재료 손질</td><td>도면 이미지와 정답 마스크를 읽고, 뒤집기 · 회전 같은 증강을 <b>두 영상에 똑같이</b> 적용해 텐서로 넘긴다. 이미지만 돌리고 마스크를 안 돌리면 정답이 어긋나기 때문에, <b>한 번의 호출로 둘을 함께 변환</b>하는 게 핵심이다.</td></tr>
+    <tr><td><code>train_seg.py</code></td><td>요리</td><td>모델을 만들고, 손실을 계산하고, 가중치를 갱신하는 학습 루프를 돌리면서 <b>매 에폭 mIoU로 성적</b>을 매긴다.</td></tr>
+    <tr><td><code>predict.py</code></td><td>결과 확인</td><td>학습된 모델의 예측을 <b>원본 크기로 되돌려</b> 색을 입히고 도면 위에 겹쳐 그린다.</td></tr>
+    <tr><td><code>train_sam_pseudolabel.py</code></td><td>라벨 자동 생성기</td><td>사람이 그린 <b>상자를 SAM에 넣어 마스크</b>를 받고, 그것으로 학습용 정답을 만든다.</td></tr>
+  </tbody>
+</table></div>
+
+<h3 class="sub-title">활용한 대표 라이브러리</h3>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>라이브러리</th><th>역할</th></tr></thead>
+  <tbody>
+    <tr><td><b>PyTorch</b></td><td>전체의 바탕. 텐서 계산, 자동 미분, <code>Dataset</code>/<code>DataLoader</code>, 혼합 정밀도(AMP) 학습을 모두 PyTorch로 처리한다.</td></tr>
+    <tr><td><b>segmentation_models_pytorch(smp)</b></td><td><b>분할 모델 조립 키트</b>. <code>smp.DeepLabV3Plus(encoder_name="resnet50")</code>처럼 구조와 백본을 고르기만 하면 ImageNet 사전학습 가중치가 들어간 모델이 바로 만들어진다. 덕분에 백본 3종 비교를 한 줄씩만 바꿔서 할 수 있었고, Dice 손실(<code>smp.losses.DiceLoss</code>)도 여기서 가져왔다.</td></tr>
+    <tr><td><b>torchmetrics</b></td><td>평가 지표 담당. <code>MulticlassJaccardIndex</code>가 IoU를 계산하는데, 배치마다 평균을 내는 대신 <b>에폭 전체의 맞음 · 틀림을 누적했다가 한 번에 계산</b>하므로 더 정확하다.</td></tr>
+    <tr><td><b>albumentations</b></td><td>증강 라이브러리. 이미지와 마스크를 함께 넣으면 <b>마스크에는 최근접 보간</b>을 써서 클래스 번호가 섞이지 않게 해 준다.</td></tr>
+    <tr><td><b>Hugging Face transformers</b></td><td><code>SamModel</code>과 <code>SamProcessor</code>를 불러 SAM을 사용했다.</td></tr>
+  </tbody>
+</table></div>
+
+<h3 class="sub-title">교안과 연결되는 대표 개념</h3>
+
+<div class="pt gyo" id="labrev-encdec">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">개념 ①</span>인코더-디코더 구조 <small>&rarr; <a class="ext" href="#encdec">12.2</a></small></h3>
+  <p>인코더는 영상을 점점 작게 줄이며 <b>&ldquo;무엇인지&rdquo;</b>를 알아내고, 디코더는 다시 원래 크기로 키우며 <b>&ldquo;어디에 있는지&rdquo;</b>를 복원한다. 이번 실습의 모델 셋은 모두 이 틀을 따른다. smp에서 고른 <b>ResNet-50, MiT-B2, EfficientNet-B3가 인코더</b>이고, <b>DeepLabV3+와 SegFormer의 머리 부분이 디코더</b>다.</p>
+</div>
+
+<div class="pt gyo" id="labrev-aspp">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">개념 ②</span>DeepLab의 팽창 합성곱과 ASPP <small>&rarr; <a class="ext" href="#deeplab">12.6 DeepLab</a> · <a class="ext" href="#decode">12.3</a></small></h3>
+  <p>교안의 DeepLab 절에서 배운 대로, DeepLab은 영상을 너무 작게 줄이지 않으려고 커널 사이에 구멍을 낸 <b>팽창(atrous) 합성곱</b>을 쓰고, 구멍 간격이 서로 다른 합성곱을 나란히 놓은 <b>ASPP로 여러 크기의 문맥을 한꺼번에</b> 본다. <code>train_seg.py</code> TODO(1)에서 <b>&ldquo;MiT 인코더를 DeepLabV3+에 쓰면 오류를 낸다&rdquo;</b>는 검사를 넣은 이유가 여기에 있다. MiT는 트랜스포머 인코더라 이 팽창 모드를 지원하지 않기 때문이다.</p>
+</div>
+
+<div class="pt gyo" id="labrev-segformer">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">개념 ③</span>SegFormer와 트랜스포머 <small>&rarr; <a class="ext" href="#latest">12.8 ①</a></small></h3>
+  <p>SegFormer는 트랜스포머 인코더로 <b>영상 전체의 관계를 한 번에</b> 보고, 가벼운 MLP 디코더로 마스크를 만든다. 실험에서 SegFormer가 <b>초반에 가장 빨리 성능이 올라간 것</b>은 전역 문맥의 장점으로 볼 수 있다. 반면 <b>입력의 1/4 해상도에서 예측한 뒤 키우기</b> 때문에 <b>경계 F1이 0.12</b>로 크게 낮았다. 선 하나 두께가 중요한 도면에서는 이 약점이 그대로 드러났다.</p>
+</div>
+
+<div class="pt gyo" id="labrev-loss">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">개념 ④</span>평가지표 IoU와 손실함수 Dice <small>&rarr; <a class="ext" href="#segtrain">12.5</a></small></h3>
+  <p>교안의 &ldquo;평가지표와 손실함수&rdquo; 절과 바로 연결된다. IoU는 예측 영역과 정답 영역이 얼마나 겹치는지를 <b>겹친 넓이 ÷ 합친 넓이</b>로 잰다. 클래스별 IoU를 평균한 것이 <b>mIoU</b>다. 그런데 <b>IoU는 미분할 수 없어</b> 바로 손실로 쓰기 어렵다. 그래서 확률값으로 부드럽게 바꾼 <b>Dice 손실</b>을 쓰고, 화소별 정답을 맞히는 <b>Cross-Entropy와 더해</b> 학습한다.</p>
+  <p>손실 비교 실험에서 <b>CE만 쓰면 작은 기호 cw를 전혀 못 맞혔고, Dice를 더하자 살아났다</b>. 이것이 교안에서 말한 <b>클래스 불균형 문제</b>를 눈으로 확인한 결과다.</p>
+</div>
+
+<div class="pt gyo" id="labrev-up">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">개념 ⑤</span>전치 합성곱과 업샘플링 <small>&rarr; <a class="ext" href="#decode">12.3</a></small></h3>
+  <p>디코더가 작은 특징 지도를 원래 크기로 키우는 과정이다. <code>predict.py</code>의 TODO(2)에서 예측을 원본 크기로 되돌릴 때 <b>&ldquo;클래스 번호가 아니라 로짓(점수)을 보간하라&rdquo;</b>고 한 것도 같은 맥락이다. 정수인 클래스 번호를 키우면 계단 모양이 생기지만, <b>연속값인 점수를 키운 뒤 가장 큰 값을 고르면</b> 경계가 매끄러워진다.</p>
+</div>
+
+<div class="pt gyo" id="labrev-sam">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">개념 ⑥</span>SAM과 프롬프트 기반 분할 <small>&rarr; <a class="ext" href="#found">12.8 ②</a></small></h3>
+  <p>교안의 &ldquo;Transformer의 한계와 Prompt 기반 Segmentation&rdquo; 절에 해당한다. SAM은 <b>무거운 영상 인코더를 이미지당 한 번만</b> 돌리고, 점이나 상자 같은 프롬프트가 들어올 때마다 <b>가벼운 디코더만 다시</b> 돌려 마스크를 낸다. <code>train_sam_pseudolabel.py</code> TODO(1)의 <b>임베딩 캐시</b>가 바로 이 설계를 코드로 옮긴 것이다.</p>
+  <p>실험 결과 <b>작고 닫힌 기호는 상자만으로 IoU 0.9 이상</b>을 얻었지만, <b>건물 전체를 감싸는 ow는 0.18</b>에 그쳤다. &ldquo;라벨링 비용을 줄이는 데이터 엔진&rdquo;이라는 SAM의 장점과 함께, <b>상자 프롬프트의 한계</b>도 확인한 셈이다.</p>
+</div>
+
+<div class="pt gyo" id="labrev-tl">
+  <h3 class="pt-h"><span class="bdg bdg-gyo">개념 ⑦</span>전이학습과 실전 학습 기법 <small>&rarr; <a class="ext" href="machine-learning-week11.html#tl">11주차 실습</a></small></h3>
+  <p>11주차에 배운 전이학습이 여기서도 이어진다. 인코더는 <b>ImageNet 사전학습 가중치</b>로 시작하고 디코더만 새로 배우므로, <b>학습 조각이 26개뿐인데도 mIoU 0.55</b>까지 올라갈 수 있었다. 여기에 <b>AMP</b>(float16 계산으로 속도와 메모리 절약), <b>기울기 클리핑</b>, <b>OneCycleLR</b>(학습률을 올렸다가 내리는 스케줄)을 더했는데, 모두 <code>train_seg.py</code> TODO(5) 학습 스텝 안에 들어 있다.</p>
+</div>
+
+<div class="note-box"><b>한 줄 정리</b> &mdash; 이 실습은 <b>&ldquo;분할 모델은 인코더-디코더로 만들고, IoU로 평가하고, Dice+CE로 학습하며, 라벨이 부족하면 SAM으로 보충할 수 있다&rdquo;</b>는 교안의 흐름을 실제 도면 데이터에 처음부터 끝까지 적용해 보는 과정이다. 실험 결과도 교안 내용과 맞아떨어진다. <b>DeepLab 계열이 경계를 가장 잘 잡았고, Dice가 소수 클래스를 살렸으며, SAM은 작은 기호에서만 쓸 만했다.</b></div>
+</section>
+
 <section class="sec" id="lab">
   <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">실습 — 건축 CAD 도면 요소 분할 (문제)<small>PyTorch · segmentation-models-pytorch · TODO 14개 / 100점 · 풀이 전</small></h2></div>
 
