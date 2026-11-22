@@ -400,6 +400,28 @@ td .term,th .term{font-weight:700}
 .svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .svg-scroll svg{display:block;width:100%;min-width:560px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
 
+/* 실습 탭 개념 상자 (.pt · .bdg) — ML 12주차와 같은 모양 */
+.bdg{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.02em;padding:3px 9px;border-radius:999px;white-space:nowrap;line-height:1.5}
+.bdg-gyo{background:#eef2fb;color:#1b3f8b;border:1px solid #c4d2ee}
+.bdg-flip{background:#fff7ed;color:#b45309;border:1px solid #f0c48a}
+.bdg-live{background:#fdf0f5;color:#9d174d;border:1px solid #f3bcd2}
+.bdg-plus{background:#f0fdfa;color:#0f766e;border:1px solid #99e0d6}
+.bdg-quiz{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+.pt[id],.sub-title[id],.pt p[id]{scroll-margin-top:64px}
+.bdg-pres{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
+.pt-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;font-weight:700;line-height:1.45;margin-bottom:7px}
+.pt > p{font-size:13.5px;color:#3f4854;line-height:1.85}
+.pt > p + p{margin-top:9px}
+.pt > p b{color:var(--ink)}
+.pt.gyo{border-left-color:#1b3f8b}
+.pt.flip{border-left-color:#b45309}
+.pt.live{border-left-color:#9d174d}
+.pt.plus{border-left-color:#0f766e}
+.pt.lab{border-left-color:#6d28d9}
+.bdg-lab{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
+.pt pre.code{margin:9px 0}
+.pt{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin:11px 0}
 </style>
 </head>
 <body id="top">
@@ -419,6 +441,7 @@ td .term,th .term{font-weight:700}
   <a href="#s15">13.15 사전학습 · 동향</a>
   <a href="#s16">13.16 교안 실습 코드</a>
   <a href="#s17">13.17 과제 · 요약</a>
+  <a href="#lab">실습 (내 풀이 · 개념)</a>
   <a href="#next">다음 주 예고</a>
 </nav>
 
@@ -1048,7 +1071,8 @@ hist = model.fit(x_train, y_train, batch_size=128, epochs=1, validation_data=(x_
 <!-- ===================== 13.17 ===================== -->
 <section class="sec" id="s17">
   <div class="sec-head"><span class="sec-badge">13.17</span><h2 class="sec-title">과제 구성 · 요약 정리<small>교안 72p · 과제 노트북</small></h2></div>
-<h3 class="sub-title" id="hw13">13주차 과제 — 13주차_실습.ipynb (세 부분)</h3>
+<h3 class="sub-title" id="hw13">실습 문제 안내 — 13주차_실습.ipynb (세 부분 + 심화)</h3>
+<p class="fx-note">내 풀이 · 실행 결과 · 심화 1~4는 <a class="ext" href="#lab">실습 (내 풀이 · 개념)</a> 탭에 개념별로 정리했다.</p>
 <div class="tbl-wrap">
 <table>
   <thead><tr><th>부</th><th>내용</th><th>TODO · 서술형</th></tr></thead>
@@ -1059,7 +1083,7 @@ hist = model.fit(x_train, y_train, batch_size=128, epochs=1, validation_data=(x_
   </tbody>
 </table>
 </div>
-<p class="fx-note">평가 기준은 <b>코드 완성도 40% · 결과 해석 30% · 서술형 답안 30%</b>, 무작위 시드를 고정해 재현 가능해야 한다(100문제 99번). HMM 형태소 분석기 구현 같은 4부는 없다(98번). 실습 풀이 · 실행 결과는 이번 업데이트에 싣지 않았다.</p>
+<p class="fx-note">평가 기준은 <b>코드 완성도 40% · 결과 해석 30% · 서술형 답안 30%</b>, 무작위 시드를 고정해 재현 가능해야 한다(100문제 99번). HMM 형태소 분석기 구현 같은 4부는 없다(98번). 실습 풀이 · 실행 결과는 <a class="ext" href="#lab">실습 탭</a>에 정리했다.</p>
 <h3 class="sub-title" id="summary13">요약 정리 (교안 72p)</h3>
 <ul class="ul">
   <li><b>형태소 분석 · 품사 태깅</b> &mdash; 개요와 KoNLPy, 딥러닝 이전(HMM · CRF)과 딥러닝 기반(FFNN · seq2seq · CNN · Bi-LSTM-CRF)</li>
@@ -1072,6 +1096,429 @@ hist = model.fit(x_train, y_train, batch_size=128, epochs=1, validation_data=(x_
 </section>
 
 <!-- ===================== 다음 주 ===================== -->
+<!-- ===================== LAB (내 풀이) ===================== -->
+<section class="sec" id="lab">
+  <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">실습 — 형태소 · 품사 태깅 · 개체명 인식 (개념으로 다시 보기)<small>배운 개념이 코드의 어느 줄인가 · 쓴 함수 · 내 노트북 결과 · 심화 1~4</small></h2></div>
+
+<div class="note-box"><b>이 탭을 읽는 법</b> &mdash; 노트북을 셀 순서대로 다시 읽지 않는다. 이 실습에서 배우는 <b>개념 16개</b>를 하나씩 놓고, <span class="hi">① 개념을 쉽게 → ② 그 개념이 코드에서는 어느 줄로 나타나나(코드 ↔ 뜻 표) → ③ 그때 쓴 함수 → ④ 내 노트북의 결과</span> 순서로 본다. 교안 13.3 · 13.5 · 13.9에서 배운 KoNLPy · Bi-LSTM-CRF · BIO · 개체 F1이 코드에서 어떤 모양인지 잇는 것이 목적이다. Windows VS Code · PyTorch 2.14(CPU) · JDK 17로 실행했다. 교안에 실린 실습 코드 1~5는 <a class="ext" href="#s16">13.16</a>에 따로 정리했다.</div>
+
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📓</span>IPYNB</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week13-lab-mine.ipynb" download="13주차_실습_풀이.ipynb">내 풀이 노트북 — 형태소 · 품사 태깅 · NER (실행 결과 포함)</a>
+      <p>TODO 7곳 · [설명] · [결과] · 서술형 1-2 · 2-4 · 3-4 · 심화 1~4 (CRF · pack_padded · klue/bert-base · KLUE-NER)</p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week13-lab-mine.ipynb" download="13주차_실습_풀이.ipynb">⬇ 다운로드</a>
+  </div>
+</div>
+
+<div class="pt lab" id="lab-about">
+  <h3 class="pt-h"><span class="bdg bdg-lab">실습 개요</span>이 실습이 하려는 것 · 코드 흐름 · 라이브러리 · 교안 연결</h3>
+  <p><b>이 실습이 하려는 것</b> &mdash; 한마디로 <b>문장의 글자 하나하나에 이름표를 붙이는 모델</b>을 만드는 실습이다. 문장 전체에 &lsquo;긍정&rsquo; 이름표 하나를 붙이던 12주차 감성 분류와 달리, 이번에는 형태소마다 품사를, 음절마다 개체명 태그를 붙인다. 교안에서 말하는 <b>시퀀스 레이블링</b>이다(<a class="ext" href="#dl-methods">13.5</a>). 실습은 세 가지 질문에 답한다. 첫째, 이미 만들어진 형태소 분석기는 띄어쓰기 없는 문장이나 구어체를 얼마나 잘 다루는가. 둘째, Bi-LSTM은 &lsquo;가&rsquo;처럼 조사도 되고 동사도 되는 형태소를 문맥으로 구분할 수 있는가. 셋째, 같은 구조로 개체명을 찾을 때 학습 때 못 본 이름 앞에서는 어떻게 무너지는가. 심화 과제에서는 여기에 CRF · 패킹 · BERT · 실제 말뭉치를 하나씩 바꿔 넣어 무엇이 성능을 바꾸는지 비교했다.</p>
+  <p><b>코드 흐름</b> &mdash; 노트북 한 개가 세 부분과 심화로 나뉜다.</p>
+  <div class="flow">
+    <div class="fl"><span class="fl-n">1</span><div><h4>1부 · 남이 만든 도구로 맛보기 (KoNLPy)</h4><p>Okt · Komoran · Hannanum에 같은 문장 셋을 넣고 자르는 방식과 태그 이름을 비교한다.</p></div></div>
+    <div class="fl"><span class="fl-n">2</span><div><h4>2부 · 직접 만들기 (Bi-LSTM 품사 태거)</h4><p>문장 생성기로 만든 형태소 · 세종 태그 데이터 → 사전 · 정수 인코딩 · 패딩 → 임베딩 · Bi-LSTM · Linear → 펼친 교차 엔트로피로 학습 → 마스크 정확도 · &lsquo;가&rsquo; 판별.</p></div></div>
+    <div class="fl"><span class="fl-n">3</span><div><h4>3부 · 같은 틀을 개체명에 (음절 BIO)</h4><p>템플릿으로 만든 NER 데이터(일부 이름은 평가 전용) → 같은 태거를 재사용 → BIO 태그열을 개체 집합으로 바꿔 개체 단위 F1로 채점.</p></div></div>
+    <div class="fl"><span class="fl-n">4</span><div><h4>심화 · 하나씩 바꿔 보기</h4><p>출력층에 CRF, LSTM 입력에 패킹, 모델 전체를 klue/bert-base로, 데이터를 KLUE-NER로 바꿔 같은 채점 함수로 비교한다.</p></div></div>
+  </div>
+  <p>앞 단계의 결과물이 뒤 단계의 재료가 된다. 2부에서 만든 <code>BiLSTMTagger</code> 클래스와 &lsquo;다음 번호 = 사전 크기&rsquo; 사전 만들기 방식을 3부가 그대로 가져다 쓰고, 3부에서 만든 <code>extract_entities</code>와 미등록 개체 표시(<code>has_unseen</code>)를 심화의 모든 모델이 공통 채점 도구로 쓴다.</p>
+  <p><b>활용한 대표 라이브러리</b></p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>라이브러리</th><th>이 실습에서 맡은 일</th></tr></thead>
+    <tbody>
+      <tr><td><b>KoNLPy</b> (+ JDK 17 · JPype)</td><td>1부 형태소 분석기 셋. 자바로 만든 분석기를 파이썬에서 부르므로 JVM이 있어야 한다. <code>tagger.pos()</code> 한 줄로 분석기를 바꿔 끼울 수 있어 비교가 쉬웠다.</td></tr>
+      <tr><td><b>PyTorch</b></td><td>2 · 3부와 심화 1 · 2의 바탕. <code>nn.Embedding</code> · <code>nn.LSTM</code> · <code>nn.Linear</code>로 태거를 조립하고, <code>DataLoader</code>로 미니배치를 꺼내 직접 짠 학습 루프로 학습한다. 12주차 Keras의 <code>fit()</code>이 해 주던 일을 한 줄씩 직접 쓴다.</td></tr>
+      <tr><td><b>pytorch-crf</b></td><td>심화 1. <code>CRF(num_tags)</code> 한 줄로 전이 점수 행렬 · 로그 우도 · 비터비 디코딩을 얻는다.</td></tr>
+      <tr><td><b>transformers</b></td><td>심화 3. <code>AutoModelForTokenClassification</code>이 klue/bert-base 위에 토큰 분류층을 얹어 주고, 토크나이저의 <code>offset_mapping</code>으로 토큰과 음절을 다시 짝지을 수 있었다.</td></tr>
+      <tr><td><b>datasets</b> · <b>pandas</b></td><td>심화 4의 KLUE-NER 내려받기 · 심화 결과를 모델별 평균 ± 표준편차 표로 정리.</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>교안과 연결되는 대표 개념</b></p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>교안 개념</th><th>실습에서 나타나는 곳</th><th>내 결과로 본 것</th></tr></thead>
+    <tbody>
+      <tr><td>형태소 · 품사 · 교착어 (<a class="ext" href="#morph-def">13.2</a>) · KoNLPy (<a class="ext" href="#konlpy">13.3</a>)</td><td><code>tag_sentence</code> · <code>tagger.pos(s)</code></td><td>띄어쓰기 없는 문장을 셋 다 틀렸고(&lsquo;가방&rsquo;), 구어체 &lsquo;ㅋㅋ&rsquo;는 Okt만 떼어 냈다</td></tr>
+      <tr><td>Bi-LSTM 태깅 · 양방향 문맥 (<a class="ext" href="#bilstm-crf">13.5</a> · <a class="ext" href="#bilstm-note">Bi-LSTM 필기</a>)</td><td><code>BiLSTMTagger</code> · <code>UniLSTMTagger</code>(비교용)</td><td>평가 정확도 1.0000. 조사를 뺀 &lsquo;학교 가었다&rsquo;에서 양방향만 &lsquo;가&rsquo;를 VV로 맞힘</td></tr>
+      <tr><td>BIO 태깅 · 음절 단위 (<a class="ext" href="#bio">13.9</a> · <a class="ext" href="#char-level">13.10</a>)</td><td><code>make_ner_sentence</code> · <code>char2idx</code></td><td>음절 사전 97개, 평가 UNK 5.213%</td></tr>
+      <tr><td>개체 단위 F1 (<a class="ext" href="#entity-f1">13.9</a>)</td><td><code>extract_entities</code> · <code>entity_f1</code></td><td>토큰 정확도 0.9553인데 개체 F1 0.7980 (O가 58.86%)</td></tr>
+      <tr><td>softmax vs CRF · 비터비 (<a class="ext" href="#why-crf">13.5</a> · <a class="ext" href="#viterbi">비터비</a>)</td><td>BIO 위반 집계 · <code>BiLSTMCRF(constrain=True)</code></td><td>규칙 위반 I- 139개 → BIO 제약 CRF에서 0개, 개체 F1 0.7705 → 0.8574</td></tr>
+      <tr><td>토큰 분류 미세조정 (<a class="ext" href="#token-cls">13.15</a>)</td><td><code>klue/bert-base</code> · <code>bert_to_char_tags</code></td><td>개체 F1 0.9953, 미등록 개체 8개 중 7개 100%</td></tr>
+      <tr><td>패딩 · 마스킹 (<a class="ext" href="nlp-week12.html#lc-pad">12주차 ⑦</a>)</td><td><code>ignore_index=PAD</code> · <code>pack_padded_sequence</code></td><td>패딩 길이만 바꿔도 기본 모델 로짓 3.52 차이, pack은 0</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>한 줄 정리</b> &mdash; 교안의 흐름은 &lsquo;규칙 · 통계에서 딥러닝으로, softmax 태깅에서 CRF로, 처음부터 학습에서 사전학습 미세조정으로&rsquo;인데, 실습 결과도 그 순서대로 좋아졌다(개체 F1 0.77 → 0.86 → 0.995). 다만 CRF는 층을 얹는 것만으로는 효과가 없었고, BIO 규칙을 직접 넣었을 때 비로소 교안이 말한 효과가 나타났다.</p>
+</div>
+
+<div class="warn"><b>실행 환경 · 한계</b> &mdash; 문제본은 Colab 기준이지만 Windows VS Code · CPU에서 실행했다. KoNLPy용 JDK는 <code>apt-get</code> 대신 winget(Microsoft OpenJDK 17)으로 설치하고, 원본의 <code>JPype1==1.4.1</code> 고정 대신 Python 3.13용 최신판을 썼다. 2 · 3부 데이터는 문장 생성기 · 템플릿으로 만든 것이라 평가 문장도 학습과 같은 틀이다. 심화 1 · 2는 시드 3개 평균이지만 BERT · KLUE는 CPU 시간 때문에 시드 1개, KLUE는 5에폭만 학습했다(손실이 아직 내려가는 중).</div>
+
+<h3 class="sub-title">개념 지도 — 질문에서 개념 상자로</h3>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>질문</th><th>개념</th><th>노트북</th></tr></thead>
+  <tbody>
+    <tr><td><b>분석기마다 왜 결과가 다른가?</b></td><td><a class="ext" href="#lc-konlpy">① 형태소 분석기 3종 · 태그셋</a></td><td>1부</td></tr>
+    <tr><td><b>문장을 어떻게 신경망에 넣나?</b></td><td><a class="ext" href="#lc-vocab">② 사전 · PAD · UNK</a> · <a class="ext" href="#lc-pad">③ 정수 인코딩 · 패딩</a></td><td>2부</td></tr>
+    <tr><td><b>태거는 속에서 무엇을 계산하나?</b></td><td><a class="ext" href="#lc-tagger">④ 임베딩 → Bi-LSTM → Linear</a> · <a class="ext" href="#lc-loss">⑤ 펼쳐서 손실 · ignore_index</a> · <a class="ext" href="#lc-mask">⑥ 마스크 정확도</a> · <a class="ext" href="#lc-ambig">⑦ 중의성 &lsquo;가&rsquo;와 양방향</a></td><td>2부</td></tr>
+    <tr><td><b>개체명은 어떻게 태깅 · 채점하나?</b></td><td><a class="ext" href="#lc-bio">⑧ 음절 단위 BIO</a> · <a class="ext" href="#lc-oov">⑨ UNK · 미등록 개체</a> · <a class="ext" href="#lc-extract">⑩ BIO → 개체 집합</a> · <a class="ext" href="#lc-f1">⑪ 개체 F1과 토큰 정확도 착시</a> · <a class="ext" href="#lc-biorule">⑫ BIO 규칙 위반</a></td><td>3부</td></tr>
+    <tr><td><b>심화 — 무엇을 바꾸면 나아지나?</b></td><td><a class="ext" href="#lc-crf">⑬ CRF</a> · <a class="ext" href="#lc-packed">⑭ pack_padded</a> · <a class="ext" href="#lc-bert">⑮ BERT 미세조정</a> · <a class="ext" href="#lc-klue">⑯ KLUE-NER</a></td><td>심화 1~4</td></tr>
+  </tbody>
+</table></div>
+
+<!-- ===== 1부 ===== -->
+<div class="pt lab" id="lc-konlpy">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ①</span>형태소 분석기 3종 · 태그셋 — 같은 문장, 다른 자르기와 다른 이름</h3>
+  <p><b>개념</b> &mdash; 형태소 분석은 어절을 뜻을 가진 가장 작은 단위로 쪼개고(&lsquo;갔다&rsquo; = 가 + 았 + 다), 품사 태깅은 조각마다 품사 이름을 붙인다(<a class="ext" href="#konlpy">13.3</a>). 분석기마다 <span class="hi">사전 · 자르는 규칙 · 태그 이름(태그셋)</span>이 달라서 결과가 다르다. KoNLPy 분석기는 자바로 만들어져 <b>JDK가 있어야</b> 돈다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>os.environ['JAVA_HOME'] = r'C:\Program Files\Microsoft\jdk-17…'</code></td><td>KoNLPy(JPype)가 JVM을 찾는 위치. Colab의 <code>apt-get install openjdk</code> 대신 winget으로 설치한 JDK를 가리킨다</td></tr>
+      <tr><td><code>taggers = {'Okt': Okt(), 'Komoran': Komoran(), 'Hannanum': Hannanum()}</code></td><td>분석기 객체 셋. 만드는 순간 JVM이 뜬다</td></tr>
+      <tr><td><code>tagger.pos(s)</code></td><td><code>[(형태소, 품사), …]</code> &mdash; TODO 1-1의 답 한 줄</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>내 결과</th><th>Okt</th><th>Komoran (세종)</th><th>Hannanum (KAIST)</th></tr></thead>
+    <tbody>
+      <tr><td>나는 … 부산에 <b>갔다</b></td><td><code>갔다/Verb</code> 한 덩어리</td><td><code>가/VV 았/EP 다/EC</code></td><td><code>가/P 아다/E</code></td></tr>
+      <tr><td><b>아버지가방에들어가신다</b></td><td>아버지 / <b>가방</b> / 에 / 들어가신다</td><td>아버지 / <b>가방</b>(NNP) / 에 / 들어가 / 시 / ㄴ다</td><td><b>아버지가방에들어가</b>/N 한 덩어리</td></tr>
+      <tr><td>꿀잼이었음<b>ㅋㅋ</b></td><td>꿀 / 잼이었음 / <b>ㅋㅋ/KoreanParticle</b></td><td>꿀잼이었음ㅋㅋ/<b>NA</b>(분석 불능)</td><td>꿀잼이었음ㅋㅋ/N</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>[해석]</b> 띄어쓰기가 없으면 어절 경계라는 가장 큰 단서가 사라져, Okt · Komoran은 사전에 있는 &lsquo;가방&rsquo;을 먼저 잡았고 Hannanum은 아예 쪼개지 못했다. 구어체는 SNS 문장에서 출발한 Okt만 &lsquo;ㅋㅋ&rsquo;를 떼어 냈다. 같은 주격 조사가 <code>Josa</code> · <code>JKS</code> · <code>J</code>로 이름이 달라, <span class="hi">&lsquo;NNG만 뽑기&rsquo; 같은 코드는 분석기를 바꾸면 아무것도 뽑지 못한다</span> &mdash; 서비스에서는 분석기를 하나로 고정하거나 공통 태그 대응표를 둔다.</p>
+</div>
+
+<!-- ===== 2부 ===== -->
+<div class="pt lab" id="lc-vocab">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ②</span>사전 · PAD · UNK — 형태소와 태그에 번호 붙이기 (학습 데이터만으로)</h3>
+  <p><b>개념</b> &mdash; 신경망은 글자를 못 받으니 형태소 · 태그마다 번호를 붙인다. <span class="hi">0번 = 패딩(PAD), 1번 = 사전에 없는 것(UNK)</span>으로 비워 두고, 사전은 <b>학습 데이터만으로</b> 만든다(평가 데이터 정보가 새지 않게). 태그 사전에는 UNK가 없다 &mdash; 정답 태그는 미리 정해진 10개뿐이니까.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>sorted({pair[index] for seq in sequences for pair in seq})</code></td><td>집합으로 중복 제거 → 정렬해 실행마다 같은 번호가 나오게</td></tr>
+      <tr><td><code>vocab[t] = len(vocab)</code></td><td>TODO 2-1 &mdash; <b>다음 번호 = 지금 사전 크기</b>. PAD · UNK가 이미 0 · 1이라 첫 형태소는 2번</td></tr>
+      <tr><td><code>idx2tag = {i: t for t, i in tag2idx.items()}</code></td><td>번호 → 태그 역사전(예측을 사람이 읽게)</td></tr>
+      <tr><td><code>word2idx.get(w, UNK)</code></td><td>사전에 없으면 1번 &mdash; 평가 때 처음 보는 형태소의 행선지</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>내 결과</b> &mdash; 학습 1,600문장으로 형태소 사전 <b>45개</b>(PAD · UNK 포함), 태그 사전 <b>11개</b>(PAD + 세종 태그 10개).</p>
+</div>
+
+<div class="pt lab" id="lc-pad">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ③</span>정수 인코딩 · 패딩 → 텐서 — 길이가 다른 문장을 한 표로</h3>
+  <p><b>개념</b> &mdash; 미니배치는 직사각형 표여야 하므로, 가장 긴 문장에 맞춰 짧은 문장 <b>뒤를 0으로</b> 채운다. 12주차 Keras의 <code>pad_sequences(padding='post')</code>를 numpy로 직접 짠 것이다(<a class="ext" href="nlp-week12.html#lc-pad">12주차 ⑦</a>).</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>out = np.zeros((len(seqs), max_len), dtype=np.int64)</code></td><td>전부 0(PAD)인 표를 먼저 만들고</td></tr>
+      <tr><td><code>out[i, :len(s)] = s</code></td><td>앞부분만 실제 번호로 덮어쓴다 &mdash; 뒤는 0으로 남는다</td></tr>
+      <tr><td><code>torch.tensor(pad(x_tr, MAX_LEN))</code></td><td>numpy 표 → PyTorch 텐서. <code>int64</code>여야 <code>nn.Embedding</code> · 손실의 정답으로 쓸 수 있다</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>내 결과</b> &mdash; 최대 10형태소 → 학습 <code>(1600, 10)</code>, 평가 <code>(400, 10)</code>. 첫 문장 &lsquo;친구가 시장에 커피를 읽었다.&rsquo;(생성기가 동사를 무작위로 골라 어색하다) → <code>[39, 3, 25, 30, 40, 14, 37, 29, 11, 2]</code>, 태그 <code>[7, 5, 7, 3, 7, 4, 10, 2, 1, 9]</code>.</p>
+</div>
+
+<div class="pt lab" id="lc-tagger">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ④</span>임베딩 → Bi-LSTM → Linear — 시점마다 태그 점수 하나씩 (many-to-many)</h3>
+  <p><b>개념</b> &mdash; 교안 Bi-LSTM-CRF 그림(<a class="ext" href="#bilstm-crf">13.5</a>)에서 CRF를 뺀 부분이다. 12주차 감성 분류는 마지막 요약 하나만 썼지만(many-to-one), 태깅은 <span class="hi">모든 시점의 출력을 각각 분류</span>한다. 양방향이라 정방향 h와 역방향 h를 이어 붙여 <b>hid × 2</b>가 된다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>모양</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>x</code></td><td>(B, L)</td><td>형태소 번호</td></tr>
+      <tr><td><code>self.emb = nn.Embedding(V, 64, padding_idx=PAD)</code></td><td>(B, L, 64)</td><td>번호 → 벡터. <code>padding_idx</code> 자리는 0 벡터로 고정, 학습도 안 된다</td></tr>
+      <tr><td><code>nn.LSTM(64, 64, batch_first=True, bidirectional=True)</code></td><td>(B, L, <b>128</b>)</td><td><code>batch_first=True</code>면 (배치, 길이, 특징) 순서. 출력 <code>h, (h_n, c_n)</code> 중 <code>h</code>만 쓴다</td></tr>
+      <tr><td><code>self.fc = nn.Linear(hid_dim * 2, tag_size)</code></td><td>(B, L, 11)</td><td>TODO 2-2 &mdash; 입력이 <b>hid × 2</b>인 것이 핵심</td></tr>
+      <tr><td><code>return self.fc(h)</code></td><td>(B, L, 11)</td><td>Linear는 마지막 축에만 작용 → 시점마다 따로 분류한 것과 같다</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note"><code>super().__init__()</code>는 <code>nn.Module</code>의 준비 작업(파라미터 등록 장부 만들기)을 먼저 하라는 뜻 &mdash; 빼면 <code>self.emb = …</code>에서 오류가 난다.</p>
+</div>
+
+<div class="pt lab" id="lc-loss">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑤</span>펼쳐서 손실 · ignore_index — (B, L, C)를 (B·L, C)로</h3>
+  <p><b>개념</b> &mdash; 태깅은 &lsquo;시점마다 분류 문제 하나&rsquo;다. <code>CrossEntropyLoss</code>는 (N, C) 점수와 (N,) 정답만 받으므로 <span class="hi">배치와 시점을 한 축으로 펼쳐</span> B·L개의 분류 문제로 만든다. 패딩 자리(정답 0)는 <code>ignore_index</code>로 손실과 기울기에서 뺀다 &mdash; 안 빼면 &lsquo;0 뒤에는 0&rsquo;이라는 쓸모없는 패턴을 배운다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>C = logits.size(-1)</code></td><td>태그 수 11 (<code>-1</code> = 마지막 축)</td></tr>
+      <tr><td><code>logits.reshape(-1, C), yb.reshape(-1)</code></td><td>TODO 2-3 &mdash; (64, 10, 11) → (640, 11), (64, 10) → (640,). <code>-1</code>은 &lsquo;나머지를 알아서&rsquo;</td></tr>
+      <tr><td><code>criterion(*flatten_for_loss(logits, yb))</code></td><td><code>*</code>는 튜플을 풀어 두 인자로 넘긴다</td></tr>
+      <tr><td><code>optimizer.zero_grad() → loss.backward() → optimizer.step()</code></td><td>기울기 비우기 → 역전파 → 갱신 (PyTorch 학습 한 걸음)</td></tr>
+      <tr><td><code>total += loss.item() * xb.size(0)</code></td><td>배치 평균 손실 × 배치 크기 → 에폭 끝에 전체 개수로 나눠 &lsquo;문장당 평균&rsquo;</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>내 결과</b> &mdash; 손실 1에폭 <b>1.9713</b> → 4에폭 0.0598 → 10에폭 <b>0.0056</b>. 문형 4가지뿐인 생성 데이터라 몇 에폭 만에 거의 외웠다.</p>
+</div>
+
+<div class="pt lab" id="lc-mask">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑥</span>마스크 정확도 · no_grad — 패딩은 채점하지 않는다</h3>
+  <p><b>개념</b> &mdash; 평가에서도 패딩 자리는 빼야 한다. 패딩까지 세면 &lsquo;빈칸을 빈칸이라 맞힌&rsquo; 점수가 섞여 정확도가 부풀려진다. 평가 중에는 기울기를 기록할 필요가 없으므로 <code>@torch.no_grad()</code>로 끈다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>pred = logits.argmax(dim=-1)</code></td><td>시점마다 점수가 가장 큰 태그 번호 → (B, L)</td></tr>
+      <tr><td><code>mask = Y != PAD</code></td><td>실제 형태소 자리만 True인 같은 모양의 표</td></tr>
+      <tr><td><code>(pred[mask] == Y[mask]).float().mean()</code></td><td>불리언 인덱싱으로 True 자리만 1차원으로 꺼내 맞힌 비율</td></tr>
+      <tr><td><code>model.eval()</code> · <code>.cpu()</code> · <code>.item()</code></td><td>평가 모드 · GPU 텐서를 CPU로 · 0차원 텐서를 파이썬 숫자로</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>내 결과</b> &mdash; 학습 정확도 <b>1.0000</b>, 평가 정확도 <b>1.0000</b>. 과적합 간격은 0이지만, 평가 문장도 같은 생성기 · 같은 어휘 45개 · 같은 문형 4가지로 만들어져 <span class="hi">과적합을 판단할 힘이 없는 평가</span>다(서술형 2-4).</p>
+</div>
+
+<div class="pt lab" id="lc-ambig">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑦</span>중의성 &lsquo;가&rsquo;와 양방향 — 뒤 문맥이 답을 정할 때</h3>
+  <p><b>개념</b> &mdash; &lsquo;가&rsquo;는 주격 조사(친구<b>가</b>)도, 동사 어간(<b>가</b>+았+다 → 갔다)도 된다. 왼쪽만 보는 단방향은 &lsquo;명사 뒤의 가 = 조사&rsquo;라는 습관에 기댈 수밖에 없고, 양방향은 <span class="hi">뒤에 오는 &lsquo;었다&rsquo;까지 보고</span> 동사라고 판단할 수 있다(<a class="ext" href="#bilstm-note">13.5 Bi-LSTM 필기</a>).</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>nn.LSTM(…, bidirectional=False)</code> · <code>nn.Linear(hid_dim, tag_size)</code></td><td>비교용 <code>UniLSTMTagger</code> &mdash; 방향만 바꾸고 출력은 hid 그대로(× 2가 아님)</td></tr>
+      <tr><td><code>rng_state = torch.get_rng_state()</code> … <code>torch.set_rng_state(rng_state)</code></td><td>추가 실험이 난수를 써도 뒤의 3부 결과가 바뀌지 않게 난수 상태를 저장 · 복원</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>내 결과</th><th>양방향</th><th>단방향</th></tr></thead>
+    <tbody>
+      <tr><td>평가 정확도</td><td>1.0000</td><td>1.0000</td></tr>
+      <tr><td>친구<b>가</b> 도서관에 <b>가</b>었다</td><td>JKS · VV ✓</td><td>JKS · VV ✓</td></tr>
+      <tr><td>학교 <b>가</b>었다 (조사 생략)</td><td><b>VV ✓</b></td><td><b>JKS ✗</b></td></tr>
+    </tbody>
+  </table></div>
+  <p><b>[해석]</b> 생성기 문장에서는 동사 &lsquo;가&rsquo;가 늘 &lsquo;에 · 는&rsquo; 뒤에 와서 왼쪽만 봐도 풀렸다. 조사를 빼자 차이가 드러났다 &mdash; 구어체처럼 조사가 자주 빠지는 실제 문장에서는 <b>뒤 문맥이 결정적</b>이라 태깅에는 양방향이 맞다.</p>
+</div>
+
+<!-- ===== 3부 ===== -->
+<div class="pt lab" id="lc-bio">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑧</span>음절 단위 BIO — 조사가 붙어도 경계를 정확히</h3>
+  <p><b>개념</b> &mdash; &lsquo;이순신은&rsquo;을 어절로 태깅하면 조사까지 개체에 섞인다. 그래서 <span class="hi">음절 하나하나</span>에 B(시작) · I(안쪽) · O(바깥)를 붙인다(<a class="ext" href="#bio">13.9</a> · <a class="ext" href="#char-level">13.10</a>). 학습 데이터는 템플릿 8개의 <code>{PER}</code> 자리에 이름을 넣어 만들고, <code>[은/는]</code>은 앞 이름의 받침으로 고른다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>('B-' if k == 0 else 'I-') + key</code></td><td>이름의 첫 음절은 B, 나머지는 I</td></tr>
+      <tr><td><code>has_jong(word)</code>: <code>(ord(w[-1]) - 0xAC00) % 28 != 0</code></td><td>한글 음절 코드에서 받침 유무 계산 → 이/가 · 은/는 선택</td></tr>
+      <tr><td><code>TRAIN_SLOTS = {k: v[:-2] …}</code> · <code>UNSEEN = {k: v[-2:] …}</code></td><td>유형마다 마지막 두 이름은 <b>평가에만</b> 등장 → 미등록 개체 실험</td></tr>
+      <tr><td><code>char2idx[c] = len(char2idx)</code> · <code>ner_tag2idx[t] = len(ner_tag2idx)</code></td><td>TODO 3-1 &mdash; ②와 같은 &lsquo;다음 번호 = 사전 크기&rsquo;</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>내 결과</b> &mdash; 학습 2,400 / 평가 600문장, 음절 사전 <b>97개</b>, 태그 <b>10개</b>(PAD · O · 4유형 × B/I), 최대 39음절. 같은 <code>BiLSTMTagger</code>를 hid 128로 10에폭 학습 → 손실 0.0015, 토큰 정확도 <b>0.9553</b>.</p>
+</div>
+
+<div class="pt lab" id="lc-oov">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑨</span>UNK · 미등록 개체 — 학습 때 못 본 글자는 모두 같은 &lsquo;1번&rsquo;</h3>
+  <p><b>개념</b> &mdash; 사전에 없는 음절은 전부 UNK(1번) 하나로 바뀐다. 그런데 <span class="hi">학습 데이터에는 UNK가 하나도 없어서</span>(사전을 학습 데이터로 만들었으니까) 1번 벡터는 한 번도 학습되지 않은 무작위 값이다. 모델은 처음 보는 글자를 &lsquo;뜻을 모르는 글자&rsquo;가 아니라 &lsquo;이상한 값&rsquo;으로 받는다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>(Xn_test == UNK).sum() / (Xn_test != PAD).sum()</code></td><td>실제 음절 중 UNK 비율</td></tr>
+      <tr><td><code>has_unseen = torch.tensor([any(n in ''.join(cs) for n in unseen_names) …])</code></td><td>미등록 개체가 든 문장 표시 → 두 묶음으로 나눠 따로 채점(추가 셀)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>미등록 개체</th><th>UNK 음절</th><th>재현율</th><th>가장 흔한 예측</th></tr></thead>
+    <tbody>
+      <tr><td>신사임당 (PER)</td><td>임 · 당</td><td><b>0 / 54</b></td><td>B-PER <b>B-PER</b> I-PER I-PER (30번)</td></tr>
+      <tr><td>1919년 3월 1일 (DAT)</td><td><b>없음</b></td><td><b>0 / 78</b></td><td>B I <b>B</b> I I O I I O O O &mdash; 두 번째 &lsquo;1&rsquo;에서 새로 시작</td></tr>
+      <tr><td>한국철도공사 (ORG)</td><td>철 · 공</td><td><b>0 / 66</b></td><td>B-ORG <b>B-ORG</b> I I I I &mdash; &lsquo;국&rsquo;은 학습에서 &lsquo;국립국어원&rsquo;의 첫 글자(B-ORG 376번)</td></tr>
+      <tr><td>오늘 (DAT)</td><td>오 · 늘</td><td>4 / 56</td><td><b>I-DAT</b> O &mdash; O 다음 I는 규칙 위반</td></tr>
+      <tr><td>정약용 (PER)</td><td><b>정 · 약 · 용 모두</b></td><td>26 / 38</td><td>B I I ✓ &mdash; 문장 틀로 이름 자리를 알아챔</td></tr>
+      <tr><td>독도 · 국립중앙박물관</td><td>독 / 앙 · 박 · 물</td><td>56 / 56 · 70 / 70</td><td>&lsquo;…도&rsquo;(한산도) · &lsquo;국립…&rsquo;(국립국어원)과 겉모습이 닮음</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>[해석]</b> UNK 비율은 5.213%. 그런데 <span class="hi">글자를 아는지와 맞히는지가 일치하지 않았다</span> &mdash; 다 아는 글자인 &lsquo;1919년 3월 1일&rsquo;은 0점, 다 모르는 글자인 &lsquo;정약용&rsquo;은 68%. 모델은 이름을 일반화한 게 아니라 <b>글자별 위치 습관</b>(&lsquo;1이면 날짜 시작&rsquo;, &lsquo;국이면 기관 시작&rsquo;)과 <b>문장 틀</b>에 기대고 있다. 완화법: 학습 때 음절 일부를 일부러 UNK로 바꾸기(word dropout) · 개체 자리 바꿔 넣기 증강 · 자모/서브워드 · 사전학습 모델(<a class="ext" href="#lc-bert">⑮</a>).</p>
+</div>
+
+<div class="pt lab" id="lc-extract">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑩</span>BIO → 개체 집합 — B에서 열고, O나 다른 유형에서 닫는다</h3>
+  <p><b>개념</b> &mdash; 채점하려면 태그열 <code>['B-PER','I-PER','I-PER','O','B-LOC','I-LOC']</code>를 개체 묶음 <code>{(0, 3, 'PER'), (4, 6, 'LOC')}</code>(시작, 끝+1, 유형)로 바꿔야 한다. 상태 두 개(<code>start</code>, <code>etype</code>)를 들고 왼쪽부터 훑는 작은 상태 기계다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>만난 태그</th><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td>끝에 가짜 O 하나</td><td><code>enumerate(list(tag_seq) + ['O'])</code></td><td>문장 끝까지 이어진 개체도 마지막에 닫히게</td></tr>
+      <tr><td><b>B-X</b></td><td><code>start, etype = i, tag[2:]</code></td><td>TODO 3-2 ① &mdash; 진행 중이던 개체는 먼저 저장하고 새로 연다. <code>tag[2:]</code> = &lsquo;B-&rsquo; 뒤의 유형</td></tr>
+      <tr><td>같은 유형의 I-X</td><td><code>continue</code></td><td>개체가 이어지는 중</td></tr>
+      <tr><td>O · 다른 유형의 I</td><td><code>entities.add((start, i, etype))</code> · <code>start, etype = None, None</code></td><td>TODO 3-2 ② &mdash; 닫아서 저장하고 <b>상태를 비운다</b>(안 비우면 다음 O에서 같은 개체를 또 저장)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">O 다음에 갑자기 I-DAT가 오면(규칙 위반) <code>etype is None</code>이라 아무것도 열지 않는다 &mdash; 그래서 &lsquo;오/I-DAT 늘/O&rsquo;는 개체 0개로 채점된다. 자가 점검 <b>통과!</b></p>
+</div>
+
+<div class="pt lab" id="lc-f1">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑪</span>개체 F1과 토큰 정확도 착시 — 집합 연산 세 줄</h3>
+  <p><b>개념</b> &mdash; 경계와 유형이 <b>모두</b> 맞아야 정답(<a class="ext" href="#entity-f1">13.9</a>). 개체를 튜플 집합으로 두면 채점이 집합 연산이 된다. 경계가 한 음절만 어긋나도 튜플이 달라져 <span class="hi">FP 1개 + FN 1개로 두 번 감점</span>된다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>tp += len(hyp &amp; gold)</code></td><td>교집합 &mdash; 맞게 찾은 개체</td></tr>
+      <tr><td><code>fp += len(hyp - gold)</code> · <code>fn += len(gold - hyp)</code></td><td>차집합 &mdash; 잘못 찾은 개체 · 놓친 개체</td></tr>
+      <tr><td><code>p = tp / (tp + fp) if tp + fp else 0.0</code></td><td>분모 0 방지(조건 표현식)</td></tr>
+      <tr><td><code>length = int((Y[i] != PAD).sum())</code></td><td>문장마다 실제 길이까지만 태그로 바꿔 채점</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>내 결과 (평가 600문장)</th><th>토큰 정확도</th><th>정밀도</th><th>재현율</th><th>개체 F1</th></tr></thead>
+    <tbody>
+      <tr><td>전체 (TP 1428 · FP 443 · FN 280)</td><td><b>0.9553</b></td><td>0.7632</td><td>0.8361</td><td><b>0.7980</b></td></tr>
+      <tr><td>미등록 개체 없는 문장 236개</td><td>&mdash;</td><td>1.0000</td><td>1.0000</td><td><b>1.0000</b></td></tr>
+      <tr><td>미등록 개체 있는 문장 364개</td><td>&mdash;</td><td>0.6333</td><td>0.7321</td><td><b>0.6791</b></td></tr>
+    </tbody>
+  </table></div>
+  <p><b>[해석]</b> 평가 음절의 <b>58.86%가 O</b>라 전부 O로 찍어도 정확도 0.59가 공짜다. &lsquo;정/B 약/I 용/O&rsquo;(6번)은 토큰으로는 2/3을 맞혔지만 개체로는 0점에 FP · FN이 하나씩 는다. 원본 노트북에는 <code>entity_f1</code>을 부르는 셀이 없어, 서술형 근거용으로 추가했다.</p>
+</div>
+
+<div class="pt lab" id="lc-biorule">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑫</span>BIO 규칙 위반 — 음절마다 따로 고르면 생기는 일 (CRF가 필요한 이유)</h3>
+  <p><b>개념</b> &mdash; <code>argmax</code>는 음절마다 <b>따로</b> 태그를 고르므로 &lsquo;앞 태그와 맞물리는가&rsquo;를 보지 않는다. 그래서 O 다음 I-DAT 같은 <b>있을 수 없는 태그열</b>이 나온다. 교안의 &lsquo;softmax vs CRF&rsquo;(<a class="ext" href="#why-crf">13.5</a>)를 내 모델 출력으로 세어 본 것이다(추가 셀).</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>tags = ['O'] + [...]</code> · <code>zip(tags, tags[1:])</code></td><td>맨 앞에 O를 붙이고 (앞, 뒤) 이웃 쌍으로 훑기</td></tr>
+      <tr><td><code>b.startswith('I-') and (a == 'O' or a[2:] != b[2:])</code></td><td>I-X 앞이 B-X · I-X가 아니면 위반</td></tr>
+      <tr><td><code>Counter()</code> · <code>most_common(3)</code></td><td>위반 쌍 세기 · 가장 많은 3개</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>내 결과</b> &mdash; 규칙을 어긴 I- 태그 <b>139개</b>(O → I-DAT <b>101</b> · I-LOC → I-ORG 18 · B-LOC → I-ORG 10), B 바로 뒤 B <b>110개</b>(B-ORG → B-ORG 47 · B-PER → B-PER 43). 학습 데이터에는 개체 두 개가 붙는 경우가 없으니 B → B도 한 번도 본 적 없는 전이다.</p>
+</div>
+
+<!-- ===== 심화 ===== -->
+<div class="pt lab" id="lc-crf">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑬</span>심화 1 · CRF — 층만 얹으면 배우지 않는다, 규칙을 넣으면 달라진다</h3>
+  <p><b>개념</b> &mdash; CRF는 Bi-LSTM의 음절별 점수(emission)에 <b>태그 → 태그 전이 점수</b>를 더해, 문장 전체에서 점수가 가장 높은 태그열을 비터비로 고른다(<a class="ext" href="#viterbi">13.5 비터비</a>). 교안은 CRF가 &lsquo;O → I 금지&rsquo;를 <b>학습한다</b>고 설명한다. 실험해 보니 <span class="hi">학습 데이터가 깨끗하고 Bi-LSTM이 금방 다 맞히면, 전이 점수를 바꿀 기울기가 생기지 않는다</span>. 그래서 불가능한 전이를 −10000으로 막는 &lsquo;BIO 제약&rsquo; 버전도 함께 비교했다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>self.crf = CRF(tag_size, batch_first=True)</code></td><td>전이 점수 행렬 <code>transitions</code> (태그 수 × 태그 수)와 시작 · 끝 점수를 가진 층</td></tr>
+      <tr><td><code>-self.crf(emissions, y, mask=(x != PAD), reduction='mean')</code></td><td>정답 태그열의 로그 우도 → 부호를 바꿔 손실. 패딩은 mask로 제외</td></tr>
+      <tr><td><code>self.crf.decode(emissions, mask=…)</code></td><td>비터비 디코딩 → <code>list[list[int]]</code>. 원-핫으로 바꿔 돌려주면 기존 <code>argmax</code> 평가 함수를 그대로 쓸 수 있다</td></tr>
+      <tr><td><code>self.crf.transitions[i, j] = -1e4</code> (I-X 앞이 B-X · I-X가 아닐 때) · <code>start_transitions[I-X] = -1e4</code></td><td>BIO 제약 &mdash; 그 전이를 지나는 경로는 비터비에서 절대 뽑히지 않는다. Adam(lr 1e-3)은 한 번에 0.001씩만 움직여 학습 중에도 그대로 남는다</td></tr>
+      <tr><td><code>hasattr(model, 'loss')</code></td><td>공통 학습 함수에서 CRF 모델이면 자기 손실을, 아니면 교차 엔트로피를 쓰게 가르는 분기</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>학습만 한 CRF의 전이 점수 (10에폭 뒤)</th><th>값</th></tr></thead>
+    <tbody>
+      <tr><td>O → B-DAT / O → I-DAT</td><td>+0.15 / <b>−0.08</b></td></tr>
+      <tr><td>B-PER → I-PER / B-PER → B-PER</td><td>+0.08 / <b>−0.08</b></td></tr>
+      <tr><td>I-LOC → I-LOC / I-LOC → I-ORG</td><td>+0.09 / +0.04</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>내 결과</b> &mdash; 시드 3개 평균 개체 F1: 기본 0.7705 → 학습만 한 CRF <b>0.7740</b>(차이가 시드 흔들림 안쪽) → BIO 제약 CRF <b>0.8574</b>. 규칙 위반 I- 태그 평균 288개 → <b>0개</b>, 미등록 개체 포함 문장 F1 0.6149 → <b>0.7618</b>. 시드 13에서 &lsquo;한국철도공사&rsquo;는 기본 · 학습 CRF가 &lsquo;한 / 국철도공&rsquo;으로 쪼갰고 제약 CRF만 한 기관으로 묶었다.</p>
+  <p><b>[해석]</b> 학습 데이터에는 위반 태그열이 하나도 없으니 CRF는 틀려 보고 벌을 받을 기회가 없었다. 작은 데이터에서는 <b>규칙을 직접 넣는 편이 확실</b>하다. 다만 제약은 앞뒤를 맞출 뿐이라, 규칙상 허용되는 <code>B-DAT I-DAT B-DAT</code>로 쪼갠 &lsquo;1919년 3월 1일&rsquo;과 글자 정보가 없는 &lsquo;오늘&rsquo;은 고치지 못했고, 시드별 F1이 0.8097~0.8982로 크게 흔들렸다(표준편차 0.0446).</p>
+</div>
+
+<div class="pt lab" id="lc-packed">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑭</span>심화 2 · pack_padded_sequence — 역방향 LSTM이 빈칸부터 읽지 않게</h3>
+  <p><b>개념</b> &mdash; 패딩은 문장 <b>뒤</b>에 붙는다. 정방향 LSTM은 실제 음절을 다 읽은 뒤에 빈칸을 만나니 상관없지만, <span class="hi">역방향 LSTM은 빈칸 수십 개를 먼저 읽고</span> 실제 음절에 도착한다. 손실에서 패딩을 빼도 은닉 상태에는 빈칸을 읽은 흔적이 남는다. 패킹은 문장마다 실제 길이까지만 LSTM을 돌린다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>lengths = (x != PAD).sum(dim=1).cpu()</code></td><td>문장마다 실제 길이. CPU 텐서여야 한다</td></tr>
+      <tr><td><code>pack_padded_sequence(e, lengths, batch_first=True, enforce_sorted=False)</code></td><td>패딩을 뺀 <code>PackedSequence</code>로 묶기. <code>enforce_sorted=False</code>면 길이순 정렬을 알아서 해 준다</td></tr>
+      <tr><td><code>h, _ = self.lstm(packed)</code></td><td>LSTM은 묶음을 그대로 받는다 &mdash; 역방향도 실제 마지막 음절부터</td></tr>
+      <tr><td><code>pad_packed_sequence(h, batch_first=True, total_length=x.size(1))</code></td><td>다시 (B, L, 2·hid) 표로. <code>total_length</code>가 없으면 배치 최대 길이로 잘려 정답과 모양이 어긋난다</td></tr>
+      <tr><td><code>class PackedBiLSTMTagger(BiLSTMTagger)</code></td><td>상속 &mdash; <code>__init__</code>은 그대로 두고 <code>forward</code>만 바꿨다</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>같은 문장, 패딩 0칸 vs 15칸</th><th>로짓 최대 차이</th><th>바뀐 태그</th></tr></thead>
+    <tbody>
+      <tr><td>기본 Bi-LSTM</td><td><b>3.5223</b></td><td>0개</td></tr>
+      <tr><td>Bi-LSTM + pack</td><td><b>0.0000</b></td><td>0개</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>[해석]</b> 패킹은 &lsquo;패딩이 결과에 영향을 주면 안 된다&rsquo;는 원칙을 정확히 지켰다. 그러나 개체 F1은 0.7658로 기본(0.7705)과 차이가 없었고, CPU 학습 시간은 평균 23초 → 45초로 늘었다. 패딩이 늘 같은 자리에 붙는 데이터에서는 모델이 그 패턴에 적응해 버리기 때문이다. <span class="hi">성능 개선책이라기보다 정확성 장치</span>이고, 추론 때 패딩 길이가 학습 때와 크게 다르면 효과가 커진다.</p>
+</div>
+
+<div class="pt lab" id="lc-bert">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑮</span>심화 3 · klue/bert-base 미세조정 — 토큰과 음절을 다시 짝짓기</h3>
+  <p><b>개념</b> &mdash; 큰 말뭉치로 미리 배운 BERT 위에 분류층 하나만 얹고 내 데이터로 조금 더 학습한다(<a class="ext" href="#token-cls">13.15</a>). 걸림돌은 단위다. BERT는 WordPiece 토큰(&lsquo;정약용은&rsquo; → &lsquo;정약용 / ##은&rsquo;)을 받지만 정답은 음절 BIO다. 그래서 <span class="hi">학습 때는 토큰마다 첫 음절의 태그를 정답으로 주고, 평가 때는 토큰 예측을 다시 음절로 펼쳐</span> Bi-LSTM과 같은 기준으로 채점했다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>tokenizer(sents, padding=True, return_offsets_mapping=True)</code></td><td>토큰마다 원문 음절 위치 <code>(시작, 끝)</code>. [CLS] · [SEP] · 패딩은 (0, 0)</td></tr>
+      <tr><td><code>labels[i, j] = ner_tag2idx[tg[s]]</code> · 나머지 <code>-100</code></td><td>토큰 정답 = 첫 음절 태그. -100은 손실에서 빠지는 자리</td></tr>
+      <tr><td><code>AutoModelForTokenClassification.from_pretrained('klue/bert-base', num_labels=10)</code></td><td>BERT + <code>Linear(768, 10)</code>. 분류층만 새로 초기화된다</td></tr>
+      <tr><td><code>AdamW(lr=5e-5)</code> · <code>get_linear_schedule_with_warmup</code></td><td>작은 학습률 + 처음 10% 예열 후 선형 감소 &mdash; 사전학습 가중치를 크게 흔들지 않으려고</td></tr>
+      <tr><td><code>bert_to_char_tags(pred, offsets, sent)</code></td><td>토큰 첫 음절 = 예측 태그, 나머지 음절 = 같은 유형 I-. 토큰에 안 들어가는 띄어쓰기는 뒤 음절이 I-면 I-로(&lsquo;2023년 5월&rsquo;)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>3부 데이터 · 평가 600문장</th><th>개체 F1</th><th>미등록 포함 F1</th><th>파라미터</th><th>학습 시간 (CPU)</th></tr></thead>
+    <tbody>
+      <tr><td>Bi-LSTM (기본, 시드 3개 평균)</td><td>0.7705</td><td>0.6149</td><td>207,434</td><td>23초</td></tr>
+      <tr><td>Bi-LSTM + CRF(BIO 제약)</td><td>0.8574</td><td>0.7618</td><td>&mdash;</td><td>35초</td></tr>
+      <tr><td><b>klue/bert-base</b> (3에폭)</td><td><b>0.9953</b></td><td><b>0.9923</b></td><td>110,034,442 (약 530배)</td><td>652초 (약 28배)</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>[해석]</b> Bi-LSTM이 한 번도 못 맞힌 &lsquo;1919년 3월 1일&rsquo; · &lsquo;오늘&rsquo;까지 미등록 개체 8개 중 7개를 100% 찾았다. 토크나이저가 &lsquo;정약용&rsquo; · &lsquo;오늘&rsquo; · &lsquo;독도&rsquo; · &lsquo;1919&rsquo;를 이미 토큰 하나로 가질 만큼, 이 이름들은 <b>BERT에게는 미등록이 아니었다</b>. 이 실험의 OOV는 &lsquo;작은 학습 데이터에 없다&rsquo;는 뜻이지 &lsquo;한국어에 없다&rsquo;는 뜻이 아니다 &mdash; 사전학습 지식이 OOV 대책으로 그만큼 강하다는 뜻이면서, BERT의 일반화를 실제보다 높게 보여 줄 수 있는 평가라는 뜻이기도 하다. 유일한 약점은 &lsquo;신사 / ##임 / ##당&rsquo;으로 잘린 신사임당(0.85) &mdash; 흔한 단어 &lsquo;신사&rsquo;에서 개체를 끊었다.</p>
+</div>
+
+<div class="pt lab" id="lc-klue">
+  <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑯</span>심화 4 · KLUE-NER — 템플릿 밖의 실제 문장</h3>
+  <p><b>개념</b> &mdash; KLUE-NER는 뉴스 · 위키 문장 21,008개(검증 5,000개)에 인명(PS) · 지명(LC) · 기관(OG) · 날짜(DT) · 시간(TI) · 수량(QT)을 <b>음절 단위 BIO</b>로 붙인 공개 데이터다. 3부 파이프라인에 그대로 들어간다. 템플릿 8개짜리 데이터에서 잰 성능이 <span class="hi">실제 문장에서도 버티는지</span> 확인한다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>코드</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>load_dataset('klue/klue', 'ner')</code></td><td>train · validation. 예시마다 <code>tokens</code>(음절) · <code>ner_tags</code>(번호)</td></tr>
+      <tr><td><code>features['ner_tags'].feature.names</code></td><td>번호 → 태그 이름 (<code>'B-DT'</code> … <code>'O'</code>)</td></tr>
+      <tr><td><code>DataLoader(…, collate_fn=pad_collate)</code></td><td>배치마다 <b>그 배치의 최대 길이</b>로만 패딩 &mdash; 145음절에 다 맞추는 것보다 계산이 적다</td></tr>
+      <tr><td><code>prf(gold, pred, etype='PS')</code></td><td>개체 집합을 유형으로 걸러 유형별 F1</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>KLUE 검증 5,000문장</th><th>개체 수</th><th>정밀도</th><th>재현율</th><th>F1</th></tr></thead>
+    <tbody>
+      <tr><td>TI 시간</td><td>545</td><td>0.8238</td><td>0.8752</td><td><b>0.8488</b></td></tr>
+      <tr><td>QT 수량</td><td>3,151</td><td>0.8150</td><td>0.8067</td><td>0.8108</td></tr>
+      <tr><td>DT 날짜</td><td>2,312</td><td>0.7960</td><td>0.7578</td><td>0.7764</td></tr>
+      <tr><td>PS 인명</td><td>4,418</td><td>0.6603</td><td>0.5002</td><td>0.5692</td></tr>
+      <tr><td>OG 기관</td><td>2,182</td><td>0.5613</td><td>0.4409</td><td>0.4938</td></tr>
+      <tr><td>LC 지명</td><td>1,649</td><td>0.5571</td><td>0.3845</td><td><b>0.4550</b></td></tr>
+      <tr><td><b>전체 (micro)</b></td><td>14,257</td><td>0.7090</td><td>0.6016</td><td><b>0.6509</b> (macro 0.6590)</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>[해석]</b> 같은 Bi-LSTM이 5에폭(325초) 만에 0.6509 &mdash; 생성 데이터의 0.77보다 낮다. 토큰 정확도 0.9350도 O가 81.38%라 부풀려진 값이다. 숫자에 &lsquo;시 · 명 · 년&rsquo;이 붙는 TI · QT · DT는 <b>글자 모양</b>만으로 알아보기 쉽지만, 이름(PS · OG · LC)은 글자만 봐서는 개체인지 알 수 없다. UNK 비율은 0.064%로 3부(5.213%)보다 훨씬 낮았다 &mdash; <span class="hi">실제 말뭉치에서 어려운 것은 처음 보는 글자가 아니라, 아는 글자로 된 처음 보는 이름</span>이다. 규칙 위반 I- 태그도 3,096개 나와, 실제 데이터에서도 CRF 제약이 필요하다(⑬). &lsquo;A형&rsquo;의 A를 인명으로, &lsquo;1등급&rsquo;을 &lsquo;1등&rsquo;까지만 잡는 오류도 보였다.</p>
+</div>
+
+<div class="note-box"><b>심화 종합</b> &mdash; 3부 데이터의 개체 F1은 <b>klue/bert-base 0.9953 &gt; BIO 제약 CRF 0.8574 &gt; 학습만 한 CRF 0.7740 ≈ 기본 0.7705 ≈ pack 0.7658</b>. 성능을 바꾼 정도는 <b>사전학습 지식 &gt; 태그 규칙 &gt; 구조 미세조정</b> 순이었고, 실무라면 사전학습 모델 위에 BIO 제약 디코딩을 얹는 조합이 맞다. 같은 기본 Bi-LSTM도 다시 학습하니 0.7617~0.7803으로 3부의 0.7980과 달랐고, 3부에서 56/56이던 &lsquo;독도&rsquo;를 시드 13 재학습 모델은 하나도 못 찾았다 &mdash; 미등록 개체 결과는 시드에 크게 흔들린다.</div>
+
+<div class="pt plus" id="lab-funcs">
+  <h3 class="pt-h"><span class="bdg bdg-plus">함수 사전</span>이 실습에서 쓴 함수 · 객체</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>라이브러리</th><th>함수 · 객체</th><th>하는 일</th><th>개념</th></tr></thead>
+    <tbody>
+      <tr><td>KoNLPy</td><td><code>Okt</code> · <code>Komoran</code> · <code>Hannanum</code> · <code>.pos()</code></td><td>형태소 분석 · 품사 태깅</td><td>①</td></tr>
+      <tr><td rowspan="4">PyTorch 층</td><td><code>nn.Embedding(padding_idx)</code></td><td>번호 → 벡터, 패딩은 0 벡터 고정</td><td>④</td></tr>
+      <tr><td><code>nn.LSTM(batch_first, bidirectional)</code></td><td>양방향 순환층, 출력 2·hid</td><td>④ ⑦</td></tr>
+      <tr><td><code>nn.Linear</code> · <code>nn.Module</code> · <code>super().__init__()</code></td><td>시점별 분류 · 모델 틀</td><td>④</td></tr>
+      <tr><td><code>pack_padded_sequence</code> · <code>pad_packed_sequence</code></td><td>실제 길이까지만 RNN 계산</td><td>⑭</td></tr>
+      <tr><td rowspan="4">PyTorch 학습 · 평가</td><td><code>TensorDataset</code> · <code>DataLoader(shuffle, collate_fn)</code></td><td>미니배치 · 배치별 패딩</td><td>⑤ ⑯</td></tr>
+      <tr><td><code>CrossEntropyLoss(ignore_index)</code> · <code>reshape(-1, C)</code></td><td>펼친 분류 손실, 패딩 제외</td><td>⑤</td></tr>
+      <tr><td><code>Adam</code> · <code>zero_grad</code> · <code>backward</code> · <code>step</code></td><td>학습 한 걸음</td><td>⑤</td></tr>
+      <tr><td><code>@torch.no_grad()</code> · <code>argmax(-1)</code> · 마스크 인덱싱 · <code>get_rng_state</code></td><td>평가 · 패딩 제외 채점 · 난수 상태 보존</td><td>⑥ ⑦</td></tr>
+      <tr><td>pytorch-crf</td><td><code>CRF</code> · <code>crf(…)</code> · <code>crf.decode</code> · <code>transitions</code></td><td>전이 점수 · 로그 우도 · 비터비</td><td>⑬</td></tr>
+      <tr><td rowspan="2">transformers</td><td><code>AutoTokenizer(return_offsets_mapping)</code> · <code>AutoModelForTokenClassification</code></td><td>WordPiece · 토큰 분류 모델</td><td>⑮</td></tr>
+      <tr><td><code>AdamW</code> · <code>get_linear_schedule_with_warmup</code></td><td>미세조정 학습률 스케줄</td><td>⑮</td></tr>
+      <tr><td>datasets · pandas</td><td><code>load_dataset</code> · <code>groupby().agg(['mean','std'])</code></td><td>KLUE-NER · 시드 평균 표</td><td>⑯ ⑬</td></tr>
+      <tr><td>파이썬</td><td>집합 <code>&amp;</code> · <code>-</code> · <code>Counter</code> · <code>dict.get(k, UNK)</code></td><td>TP · FP · FN · 위반 세기 · UNK 처리</td><td>⑪ ⑫ ②</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="pit"><b>다시 풀 때 틀리기 쉬운 곳 ★</b>
+  <ul class="ul">
+    <li>양방향 LSTM 뒤 <code>nn.Linear</code>의 입력은 <b>hid × 2</b></li>
+    <li>손실 전에 <code>(B, L, C) → (B·L, C)</code>로 펼치고 <code>ignore_index=PAD</code> &mdash; 정확도 채점에서도 패딩 마스크</li>
+    <li><code>extract_entities</code>에서 개체를 닫은 뒤 <code>start, etype = None, None</code>으로 비우기 &mdash; 안 비우면 같은 개체를 두 번 저장</li>
+    <li>사전은 학습 데이터로만 → 학습에는 UNK가 0개라 UNK 벡터가 학습되지 않는다</li>
+    <li>토큰 정확도(0.9553)가 아니라 <b>개체 F1</b>(0.7980)로 판단</li>
+    <li>CRF는 얹기만 하면 전이를 못 배울 수 있다 &mdash; 작은 데이터에서는 BIO 제약</li>
+    <li>BERT 평가는 토큰 예측을 <b>음절로 펼쳐</b> 같은 기준으로 &mdash; 띄어쓰기 처리 주의</li>
+    <li>미등록 개체 결과는 시드에 크게 흔들린다 &mdash; 여러 시드로 비교</li>
+  </ul>
+</div>
+
+</section>
+
+
 <section class="sec" id="next">
   <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>14주차 (11.30 ~ 12.6)</small></h2></div>
 <div class="note-box"><b>14주차</b>는 강의계획서를 따른다. 이번 주의 BERT(13.7) · 토큰 분류 미세조정(13.15)이 사전학습 언어모델 쪽으로 이어진다. 자료가 올라오면 그 기준으로 정리한다.
@@ -1082,7 +1529,7 @@ hist = model.fit(x_train, y_train, batch_size=128, epochs=1, validation_data=(x_
 </section>
 
 <p class="src">자연어처리 13주차 (CHAPTER 13) 강의자료 정리 · 2026학년도 2학기<br>
-교안(74페이지)을 100문제의 절 번호(13.1 ~ 13.17 중 12절)에 맞춰 정리했다. 실습 1~5의 코드 · 출력은 교안 슬라이드에 실린 값을 옮겼고, Viterbi · 개체 F1 · 파라미터 수 · 코사인 예시는 직접 계산했다. 과제 노트북 풀이는 이번 업데이트에 포함하지 않았다.</p>
+교안(74페이지)을 100문제의 절 번호(13.1 ~ 13.17 중 12절)에 맞춰 정리했다. 실습 1~5의 코드 · 출력은 교안 슬라이드에 실린 값을 옮겼고, Viterbi · 개체 F1 · 파라미터 수 · 코사인 예시는 직접 계산했다. 과제 노트북 풀이(심화 1~4 포함)는 실습 탭에 개념 16개로 정리했다.</p>
 
 </div>
 
