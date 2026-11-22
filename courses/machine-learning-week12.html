@@ -2638,6 +2638,17 @@ label_map = np.argmax(seg_fcn.predict(image), axis=-1)</pre>
     </tbody>
   </table></div>
 
+  <p id="segl-files"><b>파일별로 한눈에</b> &mdash; 같은 내용을 제출 파일 단위로 다시 묶었다. 파일을 열었을 때 &lsquo;이 파일은 무엇을 하려고 있고, 교안의 어디이며, 어떤 함수가 핵심인가&rsquo;를 바로 찾는 용도다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>파일</th><th>이 파일의 목적</th><th>교안 개념</th><th>대표 라이브러리 · 함수</th><th>내 결과</th></tr></thead>
+    <tbody>
+      <tr><td><code>dataset.py</code></td><td>도면과 정답 마스크를 짝지어 읽고, <b>같은 증강</b>을 둘에 똑같이 적용해 텐서로 넘긴다</td><td>분할의 정답 = 화소별 클래스 번호(<a class="ext" href="#seg">12.1</a>)</td><td>albumentations <code>A.Compose</code> · <code>A.Resize</code> · <code>A.HorizontalFlip</code> · <code>A.RandomRotate90</code> · <code>A.ShiftScaleRotate</code> · <code>A.Normalize</code> · <code>ToTensorV2</code>, PyTorch <code>Dataset</code> (<a class="ext" href="#sc-aug">개념 ①</a> · <a class="ext" href="#sc-tile">②</a>)</td><td>증강 뒤에도 마스크 값 {0, 1, 2} 유지 · 조각 32개(학습 26 / 검증 6)</td></tr>
+      <tr><td><code>train_seg.py</code></td><td>백본 · 손실을 바꿔 가며 모델을 학습하고, 에폭마다 mIoU로 채점해 <b>최고점 가중치</b>(best.pt)를 남긴다</td><td>인코더-디코더(<a class="ext" href="#encdec">12.2</a>) · DeepLab ASPP(<a class="ext" href="#deeplab">12.6</a>) · SegFormer(<a class="ext" href="#latest">12.8</a>) · IoU · Dice(<a class="ext" href="#segtrain">12.5</a>)</td><td>smp <code>DeepLabV3Plus</code> · <code>Segformer</code> · <code>losses.DiceLoss</code>, <code>nn.CrossEntropyLoss</code>, torchmetrics <code>MulticlassJaccardIndex</code>, <code>torch.autocast</code> · <code>amp.GradScaler</code> · <code>clip_grad_norm_</code> · <code>OneCycleLR</code> (<a class="ext" href="#sc-model">개념 ③</a> ~ <a class="ext" href="#sc-val">⑦</a>)</td><td>ResNet-50 mIoU 0.546 · 경계 F1 0.513이 최고. CE만 쓰면 cw 0.000 → CE + Dice 0.166</td></tr>
+      <tr><td><code>predict.py</code></td><td>best.pt로 예측해 <b>원본 크기로 되돌리고</b> 색을 입혀 도면 위에 겹쳐 그린다</td><td>업샘플링(<a class="ext" href="#decode">12.3</a>)</td><td><code>F.interpolate(mode="bilinear")</code> → <code>argmax(1)</code>, 팔레트 인덱싱 · PIL 저장 (<a class="ext" href="#sc-pred">개념 ⑧</a>)</td><td>로짓을 키운 뒤 argmax &mdash; 번호를 키우면 계단 경계</td></tr>
+      <tr><td><code>train_sam_pseudolabel.py</code></td><td>사람이 그린 <b>상자를 SAM에 넣어</b> 마스크를 받고, 큰 것부터 칠해 학습용 의사라벨을 만든다</td><td>SAM · 프롬프트 분할(<a class="ext" href="#found">12.8 ②</a>)</td><td>transformers <code>SamModel</code> · <code>SamProcessor</code> · <code>get_image_embeddings</code>(캐시) · <code>post_process_masks</code> · <code>iou_scores</code> (<a class="ext" href="#sc-sam">개념 ⑨</a> · <a class="ext" href="#sc-pseudo">⑩</a>)</td><td>작은 기호 IoU 0.90 이상, ow 0.184 · SAM 라벨 모델 mIoU 0.431</td></tr>
+    </tbody>
+  </table></div>
+
   <p><b>한 줄 정리</b> &mdash; <span class="hi">분할 모델은 인코더-디코더로 만들고, IoU로 평가하고, Dice + CE로 학습하며, 라벨이 부족하면 SAM으로 보충할 수 있다</span>는 교안의 흐름을 실제 도면 데이터에 처음부터 끝까지 적용해 보는 실습이다. 결과도 교안과 맞아떨어졌다. DeepLab 계열이 경계를 가장 잘 잡았고, Dice가 소수 클래스를 살렸으며, SAM은 작은 기호에서만 쓸 만했다.</p>
 </div>
 
