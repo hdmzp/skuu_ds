@@ -2580,7 +2580,7 @@ label_map = np.argmax(seg_fcn.predict(image), axis=-1)</pre>
 
 <!-- ===================== 다음 ===================== -->
 <!-- ===================== 실습 ===================== -->
-<section class="sec" id="segl">
+<section class="sec" id="segl"><span id="labrev"></span>
   <div class="sec-head"><span class="sec-badge">LAB</span><h2 class="sec-title">실습 — 건축 CAD 도면 요소 분할 (개념으로 다시 보기)<small>실습의 목적과 흐름 · 교안 개념이 코드의 어느 줄인가 · 내 결과</small></h2></div>
 
 <div class="note-box"><b>이 탭을 읽는 법</b> &mdash; 먼저 <a class="ext" href="#segl-about">실습 개요</a>에서 이 실습이 무엇을 하려는지, 파일 네 개가 어떻게 이어지는지, 어떤 라이브러리와 교안 개념을 쓰는지 큰 그림을 잡는다. 그다음 <b>개념 10개</b>를 하나씩 놓고 <span class="hi">① 개념을 쉽게 → ② 코드에서는 어느 줄인가(코드 ↔ 뜻 표) → ③ 쓴 함수 → ④ 내 실행 결과</span> 순서로 본다. 문제 안내(TODO 표 · 배점 · 제출물)는 <a class="ext" href="#lab">실습 문제 안내</a>에 있다.</div>
@@ -2694,7 +2694,7 @@ label_map = np.argmax(seg_fcn.predict(image), axis=-1)</pre>
 <!-- ============ train ============ -->
 <h3 class="sub-title">B · 어떤 모델을 어떻게 학습하나 — train_seg.py</h3>
 
-<div class="pt lab" id="sc-model">
+<div class="pt lab" id="sc-model"><span id="labrev-encdec"></span><span id="labrev-aspp"></span><span id="labrev-segformer"></span>
   <h3 class="pt-h"><span class="bdg bdg-lab">개념 ③</span>구조와 백본 고르기 &mdash; smp 한 줄</h3>
   <p><b>개념</b> &mdash; 분할 모델 = <b>인코더(백본)</b>가 특징을 뽑고 <b>디코더</b>가 원래 크기로 되돌린다(<a class="ext" href="#encdec">12.2</a>). smp는 이 둘을 레고처럼 조합하게 해 준다. 인코더는 ImageNet 사전학습 가중치로 시작하고 디코더만 새로 배운다(<a class="ext" href="machine-learning-week11.html#tc-tf">11주차 전이학습</a>). DeepLabV3+는 인코더 뒷단을 팽창 합성곱으로 바꿔 해상도를 지키는데, <span class="hi">트랜스포머 인코더 MiT에는 팽창 모드가 없어 SegFormer 구조로만 쓸 수 있다</span>.</p>
   <div class="tbl-wrap"><table>
@@ -2727,7 +2727,7 @@ label_map = np.argmax(seg_fcn.predict(image), axis=-1)</pre>
   </ul>
 </div>
 
-<div class="pt lab" id="sc-loss">
+<div class="pt lab" id="sc-loss"><span id="labrev-loss"></span>
   <h3 class="pt-h"><span class="bdg bdg-lab">개념 ④</span>CE + Dice &mdash; 넓은 클래스와 작은 클래스를 함께</h3>
   <p><b>개념</b> &mdash; <b>CE</b>는 화소마다 정답 확률을 높이는 손실을 모두 더하므로, 화소가 많은 배경 · iw가 손실 대부분을 차지한다. <b>Dice</b>는 클래스마다 겹침 비율 2|A∩B| / (|A| + |B|)를 따로 계산해 평균하므로 작은 클래스도 같은 비중이다(<a class="ext" href="#segtrain">12.5</a>). <span class="hi">둘을 더하면 CE의 안정적인 기울기와 Dice의 불균형 보정을 함께 얻는다</span> &mdash; nnU-Net의 기본 조합이다.</p>
   <div class="tbl-wrap"><table>
@@ -2753,7 +2753,7 @@ label_map = np.argmax(seg_fcn.predict(image), axis=-1)</pre>
   </ul>
 </div>
 
-<div class="pt lab" id="sc-step">
+<div class="pt lab" id="sc-step"><span id="labrev-tl"></span>
   <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑤</span>AMP 학습 스텝 &mdash; 11주차 순서에 GradScaler가 붙는다</h3>
   <p><b>개념</b> &mdash; <a class="ext" href="machine-learning-week11.html#tc-loop">11주차 개념 ②</a>의 &lsquo;예측 → 채점 → 기울기 → 고치기&rsquo;와 같다. 다른 점은 <b>float16 혼합 정밀도</b>다. float16은 아주 작은 기울기가 0으로 사라지기 쉬워, GradScaler가 손실에 큰 수를 곱해 역전파한 뒤 갱신 직전에 되돌린다. <span class="hi">클리핑은 되돌린 뒤(unscale_ 다음)에 해야 실제 기울기 크기에 1.0 기준이 적용된다.</span></p>
   <div class="tbl-wrap"><table>
@@ -2802,7 +2802,7 @@ label_map = np.argmax(seg_fcn.predict(image), axis=-1)</pre>
   </table></div>
 </div>
 
-<div class="pt lab" id="sc-pred">
+<div class="pt lab" id="sc-pred"><span id="labrev-up"></span>
   <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑧</span>예측 후처리 &mdash; 로짓을 키운 뒤 argmax · 팔레트</h3>
   <p><b>개념</b> &mdash; 학습 크기로 줄여 예측했으면 원본 크기로 되돌려야 한다. 정수인 클래스 번호를 키우면 계단 모양 경계가 생기므로, <span class="hi">연속값인 로짓을 양선형 보간으로 키운 뒤 argmax</span>를 한다(<a class="ext" href="#decode">12.3 업샘플링</a>). 색은 번호를 팔레트의 행으로 바꾸는 배열 인덱싱 한 줄이다.</p>
   <div class="tbl-wrap"><table>
@@ -2819,7 +2819,7 @@ label_map = np.argmax(seg_fcn.predict(image), axis=-1)</pre>
 <!-- ============ SAM ============ -->
 <h3 class="sub-title">D · 라벨을 싸게 만들 수 있나 — train_sam_pseudolabel.py</h3>
 
-<div class="pt lab" id="sc-sam">
+<div class="pt lab" id="sc-sam"><span id="labrev-sam"></span>
   <h3 class="pt-h"><span class="bdg bdg-lab">개념 ⑨</span>SAM &mdash; 무거운 인코더는 한 번, 프롬프트마다 가벼운 디코더</h3>
   <p><b>개념</b> &mdash; SAM은 ViT 영상 인코더(무거움, 이미지당 1회)와 프롬프트 인코더 · 마스크 디코더(가벼움, 프롬프트마다)로 나뉜다(<a class="ext" href="#found">12.8 ②</a>). <span class="hi">한 도면에 객체가 30개여도 인코더는 한 번만 돌리고 임베딩을 재사용</span>하는 것이 설계의 핵심이다. 상자 프롬프트는 모호성이 적어 마스크 후보 3개 대신 1개만 받는다.</p>
   <div class="tbl-wrap"><table>
