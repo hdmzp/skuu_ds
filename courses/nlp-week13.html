@@ -1323,7 +1323,7 @@ hist = model.fit(x_train, y_train, batch_size=128, epochs=1, validation_data=(x_
       <tr><td>독도 · 국립중앙박물관</td><td>독 / 앙 · 박 · 물</td><td>56 / 56 · 70 / 70</td><td>&lsquo;…도&rsquo;(한산도) · &lsquo;국립…&rsquo;(국립국어원)과 겉모습이 닮음</td></tr>
     </tbody>
   </table></div>
-  <p><b>[해석]</b> UNK 비율은 5.213%. 그런데 <span class="hi">글자를 아는지와 맞히는지가 일치하지 않았다</span> &mdash; 다 아는 글자인 &lsquo;1919년 3월 1일&rsquo;은 0점, 다 모르는 글자인 &lsquo;정약용&rsquo;은 68%. 모델은 이름을 일반화한 게 아니라 <b>글자별 위치 습관</b>(&lsquo;1이면 날짜 시작&rsquo;, &lsquo;국이면 기관 시작&rsquo;)과 <b>문장 틀</b>에 기대고 있다. 완화법: 학습 때 음절 일부를 일부러 UNK로 바꾸기(word dropout) · 개체 자리 바꿔 넣기 증강 · 자모/서브워드 · 사전학습 모델(<a class="ext" href="#lc-bert">⑮</a>).</p>
+  <p><b>[해석]</b> UNK 비율은 5.213%. 그런데 <span class="hi">처음 보는 글자라서 틀리고, 아는 글자라서 맞힌 것이 아니었다</span> &mdash; 다 아는 글자인 &lsquo;1919년 3월 1일&rsquo;은 0점, 다 모르는 글자인 &lsquo;정약용&rsquo;은 68%. 모델은 이름을 일반화한 게 아니라 <b>글자별 위치 습관</b>(&lsquo;1이면 날짜 시작&rsquo;, &lsquo;국이면 기관 시작&rsquo;)과 <b>문장 틀</b>에 기대고 있다. 완화법: 학습 때 음절 일부를 일부러 UNK로 바꾸기(word dropout) · 개체 자리 바꿔 넣기 증강 · 자모/서브워드 · 사전학습 모델(<a class="ext" href="#lc-bert">⑮</a>).</p>
 </div>
 
 <div class="pt lab" id="lc-extract">
