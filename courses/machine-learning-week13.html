@@ -517,6 +517,28 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
 .rv .ans pre.code{margin:8px 0}
 .rv .one{display:block;background:#fff;border:1px solid #99e0d6;border-radius:7px;padding:7px 11px;margin-bottom:8px;font-weight:700;color:#0f3d3a}
 
+/* 13주차 개정: 기말 공지 · 업샘플링 격자 · 연대기 색 */
+.exam{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;background:#fff7ed;border:1px solid #fdba74;border-left:5px solid #ea580c;border-radius:var(--radius);padding:12px 16px;margin:0 0 16px;font-size:13.5px;color:#7c2d12}
+.exam b{color:#9a3412}
+.exam .ex-t{font-weight:800;color:#c2410c}
+.upc{display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;margin:12px 0 4px}
+.upc .ug{display:grid;gap:3px}
+.upc .ug i{font-style:normal;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;border-radius:5px;border:1px solid rgba(0,0,0,.08)}
+.upc .u1{background:#dbeafe;color:#1e3a8a}.upc .u2{background:#dcfce7;color:#14532d}.upc .u3{background:#ffedd5;color:#7c2d12}.upc .u4{background:#ede9fe;color:#4c1d95}
+.upc .arr{font-size:12px;color:var(--muted);text-align:center;line-height:1.4}
+.upc .arr b{display:block;font-size:20px;color:var(--accent)}
+.upc figcaption,.upc .cap{font-size:11.5px;color:var(--muted);text-align:center;margin-top:5px}
+.upc-card{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:12px 15px;margin:10px 0}
+.upc-card h4{font-size:13.5px;font-weight:700;margin-bottom:2px}
+.tlx.f-vae .tl-era b{color:#2563eb}.tlx.f-vae .tl-era::after{background:#2563eb}
+.tlx.f-gan .tl-era b{color:#ea580c}.tlx.f-gan .tl-era::after{background:#ea580c}
+.tlx.f-dif .tl-era b{color:#16a34a}.tlx.f-dif .tl-era::after{background:#16a34a}
+.tlx.f-mm .tl-era b{color:#7c3aed}.tlx.f-mm .tl-era::after{background:#7c3aed}
+.tl-tag{display:inline-block;font-size:10.5px;font-weight:700;border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:1px}
+.tg-vae{background:#dbeafe;color:#1e3a8a}.tg-gan{background:#ffedd5;color:#7c2d12}.tg-dif{background:#dcfce7;color:#14532d}.tg-mm{background:#ede9fe;color:#4c1d95}
+.tl-era-band{font-size:11.5px;font-weight:800;color:var(--muted);letter-spacing:.04em;margin:10px 0 0 86px;padding:3px 0;border-bottom:1px dashed var(--border)}
+@media(max-width:440px){.tl-era-band{margin-left:70px}}
+
 </style>
 </head>
 <body id="top">
@@ -530,6 +552,10 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   <a href="#minimax">13.4 미니맥스 · 가치 함수</a>
   <a href="#ganeval">13.5 평가 · 응용</a>
   <a href="#ganproj">13.6 구현 프로젝트</a>
+  <a href="#vae">13.7 VAE</a>
+  <a href="#diffusion">13.8 확산 모델</a>
+  <a href="#flowmatch">13.9 흐름 매칭 · 고속화</a>
+  <a href="#trends">13.10 비교 · 최신 동향</a>
   <a href="#summary">핵심 정리</a>
   <a href="#next">다음 주</a>
 </nav>
@@ -547,14 +573,17 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
 <section class="hero">
   <p class="kicker">13주차 · 2026-2학기</p>
   <h1>13. 이미지 생성 — 위조지폐범과 경찰이 서로를 키운다 (GAN)</h1>
-  <p>지금까지의 신경망은 사진을 보고 &lsquo;무엇인가&rsquo;를 <b>맞히는</b> 결정론적인 과업(분류 · 탐지 · 분할)을 했다. 이번 주는 세상에 없던 이미지를 <b>만들어 내는</b> 생성 모델, 그중 <b>생성적 적대 신경망(GAN)</b>이다. 노이즈로 가짜를 만드는 <b>생성자</b>와 진짜 · 가짜를 가려내는 <b>판별자</b>가 경쟁하며 함께 좋아진다. 두 네트워크의 구조(판별자 = 줄어드는 CNN, 생성자 = 거꾸로 커지는 CNN), <b>판별자를 고정한 통합 신경망</b>으로 생성자를 학습하는 방법, 이 경쟁을 수식으로 쓴 <b>미니맥스 가치 함수</b>, 평가 지표(<b>인셉션 점수 · FID</b>)와 응용, 그리고 패션 MNIST로 GAN을 직접 만드는 7단계 프로젝트를 다룬다.</p>
-  <div class="chips"><span class="chip">최승호 교수</span><span class="chip">교안 &lsquo;생성모델&rsquo; 31p</span><span class="chip">100문제 13.1~13.6</span><span class="chip">생성자 · 판별자 · 통합 신경망</span><span class="chip">min<sub>G</sub> max<sub>D</sub> V(D, G)</span><span class="chip">패션 MNIST · 노이즈 100차원</span></div>
+  <p>지금까지의 신경망은 사진을 보고 &lsquo;무엇인가&rsquo;를 <b>맞히는</b> 결정론적인 과업(분류 · 탐지 · 분할)을 했다. 이번 주는 세상에 없던 이미지를 <b>만들어 내는</b> 생성 모델, 그중 <b>생성적 적대 신경망(GAN)</b>이다. 노이즈로 가짜를 만드는 <b>생성자</b>와 진짜 · 가짜를 가려내는 <b>판별자</b>가 경쟁하며 함께 좋아진다. 두 네트워크의 구조(판별자 = 줄어드는 CNN, 생성자 = 거꾸로 커지는 CNN), <b>판별자를 고정한 통합 신경망</b>으로 생성자를 학습하는 방법, 이 경쟁을 수식으로 쓴 <b>미니맥스 가치 함수</b>, 평가 지표(<b>인셉션 점수 · FID</b>)와 응용, 그리고 패션 MNIST로 GAN을 직접 만드는 7단계 프로젝트를 다룬다. 대면수업 교안(50p)과 개정판(63p)은 여기서 한 걸음 더 나가 <b>VAE</b>(구름처럼 퍼진 잠재 공간) · <b>확산 모델</b>(노이즈를 조금씩 걷어내기) · <b>흐름 매칭</b>(노이즈에서 데이터로 가는 직선 길) · 최신 생성 AI(Stable Diffusion · FLUX · Veo)까지 이어 간다 &mdash; 13.7~13.10에 정리했다.</p>
+  <div class="chips"><span class="chip">최승호 교수</span><span class="chip">교안 &lsquo;생성모델&rsquo; 31p</span><span class="chip">대면수업 교안 50p</span><span class="chip">개정판 63p</span><span class="chip">GAN · VAE · 확산 · 흐름 매칭</span><span class="chip">100문제 13.1~13.6</span><span class="chip">생성자 · 판별자 · 통합 신경망</span><span class="chip">min<sub>G</sub> max<sub>D</sub> V(D, G)</span><span class="chip">패션 MNIST · 노이즈 100차원</span></div>
 </section>
 
+<div class="exam" id="exam"><span class="ex-t">📅 기말고사</span><span><b>12월 10일(목)</b> 예정</span><span>시험 범위 <b>9~14주차</b></span><span style="font-size:12px;color:#9a3412">수업 중 공지 &mdash; 날짜가 바뀌면 다시 알린다</span></div>
 <div class="legend">
   <p class="legend-t">내용이 어디에서 왔는지 <b>뱃지</b>로 구분했습니다</p>
   <i><span class="bdg bdg-gyo">교안</span><span>교수님 슬라이드에 있는 내용</span></i>
   <i><span class="bdg bdg-plus">보충설명</span><span>교안에 없거나 짧게 지나간 부분을 따로 풀어 쓴 내용 &mdash; 숫자 예 · 모양 추적 · 코드 줄 풀이</span></i>
+  <i><span class="bdg" style="background:#6d28d9;color:#fff">📝 내 필기</span><span>대면수업 필기 · 따로 찾아 정리한 것(보라 상자)</span></i>
+  <i><span class="bdg" style="background:#b45309;color:#fff">🎙 강조</span><span>교수님이 수업에서 ★로 짚은 말(주황 상자)</span></i>
   <p class="legend-t2"><b>슬라이드를 누르면</b> 크게 볼 수 있고(← → 로 넘기기), <span class="hi">노란 형광펜</span>은 꼭 기억할 문장, <span class="term" tabindex="0" data-tip="이렇게 파란 점선이 있는 단어는 눌러 보세요. 용어 뜻이 바로 뜹니다.">파란 점선</span>은 누르면 뜻이 뜹니다.</p>
 </div>
 
@@ -569,6 +598,10 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
     <li>학습은 <b>번갈아</b>: ① 판별자 = 진짜(1) · 가짜(0)를 레이블과 함께 넣는 <b>지도 학습</b> ② 생성자 = 판별자를 붙인 <b>통합 신경망</b>에 노이즈를 넣고 정답을 &lsquo;진짜(1)&rsquo;로 &mdash; 이때 <span class="hi">판별자 가중치는 <b>고정</b></span>(<code>trainable=False</code>)</li>
     <li><b>미니맥스 게임</b>(제로섬): <span class="tex">\min_G\max_D V(D,G)</span>, <span class="tex">V=\mathbb E[\log D(x)]</span> <span class="tex">+\,\mathbb E[\log(1-D(G(z)))]</span> &mdash; D는 키우고 G는 줄인다. 로그는 틀릴수록 벌점을 크게</li>
     <li>평가: <b>인셉션 점수</b>(예측 확신도 높음 + 다양성 높음) · <b>FID</b>(실제와 생성 이미지의 인셉션 출력 분포 사이 프레셰 거리, 작을수록 좋음). 응용: <b>StackGAN</b>(문장 → 이미지, 2단계) · 이미지-이미지 번역 · 초해상도</li>
+    <li><b>VAE</b> = 오토인코더 + 확률: 인코더가 점이 아니라 <b>분포(μ, σ)</b>를 내고 KL 항이 잠재 공간을 N(0, I)로 모은다 &rarr; 아무 z나 뽑아도 그럴듯하다. 결과는 흐릿한 편이지만 오늘날 <b>잠재 확산의 압축기</b>다</li>
+    <li><b>확산 모델</b> = 망가뜨리기(노이즈 추가)는 정해져 있고 <b>되돌리기(노이즈 제거)</b>만 배운다. 학습은 &lsquo;섞인 노이즈 ε 맞히기&rsquo;라는 단순 회귀 &rarr; 안정적 · 다양, 대신 수십~1,000 스텝이라 느리다. <b>잠재 확산(Stable Diffusion)</b>은 VAE로 줄인 공간에서 확산한다</li>
+    <li><b>흐름 매칭</b> = 노이즈와 데이터를 <b>직선</b>으로 잇고 그 위의 속도 <span class="tex">v=x_1-x_0</span>를 회귀 &rarr; 곧은 길이라 적은 스텝으로 도착(SD3 · FLUX). <b>증류</b>로 1~4 스텝까지 줄인다</li>
+    <li>세 계열의 <b>삼중고</b>: GAN(고품질 · 빠름, 다양성 ↓) · VAE(빠름 · 다양, 품질 ↓) · 확산(고품질 · 다양, 느림). 최신 흐름은 <b>확산 트랜스포머 + 흐름 매칭 + VAE 잠재 공간</b>, 그리고 멀티모달 LLM과의 결합</li>
   </ul>
 </div>
 <div class="mapgrid">
@@ -578,6 +611,29 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   <a href="#minimax"><b>13.4 미니맥스 게임과 가치 함수</b><span>제로섬 · maximizer / minimizer · D(x) · D(G(z)) · 로그를 쓰는 이유</span></a>
   <a href="#ganeval"><b>13.5 평가 방법과 응용 분야</b><span>인셉션 점수 · FID · StackGAN · 이미지 번역 · 초해상도</span></a>
   <a href="#ganproj"><b>13.6 GAN 구현 프로젝트</b><span>패션 MNIST · [−1, 1] · 7×7 → 28×28 · Adam(0.0002, 0.5) · train()</span></a>
+  <a href="#vae"><b>13.7 VAE (변분 오토인코더)</b><span>점 대신 구름 · μ, σ · 재매개변수화 · ELBO = 재구성 + KL · VQ-VAE</span></a>
+  <a href="#diffusion"><b>13.8 확산 모델</b><span>노이즈 추가 · 제거 · ᾱ · ε 예측 · DDIM · CFG · 교차 주의 · 잠재 확산 · SD 버전</span></a>
+  <a href="#flowmatch"><b>13.9 흐름 매칭과 고속화</b><span>DiT · 직선 경로 · v = x₁ − x₀ · 오일러 · 증류 3방식 · MeanFlow</span></a>
+  <a href="#trends"><b>13.10 비교 · 최신 동향 · 응용</b><span>삼중고 · GAN의 현재 역할 · 자기회귀 · 멀티모달 LLM · 영상 · 모델 선택 · 윤리</span></a>
+</div>
+
+<div class="pit" id="srcmap"><b>교안이 셋이다 &mdash; 무엇이 어디로 갔나</b>
+<p>13주차 자료는 <b>구판 31p</b>(100문제의 기준), 대면수업에 쓴 <b>&lsquo;생성모델&rsquo; 50p</b>, 그리고 <b>개정판 63p</b>(PART 1~11)다. 100문제 번호가 13.1~13.6이라 이 페이지의 절 번호는 그대로 두고, 대면 · 개정판 내용은 같은 주제의 절에 끼워 넣었다.</p>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>대면수업 교안 (50p)</th><th>개정판 (63p)</th><th>이 페이지</th></tr></thead>
+  <tbody>
+    <tr><td>13.1 생성 모델이란 · 발전 흐름 (3~5p)</td><td>ROADMAP · PART 1 개요 (3 · 5~7p)</td><td><a href="#ganintro">13.1</a> &mdash; <a href="#genhist">발전 흐름 그림</a></td></tr>
+    <tr><td>13.2 GAN 구조 · 업샘플링 (6~10p)</td><td>PART 3 (13~15p)</td><td><a href="#ganstruct">13.2</a> &mdash; <a href="#upsample-card">업샘플링 카드</a></td></tr>
+    <tr><td>13.3 GAN의 학습 (11~14p)</td><td>PART 3 (16 · 17p)</td><td><a href="#gantrain">13.3</a> · <a href="#minimax">13.4</a></td></tr>
+    <tr><td>13.4 학습의 어려움 · 평가 방법 (15 · 16p)</td><td>PART 3 (18p) · PART 9 평가 (52 · 53p)</td><td><a href="#gan-hard">13.4</a> · <a href="#eval-v2">13.5</a></td></tr>
+    <tr><td>13.5 대표 GAN 모델 · cGAN · 변환 · StyleGAN · 응용 (17~21p)</td><td>PART 3 (19 · 20p)</td><td><a href="#gan-line">13.5</a></td></tr>
+    <tr><td>13.6 VAE (22 · 23p)</td><td>PART 2 VAE (9~11p)</td><td><a href="#vae">13.7</a></td></tr>
+    <tr><td>13.7 확산 모델 · 교차 주의 · CFG (24~30p)</td><td>PART 5 확산 (26~35p)</td><td><a href="#diffusion">13.8</a></td></tr>
+    <tr><td>13.7 DiT · 흐름 매칭 · 증류 (31~37p)</td><td>PART 6 · 7 (37~43p)</td><td><a href="#flowmatch">13.9</a></td></tr>
+    <tr><td>13.8 비교 · 13.9 최신 동향 · 13.10 응용 · 윤리 (38~48p)</td><td>PART 4 자기회귀 · 8 최신 동향 · 11 정리 (22~24 · 45~50 · 59p)</td><td><a href="#trends">13.10</a></td></tr>
+    <tr><td>&mdash;</td><td>PART 10 실습(SinGAN · 미니 DDPM · 흐름 매칭, 55~57p)</td><td>실습은 따로 정리한다</td></tr>
+  </tbody>
+</table></div>
 </div>
 </section>
 
@@ -585,10 +641,26 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">13주차 강의자료<small>제목을 누르면 앱 실행 없이 화면에서 바로 열립니다</small></h2></div>
 <div class="docs">
   <div class="doc">
+    <div class="doc-ico"><span>🎓</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=ml-w13-gen-live">생성모델 &mdash; 대면수업 교안</a>
+      <p>대면수업에서 쓴 교안 · 판별 vs 생성 · GAN 구조 · 학습 · 어려움 · IS/FID · cGAN · StyleGAN · VAE · 확산 · 교차 주의 · CFG · DiT · 흐름 매칭 · 증류 · 비교 · 최신 동향 · 윤리 · <b>50페이지</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week13-generative-live.pdf" download="기계학습특론_13주차_생성모델_대면수업.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📗</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=ml-w13-gen-v2">딥러닝 생성모델 &mdash; 개정판</a>
+      <p>PART 1~11 · VAE(ELBO) · GAN(계보 2014→2026) · 자기회귀 · 확산(DDPM · DDIM · CFG · DiT · 잠재 확산) · 플로우 매칭 · 소수 스텝 · 2025~26 동향 · 의료 응용 · 평가 · 실습 · <b>63페이지</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week13-generative-v2.pdf" download="기계학습특론_13주차_딥러닝_생성모델_개정판.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
     <div class="doc-ico"><span>📘</span>PDF</div>
     <div class="doc-main">
-      <a class="doc-open" href="pdf-viewer.html?doc=ml-w13-gan">생성모델 (생성적 적대 신경망 GAN)</a>
-      <p>생성 모델 · GAN 구조 · 판별자 · 생성자 · 업샘플링 · 통합 신경망 학습 · 미니맥스 함수 · 인셉션 점수 · FID · StackGAN · 이미지 번역 · 초해상도 · 구현 프로젝트 7단계 · <b>31페이지</b></p>
+      <a class="doc-open" href="pdf-viewer.html?doc=ml-w13-gan">생성모델 (생성적 적대 신경망 GAN) &mdash; 구판</a>
+      <p>생성 모델 · GAN 구조 · 판별자 · 생성자 · 업샘플링 · 통합 신경망 학습 · 미니맥스 함수 · 인셉션 점수 · FID · StackGAN · 이미지 번역 · 초해상도 · 구현 프로젝트 7단계 · <b>31페이지</b> · 100문제는 이 구판 기준이다</p>
     </div>
     <a class="doc-dl" href="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week13-gan.pdf" download="기계학습특론_13주차_딥러닝_생성모델.pdf">⬇ 다운로드</a>
   </div>
@@ -615,7 +687,7 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
 <section class="sec" id="ganintro">
   <div class="sec-head"><span class="sec-badge">13.1</span><h2 class="sec-title">생성 모델 개요와 GAN의 기본 개념<small>교안 2~5p</small></h2></div>
 <div class="deck">
-  <div class="deck-h">교안 슬라이드 모아보기 <span>2p · 3p · 4p · 5p</span></div>
+  <div class="deck-h">구판(31p) 교안 슬라이드 모아보기 <span>2p · 3p · 4p · 5p</span></div>
   <div class="deck-g">
     <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-02.jpg" alt="교안 2p — 학습 목표"><figcaption><b>2p</b> 학습 목표</figcaption></figure>
     <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-03.jpg" alt="교안 3p — 생성 모델 · GAN"><figcaption><b>3p</b> 생성 모델 · GAN</figcaption></figure>
@@ -656,13 +728,105 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   </ul>
   <p class="fx-note">두 신경망은 같은 목표를 공유하지 <b>않는다</b>. 판별자가 이기면 생성자가 지고, 생성자가 이기면 판별자가 진다 &mdash; 13.4의 제로섬 게임.</p>
 </div>
+<div class="deck v2">
+  <div class="deck-h">대면수업 · 개정판 슬라이드 모아보기 <span>대면 2p · 대면 3p · 대면 4p · 대면 5p · 개정 2p · 개정 3p · 개정 5p · 개정 6p · 개정 7p</span></div>
+  <div class="deck-t">대면수업 교안 &lsquo;생성모델&rsquo; (50p)</div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-02.jpg" alt="대면 2p — 학습 목표"><figcaption><b>대면 2p</b> 학습 목표</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-03.jpg" alt="대면 3p — 13.1 생성 모델이란 (1/2)"><figcaption><b>대면 3p</b> 13.1 생성 모델이란 (1/2)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-04.jpg" alt="대면 4p — 13.1 생성 모델이란 (2/2)"><figcaption><b>대면 4p</b> 13.1 생성 모델이란 (2/2)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-05.jpg" alt="대면 5p — 13.1 생성 모델의 발전 흐름"><figcaption><b>대면 5p</b> 13.1 생성 모델의 발전 흐름</figcaption></figure>
+  </div>
+  <div class="deck-t">개정판 &lsquo;딥러닝 생성모델&rsquo; (63p)</div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-02.jpg" alt="개정 2p — 학습 목표"><figcaption><b>개정 2p</b> 학습 목표</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-03.jpg" alt="개정 3p — 생성 모델 12년: 2014 → 2026"><figcaption><b>개정 3p</b> 생성 모델 12년: 2014 → 2026</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-05.jpg" alt="개정 5p — 생성 모델이란 무엇인가"><figcaption><b>개정 5p</b> 생성 모델이란 무엇인가</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-06.jpg" alt="개정 6p — 생성 모델 지형도"><figcaption><b>개정 6p</b> 생성 모델 지형도</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-07.jpg" alt="개정 7p — 삼중 딜레마"><figcaption><b>개정 7p</b> 삼중 딜레마</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo" id="gen-vs-disc">
+  <h3 class="pt-h" data-sref="대면 3p, 대면 4p, 개정 5p, 개정 6p"><span class="bdg bdg-gyo">교안</span>판별 모델 vs 생성 모델 &mdash; 무엇을 배우나 (대면 3 · 4p · 개정 5 · 6p)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th></th><th>판별 모델 (discriminative)</th><th>생성 모델 (generative)</th></tr></thead>
+    <tbody>
+      <tr><td>배우는 것</td><td>입력이 주어졌을 때 정답의 확률 <span class="tex">p(y\mid x)</span> &mdash; 경계</td><td>데이터 자체의 분포 <span class="tex">p(x)</span>(또는 조건부 <span class="tex">p(x\mid c)</span>)</td></tr>
+      <tr><td>하는 일</td><td>분류 · 탐지 · 분할 &mdash; 정답을 <b>맞힌다</b></td><td>학습 분포와 비슷한 <b>새 표본을 만든다</b> &mdash; 이미지 · 영상 · 음악 · 텍스트 · 분자 · 의료 영상</td></tr>
+      <tr><td>지금까지</td><td>9~12주차 전부</td><td>13주차부터</td></tr>
+    </tbody>
+  </table></div>
+  <p>생성 모델은 <span class="tex">p(x)</span>를 다루는 방식으로 나눈다.</p>
+  <ul class="ul">
+    <li><b>명시적 밀도</b> &mdash; 확률을 직접 계산(또는 근사)하며 학습한다: <b>자기회귀</b>(GPT, PixelCNN) · <b>VAE</b>(근사) · <b>확산 모델</b> · 정규화 흐름</li>
+    <li><b>암시적 밀도</b> &mdash; 확률 값은 몰라도 <b>그럴듯한 표본을 만드는 법</b>만 배운다: <b>GAN</b></li>
+  </ul>
+  <p class="fx-note">개정판 5p 그림의 요점: 생성된 표본(주황)은 학습 데이터(검정)의 분포를 <b>덮되 그대로 외우지는 않아야</b> 한다. 학습 사진을 복사해 내놓는 모델은 좋은 생성 모델이 아니다.</p>
+</div>
+
+<div class="mynote" id="genai-note"><b>대면수업 필기 &mdash; 생성 모델이란 · 생성형 AI의 세 갈래</b>
+<p>지금까지는 <b>판별 과업</b> 위주였는데, <b>생성 모델</b>이 등장해 데이터의 분포를 학습해 기존에 없던 새로운 데이터를 만든다. 생성형 AI의 대표 갈래는 셋이다.</p>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>갈래</th><th>한 줄 원리 (필기)</th><th>자세히</th></tr></thead>
+  <tbody>
+    <tr><td><b>GAN</b> 생성적 적대 신경망</td><td>노이즈 → 생성자가 가짜 이미지 → 진짜 · 가짜를 판별자에 넣어 이진 분류. 번갈아 학습, 각자 손실 함수, 제로섬 게임에 가깝다</td><td><a class="ext" href="#gan-flow-note">13.2</a> · <a class="ext" href="#minimax">13.4</a></td></tr>
+    <tr><td><b>VAE</b> 변분 오토인코더</td><td>2013년 Kingma &amp; Welling. 오토인코더에 확률적 해석을 붙여 잠재 공간에서 샘플링해 새 데이터를 만든다. 이미지 → 인코더 → 디코더 → 생성</td><td><a class="ext" href="#vae">13.7</a></td></tr>
+    <tr><td><b>Diffusion</b> 확산</td><td>노이즈를 조금씩 더하는 과정을 거꾸로 되돌리도록 학습해 순수 노이즈에서 데이터를 만든다. 2020년 DDPM(Ho et al.)으로 주목, 지금 이미지 · 영상 생성의 주류</td><td><a class="ext" href="#diffusion">13.8</a></td></tr>
+  </tbody>
+</table></div>
+</div>
+
+<div class="pt gyo" id="genhist">
+  <h3 class="pt-h" data-sref="대면 5p, 개정 3p"><span class="bdg bdg-gyo">교안</span>생성 모델의 발전 흐름 &mdash; 위에서 아래로 (대면 5p · 개정 3p)</h3>
+  <p>대면 5p의 가로 연표를 세로 흐름으로 다시 그렸다. 색은 교안과 같다 &mdash; <span class="tl-tag tg-vae">VAE 흐름</span><span class="tl-tag tg-gan">GAN 계열</span><span class="tl-tag tg-dif">확산 · 흐름 매칭</span><span class="tl-tag tg-mm">멀티모달 대형 모델</span>. 한 줄 요약: <span class="hi">2014년 GAN 등장 → 2020년 전후 확산 모델로 주류 이동 → 2024년 이후 트랜스포머 · 멀티모달 대형 모델로 통합</span>.</p>
+  <p class="tl-era-band">① 적대 · 잠재 변수 시대</p>
+  <div class="tl">
+    <div class="tlx f-vae"><div class="tl-era"><b>2013</b></div><div class="tl-body"><h4>VAE<span class="tl-tag tg-vae">VAE</span></h4><p class="tl-who">Kingma &amp; Welling &mdash; 오토인코더 + 확률적 잠재 공간</p></div></div>
+    <div class="tlx f-gan"><div class="tl-era"><b>2014</b></div><div class="tl-body"><h4>GAN<span class="tl-tag tg-gan">GAN</span></h4><p class="tl-who">Goodfellow &mdash; 생성자 vs 판별자, 적대적 학습의 시작</p></div></div>
+    <div class="tlx f-gan"><div class="tl-era"><b>2015</b></div><div class="tl-body"><h4>DCGAN<span class="tl-tag tg-gan">GAN</span></h4><p class="tl-who">합성곱 GAN 설계 규칙(BN · LeakyReLU · 스트라이드 합성곱)</p></div></div>
+    <div class="tlx f-gan"><div class="tl-era"><b>2017</b></div><div class="tl-body"><h4>WGAN · CycleGAN · ProGAN<span class="tl-tag tg-gan">GAN</span></h4><p class="tl-who">학습 안정화(바서슈타인 거리) · 짝 없는 이미지 변환 · 점진적 고해상도</p></div></div>
+    <div class="tlx f-gan"><div class="tl-era"><b>2019</b></div><div class="tl-body"><h4>StyleGAN<span class="tl-tag tg-gan">GAN</span></h4><p class="tl-who">NVIDIA &mdash; 해상도별 스타일 제어, 1024×1024 사실적 얼굴</p></div></div>
+  </div>
+  <p class="tl-era-band">② 확산 · 흐름 시대</p>
+  <div class="tl">
+    <div class="tlx f-dif"><div class="tl-era"><b>2020</b></div><div class="tl-body"><h4>DDPM (확산 모델)<span class="tl-tag tg-dif">확산</span></h4><p class="tl-who">Ho et al. &mdash; 노이즈를 걷어내는 반복으로 생성</p></div></div>
+    <div class="tlx f-mm"><div class="tl-era"><b>2021</b></div><div class="tl-body"><h4>DALL·E · CLIP<span class="tl-tag tg-mm">멀티모달</span></h4><p class="tl-who">OpenAI &mdash; 문장으로 이미지 만들기, 문장-이미지 정렬</p></div></div>
+    <div class="tlx f-dif"><div class="tl-era"><b>2022</b></div><div class="tl-body"><h4>Stable Diffusion (잠재 확산)<span class="tl-tag tg-dif">확산</span></h4><p class="tl-who">VAE로 줄인 잠재 공간에서 확산 &rarr; 개인 GPU에서도 생성</p></div></div>
+    <div class="tlx f-dif"><div class="tl-era"><b>2023</b></div><div class="tl-body"><h4>DiT · SDXL<span class="tl-tag tg-dif">확산</span></h4><p class="tl-who">U-Net을 트랜스포머로(DiT) · 더 큰 U-Net과 이중 텍스트 인코더(SDXL)</p></div></div>
+    <div class="tlx f-dif"><div class="tl-era"><b>2024</b></div><div class="tl-body"><h4>SD3 · FLUX.1 (흐름 매칭)<span class="tl-tag tg-dif">흐름 매칭</span></h4><p class="tl-who">직선 경로의 속도를 배우는 흐름 매칭 + 트랜스포머(MMDiT)</p></div></div>
+  </div>
+  <p class="tl-era-band">③ 대규모 멀티모달 시대</p>
+  <div class="tl">
+    <div class="tlx f-mm"><div class="tl-era"><b>2025</b></div><div class="tl-body"><h4>Veo 3 · FLUX.2 · Nano Banana Pro<span class="tl-tag tg-mm">멀티모달</span></h4><p class="tl-who">영상 + 대사 · 효과음 동시 생성, LLM의 이해력을 쓴 이미지 생성 · 편집</p></div></div>
+    <div class="tlx f-mm"><div class="tl-era"><b>2026</b></div><div class="tl-body"><h4>소수 스텝 · 경량화 (FLUX.2 klein 등)<span class="tl-tag tg-mm">멀티모달</span></h4><p class="tl-who">4스텝 증류, 소비자 GPU에서 1초 미만</p></div></div>
+  </div>
+  <p class="fx-note">개정판 3p의 핵심 흐름도 같은 이야기다: <b>적대적 학습(GAN) → 우도 기반(VAE · 자기회귀) → 반복적 잡음 제거(확산) → 직선 경로 회귀(흐름 매칭) → 스텝 수 축소(증류 · MeanFlow)</b>. 2026년의 최신 이미지 · 비디오 모델은 대부분 &lsquo;흐름 매칭 + 확산 트랜스포머(DiT) + VAE 잠재 공간&rsquo; 조합이다. 이번 주 순서도 이 흐름을 따른다 &mdash; GAN(13.1~13.6)을 깊이 본 뒤 VAE(13.7) · 확산(13.8) · 흐름 매칭(13.9) · 최신 동향(13.10).</p>
+</div>
 </section>
 
 <!-- ===================== 13.2 ===================== -->
 <section class="sec" id="ganstruct">
   <div class="sec-head"><span class="sec-badge">13.2</span><h2 class="sec-title">GAN의 구조와 동작 원리<small>교안 6~9p</small></h2></div>
+<div class="deck v2">
+  <div class="deck-h">대면수업 · 개정판 슬라이드 모아보기 <span>대면 6p · 대면 7p · 대면 8p · 대면 9p · 대면 10p · 개정 13p · 개정 14p · 개정 15p</span></div>
+  <div class="deck-t">대면수업 교안 &lsquo;생성모델&rsquo; (50p)</div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-06.jpg" alt="대면 6p — 13.2 GAN 구조 (1/4)"><figcaption><b>대면 6p</b> 13.2 GAN 구조 (1/4)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-07.jpg" alt="대면 7p — 13.2 GAN 구조 (2/4)"><figcaption><b>대면 7p</b> 13.2 GAN 구조 (2/4)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-08.jpg" alt="대면 8p — 13.2 GAN 구조 (3/4)"><figcaption><b>대면 8p</b> 13.2 GAN 구조 (3/4)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-09.jpg" alt="대면 9p — 13.2 GAN 구조 (4/4)"><figcaption><b>대면 9p</b> 13.2 GAN 구조 (4/4)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-10.jpg" alt="대면 10p — 13.2 업샘플링"><figcaption><b>대면 10p</b> 13.2 업샘플링</figcaption></figure>
+  </div>
+  <div class="deck-t">개정판 &lsquo;딥러닝 생성모델&rsquo; (63p)</div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-13.jpg" alt="개정 13p — GAN — 위조지폐범과 경찰"><figcaption><b>개정 13p</b> GAN — 위조지폐범과 경찰</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-14.jpg" alt="개정 14p — GAN 구조와 동작 흐름"><figcaption><b>개정 14p</b> GAN 구조와 동작 흐름</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-15.jpg" alt="개정 15p — 업샘플링 · 다운샘플링 · DCGAN 코드"><figcaption><b>개정 15p</b> 업샘플링 · 다운샘플링 · DCGAN 코드</figcaption></figure>
+  </div>
+</div>
 <div class="deck">
-  <div class="deck-h">교안 슬라이드 모아보기 <span>6p · 7p · 8p · 9p</span></div>
+  <div class="deck-h">구판(31p) 교안 슬라이드 모아보기 <span>6p · 7p · 8p · 9p</span></div>
   <div class="deck-g">
     <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-06.jpg" alt="교안 6p — 두 네트워크의 모양과 동작 순서"><figcaption><b>6p</b> 두 네트워크의 모양과 동작 순서</figcaption></figure>
     <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-07.jpg" alt="교안 7p — 판별자 모델 구조 · 코드"><figcaption><b>7p</b> 판별자 모델 구조 · 코드</figcaption></figure>
@@ -687,6 +851,35 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
   </div>
 </div>
 
+
+<div class="mynote" id="gan-flow-note"><b>대면수업 필기 &mdash; GAN은 이렇게 돈다</b>
+<div class="flow">
+  <div class="fl"><b>① 임의의 노이즈 벡터를 생성자로 보낸다</b><span>z ~ N(0, I), 예: 100차원</span></div>
+  <div class="fl"><b>② 생성자는 가짜 이미지를 만든다</b><span>G(z)</span></div>
+  <div class="fl"><b>③ 진짜 이미지와 가짜 이미지를 판별자에 입력한다</b><span>섞어서 넣는다</span></div>
+  <div class="fl"><b>④ 판별자는 진짜인지 가짜인지 판별한다</b><span><b>이진 분류</b> &mdash; 1 진짜 · 0 가짜</span></div>
+</div>
+<p>왔다 갔다 <b>번갈아 학습</b>한다(<a class="ext" href="#gantrain">13.3</a>). 각 모델은 <b>각자의 손실 함수</b>를 갖고, 둘의 관계는 <b>제로섬 게임</b>에 가깝다(<a class="ext" href="#zerosum-note">13.4</a>).</p>
+</div>
+
+<div class="pt gyo" id="dcgan-rule">
+  <h3 class="pt-h" data-sref="대면 8p, 대면 9p, 개정 15p"><span class="bdg bdg-gyo">교안</span>DCGAN 설계 지침과 PyTorch 버전 (대면 8 · 9p · 개정 15p)</h3>
+  <ul class="ul">
+    <li><b>판별자</b>: 출력이 1차원이 될 때까지 합성곱으로 크기를 줄이는 일반 CNN, 마지막은 <b>시그모이드</b> &rarr; 진짜일 확률(0~1)</li>
+    <li><b>생성자</b>: 판별자와 반대 &mdash; 1차원 벡터를 받아 업샘플링을 반복하며 이미지 크기까지 키운다. <b>배치 정규화 + ReLU/LeakyReLU, 출력층은 tanh</b></li>
+    <li><b>DCGAN(2015) 규칙</b>: 풀링 대신 <b>스트라이드 합성곱</b>, BatchNorm, 생성자는 ReLU · 출력 tanh, 판별자는 LeakyReLU</li>
+  </ul>
+  <pre class="code"><span class="cm"># 개정 15p — PyTorch DCGAN 스타일 생성자 (28×28 흑백)</span>
+self.fc  = nn.Linear(zdim, 128*7*7)            <span class="cm"># 100 → 6,272 → (128, 7, 7)</span>
+self.net = nn.Sequential(
+    nn.BatchNorm2d(128), nn.ReLU(),
+    nn.Upsample(scale_factor=2),               <span class="cm"># 7 → 14</span>
+    nn.Conv2d(128, 64, 3, padding=1), nn.BatchNorm2d(64), nn.ReLU(),
+    nn.Upsample(scale_factor=2),               <span class="cm"># 14 → 28</span>
+    nn.Conv2d(64, 1, 3, padding=1), nn.Tanh())
+<span class="cm"># 판별자: Conv(1→64, 4, 2, 1) → Conv(64→128, 4, 2, 1) → Flatten → Linear(128*7*7, 1)  ← 로짓</span></pre>
+  <p class="fx-note">구판 13.6의 케라스 코드(<a class="ext" href="#proj-gen">3단계</a>)와 같은 모양이다 &mdash; Dense로 7×7×128을 만들고 업샘플링 두 번으로 28×28. 차이 하나: PyTorch판 판별자는 마지막에 시그모이드를 <b>붙이지 않고</b> 로짓을 낸 뒤 <code>BCEWithLogitsLoss</code>가 시그모이드와 BCE를 한꺼번에 계산한다(수치적으로 더 안정). 시그모이드를 또 붙이면 두 번 걸려 기울기가 죽는다.</p>
+</div>
 <div class="pt gyo" id="disc">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>판별자 모델 (7p)</h3>
   <p>목표: <span class="hi">입력받은 이미지가 생성자가 만든 <b>가짜</b>인지 <b>진짜</b>인지 예측하는 것</span>. 7p 코드는 <code>Sequential</code>에 합성곱층을 쌓되, 합성곱층마다 <b>LeakyReLU(alpha=0.2)</b>와 <b>Dropout(0.25)</b>을 붙이고, 중간에 <code>ZeroPadding2D</code> · <code>BatchNormalization(momentum=0.8)</code>을 두며, 마지막에 <code>Flatten</code> → <b><code>Dense(1, activation='sigmoid')</code></b>로 진짜일 확률 하나를 낸다.</p>
@@ -698,19 +891,17 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
 </div>
 
 <div class="pt gyo" id="upsample">
-  <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>다운 샘플링과 업샘플링 (9p)</h3>
+  <h3 class="pt-h" data-sref="9p, 대면 10p"><span class="bdg bdg-gyo">교안</span>다운 샘플링과 업샘플링 (구판 9p · 대면 10p)</h3>
   <ul class="ul">
     <li><b>다운 샘플링</b> &mdash; 풀링 층을 이용해 입력 이미지를 <b>줄이는</b> 것</li>
     <li><b>업샘플링</b> &mdash; <b>입력 픽셀을 반복</b>하는 형태로 늘리는 층. 코드: <code>keras.layers.UpSampling2D(size=(2, 2))</code></li>
   </ul>
-  <div class="tbl-wrap"><table>
-    <thead><tr><th>입력 2×2</th><th>size=(2, 2) → 4×4</th><th>size=(3, 3) → 6×6</th></tr></thead>
-    <tbody><tr>
-      <td><code>1 2<br>3 4</code></td>
-      <td><code>1 1 2 2<br>1 1 2 2<br>3 3 4 4<br>3 3 4 4</code></td>
-      <td><code>1 1 1 2 2 2<br>1 1 1 2 2 2<br>1 1 1 2 2 2<br>3 3 3 4 4 4<br>3 3 3 4 4 4<br>3 3 3 4 4 4</code></td>
-    </tr></tbody>
-  </table></div>
+  <div class="upc-card" id="upsample-card">
+    <h4>UpSampling2D &mdash; 각 픽셀을 가로 · 세로로 반복 (대면 10p)</h4>
+    <div class="upc"><div><div class="ug" style="grid-template-columns:repeat(2,30px)"><i class="u1">1</i><i class="u2">2</i><i class="u3">3</i><i class="u4">4</i></div><p class="cap">입력 2×2</p></div><div class="arr"><b>&rarr;</b>size=(2, 2)</div><div><div class="ug" style="grid-template-columns:repeat(4,30px)"><i class="u1">1</i><i class="u1">1</i><i class="u2">2</i><i class="u2">2</i><i class="u1">1</i><i class="u1">1</i><i class="u2">2</i><i class="u2">2</i><i class="u3">3</i><i class="u3">3</i><i class="u4">4</i><i class="u4">4</i><i class="u3">3</i><i class="u3">3</i><i class="u4">4</i><i class="u4">4</i></div><p class="cap">출력 4×4</p></div></div>
+    <div class="upc"><div><div class="ug" style="grid-template-columns:repeat(2,30px)"><i class="u1">1</i><i class="u2">2</i><i class="u3">3</i><i class="u4">4</i></div><p class="cap">입력 2×2</p></div><div class="arr"><b>&rarr;</b>size=(3, 3)</div><div><div class="ug" style="grid-template-columns:repeat(6,30px)"><i class="u1">1</i><i class="u1">1</i><i class="u1">1</i><i class="u2">2</i><i class="u2">2</i><i class="u2">2</i><i class="u1">1</i><i class="u1">1</i><i class="u1">1</i><i class="u2">2</i><i class="u2">2</i><i class="u2">2</i><i class="u1">1</i><i class="u1">1</i><i class="u1">1</i><i class="u2">2</i><i class="u2">2</i><i class="u2">2</i><i class="u3">3</i><i class="u3">3</i><i class="u3">3</i><i class="u4">4</i><i class="u4">4</i><i class="u4">4</i><i class="u3">3</i><i class="u3">3</i><i class="u3">3</i><i class="u4">4</i><i class="u4">4</i><i class="u4">4</i><i class="u3">3</i><i class="u3">3</i><i class="u3">3</i><i class="u4">4</i><i class="u4">4</i><i class="u4">4</i></div><p class="cap">출력 6×6</p></div></div>
+    <p class="fx-note" style="margin-top:8px">1은 왼쪽 위 2×2 덩어리, 2는 오른쪽 위, 3은 왼쪽 아래, 4는 오른쪽 아래로 그대로 복제된다(같은 색 = 같은 값). size=(3, 3)이면 3×3 덩어리. <b>학습 파라미터가 없다</b> &mdash; 뒤따르는 합성곱이 덩어리진 경계를 다듬어 세부를 채운다. 대안은 12주차의 <b>전치 합성곱</b>: 업샘플링 방식 자체를 학습한다(<a class="ext" href="machine-learning-week12.html#decode">12.3</a>).</p>
+  </div>
   <p class="fx-note">각 값이 가로 · 세로로 size배씩 <b>복제</b>된다. 학습할 파라미터가 <b>없다</b> &mdash; 그래서 바로 뒤에 합성곱층을 붙여 복제된 덩어리를 매끄럽게 다듬는다. 12주차의 <b>언풀링</b>(마스크 자리에만 값, 나머지 0)이나 <b>전치 합성곱</b>(학습되는 필터)과 다르다(<a class="ext" href="machine-learning-week12.html#decode">12.3</a>).</p>
 </div>
 
@@ -734,8 +925,20 @@ table.folds td.tr{background:#ecfdf5;color:#166534;text-align:center}
 <!-- ===================== 13.3 ===================== -->
 <section class="sec" id="gantrain">
   <div class="sec-head"><span class="sec-badge">13.3</span><h2 class="sec-title">GAN의 학습 과정과 통합 신경망<small>교안 10~14p</small></h2></div>
+<div class="deck v2">
+  <div class="deck-h">대면수업 · 개정판 슬라이드 모아보기 <span>대면 11p · 대면 12p · 개정 16p</span></div>
+  <div class="deck-t">대면수업 교안 &lsquo;생성모델&rsquo; (50p)</div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-11.jpg" alt="대면 11p — 13.3 GAN의 학습 (1/4)"><figcaption><b>대면 11p</b> 13.3 GAN의 학습 (1/4)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-12.jpg" alt="대면 12p — 13.3 GAN의 학습 (2/4)"><figcaption><b>대면 12p</b> 13.3 GAN의 학습 (2/4)</figcaption></figure>
+  </div>
+  <div class="deck-t">개정판 &lsquo;딥러닝 생성모델&rsquo; (63p)</div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-16.jpg" alt="개정 16p — 교대 학습 (PyTorch)"><figcaption><b>개정 16p</b> 교대 학습 (PyTorch)</figcaption></figure>
+  </div>
+</div>
 <div class="deck">
-  <div class="deck-h">교안 슬라이드 모아보기 <span>10p · 11p · 12p · 13p · 14p</span></div>
+  <div class="deck-h">구판(31p) 교안 슬라이드 모아보기 <span>10p · 11p · 12p · 13p · 14p</span></div>
   <div class="deck-g">
     <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-10.jpg" alt="교안 10p — 판별자 학습 · 생성자 학습"><figcaption><b>10p</b> 판별자 학습 · 생성자 학습</figcaption></figure>
     <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-11.jpg" alt="교안 11p — GAN의 병렬 학습"><figcaption><b>11p</b> GAN의 병렬 학습</figcaption></figure>
@@ -813,13 +1016,48 @@ g_loss = combined.train_on_batch(noise, valid)   <span class="cm"># 노이즈 �
   </tbody>
 </table></div>
 결론(30p): GAN 학습은 <b>판별자 모델과 통합 신경망을 교대로</b> 학습하는 방식이다. &lsquo;통합 신경망에서 생성자를 고정한다&rsquo;는 보기는 거꾸로다.</div>
+
+<div class="pt gyo" id="train-v2">
+  <h3 class="pt-h" data-sref="대면 11p, 대면 12p, 개정 16p"><span class="bdg bdg-gyo">교안</span>대면 · 개정판이 덧붙인 것 &mdash; PyTorch 한 반복과 &lsquo;손실보다 샘플&rsquo; (대면 11 · 12p · 개정 16p)</h3>
+  <pre class="code">for x_real in loader:                         <span class="cm"># (B, 1, 28, 28), 값 [-1, 1]</span>
+    z = torch.randn(B, 100); x_fake = G(z)
+    <span class="cm"># ① 판별자: 진짜 → 1, 가짜 → 0  (생성자 쪽 그래프는 detach로 끊는다)</span>
+    loss_D = bce(D(x_real), ones) + bce(D(x_fake.detach()), zeros)
+    opt_D.zero_grad(); loss_D.backward(); opt_D.step()
+    <span class="cm"># ② 생성자: 가짜를 '진짜(1)'로 판정하게. opt_G만 step → 판별자는 고정</span>
+    loss_G = bce(D(x_fake), ones)
+    opt_G.zero_grad(); loss_G.backward(); opt_G.step()</pre>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>케라스 (구판 13.3)</th><th>PyTorch (개정 16p)</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>discriminator.trainable = False</code> 후 통합 신경망 compile</td><td><code>opt_G.step()</code>만 부른다 (<code>opt_D</code>는 호출 안 함)</td><td>생성자 단계에서 <b>판별자 가중치 고정</b></td></tr>
+      <tr><td>판별자 학습에 가짜 이미지를 넣을 때 생성자는 따로 모델</td><td><code>x_fake.detach()</code></td><td>판별자 단계에서 <b>생성자는 갱신하지 않음</b></td></tr>
+      <tr><td>통합 신경망의 정답 = 1</td><td><code>bce(D(x_fake), ones)</code></td><td>비포화 손실 <span class="tex">-\log D(G(z))</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">대면 12p: <span class="hi">GAN의 손실 값은 수렴 지표가 아니다 &mdash; 손실보다 <b>생성된 샘플을 직접 눈으로</b> 관찰하는 것이 중요하다</span>. 제로섬 게임이라 한쪽 손실이 줄면 다른 쪽이 늘어 둘 다 오르내리기 때문이다(<a class="ext" href="#zerosum-note">13.4 필기</a>).</p>
+</div>
 </section>
 
 <!-- ===================== 13.4 ===================== -->
 <section class="sec" id="minimax">
   <div class="sec-head"><span class="sec-badge">13.4</span><h2 class="sec-title">미니맥스 게임과 가치 함수<small>교안 15 · 16 · 17p</small></h2></div>
+<div class="deck v2">
+  <div class="deck-h">대면수업 · 개정판 슬라이드 모아보기 <span>대면 13p · 대면 14p · 대면 15p · 개정 17p · 개정 18p</span></div>
+  <div class="deck-t">대면수업 교안 &lsquo;생성모델&rsquo; (50p)</div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-13.jpg" alt="대면 13p — 13.3 GAN의 학습 (3/4)"><figcaption><b>대면 13p</b> 13.3 GAN의 학습 (3/4)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-14.jpg" alt="대면 14p — 13.3 GAN의 학습 (4/4)"><figcaption><b>대면 14p</b> 13.3 GAN의 학습 (4/4)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-15.jpg" alt="대면 15p — 13.4 GAN 학습의 어려움"><figcaption><b>대면 15p</b> 13.4 GAN 학습의 어려움</figcaption></figure>
+  </div>
+  <div class="deck-t">개정판 &lsquo;딥러닝 생성모델&rsquo; (63p)</div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-17.jpg" alt="개정 17p — 미니맥스 목적 함수 · 이론"><figcaption><b>개정 17p</b> 미니맥스 목적 함수 · 이론</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-18.jpg" alt="개정 18p — 학습의 어려움과 해결책"><figcaption><b>개정 18p</b> 학습의 어려움과 해결책</figcaption></figure>
+  </div>
+</div>
 <div class="deck">
-  <div class="deck-h">교안 슬라이드 모아보기 <span>15p · 16p · 17p</span></div>
+  <div class="deck-h">구판(31p) 교안 슬라이드 모아보기 <span>15p · 16p · 17p</span></div>
   <div class="deck-g">
     <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-15.jpg" alt="교안 15p — 제로섬 · 미니맥스 게임"><figcaption><b>15p</b> 제로섬 · 미니맥스 게임</figcaption></figure>
     <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-16.jpg" alt="교안 16p — 가치 함수 V(D, G) · 기호"><figcaption><b>16p</b> 가치 함수 V(D, G) · 기호</figcaption></figure>
@@ -895,13 +1133,66 @@ g_loss = combined.train_on_batch(noise, valid)   <span class="cm"># 노이즈 �
   <p>판별자는 두 항을 모두 0 쪽(최댓값)으로 올리려 하고, 생성자는 뒤 항을 −∞ 쪽(최솟값)으로 끌어내리려 한다 &mdash; 같은 V를 하나는 키우고 하나는 줄이니 &lsquo;min max&rsquo;다. 확률을 그대로 쓰면 0.1과 0.01의 차이가 0.09지만, 로그로는 −2.3과 −4.6으로 크게 벌어져 &lsquo;많이 틀린 것&rsquo;을 강하게 꾸짖는다. 이 식은 판별자의 <b>이진 교차 엔트로피</b>와 같은 꼴이다(정답 1에는 <span class="tex">\log D</span>, 정답 0에는 <span class="tex">\log(1-D)</span>).</p>
   <p class="fx-note">(교안 밖) 이론상 둘이 끝까지 균형을 이루면 생성 분포가 실제 분포와 같아지고 판별자는 무엇을 넣든 <b>D = 0.5</b>(반반 찍기)가 된다. 또 13.3 코드처럼 생성자를 &lsquo;정답 1&rsquo;로 학습하면 실제로는 <span class="tex">-\log D(G(z))</span>를 줄이는 셈인데, 학습 초반 기울기가 더 커서 실무에서 흔히 쓰는 변형이다.</p>
 </div>
+
+<div class="pt gyo" id="minimax-theory">
+  <h3 class="pt-h" data-sref="대면 14p, 개정 17p"><span class="bdg bdg-gyo">교안</span>미니맥스의 이론적 성질과 비포화 손실 (대면 14p · 개정 17p)</h3>
+  <ul class="ul">
+    <li>생성자를 고정했을 때 <b>최적 판별자</b>: <span class="tex">D^*(x)=\dfrac{p_{\text{data}}(x)}{p_{\text{data}}(x)+p_g(x)}</span></li>
+    <li>D*를 넣으면 <span class="tex">C(G)=-\log 4+2\cdot\mathrm{JSD}(p_{\text{data}}\,\|\,p_g)</span> &rarr; 전역 최적은 <span class="tex">p_g=p_{\text{data}}</span>, 이때 <span class="tex">D^*(x)=\tfrac12</span></li>
+    <li><b>실전 팁</b>: 학습 초기에는 판별자가 쉽게 이겨 <span class="tex">\log(1-D(G(z)))</span>의 기울기가 거의 0이다. 그래서 대신 <span class="tex">-\log D(G(z))</span>를 최소화하는 <b>비포화(non-saturating) 손실</b>을 쓴다 &mdash; 케라스 구현의 <span class="hi">&lsquo;가짜에 1 레이블&rsquo;이 바로 이것</span>이다</li>
+  </ul>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>숫자로 &mdash; D*가 0.5가 되는 이유와 &lsquo;포화&rsquo;의 뜻</h3>
+  <ul class="ul">
+    <li>어떤 이미지 x가 실제 데이터에서 나올 확률 밀도가 0.6, 생성자에서 나올 밀도가 0.2라면 <span class="tex">D^*=0.6/(0.6+0.2)=0.75</span> &mdash; &lsquo;진짜일 가능성이 더 크다&rsquo;. 생성자가 완벽해져 둘 다 0.4가 되면 <span class="tex">0.4/0.8=0.5</span>, 판별자는 동전 던지기밖에 못 한다</li>
+    <li>학습 초반 D(G(z)) = 0.01(판별자가 가짜를 쉽게 알아봄)이라 하자. <span class="tex">\log(1-D)</span>를 D로 미분하면 <span class="tex">-1/(1-D)=-1.01</span>로 작지만, <span class="tex">-\log D</span>의 미분은 <span class="tex">-1/D=-100</span>이다. 생성자가 가장 못할 때 <b>100배 큰 신호</b>를 받는 쪽이 비포화 손실이다</li>
+  </ul>
+</div>
+
+<div class="pt gyo" id="gan-hard">
+  <h3 class="pt-h" data-sref="대면 15p, 개정 18p"><span class="bdg bdg-gyo">교안</span>GAN 학습의 어려움과 해결책 (대면 15p · 개정 18p)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>문제</th><th>무슨 일이 생기나</th><th>대표 해결책</th></tr></thead>
+    <tbody>
+      <tr><td><b>모드 붕괴</b> (mode collapse)</td><td>생성자가 판별자를 속이기 쉬운 <b>몇 가지 샘플만 반복</b> 생성 &rarr; 다양성 상실</td><td>미니배치 판별, unrolled GAN, 다양성 규제, WGAN 계열 손실</td></tr>
+      <tr><td><b>기울기 소실</b></td><td>판별자가 너무 강하면 생성자에 가는 신호가 0에 수렴</td><td>비포화 손실, 레이블 스무딩, 학습률 분리(<b>TTUR</b>)</td></tr>
+      <tr><td><b>진동 · 비수렴</b></td><td>두 모델이 서로를 쫓으며 오르내림 &mdash; 내쉬 균형은 경사 하강으로 도달하기 어렵다</td><td>R1 기울기 패널티(StyleGAN2), EMA 생성자, D : G 갱신 비율 조절</td></tr>
+      <tr><td><b>거리 척도 문제</b></td><td>두 분포가 겹치지 않으면 JSD가 상수 &rarr; 의미 없는 기울기</td><td><b>WGAN</b>(바서슈타인 거리) + 기울기 패널티(<b>WGAN-GP</b>), <b>스펙트럴 정규화</b></td></tr>
+      <tr><td><b>평가의 어려움</b></td><td>손실 값이 품질을 반영하지 않음</td><td>IS · FID · Precision/Recall 등 외부 지표(<a class="ext" href="#eval-v2">13.5</a>)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="fx"><div class="tex-d">L_D=\mathbb E[D(G(z))]-\mathbb E[D(x)]+\lambda\,\mathbb E_{\hat x}\big[(\lVert\nabla_{\hat x}D(\hat x)\rVert_2-1)^2\big],\quad \hat x=\epsilon x+(1-\epsilon)G(z),\ \lambda=10</div>
+  <p class="fx-note">WGAN-GP 손실. 판별자는 확률 대신 시그모이드 없는 &lsquo;점수(critic)&rsquo;를 내고, 기울기 크기를 1 근처로 묶어(1-립시츠) 어디서나 쓸 만한 기울기를 준다.</p></div>
+  <p class="fx-note">위 내 필기의 <span class="tex">V=xy</span> 예(원을 그리며 도는 학습)가 &lsquo;진동 · 비수렴&rsquo; 줄의 직관이다.</p>
+</div>
 </section>
 
 <!-- ===================== 13.5 ===================== -->
 <section class="sec" id="ganeval">
   <div class="sec-head"><span class="sec-badge">13.5</span><h2 class="sec-title">GAN의 평가 방법과 응용 분야<small>교안 18 · 19 · 20p</small></h2></div>
+<div class="deck v2">
+  <div class="deck-h">대면수업 · 개정판 슬라이드 모아보기 <span>대면 16p · 대면 17p · 대면 18p · 대면 19p · 대면 20p · 대면 21p · 개정 19p · 개정 20p · 개정 52p · 개정 53p</span></div>
+  <div class="deck-t">대면수업 교안 &lsquo;생성모델&rsquo; (50p)</div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-16.jpg" alt="대면 16p — 13.4 GAN 모델의 평가 방법"><figcaption><b>대면 16p</b> 13.4 GAN 모델의 평가 방법</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-17.jpg" alt="대면 17p — 13.5 대표 GAN 모델의 흐름"><figcaption><b>대면 17p</b> 13.5 대표 GAN 모델의 흐름</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-18.jpg" alt="대면 18p — 13.5 조건부 GAN (cGAN)"><figcaption><b>대면 18p</b> 13.5 조건부 GAN (cGAN)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-19.jpg" alt="대면 19p — 13.5 이미지-이미지 변환"><figcaption><b>대면 19p</b> 13.5 이미지-이미지 변환</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-20.jpg" alt="대면 20p — 13.5 StyleGAN 이란"><figcaption><b>대면 20p</b> 13.5 StyleGAN 이란</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-21.jpg" alt="대면 21p — 13.5 GAN 응용: 문장→이미지, 초해상도"><figcaption><b>대면 21p</b> 13.5 GAN 응용: 문장→이미지, 초해상도</figcaption></figure>
+  </div>
+  <div class="deck-t">개정판 &lsquo;딥러닝 생성모델&rsquo; (63p)</div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-19.jpg" alt="개정 19p — GAN 계보 2014 → 2026"><figcaption><b>개정 19p</b> GAN 계보 2014 → 2026</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-20.jpg" alt="개정 20p — GAN의 응용 분야"><figcaption><b>개정 20p</b> GAN의 응용 분야</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-52.jpg" alt="개정 52p — IS와 FID"><figcaption><b>개정 52p</b> IS와 FID</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-53.jpg" alt="개정 53p — 지표 비교와 선택"><figcaption><b>개정 53p</b> 지표 비교와 선택</figcaption></figure>
+  </div>
+</div>
 <div class="deck">
-  <div class="deck-h">교안 슬라이드 모아보기 <span>18p · 19p · 20p</span></div>
+  <div class="deck-h">구판(31p) 교안 슬라이드 모아보기 <span>18p · 19p · 20p</span></div>
   <div class="deck-g">
     <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-18.jpg" alt="교안 18p — 인셉션 점수 · FID"><figcaption><b>18p</b> 인셉션 점수 · FID</figcaption></figure>
     <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-19.jpg" alt="교안 19p — StackGAN — 문장으로 이미지"><figcaption><b>19p</b> StackGAN — 문장으로 이미지</figcaption></figure>
@@ -933,6 +1224,55 @@ g_loss = combined.train_on_batch(noise, valid)   <span class="cm"># 노이즈 �
   </ul>
 </div>
 
+
+<div class="mynote" id="eval-note"><b>대면수업 필기 &mdash; 13.4 GAN 모델 평가 방법</b>
+<ul class="ul">
+  <li><b>IS</b>(인셉션 점수) &mdash; 높을수록 좋다</li>
+  <li><b>FID</b> &mdash; 낮을수록 좋다</li>
+  <li>GAN 초반에는 성능이 매우 낮았고(필기: &ldquo;Tensorflow 0점대 수준&rdquo;), 이후 계속 발전했다</li>
+</ul>
+<p class="fix">필기의 &lsquo;Tensorflow 0점대&rsquo;가 어떤 지표를 가리킨 말인지는 교안에 없어 그대로 옮겼다 &mdash; 확인이 필요하다. 교안에서 확인되는 &lsquo;발전&rsquo;의 크기: 2014년 첫 GAN은 MLP로 작은 흑백 · 저해상도 이미지를 만들었고, 개정 43p 기준 ImageNet 256² FID는 BigGAN-deep 6.95 &rarr; DiT-XL/2 2.27 &rarr; VAR 1.73까지 내려왔다(낮을수록 좋다).</p>
+</div>
+
+<div class="pt gyo" id="eval-v2">
+  <h3 class="pt-h" data-sref="대면 16p, 개정 52p"><span class="bdg bdg-gyo">교안</span>IS와 FID를 식으로 (대면 16p · 개정 52p)</h3>
+  <p>사람의 육안 평가는 주관적이고 비용이 크므로 자동 지표를 함께 쓴다.</p>
+  <div class="fx"><div class="tex-d">\mathrm{IS}=\exp\Big(\mathbb E_x\,\mathrm{KL}\big(p(y\mid x)\,\|\,p(y)\big)\Big)\qquad(\uparrow\ \text{좋음})</div>
+  <p class="fx-note"><b>품질</b> = 이미지 하나의 분류가 확신에 차 있다(<span class="tex">p(y\mid x)</span>의 엔트로피가 낮다). <b>다양성</b> = 전체로 보면 클래스가 고르다(<span class="tex">p(y)</span>의 엔트로피가 높다). 둘이 다를수록 KL이 크다. 한계: 실제 데이터와 비교하지 않고, 클래스 안의 다양성은 못 보며, ImageNet이 아닌 영역(의료 등)에는 맞지 않는다.</p></div>
+  <div class="fx"><div class="tex-d">\mathrm{FID}=\lVert\mu_r-\mu_g\rVert^2+\mathrm{Tr}\big(\Sigma_r+\Sigma_g-2(\Sigma_r\Sigma_g)^{1/2}\big)\qquad(\downarrow\ \text{좋음})</div>
+  <p class="fx-note">실제 · 생성 이미지를 Inception-v3에 넣어 2,048차원 특징을 모으고, 각각을 다변량 가우시안 <span class="tex">N(\mu_r,\Sigma_r)</span> · <span class="tex">N(\mu_g,\Sigma_g)</span>로 근사한 뒤 둘 사이의 프레셰 거리를 잰다. 표본 수에 민감(보통 5만 장), 다양성 붕괴도 잡아내 GAN · 확산 모두의 표준 지표다.</p></div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>숫자로 &mdash; 클래스 2개짜리 IS, 1차원 FID</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>생성자</th><th>이미지별 <span class="tex">p(y\mid x)</span></th><th>전체 <span class="tex">p(y)</span></th><th>KL 평균</th><th>IS</th></tr></thead>
+    <tbody>
+      <tr><td>A &mdash; 고양이 하나, 개 하나를 또렷하게</td><td>(0.9, 0.1), (0.1, 0.9)</td><td>(0.5, 0.5)</td><td>0.9 ln 1.8 + 0.1 ln 0.2 = 0.368</td><td><b>e<sup>0.368</sup> ≈ 1.44</b></td></tr>
+      <tr><td>B &mdash; 둘 다 또렷한 고양이 (모드 붕괴)</td><td>(0.9, 0.1), (0.9, 0.1)</td><td>(0.9, 0.1)</td><td>0</td><td><b>1.00</b> (최저)</td></tr>
+    </tbody>
+  </table></div>
+  <p>클래스가 2개면 IS의 최댓값은 2(완벽히 또렷 + 완벽히 고름)다. B는 이미지마다 또렷해도 다양성이 없어 최저점이다. <b>1차원 FID</b>: 실제 특징이 N(0, 1²), 생성 특징이 N(0.5, 0.8²)이면 <span class="tex">(0-0.5)^2+1+0.64-2\cdot\sqrt{1\cdot0.64}=0.25+0.04=0.29</span>. 평균이 어긋난 몫(0.25)과 퍼짐이 어긋난 몫(0.04)이 더해진다 &mdash; 둘 다 같으면 0.</p>
+</div>
+
+<div class="pt gyo" id="metric-table">
+  <h3 class="pt-h" data-sref="대면 16p, 개정 53p"><span class="bdg bdg-gyo">교안</span>지표 비교와 선택 (대면 16p · 개정 53p)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>지표</th><th>재는 것</th><th>장점</th><th>한계</th></tr></thead>
+    <tbody>
+      <tr><td>IS ↑</td><td>품질 + 다양성(한 숫자)</td><td>실제 데이터 불필요</td><td>ImageNet 편향, 클래스 내 다양성 무시</td></tr>
+      <tr><td>FID / KID ↓</td><td>특징 분포 거리</td><td>다양성 붕괴 감지, 표준</td><td>Inception 편향, 표본 수 의존(KID는 비편향)</td></tr>
+      <tr><td>FD<sub>DINOv2</sub> ↓</td><td>DINOv2 특징으로 잰 FID</td><td>사람 판단과 상관 높음</td><td>보고 관행 정착 중</td></tr>
+      <tr><td>Precision / Recall</td><td>품질(P) · 커버리지(R) 분리</td><td>모드 붕괴 vs 품질 저하 구분</td><td>k-NN 반경 등 하이퍼파라미터</td></tr>
+      <tr><td><b>CLIP 점수</b></td><td>문장-이미지 일치도</td><td>텍스트 → 이미지의 조건 충실도</td><td>CLIP 자체 편향, 구도 · 수량에 약함</td></tr>
+      <tr><td>GenEval · DPG-Bench</td><td>객체 · 속성 · 관계 · 수량</td><td>프롬프트 따르기 표준</td><td>합성 프롬프트 한정</td></tr>
+      <tr><td>FVD · VBench</td><td>비디오 특징 거리 · 16개 차원</td><td>시간 일관성 · 움직임</td><td>짧은 클립 중심</td></tr>
+      <tr><td>PSNR / SSIM / LPIPS</td><td>참조 영상과의 픽셀 · 구조 · 지각 유사도</td><td>복원 · 변환 · 초해상도</td><td>생성 다양성은 못 잰다</td></tr>
+      <tr><td><b>사람 평가 · 아레나</b></td><td>선호도 순위, 진위 판별률</td><td>최종 기준</td><td>비용 · 재현성</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">텍스트 → 이미지 모델은 IS · FID만으로 부족하다 &mdash; &lsquo;문장대로 그렸나&rsquo;를 보는 CLIP 점수와, 사람이 두 결과 중 고르는 <b>선호도 기반 순위(아레나, 예: LMArena)</b>를 함께 본다(대면 16p).</p>
+</div>
 <div class="pt gyo" id="apps">
   <h3 class="pt-h"><span class="bdg bdg-gyo">교안</span>GAN의 응용 분야 (19 · 20p)</h3>
   <div class="tbl-wrap"><table>
@@ -945,13 +1285,39 @@ g_loss = combined.train_on_batch(noise, valid)   <span class="cm"># 노이즈 �
   </table></div>
   <p class="fx-note">12주차 오토인코더의 쓰임(노이즈 제거 · 해상도 개선 · 낮 ↔ 밤 사진)과 겹친다(<a class="ext" href="machine-learning-week12.html#ae-use">12.2</a>). 차이는 &lsquo;원본과 픽셀 차이를 줄이는&rsquo; 오토인코더와 달리, GAN은 &lsquo;판별자가 진짜라고 믿게&rsquo; 만들어 더 선명한 결과를 낸다는 점이다.</p>
 </div>
+
+<div class="pt gyo" id="gan-line">
+  <h3 class="pt-h" data-sref="대면 17p, 대면 18p, 대면 19p, 대면 20p, 대면 21p, 개정 19p, 개정 20p"><span class="bdg bdg-gyo">교안</span>대표 GAN 모델의 흐름 (대면 17~21p · 개정 19 · 20p)</h3>
+  <p>GAN 연구는 <span class="hi"><b>안정적인 학습 → 조건 제어 → 고해상도 · 스타일 제어 → 대규모화</b></span> 방향으로 발전했다. 응용의 대부분은 <b>조건부 생성</b>(무엇을 만들지 지정)에서 출발한다.</p>
+  <div class="flow">
+    <div class="fl"><b>DCGAN (2015)</b><span>합성곱 구조 표준화 &mdash; BN · LeakyReLU · 스트라이드 합성곱, 잠재 공간 벡터 연산</span></div>
+    <div class="fl"><b>cGAN (2014)</b><span>조건 y(클래스 &ldquo;숫자 7&rdquo;, 문장, 다른 이미지)를 생성자와 판별자에 <b>함께</b> 넣는다 &mdash; 판별자는 &lsquo;진짜 같은가&rsquo; + &lsquo;조건에 맞는가&rsquo;를 함께 판단</span></div>
+    <div class="fl"><b>Pix2Pix (2017) · CycleGAN (2017)</b><span>이미지-이미지 변환. Pix2Pix는 입력-정답 <b>짝 데이터</b>가 필요, CycleGAN은 짝 없이 <b>순환 일관성</b>(A→B→A가 원래 A로)으로 학습</span></div>
+    <div class="fl"><b>StyleGAN (2019 · 1/2/3)</b><span>노이즈 z를 매핑 네트워크로 스타일 벡터 w로 바꿔 <b>해상도별로 주입</b> &rarr; 거친 특징(구도 · 자세)부터 세밀한 특징(색 · 질감)까지 따로 제어</span></div>
+    <div class="fl"><b>BigGAN (2018) · GigaGAN (2023)</b><span>대규모 클래스 조건부 · 10억 파라미터 텍스트 → 이미지 GAN(0.13초/장)</span></div>
+  </div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>응용 (대면 21p · 개정 20p)</th><th>하는 일</th></tr></thead>
+    <tbody>
+      <tr><td><b>StackGAN</b> (2017) 문장 → 이미지</td><td>1단계: 문장에 맞는 대략적 형태 · 색의 저해상도 &rarr; 2단계: 결함 보완 · 세부 묘사. 지금은 확산 · 흐름 기반이 표준</td></tr>
+      <tr><td><b>SRGAN · ESRGAN</b> 초해상도</td><td>저해상도 → 고해상도. <b>지각 손실 + 적대적 손실</b>로 MSE 기반보다 흐릿하지 않은 질감</td></tr>
+      <tr><td>의료 영상 합성 · 증강</td><td>희귀 질환 · 소수 클래스 증강, 모달리티 변환(CT ↔ MRI), SinGAN으로 MRI 한 장에서 다양한 변형</td></tr>
+      <tr><td>이상 탐지 (AnoGAN)</td><td>정상 데이터로만 학습 &rarr; 재구성 오차가 큰 곳을 병변 후보로</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="mynote" id="stylegan-note"><b>대면수업 필기 &mdash; StyleGAN</b>
+<p>StyleGAN은 NVIDIA가 2018년에 발표한 이미지 생성용 GAN이다. 얼굴 같은 고해상도 이미지를 사실적으로 만들면서, 생성된 이미지의 스타일을 <b>계층별로</b> 조절할 수 있다는 점이 특징이다.</p>
+<p class="fix">연도 표기: 논문이 arXiv에 처음 나온 것은 2018년 12월이고, 학회(CVPR) 발표는 2019년이라 교안 연표에는 2019로 적혀 있다. 둘 다 맞는 표기다. &lsquo;계층별&rsquo; = 해상도 단계별 &mdash; 4×4 · 8×8 같은 낮은 단계의 스타일은 얼굴형 · 자세를, 512 · 1024 같은 높은 단계는 머리카락 결 · 피부 질감을 바꾼다. 사실적인 1024×1024 얼굴 생성이 딥페이크 논의의 출발점이 되었다.</p>
+</div>
 </section>
 
 <!-- ===================== 13.6 ===================== -->
 <section class="sec" id="ganproj">
   <div class="sec-head"><span class="sec-badge">13.6</span><h2 class="sec-title">GAN 모델 구현 프로젝트<small>교안 21~28p · 패션 MNIST</small></h2></div>
 <div class="deck">
-  <div class="deck-h">교안 슬라이드 모아보기 <span>21p · 22p · 23p · 24p · 25p · 26p · 27p · 28p</span></div>
+  <div class="deck-h">구판(31p) 교안 슬라이드 모아보기 <span>21p · 22p · 23p · 24p · 25p · 26p · 27p · 28p</span></div>
   <div class="deck-g">
     <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-21.jpg" alt="교안 21p — 구현 프로젝트 7단계"><figcaption><b>21p</b> 구현 프로젝트 7단계</figcaption></figure>
     <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-22.jpg" alt="교안 22p — 1단계 라이브러리 임포트"><figcaption><b>22p</b> 1단계 라이브러리 임포트</figcaption></figure>
@@ -1073,11 +1439,458 @@ train(epochs=1000, batch_size=32, save_interval=50)</pre>
 </div>
 </section>
 
+<!-- ===================== 13.7 VAE ===================== -->
+<section class="sec" id="vae">
+  <div class="sec-head"><span class="sec-badge">13.7</span><h2 class="sec-title">VAE &mdash; 변분 오토인코더<small>대면 22 · 23p · 개정 PART 2 (9~11p)</small></h2></div>
+<div class="deck v2">
+  <div class="deck-h">대면수업 · 개정판 슬라이드 모아보기 <span>대면 22p · 대면 23p · 개정 9p · 개정 10p · 개정 11p</span></div>
+  <div class="deck-t">대면수업 교안 &lsquo;생성모델&rsquo; (50p)</div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-22.jpg" alt="대면 22p — 13.6 VAE (변분 오토인코더)"><figcaption><b>대면 22p</b> 13.6 VAE (변분 오토인코더)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-23.jpg" alt="대면 23p — 13.6 VAE 쉽게 이해하기"><figcaption><b>대면 23p</b> 13.6 VAE 쉽게 이해하기</figcaption></figure>
+  </div>
+  <div class="deck-t">개정판 &lsquo;딥러닝 생성모델&rsquo; (63p)</div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-09.jpg" alt="개정 9p — 오토인코더에서 VAE로"><figcaption><b>개정 9p</b> 오토인코더에서 VAE로</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-10.jpg" alt="개정 10p — ELBO(증거 하한) 유도"><figcaption><b>개정 10p</b> ELBO(증거 하한) 유도</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-11.jpg" alt="개정 11p — 재매개변수화 트릭 · VQ-VAE"><figcaption><b>개정 11p</b> 재매개변수화 트릭 · VQ-VAE</figcaption></figure>
+  </div>
+</div>
+
+<div class="mynote" id="vae-note"><b>대면수업 필기 &mdash; VAE</b>
+<ul class="ul">
+  <li>VAE(Variational Autoencoder)는 <b>2013년 Kingma &amp; Welling</b>이 제안한 생성 모델</li>
+  <li><b>오토인코더 구조에 확률적 해석</b>을 붙여서, 잠재 공간에서 샘플링해 새 데이터를 만들 수 있게 한 모델</li>
+  <li>흐름: <b>Image → encoder → decoder → Generated</b></li>
+</ul>
+</div>
+
+<div class="pt gyo" id="vae-why">
+  <h3 class="pt-h" data-sref="대면 22p, 대면 23p, 개정 9p"><span class="bdg bdg-gyo">교안</span>왜 오토인코더로는 못 그리나 &mdash; 점 대신 구름 (대면 22 · 23p · 개정 9p)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th></th><th>오토인코더 (12주차)</th><th>VAE</th></tr></thead>
+    <tbody>
+      <tr><td>인코더 출력</td><td>잠재 벡터 <b>z 하나</b>(점)</td><td><b>분포 (μ, σ)</b> &mdash; &lsquo;이 근처 어딘가&rsquo;(작은 구름)</td></tr>
+      <tr><td>손실</td><td>재구성 <span class="tex">\lVert x-\hat x\rVert^2</span>만</td><td>재구성 + <b>KL 항</b>(구름을 표준 정규분포 N(0, I) 근처로 모음)</td></tr>
+      <tr><td>잠재 공간</td><td>점들이 흩어져 <b>빈 곳</b>이 많다 &rarr; 빈 곳의 z를 디코딩하면 이상한 이미지</td><td>원점 근처가 구름으로 촘촘히 채워짐 &rarr; <b>아무 z나 뽑아도</b> 그럴듯</td></tr>
+      <tr><td>생성</td><td>불가(어디서 z를 뽑을지 모름)</td><td><span class="tex">z\sim N(0,I)</span>를 뽑아 디코더에 넣으면 끝 &mdash; 디코더가 &lsquo;생성기&rsquo;</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>비유(대면 23p)</b> &mdash; 지도에 도시를 <b>점</b>으로만 찍으면 사이가 비지만, 도시 주변을 <b>넓게 색칠</b>하면 지도 전체가 의미 있는 땅이 된다. 두 점 사이를 이동하면 결과도 부드럽게 바뀐다(<b>보간</b>) &mdash; 웃는 얼굴 z와 무표정 z의 중간을 디코딩하면 살짝 웃는 얼굴.</p>
+  <p class="fx-note">장점: 학습이 안정적(경쟁 없음), 잠재 공간이 매끄럽다. 단점: 결과가 <b>흐릿해지기 쉽다</b>(픽셀 평균을 맞추는 재구성 손실 탓). 그래서 오늘날에는 그림을 직접 그리기보다 <span class="hi">잠재 확산(Stable Diffusion · FLUX · Veo)의 <b>압축기</b></span>로 쓰인다 &mdash; &lsquo;구식&rsquo;이 아니라 현대 생성 모델의 기반 부품이다(<a class="ext" href="#ldm">13.8 잠재 확산</a>).</p>
+</div>
+
+<div class="pt gyo" id="elbo">
+  <h3 class="pt-h" data-sref="개정 10p"><span class="bdg bdg-gyo">교안</span>손실 = 재구성 + KL &mdash; ELBO (개정 10p)</h3>
+  <div class="fx"><div class="tex-d">\log p_\theta(x)\ \ge\ \underbrace{\mathbb E_{q_\phi(z\mid x)}\big[\log p_\theta(x\mid z)\big]}_{\text{① 재구성}}-\underbrace{\mathrm{KL}\big(q_\phi(z\mid x)\,\|\,N(0,I)\big)}_{\text{② 규제}}=\mathrm{ELBO}</div>
+  <p class="fx-note">진짜 목표인 <span class="tex">\log p(x)</span>는 모든 z에 대한 적분이라 계산할 수 없다. 대신 그 <b>아래쪽 경계(증거 하한, ELBO)</b>를 키운다. 학습 손실은 −ELBO.</p></div>
+  <ul class="ul">
+    <li><b>① 재구성 항</b> &mdash; z에서 x를 얼마나 잘 복원하나. 가우시안 디코더면 MSE, 베르누이면 BCE를 최소화하는 것과 같다</li>
+    <li><b>② KL 항</b> &mdash; 닫힌 형태 <span class="tex">\mathrm{KL}=\tfrac12\sum_j(\mu_j^2+\sigma_j^2-\log\sigma_j^2-1)</span>. μ = 0, σ = 1이면 0이 된다 &rarr; 구름을 원점의 표준 정규분포 모양으로 정돈</li>
+    <li><b>β-VAE</b> &mdash; KL에 β를 곱한다. β가 크면 흐릿해지고 사후분포 붕괴 위험, 작으면 잠재 공간이 사전분포와 어긋나 샘플링 품질이 떨어진다</li>
+  </ul>
+</div>
+
+<div class="pt gyo" id="reparam">
+  <h3 class="pt-h" data-sref="개정 11p"><span class="bdg bdg-gyo">교안</span>재매개변수화 트릭과 VQ-VAE (개정 11p)</h3>
+  <p><b>문제</b>: <span class="tex">z\sim N(\mu,\sigma^2)</span>에서 &lsquo;뽑는&rsquo; 연산은 미분할 수 없어 인코더로 기울기가 흐르지 않는다. <b>해결</b>: 무작위성을 파라미터와 무관한 ε로 떼어 낸다.</p>
+  <div class="fx"><div class="tex-d">z=\mu+\sigma\odot\epsilon,\qquad \epsilon\sim N(0,I),\qquad \frac{\partial z}{\partial\mu}=1,\ \ \frac{\partial z}{\partial\sigma}=\epsilon</div></div>
+  <pre class="code">mu, logvar = encoder(x)                 <span class="cm"># 인코더는 σ 대신 log σ² 를 낸다(음수 걱정 없음)</span>
+std = torch.exp(0.5 * logvar)           <span class="cm"># log σ² → σ</span>
+eps = torch.randn_like(std)
+z   = mu + std * eps                    <span class="cm"># 재매개변수화</span>
+x_hat = decoder(z)
+recon = F.mse_loss(x_hat, x, reduction="sum")
+kl    = -0.5 * torch.sum(1 + logvar - mu**2 - logvar.exp())
+loss  = recon + beta * kl               <span class="cm"># −ELBO</span></pre>
+  <p><b>VQ-VAE</b>(2017) &mdash; 잠재를 연속 벡터 대신 <b>코드북의 가장 가까운 항목</b>(이산 토큰)으로 바꾼다. 이미지가 정수 토큰 격자(예: 32×32)가 되어 트랜스포머가 &lsquo;단어처럼&rsquo; 생성할 수 있다(DALL·E 1, VAR). <b>VQGAN</b>(2021)은 여기에 지각 손실 + GAN 판별자를 더한 고품질 토크나이저다.</p>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>숫자로 &mdash; z 하나 뽑기와 KL 한 칸</h3>
+  <ul class="ul">
+    <li>인코더가 μ = 0.5, σ = 0.8을 냈고 이번에 ε = 1.2가 뽑혔다면 <span class="tex">z=0.5+0.8\times1.2=1.46</span>. 다음 반복에서 ε = −0.5면 <span class="tex">z=0.1</span> &mdash; 같은 사진도 매번 구름 안의 다른 점이 된다</li>
+    <li>이 한 차원의 KL: <span class="tex">\tfrac12(0.5^2+0.8^2-\ln0.64-1)=\tfrac12(0.25+0.64+0.446-1)\approx0.168</span>. μ = 0, σ = 1이면 <span class="tex">\tfrac12(0+1-0-1)=0</span> &mdash; KL은 &lsquo;표준 정규분포에서 얼마나 벗어났나&rsquo;에 매기는 벌점이다</li>
+    <li>기울기: <span class="tex">\partial z/\partial\mu=1</span>, <span class="tex">\partial z/\partial\sigma=\epsilon=1.2</span> &mdash; ε를 상수로 보니 μ, σ로 그대로 역전파된다. 확산 모델의 <span class="tex">x_t=\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\,\epsilon</span>도 정확히 같은 꼴이다(<a class="ext" href="#diff-forward">13.8</a>)</li>
+  </ul>
+</div>
+</section>
+
+<!-- ===================== 13.8 확산 ===================== -->
+<section class="sec" id="diffusion">
+  <div class="sec-head"><span class="sec-badge">13.8</span><h2 class="sec-title">확산 모델 &mdash; 노이즈를 조금씩 걷어내기<small>대면 24~30p · 개정 PART 5 (26~35p)</small></h2></div>
+<div class="deck v2">
+  <div class="deck-h">대면수업 · 개정판 슬라이드 모아보기 <span>대면 24p · 대면 25p · 대면 26p · 대면 27p · 대면 28p · 대면 29p · 대면 30p · 개정 26p · 개정 27p · 개정 28p · 개정 29p · 개정 30p · 개정 31p · 개정 32p · 개정 33p · 개정 34p · 개정 35p</span></div>
+  <div class="deck-t">대면수업 교안 &lsquo;생성모델&rsquo; (50p)</div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-24.jpg" alt="대면 24p — 13.7 확산 모델 (1/3)"><figcaption><b>대면 24p</b> 13.7 확산 모델 (1/3)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-25.jpg" alt="대면 25p — 13.7 확산 모델 (2/3)"><figcaption><b>대면 25p</b> 13.7 확산 모델 (2/3)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-26.jpg" alt="대면 26p — 13.7 확산 모델 쉽게 이해하기"><figcaption><b>대면 26p</b> 13.7 확산 모델 쉽게 이해하기</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-27.jpg" alt="대면 27p — 13.7 확산 모델 (3/3)"><figcaption><b>대면 27p</b> 13.7 확산 모델 (3/3)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-28.jpg" alt="대면 28p — 13.7 텍스트로 조종하기: 교차 주의와 CFG"><figcaption><b>대면 28p</b> 13.7 텍스트로 조종하기: 교차 주의와 CFG</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-29.jpg" alt="대면 29p — 13.7 교차 주의 자세히"><figcaption><b>대면 29p</b> 13.7 교차 주의 자세히</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-30.jpg" alt="대면 30p — 13.7 CFG(분류기 없는 가이던스) 자세히"><figcaption><b>대면 30p</b> 13.7 CFG(분류기 없는 가이던스) 자세히</figcaption></figure>
+  </div>
+  <div class="deck-t">개정판 &lsquo;딥러닝 생성모델&rsquo; (63p)</div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-26.jpg" alt="개정 26p — 확산 — 잡음 추가와 제거"><figcaption><b>개정 26p</b> 확산 — 잡음 추가와 제거</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-27.jpg" alt="개정 27p — 순방향 과정의 수식"><figcaption><b>개정 27p</b> 순방향 과정의 수식</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-28.jpg" alt="개정 28p — 역방향 과정 · 잡음 예측"><figcaption><b>개정 28p</b> 역방향 과정 · 잡음 예측</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-29.jpg" alt="개정 29p — 점수 기반 관점 · SDE"><figcaption><b>개정 29p</b> 점수 기반 관점 · SDE</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-30.jpg" alt="개정 30p — 샘플링 가속 DDIM · DPM-Solver"><figcaption><b>개정 30p</b> 샘플링 가속 DDIM · DPM-Solver</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-31.jpg" alt="개정 31p — Classifier(-Free) Guidance"><figcaption><b>개정 31p</b> Classifier(-Free) Guidance</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-32.jpg" alt="개정 32p — U-Net → DiT"><figcaption><b>개정 32p</b> U-Net → DiT</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-33.jpg" alt="개정 33p — 잠재 확산(Stable Diffusion) 구조"><figcaption><b>개정 33p</b> 잠재 확산(Stable Diffusion) 구조</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-34.jpg" alt="개정 34p — 미니 DDPM ① 학습 루프"><figcaption><b>개정 34p</b> 미니 DDPM ① 학습 루프</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-35.jpg" alt="개정 35p — 미니 DDPM ② 샘플링"><figcaption><b>개정 35p</b> 미니 DDPM ② 샘플링</figcaption></figure>
+  </div>
+</div>
+
+<div class="mynote" id="diff-note"><b>대면수업 필기 &mdash; Diffusion</b>
+<ul class="ul">
+  <li>Diffusion 모델은 데이터에 노이즈를 조금씩 더하는 과정을 <b>거꾸로 되돌리도록</b> 학습해서, 순수 노이즈에서 데이터를 만들어 내는 생성 모델</li>
+  <li><b>2020년 DDPM(Ho et al.)</b>으로 크게 주목받았고, 지금 이미지 · 영상 생성의 <b>주류</b>다</li>
+  <li>노이즈를 추가해 놓고, 그걸 다시 노이즈를 제거해 가며 새로운 이미지를 생성한다 (CV 논문 발표의 <b>Stable Diffusion</b>과 연관 &mdash; 확산의 전방 · 역방 원리는 <a class="ext" href="computer-vision-week14.html#diffusion">컴퓨터비전 14주차</a>에도 정리돼 있다)</li>
+</ul>
+</div>
+
+<div class="pt gyo" id="diff-idea">
+  <h3 class="pt-h" data-sref="대면 24p, 대면 25p, 대면 26p, 개정 26p"><span class="bdg bdg-gyo">교안</span>망가뜨리기는 정해져 있고, 되돌리기만 배운다 (대면 24~26p · 개정 26p)</h3>
+  <div class="flow">
+    <div class="fl"><b>순방향 (고정 · 학습 없음)</b><span>x₀(사진) → x₁ → x₂ → … → x<sub>T</sub> ≈ 순수 가우시안 노이즈 &mdash; 매 단계 노이즈를 조금 더한다</span></div>
+    <div class="fl"><b>역방향 (학습 대상)</b><span>x<sub>T</sub> → … → x₀ &mdash; 신경망 ε<sub>θ</sub>가 &lsquo;지금 섞인 노이즈&rsquo;를 예측해 조금씩 뺀다</span></div>
+  </div>
+  <ul class="ul">
+    <li><b>학습</b>: 이미지에 임의 시점 t만큼 노이즈를 섞고, <span class="hi">섞인 노이즈를 맞히도록</span> 학습 &mdash; 쉬운 <b>회귀 문제</b></li>
+    <li>GAN과 달리 <b>경쟁이 없는</b> 단순 MSE &rarr; 학습이 안정적이고 다양성이 높다(모드 붕괴 없음)</li>
+    <li><b>단점</b>: 생성할 때 여러 단계를 반복해야 해서 느리다(T번 신경망 호출) &rarr; DDIM · 증류 등 가속 기법이 발전</li>
+  </ul>
+  <p><b>비유(대면 26p)</b> &mdash; 뿌옇게 김 서린 유리창을 한 번에 닦지 않고, 조금씩 여러 번 닦아 바깥 풍경을 드러내는 것. 순수 노이즈에서 한 번에 이미지를 만드는 건 너무 어려우니 <b>아주 작은 문제 수백 개로 쪼갠다</b>. 그래서 생성 중간을 보면 <b>거친 구도 → 형태 → 세부 질감</b> 순서로 선명해진다.</p>
+</div>
+
+<div class="pt gyo" id="diff-forward">
+  <h3 class="pt-h" data-sref="개정 27p"><span class="bdg bdg-gyo">교안</span>순방향 수식 &mdash; 한 번에 t단계로 점프 (개정 27p)</h3>
+  <div class="fx"><div class="tex-d">q(x_t\mid x_{t-1})=N\big(\sqrt{1-\beta_t}\,x_{t-1},\ \beta_t I\big),\qquad \alpha_t=1-\beta_t,\quad \bar\alpha_t=\prod_{s\le t}\alpha_s</div>
+  <div class="tex-d">x_t=\sqrt{\bar\alpha_t}\,x_0+\sqrt{1-\bar\alpha_t}\,\epsilon,\qquad \epsilon\sim N(0,I)</div>
+  <p class="fx-note"><span class="tex">\beta_t</span>는 노이즈 스케줄(예: 10⁻⁴ → 0.02 선형). <span class="tex">\bar\alpha_t</span>는 &lsquo;원래 신호가 얼마나 남았나&rsquo;의 누적곱. 덕분에 x₀에서 x<sub>t</sub>로 t번 반복하지 않고 <b>한 번에</b> 만든다(재매개변수화와 같은 꼴).</p></div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>숫자로 &mdash; 선형 스케줄(T = 1,000)에서 신호가 사라지는 속도</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>t</th><th><span class="tex">\bar\alpha_t</span></th><th>신호 계수 <span class="tex">\sqrt{\bar\alpha_t}</span></th><th>노이즈 계수 <span class="tex">\sqrt{1-\bar\alpha_t}</span></th><th>눈으로 보면</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>0.9999</td><td>1.000</td><td>0.010</td><td>원본 그대로</td></tr>
+      <tr><td>100</td><td>0.897</td><td>0.947</td><td>0.321</td><td>자글자글한 사진</td></tr>
+      <tr><td>250</td><td>0.524</td><td>0.724</td><td>0.690</td><td>형태만 보임</td></tr>
+      <tr><td>500</td><td>0.079</td><td>0.280</td><td>0.960</td><td>거의 노이즈</td></tr>
+      <tr><td>750</td><td>0.0034</td><td>0.058</td><td>0.998</td><td>노이즈</td></tr>
+      <tr><td>1000</td><td>0.00004</td><td>0.006</td><td>1.000</td><td>순수 가우시안</td></tr>
+    </tbody>
+  </table></div>
+  <p>직접 계산한 값이다(<code>abar = cumprod(1 − linspace(1e-4, 0.02, 1000))</code>). 픽셀 x₀ = 0.8, 이번에 뽑힌 ε = −0.5라면 t = 500에서 <span class="tex">x_{500}=0.280\times0.8+0.960\times(-0.5)=-0.256</span>. 신경망은 x₅₀₀ = −0.256과 t = 500을 보고 &lsquo;섞인 노이즈는 −0.5였다&rsquo;를 맞혀야 한다. 신호 계수와 노이즈 계수의 제곱 합은 늘 1이라(0.280² + 0.960² ≈ 1) 값의 크기가 폭주하지 않는다.</p>
+</div>
+
+<div class="pt gyo" id="diff-train">
+  <h3 class="pt-h" data-sref="개정 28p, 개정 30p"><span class="bdg bdg-gyo">교안</span>학습 = 노이즈 맞히기, 생성 = T번 조금씩 빼기 (개정 28 · 30p)</h3>
+  <div class="fx"><div class="tex-d">L_{\text{simple}}=\mathbb E_{t,\,x_0,\,\epsilon}\big\lVert\,\epsilon-\epsilon_\theta\big(\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\,\epsilon,\ t\big)\big\rVert^2</div></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>알고리즘 1: 학습</th><th>알고리즘 2: 샘플링 (DDPM)</th></tr></thead>
+    <tbody><tr>
+      <td>① x₀를 하나 뽑고 t ~ Uniform{1..T}, ε ~ N(0, I)<br>② x<sub>t</sub> = √ᾱ<sub>t</sub> x₀ + √(1−ᾱ<sub>t</sub>) ε<br>③ ‖ε − ε<sub>θ</sub>(x<sub>t</sub>, t)‖²로 경사 하강<br>&mdash; GAN처럼 두 모델을 번갈아 학습할 필요 없음</td>
+      <td>① x<sub>T</sub> ~ N(0, I)<br>② t = T … 1: 예측한 노이즈로 평균 μ<sub>θ</sub>를 구하고 작은 노이즈 σ<sub>t</sub>z를 더함(마지막 t에서는 z = 0)<br>③ x₀ 반환 &mdash; <b>T = 1,000이면 신경망 1,000회 호출</b></td>
+    </tr></tbody>
+  </table></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>샘플러 (개정 30p)</th><th>원리</th><th>스텝 수</th></tr></thead>
+    <tbody>
+      <tr><td>DDPM (2020)</td><td>확률적, 학습 스케줄 그대로 한 스텝씩</td><td>~1000</td></tr>
+      <tr><td><b>DDIM</b> (2021)</td><td>결정론적(η = 0) &mdash; 같은 ε<sub>θ</sub>로 스텝을 건너뛴다. 같은 x<sub>T</sub>면 늘 같은 그림 &rarr; 보간 · 편집 가능</td><td>20~100</td></tr>
+      <tr><td>DPM-Solver (2022)</td><td>ODE 고차 적분기 &mdash; SD · SDXL의 기본 샘플러 계열</td><td>10~20</td></tr>
+      <tr><td>Euler (Rectified Flow)</td><td>직선 경로라 단순 오일러로 충분 &mdash; SD3 · FLUX</td><td>20~50</td></tr>
+      <tr><td>증류 (2023~26)</td><td>학습 단계에서 스텝 수 자체를 줄임(<a class="ext" href="#distill">13.9</a>)</td><td>1~8</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">개정판의 핵심 메시지: <span class="hi">확산 모델의 &lsquo;느림&rsquo;은 모델의 본질이 아니라 <b>적분 방법</b>의 문제</span>다. 같은 학습된 모델로 DDPM 1,000스텝 대신 DDIM 50스텝을 쓰면 신경망 호출이 1/20이다. 같은 아이디어의 다른 이름이 <b>점수 기반 모델</b>(밀도가 높아지는 방향 <span class="tex">\nabla_x\log p(x)</span>를 배운다 &mdash; 노이즈 예측과 같은 것, 개정 29p)이다.</p>
+</div>
+
+<div class="pt gyo" id="cfg">
+  <h3 class="pt-h" data-sref="대면 27p, 대면 28p, 대면 29p, 대면 30p, 개정 31p"><span class="bdg bdg-gyo">교안</span>텍스트로 조종하기 &mdash; 교차 주의와 CFG (대면 27~30p · 개정 31p)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th></th><th>교차 주의 (cross-attention)</th><th>CFG (분류기 없는 가이던스)</th></tr></thead>
+    <tbody>
+      <tr><td>비유</td><td>화가가 캔버스의 각 부분을 칠할 때마다 <b>주문서에서 해당 단어</b>를 찾아보는 것</td><td>&lsquo;그냥 그린 그림&rsquo;과 &lsquo;주문대로 그린 그림&rsquo;의 차이를 찾아 <b>그 차이를 과장</b>해 그리는 것</td></tr>
+      <tr><td>왜</td><td>노이즈를 지우는 신경망은 그림만 본다 &rarr; 어떤 단어를 어느 위치에 그릴지 연결이 필요</td><td>텍스트를 넣어도 모델이 문장을 약하게 반영 &rarr; 프롬프트와 덜 맞고 흐릿</td></tr>
+      <tr><td>어떻게</td><td><b>Q = 그림의 각 위치(패치)</b>, <b>K · V = 문장의 단어 토큰</b>. 위치마다 관련 단어에 가중치를 주고 그 의미(V)를 가져온다 &mdash; 계산은 자기 주의와 같다(<a class="ext" href="machine-learning-week12.html#selfattn">12주차 자기 주의</a>)</td><td>학습 때 약 10~20% 확률로 텍스트를 빈칸 ∅로 바꿔 한 모델이 두 예측을 모두 익힘 &rarr; 생성 때 두 예측의 차이를 w배</td></tr>
+      <tr><td>효과</td><td>단어별 주의 지도로 &lsquo;어느 단어가 어디에 그려지는지&rsquo; 보인다 &rarr; 단어 하나만 바꿔 그 부분만 편집(Prompt-to-Prompt)</td><td>w ↑ &rarr; 충실도 · 선명도 ↑, 다양성 ↓, 너무 크면 <b>과포화</b> &rarr; 보통 3~8. 스텝마다 예측 2번 &rarr; 계산량 2배</td></tr>
+    </tbody>
+  </table></div>
+  <div class="fx"><div class="tex-d">\hat\epsilon=\epsilon_\theta(x_t,t,\varnothing)+w\cdot\big(\epsilon_\theta(x_t,t,c)-\epsilon_\theta(x_t,t,\varnothing)\big)</div>
+  <p class="fx-note">숫자 예: 어떤 픽셀에서 조건 없는 예측 ε(∅) = 0.2, &lsquo;고양이&rsquo; 조건 예측 ε(c) = 0.5, w = 3이면 <span class="tex">0.2+3\times(0.5-0.2)=1.1</span>. 조건이 가리키는 방향(+0.3)을 3배로 밀어 0.5보다 더 &lsquo;고양이 쪽&rsquo;으로 간다. w = 1이면 그냥 ε(c) = 0.5, w = 0이면 조건을 무시한 0.2.</p></div>
+</div>
+
+<div class="pt gyo" id="ldm">
+  <h3 class="pt-h" data-sref="대면 27p, 개정 32p, 개정 33p"><span class="bdg bdg-gyo">교안</span>잠재 확산(Latent Diffusion) &mdash; Stable Diffusion의 구조 (대면 27p · 개정 32 · 33p)</h3>
+  <div class="flow">
+    <div class="fl"><b>텍스트 프롬프트 → 텍스트 인코더</b><span>CLIP · T5 · LLM</span></div>
+    <div class="fl"><b>잡음 잠재 z<sub>T</sub> ~ N(0, I)</b><span>예: 64×64×4 &mdash; 픽셀이 아니라 작은 잠재 공간</span></div>
+    <div class="fl"><b>잡음 제거 백본 × N 스텝 (20~50, CFG 포함)</b><span>U-Net(SD 1 · 2 · XL) 또는 MM-DiT(SD3 · FLUX), 텍스트는 교차 주의로 주입</span></div>
+    <div class="fl"><b>깨끗한 잠재 z₀ → VAE 디코더 → 이미지</b><span>512² ~ 1024² 로 크게 펼친다</span></div>
+  </div>
+  <p><span class="hi">작은 잠재 공간에서 그리고, 마지막에 VAE 디코더로 크게 펼친다.</span> 지각적으로 의미 없는 고주파 세부는 VAE에 맡기고, 확산은 의미 있는 구조에 집중한다. 학습 때는 이미지 → VAE 인코더 → z₀ → 노이즈 추가 → 백본이 ε(또는 v) 예측, 추론 때는 인코더가 필요 없고 디코더만 한 번 부른다.</p>
+  <p><b>DiT(확산 트랜스포머)</b> &mdash; U-Net을 트랜스포머로 바꾼다. 잠재 32×32×4를 2×2 패치로 자르면 16×16 = <b>256 토큰</b>. 모델과 데이터를 키울수록 FID가 꾸준히 내려가(스케일링) SD3 · FLUX · 영상 모델의 기본 골격이 됐다(<a class="ext" href="#dit">13.9</a>).</p>
+</div>
+
+<div class="mynote" id="ldm-note"><b>대면수업 필기 &mdash; Latent Diffusion (Stable Diffusion)과 버전별 변화</b>
+<p>픽셀 공간에서 직접 diffusion하면 계산량이 크다. 그래서 <b>VAE로 이미지를 작은 잠재 공간으로 압축</b>한 뒤 그 안에서 diffusion을 하고, 마지막에 <b>VAE 디코더로 복원</b>한다. 앞서 본 VAE(<a class="ext" href="#vae">13.7</a>)가 여기서 <b>압축기</b>로 쓰인다.</p>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>버전</th><th>백본</th><th>학습 방식 · 특징</th></tr></thead>
+  <tbody>
+    <tr><td>SD 1.x / 2.x</td><td>U-Net</td><td>확산(ε · v 예측), CLIP 텍스트 인코더</td></tr>
+    <tr><td>SDXL</td><td>더 큰 U-Net</td><td><b>이중 텍스트 인코더</b></td></tr>
+    <tr><td>SD 3</td><td>U-Net 대신 <b>Transformer (MMDiT)</b></td><td>학습은 <b>Flow Matching</b>(<a class="ext" href="#flowmatch">13.9</a>)</td></tr>
+  </tbody>
+</table></div>
+<p class="fix">숫자로 &mdash; 512×512 RGB 사진은 512 × 512 × 3 = 786,432개 값, SD의 잠재는 64 × 64 × 4 = 16,384개 값이다. 약 <b>48배</b> 작은 공간에서 확산을 돌리니 계산이 크게 준다. 개정 33p 세대별: SD 1.x(2022, U-Net 860M) → SDXL(2023, 2.6B) → SD3/3.5(2024, MM-DiT · Rectified Flow · T5-XXL) → FLUX.1/2(12B/32B) → FLUX.2 klein(2026, 4B/9B, 4스텝).</p>
+</div>
+</section>
+
+<!-- ===================== 13.9 흐름 매칭 ===================== -->
+<section class="sec" id="flowmatch">
+  <div class="sec-head"><span class="sec-badge">13.9</span><h2 class="sec-title">흐름 매칭과 고속화 &mdash; 곧은 길로 빨리<small>대면 31~37p · 개정 PART 6 · 7 (37~43p)</small></h2></div>
+<div class="deck v2">
+  <div class="deck-h">대면수업 · 개정판 슬라이드 모아보기 <span>대면 31p · 대면 32p · 대면 33p · 대면 34p · 대면 35p · 대면 36p · 대면 37p · 개정 37p · 개정 38p · 개정 39p · 개정 40p · 개정 42p · 개정 43p</span></div>
+  <div class="deck-t">대면수업 교안 &lsquo;생성모델&rsquo; (50p)</div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-31.jpg" alt="대면 31p — 13.7 최신 구조: 확산 트랜스포머 (DiT)"><figcaption><b>대면 31p</b> 13.7 최신 구조: 확산 트랜스포머 (DiT)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-32.jpg" alt="대면 32p — 13.7 최신 구조: 흐름 매칭과 고속화"><figcaption><b>대면 32p</b> 13.7 최신 구조: 흐름 매칭과 고속화</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-33.jpg" alt="대면 33p — 13.7 흐름 매칭 쉽게 이해하기"><figcaption><b>대면 33p</b> 13.7 흐름 매칭 쉽게 이해하기</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-34.jpg" alt="대면 34p — 13.7 흐름 매칭: 학습과 생성 단계"><figcaption><b>대면 34p</b> 13.7 흐름 매칭: 학습과 생성 단계</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-35.jpg" alt="대면 35p — 13.7 확산 vs 흐름 매칭 비교"><figcaption><b>대면 35p</b> 13.7 확산 vs 흐름 매칭 비교</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-36.jpg" alt="대면 36p — 13.7 증류로 더 빠르게"><figcaption><b>대면 36p</b> 13.7 증류로 더 빠르게</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-37.jpg" alt="대면 37p — 13.7 증류의 세 가지 방식"><figcaption><b>대면 37p</b> 13.7 증류의 세 가지 방식</figcaption></figure>
+  </div>
+  <div class="deck-t">개정판 &lsquo;딥러닝 생성모델&rsquo; (63p)</div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-37.jpg" alt="개정 37p — 정규화 흐름 → CNF"><figcaption><b>개정 37p</b> 정규화 흐름 → CNF</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-38.jpg" alt="개정 38p — 플로우 매칭 — 직선 보간"><figcaption><b>개정 38p</b> 플로우 매칭 — 직선 보간</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-39.jpg" alt="개정 39p — 왜 2024년 이후는 플로우 매칭인가"><figcaption><b>개정 39p</b> 왜 2024년 이후는 플로우 매칭인가</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-40.jpg" alt="개정 40p — 미니 플로우 매칭 코드"><figcaption><b>개정 40p</b> 미니 플로우 매칭 코드</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-42.jpg" alt="개정 42p — 스텝 수를 줄이는 네 전략"><figcaption><b>개정 42p</b> 스텝 수를 줄이는 네 전략</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-43.jpg" alt="개정 43p — 품질–속도 지형(FID)"><figcaption><b>개정 43p</b> 품질–속도 지형(FID)</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo" id="dit">
+  <h3 class="pt-h" data-sref="대면 31p"><span class="bdg bdg-gyo">교안</span>확산 트랜스포머 DiT (대면 31p · 개정 32p)</h3>
+  <ul class="ul">
+    <li>DiT(Diffusion Transformer, 2023): 확산 모델의 <b>U-Net을 트랜스포머로 교체</b> &mdash; 키울수록 좋아지는(스케일링) 구조</li>
+    <li>이미지(잠재)를 <b>패치 토큰</b>으로 바꿔 처리 &mdash; 12주차 ViT와 같은 방식(<a class="ext" href="machine-learning-week12.html#vit">12주차 ViT</a>). 시간 t · 클래스 c는 adaLN으로 LayerNorm의 scale · shift에 넣는다</li>
+    <li><b>MM-DiT</b>(SD3): 텍스트 토큰과 이미지 토큰을 같은 시퀀스로 함께 주의 &rarr; 텍스트 이해 크게 향상. SD3 · FLUX · Wan · Veo가 같은 계열</li>
+  </ul>
+</div>
+
+<div class="pt gyo" id="fm-core">
+  <h3 class="pt-h" data-sref="대면 32p, 대면 33p, 대면 34p, 개정 38p"><span class="bdg bdg-gyo">교안</span>흐름 매칭 &mdash; 노이즈와 데이터를 직선으로 잇는다 (대면 32~34p · 개정 38p)</h3>
+  <p><b>비유(대면 33p)</b> &mdash; 꼬불꼬불한 산길(확산) 대신 <b>직선 고속도로</b>(흐름 매칭)를 타고 목적지까지 가는 것. 확산의 생성 경로는 구불구불해서 정확히 따라가려면 작은 걸음을 아주 많이 걸어야 한다. 경로가 곧으면 <b>큰 걸음 몇 번</b>으로 도착한다.</p>
+  <div class="fx"><div class="tex-d">x_t=(1-t)\,x_0+t\,x_1,\qquad x_0\sim N(0,I)\ (\text{노이즈}),\ \ x_1\sim p_{\text{data}},\ \ t\sim U[0,1]</div>
+  <div class="tex-d">L_{\text{CFM}}=\mathbb E\,\big\lVert v_\theta(x_t,t)-(x_1-x_0)\big\rVert^2</div></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>학습</th><th>생성</th></tr></thead>
+    <tbody><tr>
+      <td>노이즈 x₀ · 데이터 x₁ · 시각 t로 중간점 x<sub>t</sub>를 만들고, 신경망이 그 자리의 <b>정답 속도 x₁ − x₀</b>를 맞힌다 &mdash; 노이즈 스케줄 없이 단순 회귀</td>
+      <td>노이즈에서 출발해 <span class="tex">x\leftarrow x+\Delta t\cdot v_\theta(x,t)</span>를 t = 0 → 1로 몇 번 반복(오일러 적분). <b>비유(대면 34p)</b>: 어디서든 &lsquo;도착지 방향과 속력&rsquo;을 알려 주는 내비게이션을 따라 몇 번만 이동</td>
+    </tr></tbody>
+  </table></div>
+</div>
+
+<div class="pt plus">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>숫자로 &mdash; 1차원 점 하나를 직선으로 옮기기</h3>
+  <ul class="ul">
+    <li>노이즈 x₀ = −1.0, 데이터 x₁ = 0.6이라 하자. 정답 속도는 <span class="tex">v=x_1-x_0=1.6</span> &mdash; <b>t와 상관없이 늘 같다</b>(직선이니까)</li>
+    <li>t = 0.25의 중간점: <span class="tex">x_{0.25}=0.75\times(-1.0)+0.25\times0.6=-0.6</span>. 학습은 &lsquo;x = −0.6, t = 0.25를 보고 1.6을 말하라&rsquo;</li>
+    <li>신경망이 완벽히 1.6을 낸다면 생성은 Δt = 0.5로 <b>2스텝</b>이면 충분: −1.0 → −1.0 + 0.5 × 1.6 = −0.2 → −0.2 + 0.8 = <b>0.6</b> 도착. 경로가 휘어 있으면 큰 걸음이 길을 벗어나 많은 스텝이 필요하다 &mdash; 이것이 확산과의 차이</li>
+  </ul>
+</div>
+
+<div class="pt gyo" id="fm-vs">
+  <h3 class="pt-h" data-sref="대면 35p, 개정 39p"><span class="bdg bdg-gyo">교안</span>확산 vs 흐름 매칭 (대면 35p · 개정 39p)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>구분</th><th>확산 (DDPM)</th><th>흐름 매칭 (정류 흐름)</th></tr></thead>
+    <tbody>
+      <tr><td>신경망이 맞히는 것</td><td>섞인 노이즈 ε</td><td>데이터 쪽으로 가는 속도 <span class="tex">v=x_1-x_0</span></td></tr>
+      <tr><td>학습 손실</td><td><span class="tex">\lVert\epsilon-\epsilon_\theta(x_t,t)\rVert^2</span></td><td><span class="tex">\lVert(x_1-x_0)-v_\theta(x_t,t)\rVert^2</span></td></tr>
+      <tr><td>노이즈 → 데이터 경로</td><td>굽은 확률적 경로</td><td><b>곧은 직선 경로</b></td></tr>
+      <tr><td>시간</td><td>이산 스텝(예: 1,000단계)</td><td>연속 시간 t ∈ [0, 1]</td></tr>
+      <tr><td>스텝을 줄이면</td><td>품질 저하가 큼(가속 기법 필요)</td><td>경로가 곧아 비교적 안정적</td></tr>
+      <tr><td>대표 모델</td><td>Stable Diffusion 1 · 2, SDXL</td><td>SD3, FLUX.1 · FLUX.2</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">둘 다 &lsquo;노이즈 → 데이터&rsquo;를 배우지만 흐름 매칭은 <b>곧은 길과 속도</b>로 단순화했다. 개정 39p 정리: ① 단순 MSE 회귀 ② 경로 · 사전분포를 자유롭게 고를 수 있다 ③ 직선이라 소수 스텝 ④ 이미지 · 비디오 · 오디오 · 분자 구조까지 한 틀로 &mdash; 그래서 2024년 이후 대규모 생성의 학습 표준이다. 주의: 이 페이지의 흐름 매칭 기호는 x₀ = 노이즈, x₁ = 데이터라 확산 절(x₀ = 데이터)과 <b>x₀의 뜻이 반대</b>다.</p>
+</div>
+
+<div class="pt gyo" id="distill">
+  <h3 class="pt-h" data-sref="대면 32p, 대면 36p, 대면 37p, 개정 42p, 개정 43p"><span class="bdg bdg-gyo">교안</span>증류로 더 빠르게 &mdash; 수십 스텝을 1~4 스텝으로 (대면 32 · 36 · 37p · 개정 42 · 43p)</h3>
+  <p><b>비유(대면 36p)</b> &mdash; 선생님이 50단계로 푸는 문제를, 학생이 요령을 익혀 2~3단계 만에 같은 답을 내는 것. 여러 스텝을 거치는 &lsquo;교사&rsquo; 모델의 결과를 1~4 스텝 &lsquo;학생&rsquo; 모델이 한 번에 흉내 내도록 학습한다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>방식</th><th>비유 (대면 37p)</th><th>원리</th><th>예</th></tr></thead>
+    <tbody>
+      <tr><td>① 점진적 증류</td><td>요약 노트</td><td>교사 2스텝을 학생 1스텝으로, 이를 반복해 절반씩 (N스텝이면 log₂N회)</td><td>Progressive Distillation, FLUX dev(가이던스 증류)</td></tr>
+      <tr><td>② 일관성 모델</td><td>어느 장에서든 결론으로 직행</td><td>같은 경로 위 어느 점에서든 최종 이미지로 바로</td><td>Consistency Models, LCM</td></tr>
+      <tr><td>③ 적대적 증류</td><td>채점관 앞 실전 연습</td><td><b>판별자</b> + 교사 신호로 학습 &mdash; GAN 아이디어의 부활</td><td>SDXL Turbo(ADD), DMD, FLUX.2 klein</td></tr>
+      <tr><td>④ 평균 속도 학습</td><td>&mdash;</td><td>순간 속도 대신 구간 <b>평균 속도</b>를 배워 증류 없이 1스텝</td><td>MeanFlow(2025) &mdash; ImageNet 256² 1스텝 FID 3.43</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">결과: 품질은 비슷하게 유지하며 생성이 수~수십 배 빨라져 <b>소비자 GPU에서도 1초 내외</b>(대면 32p). 대신 다양성이나 세부 품질이 조금 떨어질 수 있다. 개정 43p 그래프: 250스텝 확산 DiT-XL/2 FID 2.27, MeanFlow 1스텝 3.43 · 2스텝 2.20 &mdash; 1~2스텝이 250스텝에 근접했다. 개정판의 정리: <span class="hi">증류 · MeanFlow로 1~4 스텝이 실현되어 GAN의 속도 이점이 사라졌다.</span></p>
+</div>
+</section>
+
+<!-- ===================== 13.10 비교 · 최신 동향 ===================== -->
+<section class="sec" id="trends">
+  <div class="sec-head"><span class="sec-badge">13.10</span><h2 class="sec-title">GAN · VAE · 확산 비교와 최신 생성 AI 동향<small>대면 38~49p · 개정 PART 4 · 8 · 11</small></h2></div>
+<div class="deck v2">
+  <div class="deck-h">대면수업 · 개정판 슬라이드 모아보기 <span>대면 38p · 대면 39p · 대면 40p · 대면 41p · 대면 42p · 대면 43p · 대면 44p · 대면 45p · 대면 46p · 대면 47p · 대면 48p · 대면 49p · 개정 22p · 개정 23p · 개정 24p · 개정 45p · 개정 46p · 개정 47p · 개정 48p · 개정 49p · 개정 50p · 개정 59p · 개정 60p</span></div>
+  <div class="deck-t">대면수업 교안 &lsquo;생성모델&rsquo; (50p)</div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-38.jpg" alt="대면 38p — 13.8 GAN · VAE · 확산 모델 비교"><figcaption><b>대면 38p</b> 13.8 GAN · VAE · 확산 모델 비교</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-39.jpg" alt="대면 39p — 13.8 생성 모델의 삼중고"><figcaption><b>대면 39p</b> 13.8 생성 모델의 삼중고</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-40.jpg" alt="대면 40p — 13.8 GAN의 현재 역할"><figcaption><b>대면 40p</b> 13.8 GAN의 현재 역할</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-41.jpg" alt="대면 41p — 13.9 최신 생성 AI 동향 (2024~2026)"><figcaption><b>대면 41p</b> 13.9 최신 생성 AI 동향 (2024~2026)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-42.jpg" alt="대면 42p — 13.9 멀티모달 LLM 이미지 생성 이해하기"><figcaption><b>대면 42p</b> 13.9 멀티모달 LLM 이미지 생성 이해하기</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-43.jpg" alt="대면 43p — 13.9 영상 생성 이해하기: 시공간 패치"><figcaption><b>대면 43p</b> 13.9 영상 생성 이해하기: 시공간 패치</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-44.jpg" alt="대면 44p — 13.9 시공간 패치 단계별로 보기"><figcaption><b>대면 44p</b> 13.9 시공간 패치 단계별로 보기</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-45.jpg" alt="대면 45p — 13.9 현재 대표 생성 모델"><figcaption><b>대면 45p</b> 13.9 현재 대표 생성 모델</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-46.jpg" alt="대면 46p — 13.9 목적별 생성 모델 선택 가이드"><figcaption><b>대면 46p</b> 13.9 목적별 생성 모델 선택 가이드</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-47.jpg" alt="대면 47p — 13.10 생성 모델의 응용 분야"><figcaption><b>대면 47p</b> 13.10 생성 모델의 응용 분야</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-48.jpg" alt="대면 48p — 13.10 고려 사항: 신뢰와 윤리"><figcaption><b>대면 48p</b> 13.10 고려 사항: 신뢰와 윤리</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13l-49.jpg" alt="대면 49p — 결론"><figcaption><b>대면 49p</b> 결론</figcaption></figure>
+  </div>
+  <div class="deck-t">개정판 &lsquo;딥러닝 생성모델&rsquo; (63p)</div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-22.jpg" alt="개정 22p — 자기회귀 모델의 원리"><figcaption><b>개정 22p</b> 자기회귀 모델의 원리</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-23.jpg" alt="개정 23p — LLM은 자기회귀 생성 모델"><figcaption><b>개정 23p</b> LLM은 자기회귀 생성 모델</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-24.jpg" alt="개정 24p — VQGAN · MaskGIT · VAR"><figcaption><b>개정 24p</b> VQGAN · MaskGIT · VAR</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-45.jpg" alt="개정 45p — 텍스트→이미지 모델 지형"><figcaption><b>개정 45p</b> 텍스트→이미지 모델 지형</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-46.jpg" alt="개정 46p — 비디오 생성"><figcaption><b>개정 46p</b> 비디오 생성</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-47.jpg" alt="개정 47p — 확산 언어 모델"><figcaption><b>개정 47p</b> 확산 언어 모델</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-48.jpg" alt="개정 48p — 통합 멀티모달 · 새 방향"><figcaption><b>개정 48p</b> 통합 멀티모달 · 새 방향</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-49.jpg" alt="개정 49p — 의료 영상 생성 동향"><figcaption><b>개정 49p</b> 의료 영상 생성 동향</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-50.jpg" alt="개정 50p — 의료 적용 시 검증"><figcaption><b>개정 50p</b> 의료 적용 시 검증</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-59.jpg" alt="개정 59p — 다섯 계열 한눈에 비교"><figcaption><b>개정 59p</b> 다섯 계열 한눈에 비교</figcaption></figure>
+    <figure class="sld"><img width="1100" height="619" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13v-60.jpg" alt="개정 60p — 결론"><figcaption><b>개정 60p</b> 결론</figcaption></figure>
+  </div>
+</div>
+
+<div class="pt gyo" id="compare3">
+  <h3 class="pt-h" data-sref="대면 38p, 대면 39p"><span class="bdg bdg-gyo">교안</span>GAN · VAE · 확산 모델 비교와 삼중고 (대면 38 · 39p · 개정 7p)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>구분</th><th>GAN</th><th>VAE</th><th>확산 모델</th></tr></thead>
+    <tbody>
+      <tr><td>학습 원리</td><td>생성자-판별자 경쟁</td><td>재구성 + KL (확률적 인코더)</td><td>노이즈 예측 (단계적 복원)</td></tr>
+      <tr><td>학습 안정성</td><td>낮음 (모드 붕괴 · 진동)</td><td>높음</td><td>높음</td></tr>
+      <tr><td>샘플 품질</td><td>선명함</td><td>흐릿한 편</td><td>매우 높음</td></tr>
+      <tr><td>다양성</td><td>부족할 수 있음</td><td>높음</td><td>높음</td></tr>
+      <tr><td>생성 속도</td><td><b>매우 빠름</b> (순전파 1회)</td><td>빠름</td><td>느림 &rarr; 증류 · 흐름 매칭으로 개선</td></tr>
+      <tr><td>대표 모델</td><td>StyleGAN, GigaGAN</td><td>VQ-VAE, 잠재 확산의 오토인코더</td><td>Stable Diffusion, FLUX, Veo</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>삼중고(trilemma)</b> &mdash; <span class="hi">고품질 · 다양성 · 빠른 샘플링을 동시에 만족하기 어렵다.</span> GAN = 고품질 + 빠름(다양성 부족), VAE = 빠름 + 다양성(품질 부족), 확산 = 고품질 + 다양성(느림). 최근 연구는 확산 · 흐름 모델의 <b>속도 격차를 줄이는</b> 방향이다 &mdash; 개정 7p: 증류 · Rectified Flow · MeanFlow로 확산 계열이 &lsquo;속도&rsquo; 꼭짓점까지 확보했다.</p>
+</div>
+
+<div class="pt gyo" id="gan-now">
+  <h3 class="pt-h" data-sref="대면 40p"><span class="bdg bdg-gyo">교안</span>GAN의 현재 역할 &mdash; 주연은 아니지만 핵심 부품 (대면 40p)</h3>
+  <ul class="ul">
+    <li><b>잠재 확산의 오토인코더</b>: 재구성 + 지각 + <b>적대적 손실</b>로 학습 &rarr; 선명한 복원</li>
+    <li><b>초해상도 · 복원</b>(Real-ESRGAN 등)에서 널리 사용</li>
+    <li><b>적대적 증류</b>: 다단계 확산을 1~4 스텝으로 줄일 때 판별자 사용(<a class="ext" href="#distill">13.9</a>)</li>
+    <li><b>R3GAN</b>(2024): 안정적인 손실로 현대식 GAN 기준선 제시</li>
+  </ul>
+</div>
+
+<div class="pt gyo" id="ar-llm">
+  <h3 class="pt-h" data-sref="개정 22p, 개정 23p, 개정 24p"><span class="bdg bdg-gyo">교안</span>자기회귀 생성 모델과 LLM (개정 PART 4 · 22~24p)</h3>
+  <div class="fx"><div class="tex-d">p_\theta(x)=\prod_i p_\theta(x_i\mid x_1,\dots,x_{i-1}),\qquad \text{손실}=-\sum_i\log p_\theta(x_i\mid x_{\lt i})</div>
+  <p class="fx-note">&lsquo;다음 토큰 예측&rsquo; = 최대 우도. 학습은 병렬(teacher forcing), 생성은 순차(토큰 수만큼 순전파).</p></div>
+  <ul class="ul">
+    <li><b>LLM은 자기회귀 생성 모델</b>이다 &mdash; 다음 단어 예측 하나로 언어 능력이 창발했고, 손실이 파라미터 · 데이터 · 연산량의 거듭제곱으로 줄어드는 <b>스케일링 법칙</b>이 규모 경쟁의 근거가 됐다. temperature · top-p 샘플링에도 &lsquo;다양성 vs 품질&rsquo; 딜레마가 그대로 있다</li>
+    <li>이미지에 쓰려면 픽셀 그대로는 너무 길다(256×256 컬러 = 196,608 스텝) &rarr; VQ-VAE/VQGAN으로 이산 토큰 격자로 줄인 뒤 생성(DALL·E 1, Parti). <b>MaskGIT</b>은 마스크된 토큰을 병렬로 8~16번에 채우고, <b>VAR</b>(2024)은 1×1 → 2×2 → … → 16×16 &lsquo;다음 해상도&rsquo;를 예측해 FID 1.73으로 당시 DiT를 넘었다</li>
+    <li><b>확산 언어 모델</b>(개정 47p): 반대로 텍스트에 확산을 쓴다 &mdash; 전부 [M]으로 가린 문장을 양방향으로 몇 번에 걸쳐 복원(LLaDA, Mercury, Gemini Diffusion) &rarr; 토큰 병렬 생성으로 빠르다</li>
+  </ul>
+</div>
+
+<div class="pt gyo" id="trend-mm">
+  <h3 class="pt-h" data-sref="대면 41p, 대면 42p, 대면 43p, 대면 44p, 개정 45p, 개정 46p, 개정 47p, 개정 48p"><span class="bdg bdg-gyo">교안</span>최신 동향 (2024~2026) &mdash; &lsquo;잘 그리는 모델&rsquo;에서 &lsquo;이해하고 그리는 모델&rsquo;로 (대면 41~44p · 개정 45~48p)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th></th><th>멀티모달 LLM 이미지 생성</th><th>영상 생성 &mdash; 시공간 패치</th></tr></thead>
+    <tbody>
+      <tr><td>비유</td><td>붓만 잘 다루는 화가(확산)에서, 주문을 이해하고 <b>기획까지 하는 디자이너 겸 화가</b>로</td><td>만화책 여러 쪽을 한꺼번에 펼쳐 놓고 모든 칸이 자연스럽게 이어지도록 동시에 그리기</td></tr>
+      <tr><td>왜</td><td>기존 확산은 긴 지시, 정확한 글자, 대화형 수정에 약함(텍스트 인코더가 문장을 깊이 이해하지 못함)</td><td>영상 = 이미지 수백 장(5초 = 120프레임) + 시간 일관성 &rarr; 프레임을 따로 만들면 깜빡이고 어긋남</td></tr>
+      <tr><td>어떻게</td><td>거대 언어 모델이 텍스트와 이미지를 함께 다루며 먼저 <b>지시를 이해 · 계획</b>한 뒤 생성(이미지 토큰 생성 또는 확산 디코더 결합, 세부는 비공개가 많음)</td><td>① 비디오 VAE로 시간 · 공간 압축 ② 시간 × 세로 × 가로 조각(튜블릿)으로 잘라 토큰화 ③ 확산 트랜스포머가 모든 토큰 관계를 보며 노이즈 제거</td></tr>
+      <tr><td>결과</td><td>정확한 글자 · 도표, 여러 장 참조, 대화로 부분 편집(Nano Banana Pro, GPT Image)</td><td>카메라 이동에도 물체가 일관되고 대사 · 효과음까지 함께(Veo 3, Sora 2)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>분야</th><th>대표 모델 (대면 45p, 발표 시점)</th><th>특징</th></tr></thead>
+    <tbody>
+      <tr><td>이미지</td><td>Nano Banana Pro · Gemini 3 Pro Image (Google, 2025.11)</td><td>언어 모델의 추론 · 지식을 활용한 생성 · 편집, 최대 4K</td></tr>
+      <tr><td>이미지</td><td>GPT Image 1.5 (OpenAI, 2025.12)</td><td>지시 이행과 정밀한 편집</td></tr>
+      <tr><td>이미지</td><td>FLUX.2 (Black Forest Labs, 2025.11) · FLUX.2 [klein] (2026.1)</td><td>정류 흐름 트랜스포머, 공개 가중치 · 소형 고속(소비자 GPU 1초 미만)</td></tr>
+      <tr><td>영상</td><td>Veo 3 / 3.1 (Google, 2025) · Sora 2 (OpenAI, 2025.9) · Kling · Seedance</td><td>영상 + 대사 · 효과음, 물리적 사실성 · 캐릭터 일관성 경쟁</td></tr>
+    </tbody>
+  </table></div>
+  <p class="fx-note">순위는 빠르게 바뀐다 &mdash; LMArena · Artificial Analysis 같은 사람 선호도 기반 리더보드에서 최신 순위를 확인하라는 것이 교안의 주의다.</p>
+</div>
+
+<div class="pt gyo" id="choose-gen">
+  <h3 class="pt-h" data-sref="대면 46p"><span class="bdg bdg-gyo">교안</span>목적별 생성 모델 선택 가이드 (대면 46p)</h3>
+  <p>공개 가중치 vs API, 품질 vs 속도, <b>라이선스(상업적 이용 가능 여부)</b>를 함께 확인한다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>목적</th><th>추천 접근</th><th>이유</th></tr></thead>
+    <tbody>
+      <tr><td>연구 · 직접 미세조정</td><td>공개 가중치(FLUX.2 [dev], SD 3.5 등)</td><td>내 데이터로 학습 · 수정 가능</td></tr>
+      <tr><td>정확한 글자 · 지시 이행 · 대화형 편집</td><td>멀티모달 LLM 이미지 모델</td><td>언어 이해 · 추론 활용</td></tr>
+      <tr><td>실시간 · 온디바이스</td><td>증류된 소수 스텝 모델, 소형 모델</td><td>지연 시간 최소화</td></tr>
+      <tr><td>특정 스타일 · 인물 일관성</td><td>LoRA 미세조정, 참조 이미지 입력</td><td>적은 데이터로 맞춤화</td></tr>
+      <tr><td>초해상도 · 복원</td><td>GAN 기반(Real-ESRGAN) 또는 확산 기반 복원</td><td>속도와 품질 사이 선택</td></tr>
+      <tr><td>학습 데이터 보강</td><td>조건부 생성 + 품질 필터링</td><td>드문 사례 보충</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="pt gyo" id="gen-apps">
+  <h3 class="pt-h" data-sref="대면 47p, 대면 48p, 개정 49p, 개정 50p"><span class="bdg bdg-gyo">교안</span>생성 모델의 응용과 고려 사항 (대면 47 · 48p · 개정 49 · 50p)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>분야</th><th>활용 예</th></tr></thead>
+    <tbody>
+      <tr><td>콘텐츠 · 디자인</td><td>텍스트 → 이미지, 광고 · 제품 이미지, 캐릭터 · 스토리보드</td></tr>
+      <tr><td>이미지 편집</td><td>인페인팅(지우기 · 채우기), 아웃페인팅(확장), 스타일 변환, 초해상도 · 복원</td></tr>
+      <tr><td>영상 · 3D</td><td>텍스트 → 영상, 이미지 애니메이션, 3D 에셋 · 장면</td></tr>
+      <tr><td>데이터 증강</td><td>드문 사례(의료 병변, 사고 장면)를 합성해 학습 데이터 보강</td></tr>
+      <tr><td>의료 · 과학</td><td>저선량 영상 복원, 모달리티 변환(CT ↔ MRI), 분자 · 단백질 구조 설계(확산)</td></tr>
+      <tr><td>음성 · 음악</td><td>음성 합성, 효과음 · 배경 음악</td></tr>
+    </tbody>
+  </table></div>
+  <ul class="ul">
+    <li><b>위험</b>: 딥페이크 · 허위 정보, 저작권 · 초상권, 학습 데이터 편향. 확산 모델은 학습 표본을 거의 그대로 재생성하기도 한다(기억화 &mdash; 소규모 의료 데이터에서 더 위험)</li>
+    <li><b>대응 기술</b>: 보이지 않는 워터마크(Google <b>SynthID</b>), 출처 메타데이터 표준(<b>C2PA</b> 콘텐츠 자격증명) &mdash; <span class="hi">만드는 기술과 함께 &lsquo;출처를 밝히는 기술&rsquo;이 중요해졌다</span></li>
+    <li>의료 적용은 FID를 의료 특징(RadImageNet)으로 다시 재고, 전문의 시각 튜링 테스트, 합성 데이터로 학습한 모델이 <b>실데이터에서</b> 좋아지는지(하위 과제)가 최종 기준이다(개정 50p)</li>
+  </ul>
+</div>
+
+<div class="live" id="prompt-live"><b>★ 교수님 강조 (대면수업)</b>
+<ul class="ul">
+  <li><b>AI에게 프롬프트를 주는 능력이 중요하다.</b> 좋은 프롬프트 디자인을 위해서는 경험과 공부가 중요하다 &mdash; 결국 <b>기획력</b>이다</li>
+  <li><b>새로운 트렌드가 나올 때마다 공부해서 익혀야 한다 &mdash; AI-Native scientist</b></li>
+</ul>
+<p style="margin-top:6px">이번 주 내용과 연결하면: 텍스트 조건은 교차 주의로 그림의 각 위치에 전달되고(<a class="ext" href="#cfg">13.8</a>), 멀티모달 LLM 모델은 지시를 먼저 이해 · 계획한 뒤 그린다(<a class="ext" href="#trend-mm">위</a>). 같은 모델이라도 &lsquo;무엇을 · 어떤 구도로 · 어떤 스타일로&rsquo;를 구체적으로 적을수록 결과가 달라지는 이유다. 13주차 교안이 개정판 · 대면판으로 계속 갱신된 것(GAN만 다루던 31p → 흐름 매칭 · 2026년 모델까지 63p)도 &lsquo;트렌드를 따라 익혀야 한다&rsquo;는 말의 예다. 12주차 필기의 &lsquo;기획 역량&rsquo;(<a class="ext" href="machine-learning-week12.html#planning">12주차</a>)과 같은 이야기다.</p>
+</div>
+</section>
+
 <!-- ===================== 정리 ===================== -->
 <section class="sec" id="summary">
-  <div class="sec-head"><span class="sec-badge">SUM</span><h2 class="sec-title">핵심 정리<small>시험 전에 이것만 · 교안 결론 29 · 30p</small></h2></div>
+  <div class="sec-head"><span class="sec-badge">SUM</span><h2 class="sec-title">핵심 정리<small>시험 전에 이것만 · 구판 결론 29 · 30p + 대면 · 개정판 결론</small></h2></div>
 <div class="deck">
-  <div class="deck-h">교안 슬라이드 모아보기 <span>29p · 30p</span></div>
+  <div class="deck-h">구판(31p) 교안 슬라이드 모아보기 <span>29p · 30p</span></div>
   <div class="deck-g">
     <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-29.jpg" alt="교안 29p — 결론 (1)"><figcaption><b>29p</b> 결론 (1)</figcaption></figure>
     <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/figs/ml13-30.jpg" alt="교안 30p — 결론 (2)"><figcaption><b>30p</b> 결론 (2)</figcaption></figure>
@@ -1094,6 +1907,18 @@ train(epochs=1000, batch_size=32, save_interval=50)</pre>
   <div class="card2"><b>평가</b><p>인셉션 점수: 예측 확신도 ↑ · 다양성 ↑(클수록 좋다). FID: 실제 · 생성 출력의 다변량 가우시안 사이 프레셰 거리(작을수록 좋다). 주로 사람이 직접 평가.</p></div>
   <div class="card2"><b>응용</b><p>StackGAN(문장 → 저해상도 형태 · 색 → 고해상도 세부), 이미지-이미지 번역, 초해상도.</p></div>
   <div class="card2"><b>프로젝트</b><p>패션 MNIST · /127.5 − 1 → [−1, 1] · expand_dims → (28, 28, 1) · 노이즈 100 · Adam(0.0002, 0.5) · train(1000, 32, 50) · d_loss = 평균.</p></div>
+  <div class="card2"><b>판별 vs 생성</b><p>판별 = p(y|x)(경계). 생성 = p(x)(분포)를 배워 새 표본. 명시적 밀도(자기회귀 · VAE · 확산) vs 암시적 밀도(GAN).</p></div>
+  <div class="card2"><b>발전 흐름</b><p>VAE(2013) · GAN(2014) → DCGAN · WGAN · StyleGAN → DDPM(2020) → Stable Diffusion(2022) → DiT · SDXL(2023) → SD3 · FLUX(흐름 매칭, 2024) → 멀티모달 · 소수 스텝(2025~26).</p></div>
+  <div class="card2"><b>GAN 학습의 어려움</b><p>모드 붕괴 · 기울기 소실 · 진동. 해결: 비포화 손실 −log D(G(z)), WGAN-GP, 스펙트럴 정규화, TTUR. D* = p<sub>data</sub>/(p<sub>data</sub>+p<sub>g</sub>), 균형에서 ½. 손실보다 샘플을 보라.</p></div>
+  <div class="card2"><b>평가 확장</b><p>IS = exp(E KL(p(y|x)‖p(y))) ↑, FID = ‖μ<sub>r</sub>−μ<sub>g</sub>‖² + Tr(…) ↓. 텍스트 → 이미지: CLIP 점수 · 아레나(사람 선호). 복원: PSNR · SSIM.</p></div>
+  <div class="card2"><b>GAN 계보</b><p>안정 학습 → 조건 제어 → 고해상도 · 스타일 → 대규모. cGAN(조건 y를 G · D에) · Pix2Pix(짝) · CycleGAN(짝 없이 순환) · StyleGAN(해상도별 스타일) · StackGAN · SRGAN.</p></div>
+  <div class="card2"><b>VAE</b><p>인코더가 분포(μ, σ) → z = μ + σε(재매개변수화). 손실 = 재구성 + KL(→N(0, I)) = −ELBO. 매끄러운 잠재 · 안정, 대신 흐림 → 잠재 확산의 압축기.</p></div>
+  <div class="card2"><b>확산</b><p>순방향(노이즈 추가)은 고정, 역방향만 학습. x<sub>t</sub> = √ᾱ x₀ + √(1−ᾱ) ε, 손실 ‖ε − ε<sub>θ</sub>‖². 안정 · 다양, 느림(T번) → DDIM 등. 2020 DDPM.</p></div>
+  <div class="card2"><b>교차 주의 · CFG</b><p>교차 주의: Q = 그림 위치, K · V = 단어. CFG: ε̂ = ε(∅) + w(ε(c) − ε(∅)), 학습 때 10~20% ∅, w 3~8, 크면 과포화, 계산 2배.</p></div>
+  <div class="card2"><b>잠재 확산 · SD</b><p>VAE로 압축(512²×3 → 64²×4, 약 48배) → 잠재에서 확산 → VAE 디코더. SD 1/2 U-Net → SDXL 큰 U-Net · 이중 인코더 → SD3 MMDiT + 흐름 매칭.</p></div>
+  <div class="card2"><b>흐름 매칭 · 증류</b><p>x<sub>t</sub> = (1−t)x₀ + t x₁, 속도 v = x₁ − x₀ 회귀, 직선이라 적은 스텝. 증류: 점진적 · 일관성 · 적대적 → 1~4 스텝. MeanFlow 1스텝.</p></div>
+  <div class="card2"><b>비교 · 삼중고</b><p>GAN 고품질 · 빠름(다양성 ↓), VAE 빠름 · 다양(품질 ↓), 확산 고품질 · 다양(느림). 최신 = DiT + 흐름 매칭 + VAE 잠재, 멀티모달 LLM 결합, 영상 + 음성.</p></div>
+  <div class="card2"><b>응용 · 윤리 · 강조</b><p>편집 · 영상 · 증강 · 의료. 딥페이크 · 저작권 → SynthID · C2PA. ★ 프롬프트 능력 = 기획력, 트렌드를 계속 익히는 AI-Native scientist.</p></div>
 </div>
 </section>
 
@@ -1104,7 +1929,7 @@ train(epochs=1000, batch_size=32, save_interval=50)</pre>
 </section>
 
 <p class="src">기계학습특론 13주차 강의자료 정리 · 2026학년도 2학기<br>
-교안 &lsquo;생성모델&rsquo;(<b>31p</b>)을 100문제의 절 구분(13.1~13.6)에 맞춰 정리하고 슬라이드 <b>29장</b>을 실었다. 슬라이드 속 코드는 사진 해상도가 낮아, 100문제 해설에 적힌 인자 값과 대조해 옮겨 적었다. 로그 벌점 · 정규화 값 계산은 직접 계산한 값이다.</p>
+교안 &lsquo;생성모델&rsquo;(<b>31p</b>)을 100문제의 절 구분(13.1~13.6)에 맞춰 정리하고 슬라이드 <b>29장</b>을 실었다. 대면수업 교안(<b>50p</b>)과 개정판(<b>63p</b>)은 같은 주제의 절에 끼워 넣고 13.7~13.10을 새로 만들었으며, 대면수업 필기는 보라 상자, 수업 중 ★ 강조는 주황 상자로 구분했다. 발전 흐름 그림 · 업샘플링 카드는 교안 그림을 다시 그린 것이고, ᾱ 표 · IS · FID · KL · CFG · 흐름 매칭 숫자 예는 직접 계산했다. 슬라이드 속 코드는 사진 해상도가 낮아, 100문제 해설에 적힌 인자 값과 대조해 옮겨 적었다. 로그 벌점 · 정규화 값 계산은 직접 계산한 값이다.</p>
 
 </div>
 
