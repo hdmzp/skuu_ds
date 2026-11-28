@@ -176,6 +176,13 @@ body{
       sub: '13주차 · 74페이지',
       back: 'nlp-week13.html'
     },
+    'nlp-w13-hl': {
+      file: '../materials/자연어처리/week13-slides-highlight.pdf',
+      download: '자연어처리_13주차_강의자료_형광펜.pdf',
+      title: 'CHAPTER 13 — 형광펜 표시본 (딥러닝 기반 형태소 분석 · 품사 태깅 · 의미 분석 · 개체명 인식)',
+      sub: '13주차 · 74페이지 · 형광펜 186곳',
+      back: 'nlp-week13.html'
+    },
     'nlp-w12-slides': {
       file: '../materials/자연어처리/week12-slides.pdf',
       download: '자연어처리_12주차_순환신경망_RNN_LSTM.pdf',
@@ -835,8 +842,21 @@ body{
       holders.push(h);
     }
 
-    var chain = Promise.resolve();
+    // ?page=N 이 있으면 그 쪽을 먼저 그리고 그 자리로 이동합니다.
+    // 빈 자리의 비율을 1쪽 비율로 맞춰 두어, 앞쪽이 나중에 그려져도 위치가 밀리지 않게 합니다.
+    var target = parseInt(param('page'), 10);
+    if (!(target >= 1 && target <= pdf.numPages)) { target = 0; }
+
+    var chain = pdf.getPage(1).then(function (p1) {
+      var v = p1.getViewport({ scale: 1 });
+      holders.forEach(function (h) { h.style.aspectRatio = v.width + ' / ' + v.height; });
+      if (!target) { return; }
+      return renderPage(pdf, target, holders[target - 1]).then(function () {
+        holders[target - 1].scrollIntoView({ block: 'start' });
+      });
+    });
     holders.forEach(function (h, idx) {
+      if (idx + 1 === target) { return; }
       chain = chain.then(function () { return renderPage(pdf, idx + 1, h); });
     });
     return chain;
