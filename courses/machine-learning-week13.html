@@ -1462,7 +1462,23 @@ train(epochs=1000, batch_size=32, save_interval=50)</pre>
   <li>VAE(Variational Autoencoder)는 <b>2013년 Kingma &amp; Welling</b>이 제안한 생성 모델</li>
   <li><b>오토인코더 구조에 확률적 해석</b>을 붙여서, 잠재 공간에서 샘플링해 새 데이터를 만들 수 있게 한 모델</li>
   <li>흐름: <b>Image → encoder → decoder → Generated</b></li>
+  <li>z를 조금씩 바꾸면 결과도 부드럽게 변한다 &rarr; 새 샘플을 생성한다. 이게 <b>보간</b>?? (아래 풀이)</li>
+  <li>한때 <b>인기 있었던 알고리즘</b></li>
 </ul>
+</div>
+
+<div class="live" id="vae-live"><b>강조 &mdash; VAE는 &lsquo;구름(분포)&rsquo;으로 저장된다 (대면 23p &lsquo;VAE 쉽게 이해하기&rsquo;)</b>
+<p>오토인코더는 사진 한 장을 잠재 공간의 <b>점 하나</b>로 저장하지만, VAE는 <b>구름 하나</b>(평균 μ 둘레로 σ만큼 퍼진 정규분포)로 저장한다. 구름들이 원점 근처에 촘촘히 겹쳐 빈 땅이 없으니, 어디서 z를 뽑아도 그럴듯한 그림이 나온다 &mdash; 아래 <a class="ext" href="#vae-why">점 대신 구름 표</a>가 이 슬라이드의 정리다.</p>
+</div>
+
+<div class="qa" id="vae-interp"><b>보간(interpolation)이 뭐냐 &mdash; 두 z 사이를 한 걸음씩 걸어 보는 것</b>
+<p>맞다. &lsquo;z를 조금씩 바꾸면 결과도 부드럽게 변한다&rsquo;를 두 사진 사이에서 해 보는 것이 <b>보간</b>이다. 보간 = 이미 아는 두 값 <b>사이의 값</b>을 채워 넣는 것(1과 3 사이에 2를 넣듯이).</p>
+<ul class="ul">
+  <li>웃는 얼굴 A를 인코더에 넣었더니 <span class="tex">z_A=(1.0,\,-0.5)</span>, 무표정 B는 <span class="tex">z_B=(-1.0,\,0.5)</span>가 나왔다고 하자(잠재 2차원으로 단순화)</li>
+  <li>둘 사이를 비율 λ로 섞는다: <span class="tex">z(\lambda)=(1-\lambda)\,z_A+\lambda\,z_B</span>. λ = 0.25면 <span class="tex">(0.5,\,-0.25)</span>, λ = 0.5면 <span class="tex">(0,\,0)</span>, λ = 0.75면 <span class="tex">(-0.5,\,0.25)</span></li>
+  <li>이 z들을 디코더에 하나씩 넣으면 <b>활짝 웃음 → 살짝 웃음 → 무표정</b>처럼 이어지는 그림 여러 장이 나온다. 그중 가운데 그림들은 학습 데이터에 <b>없던 새 샘플</b>이다 &mdash; 필기의 &lsquo;새 샘플을 생성한다&rsquo;</li>
+</ul>
+<p><b>왜 VAE라서 되나</b> &mdash; 일반 오토인코더에서는 (0, 0) 같은 중간 지점이 아무 사진도 배정되지 않은 <b>빈 땅</b>일 수 있어 디코딩하면 깨진 그림이 나온다. VAE는 KL 항이 구름들을 원점 근처에 겹쳐 모아 두었기 때문에 중간 지점도 &lsquo;누군가의 구름 속&rsquo;이고, 그래서 결과가 매끄럽게 이어진다. 같은 이야기를 <a class="ext" href="computer-vision-week14.html#vae">컴퓨터비전 14주차 VAE</a>에서도 다뤘다.</p>
 </div>
 
 <div class="pt gyo" id="vae-why">
@@ -1551,6 +1567,8 @@ loss  = recon + beta * kl               <span class="cm"># −ELBO</span></pre>
   <li>Diffusion 모델은 데이터에 노이즈를 조금씩 더하는 과정을 <b>거꾸로 되돌리도록</b> 학습해서, 순수 노이즈에서 데이터를 만들어 내는 생성 모델</li>
   <li><b>2020년 DDPM(Ho et al.)</b>으로 크게 주목받았고, 지금 이미지 · 영상 생성의 <b>주류</b>다</li>
   <li>노이즈를 추가해 놓고, 그걸 다시 노이즈를 제거해 가며 새로운 이미지를 생성한다 (CV 논문 발표의 <b>Stable Diffusion</b>과 연관 &mdash; 확산의 전방 · 역방 원리는 <a class="ext" href="computer-vision-week14.html#diffusion">컴퓨터비전 14주차</a>에도 정리돼 있다)</li>
+  <li>이미지에 임의 시점 t만큼 노이즈를 섞고, 섞인 노이즈를 예측하도록 학습한다</li>
+  <li>자료에는 수학적 내용이 빠졌지만 사실 <b>수학이 매우 많다</b>. CV에서 공부할 때 이게 &lsquo;정규화&rsquo;를 한다고 했었나...? (아래 <a class="ext" href="#diff-math">수식 · 절차 요약</a>)</li>
 </ul>
 </div>
 
@@ -1612,6 +1630,26 @@ loss  = recon + beta * kl               <span class="cm"># −ELBO</span></pre>
     </tbody>
   </table></div>
   <p class="fx-note">개정판의 핵심 메시지: <span class="hi">확산 모델의 &lsquo;느림&rsquo;은 모델의 본질이 아니라 <b>적분 방법</b>의 문제</span>다. 같은 학습된 모델로 DDPM 1,000스텝 대신 DDIM 50스텝을 쓰면 신경망 호출이 1/20이다. 같은 아이디어의 다른 이름이 <b>점수 기반 모델</b>(밀도가 높아지는 방향 <span class="tex">\nabla_x\log p(x)</span>를 배운다 &mdash; 노이즈 예측과 같은 것, 개정 29p)이다.</p>
+</div>
+
+<div class="pt plus" id="diff-math">
+  <h3 class="pt-h"><span class="bdg bdg-plus">보충설명</span>확산 모델의 수학 &mdash; 수식 다섯 줄과 절차 한 장</h3>
+  <p>대면 교안은 직관만 보여 주지만 DDPM 논문은 확률 수식으로 쌓여 있다. 뼈대는 <b>&lsquo;모든 단계가 정규분포(가우시안)&rsquo;</b>라는 가정 하나와, VAE에서 본 <b>ELBO</b>다. 순서대로 보면 다섯 단계다.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>단계</th><th>수식</th><th>한 줄 뜻</th></tr></thead>
+    <tbody>
+      <tr><td>① 한 걸음 망가뜨리기</td><td><span class="tex">q(x_t\mid x_{t-1})=N\big(\sqrt{1-\beta_t}\,x_{t-1},\ \beta_t I\big)</span></td><td>이전 그림을 살짝 줄이고(√(1−β)) 노이즈를 β만큼 더한다. 학습할 것 없음</td></tr>
+      <tr><td>② 한 번에 t걸음</td><td><span class="tex">x_t=\sqrt{\bar\alpha_t}\,x_0+\sqrt{1-\bar\alpha_t}\,\epsilon</span></td><td>가우시안을 여러 번 더해도 가우시안이라 한 줄로 접힌다(<a class="ext" href="#diff-forward">위 표</a>)</td></tr>
+      <tr><td>③ 되돌리는 모델</td><td><span class="tex">p_\theta(x_{t-1}\mid x_t)=N\big(\mu_\theta(x_t,t),\ \sigma_t^2 I\big)</span></td><td>한 걸음 되돌리기도 가우시안이라고 놓고, 그 <b>평균</b>만 신경망이 맞힌다</td></tr>
+      <tr><td>④ 학습 목표 (ELBO)</td><td><span class="tex">-\log p_\theta(x_0)\le\sum_t \mathrm{KL}\big(q(x_{t-1}\mid x_t,x_0)\,\|\,p_\theta(x_{t-1}\mid x_t)\big)+\cdots</span></td><td>VAE처럼 직접 못 구하는 우도 대신 상한을 줄인다. x₀를 알면 &lsquo;정답 되돌리기&rsquo; q(x<sub>t−1</sub> | x<sub>t</sub>, x₀)도 가우시안으로 계산된다</td></tr>
+      <tr><td>⑤ 단순화</td><td><span class="tex">\mu_\theta=\tfrac{1}{\sqrt{\alpha_t}}\Big(x_t-\tfrac{\beta_t}{\sqrt{1-\bar\alpha_t}}\,\epsilon_\theta(x_t,t)\Big)\ \Rightarrow\ \lVert\epsilon-\epsilon_\theta\rVert^2</span></td><td>두 가우시안의 KL은 &lsquo;평균 차이의 제곱&rsquo;이 되고, 평균을 이 꼴로 놓으면 결국 <b>노이즈 맞히기 MSE</b>만 남는다(L<sub>simple</sub>)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="flow">
+    <div class="fl"><b>학습 절차</b><span>사진 x₀ 뽑기 → t를 무작위로 → ε 뽑기 → ②로 x<sub>t</sub> 만들기 → 신경망이 ε 예측 → MSE로 갱신 (반복)</span></div>
+    <div class="fl"><b>생성 절차</b><span>x<sub>T</sub> ~ N(0, I)에서 출발 → 매 t마다 ε 예측 → ⑤의 μ<sub>θ</sub> 계산 → 작은 노이즈 σ<sub>t</sub>z 더해 x<sub>t−1</sub> → … → x₀</span></div>
+  </div>
+  <p><b>&lsquo;정규화&rsquo;라고 기억나는 것의 정체</b> &mdash; 확산에서 핵심 단어는 <b>정규분포</b>다. ① 매 단계 더하는 노이즈가 정규분포, ② 끝점 x<sub>T</sub>가 <b>표준 정규분포 N(0, I)</b>, ③ 되돌리기도 정규분포로 놓는다. 여기에 &lsquo;크기를 맞춘다&rsquo;는 의미의 정규화가 하나 더 숨어 있다: ①에서 √(1−β)로 줄이고 β를 더하면 분산이 <span class="tex">(1-\beta)\cdot1+\beta=1</span>로 <b>늘 1로 유지</b>된다 &mdash; 아무리 노이즈를 더해도 값이 폭주하지 않는 이유다(위 표의 0.280² + 0.960² ≈ 1). 입력 이미지를 [−1, 1]로 맞추는 전처리도 같은 목적이다. 컴퓨터비전 14주차 정리(<a class="ext" href="computer-vision-week14.html#diffusion">CV 14주차 확산 모델</a>)에 같은 전방 · 역방 식이 있다 &mdash; CV에서 들은 &lsquo;정규화&rsquo;가 정확히 어느 대목이었는지는 그 페이지와 대조해 보면 된다.</p>
 </div>
 
 <div class="pt gyo" id="cfg">
@@ -1690,6 +1728,21 @@ loss  = recon + beta * kl               <span class="cm"># −ELBO</span></pre>
   </ul>
 </div>
 
+<div class="mynote" id="dit-note"><b>대면수업 필기 &mdash; 확산 트랜스포머 (Diffusion Transformer)</b>
+<ul class="ul">
+  <li>확산 모델의 <b>U-Net을 transformer로 교체</b>한 것</li>
+  <li>블록 = <b>자기 주의 + MLP</b></li>
+  <li>&lsquo;키울수록 좋아지는 구조&rsquo;로 교체 (이게 먼 소리얌)</li>
+</ul>
+</div>
+<div class="qa" id="dit-scale"><b>&lsquo;키울수록 좋아지는 구조&rsquo; = 크기를 늘린 만큼 성능이 예측 가능하게 오른다 (스케일링)</b>
+<ul class="ul">
+  <li><b>블록 모양</b> &mdash; DiT 블록은 ViT · GPT와 같은 &lsquo;자기 주의(토큰끼리 서로 참고) → MLP(토큰마다 변환)&rsquo;의 반복이다. 이 블록을 <b>더 많이 쌓고(깊이) 더 넓게(폭)</b> 하는 것만으로 모델을 키울 수 있다. U-Net은 해상도마다 단계가 정해진 손설계 구조라, 키우려면 어디를 얼마나 늘릴지 다시 설계해야 한다(개정 32p: &lsquo;스케일링이 불투명&rsquo;)</li>
+  <li><b>결과가 직선처럼 좋아진다</b> &mdash; DiT 논문은 모델 연산량(GFLOPs)을 늘릴수록 FID가 꾸준히 내려가는 것을 보였다(가장 큰 DiT-XL/2가 ImageNet 256²에서 FID 2.27). LLM에서 &lsquo;파라미터 · 데이터를 늘리면 손실이 거듭제곱으로 준다&rsquo;는 <b>스케일링 법칙</b>(<a class="ext" href="#ar-llm">13.10</a>)이 이미지 생성에서도 통한 것이다</li>
+  <li><b>왜 중요한가</b> &mdash; &lsquo;GPU와 데이터를 더 넣으면 확실히 좋아진다&rsquo;가 보장되면 회사들이 큰돈을 투자할 수 있다. 그래서 SD3 · FLUX · Sora · Veo가 모두 DiT 계열이 됐다. 비유: 손으로 짠 맞춤 가구(U-Net)는 크게 만들기 어렵지만, 같은 레고 블록(트랜스포머 블록)은 더 많이 끼우기만 하면 커진다</li>
+</ul>
+</div>
+
 <div class="pt gyo" id="fm-core">
   <h3 class="pt-h" data-sref="대면 32p, 대면 33p, 대면 34p, 개정 38p"><span class="bdg bdg-gyo">교안</span>흐름 매칭 &mdash; 노이즈와 데이터를 직선으로 잇는다 (대면 32~34p · 개정 38p)</h3>
   <p><b>비유(대면 33p)</b> &mdash; 꼬불꼬불한 산길(확산) 대신 <b>직선 고속도로</b>(흐름 매칭)를 타고 목적지까지 가는 것. 확산의 생성 경로는 구불구불해서 정확히 따라가려면 작은 걸음을 아주 많이 걸어야 한다. 경로가 곧으면 <b>큰 걸음 몇 번</b>으로 도착한다.</p>
@@ -1729,6 +1782,14 @@ loss  = recon + beta * kl               <span class="cm"># −ELBO</span></pre>
   <p class="fx-note">둘 다 &lsquo;노이즈 → 데이터&rsquo;를 배우지만 흐름 매칭은 <b>곧은 길과 속도</b>로 단순화했다. 개정 39p 정리: ① 단순 MSE 회귀 ② 경로 · 사전분포를 자유롭게 고를 수 있다 ③ 직선이라 소수 스텝 ④ 이미지 · 비디오 · 오디오 · 분자 구조까지 한 틀로 &mdash; 그래서 2024년 이후 대규모 생성의 학습 표준이다. 주의: 이 페이지의 흐름 매칭 기호는 x₀ = 노이즈, x₁ = 데이터라 확산 절(x₀ = 데이터)과 <b>x₀의 뜻이 반대</b>다.</p>
 </div>
 
+<div class="qa" id="fm-opposite"><b>필기 속 질문: 확산과 흐름 매칭은 서로 반대 개념? &mdash; 아니다, 같은 목표 · 다른 길</b>
+<ul class="ul">
+  <li><b>목표는 같다</b> &mdash; 둘 다 &lsquo;노이즈 → 데이터&rsquo;로 가는 길을 배운다. 확산이 반대(데이터 → 노이즈)를 배우는 것이 아니다. 확산도 노이즈를 <b>더하는</b> 과정은 학습 데이터 만들기용이고, 신경망이 배우는 건 <b>되돌리는</b> 쪽이다</li>
+  <li><b>다른 것은 길의 모양과 맞히는 대상</b> &mdash; 확산은 굽은 길 위에서 &lsquo;섞인 노이즈 ε&rsquo;를, 흐름 매칭은 곧은 길 위에서 &lsquo;속도 v&rsquo;를 맞힌다. 개정 38p: 둘은 선형 변환으로 서로 바꿀 수 있고, 흐름 매칭은 &lsquo;가장 단순한 경로 + 가장 단순한 손실&rsquo;을 고른 <b>더 일반적인 틀</b>이다(확산을 포함)</li>
+  <li><b>헷갈리는 이유 두 가지</b> &mdash; ① 기호: 확산 절에서는 x₀ = 데이터, 흐름 매칭 절에서는 x₀ = 노이즈다. ② 시간 방향: 확산의 생성은 t = T → 0으로 <b>거꾸로</b> 세고, 흐름 매칭은 t = 0 → 1로 <b>앞으로</b> 센다. 이름표가 반대일 뿐 하는 일은 같은 방향이다</li>
+</ul>
+</div>
+
 <div class="pt gyo" id="distill">
   <h3 class="pt-h" data-sref="대면 32p, 대면 36p, 대면 37p, 개정 42p, 개정 43p"><span class="bdg bdg-gyo">교안</span>증류로 더 빠르게 &mdash; 수십 스텝을 1~4 스텝으로 (대면 32 · 36 · 37p · 개정 42 · 43p)</h3>
   <p><b>비유(대면 36p)</b> &mdash; 선생님이 50단계로 푸는 문제를, 학생이 요령을 익혀 2~3단계 만에 같은 답을 내는 것. 여러 스텝을 거치는 &lsquo;교사&rsquo; 모델의 결과를 1~4 스텝 &lsquo;학생&rsquo; 모델이 한 번에 흉내 내도록 학습한다.</p>
@@ -1742,6 +1803,10 @@ loss  = recon + beta * kl               <span class="cm"># −ELBO</span></pre>
     </tbody>
   </table></div>
   <p class="fx-note">결과: 품질은 비슷하게 유지하며 생성이 수~수십 배 빨라져 <b>소비자 GPU에서도 1초 내외</b>(대면 32p). 대신 다양성이나 세부 품질이 조금 떨어질 수 있다. 개정 43p 그래프: 250스텝 확산 DiT-XL/2 FID 2.27, MeanFlow 1스텝 3.43 · 2스텝 2.20 &mdash; 1~2스텝이 250스텝에 근접했다. 개정판의 정리: <span class="hi">증류 · MeanFlow로 1~4 스텝이 실현되어 GAN의 속도 이점이 사라졌다.</span></p>
+</div>
+
+<div class="mynote" id="distill-note"><b>대면수업 필기 &mdash; 증류</b>
+<p>세 가지 방식: <b>점진적 / 일관성 / 적대적</b> &mdash; 위 표의 ①②③. 외우는 요령: <b>점진적</b> = 2스텝을 1스텝으로 반씩 접기(50 → 25 → 13 → … 스텝), <b>일관성</b> = 경로 어디서든 한 번에 결론으로, <b>적대적</b> = GAN의 판별자를 다시 데려와 &lsquo;진짜 같은지&rsquo;로 채점.</p>
 </div>
 </section>
 
@@ -1807,6 +1872,17 @@ loss  = recon + beta * kl               <span class="cm"># −ELBO</span></pre>
   </ul>
 </div>
 
+<div class="mynote" id="gan-why-note"><b>대면수업 필기 &mdash; GAN은 요즘 안 쓴대!! 헐! 왜 안 써? &mdash; 그치만 적대적 학습은 여전히 핵심 부품</b></div>
+<div class="qa" id="gan-why"><b>왜 이미지 생성의 주연에서 내려왔나 &mdash; 네 가지 이유</b>
+<ul class="ul">
+  <li><b>학습이 불안정</b> &mdash; 두 모델의 균형 잡기라 모드 붕괴 · 진동이 잦고, 하이퍼파라미터를 조금만 바꿔도 망가진다(<a class="ext" href="#gan-hard">13.4</a>). 확산 · 흐름 매칭은 MSE 하나라 안정적이다</li>
+  <li><b>다양성 부족</b> &mdash; 판별자를 속이기 쉬운 쪽으로 몰려 데이터 분포를 다 덮지 못한다. 확산은 우도 기반이라 분포 전체를 덮는다. 개정판 참고문헌의 논문 제목 자체가 &lsquo;Diffusion Models Beat GANs&rsquo;(2021)다</li>
+  <li><b>크게 키우기 · 문장 조건이 어렵다</b> &mdash; 수십억 장 · 긴 프롬프트로 키울수록 GAN은 학습이 더 불안정해지는 반면, DiT는 키울수록 좋아진다(<a class="ext" href="#dit-scale">13.9</a>)</li>
+  <li><b>마지막 장점(속도)도 사라졌다</b> &mdash; GAN의 무기는 순전파 1번이었는데, 증류 · MeanFlow로 확산 계열도 1~4스텝이 됐다(<a class="ext" href="#distill">13.9</a>)</li>
+</ul>
+<p>그래도 &lsquo;진짜 같은가&rsquo;를 채점하는 <b>판별자 아이디어</b>는 살아 있다 &mdash; 아래 표처럼 VAE의 선명한 복원, 초해상도, 적대적 증류 안에 부품으로 들어간다. 그래서 13.1~13.6의 GAN 원리는 여전히 시험 범위이자 기본기다.</p>
+</div>
+
 <div class="pt gyo" id="ar-llm">
   <h3 class="pt-h" data-sref="개정 22p, 개정 23p, 개정 24p"><span class="bdg bdg-gyo">교안</span>자기회귀 생성 모델과 LLM (개정 PART 4 · 22~24p)</h3>
   <div class="fx"><div class="tex-d">p_\theta(x)=\prod_i p_\theta(x_i\mid x_1,\dots,x_{i-1}),\qquad \text{손실}=-\sum_i\log p_\theta(x_i\mid x_{\lt i})</div>
@@ -1839,6 +1915,34 @@ loss  = recon + beta * kl               <span class="cm"># −ELBO</span></pre>
     </tbody>
   </table></div>
   <p class="fx-note">순위는 빠르게 바뀐다 &mdash; LMArena · Artificial Analysis 같은 사람 선호도 기반 리더보드에서 최신 순위를 확인하라는 것이 교안의 주의다.</p>
+</div>
+
+<div class="mynote" id="mm-note"><b>대면수업 필기 &mdash; 이미지 생성 · 멀티모달 LLM · 영상 생성</b>
+<ul class="ul">
+  <li>이미지 생성: <b>확산 → 트랜스포머 + 흐름 매칭, 그리고 멀티모달 LLM과의 결합</b> (멀티모달 LLM 설명은 위 표 왼쪽 열)</li>
+  <li>기술 계층도의 가장 아래층에서 가장 중요한 건 <b>지식을 이해하는 것</b>. 텍스트와 이미지의 관계를 잘 이해시킬 수 있는 <b>특징을 잘 추출하는 모델</b>을 뽑아야 한다. Image understanding · text understanding 분야는 더 새로운 걸 만들어야 하는 <b>미지의 분야</b>다 (이거 맞나;; 아직 이해는 잘 못하고 있는 뉘앙스..)</li>
+  <li>나노바나나 같은 거구낭</li>
+</ul>
+</div>
+<div class="qa" id="mm-understand"><b>&lsquo;가장 아래층 = 이해&rsquo;를 풀면 &mdash; 그리기 전에 먼저 알아들어야 한다</b>
+<p>필기의 뉘앙스가 맞다. 생성 모델을 층으로 쌓아 보면 이렇다.</p>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>층</th><th>하는 일</th><th>이번 주 예</th></tr></thead>
+  <tbody>
+    <tr><td>위층 &mdash; 그리기</td><td>노이즈를 걷어 그림을 만든다</td><td>확산 · 흐름 매칭 백본(DiT)</td></tr>
+    <tr><td>중간 &mdash; 연결</td><td>문장의 단어를 그림의 위치에 전달</td><td>교차 주의 · MM-DiT 공동 주의(<a class="ext" href="#cfg">13.8</a>)</td></tr>
+    <tr><td><b>아래층 &mdash; 이해</b></td><td>문장 · 이미지에서 <b>의미 특징</b>을 뽑아 둘을 같은 공간에서 비교할 수 있게</td><td>텍스트 인코더 CLIP → T5 → <b>LLM</b>(Qwen3 등), 이미지 인코더(<a class="ext" href="machine-learning-week12.html#clip">12주차 CLIP</a>)</td></tr>
+  </tbody>
+</table></div>
+<ul class="ul">
+  <li>아래층이 &lsquo;빨간 모자를 쓴 고양이가 <b>왼쪽</b>에 두 마리&rsquo;를 정확히 알아듣지 못하면, 위층이 아무리 잘 그려도 모자 색 · 위치 · 마릿수가 틀린다. 그래서 개정 45p의 공통 추세 ②가 &lsquo;LLM을 텍스트 인코더로&rsquo;이고, 평가에도 GenEval(객체 · 속성 · 수량)이 생겼다</li>
+  <li><b>나노바나나</b>(Nano Banana Pro)가 바로 이 방향의 예다 &mdash; 언어 모델이 먼저 지시를 이해 · 계획하고 세계 지식을 써서 그리니 글자 · 도표가 정확하고 대화로 고칠 수 있다</li>
+  <li>&lsquo;미지의 분야&rsquo;라는 말은, 텍스트와 이미지를 <b>함께</b> 깊이 이해하는 표현을 어떻게 만들지(무엇을 잠재로 쓸지)가 아직 정답이 없는 연구 주제라는 뜻으로 읽힌다 &mdash; 개정 48p의 REPA · RAE(&lsquo;의미 있는 잠재가 생성 품질을 좌우&rsquo;), Transfusion · BAGEL(이해와 생성을 한 모델로)이 그 시도들이다</li>
+</ul>
+</div>
+<div class="live" id="video-live"><b>강조 &mdash; 영상 생성에서 가장 중요한 것</b>
+<p><b>공간적 특징을 이해하는 것</b>이 가장 중요하다. 우리는 <b>시간이 있는 세계</b>에 살고 있기 때문에, <b>&lsquo;시공간&rsquo; 정보를 잘 이해할 수 있는 생성 모델</b>을 만드는 것이 중요하다.</p>
+<p style="margin-top:6px">위 표 오른쪽 열이 그 구현이다 &mdash; 영상을 가로 × 세로 × <b>시간</b>의 3D 조각(시공간 패치)으로 잘라, 한 프레임 안(공간)과 프레임 사이(시간)를 한꺼번에 주의로 본다. 프레임을 따로 그리면 물체가 깜빡이고 모양이 바뀌는 것도 &lsquo;시간 축 이해&rsquo;가 빠졌기 때문이다.</p>
 </div>
 
 <div class="pt gyo" id="choose-gen">
@@ -1881,6 +1985,7 @@ loss  = recon + beta * kl               <span class="cm"># −ELBO</span></pre>
 <ul class="ul">
   <li><b>AI에게 프롬프트를 주는 능력이 중요하다.</b> 좋은 프롬프트 디자인을 위해서는 경험과 공부가 중요하다 &mdash; 결국 <b>기획력</b>이다</li>
   <li><b>새로운 트렌드가 나올 때마다 공부해서 익혀야 한다 &mdash; AI-Native scientist</b></li>
+  <li><b>인공지능을 만들 때 중요한 것</b>: &lsquo;GAN · VAE · Diffusion 중 뭘 만들어야 할까?&rsquo;가 아니라, 비교표에 <b>새로운 열(새 계열)</b>로 들어갈 <b>new 모델을 만드는 것</b>을 목표로 해야 한다</li>
 </ul>
 <p style="margin-top:6px">이번 주 내용과 연결하면: 텍스트 조건은 교차 주의로 그림의 각 위치에 전달되고(<a class="ext" href="#cfg">13.8</a>), 멀티모달 LLM 모델은 지시를 먼저 이해 · 계획한 뒤 그린다(<a class="ext" href="#trend-mm">위</a>). 같은 모델이라도 &lsquo;무엇을 · 어떤 구도로 · 어떤 스타일로&rsquo;를 구체적으로 적을수록 결과가 달라지는 이유다. 13주차 교안이 개정판 · 대면판으로 계속 갱신된 것(GAN만 다루던 31p → 흐름 매칭 · 2026년 모델까지 63p)도 &lsquo;트렌드를 따라 익혀야 한다&rsquo;는 말의 예다. 12주차 필기의 &lsquo;기획 역량&rsquo;(<a class="ext" href="machine-learning-week12.html#planning">12주차</a>)과 같은 이야기다.</p>
 </div>
