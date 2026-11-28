@@ -422,6 +422,39 @@ td .term,th .term{font-weight:700}
 .pt pre.code{margin:9px 0}
 .pt{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
   border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin:11px 0}
+/* 슬라이드 모아보기 · 확대 보기 (ML 페이지와 같은 양식) */
+.deck{background:#efeeea;border:1px solid var(--border);border-radius:var(--radius);padding:12px 12px 14px;margin-bottom:20px}
+.deck-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.deck-h span{font-size:11px;font-weight:400;color:var(--muted)}
+.deck-t{font-size:12px;font-weight:700;color:var(--accent);margin:13px 0 7px;padding-left:8px;border-left:3px solid var(--accent)}
+.deck-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.sld{background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px;margin:0;cursor:zoom-in;transition:box-shadow .15s,transform .15s}
+.sld:hover{box-shadow:0 6px 16px rgba(18,34,80,.13);transform:translateY(-2px)}
+.sld img{display:block;width:100%;height:auto;border-radius:4px;background:#fff}
+.sld figcaption{font-size:11px;color:var(--muted);line-height:1.5;margin-top:6px;text-align:center}
+.sld figcaption b{color:var(--accent)}
+
+
+/* ===== 슬라이드 확대 보기 ===== */
+#lb{position:fixed;inset:0;background:rgba(9,15,31,.94);display:none;align-items:center;justify-content:center;
+  z-index:400;padding:52px 60px 64px;cursor:zoom-out;-webkit-user-select:none;user-select:none}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:80vh;border-radius:8px;background:#fff;box-shadow:0 18px 50px rgba(0,0,0,.45);cursor:default}
+#lb .cap{position:absolute;left:0;right:0;bottom:18px;text-align:center;color:#d9e1f3;font-size:12.5px;line-height:1.6;padding:0 20px;cursor:default}
+#lb .cap b{color:#fff}
+#lb .cap .num{display:block;font-size:11px;color:#9fb0d4;margin-top:4px;letter-spacing:.04em}
+#lb button{
+  position:absolute;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;
+  border-radius:50%;width:44px;height:44px;font-size:20px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .15s;
+  font-family:inherit;padding:0;
+}
+#lb button:hover{background:rgba(255,255,255,.22)}
+#lb button:disabled{opacity:.25;cursor:default}
+#lb .prev{left:12px;top:50%;transform:translateY(-50%)}
+#lb .next{right:12px;top:50%;transform:translateY(-50%)}
+#lb .x{right:12px;top:12px;width:38px;height:38px;font-size:17px}
+.sub-title + .sref{margin-top:2px}
 </style>
 </head>
 <body id="top">
@@ -498,6 +531,13 @@ td .term,th .term{font-weight:700}
 <!-- ===================== 개요 ===================== -->
 <section class="sec" id="goal">
   <div class="sec-head"><span class="sec-badge">GOAL</span><h2 class="sec-title">학습 목표와 14주차 지도<small>교안 2 · 3p · 이름 대조표</small></h2></div>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>2p · 3p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-02.jpg" alt="교안 2p — 학습 목표"><figcaption><b>2p</b> 학습 목표</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-03.jpg" alt="교안 3p — 강의 목차"><figcaption><b>3p</b> 강의 목차</figcaption></figure>
+  </div>
+</div>
 <div class="tbl-wrap">
 <table>
   <thead><tr><th>학습 목표 (교안 2p)</th><th>이 페이지의 절</th></tr></thead>
@@ -529,7 +569,17 @@ td .term,th .term{font-weight:700}
 <!-- ===================== 14.1 ===================== -->
 <section class="sec" id="s1">
   <div class="sec-head"><span class="sec-badge">14.1</span><h2 class="sec-title">딥러닝 기반 질의 응답<small>교안 4~8p</small></h2></div>
-<h3 class="sub-title" id="qa-def">질의 응답이란 &mdash; 문서 목록이 아니라 정답 그 자체 (교안 5p)</h3>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>4p · 5p · 6p · 7p · 8p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-04.jpg" alt="교안 4p — 14.1 이번 절 내용"><figcaption><b>4p</b> 14.1 이번 절 내용</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-05.jpg" alt="교안 5p — 질의 응답이란 · 과제 분류"><figcaption><b>5p</b> 질의 응답이란 · 과제 분류</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-06.jpg" alt="교안 6p — QA 연구의 흐름"><figcaption><b>6p</b> QA 연구의 흐름</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-07.jpg" alt="교안 7p — 기존 처리 과정 vs 딥러닝"><figcaption><b>7p</b> 기존 처리 과정 vs 딥러닝</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-08.jpg" alt="교안 8p — 딥러닝 QA의 특징 · 한계"><figcaption><b>8p</b> 딥러닝 QA의 특징 · 한계</figcaption></figure>
+  </div>
+</div>
+<h3 class="sub-title sref-h" id="qa-def">질의 응답이란 &mdash; 문서 목록이 아니라 정답 그 자체 (교안 5p)</h3>
 <p><b>질의 응답(Question &amp; Answering)</b> = 자연어로 주어진 질문에 대해 시스템이 자연어로 <b>정답</b>을 제시하는 과제. <b>검색</b>(Information Retrieval)이 &lsquo;관련 문서 목록&rsquo;을 주는 것과 달리, 질의 응답은 <b>&lsquo;정답 그 자체&rsquo;</b>를 준다 &mdash; &ldquo;대한민국의 수도는?&rdquo;에 검색은 링크 10개, 질의 응답은 &ldquo;서울&rdquo;.</p>
 <div class="tbl-wrap" id="qa-types">
 <table>
@@ -543,7 +593,7 @@ td .term,th .term{font-weight:700}
 </div>
 <div class="pit"><b>⚠ 분류 기준 섞기</b> &mdash; &lsquo;폐쇄형&rsquo;은 <b>지식 범위</b> 기준이지 정답 형태 기준이 아니다(100문제 3번). 정답 형태 = 추출 · 생성 · 선택, 지식 범위 = 폐쇄 · 개방, 근거 = 독해 · 검색 &mdash; 세 쌍을 짝으로 외운다.</div>
 
-<h3 class="sub-title" id="qa-pipeline">기존 질의 응답 vs 딥러닝 질의 응답 (교안 6~8p)</h3>
+<h3 class="sub-title sref-h" id="qa-pipeline">기존 질의 응답 vs 딥러닝 질의 응답 (교안 6~8p)</h3>
 <div class="flow">
   <div class="fl"><b>기존 (규칙 · 통계 기반)</b><span>질문 → 질문 분석 → 쿼리 → 문서 검색 → 후보 정답 추출 → 정답 추출 → 정답 &mdash; 단계마다 사전 · 규칙 · 형태소 분석기 같은 <b>외부 리소스</b>가 필요</span></div>
   <div class="fl"><b>딥러닝 (End-to-End)</b><span>질문 + 문서 → 단어 임베딩 + 신경망 인코더 → 정답 예측 → 정답 &mdash; 전체를 <b>손실 함수 하나</b>로 학습</span></div>
@@ -565,9 +615,19 @@ td .term,th .term{font-weight:700}
 <!-- ===================== 14.2 ===================== -->
 <section class="sec" id="s2">
   <div class="sec-head"><span class="sec-badge">14.2</span><h2 class="sec-title">질의 응답 딥러닝 모델 — 샴 · 어텐션 · Compare-Aggregate<small>교안 9~13p</small></h2></div>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>9p · 10p · 11p · 12p · 13p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-09.jpg" alt="교안 9p — QA 모델 종류 · 공통 아이디어"><figcaption><b>9p</b> QA 모델 종류 · 공통 아이디어</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-10.jpg" alt="교안 10p — 샴 네트워크"><figcaption><b>10p</b> 샴 네트워크</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-11.jpg" alt="교안 11p — 어텐션 기반 모델"><figcaption><b>11p</b> 어텐션 기반 모델</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-12.jpg" alt="교안 12p — Compare-Aggregate · BiMPM 5층"><figcaption><b>12p</b> Compare-Aggregate · BiMPM 5층</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-13.jpg" alt="교안 13p — BiMPM 구조도"><figcaption><b>13p</b> BiMPM 구조도</figcaption></figure>
+  </div>
+</div>
 <div class="note-box" id="qa-models"><b>세 모델의 공통 아이디어 (교안 9p)</b> &mdash; 질문 문장과 정답 후보 문장을 <b>각각 인코딩</b>한 뒤 두 표현 사이의 <b>연관성 점수</b>를 계산하고, 점수가 가장 높은 후보를 고르는 <b>랭킹(ranking) 문제</b>로 정식화한다. 차이는 &lsquo;두 문장을 얼마나 일찍 · 촘촘히 비교하느냐&rsquo;다.</div>
 
-<h3 class="sub-title" id="siamese">샴 네트워크 — 쌍둥이 인코더 (교안 10p)</h3>
+<h3 class="sub-title sref-h" id="siamese">샴 네트워크 — 쌍둥이 인코더 (교안 10p)</h3>
 <svg viewBox="0 0 640 210" role="img" aria-label="샴 네트워크: 질문과 정답 후보가 가중치를 공유하는 두 인코더(Bi-LSTM 또는 CNN)를 각각 통과해 벡터가 되고, 두 벡터가 유사도 계산(코사인 또는 element-wise)으로 모여 점수가 나온다" style="width:100%;max-width:640px;display:block;margin:8px auto">
   <defs><marker id="n14a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#374151"/></marker></defs>
   <rect x="20" y="20" width="150" height="40" rx="8" fill="#eef6ff" stroke="#1b3f8b"/><text x="95" y="45" text-anchor="middle" font-size="13">질문 (Question)</text>
@@ -588,7 +648,7 @@ td .term,th .term{font-weight:700}
 </ul>
 <div class="deep"><b>🔎 왜 가중치를 공유하나</b> &mdash; 질문 인코더와 답 인코더가 따로면, 같은 문장 &ldquo;서울이 수도다&rdquo;도 양쪽에서 다른 벡터가 되어 코사인이 1이 아닐 수 있다. 공유하면 같은 문장은 늘 같은 벡터, 비슷한 문장은 비슷한 벡터가 되어 &lsquo;거리 = 의미 차이&rsquo;가 성립한다. 파라미터 수도 절반이다. 단점은 두 문장을 <b>끝까지 따로</b> 읽다가 마지막에야 비교한다는 것 &mdash; 질문의 어느 단어가 답의 어느 단어와 맞는지는 보지 못한다. 그래서 다음 두 모델이 나왔다.</div>
 
-<h3 class="sub-title" id="attn-qa">어텐션 기반 모델 — 질문이 답의 단어를 고른다 (교안 11p)</h3>
+<h3 class="sub-title sref-h" id="attn-qa">어텐션 기반 모델 — 질문이 답의 단어를 고른다 (교안 11p)</h3>
 <ul class="ul">
   <li>질문과 정답 후보 간 <b>상호작용</b>을 개선하려고 제안</li>
   <li><b>bi-LSTM + pooling layer</b>로 질문 표현을 만든다</li>
@@ -596,7 +656,7 @@ td .term,th .term{font-weight:700}
 </ul>
 <p class="fx-note">예: 질문 &ldquo;수도는 어디인가&rdquo;, 후보 &ldquo;대한민국의 수도는 인구가 많은 서울이다&rdquo; &mdash; 어텐션이 &lsquo;수도&rsquo; · &lsquo;서울&rsquo;에 무게를 싣고 &lsquo;인구가 많은&rsquo;은 덜 본다. 샴처럼 문장 전체를 한 벡터로 뭉뚱그리지 않는다.</p>
 
-<h3 class="sub-title" id="bimpm">Compare-Aggregate — BiMPM의 5개 층 (교안 12 · 13p)</h3>
+<h3 class="sub-title sref-h" id="bimpm">Compare-Aggregate — BiMPM의 5개 층 (교안 12 · 13p)</h3>
 <div class="tbl-wrap">
 <table>
   <thead><tr><th>층 (아래 → 위)</th><th>하는 일</th></tr></thead>
@@ -610,6 +670,27 @@ td .term,th .term{font-weight:700}
 </table>
 </div>
 <div class="pit"><b>⚠ 순서 · 이름</b> &mdash; BiMPM(Bilateral Multi-Perspective Matching)은 <b>5개 층</b>, 순서는 Word → Context → <b>Matching → Aggregation</b> → Prediction(&lsquo;비교한 뒤 모은다&rsquo; = Compare-Aggregate라는 이름 그대로). &lsquo;다관점 비교&rsquo;는 Matching, &lsquo;고정 길이로 모으기&rsquo;는 Aggregation(100문제 20 · 21번).</div>
+<div class="mynote" id="ca-vs-bimpm"><b>비교집계 모델(Compare-Aggregate)과 BiMPM &mdash; 틀과 대표 모델</b>
+<p><b>비교집계 모델</b>은 두 문장(또는 텍스트 쌍) 사이의 의미적 유사도나 논리적 관계를 판별하려고, <b>단어 단위로 먼저 세밀하게 대조한 뒤 그 결과를 종합</b>하는 자연어 처리 아키텍처 <b>프레임워크</b>다. <b>BiMPM</b>(Bilateral Multi-Perspective Matching)은 이 프레임워크를 가장 정교하게 구현한 <b>대표 딥러닝 모델</b>이다.</p>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>구분</th><th>비교집계 모델 (Compare-Aggregate)</th><th>BiMPM</th></tr></thead>
+  <tbody>
+    <tr><td>개념적 위상</td><td>문장 쌍 매칭을 위한 설계 <b>프레임워크(패러다임)</b></td><td>비교집계 프레임워크를 구체화한 <b>대표 모델</b></td></tr>
+    <tr><td>핵심 아이디어</td><td>문장 전체를 한 벡터로 압축하는 대신 <b>단어 단위로 먼저 비교</b> 후 종합</td><td><b>양방향(Bilateral)</b> + <b>다각도(Multi-Perspective)</b> 매칭</td></tr>
+    <tr><td>비교 방식</td><td>원소별 곱 · 차이, 신경망 계층 등 유연하게 선택</td><td>다중 관점 코사인 유사도 + 4가지 특화 매칭 전략 결합</td></tr>
+    <tr><td>집계 방식</td><td>주로 CNN 또는 RNN으로 비교 벡터들을 요약</td><td>Aggregation용 <b>BiLSTM</b>으로 순차적 문맥 종합</td></tr>
+  </tbody>
+</table></div>
+</div>
+<div class="deep"><b>🔎 &lsquo;양방향&rsquo; · &lsquo;다관점&rsquo; · &lsquo;4가지 매칭 전략&rsquo;을 풀면</b>
+<ul class="ul">
+  <li><b>양방향(Bilateral)</b> &mdash; 질문의 각 단어를 정답 후보 전체와 비교(Q → A)하고, 거꾸로 정답 후보의 각 단어를 질문 전체와도 비교(A → Q)한다. 한쪽만 보면 &lsquo;질문에 있는 것이 답에 있는가&rsquo;만 알고 &lsquo;답에 군더더기가 있는가&rsquo;는 놓친다</li>
+  <li><b>다관점(Multi-Perspective) 코사인</b> &mdash; 두 벡터를 그대로 코사인하지 않고, 학습되는 가중 벡터 W<sub>k</sub>로 차원마다 무게를 다르게 준 뒤 잰다: <span class="tex">m_k=\cos(W_k\circ v_1,\ W_k\circ v_2)</span>. 관점이 l개면 비교 결과가 숫자 하나가 아니라 <b>l차원 벡터</b>가 된다</li>
+  <li>숫자 예 &mdash; v₁ = (1, 0, 1), v₂ = (1, 1, 0). 관점 W₁ = (1, 1, 1)(모든 차원 동등)이면 cos = 1/(√2·√2) = <b>0.50</b>. 관점 W₂ = (1, 0, 1)(2번째 차원 무시)이면 (1, 0, 1)과 (1, 0, 0)의 cos = 1/√2 ≈ <b>0.71</b>. 어느 측면을 보느냐에 따라 &lsquo;닮은 정도&rsquo;가 달라지고, 모델은 쓸모 있는 관점들을 스스로 배운다</li>
+  <li><b>4가지 매칭 전략</b>(BiMPM 논문) &mdash; 한 단어를 상대 문장의 무엇과 비교하나: ① <b>Full</b> = 상대 문장의 마지막 상태(문장 전체 요약)와 ② <b>Max-pooling</b> = 상대의 모든 단어와 비교한 뒤 관점별 최댓값 ③ <b>Attentive</b> = 상대 단어들을 유사도로 가중평균한 벡터와 ④ <b>Max-attentive</b> = 상대 단어 중 가장 비슷한 하나와. 네 결과를 이어 붙여 Aggregation BiLSTM에 넘긴다</li>
+</ul>
+<p>그래서 앞의 샴 네트워크와 대비된다 &mdash; 샴은 &lsquo;각자 요약한 뒤 한 번 비교&rsquo;, 비교집계는 &lsquo;단어마다 먼저 비교한 뒤 모으기&rsquo;(아래 표).</p>
+</div>
 <div class="deep"><b>🔎 세 모델을 한 줄씩</b>
   <div class="tbl-wrap"><table>
     <thead><tr><th>모델</th><th>언제 비교하나</th><th>비유</th></tr></thead>
@@ -625,7 +706,15 @@ td .term,th .term{font-weight:700}
 <!-- ===================== 14.3 ===================== -->
 <section class="sec" id="s3">
   <div class="sec-head"><span class="sec-badge">14.3</span><h2 class="sec-title">사전학습 언어모델 기반 질의 응답과 평가 지표<small>교안 14~16p</small></h2></div>
-<h3 class="sub-title" id="bert-qa">BERT로 푸는 추출형 질의 응답 (교안 14p)</h3>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>14p · 15p · 16p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-14.jpg" alt="교안 14p — 사전학습 언어모델 QA · 데이터셋"><figcaption><b>14p</b> 사전학습 언어모델 QA · 데이터셋</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-15.jpg" alt="교안 15p — 정답 구간 예측"><figcaption><b>15p</b> 정답 구간 예측</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-16.jpg" alt="교안 16p — EM · F1 표"><figcaption><b>16p</b> EM · F1 표</figcaption></figure>
+  </div>
+</div>
+<h3 class="sub-title sref-h" id="bert-qa">BERT로 푸는 추출형 질의 응답 (교안 14p)</h3>
 <ul class="ul">
   <li>대규모 코퍼스로 <b>사전학습</b>한 언어모델을 질의 응답 데이터로 <b>미세조정</b>한다(13주차 BERT &mdash; <a class="ext" href="nlp-week13.html#s7">13.7</a>)</li>
   <li>입력: <b><code>[CLS] 질문 [SEP] 지문 [SEP]</code></b></li>
@@ -644,7 +733,7 @@ td .term,th .term{font-weight:700}
 </table>
 </div>
 
-<h3 class="sub-title" id="span">정답 구간 고르기 — s(i) + e(j)가 가장 큰 i ≤ j (교안 15p)</h3>
+<h3 class="sub-title sref-h" id="span">정답 구간 고르기 — s(i) + e(j)가 가장 큰 i ≤ j (교안 15p)</h3>
 <div class="tbl-wrap">
 <table>
   <thead><tr><th>지문 토큰</th><th>대한민국</th><th>의</th><th>수도</th><th>는</th><th><b>서울</b></th><th>이다</th></tr></thead>
@@ -659,7 +748,7 @@ td .term,th .term{font-weight:700}
 <div class="deep"><b>🔎 손으로 구간 고르기 (점수는 설명용으로 정한 값)</b> &mdash; 후보 구간 (i, j)마다 s(i) + e(j)를 더한다. (서울, 서울) = 2.0 + 1.8 = <b>3.8</b>, (서울, 이다) = 2.0 + 0.6 = 2.6, (대한민국, 서울) = 0.5 + 1.8 = 2.3 … 가장 큰 것은 (서울, 서울) &rarr; 정답 &ldquo;서울&rdquo;. 소프트맥스는 각 줄을 합이 1인 확률로 바꿀 뿐 순위는 바꾸지 않는다(서울이 0.637 · 0.547로 1등). 지문 안의 연속 구간만 후보라 &lsquo;지문에 없는 말&rsquo;은 답이 될 수 없다 &mdash; 이것이 추출형의 뜻이다.</div>
 <div class="pit"><b>⚠ argmax 두 번 vs i ≤ j 제약</b> &mdash; 100문제 23번 보기는 &lsquo;argmax P(start)부터 argmax P(end)까지&rsquo;라고 쓴다. 위 예처럼 둘이 같은 자리를 가리키면 결과가 같다. 하지만 start 1등이 &lsquo;서울&rsquo;(5번째), end 1등이 &lsquo;수도&rsquo;(3번째)처럼 <b>끝이 시작보다 앞에</b> 오면 구간이 성립하지 않는다 &mdash; 그래서 교안 15p는 <b>i ≤ j 이면서 s(i) + e(j)가 최대</b>인 쌍을 고르라고 적었다. 실제 구현도 이 제약(과 최대 길이 제한)을 둔다.</div>
 
-<h3 class="sub-title" id="em-f1">EM과 F1 — 완전 일치 vs 부분 점수 (교안 16p)</h3>
+<h3 class="sub-title sref-h" id="em-f1">EM과 F1 — 완전 일치 vs 부분 점수 (교안 16p)</h3>
 <ul class="ul">
   <li><b>EM(Exact Match)</b> &mdash; 예측과 정답 문자열이 <b>완전히 일치</b>하는 비율(맞으면 1, 아니면 0)</li>
   <li><b>F1</b> &mdash; 예측과 정답을 <b>토큰 집합</b>으로 보고 정밀도 · 재현율의 조화평균</li>
@@ -681,7 +770,16 @@ td .term,th .term{font-weight:700}
 <!-- ===================== 14.4 ===================== -->
 <section class="sec" id="s4">
   <div class="sec-head"><span class="sec-badge">14.4</span><h2 class="sec-title">시각 질의 응답 (VQA)<small>교안 17~20p</small></h2></div>
-<h3 class="sub-title" id="vqa">VQA — 사진을 보고 질문에 답하기 (교안 17p)</h3>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>17p · 18p · 19p · 20p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-17.jpg" alt="교안 17p — VQA · 캡셔닝과의 차이"><figcaption><b>17p</b> VQA · 캡셔닝과의 차이</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-18.jpg" alt="교안 18p — VQA 데이터 구성"><figcaption><b>18p</b> VQA 데이터 구성</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-19.jpg" alt="교안 19p — VQA 기본 모델"><figcaption><b>19p</b> VQA 기본 모델</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-20.jpg" alt="교안 20p — VQA 모델의 종류"><figcaption><b>20p</b> VQA 모델의 종류</figcaption></figure>
+  </div>
+</div>
+<h3 class="sub-title sref-h" id="vqa">VQA — 사진을 보고 질문에 답하기 (교안 17p)</h3>
 <p><b>VQA</b> = 자유 형식의 이미지와 그 이미지에 대한 다양한 질문이 주어졌을 때 올바른 답을 만드는 작업. 예: &ldquo;who is wearing glasses?&rdquo; &mdash; 비슷한 이미지라도 사진에 따라 &ldquo;man&rdquo; 또는 &ldquo;woman&rdquo;이 답이 되도록 데이터 분포를 고려한다(이미지를 안 보고 질문만으로 찍지 못하게).</p>
 <div class="tbl-wrap">
 <table>
@@ -693,7 +791,7 @@ td .term,th .term{font-weight:700}
 </table>
 </div>
 
-<h3 class="sub-title" id="vqa-data">VQA 데이터 구성 — 개방형과 다지선다형 (교안 18p)</h3>
+<h3 class="sub-title sref-h" id="vqa-data">VQA 데이터 구성 — 개방형과 다지선다형 (교안 18p)</h3>
 <div class="tbl-wrap">
 <table>
   <thead><tr><th>개방형 질문 유형</th><th>예시 질문</th><th>필요한 것</th></tr></thead>
@@ -708,7 +806,7 @@ td .term,th .term{font-weight:700}
 </div>
 <div class="pit"><b>⚠ 지식 vs 상식</b> &mdash; 채식주의 여부는 음식 재료에 대한 <b>지식</b>, 시력 질문은 안경을 보고 짐작하는 <b>상식</b> 추론이다(100문제 38번). 개수 세기는 &lsquo;물체 인식(Object detection)&rsquo;이다(37번).</div>
 
-<h3 class="sub-title" id="vqa-model">VQA 기본 모델과 변형 (교안 19 · 20p)</h3>
+<h3 class="sub-title sref-h" id="vqa-model">VQA 기본 모델과 변형 (교안 19 · 20p)</h3>
 <div class="flow">
   <div class="fl"><b>이미지 → CNN(VGG 등)</b><span>이미지 정보를 담은 벡터</span></div>
   <div class="fl"><b>질문 → word2vec 임베딩의 element-wise 평균</b><span>(또는 LSTM) 질문 벡터</span></div>
@@ -732,7 +830,16 @@ td .term,th .term{font-weight:700}
 <!-- ===================== 14.5 ===================== -->
 <section class="sec" id="s5">
   <div class="sec-head"><span class="sec-badge">14.5</span><h2 class="sec-title">기계 번역의 소개와 발전 흐름<small>교안 21~24p</small></h2></div>
-<h3 class="sub-title" id="mt-def">기계 번역의 세 흐름 — 규칙 → 통계 → 신경망 (교안 22 · 23p)</h3>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>21p · 22p · 23p · 24p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-21.jpg" alt="교안 21p — 14.5 이번 절 내용"><figcaption><b>21p</b> 14.5 이번 절 내용</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-22.jpg" alt="교안 22p — 기계 번역 · RBMT"><figcaption><b>22p</b> 기계 번역 · RBMT</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-23.jpg" alt="교안 23p — SMT · NMT"><figcaption><b>23p</b> SMT · NMT</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-24.jpg" alt="교안 24p — 번역의 발전 순서"><figcaption><b>24p</b> 번역의 발전 순서</figcaption></figure>
+  </div>
+</div>
+<h3 class="sub-title sref-h" id="mt-def">기계 번역의 세 흐름 — 규칙 → 통계 → 신경망 (교안 22 · 23p)</h3>
 <p><b>기계 번역</b> = 소스 문장(Source Sentence)을 타겟 문장(Target Sentence)으로 컴퓨터가 번역하는 것.</p>
 <div class="tbl-wrap">
 <table>
@@ -747,7 +854,7 @@ td .term,th .term{font-weight:700}
 </div>
 <div class="deep"><b>🔎 SMT의 두 모델을 한 문장으로</b> &mdash; &ldquo;나는 학교에 갔다&rdquo;를 번역할 때, <b>번역 모델</b>은 &lsquo;학교에 ↔ to school&rsquo;, &lsquo;갔다 ↔ went&rsquo; 같은 대응(alignment)과 그 확률을 병렬 코퍼스에서 센다. <b>언어 모델</b>은 후보 &ldquo;I went to school&rdquo;과 &ldquo;I to school went&rdquo; 중 영어로 자연스러운 쪽의 확률을 높게 준다. 두 점수를 곱해 가장 높은 후보를 고른다 &mdash; 대응은 맞는데 어순이 이상한 번역을 언어 모델이 걸러 준다.</div>
 
-<h3 class="sub-title" id="nmt-history">발전 순서와 실제 사례 (교안 24p)</h3>
+<h3 class="sub-title sref-h" id="nmt-history">발전 순서와 실제 사례 (교안 24p)</h3>
 <div class="flow">
   <div class="fl"><b>통계 기반 (수작업 자질 · 정렬 모델)</b><span>Word-based SMT → Phrase-based SMT → Hierarchical Phrase SMT</span></div>
   <div class="fl"><b>신경망 기반 (표현 학습 · End-to-End)</b><span>RNN-based NMT → CNN-based NMT → <b>Transformer-based NMT</b></span></div>
@@ -762,7 +869,16 @@ td .term,th .term{font-weight:700}
 <!-- ===================== 14.6 ===================== -->
 <section class="sec" id="s6">
   <div class="sec-head"><span class="sec-badge">14.6</span><h2 class="sec-title">Sequence to Sequence 구조와 인코더-디코더<small>교안 25~28p</small></h2></div>
-<h3 class="sub-title" id="seq2seq">NMT = 문장 to 문장 (교안 25 · 26p)</h3>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>25p · 26p · 27p · 28p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-25.jpg" alt="교안 25p — NMT = Seq2Seq"><figcaption><b>25p</b> NMT = Seq2Seq</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-26.jpg" alt="교안 26p — 인코더 · 디코더 · 교사 강요"><figcaption><b>26p</b> 인코더 · 디코더 · 교사 강요</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-27.jpg" alt="교안 27p — Seq2Seq 동작 구조"><figcaption><b>27p</b> Seq2Seq 동작 구조</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-28.jpg" alt="교안 28p — RNN 기반 NMT의 문제점"><figcaption><b>28p</b> RNN 기반 NMT의 문제점</figcaption></figure>
+  </div>
+</div>
+<h3 class="sub-title sref-h" id="seq2seq">NMT = 문장 to 문장 (교안 25 · 26p)</h3>
 <ul class="ul">
   <li>NMT는 <b>Sequence to Sequence</b> 구조, 즉 <b>문장 to 문장</b>. 한-영 번역기 = &ldquo;한국어 문장 to 영어 문장&rdquo;</li>
   <li>학습에 필요한 것: <b>Parallel Corpus(병렬 코퍼스)</b> &mdash; 같은 뜻의 소스 · 타겟 문장 쌍</li>
@@ -781,7 +897,7 @@ td .term,th .term{font-weight:700}
 </div>
 <div class="deep"><b>🔎 교사 강요가 왜 필요한가</b> &mdash; 정답이 &ldquo;I went to school&rdquo;인데 학습 초반 디코더가 첫 단어를 &ldquo;You&rdquo;로 틀렸다고 하자. 그 틀린 &ldquo;You&rdquo;를 다음 입력으로 넣으면 뒤의 단어들도 줄줄이 엉뚱한 문맥에서 배우게 된다. 교사 강요는 다음 입력으로 <b>정답 &ldquo;I&rdquo;</b>를 넣어 각 시점이 올바른 앞 문맥에서 배우게 한다 &mdash; 학습이 빠르고 안정적이다. 대신 추론 때는 정답이 없어 자기 예측을 넣어야 하므로, 학습과 추론의 입력이 달라지는 차이(노출 편향)가 생긴다.</div>
 
-<h3 class="sub-title" id="s2s-flow">동작 구조 — &lsquo;나는 학교에 갔다&rsquo; → &lsquo;I went to school&rsquo; (교안 27p)</h3>
+<h3 class="sub-title sref-h" id="s2s-flow">동작 구조 — &lsquo;나는 학교에 갔다&rsquo; → &lsquo;I went to school&rsquo; (교안 27p)</h3>
 <svg viewBox="0 0 660 230" role="img" aria-label="Seq2Seq: 인코더 LSTM 4칸이 나는, 학교에, 갔다, eos를 차례로 읽어 문맥 벡터 하나를 만들고, 디코더 LSTM 4칸이 sos부터 입력받아 I, went, to school, eos를 차례로 출력한다. 각 출력이 다음 칸의 입력이 된다" style="width:100%;max-width:660px;display:block;margin:8px auto">
   <defs><marker id="n14b" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#374151"/></marker></defs>
   <text x="140" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#1b3f8b">인코더 (Encoder)</text>
@@ -812,7 +928,7 @@ td .term,th .term{font-weight:700}
 </svg>
 <p class="fx-note">인코더는 &lsquo;나는 / 학교에 / 갔다 / &lt;eos&gt;&rsquo;를 끝까지 읽어 <b>문맥 벡터</b>를 만들고, 디코더는 <b>&lt;sos&gt;를 첫 입력</b>으로 받아 &lsquo;I&rsquo;부터 &lsquo;&lt;eos&gt;&rsquo;가 나올 때까지 한 단어씩 만든다(100문제 61번). 교안 그림은 &lsquo;to school&rsquo;을 한 칸으로 묶어 그렸다.</p>
 
-<h3 class="sub-title" id="rnn-limit">RNN 기반 NMT의 문제점 (교안 28p)</h3>
+<h3 class="sub-title sref-h" id="rnn-limit">RNN 기반 NMT의 문제점 (교안 28p)</h3>
 <div class="tbl-wrap">
 <table>
   <thead><tr><th>문제</th><th>왜</th><th>해결</th></tr></thead>
@@ -830,14 +946,26 @@ td .term,th .term{font-weight:700}
 <!-- ===================== 14.7 ===================== -->
 <section class="sec" id="s7">
   <div class="sec-head"><span class="sec-badge">14.7</span><h2 class="sec-title">어텐션 메커니즘과 트랜스포머 기반 번역 · BLEU<small>교안 29~35p</small></h2></div>
-<h3 class="sub-title" id="attn-why">어텐션 — 그때그때 어디를 볼지 정한다 (교안 29p)</h3>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>29p · 30p · 31p · 32p · 33p · 34p · 35p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-29.jpg" alt="교안 29p — 어텐션의 등장"><figcaption><b>29p</b> 어텐션의 등장</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-30.jpg" alt="교안 30p — 어텐션 계산 4단계"><figcaption><b>30p</b> 어텐션 계산 4단계</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-31.jpg" alt="교안 31p — 어텐션 가중치 시각화"><figcaption><b>31p</b> 어텐션 가중치 시각화</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-32.jpg" alt="교안 32p — 트랜스포머 구성 요소"><figcaption><b>32p</b> 트랜스포머 구성 요소</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-33.jpg" alt="교안 33p — Scaled Dot-Product · 멀티헤드"><figcaption><b>33p</b> Scaled Dot-Product · 멀티헤드</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-34.jpg" alt="교안 34p — 트랜스포머 구조"><figcaption><b>34p</b> 트랜스포머 구조</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-35.jpg" alt="교안 35p — BLEU"><figcaption><b>35p</b> BLEU</figcaption></figure>
+  </div>
+</div>
+<h3 class="sub-title sref-h" id="attn-why">어텐션 — 그때그때 어디를 볼지 정한다 (교안 29p)</h3>
 <ul class="ul">
   <li>문제: 고정된 벡터 하나로 전체 맥락을 나타내면 긴 문장을 처리하기 어렵다 &rarr; 해결책이 <b>Attention</b></li>
   <li>핵심: <span class="hi">어떤 시점에 어떤 부분에 집중할지 <b>그때그때 동적으로</b> 정하는 것</span></li>
   <li>인코더의 <b>모든 스텝의 hidden state</b>를 디코더에 넘겨준다 &mdash; 각 디코딩 스텝에서 입력의 어느 부분을 보는지 확인할 수 있다</li>
 </ul>
 
-<h3 class="sub-title" id="attn-steps">어텐션 계산 4단계 (교안 30p)</h3>
+<h3 class="sub-title sref-h" id="attn-steps">어텐션 계산 4단계 (교안 30p)</h3>
 <div class="tbl-wrap">
 <table>
   <thead><tr><th>단계</th><th>식</th><th>뜻</th></tr></thead>
@@ -852,7 +980,7 @@ td .term,th .term{font-weight:700}
 <div class="deep"><b>🔎 &lsquo;went&rsquo;를 만들 때 한 번 계산해 보기 (값은 설명용)</b> &mdash; 인코더 은닉 상태를 2차원으로 줄여 h<sub>나는</sub> = (0.9, 0.1), h<sub>학교에</sub> = (0.2, 0.8), h<sub>갔다</sub> = (0.5, 0.5)라 하고, ① 점수가 (2.0, 0.5, 0.3)으로 나왔다고 하자. ② softmax &rarr; (0.711, 0.159, 0.130), 합 1. ③ 문맥 벡터 c = 0.711·(0.9, 0.1) + 0.159·(0.2, 0.8) + 0.130·(0.5, 0.5) = <b>(0.737, 0.263)</b> &mdash; 가장 큰 가중치를 받은 단어의 상태 쪽으로 끌려간다. ④ c와 디코더 상태 s를 이어 tanh → softmax로 다음 단어를 고른다. 디코딩 스텝마다 점수가 새로 계산되니 c도 매번 다르다 &mdash; &lsquo;동적으로&rsquo;의 뜻이다.</div>
 <p>어텐션 전체 구조(교안 30p): <b>Embedding</b>(단어 → 벡터) → <b>Bi-directional Encoder</b>(양방향으로 각 시점 정보) → <b>Attention</b>(관심 있는 부분을 가중합해 결합) → <b>Decoder</b>(time-step별 단어 출력).</p>
 
-<h3 class="sub-title" id="attn-map">어텐션 가중치 시각화 (교안 31p)</h3>
+<h3 class="sub-title sref-h" id="attn-map">어텐션 가중치 시각화 (교안 31p)</h3>
 <div class="tbl-wrap">
 <table>
   <thead><tr><th>출력 ↓ / 입력 →</th><th>나는</th><th>학교에</th><th>갔다</th><th>행 합</th></tr></thead>
@@ -865,7 +993,7 @@ td .term,th .term{font-weight:700}
 </div>
 <p class="fx-note">행 = 출력(타겟) 단어, 열 = 입력(소스) 단어, 진할수록 큰 가중치. <b>각 행의 합 = 1</b>(softmax 결과). 어순이 다른 두 언어의 대응이 그대로 보인다 &mdash; 영어 2번째 단어 &lsquo;went&rsquo;는 한국어 3번째 &lsquo;갔다&rsquo;(0.77), &lsquo;to school&rsquo;은 &lsquo;학교에&rsquo;(0.78)를 본다. 행 합이 1이지 열 합이 1인 것은 아니다.</p>
 
-<h3 class="sub-title" id="transformer">트랜스포머 — 순환 없이 어텐션만으로 (교안 32 · 34p)</h3>
+<h3 class="sub-title sref-h" id="transformer">트랜스포머 — 순환 없이 어텐션만으로 (교안 32 · 34p)</h3>
 <p>&ldquo;<b>Attention Is All You Need</b>&rdquo;(2017)는 순환 구조를 제거하고 어텐션만으로 인코더-디코더를 만들었다. 모든 시점을 <b>동시에</b> 처리해 병렬 학습이 되고, 먼 단어 사이의 의존성도 한 번에 잡는다.</p>
 <div class="tbl-wrap">
 <table>
@@ -888,7 +1016,7 @@ td .term,th .term{font-weight:700}
 </div>
 <div class="pit"><b>⚠ 디코더에만 있는 것</b> &mdash; <b>Masked</b> Multi-Head Attention과 <b>Encoder-Decoder Attention</b>(100문제 76번). Positional Encoding은 &lsquo;순서 정보&rsquo;, 미래를 가리는 것은 Masked Self-Attention이다 &mdash; 둘을 바꿔 놓은 보기가 함정(74번). 각 서브층 뒤에는 모두 Add &amp; Layer Norm이 붙는다.</div>
 
-<h3 class="sub-title" id="sdpa">Scaled Dot-Product Attention과 √d<sub>k</sub> (교안 33p)</h3>
+<h3 class="sub-title sref-h" id="sdpa">Scaled Dot-Product Attention과 √d<sub>k</sub> (교안 33p)</h3>
 <div class="fx"><div class="tex-d">\text{Attention}(Q,K,V)=\text{softmax}\!\Big(\frac{QK^{\top}}{\sqrt{d_k}}\Big)V</div>
 <p class="fx-note">질의(Q)로 키(K)를 검색해 값(V)을 가중합한다. 위 4단계의 Score = QKᵀ, Alignment = softmax, Context = ·V와 같은 일이다.</p></div>
 <ul class="ul">
@@ -898,7 +1026,7 @@ td .term,th .term{font-weight:700}
 </ul>
 <div class="deep"><b>🔎 √64 = 8의 효과를 숫자로</b> &mdash; d<sub>k</sub> = 64면 내적의 표준편차가 약 √64 = 8이다. 점수가 (8, 0, −8) 정도로 벌어지면 softmax는 <b>(0.9997, 0.0003, 0.0000)</b> &mdash; 사실상 한 칸만 1이라 다른 칸으로는 기울기가 흐르지 않는다. 8로 나눈 (1, 0, −1)이면 <b>(0.665, 0.245, 0.090)</b>으로 고르게 퍼져 모든 칸이 학습된다. 마스킹: 점수에 −∞를 더하면 e<sup>−∞</sup> = 0이라 미래 단어 가중치가 정확히 0이 된다.</div>
 
-<h3 class="sub-title" id="bleu">번역의 채점표 BLEU (교안 35p)</h3>
+<h3 class="sub-title sref-h" id="bleu">번역의 채점표 BLEU (교안 35p)</h3>
 <div class="fx"><div class="tex-d">\text{BLEU}=BP\cdot\exp\Big(\sum_{n=1}^{4}w_n\log p_n\Big),\qquad BP=\min\big(1,\ e^{\,1-r/c}\big)</div>
 <p class="fx-note">p<sub>n</sub> = 수정 n-gram 정밀도(후보의 n-gram 빈도는 참조에서의 최대 빈도까지만 센다 = <b>clipping</b>), <b>c = 후보 번역 길이, r = 참조 번역 길이</b>. 보통 w<sub>n</sub> = 1/4로 1~4-gram 정밀도의 기하평균. 범위 0~1(또는 0~100), 높을수록 참조와 비슷하다.</p></div>
 <div class="deep"><b>🔎 손으로 BLEU 한 번</b> &mdash; 참조 &ldquo;the cat sat on the mat&rdquo;(r = 6), 후보 &ldquo;the cat sat on mat&rdquo;(c = 5).
@@ -918,7 +1046,19 @@ td .term,th .term{font-weight:700}
 <!-- ===================== 14.8 ===================== -->
 <section class="sec" id="s8">
   <div class="sec-head"><span class="sec-badge">14.8</span><h2 class="sec-title">딥러닝 기반 문장 생성과 디코딩 전략<small>교안 36~42p</small></h2></div>
-<h3 class="sub-title" id="gen-stat">통계 언어모델의 한계와 자연스러운 문장의 조건 (교안 36p)</h3>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>36p · 37p · 38p · 39p · 40p · 41p · 42p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-36.jpg" alt="교안 36p — 통계 LM 한계 · 문장 조건"><figcaption><b>36p</b> 통계 LM 한계 · 문장 조건</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-37.jpg" alt="교안 37p — RNN 언어 모델 · LSTM 생성"><figcaption><b>37p</b> RNN 언어 모델 · LSTM 생성</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-38.jpg" alt="교안 38p — 문장 생성 학습 절차"><figcaption><b>38p</b> 문장 생성 학습 절차</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-39.jpg" alt="교안 39p — 디코딩 전략"><figcaption><b>39p</b> 디코딩 전략</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-40.jpg" alt="교안 40p — GPT · 남은 과제"><figcaption><b>40p</b> GPT · 남은 과제</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-41.jpg" alt="교안 41p — GPT-2 크기 비교"><figcaption><b>41p</b> GPT-2 크기 비교</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-42.jpg" alt="교안 42p — 세 과제의 공통 구조"><figcaption><b>42p</b> 세 과제의 공통 구조</figcaption></figure>
+  </div>
+</div>
+<h3 class="sub-title sref-h" id="gen-stat">통계 언어모델의 한계와 자연스러운 문장의 조건 (교안 36p)</h3>
 <div class="tbl-wrap">
 <table>
   <thead><tr><th>통계 기반 언어 모델</th><th>자연스러운 문장 생성의 조건</th></tr></thead>
@@ -930,7 +1070,7 @@ td .term,th .term{font-weight:700}
 </div>
 <div class="pit"><b>⚠ 장점을 한계로 바꾼 보기</b> &mdash; 통계 언어 모델은 &lsquo;해석이 쉽고 가볍다&rsquo;가 <b>장점</b>이다. &lsquo;무겁고 해석이 어렵다&rsquo;는 한계가 아니다(100문제 81번).</div>
 
-<h3 class="sub-title" id="rnnlm">순환 신경망 언어 모델 · LSTM 생성 (교안 37p)</h3>
+<h3 class="sub-title sref-h" id="rnnlm">순환 신경망 언어 모델 · LSTM 생성 (교안 37p)</h3>
 <div class="fx"><div class="tex-d">P(w_t\mid w_1,\dots,w_{t-1})</div>
 <p class="fx-note">이전 토큰들을 조건으로 다음 토큰의 확률을 예측한다. 이전 은닉층이 다음 은닉층에 영향을 주는 재귀 구조라 시계열(자연어 · 음성 · 유전자)에 쓰인다. LSTM 생성: 각 타임스텝의 <b>이전 출력이 다음 입력</b>이 되고, 게이트가 이전 정보를 선택적으로 반영한다(<a class="ext" href="nlp-week12.html">12주차 LSTM</a>).</p></div>
 <div class="flow" id="gen-steps">
@@ -940,7 +1080,7 @@ td .term,th .term{font-weight:700}
   <div class="fl"><b>④ 문장 생성</b><span>체크포인트 로드 후 시작 토큰부터 순차 생성</span></div>
 </div>
 
-<h3 class="sub-title" id="decoding">디코딩 전략 — 같은 모델, 다른 문장 (교안 39p)</h3>
+<h3 class="sub-title sref-h" id="decoding">디코딩 전략 — 같은 모델, 다른 문장 (교안 39p)</h3>
 <p><b>디코딩</b> = 학습된 언어 모델의 확률 분포에서 실제 단어열을 만들어 내는 방법.</p>
 <div class="tbl-wrap">
 <table>
@@ -963,7 +1103,7 @@ td .term,th .term{font-weight:700}
   <li><b>Beam vs Greedy</b> &mdash; 1단계 확률 A 0.5, B 0.4. A 다음 최고 0.4(누적 0.20), B 다음 최고 0.9(누적 0.36). greedy는 A를 고른 순간 0.20에 갇히지만, beam(k = 2)은 B 경로도 들고 가 0.36을 찾는다</li>
 </ul></div>
 
-<h3 class="sub-title" id="gpt">셀프 어텐션 언어 모델 GPT (교안 40 · 41p)</h3>
+<h3 class="sub-title sref-h" id="gpt">셀프 어텐션 언어 모델 GPT (교안 40 · 41p)</h3>
 <ul class="ul">
   <li>OpenAI의 GPT 시리즈 &mdash; <b>인코더 없이 마스킹 셀프 어텐션 블록만 쌓은 디코더 전용</b> 구조(인코더-디코더 어텐션 없음), 방대한 데이터로 학습</li>
   <li>주어진 문장에 이어 새 문장을 생성하며, 언뜻 보면 사람이 쓴 것처럼 자연스럽다</li>
@@ -983,7 +1123,7 @@ td .term,th .term{font-weight:700}
 <p>모델 규모(파라미터 · 데이터 · 연산량)가 커질수록 성능이 예측 가능하게 오르는 경향 = <b>스케일링 법칙(Scaling Law)</b>.</p>
 <div class="deep"><b>🔎 117M과 124M은 왜 다른가 &mdash; 파라미터를 직접 세 보기</b> &mdash; 트랜스포머 블록 하나는 대략 12·d² 개(어텐션 4d² + FFN 8d²)다. Small: 12 × 12 × 768² ≈ 84.9M, 여기에 단어 임베딩 50,257 × 768 ≈ 38.6M과 위치 임베딩 1,024 × 768 ≈ 0.8M을 더하면 <b>약 124M</b> &mdash; 공개 체크포인트 값과 맞는다(117M은 논문이 처음 적은 값). Medium도 같은 식으로 12 × 24 × 1024² + 임베딩 ≈ <b>355M</b>이 나온다 &mdash; 표의 345M도 논문 값이라 실제 체크포인트와 조금 다르다. 시험은 표 값(Medium = 1024 · 24 · 345M)을 고른다.</div>
 
-<h3 class="sub-title" id="common">세 과제의 공통 구조 (교안 42p)</h3>
+<h3 class="sub-title sref-h" id="common">세 과제의 공통 구조 (교안 42p)</h3>
 <div class="tbl-wrap">
 <table>
   <thead><tr><th>과제</th><th>확률 정식화</th><th>조건</th></tr></thead>
@@ -1000,6 +1140,14 @@ td .term,th .term{font-weight:700}
 <!-- ===================== 14.9 ===================== -->
 <section class="sec" id="s9">
   <div class="sec-head"><span class="sec-badge">14.9</span><h2 class="sec-title">실습 · 과제 안내와 정리<small>실습 노트북 과제 안내 · 교안 43~46p</small></h2></div>
+<div class="deck">
+  <div class="deck-h">교안 슬라이드 모아보기 <span>43p · 44p · 46p</span></div>
+  <div class="deck-g">
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-43.jpg" alt="교안 43p — 요약 정리 (1)"><figcaption><b>43p</b> 요약 정리 (1)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-44.jpg" alt="교안 44p — 요약 정리 (2)"><figcaption><b>44p</b> 요약 정리 (2)</figcaption></figure>
+    <figure class="sld"><img width="1100" height="825" loading="lazy" src="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/figs/nlp14-46.jpg" alt="교안 46p — 질문 및 정리 · 다음 시간"><figcaption><b>46p</b> 질문 및 정리 · 다음 시간</figcaption></figure>
+  </div>
+</div>
 <div class="note-box" id="assign"><b>실습 구성</b> (<code>14주차_실습_문제.ipynb</code>, <b>Google Colab · TensorFlow 2.x / Keras</b> 기준, GPU 없이도 수 분 안에 학습되도록 작게 구성) &mdash; 실습 1 병렬 코퍼스 전처리 · 어휘 사전 / 실습 2 Seq2Seq(어텐션 없음) / 실습 3 어텐션 + 가중치 시각화 / 실습 4 LSTM 문장 생성 · 디코딩 전략 비교 / 실습 5 BLEU · EM/F1 직접 구현. 풀이는 따로 정리한다.</div>
 <div class="tbl-wrap">
 <table>
@@ -1014,7 +1162,7 @@ td .term,th .term{font-weight:700}
 </table>
 </div>
 <p><b>평가 기준: 코드 정확성 40% / 결과 해석 40% / 보고서 작성 20%</b> &mdash; 실행 결과가 포함된 노트북을 제출하고, 각 과제의 해석을 마크다운 셀에 쓴다.</p>
-<h3 class="sub-title" id="wrap">핵심 질문 다시 보기 (교안 46p)</h3>
+<h3 class="sub-title sref-h" id="wrap">핵심 질문 다시 보기 (교안 46p)</h3>
 <ul class="ul">
   <li><b>인코더</b>가 입력을 벡터 표현으로 바꾸고, <b>디코더</b>가 그 표현을 조건으로 토큰을 하나씩 생성한다</li>
   <li><b>어텐션</b>은 매 생성 시점마다 입력의 어느 부분을 볼지 동적으로 결정한다</li>
@@ -1123,6 +1271,166 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script>
+/* 슬라이드 확대 보기 — 좌우 이동 · 닫으면 보던 자리로 */
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.sld'));
+  if (!slides.length) return;
+
+  var lb = document.createElement('div');
+  lb.id = 'lb';
+  lb.innerHTML =
+    '<button class="prev" type="button" aria-label="이전 슬라이드">&#10094;</button>' +
+    '<img alt="">' +
+    '<button class="next" type="button" aria-label="다음 슬라이드">&#10095;</button>' +
+    '<button class="x" type="button" aria-label="닫기">&#10005;</button>' +
+    '<p class="cap"></p>';
+  document.body.appendChild(lb);
+
+  var big = lb.querySelector('img'),
+      cap = lb.querySelector('.cap'),
+      bPrev = lb.querySelector('.prev'),
+      bNext = lb.querySelector('.next'),
+      bX = lb.querySelector('.x');
+
+  var idx = -1, openedIdx = -1, savedY = 0, pushed = false, prevRestore = null, fromRef = false;
+
+  function lock() {
+    savedY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    document.body.style.position = 'fixed';
+    document.body.style.top = (-savedY) + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  /* html{scroll-behavior:smooth} 때문에 되돌아갈 때 화면이 흘러가지 않도록 잠깐 끈다 */
+  function instantly(fn) {
+    var de = document.documentElement, prev = de.style.scrollBehavior;
+    de.style.scrollBehavior = 'auto';
+    fn();
+    void de.offsetHeight;
+    de.style.scrollBehavior = prev;
+  }
+  function unlock() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    /* 개념 카드의 썸네일로 연 경우에는 넘겨 봤어도 읽던 자리로 돌아간다 */
+    var target = (!fromRef && idx >= 0 && idx !== openedIdx) ? slides[idx] : null;
+    function place() {
+      instantly(function () {
+        window.scrollTo(0, savedY);
+        /* 넘겨 본 슬라이드가 있으면 그 슬라이드 자리로, 아니면 보던 자리 그대로 */
+        if (target) target.scrollIntoView({ block: 'center' });
+      });
+    }
+    place();
+    /* 기기 뒤로가기로 닫을 때 브라우저가 옛 스크롤을 덮어쓰므로 한 프레임 뒤 한 번 더 */
+    if (window.requestAnimationFrame) window.requestAnimationFrame(place);
+    setTimeout(place, 0);
+  }
+
+  function preload(i) {
+    if (i < 0 || i >= slides.length) return;
+    var im = slides[i].querySelector('img');
+    if (im) { var p = new Image(); p.src = im.currentSrc || im.src; }
+  }
+
+  function render(i) {
+    idx = i;
+    var f = slides[i], im = f.querySelector('img'), fc = f.querySelector('figcaption');
+    big.src = im.currentSrc || im.src;
+    big.alt = im.alt || '';
+    cap.innerHTML = '';
+    cap.appendChild(document.createTextNode(fc ? fc.textContent : ''));
+    var num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = (i + 1) + ' / ' + slides.length + ' · ← → 로 넘기기';
+    cap.appendChild(num);
+    bPrev.disabled = (i === 0);
+    bNext.disabled = (i === slides.length - 1);
+    preload(i + 1); preload(i - 1);
+  }
+
+  function open(i) {
+    openedIdx = i;
+    lock();
+    render(i);
+    lb.classList.add('on');
+    if (!pushed && window.history && window.history.pushState) {
+      try {
+        if ('scrollRestoration' in window.history && prevRestore === null) {
+          prevRestore = window.history.scrollRestoration;
+          window.history.scrollRestoration = 'manual';
+        }
+        window.history.pushState({ lb: 1 }, '');
+        pushed = true;
+      } catch (e) { pushed = false; }
+    }
+  }
+  function closeNow() {
+    if (!lb.classList.contains('on')) return;
+    lb.classList.remove('on');
+    unlock();
+    idx = openedIdx = -1;
+    fromRef = false;
+    if (prevRestore !== null) {
+      try { window.history.scrollRestoration = prevRestore; } catch (e) {}
+      prevRestore = null;
+    }
+  }
+  function closeByUser() {
+    if (pushed) { pushed = false; window.history.back(); }  /* popstate 가 닫는다 */
+    else { closeNow(); }
+  }
+  function go(step) {
+    var n = idx + step;
+    if (n < 0 || n >= slides.length) return;
+    render(n);
+  }
+
+  slides.forEach(function (f, i) {
+    f.addEventListener('click', function () { open(i); });
+  });
+  window.__lbOpenFig = function (f) {
+    var i = slides.indexOf(f);
+    if (i >= 0) { fromRef = true; open(i); }
+  };
+
+  bPrev.addEventListener('click', function (e) { e.stopPropagation(); go(-1); });
+  bNext.addEventListener('click', function (e) { e.stopPropagation(); go(1); });
+  bX.addEventListener('click', function (e) { e.stopPropagation(); closeByUser(); });
+  big.addEventListener('click', function (e) { e.stopPropagation(); });
+  cap.addEventListener('click', function (e) { e.stopPropagation(); });
+  lb.addEventListener('click', closeByUser);
+
+  window.addEventListener('popstate', function () {
+    if (lb.classList.contains('on')) { pushed = false; closeNow(); }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('on')) return;
+    if (e.key === 'Escape') { e.preventDefault(); closeByUser(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+  });
+
+  /* 모바일 — 좌우로 쓸어 넘기기 */
+  var tx = 0, ty = 0;
+  lb.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) return;
+    tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+  }, { passive: true });
+  lb.addEventListener('touchend', function (e) {
+    if (!e.changedTouches.length) return;
+    var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
+</script>
+<script src="slide-ref.js?v=3"></script>
 <script src="../vendor/katex/katex.min.js"></script>
 <script>
 // .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.

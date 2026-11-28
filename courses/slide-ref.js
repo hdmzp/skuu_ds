@@ -49,7 +49,7 @@
         if (!byKey[k]) byKey[k] = f;
       }
     });
-    sec.querySelectorAll('.pt-h').forEach(function (h) {
+    sec.querySelectorAll('.pt-h, .sref-h').forEach(function (h) {
       var seen = {}, hits = [];
       var keys = h.getAttribute('data-sref');
       if (keys) {
