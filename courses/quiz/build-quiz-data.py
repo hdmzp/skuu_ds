@@ -146,6 +146,23 @@ TERMS = {
    'Convolution','Normalization','Pooling','Activation','Loss function','Adam','Regularization',
    'Epoch','Seed','Learning rate','Batch','과적합','Overfitting','Underfitting','텐서플로','파이토치','코랩','Colab','아나콘다','conda','어노테이션',
  ],
+ 'nlp-w14': [
+   '질의 응답','Question & Answering','검색','Information Retrieval','추출형','생성형','선택형','폐쇄형','개방형','독해형','검색 기반',
+   'error propagation','오류 누적','End-to-End','분산 표현','블랙박스','feature engineering',
+   '샴 네트워크','Siamese','가중치 공유','paraphrase','코사인 유사도','element-wise','랭킹','어텐션','Bi-LSTM','pooling',
+   'Compare-Aggregate','BiMPM','Word Representation','Context Representation','Matching','Aggregation','Prediction','multi-perspective',
+   'BERT','[CLS]','[SEP]','start','end','span','SQuAD','KorQuAD','정답 없음','EM','Exact Match','F1','정밀도','재현율',
+   'VQA','시각 질의 응답','이미지 캡셔닝','개방형','다지선다형','Fine-grained recognition','Object detection','Activity recognition','Knowledge base reasoning','Commonsense reasoning',
+   'CNN','VGG','word2vec','MLP','Softmax','co-attention','AlexNet','GloVe','이진 분류',
+   '기계 번역','RBMT','SMT','NMT','번역 모델','언어 모델','alignment','Phrase-based','GNMT','Papago','mBART','NLLB',
+   'Sequence to Sequence','Seq2Seq','인코더','디코더','Parallel Corpus','병렬 코퍼스','교사 강요','Teacher Forcing','<sos>','<eos>','문맥 벡터','OOV','병렬화',
+   'hidden state','Score','Alignment','Context','Output','Luong','Bahdanau','dot-product','additive',
+   '트랜스포머','Transformer','Attention Is All You Need','Self-Attention','Multi-Head Attention','Positional Encoding','Masked Self-Attention','Encoder-Decoder Attention','Add & Layer Norm','Feed Forward',
+   'Scaled Dot-Product','d_k','BLEU','n-gram','Brevity Penalty','BP','clipping','METEOR','chrF','BERTScore','COMET',
+   '희소','sparsity','순환 신경망','LSTM','BPE','서브워드','체크포인트',
+   'Greedy Search','Beam Search','Temperature','Top-k','Top-p','Nucleus','GPT','GPT-2','환각','hallucination','스케일링 법칙','Scaling Law',
+   'Colab','TensorFlow','Keras','과제',
+ ],
  'nlp-w13': [
    '시퀀스 레이블링','자질','형태소 분석','품사 태깅','형태소','어근','접사','어절','교착어','세종 품사 태그','NNG','NNP','NR','JKO','JKS','VV','VA','EFN',
    'KoNLPy','한나눔','꼬꼬마','코모란','Mecab','Okt','Twitter','Korean POS tag comparison chart','태그셋','사용자 사전',
@@ -347,3 +364,5 @@ build('ml-w13', 'materials/기계학습특론/week13-quiz100.html', 'courses/qui
       {'title': '13주차 · 딥러닝 생성모델', 'quiz': '../materials/%EA%B8%B0%EA%B3%84%ED%95%99%EC%8A%B5%ED%8A%B9%EB%A1%A0/week13-quiz100.html'})
 build('nlp-w13', 'materials/자연어처리/week13-quiz100.html', 'courses/quiz/nlp-w13.js',
       {'title': '13주차 · 형태소 · 품사 태깅 · 의미 · 개체명', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week13-quiz100.html'})
+build('nlp-w14', 'materials/자연어처리/week14-quiz100.html', 'courses/quiz/nlp-w14.js',
+      {'title': '14주차 · 질의 응답 · 기계 번역 · 문장 생성', 'quiz': '../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week14-quiz100.html'})

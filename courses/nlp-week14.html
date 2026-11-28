@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자연어처리 | 14주차 수업내용</title>
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0c1a3a">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#fff; --border:#e2ddd6;
+  --ink:#1a1a2e; --muted:#6b7280;
+  --accent:#1b3f8b; --accent-light:#eef2fb;
+  --red:#b91c1c; --gold:#7c5c1e; --lime:#c9f24b; --green:#166534;
+  --radius:10px; --max:820px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans KR',system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+}
+.tab-bar{
+  background:var(--ink);padding:0 16px;overflow-x:auto;white-space:nowrap;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-bar a{
+  display:inline-block;color:rgba(255,255,255,.55);text-decoration:none;
+  font-size:13px;font-weight:500;padding:13px 12px;
+  border-bottom:2.5px solid transparent;transition:.15s;
+}
+.tab-bar a:hover,.tab-bar a.active{color:#fff;border-color:#7eb3ff}
+.wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 80px}
+.backlink{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;
+  color:var(--accent);text-decoration:none;margin-bottom:14px;
+  border:1px solid var(--border);background:var(--surface);
+  padding:6px 12px;border-radius:999px;
+}
+.backlink:hover{background:var(--accent-light)}
+/* hero */
+.hero{
+  background:linear-gradient(135deg,#122250,#24407f);
+  color:#fff;border-radius:14px;padding:22px 22px 20px;margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(18,34,80,.16);
+}
+.hero .kicker{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(20px,5vw,27px);font-weight:700;line-height:1.25;margin:6px 0 4px}
+.hero p{font-size:13px;color:#c9d3ee;line-height:1.6}
+.hero .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#eef2ff;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;
+}
+/* section */
+.sec{margin-bottom:44px}
+.sec-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:11px;margin-bottom:18px}
+.sec-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:4px;white-space:nowrap}
+.sec-title{font-size:clamp(16px,3.5vw,20px);font-weight:700;line-height:1.2}
+.sec-title small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.sub-title{font-size:14px;font-weight:700;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--accent)}
+/* boxes */
+.note-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;line-height:1.8;color:#2d3748}
+.note-box + .note-box{margin-top:10px}
+.note-box b{color:var(--ink)}
+.tip{background:#fffbeb;border:1px solid #f59e0b;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#78350f;line-height:1.75;margin:12px 0}
+.tip b{color:#92400e}
+.warn{background:#fef2f2;border:1px solid #ef4444;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#7f1d1d;line-height:1.75;margin:12px 0}
+.warn b{color:#b91c1c}
+.good{background:#f0fdf4;border:1px solid #22c55e;border-radius:var(--radius);padding:12px 15px;font-size:13px;color:#14532d;line-height:1.75;margin:12px 0}
+.good b{color:var(--green)}
+/* lists */
+.ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ul li{font-size:13px;color:#4b5563;line-height:1.7;padding-left:13px;position:relative}
+.ul li::before{content:'';position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.6}
+.ul li b{color:var(--ink)}
+/* info rows */
+.info{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;background:var(--surface)}
+.info-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-key{background:#f8f7f4;padding:11px 14px;font-size:12.5px;font-weight:700;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.35}
+.info-val{padding:11px 14px;font-size:13px;color:#374151;line-height:1.65}
+@media(max-width:440px){
+  .info-row{grid-template-columns:1fr}
+  .info-key{border-right:none;border-bottom:1px solid var(--border);background:var(--accent-light)}
+}
+/* concept cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.card2{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:13px 15px}
+.card2 h4{font-size:13.5px;font-weight:700;margin-bottom:5px}
+.card2 h4 em{font-style:normal;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.card2 p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* nesting diagram */
+.nest{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 0}
+.nest-l{border:2px solid var(--accent);border-radius:10px;padding:12px 12px 12px;position:relative}
+.nest-l + .nest-l{margin-top:0}
+.nest-l > b{display:block;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.nest-l.l2{border-color:#4a72c9}
+.nest-l.l2 > b{color:#4a72c9}
+.nest-l.l3{border-color:#7c9fe0}
+.nest-l.l3 > b{color:#5b81cc}
+.nest-l.l4{border-color:var(--red);background:#fdf3f3}
+.nest-l.l4 > b{color:var(--red)}
+.nest-l.l4 p{font-size:12px;color:#7f1d1d;line-height:1.6}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.fl{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px}
+.fl-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl h4{font-size:13.5px;font-weight:700;margin-bottom:3px}
+.fl p{font-size:12.5px;color:#4b5563;line-height:1.7}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.tlx{display:grid;grid-template-columns:70px 1fr;gap:0}
+.tl-era{
+  position:relative;padding:14px 12px 14px 0;text-align:right;
+  border-right:2px solid var(--border);
+}
+.tl-era b{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2;display:block}
+.tl-era::after{
+  content:'';position:absolute;right:-6px;top:19px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg);
+}
+.tlx.cold .tl-era b{color:#64748b}
+.tlx.cold .tl-era::after{background:#94a3b8}
+.tl-body{padding:12px 0 14px 16px}
+.tl-body h4{font-size:13.5px;font-weight:700;line-height:1.4}
+.tl-who{font-size:11.5px;color:var(--muted);margin-top:2px}
+@media(max-width:440px){
+  .tlx{grid-template-columns:56px 1fr}
+  .tl-era b{font-size:11.5px}
+}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+th{background:#f8f7f4;font-weight:700;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td:first-child,th:first-child{font-weight:700;white-space:nowrap;background:#fcfbf9}
+.exam{background:#fef2f2;border:2px solid var(--red);border-radius:var(--radius);padding:11px 15px;font-size:12.5px;color:#7f1d1d;line-height:1.7;margin:0 0 12px;display:flex;gap:9px;align-items:flex-start}
+.exam .tag{flex-shrink:0;background:var(--red);color:#fff;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;margin-top:1px}
+table.exam-table th{background:#fdecec}
+table.exam-table td:first-child{background:#fef7f7}
+.pipe{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:14px 0}
+.pipe .st{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:12px;font-weight:700;text-align:center;line-height:1.5;flex:1 1 100px;min-width:88px}
+.pipe .st small{display:block;font-size:10px;font-weight:400;color:var(--muted);margin-top:2px}
+.pipe .st.raw{background:#f1f0ec;color:var(--muted)}
+.pipe .st.app{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pipe .arrow{color:var(--muted);font-size:14px;flex:0 0 auto}
+.cycle{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.cyc{background:var(--accent);color:#fff;border-radius:8px;padding:12px 12px 11px;font-size:12.5px;font-weight:700;text-align:center}
+.cyc em{display:block;font-style:normal;font-size:10.5px;font-weight:400;color:#dbe4f7;margin-top:4px;line-height:1.5}
+.cyc.dim{background:#7d9ad6}
+@media(max-width:480px){.cycle{grid-template-columns:1fr 1fr}}
+.cyc-note{grid-column:1/-1;background:#fff7ed;border:1px solid #f59e0b;border-radius:8px;padding:9px 12px;font-size:11.5px;color:#78350f;text-align:center}
+/* links */
+a.ext{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid rgba(27,63,139,.3)}
+a.ext:hover{border-bottom-color:var(--accent)}
+.link-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.link-list a{
+  display:block;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--accent);text-decoration:none;line-height:1.5;
+}
+.link-list a:hover{background:var(--accent-light)}
+.link-list a small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px}
+.docs{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.doc{
+  display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+  border-radius:0 var(--radius) var(--radius) 0;padding:13px 15px;
+}
+.doc-ico{
+  width:44px;height:52px;border-radius:5px;background:#fdecec;border:1px solid #f3c7c7;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font-size:9px;font-weight:700;color:var(--red);letter-spacing:.04em;
+}
+.doc-ico span{font-size:16px;line-height:1}
+.doc-main{min-width:0}
+.doc-main a.doc-open{
+  display:block;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;line-height:1.45;
+}
+.doc-main a.doc-open:hover{color:var(--accent);text-decoration:underline}
+.doc-main p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.doc-dl{
+  display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:8px;text-decoration:none;white-space:nowrap;
+}
+.doc-dl:hover{background:#16336f}
+@media(max-width:480px){
+  .doc{grid-template-columns:44px 1fr;row-gap:10px}
+  .doc-dl{grid-column:1 / -1;justify-content:center}
+}
+.src{font-size:11.5px;color:var(--muted);text-align:center;margin-top:36px;line-height:1.7}
+.top-btn{position:fixed;bottom:24px;right:20px;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:transform .2s}
+.top-btn:hover{transform:translateY(-3px)}
+
+/* 주차 내비 */
+.weeknav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.weeknav a,.weeknav span{
+  font-size:12.5px;font-weight:700;text-decoration:none;border-radius:999px;
+  padding:6px 13px;border:1px solid var(--border);background:var(--surface);color:var(--accent);
+}
+.weeknav a:hover{background:var(--accent-light)}
+.weeknav .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.weeknav .plan{color:var(--muted)}
+/* 코드 블록 */
+pre.code{
+  background:#16233f;color:#e7edf9;border-radius:10px;padding:13px 15px;margin:10px 0;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;font-size:12.5px;line-height:1.75;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:pre;
+}
+pre.code .cm{color:#8fa8d8}
+pre.code .out{color:#c9f24b}
+code{background:#eef2fb;border:1px solid #dbe3f5;border-radius:4px;padding:1px 5px;font-size:12.5px;
+  font-family:'Consolas','D2Coding',ui-monospace,monospace;color:#1b3f8b;word-break:break-all}
+/* 교안 캡처 */
+.fig{margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+.fig figcaption{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:8px;text-align:center}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:12px 0}
+.figs .fig{margin:0}
+/* 용어 · 약어 표 — 좁은 화면에서도 가로 스크롤 없이 읽히게 */
+#terms table{min-width:0}
+#terms td:first-child{white-space:normal;width:1%;font-size:12.5px}
+#terms td{padding:9px 11px}
+
+/* 수식 카드 · 풀이 예제 (기계학습특론 페이지와 같은 규칙) */
+.fx{background:#f8faff;border:1px solid #cfdcf5;border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:12px 15px;margin:10px 0}
+.fx-lab{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.fx-note{font-size:12px;color:#4b5563;line-height:1.7;margin-top:7px}
+.fx-note b{color:var(--ink)}
+.tex-d{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:9px 2px 5px;text-align:center}
+.tex-d .katex{font-size:1.08em}
+.ex{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin:10px 0}
+.ex-q{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.65;background:#f1f0ec;border-radius:7px;padding:9px 12px;margin-bottom:4px}
+.ex-q em{font-style:normal;color:var(--red);font-size:11px;font-weight:700;display:block;margin-bottom:3px}
+.step{display:grid;grid-template-columns:20px 1fr;gap:9px;align-items:baseline;font-size:12.5px;color:#4b5563;line-height:1.75;padding:5px 0}
+.step i{font-style:normal;font-weight:700;color:var(--accent);font-size:11.5px}
+.ex-ans{margin-top:8px;background:#f0fdf4;border:1px solid #22c55e;border-radius:8px;padding:9px 12px;font-size:12.5px;color:#14532d;line-height:1.7}
+.ex-ans b{color:var(--green)}
+.figs > .note-box{margin:0}
+/* 편집 거리 DP 표 */
+.lev table{min-width:0;width:auto;margin:0 auto;font-family:'Consolas','D2Coding',ui-monospace,monospace}
+.lev th,.lev td{text-align:center;padding:6px 10px;white-space:nowrap}
+.lev td.on{background:#fde68a;font-weight:700;color:#7c2d12}
+/* ===== 개념 하이라이트(형광펜) + 툴팁 ===== */
+.term{
+  color:var(--accent);font-weight:700;cursor:help;
+  background:#eef6ff;border-bottom:2px dotted var(--accent);
+  border-radius:3px;padding:0 2px;
+}
+.term:hover,.term.on{background:#dce9fb}
+td .term,th .term{font-weight:700}
+#tipbox{
+  position:fixed;z-index:999;max-width:min(330px,90vw);
+  background:#16233f;color:#f2f5fb;font-size:12.5px;font-weight:400;line-height:1.7;
+  padding:11px 13px;border-radius:10px;box-shadow:0 10px 26px rgba(12,26,58,.34);
+  opacity:0;visibility:hidden;transition:opacity .13s;pointer-events:none;
+  left:0;top:0;
+}
+#tipbox.on{opacity:1;visibility:visible}
+/* ===== 심화 — 한 걸음 더 ===== */
+.deep{
+  background:#f7f5ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:13px 16px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.deep::before{
+  content:'🔎 한 걸음 더 — 심화 개념';display:table;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:8px;
+}
+.deep b{color:#2e1065}
+.deep .ul li{color:#3b2a6b}
+.deep .ul li::before{background:#6d28d9;opacity:.75}
+.deep .tbl-wrap{margin:9px 0 4px;background:#fff}
+.deep pre.code{margin:9px 0}
+.deep .fx{background:#fff;border-color:#d8cdf7;border-left-color:#6d28d9;margin:9px 0}
+.deep .fx-lab{color:#6d28d9}
+.deep .term{background:#ede7ff;color:#5b21b6;border-bottom-color:#6d28d9}
+.deep .term:hover,.deep .term.on{background:#ddd2fb}
+/* ===== 오답 포인트 — 문제에서 갈린 지점 ===== */
+.pit{
+  background:#fff7ed;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:12.5px;line-height:1.8;color:#7c2d12;
+}
+.pit::before{
+  content:'⚠ 여기서 갈린다';display:table;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.pit b{color:#7c2d12}
+.pit .ul li{color:#7c2d12}
+.pit .ul li::before{background:#b45309;opacity:.8}
+.pit table{min-width:0}
+.pit .tbl-wrap{margin:8px 0 4px;background:#fff}
+
+/* ===== 필기 구분 — 실시간 강의 강조 / 내 복습 필기 ===== */
+.live{
+  background:#fffaf3;border:1px solid #f0c48a;border-left:4px solid #b45309;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#7c2d12;
+}
+.live::before{
+  content:'🎙 실시간 강의 강조';display:table;background:#b45309;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.live b{color:#7c2d12}
+.live .ul li{color:#7c2d12}
+.live .ul li::before{background:#b45309;opacity:.75}
+.cpt{
+  background:#fbfaff;border:1px solid #e3dcf7;border-left:4px solid #8b5cf6;
+  border-radius:var(--radius);padding:12px 15px;margin:10px 0 14px;
+  font-size:13px;line-height:1.85;
+}
+.cpt::before{
+  content:'💡 개념 → 코드 → 내 결과';display:table;background:#8b5cf6;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.cpt p{margin:6px 0}
+.labnote{
+  background:#fbfaff;border:1px solid #e3dcf7;border-left:4px solid #8b5cf6;
+  border-radius:var(--radius);padding:12px 15px;margin:10px 0 14px;
+  font-size:13px;line-height:1.85;
+}
+.labnote::before{
+  content:'🧪 내 실습 노트북 — [설명] · [결과]';display:table;background:#8b5cf6;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.labnote p{margin:6px 0}
+.labfig{margin:12px 0;text-align:center}
+.labfig img{max-width:100%;height:auto;border:1px solid #e2e8f0;border-radius:8px;background:#fff}
+.labfig figcaption{font-size:12px;color:#64748b;margin-top:4px}
+.mynote{
+  background:#f5f3ff;border:1px solid #cfc4f5;border-left:4px solid #6d28d9;
+  border-radius:var(--radius);padding:12px 15px;margin:12px 0;
+  font-size:13px;line-height:1.85;color:#3b2a6b;
+}
+.mynote::before{
+  content:'📝 내 복습 필기 · 추가 개념';display:table;background:#6d28d9;color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin-bottom:7px;
+}
+.mynote b{color:#2e1065}
+.mynote .ul li{color:#3b2a6b}
+.mynote .ul li::before{background:#6d28d9;opacity:.75}
+.mynote table{min-width:0}
+.mynote .tbl-wrap{margin:8px 0 4px;background:#fff}
+.mynote pre.code{margin:9px 0}
+.mynote .fx{background:#fff;border-color:#d8cdf7;border-left-color:#6d28d9;margin:9px 0}
+/* 분류 알고리즘 바로가기 카드 */
+.algo{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:9px;margin:12px 0}
+.algo a{display:block;background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:11px 13px;text-decoration:none;color:inherit;transition:border-color .12s,transform .12s}
+.algo a:hover{border-color:var(--accent);transform:translateY(-1px)}
+.algo a b{display:block;font-size:13.5px;color:var(--ink)}
+.algo a small{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}
+.algo a span{display:block;font-size:12px;color:#4b5563;line-height:1.65}
+.algo a em{display:block;font-style:normal;font-size:11px;color:var(--accent);font-weight:700;margin-top:6px}
+/* 재현율 점 그림 */
+.dots{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0 4px}
+.dots i{width:15px;height:15px;border-radius:50%;display:inline-block}
+.dots i.tp{background:#16a34a}
+.dots i.fn{background:#fff;border:2px solid #dc2626}
+.dots i.fp{background:#f59e0b}
+.dots-lab{font-size:11.5px;color:#4b5563}
+/* 시그모이드 그림 */
+.sig{display:block;width:100%;max-width:420px;height:auto;margin:8px auto 2px;background:#fff;border:1px solid #d8cdf7;border-radius:8px}
+/* ===== 복습하기 ===== */
+.rv{background:var(--surface);border:1px solid var(--border);border-left:4px solid #0f766e;border-radius:var(--radius);margin:10px 0;overflow:hidden}
+.rv summary{cursor:pointer;list-style:none;padding:12px 15px;font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.6;display:flex;gap:9px;align-items:baseline}
+.rv summary::-webkit-details-marker{display:none}
+.rv summary i{font-style:normal;flex:none;font-size:11px;font-weight:800;color:#fff;background:#0f766e;border-radius:999px;padding:1px 8px}
+.rv summary::after{content:'답 보기 ▾';margin-left:auto;flex:none;font-size:11px;font-weight:700;color:#0f766e}
+.rv[open] summary::after{content:'접기 ▴'}
+.rv .ans{border-top:1px dashed #99e0d6;background:#f0fdfa;padding:12px 15px;font-size:13px;line-height:1.85;color:#134e4a}
+.rv .ans b{color:#0f3d3a}
+.rv .ans .ul li{color:#134e4a}
+.rv .ans .tbl-wrap{background:#fff;margin:8px 0}
+.rv .ans table{min-width:0}
+.rv .ans pre.code{margin:8px 0}
+.rv .one{display:block;background:#fff;border:1px solid #99e0d6;border-radius:7px;padding:7px 11px;margin-bottom:8px;font-weight:700;color:#0f3d3a}
+/* 범례 */
+.mark-legend{display:flex;flex-wrap:wrap;gap:8px 18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px 14px;margin:-14px 0 26px;font-size:12.5px;color:#4b5563;line-height:1.6}
+.mark-legend span{display:inline-flex;align-items:center;gap:6px}
+.hi{background:linear-gradient(transparent 58%,#ffe9a8 58%);font-weight:700;color:var(--ink);padding:0 1px}
+.mark-legend i{width:12px;height:12px;border-radius:3px;display:inline-block;flex-shrink:0}
+/* 7주차 추가: 한 줄 요약 · SVG 도식 */
+.oneline{background:#16233f;color:#e7edf9;border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+.oneline > p{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:#c9f24b}
+.oneline .ul li{color:#c5d0e8;font-size:13px}
+.oneline .ul li b{color:#fff}
+.oneline .ul li::before{background:#c9f24b;opacity:.9}
+.oneline .hi{color:#16233f}
+.svgfig{padding:11px 11px 9px}
+.svg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-scroll svg{display:block;width:100%;min-width:560px;height:auto;font-family:'Noto Sans KR',system-ui,sans-serif}
+
+/* 실습 탭 개념 상자 (.pt · .bdg) — ML 12주차와 같은 모양 */
+.bdg{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.02em;padding:3px 9px;border-radius:999px;white-space:nowrap;line-height:1.5}
+.bdg-gyo{background:#eef2fb;color:#1b3f8b;border:1px solid #c4d2ee}
+.bdg-flip{background:#fff7ed;color:#b45309;border:1px solid #f0c48a}
+.bdg-live{background:#fdf0f5;color:#9d174d;border:1px solid #f3bcd2}
+.bdg-plus{background:#f0fdfa;color:#0f766e;border:1px solid #99e0d6}
+.bdg-quiz{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+.pt[id],.sub-title[id],.pt p[id]{scroll-margin-top:64px}
+.bdg-pres{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
+.pt-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;font-weight:700;line-height:1.45;margin-bottom:7px}
+.pt > p{font-size:13.5px;color:#3f4854;line-height:1.85}
+.pt > p + p{margin-top:9px}
+.pt > p b{color:var(--ink)}
+.pt.gyo{border-left-color:#1b3f8b}
+.pt.flip{border-left-color:#b45309}
+.pt.live{border-left-color:#9d174d}
+.pt.plus{border-left-color:#0f766e}
+.pt.lab{border-left-color:#6d28d9}
+.bdg-lab{background:#f5f0fd;color:#6d28d9;border:1px solid #d6c7f5}
+.pt pre.code{margin:9px 0}
+.pt{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+  border-radius:0 var(--radius) var(--radius) 0;padding:14px 16px;margin:11px 0}
+</style>
+</head>
+<body id="top">
+
+<nav class="tab-bar" id="tabbar">
+  <a href="#docs">강의자료</a>
+  <a href="#goal">개요</a>
+  <a href="#s1">14.1 질의 응답</a>
+  <a href="#s2">14.2 QA 모델</a>
+  <a href="#s3">14.3 사전학습 QA · EM/F1</a>
+  <a href="#s4">14.4 VQA</a>
+  <a href="#s5">14.5 기계 번역 흐름</a>
+  <a href="#s6">14.6 Seq2Seq</a>
+  <a href="#s7">14.7 어텐션 · 트랜스포머 · BLEU</a>
+  <a href="#s8">14.8 문장 생성 · 디코딩</a>
+  <a href="#s9">14.9 과제 · 정리</a>
+  <a href="#next">다음 주 예고</a>
+</nav>
+
+<div class="wrap">
+
+<div class="weeknav">
+  <a href="nlp.html" class="plan">← 강의계획서</a>
+  <a href="nlp-week11.html">11주차 · 딥러닝 기초 · word2vec · CNN</a>
+  <a href="nlp-week12.html">12주차 · RNN · LSTM · Seq2Seq · 어텐션</a>
+  <a href="nlp-week13.html">13주차 · 형태소 · 품사 태깅 · 의미 · 개체명</a>
+  <span class="cur">14주차 · 질의 응답 · 기계 번역 · 문장 생성</span>
+</div>
+
+<section class="hero">
+  <p class="kicker">14주차 · 11.30 ~ 12.6 · 2026-2학기</p>
+  <h1>CHAPTER 14 — 딥러닝 기반 질의 응답, 기계 번역, 그리고 문장 생성</h1>
+  <p>핵심 질문은 &ldquo;<b>딥러닝 기반 번역 · 생성 시스템은 어떻게 구현하는가?</b>&rdquo;이다. 세 덩어리로 읽는다 &mdash; <b>질의 응답</b>(질문에 정답 그 자체를 내놓기 · 샴 · 어텐션 · Compare-Aggregate · BERT의 정답 구간 예측 · EM/F1 · 이미지에 묻는 VQA), <b>기계 번역</b>(규칙 → 통계 → 신경망 · Seq2Seq 인코더-디코더 · 고정 길이 문맥 벡터의 병목 · 어텐션 · 트랜스포머 · BLEU), <b>문장 생성</b>(RNN · GPT 언어 모델 · greedy · beam · temperature · top-k · top-p). 마지막에 세 과제가 모두 <b>&lsquo;조건이 주어졌을 때 토큰열을 만드는 문제&rsquo;</b> 하나로 묶인다 &mdash; 12주차 Seq2Seq · 어텐션이 그대로 이어진다.</p>
+  <div class="chips"><span class="chip">추출형 · 생성형 · 선택형</span><span class="chip">[CLS] 질문 [SEP] 지문 [SEP]</span><span class="chip">EM 0.0 · F1 0.67</span><span class="chip">RBMT → SMT → NMT</span><span class="chip">Score → Alignment → Context → Output</span><span class="chip">softmax(QKᵀ/√d_k)V</span><span class="chip">BLEU = BP · exp(Σ w log p)</span><span class="chip">greedy · beam · T · top-k · top-p</span></div>
+</section>
+
+<div class="mark-legend">
+  <span><i style="background:#eef6ff;border:1px solid #1b3f8b"></i><b class="term" tabindex="0" data-tip="이렇게 파란 형광펜이 칠해진 말에 손을 올리거나(모바일은 탭) 하면 짧은 설명이 뜹니다.">어려운 용어</b> — 커서를 올리면(모바일은 탭) 설명이 뜹니다</span>
+  <span><i style="background:#f7f5ff;border:1px solid #6d28d9"></i><b>🔎 한 걸음 더</b> — 교안 한 줄을 끝까지 파고든 심화 설명 · 숫자 예시</span>
+  <span><i style="background:#fff7ed;border:1px solid #b45309"></i><b>⚠ 여기서 갈린다</b> — 헷갈리기 쉬운 지점 · 교안 정정</span>
+</div>
+
+<!-- ===================== 강의자료 ===================== -->
+<section class="sec" id="docs">
+  <div class="sec-head"><span class="sec-badge">DOC</span><h2 class="sec-title">14주차 강의자료<small>제목을 누르면 앱 실행 없이 화면에서 바로 열립니다</small></h2></div>
+<div class="docs">
+  <div class="doc">
+    <div class="doc-ico"><span>📘</span>PDF</div>
+    <div class="doc-main">
+      <a class="doc-open" href="pdf-viewer.html?doc=nlp-w14-slides">자연어처리 CHAPTER 14 — 딥러닝 기반 질의 응답 · 기계 번역 · 문장 생성</a>
+      <p>질의 응답 유형 · 샴 · 어텐션 · BiMPM · BERT 추출형 QA · SQuAD · KorQuAD · EM/F1 · VQA · RBMT · SMT · NMT · Seq2Seq · 교사 강요 · 어텐션 4단계 · 트랜스포머 · BLEU · 디코딩 전략 · GPT-2 · <b>46페이지</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week14-slides.pdf" download="자연어처리_14주차_강의자료.pdf">⬇ 다운로드</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>☁️</span>Claude</div>
+    <div class="doc-main">
+      <a class="doc-open" href="https://claude.ai/artifact/MuZoPuuRA6a4veV9dPjHwc" target="_blank" rel="noopener">14주차 100문제 — 다른 기기에서 이어 풀기(Claude 계정 저장) ↗</a>
+      <p>폰 · 태블릿 · PC 어디서 열어도 <b>같은 풀이 기록</b>이 이어진다. 답을 고르면 해설 아래에 <b>이 페이지의 개념 바로가기</b>와 핵심 · 함정 정리가 붙는다(35개념). 북마크 · 단원 접기가 있고, 마지막 결과 화면은 원래 문제지와 똑같다</p>
+    </div>
+    <a class="doc-dl" href="https://claude.ai/artifact/MuZoPuuRA6a4veV9dPjHwc" target="_blank" rel="noopener">열기 ↗</a>
+  </div>
+  <div class="doc">
+    <div class="doc-ico"><span>📝</span>HTML</div>
+    <div class="doc-main">
+      <a class="doc-open" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week14-quiz100.html" target="_blank" rel="noopener">14주차 딥러닝 QA · 번역 · 문장 생성 100문제 (원본 · 백업) ↗</a>
+      <p>교수님이 올린 원본 문제지 · 기록이 이 브라우저에만 남는다 · 절별 문제는 아래 각 절 제목 옆 버튼으로도 열린다 · <b>14.7 어텐션 · 트랜스포머가 17문항으로 가장 많다</b></p>
+    </div>
+    <a class="doc-dl" href="../materials/%EC%9E%90%EC%97%B0%EC%96%B4%EC%B2%98%EB%A6%AC/week14-quiz100.html" download="자연어처리_14주차_100문제.html">⬇ 다운로드</a>
+  </div>
+</div>
+</section>
+
+<!-- ===================== 개요 ===================== -->
+<section class="sec" id="goal">
+  <div class="sec-head"><span class="sec-badge">GOAL</span><h2 class="sec-title">학습 목표와 14주차 지도<small>교안 2 · 3p · 이름 대조표</small></h2></div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>학습 목표 (교안 2p)</th><th>이 페이지의 절</th></tr></thead>
+  <tbody>
+    <tr><td>딥러닝 기반 질의 응답의 개념과 모델 구조를 이해한다</td><td><a class="ext" href="#s1">14.1</a> · <a class="ext" href="#s2">14.2</a> · <a class="ext" href="#s3">14.3</a></td></tr>
+    <tr><td>시각 질의 응답(VQA)의 데이터 구성과 모델 구조를 이해한다</td><td><a class="ext" href="#s4">14.4</a></td></tr>
+    <tr><td>신경망 기계 번역의 발전 흐름과 Sequence-to-Sequence 구조를 이해한다</td><td><a class="ext" href="#s5">14.5</a> · <a class="ext" href="#s6">14.6</a></td></tr>
+    <tr><td>어텐션과 트랜스포머가 번역 성능을 개선한 원리를 설명한다</td><td><a class="ext" href="#s7">14.7</a></td></tr>
+    <tr><td>문장 생성 모델과 디코딩 전략을 이해한다</td><td><a class="ext" href="#s8">14.8</a></td></tr>
+    <tr><td>BLEU, EM/F1 등 평가 지표를 계산한다</td><td><a class="ext" href="#em-f1">EM/F1</a> · <a class="ext" href="#bleu">BLEU</a></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>자료</th><th>이름 · 번호</th><th>이 페이지</th></tr></thead>
+  <tbody>
+    <tr><td>바탕화면 폴더</td><td><code>자_14주차(11.30-12.6)</code></td><td>14주차</td></tr>
+    <tr><td>교안</td><td><b>CHAPTER 14</b>, 46쪽 &mdash; 슬라이드 절 번호 14.1 ~ 14.8, 요약은 &lsquo;14.10&rsquo;</td><td>100문제 절 번호(14.1 ~ 14.9)를 따른다</td></tr>
+    <tr><td>100문제</td><td>14.1 ~ 14.9 &mdash; 14.9 &lsquo;실습 · 과제 · 정리&rsquo;는 실습 노트북의 과제 안내에서 출제(4문항)</td><td>절 제목 옆 문제 버튼</td></tr>
+    <tr><td>번호가 어긋나는 곳</td><td>교안에는 14.9가 없고 요약이 14.10 &mdash; 100문제 14.9 = 실습 · 과제 안내 + 마무리 슬라이드(46p)</td><td><a class="ext" href="#s9">14.9</a></td></tr>
+    <tr><td>실습</td><td><code>14주차_실습_문제.ipynb</code>(실습 1~5: 병렬 코퍼스 · Seq2Seq · 어텐션 · LSTM 문장 생성 · BLEU/EM/F1)</td><td>이번 업데이트에서는 싣지 않음 &mdash; 과제 구성만 <a class="ext" href="#s9">14.9</a></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note-box"><b>12주차와의 연결</b> &mdash; 12주차에 RNN · LSTM으로 Seq2Seq와 어텐션의 뼈대를 배웠다(<a class="ext" href="nlp-week12.html">12주차</a>). 이번 주는 그 부품으로 <b>무엇을 만드는가</b>(질의 응답 · 번역 · 생성)와 <b>어떻게 채점하는가</b>(EM/F1 · BLEU)를 본다. 새로 나오는 것은 BERT 정답 구간 예측, VQA, 트랜스포머의 Scaled Dot-Product, 디코딩 전략이다.</div>
+</section>
+
+<!-- ===================== 14.1 ===================== -->
+<section class="sec" id="s1">
+  <div class="sec-head"><span class="sec-badge">14.1</span><h2 class="sec-title">딥러닝 기반 질의 응답<small>교안 4~8p</small></h2></div>
+<h3 class="sub-title" id="qa-def">질의 응답이란 &mdash; 문서 목록이 아니라 정답 그 자체 (교안 5p)</h3>
+<p><b>질의 응답(Question &amp; Answering)</b> = 자연어로 주어진 질문에 대해 시스템이 자연어로 <b>정답</b>을 제시하는 과제. <b>검색</b>(Information Retrieval)이 &lsquo;관련 문서 목록&rsquo;을 주는 것과 달리, 질의 응답은 <b>&lsquo;정답 그 자체&rsquo;</b>를 준다 &mdash; &ldquo;대한민국의 수도는?&rdquo;에 검색은 링크 10개, 질의 응답은 &ldquo;서울&rdquo;.</p>
+<div class="tbl-wrap" id="qa-types">
+<table>
+  <thead><tr><th>나누는 기준</th><th>종류</th><th>예</th></tr></thead>
+  <tbody>
+    <tr><td><b>정답 형태</b></td><td><b>추출형</b>(Extractive) / <b>생성형</b>(Abstractive) / <b>선택형</b>(Multiple-choice)</td><td>지문에서 &lsquo;서울&rsquo;을 잘라 옴 / 문장을 새로 써서 답 / 보기 4개 중 고름</td></tr>
+    <tr><td><b>지식 범위</b></td><td><b>폐쇄형</b>(Closed-domain) / <b>개방형</b>(Open-domain)</td><td>사내 규정 · 의료 등 한 분야 / 무엇이든</td></tr>
+    <tr><td><b>근거 제공 방식</b></td><td><b>독해형</b>(Reading Comprehension) / <b>검색 기반</b>(Retrieval-based)</td><td>지문이 함께 주어짐 / 먼저 문서를 찾아 온 뒤 답</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="pit"><b>⚠ 분류 기준 섞기</b> &mdash; &lsquo;폐쇄형&rsquo;은 <b>지식 범위</b> 기준이지 정답 형태 기준이 아니다(100문제 3번). 정답 형태 = 추출 · 생성 · 선택, 지식 범위 = 폐쇄 · 개방, 근거 = 독해 · 검색 &mdash; 세 쌍을 짝으로 외운다.</div>
+
+<h3 class="sub-title" id="qa-pipeline">기존 질의 응답 vs 딥러닝 질의 응답 (교안 6~8p)</h3>
+<div class="flow">
+  <div class="fl"><b>기존 (규칙 · 통계 기반)</b><span>질문 → 질문 분석 → 쿼리 → 문서 검색 → 후보 정답 추출 → 정답 추출 → 정답 &mdash; 단계마다 사전 · 규칙 · 형태소 분석기 같은 <b>외부 리소스</b>가 필요</span></div>
+  <div class="fl"><b>딥러닝 (End-to-End)</b><span>질문 + 문서 → 단어 임베딩 + 신경망 인코더 → 정답 예측 → 정답 &mdash; 전체를 <b>손실 함수 하나</b>로 학습</span></div>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>기존 파이프라인</th><th>딥러닝 기반</th></tr></thead>
+  <tbody>
+    <tr><td>필요한 것</td><td>형태소 분석 · 구문 분석 등 언어학 지식 기반 외부 리소스</td><td>초기 단어 임베딩용 <b>레이블 없는 큰 코퍼스</b> 외에는 수작업 리소스 불필요</td></tr>
+    <tr><td>오류</td><td>앞 단계 오류가 뒤로 전파 &mdash; <span class="term" tabindex="0" data-tip="파이프라인의 앞 단계(예: 형태소 분석)가 틀리면 그 결과를 받는 뒤 단계가 모두 틀린 입력으로 일하게 되어 오류가 쌓이는 현상">오류 누적(error propagation)</span></td><td>한 번에 학습하므로 누적이 줄어듦</td></tr>
+    <tr><td>의미 비교</td><td>사람이 만든 자질</td><td>질문과 정답 후보를 <b>같은 벡터 공간</b>에 놓고 유사도를 학습(분산 표현)</td></tr>
+    <tr><td>한계</td><td>규칙 구축 비용</td><td><b>대량의 학습 데이터</b> 필요, 판단 근거 해석이 어려움(<b>블랙박스</b>)</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>🔎 오류 누적을 숫자로</b> &mdash; 기존 파이프라인의 다섯 단계가 각각 95% 정확하다고 하자. 앞 단계가 틀리면 뒤에서 회복할 수 없다면 전체 정확도는 <span class="tex">0.95^5 \approx 0.774</span>, 약 77%로 떨어진다. 단계가 늘수록 더 나빠진다. 딥러닝 모델은 중간 단계를 따로 두지 않고 정답 손실 하나로 모든 층을 함께 고치니, 이런 곱셈식 손실이 생기지 않는다. 대신 사전학습 언어모델을 재사용해 적은 데이터로도 높은 성능을 낸다(교안 6p, <a class="ext" href="#s3">14.3</a>).</div>
+</section>
+
+<!-- ===================== 14.2 ===================== -->
+<section class="sec" id="s2">
+  <div class="sec-head"><span class="sec-badge">14.2</span><h2 class="sec-title">질의 응답 딥러닝 모델 — 샴 · 어텐션 · Compare-Aggregate<small>교안 9~13p</small></h2></div>
+<div class="note-box" id="qa-models"><b>세 모델의 공통 아이디어 (교안 9p)</b> &mdash; 질문 문장과 정답 후보 문장을 <b>각각 인코딩</b>한 뒤 두 표현 사이의 <b>연관성 점수</b>를 계산하고, 점수가 가장 높은 후보를 고르는 <b>랭킹(ranking) 문제</b>로 정식화한다. 차이는 &lsquo;두 문장을 얼마나 일찍 · 촘촘히 비교하느냐&rsquo;다.</div>
+
+<h3 class="sub-title" id="siamese">샴 네트워크 — 쌍둥이 인코더 (교안 10p)</h3>
+<svg viewBox="0 0 640 210" role="img" aria-label="샴 네트워크: 질문과 정답 후보가 가중치를 공유하는 두 인코더(Bi-LSTM 또는 CNN)를 각각 통과해 벡터가 되고, 두 벡터가 유사도 계산(코사인 또는 element-wise)으로 모여 점수가 나온다" style="width:100%;max-width:640px;display:block;margin:8px auto">
+  <defs><marker id="n14a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#374151"/></marker></defs>
+  <rect x="20" y="20" width="150" height="40" rx="8" fill="#eef6ff" stroke="#1b3f8b"/><text x="95" y="45" text-anchor="middle" font-size="13">질문 (Question)</text>
+  <rect x="20" y="150" width="150" height="40" rx="8" fill="#eef6ff" stroke="#1b3f8b"/><text x="95" y="175" text-anchor="middle" font-size="13">정답 후보 (Answer)</text>
+  <rect x="220" y="15" width="160" height="50" rx="8" fill="#f7f5ff" stroke="#6d28d9"/><text x="300" y="37" text-anchor="middle" font-size="12.5">Encoder</text><text x="300" y="54" text-anchor="middle" font-size="11" fill="#6b7280">Bi-LSTM / CNN</text>
+  <rect x="220" y="145" width="160" height="50" rx="8" fill="#f7f5ff" stroke="#6d28d9"/><text x="300" y="167" text-anchor="middle" font-size="12.5">Encoder</text><text x="300" y="184" text-anchor="middle" font-size="11" fill="#6b7280">Bi-LSTM / CNN</text>
+  <line x1="300" y1="68" x2="300" y2="142" stroke="#6d28d9" stroke-dasharray="5 4"/><text x="310" y="110" font-size="11.5" fill="#6d28d9">가중치 공유</text>
+  <rect x="440" y="80" width="180" height="50" rx="8" fill="#fff7ed" stroke="#b45309"/><text x="530" y="102" text-anchor="middle" font-size="12.5">유사도 계산</text><text x="530" y="119" text-anchor="middle" font-size="11" fill="#6b7280">cosine / element-wise</text>
+  <line x1="170" y1="40" x2="216" y2="40" stroke="#374151" marker-end="url(#n14a)"/>
+  <line x1="170" y1="170" x2="216" y2="170" stroke="#374151" marker-end="url(#n14a)"/>
+  <line x1="380" y1="40" x2="438" y2="95" stroke="#374151" marker-end="url(#n14a)"/>
+  <line x1="380" y1="170" x2="438" y2="117" stroke="#374151" marker-end="url(#n14a)"/>
+</svg>
+<ul class="ul">
+  <li>문장 의미 유사도, <b>paraphrase 식별</b>처럼 <b>문장을 쌍으로</b> 쓰는 과제에 쓰인다</li>
+  <li>두 입력은 <b>가중치를 공유하는 동일한 구조의 인코더</b>를 통과해 벡터가 된다 &mdash; 같은 잣대로 재야 비교가 공정하다</li>
+  <li>두 벡터로 <b>코사인 유사도 · element-wise 연산 · 신경망 기반 가중합</b> 중 하나로 연관성 점수를 낸다</li>
+</ul>
+<div class="deep"><b>🔎 왜 가중치를 공유하나</b> &mdash; 질문 인코더와 답 인코더가 따로면, 같은 문장 &ldquo;서울이 수도다&rdquo;도 양쪽에서 다른 벡터가 되어 코사인이 1이 아닐 수 있다. 공유하면 같은 문장은 늘 같은 벡터, 비슷한 문장은 비슷한 벡터가 되어 &lsquo;거리 = 의미 차이&rsquo;가 성립한다. 파라미터 수도 절반이다. 단점은 두 문장을 <b>끝까지 따로</b> 읽다가 마지막에야 비교한다는 것 &mdash; 질문의 어느 단어가 답의 어느 단어와 맞는지는 보지 못한다. 그래서 다음 두 모델이 나왔다.</div>
+
+<h3 class="sub-title" id="attn-qa">어텐션 기반 모델 — 질문이 답의 단어를 고른다 (교안 11p)</h3>
+<ul class="ul">
+  <li>질문과 정답 후보 간 <b>상호작용</b>을 개선하려고 제안</li>
+  <li><b>bi-LSTM + pooling layer</b>로 질문 표현을 만든다</li>
+  <li>그 질문 표현을 기준으로 어텐션을 적용해, 정답 후보 문장의 단어 중 <b>질문과 관련 있는 단어에 더 큰 가중치</b>를 준다 &rarr; 가중합 표현 → 유사도 점수</li>
+</ul>
+<p class="fx-note">예: 질문 &ldquo;수도는 어디인가&rdquo;, 후보 &ldquo;대한민국의 수도는 인구가 많은 서울이다&rdquo; &mdash; 어텐션이 &lsquo;수도&rsquo; · &lsquo;서울&rsquo;에 무게를 싣고 &lsquo;인구가 많은&rsquo;은 덜 본다. 샴처럼 문장 전체를 한 벡터로 뭉뚱그리지 않는다.</p>
+
+<h3 class="sub-title" id="bimpm">Compare-Aggregate — BiMPM의 5개 층 (교안 12 · 13p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>층 (아래 → 위)</th><th>하는 일</th></tr></thead>
+  <tbody>
+    <tr><td>① <b>Word Representation</b></td><td>단어를 일정 차원 벡터로 &mdash; 단어 임베딩 + 문자 임베딩</td></tr>
+    <tr><td>② <b>Context Representation</b></td><td>위치 · 문맥 정보를 더해 새 벡터로 &mdash; Bi-LSTM</td></tr>
+    <tr><td>③ <b>Matching</b></td><td>질문과 정답 후보의 <b>각 시점 표현을 여러 관점(perspective)에서 비교</b> &mdash; 다관점 매칭</td></tr>
+    <tr><td>④ <b>Aggregation</b></td><td>비교 결과를 <b>고정 길이 벡터</b>로 집계</td></tr>
+    <tr><td>⑤ <b>Prediction</b></td><td>집계 벡터로 최종 연관성 점수 또는 라벨 예측</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="pit"><b>⚠ 순서 · 이름</b> &mdash; BiMPM(Bilateral Multi-Perspective Matching)은 <b>5개 층</b>, 순서는 Word → Context → <b>Matching → Aggregation</b> → Prediction(&lsquo;비교한 뒤 모은다&rsquo; = Compare-Aggregate라는 이름 그대로). &lsquo;다관점 비교&rsquo;는 Matching, &lsquo;고정 길이로 모으기&rsquo;는 Aggregation(100문제 20 · 21번).</div>
+<div class="deep"><b>🔎 세 모델을 한 줄씩</b>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>모델</th><th>언제 비교하나</th><th>비유</th></tr></thead>
+    <tbody>
+      <tr><td>샴</td><td>각자 다 읽고 <b>마지막에 한 번</b></td><td>두 사람이 각자 요약문을 써서 요약끼리 비교</td></tr>
+      <tr><td>어텐션 기반</td><td>질문 요약을 들고 <b>답의 단어를 훑으며</b></td><td>질문 메모를 들고 답안지에 형광펜 칠하기</td></tr>
+      <tr><td>Compare-Aggregate</td><td><b>단어(시점)마다 여러 관점</b>으로 비교한 뒤 모음</td><td>두 문서를 줄마다 대조표로 맞춰 본 뒤 결론</td></tr>
+    </tbody>
+  </table></div>
+</div>
+</section>
+
+<!-- ===================== 14.3 ===================== -->
+<section class="sec" id="s3">
+  <div class="sec-head"><span class="sec-badge">14.3</span><h2 class="sec-title">사전학습 언어모델 기반 질의 응답과 평가 지표<small>교안 14~16p</small></h2></div>
+<h3 class="sub-title" id="bert-qa">BERT로 푸는 추출형 질의 응답 (교안 14p)</h3>
+<ul class="ul">
+  <li>대규모 코퍼스로 <b>사전학습</b>한 언어모델을 질의 응답 데이터로 <b>미세조정</b>한다(13주차 BERT &mdash; <a class="ext" href="nlp-week13.html#s7">13.7</a>)</li>
+  <li>입력: <b><code>[CLS] 질문 [SEP] 지문 [SEP]</code></b></li>
+  <li>지문의 각 토큰이 정답 구간의 <b>시작(start)일 확률</b>과 <b>끝(end)일 확률</b>을 각각 예측</li>
+  <li><b>추출형</b>이므로 정답은 반드시 지문 안의 <b>연속된 구간(span)</b>이어야 한다</li>
+</ul>
+<div class="tbl-wrap" id="squad">
+<table>
+  <thead><tr><th>데이터셋</th><th>특징</th></tr></thead>
+  <tbody>
+    <tr><td>SQuAD 1.1</td><td>위키백과 지문 + 질문, 정답은 지문 속 구간</td></tr>
+    <tr><td><b>SQuAD 2.0</b></td><td>지문에 정답이 없는 질문이 섞여 <b>&lsquo;정답 없음&rsquo;을 판별</b>해야 한다</td></tr>
+    <tr><td>KorQuAD 1.0</td><td>한국어판 SQuAD</td></tr>
+    <tr><td><b>KorQuAD 2.0</b></td><td><b>문서 전체(표 · 리스트 포함)</b>를 지문으로 하는 긴 문서 기계독해</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 class="sub-title" id="span">정답 구간 고르기 — s(i) + e(j)가 가장 큰 i ≤ j (교안 15p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>지문 토큰</th><th>대한민국</th><th>의</th><th>수도</th><th>는</th><th><b>서울</b></th><th>이다</th></tr></thead>
+  <tbody>
+    <tr><td>start 점수 s</td><td>0.5</td><td>−1.0</td><td>0.2</td><td>−1.0</td><td><b>2.0</b></td><td>−0.5</td></tr>
+    <tr><td>softmax P(start)</td><td>0.142</td><td>0.032</td><td>0.105</td><td>0.032</td><td><b>0.637</b></td><td>0.052</td></tr>
+    <tr><td>end 점수 e</td><td>0.1</td><td>−1.0</td><td>0.3</td><td>−1.0</td><td><b>1.8</b></td><td>0.6</td></tr>
+    <tr><td>softmax P(end)</td><td>0.100</td><td>0.033</td><td>0.122</td><td>0.033</td><td><b>0.547</b></td><td>0.165</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>🔎 손으로 구간 고르기 (점수는 설명용으로 정한 값)</b> &mdash; 후보 구간 (i, j)마다 s(i) + e(j)를 더한다. (서울, 서울) = 2.0 + 1.8 = <b>3.8</b>, (서울, 이다) = 2.0 + 0.6 = 2.6, (대한민국, 서울) = 0.5 + 1.8 = 2.3 … 가장 큰 것은 (서울, 서울) &rarr; 정답 &ldquo;서울&rdquo;. 소프트맥스는 각 줄을 합이 1인 확률로 바꿀 뿐 순위는 바꾸지 않는다(서울이 0.637 · 0.547로 1등). 지문 안의 연속 구간만 후보라 &lsquo;지문에 없는 말&rsquo;은 답이 될 수 없다 &mdash; 이것이 추출형의 뜻이다.</div>
+<div class="pit"><b>⚠ argmax 두 번 vs i ≤ j 제약</b> &mdash; 100문제 23번 보기는 &lsquo;argmax P(start)부터 argmax P(end)까지&rsquo;라고 쓴다. 위 예처럼 둘이 같은 자리를 가리키면 결과가 같다. 하지만 start 1등이 &lsquo;서울&rsquo;(5번째), end 1등이 &lsquo;수도&rsquo;(3번째)처럼 <b>끝이 시작보다 앞에</b> 오면 구간이 성립하지 않는다 &mdash; 그래서 교안 15p는 <b>i ≤ j 이면서 s(i) + e(j)가 최대</b>인 쌍을 고르라고 적었다. 실제 구현도 이 제약(과 최대 길이 제한)을 둔다.</div>
+
+<h3 class="sub-title" id="em-f1">EM과 F1 — 완전 일치 vs 부분 점수 (교안 16p)</h3>
+<ul class="ul">
+  <li><b>EM(Exact Match)</b> &mdash; 예측과 정답 문자열이 <b>완전히 일치</b>하는 비율(맞으면 1, 아니면 0)</li>
+  <li><b>F1</b> &mdash; 예측과 정답을 <b>토큰 집합</b>으로 보고 정밀도 · 재현율의 조화평균</li>
+  <li>한 질문에 정답이 여러 개면 <b>각 정답과의 점수 중 최댓값</b>을 쓴다</li>
+</ul>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>사례</th><th>정답</th><th>예측</th><th>EM</th><th>F1</th><th>계산</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>서울</td><td>서울</td><td>1.0</td><td>1.00</td><td>P = 1/1, R = 1/1</td></tr>
+    <tr><td>2</td><td>서울</td><td>대한민국 서울</td><td><b>0.0</b></td><td><b>0.67</b></td><td>토큰: P = 1/2(예측 2개 중 1개 맞음), R = 1/1 &rarr; 2·0.5·1/(0.5+1) = 0.667</td></tr>
+    <tr><td>3</td><td>서울</td><td>부산</td><td>0.0</td><td>0.00</td><td>겹치는 토큰 없음</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>🔎 표의 &lsquo;문자 단위 0.50&rsquo;</b> &mdash; 사례 2를 글자 단위로 세면 예측 &lsquo;대한민국서울&rsquo; 6글자 중 정답 글자 &lsquo;서 · 울&rsquo; 2글자가 겹쳐 P = 2/6 = 1/3, R = 2/2 = 1 &rarr; F1 = 2·(1/3)·1/(1/3 + 1) = <b>0.50</b>. 같은 예측이라도 토큰을 무엇으로 자르느냐에 따라 점수가 달라진다 &mdash; 조사가 붙는 한국어(KorQuAD)는 글자 단위 F1을 함께 보고하는 이유다. F1은 부분 정답을 인정해 EM보다 <b>관대</b>하므로 두 지표를 함께 보고한다.</div>
+</section>
+
+<!-- ===================== 14.4 ===================== -->
+<section class="sec" id="s4">
+  <div class="sec-head"><span class="sec-badge">14.4</span><h2 class="sec-title">시각 질의 응답 (VQA)<small>교안 17~20p</small></h2></div>
+<h3 class="sub-title" id="vqa">VQA — 사진을 보고 질문에 답하기 (교안 17p)</h3>
+<p><b>VQA</b> = 자유 형식의 이미지와 그 이미지에 대한 다양한 질문이 주어졌을 때 올바른 답을 만드는 작업. 예: &ldquo;who is wearing glasses?&rdquo; &mdash; 비슷한 이미지라도 사진에 따라 &ldquo;man&rdquo; 또는 &ldquo;woman&rdquo;이 답이 되도록 데이터 분포를 고려한다(이미지를 안 보고 질문만으로 찍지 못하게).</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>이미지 캡셔닝</th><th>VQA</th></tr></thead>
+  <tbody>
+    <tr><td>출력</td><td>이미지 <b>전체</b>를 묘사하는 문장</td><td>질문이 지정한 <b>대상 · 속성 · 관계</b>에 선택적으로 집중한 답</td></tr>
+    <tr><td>필요한 능력</td><td>이미지 이해</td><td>이미지 이해 + 질문에 대한 <b>통합적 추론</b></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 class="sub-title" id="vqa-data">VQA 데이터 구성 — 개방형과 다지선다형 (교안 18p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>개방형 질문 유형</th><th>예시 질문</th><th>필요한 것</th></tr></thead>
+  <tbody>
+    <tr><td>Fine-grained recognition (세밀한 인식)</td><td>&ldquo;피자 위에 올려진 치즈 종류는?&rdquo;</td><td>비슷한 것끼리의 미세한 차이</td></tr>
+    <tr><td>Object detection (물체 인식)</td><td>&ldquo;자전거가 몇 대나 세워져 있습니까?&rdquo;</td><td>물체를 찾아 세기</td></tr>
+    <tr><td>Activity recognition (행동 인식)</td><td>&ldquo;이 남자가 웃고 있습니까?&rdquo;</td><td>동작 · 표정</td></tr>
+    <tr><td>Knowledge base reasoning (지식 기반 추론)</td><td>&ldquo;이 피자는 채식주의자용인가요?&rdquo;</td><td>사진 밖 지식(고기 토핑 = 비채식)</td></tr>
+    <tr><td>Commonsense reasoning (상식 추론)</td><td>&ldquo;저 사람의 시력은 1.0인가요?&rdquo;</td><td>상식(안경 = 시력이 나쁠 가능성)</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="pit"><b>⚠ 지식 vs 상식</b> &mdash; 채식주의 여부는 음식 재료에 대한 <b>지식</b>, 시력 질문은 안경을 보고 짐작하는 <b>상식</b> 추론이다(100문제 38번). 개수 세기는 &lsquo;물체 인식(Object detection)&rsquo;이다(37번).</div>
+
+<h3 class="sub-title" id="vqa-model">VQA 기본 모델과 변형 (교안 19 · 20p)</h3>
+<div class="flow">
+  <div class="fl"><b>이미지 → CNN(VGG 등)</b><span>이미지 정보를 담은 벡터</span></div>
+  <div class="fl"><b>질문 → word2vec 임베딩의 element-wise 평균</b><span>(또는 LSTM) 질문 벡터</span></div>
+  <div class="fl"><b>완전 연결층으로 같은 차원 → 결합(element-wise)</b><span>두 벡터를 한 벡터로</span></div>
+  <div class="fl"><b>MLP + Softmax → K개 정답 후보 확률</b><span>정답을 &lsquo;K개 중 하나 고르기&rsquo; 분류로 풀고 오차를 줄이도록 학습</span></div>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>모델</th><th>특징</th></tr></thead>
+  <tbody>
+    <tr><td>VQA 기본 모델</td><td>위 흐름 &mdash; CNN + word2vec 평균, 결합 후 MLP · Softmax</td></tr>
+    <tr><td><b>다지선다형 모델</b></td><td>선택지가 N개면 <b>N번의 이진 분류</b>를 하고 확률이 가장 높은 후보 선택</td></tr>
+    <tr><td><b>응용 모델</b></td><td>이미지 임베딩은 AlexNet · VGGNet 등 <b>사전학습 CNN 재사용</b>, 텍스트는 word2vec · GloVe · LSTM, 결합은 element-wise 곱 · 덧셈 · concatenate</td></tr>
+    <tr><td>최근</td><td>이미지 <b>영역</b>과 질문 <b>단어</b> 사이의 <b>co-attention</b> &mdash; 질문의 &lsquo;안경&rsquo;이 사진의 얼굴 영역을, 사진의 얼굴 영역이 질문의 &lsquo;who&rsquo;를 서로 참고</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>🔎 element-wise 결합을 숫자로</b> &mdash; 이미지 벡터 (0.8, 0.1, 0.5), 질문 벡터 (1.0, 0.0, 0.4)라면 element-wise 곱은 (0.8, 0.0, 0.2) &mdash; <b>둘 다 큰 칸만 살아남는다</b>(&lsquo;질문이 묻는 것 AND 사진에 있는 것&rsquo;). 덧셈은 (1.8, 0.1, 0.9)로 어느 한쪽만 커도 남고, concatenate는 6차원으로 이어 붙여 판단을 뒤 MLP에 맡긴다. 그래서 두 벡터를 먼저 <b>같은 차원</b>으로 맞추는 완전 연결층이 필요하다(곱 · 덧셈은 차원이 같아야 한다).</div>
+</section>
+
+<!-- ===================== 14.5 ===================== -->
+<section class="sec" id="s5">
+  <div class="sec-head"><span class="sec-badge">14.5</span><h2 class="sec-title">기계 번역의 소개와 발전 흐름<small>교안 21~24p</small></h2></div>
+<h3 class="sub-title" id="mt-def">기계 번역의 세 흐름 — 규칙 → 통계 → 신경망 (교안 22 · 23p)</h3>
+<p><b>기계 번역</b> = 소스 문장(Source Sentence)을 타겟 문장(Target Sentence)으로 컴퓨터가 번역하는 것.</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>규칙 기반 (RBMT)</th><th>통계 기반 (SMT)</th><th>인공신경망 (NMT)</th></tr></thead>
+  <tbody>
+    <tr><td>방식</td><td>언어학 · 문법 규칙 &mdash; 형태소 · 구문 분석 후 타겟 언어 문법 규칙에 맞게 변환</td><td>대용량 코퍼스에서 배운 <b>통계 정보</b>로 번역</td><td>딥러닝으로 입력 · 출력 문장을 <b>하나의 쌍</b>으로 두고 표현과 번역을 함께 학습</td></tr>
+    <tr><td>구성</td><td>사전 + 규칙</td><td><b>번역 모델</b>(소스-타겟 <b>alignment</b> 추출) + <b>언어 모델</b>(타겟 문장의 확률 예측)</td><td>인코더-디코더(<a class="ext" href="#s6">14.6</a>)</td></tr>
+    <tr><td>장점</td><td>규칙이 맞으면 정확, 설명 가능</td><td>데이터가 많을수록 성능 향상</td><td>문장 전체 문맥, End-to-End</td></tr>
+    <tr><td>한계</td><td>규칙 구축 비용 큼, <b>새 언어쌍으로 확장 어려움</b></td><td>수작업 자질 · 정렬 모델, 긴 문맥에 약함</td><td>병렬 코퍼스 대량 필요</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>🔎 SMT의 두 모델을 한 문장으로</b> &mdash; &ldquo;나는 학교에 갔다&rdquo;를 번역할 때, <b>번역 모델</b>은 &lsquo;학교에 ↔ to school&rsquo;, &lsquo;갔다 ↔ went&rsquo; 같은 대응(alignment)과 그 확률을 병렬 코퍼스에서 센다. <b>언어 모델</b>은 후보 &ldquo;I went to school&rdquo;과 &ldquo;I to school went&rdquo; 중 영어로 자연스러운 쪽의 확률을 높게 준다. 두 점수를 곱해 가장 높은 후보를 고른다 &mdash; 대응은 맞는데 어순이 이상한 번역을 언어 모델이 걸러 준다.</div>
+
+<h3 class="sub-title" id="nmt-history">발전 순서와 실제 사례 (교안 24p)</h3>
+<div class="flow">
+  <div class="fl"><b>통계 기반 (수작업 자질 · 정렬 모델)</b><span>Word-based SMT → Phrase-based SMT → Hierarchical Phrase SMT</span></div>
+  <div class="fl"><b>신경망 기반 (표현 학습 · End-to-End)</b><span>RNN-based NMT → CNN-based NMT → <b>Transformer-based NMT</b></span></div>
+</div>
+<ul class="ul">
+  <li>실제 응용: <b>Google GNMT</b>(Google Neural Machine Translation), <b>Naver Papago</b></li>
+  <li><b>2016년 이후</b> 상용 번역 시스템 대부분이 <b>NMT로 전환</b>(RBMT로 간 것이 아니다 &mdash; 100문제 53번)</li>
+  <li>현재는 트랜스포머 기반 대규모 <b>다국어 모델</b>(mBART, NLLB, LLM 계열)이 주류</li>
+</ul>
+</section>
+
+<!-- ===================== 14.6 ===================== -->
+<section class="sec" id="s6">
+  <div class="sec-head"><span class="sec-badge">14.6</span><h2 class="sec-title">Sequence to Sequence 구조와 인코더-디코더<small>교안 25~28p</small></h2></div>
+<h3 class="sub-title" id="seq2seq">NMT = 문장 to 문장 (교안 25 · 26p)</h3>
+<ul class="ul">
+  <li>NMT는 <b>Sequence to Sequence</b> 구조, 즉 <b>문장 to 문장</b>. 한-영 번역기 = &ldquo;한국어 문장 to 영어 문장&rdquo;</li>
+  <li>학습에 필요한 것: <b>Parallel Corpus(병렬 코퍼스)</b> &mdash; 같은 뜻의 소스 · 타겟 문장 쌍</li>
+  <li><b>인코더</b> = 인간의 언어를 컴퓨터가 이해할 수 있는 형태(벡터)로 바꾸는 것</li>
+  <li><b>디코더</b> = 인코더 결과인 <b>문장 임베딩 벡터</b>와 <b>이전 time-step까지 생성한 단어들</b>에 기반해 현재 time-step의 단어를 생성</li>
+  <li>기계 번역뿐 아니라 <b>챗봇 · 요약 · 음성 인식</b>에도 쓰인다</li>
+</ul>
+<div class="tbl-wrap" id="teacher">
+<table>
+  <thead><tr><th>학습 기법 (교안 26p)</th><th>내용</th></tr></thead>
+  <tbody>
+    <tr><td><b>교사 강요</b> (Teacher Forcing)</td><td>학습 때 디코더 입력으로 <b>이전 예측 대신 실제 정답 단어</b>를 넣어 학습을 안정화</td></tr>
+    <tr><td>특수 토큰</td><td>문장의 시작 <b><code>&lt;sos&gt;</code></b>, 끝 <b><code>&lt;eos&gt;</code></b></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>🔎 교사 강요가 왜 필요한가</b> &mdash; 정답이 &ldquo;I went to school&rdquo;인데 학습 초반 디코더가 첫 단어를 &ldquo;You&rdquo;로 틀렸다고 하자. 그 틀린 &ldquo;You&rdquo;를 다음 입력으로 넣으면 뒤의 단어들도 줄줄이 엉뚱한 문맥에서 배우게 된다. 교사 강요는 다음 입력으로 <b>정답 &ldquo;I&rdquo;</b>를 넣어 각 시점이 올바른 앞 문맥에서 배우게 한다 &mdash; 학습이 빠르고 안정적이다. 대신 추론 때는 정답이 없어 자기 예측을 넣어야 하므로, 학습과 추론의 입력이 달라지는 차이(노출 편향)가 생긴다.</div>
+
+<h3 class="sub-title" id="s2s-flow">동작 구조 — &lsquo;나는 학교에 갔다&rsquo; → &lsquo;I went to school&rsquo; (교안 27p)</h3>
+<svg viewBox="0 0 660 230" role="img" aria-label="Seq2Seq: 인코더 LSTM 4칸이 나는, 학교에, 갔다, eos를 차례로 읽어 문맥 벡터 하나를 만들고, 디코더 LSTM 4칸이 sos부터 입력받아 I, went, to school, eos를 차례로 출력한다. 각 출력이 다음 칸의 입력이 된다" style="width:100%;max-width:660px;display:block;margin:8px auto">
+  <defs><marker id="n14b" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#374151"/></marker></defs>
+  <text x="140" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#1b3f8b">인코더 (Encoder)</text>
+  <text x="500" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#b45309">디코더 (Decoder)</text>
+  <g font-size="12" text-anchor="middle">
+    <rect x="10" y="95" width="56" height="34" rx="6" fill="#eef6ff" stroke="#1b3f8b"/><text x="38" y="117">LSTM</text>
+    <rect x="80" y="95" width="56" height="34" rx="6" fill="#eef6ff" stroke="#1b3f8b"/><text x="108" y="117">LSTM</text>
+    <rect x="150" y="95" width="56" height="34" rx="6" fill="#eef6ff" stroke="#1b3f8b"/><text x="178" y="117">LSTM</text>
+    <rect x="220" y="95" width="56" height="34" rx="6" fill="#eef6ff" stroke="#1b3f8b"/><text x="248" y="117">LSTM</text>
+    <text x="38" y="168">나는</text><text x="108" y="168">학교에</text><text x="178" y="168">갔다</text><text x="248" y="168">&lt;eos&gt;</text>
+    <rect x="296" y="90" width="64" height="44" rx="8" fill="#fde68a" stroke="#b45309"/><text x="328" y="109" font-size="11.5">문맥</text><text x="328" y="125" font-size="11.5">벡터</text>
+    <rect x="380" y="95" width="56" height="34" rx="6" fill="#fff7ed" stroke="#b45309"/><text x="408" y="117">LSTM</text>
+    <rect x="450" y="95" width="56" height="34" rx="6" fill="#fff7ed" stroke="#b45309"/><text x="478" y="117">LSTM</text>
+    <rect x="520" y="95" width="56" height="34" rx="6" fill="#fff7ed" stroke="#b45309"/><text x="548" y="117">LSTM</text>
+    <rect x="590" y="95" width="56" height="34" rx="6" fill="#fff7ed" stroke="#b45309"/><text x="618" y="117">LSTM</text>
+    <text x="408" y="168">&lt;sos&gt;</text><text x="478" y="168">I</text><text x="548" y="168">went</text><text x="618" y="168">to school</text>
+    <text x="408" y="58" font-weight="700">I</text><text x="478" y="58" font-weight="700">went</text><text x="548" y="58" font-weight="700">to school</text><text x="618" y="58" font-weight="700">&lt;eos&gt;</text>
+    <text x="512" y="205" font-size="11" fill="#6b7280">출력이 다음 칸의 입력 (학습 땐 정답 = 교사 강요)</text>
+    <text x="160" y="205" font-size="11" fill="#6b7280">마지막 상태 하나가 문장 전체를 대표</text>
+  </g>
+  <g stroke="#374151">
+    <line x1="66" y1="112" x2="78" y2="112" marker-end="url(#n14b)"/><line x1="136" y1="112" x2="148" y2="112" marker-end="url(#n14b)"/><line x1="206" y1="112" x2="218" y2="112" marker-end="url(#n14b)"/><line x1="276" y1="112" x2="294" y2="112" marker-end="url(#n14b)"/>
+    <line x1="360" y1="112" x2="378" y2="112" marker-end="url(#n14b)"/><line x1="436" y1="112" x2="448" y2="112" marker-end="url(#n14b)"/><line x1="506" y1="112" x2="518" y2="112" marker-end="url(#n14b)"/><line x1="576" y1="112" x2="588" y2="112" marker-end="url(#n14b)"/>
+    <line x1="38" y1="155" x2="38" y2="132" marker-end="url(#n14b)"/><line x1="108" y1="155" x2="108" y2="132" marker-end="url(#n14b)"/><line x1="178" y1="155" x2="178" y2="132" marker-end="url(#n14b)"/><line x1="248" y1="155" x2="248" y2="132" marker-end="url(#n14b)"/>
+    <line x1="408" y1="155" x2="408" y2="132" marker-end="url(#n14b)"/><line x1="478" y1="155" x2="478" y2="132" marker-end="url(#n14b)"/><line x1="548" y1="155" x2="548" y2="132" marker-end="url(#n14b)"/><line x1="618" y1="155" x2="618" y2="132" marker-end="url(#n14b)"/>
+    <line x1="408" y1="93" x2="408" y2="65" marker-end="url(#n14b)"/><line x1="478" y1="93" x2="478" y2="65" marker-end="url(#n14b)"/><line x1="548" y1="93" x2="548" y2="65" marker-end="url(#n14b)"/><line x1="618" y1="93" x2="618" y2="65" marker-end="url(#n14b)"/>
+  </g>
+</svg>
+<p class="fx-note">인코더는 &lsquo;나는 / 학교에 / 갔다 / &lt;eos&gt;&rsquo;를 끝까지 읽어 <b>문맥 벡터</b>를 만들고, 디코더는 <b>&lt;sos&gt;를 첫 입력</b>으로 받아 &lsquo;I&rsquo;부터 &lsquo;&lt;eos&gt;&rsquo;가 나올 때까지 한 단어씩 만든다(100문제 61번). 교안 그림은 &lsquo;to school&rsquo;을 한 칸으로 묶어 그렸다.</p>
+
+<h3 class="sub-title" id="rnn-limit">RNN 기반 NMT의 문제점 (교안 28p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>문제</th><th>왜</th><th>해결</th></tr></thead>
+  <tbody>
+    <tr><td><b>긴 문장</b> 번역이 잘 안 됨</td><td>문장 전체를 <b>고정 길이 문맥 벡터 하나</b>에 눌러 담는 <b>정보 병목</b></td><td>어텐션(<a class="ext" href="#s7">14.7</a>)</td></tr>
+    <tr><td><b>OOV</b> 단어</td><td>학습 데이터에 없는 단어는 생략하거나 잘못 번역</td><td>서브워드(BPE) 토큰</td></tr>
+    <tr><td>앞부분 <b>반복 번역</b></td><td>어디까지 번역했는지 추적이 약함</td><td>어텐션 정렬</td></tr>
+    <tr><td><b>학습 속도</b>가 느림</td><td>순차 처리 구조라 <b>병렬화가 어려움</b></td><td>트랜스포머</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>🔎 병목을 숫자로</b> &mdash; LSTM 은닉 크기가 256이면 문맥 벡터는 숫자 256개다. 5단어 문장이든 50단어 문장이든 똑같이 256칸에 담아야 하니, 50단어면 단어 하나당 약 5칸밖에 돌아가지 않는다. 게다가 마지막 상태는 최근 단어를 더 많이 기억해 문장 앞부분이 흐려진다. 어텐션은 인코더의 <b>모든 시점</b> 은닉 상태(50 × 256)를 디코더에게 넘겨 이 병목을 없앤다. 과제 5(<a class="ext" href="#s9">14.9</a>)가 바로 &lsquo;어텐션 유무에 따른 BLEU 차이를 이 병목과 연결해 설명하라&rsquo;이다.</div>
+</section>
+
+<!-- ===================== 14.7 ===================== -->
+<section class="sec" id="s7">
+  <div class="sec-head"><span class="sec-badge">14.7</span><h2 class="sec-title">어텐션 메커니즘과 트랜스포머 기반 번역 · BLEU<small>교안 29~35p</small></h2></div>
+<h3 class="sub-title" id="attn-why">어텐션 — 그때그때 어디를 볼지 정한다 (교안 29p)</h3>
+<ul class="ul">
+  <li>문제: 고정된 벡터 하나로 전체 맥락을 나타내면 긴 문장을 처리하기 어렵다 &rarr; 해결책이 <b>Attention</b></li>
+  <li>핵심: <span class="hi">어떤 시점에 어떤 부분에 집중할지 <b>그때그때 동적으로</b> 정하는 것</span></li>
+  <li>인코더의 <b>모든 스텝의 hidden state</b>를 디코더에 넘겨준다 &mdash; 각 디코딩 스텝에서 입력의 어느 부분을 보는지 확인할 수 있다</li>
+</ul>
+
+<h3 class="sub-title" id="attn-steps">어텐션 계산 4단계 (교안 30p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>단계</th><th>식</th><th>뜻</th></tr></thead>
+  <tbody>
+    <tr><td>① <b>Score</b></td><td><span class="tex">\text{score}(s_t,h_i)</span></td><td>디코더 상태와 인코더 상태의 유사도 &mdash; dot-product(<b>Luong</b>) · general · concat/additive(<b>Bahdanau</b>)</td></tr>
+    <tr><td>② <b>Alignment</b></td><td><span class="tex">a_t=\text{softmax}(\text{score})</span></td><td><b>합이 1</b>인 가중치 분포</td></tr>
+    <tr><td>③ <b>Context</b></td><td><span class="tex">c_t=\sum_i a_{t,i}\,h_i</span></td><td>가중합 문맥 벡터</td></tr>
+    <tr><td>④ <b>Output</b></td><td><span class="tex">[c_t;\,s_t]\to\tanh\to\text{softmax}</span></td><td>다음 단어 예측</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="deep"><b>🔎 &lsquo;went&rsquo;를 만들 때 한 번 계산해 보기 (값은 설명용)</b> &mdash; 인코더 은닉 상태를 2차원으로 줄여 h<sub>나는</sub> = (0.9, 0.1), h<sub>학교에</sub> = (0.2, 0.8), h<sub>갔다</sub> = (0.5, 0.5)라 하고, ① 점수가 (2.0, 0.5, 0.3)으로 나왔다고 하자. ② softmax &rarr; (0.711, 0.159, 0.130), 합 1. ③ 문맥 벡터 c = 0.711·(0.9, 0.1) + 0.159·(0.2, 0.8) + 0.130·(0.5, 0.5) = <b>(0.737, 0.263)</b> &mdash; 가장 큰 가중치를 받은 단어의 상태 쪽으로 끌려간다. ④ c와 디코더 상태 s를 이어 tanh → softmax로 다음 단어를 고른다. 디코딩 스텝마다 점수가 새로 계산되니 c도 매번 다르다 &mdash; &lsquo;동적으로&rsquo;의 뜻이다.</div>
+<p>어텐션 전체 구조(교안 30p): <b>Embedding</b>(단어 → 벡터) → <b>Bi-directional Encoder</b>(양방향으로 각 시점 정보) → <b>Attention</b>(관심 있는 부분을 가중합해 결합) → <b>Decoder</b>(time-step별 단어 출력).</p>
+
+<h3 class="sub-title" id="attn-map">어텐션 가중치 시각화 (교안 31p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>출력 ↓ / 입력 →</th><th>나는</th><th>학교에</th><th>갔다</th><th>행 합</th></tr></thead>
+  <tbody>
+    <tr><td><b>I</b></td><td style="background:#1b3f8b;color:#fff"><b>0.82</b></td><td>0.10</td><td>0.08</td><td>1.00</td></tr>
+    <tr><td><b>went</b></td><td>0.08</td><td style="background:#dbe6fb">0.15</td><td style="background:#1b3f8b;color:#fff"><b>0.77</b></td><td>1.00</td></tr>
+    <tr><td><b>to school</b></td><td>0.09</td><td style="background:#1b3f8b;color:#fff"><b>0.78</b></td><td style="background:#dbe6fb">0.13</td><td>1.00</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="fx-note">행 = 출력(타겟) 단어, 열 = 입력(소스) 단어, 진할수록 큰 가중치. <b>각 행의 합 = 1</b>(softmax 결과). 어순이 다른 두 언어의 대응이 그대로 보인다 &mdash; 영어 2번째 단어 &lsquo;went&rsquo;는 한국어 3번째 &lsquo;갔다&rsquo;(0.77), &lsquo;to school&rsquo;은 &lsquo;학교에&rsquo;(0.78)를 본다. 행 합이 1이지 열 합이 1인 것은 아니다.</p>
+
+<h3 class="sub-title" id="transformer">트랜스포머 — 순환 없이 어텐션만으로 (교안 32 · 34p)</h3>
+<p>&ldquo;<b>Attention Is All You Need</b>&rdquo;(2017)는 순환 구조를 제거하고 어텐션만으로 인코더-디코더를 만들었다. 모든 시점을 <b>동시에</b> 처리해 병렬 학습이 되고, 먼 단어 사이의 의존성도 한 번에 잡는다.</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>구성 요소</th><th>역할</th></tr></thead>
+  <tbody>
+    <tr><td><b>Self-Attention</b></td><td>한 문장 안의 단어들이 서로를 참조해 문맥 표현을 만든다</td></tr>
+    <tr><td><b>Multi-Head Attention</b></td><td>여러 표현 공간에서 병렬로 어텐션을 계산한 뒤 결합</td></tr>
+    <tr><td><b>Positional Encoding</b></td><td>순서 정보를 벡터에 더해 위치를 구분(순환이 없으니 순서를 따로 알려야 한다)</td></tr>
+    <tr><td><b>Masked Self-Attention</b></td><td>디코더가 <b>미래 단어를 보지 못하도록</b> 가림</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>Encoder Block × N</th><th>Decoder Block × N</th></tr></thead>
+  <tbody>
+    <tr><td>입력 임베딩 + Positional Encoding<br>→ Multi-Head <b>Self</b>-Attention → Add &amp; Layer Norm<br>→ Feed Forward Network → Add &amp; Layer Norm</td><td>출력 임베딩 + Positional Encoding<br>→ <b>Masked</b> Multi-Head Attention → Add &amp; Norm<br>→ <b>Encoder-Decoder Attention</b>(인코더의 문맥 표현 참조) → Add &amp; Norm<br>→ Feed Forward Network → Add &amp; Norm<br>→ Linear → Softmax → 다음 단어 확률</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="pit"><b>⚠ 디코더에만 있는 것</b> &mdash; <b>Masked</b> Multi-Head Attention과 <b>Encoder-Decoder Attention</b>(100문제 76번). Positional Encoding은 &lsquo;순서 정보&rsquo;, 미래를 가리는 것은 Masked Self-Attention이다 &mdash; 둘을 바꿔 놓은 보기가 함정(74번). 각 서브층 뒤에는 모두 Add &amp; Layer Norm이 붙는다.</div>
+
+<h3 class="sub-title" id="sdpa">Scaled Dot-Product Attention과 √d<sub>k</sub> (교안 33p)</h3>
+<div class="fx"><div class="tex-d">\text{Attention}(Q,K,V)=\text{softmax}\!\Big(\frac{QK^{\top}}{\sqrt{d_k}}\Big)V</div>
+<p class="fx-note">질의(Q)로 키(K)를 검색해 값(V)을 가중합한다. 위 4단계의 Score = QKᵀ, Alignment = softmax, Context = ·V와 같은 일이다.</p></div>
+<ul class="ul">
+  <li><b>√d<sub>k</sub>로 나누는 이유</b> &mdash; Q · K의 각 성분이 독립이고 분산이 1이면 내적의 분산은 <b>d<sub>k</sub>에 비례</b>해 커진다 &rarr; 값이 커지면 softmax가 한쪽으로 <b>포화</b>되어 기울기가 거의 0 &rarr; √d<sub>k</sub>로 나누면 분산이 1 근처로 유지되어 학습이 안정된다</li>
+  <li><b>멀티헤드</b> &mdash; d<sub>model</sub>을 h개로 나눠 각 헤드가 d<sub>k</sub> = d<sub>model</sub> / h 차원에서 따로 어텐션 → 이어 붙인 뒤 W<sub>O</sub>로 사영. 예: <b>d<sub>model</sub> = 512, h = 8 → d<sub>k</sub> = d<sub>v</sub> = 64</b></li>
+  <li>디코더의 마스킹은 미래 시점 스코어에 <b>−∞</b>를 더한다 &rarr; softmax 뒤 그 칸의 가중치가 정확히 0</li>
+</ul>
+<div class="deep"><b>🔎 √64 = 8의 효과를 숫자로</b> &mdash; d<sub>k</sub> = 64면 내적의 표준편차가 약 √64 = 8이다. 점수가 (8, 0, −8) 정도로 벌어지면 softmax는 <b>(0.9997, 0.0003, 0.0000)</b> &mdash; 사실상 한 칸만 1이라 다른 칸으로는 기울기가 흐르지 않는다. 8로 나눈 (1, 0, −1)이면 <b>(0.665, 0.245, 0.090)</b>으로 고르게 퍼져 모든 칸이 학습된다. 마스킹: 점수에 −∞를 더하면 e<sup>−∞</sup> = 0이라 미래 단어 가중치가 정확히 0이 된다.</div>
+
+<h3 class="sub-title" id="bleu">번역의 채점표 BLEU (교안 35p)</h3>
+<div class="fx"><div class="tex-d">\text{BLEU}=BP\cdot\exp\Big(\sum_{n=1}^{4}w_n\log p_n\Big),\qquad BP=\min\big(1,\ e^{\,1-r/c}\big)</div>
+<p class="fx-note">p<sub>n</sub> = 수정 n-gram 정밀도(후보의 n-gram 빈도는 참조에서의 최대 빈도까지만 센다 = <b>clipping</b>), <b>c = 후보 번역 길이, r = 참조 번역 길이</b>. 보통 w<sub>n</sub> = 1/4로 1~4-gram 정밀도의 기하평균. 범위 0~1(또는 0~100), 높을수록 참조와 비슷하다.</p></div>
+<div class="deep"><b>🔎 손으로 BLEU 한 번</b> &mdash; 참조 &ldquo;the cat sat on the mat&rdquo;(r = 6), 후보 &ldquo;the cat sat on mat&rdquo;(c = 5).
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>n</th><th>후보의 n-gram</th><th>참조에 있는 것</th><th>p<sub>n</sub></th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>the, cat, sat, on, mat</td><td>5개 모두</td><td>5/5 = 1</td></tr>
+      <tr><td>2</td><td>the cat, cat sat, sat on, on mat</td><td>on mat 빼고 3개</td><td>3/4 = 0.75</td></tr>
+      <tr><td>3</td><td>the cat sat, cat sat on, sat on mat</td><td>2개</td><td>2/3</td></tr>
+      <tr><td>4</td><td>the cat sat on, cat sat on mat</td><td>1개</td><td>1/2</td></tr>
+    </tbody>
+  </table></div>
+  기하평균 = (1 × 0.75 × 0.667 × 0.5)<sup>1/4</sup> = 0.25<sup>1/4</sup> ≈ 0.707. 후보가 참조보다 짧으니 BP = e<sup>1 − 6/5</sup> = e<sup>−0.2</sup> ≈ 0.819. <b>BLEU ≈ 0.819 × 0.707 ≈ 0.579</b>. <b>clipping</b>이 없으면 &ldquo;the the the&rdquo;가 참조 &ldquo;the cat&rdquo; 앞에서 1-gram 정밀도 3/3을 받는다 &mdash; 참조에 the가 1번뿐이니 1번까지만 인정해 1/3. <b>BP</b>가 없으면 &ldquo;the cat&rdquo; 두 단어만 내놓아도 정밀도가 100%가 된다.</div>
+<div class="pit"><b>⚠ BLEU의 한계</b> &mdash; 표면적인 어휘 일치만 봐서 <b>동의어 · 어순 변화</b>를 반영하지 못한다(&ldquo;I went to school&rdquo; vs &ldquo;I headed to school&rdquo;). 그래서 METEOR · chrF · BERTScore · COMET을 함께 쓴다. r/c를 거꾸로 외우지 않기 &mdash; <b>c = candidate(후보)</b>.</div>
+</section>
+
+<!-- ===================== 14.8 ===================== -->
+<section class="sec" id="s8">
+  <div class="sec-head"><span class="sec-badge">14.8</span><h2 class="sec-title">딥러닝 기반 문장 생성과 디코딩 전략<small>교안 36~42p</small></h2></div>
+<h3 class="sub-title" id="gen-stat">통계 언어모델의 한계와 자연스러운 문장의 조건 (교안 36p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>통계 기반 언어 모델</th><th>자연스러운 문장 생성의 조건</th></tr></thead>
+  <tbody><tr>
+    <td><b>장점</b>: 해석이 쉽고 가볍다<br><b>한계</b>: 코퍼스 내용 · 양에 성능이 크게 좌우, <b>희소 문제(sparsity)</b>에 약함, 데이터를 늘려도 수확 체감 &mdash; 희소성 때문에 문맥 길이를 늘리는 쪽으로 확장되지 않는다</td>
+    <td>① 올바른 <b>통사 구조</b><br>② <b>의미적으로</b> 말이 됨<br>③ 문장 안 · 문장 사이 <b>문맥이 일관</b><br>(&lsquo;길이가 일정해야 한다&rsquo;는 조건이 아니다)</td>
+  </tr></tbody>
+</table>
+</div>
+<div class="pit"><b>⚠ 장점을 한계로 바꾼 보기</b> &mdash; 통계 언어 모델은 &lsquo;해석이 쉽고 가볍다&rsquo;가 <b>장점</b>이다. &lsquo;무겁고 해석이 어렵다&rsquo;는 한계가 아니다(100문제 81번).</div>
+
+<h3 class="sub-title" id="rnnlm">순환 신경망 언어 모델 · LSTM 생성 (교안 37p)</h3>
+<div class="fx"><div class="tex-d">P(w_t\mid w_1,\dots,w_{t-1})</div>
+<p class="fx-note">이전 토큰들을 조건으로 다음 토큰의 확률을 예측한다. 이전 은닉층이 다음 은닉층에 영향을 주는 재귀 구조라 시계열(자연어 · 음성 · 유전자)에 쓰인다. LSTM 생성: 각 타임스텝의 <b>이전 출력이 다음 입력</b>이 되고, 게이트가 이전 정보를 선택적으로 반영한다(<a class="ext" href="nlp-week12.html">12주차 LSTM</a>).</p></div>
+<div class="flow" id="gen-steps">
+  <div class="fl"><b>① 데이터 전처리</b><span>코퍼스 수집 · 토큰화 · 어휘 사전 구축 · 시퀀스 생성 &mdash; 토큰 단위는 문자 / 단어 / <b>서브워드(BPE)</b>에 따라 다르다</span></div>
+  <div class="fl"><b>② 모델 설계</b><span>배치 크기 · vocab 크기 · 임베딩 차원 · RNN 유닛 수</span></div>
+  <div class="fl"><b>③ 모델 훈련</b><span>옵티마이저 · 손실 함수 설정, 체크포인트 저장</span></div>
+  <div class="fl"><b>④ 문장 생성</b><span>체크포인트 로드 후 시작 토큰부터 순차 생성</span></div>
+</div>
+
+<h3 class="sub-title" id="decoding">디코딩 전략 — 같은 모델, 다른 문장 (교안 39p)</h3>
+<p><b>디코딩</b> = 학습된 언어 모델의 확률 분포에서 실제 단어열을 만들어 내는 방법.</p>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>전략</th><th>동작</th><th>특징</th></tr></thead>
+  <tbody>
+    <tr><td><b>Greedy Search</b></td><td>매 스텝 확률 최고 토큰 1개</td><td>빠르지만 <b>반복 · 단조로운</b> 문장</td></tr>
+    <tr><td><b>Beam Search</b></td><td>상위 <b>k개 후보 경로</b>를 동시에 유지</td><td><b>번역 · 요약</b>에 적합, 다양성은 낮음</td></tr>
+    <tr><td><b>Temperature</b></td><td>logit을 <b>T로 나눠</b> 분포를 평탄 / 뾰족하게</td><td>T ↑ 다양성 ↑, T ↓ 보수적</td></tr>
+    <tr><td><b>Top-k Sampling</b></td><td>확률 상위 <b>k개 중에서만</b> 샘플링</td><td>엉뚱한 토큰 배제, k 선택이 중요</td></tr>
+    <tr><td><b>Top-p (Nucleus)</b></td><td><b>누적 확률 p</b>를 넘는 최소 집합에서 샘플링</td><td>문맥에 따라 <b>후보 수가 자동 조절</b></td></tr>
+  </tbody>
+</table>
+</div>
+<p class="fx-note">창작 · 대화에는 샘플링 계열, 번역 · 요약에는 beam search가 주로 쓰인다.</p>
+<div class="deep" id="temperature"><b>🔎 다섯 전략을 숫자로</b>
+<ul class="ul">
+  <li><b>Temperature</b> &mdash; 다음 단어 후보 3개의 logit이 (2, 1, 0)일 때 softmax(logit/T): T = 1 → <b>(0.665, 0.245, 0.090)</b>, T = 0.5 → (0.867, 0.117, 0.016)(1등이 더 독식, 보수적), T = 2 → (0.506, 0.307, 0.186)(평평, 다양). T → 0이면 greedy와 같아진다</li>
+  <li><b>Top-k</b> &mdash; k = 2면 3등(0.090)을 버리고 1 · 2등을 다시 합 1로 맞춰 (0.731, 0.269)에서 뽑는다. <b>k = 1이면 늘 1등만</b> 뽑으니 <b>greedy와 같다</b>(과제 4의 질문)</li>
+  <li><b>Top-p</b> &mdash; 확률이 (0.5, 0.2, 0.15, 0.1, 0.05)이고 p = 0.8이면 0.5 → 0.7 → 0.85에서 p를 넘으니 <b>3개</b>가 후보. 분포가 뾰족한 문맥(&ldquo;대한민국의 수도는&rdquo; 다음)에서는 1~2개, 평평한 문맥에서는 많이 &mdash; k를 고정하지 않아도 된다</li>
+  <li><b>Beam vs Greedy</b> &mdash; 1단계 확률 A 0.5, B 0.4. A 다음 최고 0.4(누적 0.20), B 다음 최고 0.9(누적 0.36). greedy는 A를 고른 순간 0.20에 갇히지만, beam(k = 2)은 B 경로도 들고 가 0.36을 찾는다</li>
+</ul></div>
+
+<h3 class="sub-title" id="gpt">셀프 어텐션 언어 모델 GPT (교안 40 · 41p)</h3>
+<ul class="ul">
+  <li>OpenAI의 GPT 시리즈 &mdash; <b>인코더 없이 마스킹 셀프 어텐션 블록만 쌓은 디코더 전용</b> 구조(인코더-디코더 어텐션 없음), 방대한 데이터로 학습</li>
+  <li>주어진 문장에 이어 새 문장을 생성하며, 언뜻 보면 사람이 쓴 것처럼 자연스럽다</li>
+  <li>남은 과제: 지식 · 상식에 기반한 창조적 생성은 여전히 어렵고, 사실과 다른 내용을 그럴듯하게 만드는 <b>환각(hallucination)</b>이 있다</li>
+</ul>
+<div class="tbl-wrap" id="gpt-size">
+<table>
+  <thead><tr><th>모델</th><th>Model Dimensionality</th><th>Layers</th><th>Parameters</th></tr></thead>
+  <tbody>
+    <tr><td>GPT-2 Small</td><td>768</td><td>12</td><td>117M (공개 체크포인트 124M)</td></tr>
+    <tr><td><b>GPT-2 Medium</b></td><td><b>1024</b></td><td><b>24</b></td><td><b>345M</b></td></tr>
+    <tr><td>GPT-2 Large</td><td>1280</td><td>36</td><td>762M</td></tr>
+    <tr><td>GPT-2 Extra Large</td><td>1600</td><td>48</td><td>1,542M</td></tr>
+  </tbody>
+</table>
+</div>
+<p>모델 규모(파라미터 · 데이터 · 연산량)가 커질수록 성능이 예측 가능하게 오르는 경향 = <b>스케일링 법칙(Scaling Law)</b>.</p>
+<div class="deep"><b>🔎 117M과 124M은 왜 다른가 &mdash; 파라미터를 직접 세 보기</b> &mdash; 트랜스포머 블록 하나는 대략 12·d² 개(어텐션 4d² + FFN 8d²)다. Small: 12 × 12 × 768² ≈ 84.9M, 여기에 단어 임베딩 50,257 × 768 ≈ 38.6M과 위치 임베딩 1,024 × 768 ≈ 0.8M을 더하면 <b>약 124M</b> &mdash; 공개 체크포인트 값과 맞는다(117M은 논문이 처음 적은 값). Medium도 같은 식으로 12 × 24 × 1024² + 임베딩 ≈ <b>355M</b>이 나온다 &mdash; 표의 345M도 논문 값이라 실제 체크포인트와 조금 다르다. 시험은 표 값(Medium = 1024 · 24 · 345M)을 고른다.</div>
+
+<h3 class="sub-title" id="common">세 과제의 공통 구조 (교안 42p)</h3>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>과제</th><th>확률 정식화</th><th>조건</th></tr></thead>
+  <tbody>
+    <tr><td>기계 번역</td><td><span class="tex">P(\text{타겟 문장}\mid\text{소스 문장})</span></td><td>소스 문장</td></tr>
+    <tr><td>질의 응답</td><td><span class="tex">P(\text{정답}\mid\text{질문},\ \text{지문})</span></td><td>질문 + 지문</td></tr>
+    <tr><td>문장 생성</td><td><span class="tex">P(\text{다음 토큰}\mid\text{이전 토큰들})</span></td><td>앞 문맥</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note-box">세 과제 모두 <b>&lsquo;조건이 주어졌을 때 적절한 토큰열을 만드는 문제&rsquo;</b>다 &mdash; 그래서 인코더-디코더와 어텐션이라는 같은 부품을 재사용하고, 최근에는 하나의 대규모 언어 모델이 <b>프롬프트만 바꿔</b> 세 과제를 모두 한다(&ldquo;다음 문장을 영어로 번역해&rdquo; / &ldquo;이 글을 보고 답해&rdquo; / &ldquo;이어서 써&rdquo;).</div>
+</section>
+
+<!-- ===================== 14.9 ===================== -->
+<section class="sec" id="s9">
+  <div class="sec-head"><span class="sec-badge">14.9</span><h2 class="sec-title">실습 · 과제 안내와 정리<small>실습 노트북 과제 안내 · 교안 43~46p</small></h2></div>
+<div class="note-box" id="assign"><b>실습 구성</b> (<code>14주차_실습_문제.ipynb</code>, <b>Google Colab · TensorFlow 2.x / Keras</b> 기준, GPU 없이도 수 분 안에 학습되도록 작게 구성) &mdash; 실습 1 병렬 코퍼스 전처리 · 어휘 사전 / 실습 2 Seq2Seq(어텐션 없음) / 실습 3 어텐션 + 가중치 시각화 / 실습 4 LSTM 문장 생성 · 디코딩 전략 비교 / 실습 5 BLEU · EM/F1 직접 구현. 풀이는 따로 정리한다.</div>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>과제</th><th>할 일</th><th>이 페이지의 개념</th></tr></thead>
+  <tbody>
+    <tr><td>1 병렬 코퍼스 확장</td><td>새 문장쌍 10개 추가 → 어휘 사전 크기 변화 보고</td><td><a class="ext" href="#seq2seq">병렬 코퍼스</a></td></tr>
+    <tr><td>2 모델 용량 비교</td><td>LSTM 유닛 128 / 256 → 학습 곡선 · 번역 품질 비교</td><td><a class="ext" href="#rnn-limit">문맥 벡터 크기</a></td></tr>
+    <tr><td>3 어텐션 가중치 해석</td><td>평가 문장 3개의 히트맵 → 어떤 한국어 토큰이 어떤 영어 단어에 쓰였나</td><td><a class="ext" href="#attn-map">가중치 시각화</a></td></tr>
+    <tr><td><b>4 디코딩 전략 비교</b></td><td><b>temperature 0.2 / 0.7 / 1.2</b>, <b>top-k k = 1 / 5 / 20</b>로 같은 시작 문구 생성 · 비교. k = 1은 어떤 전략과 같은가?</td><td><a class="ext" href="#temperature">숫자 예</a> &mdash; k = 1 = greedy</td></tr>
+    <tr><td>5 어텐션 유무 비교</td><td>두 모델의 BLEU 표 + 차이를 고정 길이 문맥 벡터의 병목과 연결</td><td><a class="ext" href="#bleu">BLEU</a> · <a class="ext" href="#rnn-limit">병목</a></td></tr>
+  </tbody>
+</table>
+</div>
+<p><b>평가 기준: 코드 정확성 40% / 결과 해석 40% / 보고서 작성 20%</b> &mdash; 실행 결과가 포함된 노트북을 제출하고, 각 과제의 해석을 마크다운 셀에 쓴다.</p>
+<h3 class="sub-title" id="wrap">핵심 질문 다시 보기 (교안 46p)</h3>
+<ul class="ul">
+  <li><b>인코더</b>가 입력을 벡터 표현으로 바꾸고, <b>디코더</b>가 그 표현을 조건으로 토큰을 하나씩 생성한다</li>
+  <li><b>어텐션</b>은 매 생성 시점마다 입력의 어느 부분을 볼지 동적으로 결정한다</li>
+  <li><b>디코딩 전략</b>은 같은 모델에서도 결과 문장의 <b>품질과 다양성을 크게 바꾼다</b>(&lsquo;거의 영향이 없다&rsquo;는 틀린 보기 &mdash; 100문제 100번)</li>
+</ul>
+<div class="cards">
+  <div class="card2"><b>질의 응답</b><p>정답 그 자체. 정답 형태(추출 · 생성 · 선택) · 지식 범위(폐쇄 · 개방) · 근거(독해 · 검색). 기존은 오류 누적, 딥러닝은 End-to-End · 블랙박스.</p></div>
+  <div class="card2"><b>QA 모델</b><p>공통: 각각 인코딩 → 연관성 점수 → 랭킹. 샴(가중치 공유) · 어텐션(질문 기준 답 단어 가중) · BiMPM 5층(Word → Context → Matching → Aggregation → Prediction).</p></div>
+  <div class="card2"><b>BERT QA · 지표</b><p>[CLS] 질문 [SEP] 지문 [SEP], start · end 확률, i ≤ j에서 s(i) + e(j) 최대. SQuAD 2.0 = 정답 없음, KorQuAD 2.0 = 표 · 리스트 긴 문서. EM 0.0 · F1 0.67.</p></div>
+  <div class="card2"><b>VQA</b><p>이미지 + 질문 → 답. 개방형 · 다지선다형, 5유형(세밀 · 물체 · 행동 · 지식 · 상식). CNN + word2vec 평균 → 결합 → MLP · Softmax(K개). 다지선다 = N번 이진 분류, 최근 co-attention.</p></div>
+  <div class="card2"><b>기계 번역 흐름</b><p>RBMT(규칙, 확장 어려움) → SMT(번역 모델 = alignment + 언어 모델 = 타겟 확률) → NMT. Word → Phrase → Hierarchical SMT → RNN → CNN → Transformer NMT. 2016년 이후 NMT.</p></div>
+  <div class="card2"><b>Seq2Seq</b><p>문장 to 문장, 병렬 코퍼스. 인코더 = 벡터로, 디코더 = 문맥 벡터 + 이전 단어로 현재 단어. 교사 강요, &lt;sos&gt; · &lt;eos&gt;. RNN 한계: 긴 문장(병목) · OOV · 반복 · 병렬화.</p></div>
+  <div class="card2"><b>어텐션</b><p>모든 hidden state 전달. Score → Alignment(softmax, 합 1) → Context(가중합) → Output([c; s] → tanh → softmax). Luong(dot) · general · Bahdanau(additive). went → 갔다 0.77.</p></div>
+  <div class="card2"><b>트랜스포머 · BLEU</b><p>softmax(QKᵀ/√d_k)V, 512 / 8 = 64. 디코더만 Masked · Enc-Dec Attention. BLEU = BP · exp(Σ w log p), BP = min(1, e^(1−r/c)), c = 후보, clipping.</p></div>
+  <div class="card2"><b>문장 생성 · 디코딩</b><p>P(w_t | w_1…w_{t−1}). 전처리 → 설계 → 훈련 → 생성. greedy(단조) · beam(번역 · 요약) · T(↑ 다양) · top-k(k = 1 = greedy) · top-p(후보 수 자동). GPT = 디코더 전용, 환각, Medium 1024 · 24 · 345M.</p></div>
+</div>
+</section>
+
+<section class="sec" id="next">
+  <div class="sec-head"><span class="sec-badge">NEXT</span><h2 class="sec-title">다음 주 예고<small>15주차 (12.7 ~ 12.13)</small></h2></div>
+<div class="note-box"><b>15주차는 기말 정리</b>다 &mdash; 9~14주차 핵심 요약과 기말고사 대비(교안 46p).
+<ul class="ul">
+  <li>이번 주 손계산 거리 &mdash; <b>EM/F1(대한민국 서울 → 0.0 · 0.67, 문자 단위 0.50), 정답 구간 s(i) + e(j), 어텐션 softmax · 문맥 벡터, √d_k = 8의 효과, BLEU 0.579, temperature (2, 1, 0) 분포, GPT-2 파라미터 124M</b></li>
+  <li>비교표 &mdash; <b>QA 분류 세 기준, 샴 · 어텐션 · BiMPM, 캡셔닝 vs VQA, RBMT · SMT · NMT, 인코더 vs 디코더 블록, 디코딩 전략 다섯 가지</b></li>
+</ul></div>
+</section>
+
+<p class="src">자연어처리 14주차 (CHAPTER 14) 강의자료 정리 · 2026학년도 2학기<br>
+교안(46페이지)을 100문제의 절 번호(14.1 ~ 14.9)에 맞춰 정리했다. 14.9의 실습 · 과제 내용은 실습 노트북의 안내 셀에서 옮겼고 실습 풀이는 싣지 않았다. 오류 누적 · 정답 구간 · F1 · element-wise 결합 · 어텐션 · √d<sub>k</sub> · BLEU · temperature · top-p · beam · GPT-2 파라미터 숫자 예는 직접 계산했다(정답 구간과 어텐션의 점수는 설명용으로 정한 값).</p>
+
+</div>
+
+<a href="#top" class="top-btn" aria-label="맨 위로">↑</a>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-bar a');
+  var sections = document.querySelectorAll('.sec');
+  function setActive(){
+    var cur = '';
+    sections.forEach(function(s){ if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+    tabs.forEach(function(t){ t.classList.toggle('active', t.getAttribute('href') === '#' + cur); });
+  }
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      setTimeout(function(){
+        var bar = document.getElementById('tabbar');
+        var active = bar.querySelector('.active');
+        if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth / 2 + active.clientWidth / 2;
+      }, 300);
+    });
+  });
+
+  /* ---- 개념 설명 말풍선 (형광펜 용어) ---- */
+  var terms = document.querySelectorAll('.term');
+  if (!terms.length) return;
+  var tip = document.createElement('div');
+  tip.id = 'tipbox';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  var current = null;
+
+  function hide() {
+    tip.classList.remove('on');
+    if (current) { current.classList.remove('on'); current = null; }
+  }
+  function show(el) {
+    tip.textContent = el.getAttribute('data-tip') || '';
+    tip.classList.add('on');
+    if (current && current !== el) current.classList.remove('on');
+    current = el;
+    el.classList.add('on');
+    var pad = 8;
+    var r = el.getBoundingClientRect();
+    var t = tip.getBoundingClientRect();
+    var left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(pad, Math.min(left, window.innerWidth - t.width - pad));
+    var top = r.top - t.height - 10;
+    if (top < pad) top = r.bottom + 10;
+    top = Math.min(top, window.innerHeight - t.height - pad);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+  terms.forEach(function (el) {
+    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+    el.addEventListener('mouseenter', function () { show(el); });
+    el.addEventListener('mouseleave', function () { if (current === el) hide(); });
+    el.addEventListener('focus', function () { show(el); });
+    el.addEventListener('blur', hide);
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (current === el && tip.classList.contains('on')) hide(); else show(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el); }
+      if (e.key === 'Escape') hide();
+    });
+  });
+  document.addEventListener('click', hide);
+  window.addEventListener('scroll', hide, { passive: true });
+  window.addEventListener('resize', hide);
+});
+</script>
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script src="../vendor/katex/katex.min.js"></script>
+<script>
+// .tex(인라인) / .tex-d(별행) 안의 TeX 원문을 수식으로 그린다.
+// KaTeX를 못 불러온 경우에는 원문이 그대로 남아 최소한 읽을 수는 있게 둔다.
+(function () {
+  if (typeof katex === 'undefined') { return; }
+  document.querySelectorAll('.tex, .tex-d').forEach(function (el) {
+    try {
+      katex.render(el.textContent.trim(), el, {
+        displayMode: el.classList.contains('tex-d'),
+        throwOnError: false,
+        strict: false
+      });
+    } catch (e) { if (window.console) { console.error('KaTeX', e, el.textContent); } }
+  });
+})();
+</script>
+
+<script src="quiz/nlp-w14.js?v=1"></script>
+<script src="quiz/inline-quiz.js?v=2"></script>
+
+</body>
+</html>
